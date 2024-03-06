@@ -23,10 +23,11 @@ import SharedCredentialsDetail from '../../pages/SharedCredentialsDetail';
 import SingleSharedCredential from '../../pages/SharedCredentialsDetail/SingleSharedCredential';
 import UserListDetail from '../../pages/UserListDetail';
 import UserDetail from '../../pages/UserListDetail/UserDetail';
-import DefaultCheckDetail from '../../pages/DefaultChecksDetail'
 import DefaultSchedules from '../../pages/DefaultSchedulesDetail'
 import LeftView from './LeftView';
 import { useDefinition } from '../../contexts/definitionContext';
+import DefaultCheckPatterns from '../../pages/DefaultCheckPatterns/DefaultCheckPatterns';
+import DefaultCheckPatternConfiguration from '../../pages/DefaultCheckPatternConfiguration';
 
 interface LayoutProps {
   route: string
@@ -74,8 +75,6 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
         return <RuleDetail />;
       case ROUTES.PATTERNS.CHECK_DETAIL:
         return <CheckDetail />;
-      case ROUTES.PATTERNS.CHECK_DEFAULT_DETAIL:
-        return <DefaultCheckDetail />;
       case ROUTES.PATTERNS.DEFINITIONS:
         return <Definitions />;
       case ROUTES.PATTERNS.INCIDENT_CONNECTION:
@@ -96,6 +95,10 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
         return <DataDictionary />;
       case ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL:
         return <DataDictionaryItemOverview />;
+      case ROUTES.PATTERNS.DEFAULT_CHECKS_PATTERNS:
+        return <DefaultCheckPatterns />;  
+      case ROUTES.PATTERNS.DEFAULT_CHECK_PATTERN_DETAIL: 
+        return <DefaultCheckPatternConfiguration />  
       default:
         return null;
     }

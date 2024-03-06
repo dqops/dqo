@@ -456,12 +456,16 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
 
             Selection minSeveritySelection = partitionData.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME).isGreaterThanOrEqualTo(minSeverity);
+            Selection notProfilingSelection = partitionData.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).isNotEqualTo(CheckType.profiling.getDisplayName());
             InstantColumn partitionExecutedAtColumn = partitionData.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
             Selection issuesInTimeRange = partitionExecutedAtColumn.isBetweenIncluding(
                     PackedInstant.pack(startTimestamp), PackedInstant.pack(endTimestamp));
             Selection incidentHashSelection = partitionData.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME).isIn(incidentHash);
 
-            Selection selectionOfMatchingIssues = minSeveritySelection.and(issuesInTimeRange).and(incidentHashSelection);
+            Selection selectionOfMatchingIssues = minSeveritySelection
+                    .and(notProfilingSelection)
+                    .and(issuesInTimeRange)
+                    .and(incidentHashSelection);
             if (!Strings.isNullOrEmpty(filterParameters.getColumn())) {
                 TextColumn partitionColumnNameColumn = partitionData.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
                 if (Objects.equals(CheckResultsDataService.COLUMN_NAME_TABLE_CHECKS_PLACEHOLDER, filterParameters.getColumn())) {
@@ -564,6 +568,9 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             IntColumn severityColumn = partitionData.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
             Selection minSeveritySelection = severityColumn.isGreaterThanOrEqualTo(minSeverity);
 
+            TextColumn checkTypeColumn = partitionData.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME);
+            Selection notProfilingSelection = checkTypeColumn.isNotEqualTo(CheckType.profiling.getDisplayName());
+
             InstantColumn executedAtColumn = partitionData.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
             Instant startTimestamp = firstSeen;
             if (filterParameters.getDays() != null) {
@@ -576,14 +583,17 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                     PackedInstant.pack(startTimestamp), PackedInstant.pack(incidentUntil));
             Selection incidentHashSelection = partitionData.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME).isIn(incidentHash);
 
-            Selection selectionOfMatchingIssues = minSeveritySelection.and(issuesInTimeRange).and(incidentHashSelection);
+            Selection selectionOfMatchingIssues = minSeveritySelection
+                    .and(notProfilingSelection)
+                    .and(issuesInTimeRange)
+                    .and(incidentHashSelection);
             if (selectionOfMatchingIssues.size() == 0) {
                 continue;
             }
 
             TextColumn columnNameColumn = partitionData.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
             TextColumn checkNameColumn = partitionData.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
-            TextColumn checkTypeColumn = partitionData.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME);
+            TextColumn checkTimeGradientColumn = partitionData.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
 
             for (Integer rowIndex : selectionOfMatchingIssues) {
                 Row row = partitionData.row(rowIndex);
@@ -602,6 +612,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 String checkName = checkNameColumn.get(rowIndex);
                 String checkTypeString = checkTypeColumn.get(rowIndex);
                 CheckType checkType = Strings.isNullOrEmpty(checkTypeString) ? null : Enum.valueOf(CheckType.class, checkTypeString);
+                String checkTimeGradientString = checkTimeGradientColumn.isMissing(rowIndex) ? null : checkTimeGradientColumn.get(rowIndex);
+                TimePeriodGradient timePeriodGradient = Strings.isNullOrEmpty(checkTimeGradientString) ? null : Enum.valueOf(TimePeriodGradient.class, checkTimeGradientString);
                 if (columnName == null) {
                     columnName = CheckResultsDataService.COLUMN_NAME_TABLE_CHECKS_PLACEHOLDER;
                 }
@@ -622,7 +634,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                     histogramModel.incrementCountForCheck(checkName);
                 }
 
-                histogramModel.markCheckType(checkType);
+                histogramModel.markCheckType(checkType, timePeriodGradient);
             }
         }
 

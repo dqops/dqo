@@ -58,7 +58,7 @@ public class BigQueryProviderDialectSettings extends ProviderDialectSettings {
         }
 
         if (StringCheckUtility.containsAny(columnType, "text")) {
-            return DataTypeCategory.string;
+            return DataTypeCategory.text;
         }
 
         if (StringCheckUtility.containsAny(columnType, "json")) {

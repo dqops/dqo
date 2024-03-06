@@ -45,6 +45,7 @@ class SchemaModel:
             statistics.
         can_run_checks (Union[Unset, bool]): Boolean flag that decides if the current user can run checks.
         can_delete_data (Union[Unset, bool]): Boolean flag that decides if the current user can delete data (results).
+        error_message (Union[Unset, str]): Field for error message.
     """
 
     connection_name: Union[Unset, str] = UNSET
@@ -63,6 +64,7 @@ class SchemaModel:
     can_collect_statistics: Union[Unset, bool] = UNSET
     can_run_checks: Union[Unset, bool] = UNSET
     can_delete_data: Union[Unset, bool] = UNSET
+    error_message: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -109,6 +111,7 @@ class SchemaModel:
         can_collect_statistics = self.can_collect_statistics
         can_run_checks = self.can_run_checks
         can_delete_data = self.can_delete_data
+        error_message = self.error_message
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -149,6 +152,8 @@ class SchemaModel:
             field_dict["can_run_checks"] = can_run_checks
         if can_delete_data is not UNSET:
             field_dict["can_delete_data"] = can_delete_data
+        if error_message is not UNSET:
+            field_dict["error_message"] = error_message
 
         return field_dict
 
@@ -253,6 +258,8 @@ class SchemaModel:
 
         can_delete_data = d.pop("can_delete_data", UNSET)
 
+        error_message = d.pop("error_message", UNSET)
+
         schema_model = cls(
             connection_name=connection_name,
             schema_name=schema_name,
@@ -268,6 +275,7 @@ class SchemaModel:
             can_collect_statistics=can_collect_statistics,
             can_run_checks=can_run_checks,
             can_delete_data=can_delete_data,
+            error_message=error_message,
         )
 
         schema_model.additional_properties = d

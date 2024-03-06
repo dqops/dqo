@@ -31,6 +31,7 @@ import com.dqops.rest.models.comparison.TableComparisonConfigurationModel;
 import com.dqops.rest.models.comparison.TableComparisonModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.services.locking.RestApiLockService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.jetbrains.annotations.NotNull;
@@ -55,17 +56,21 @@ import java.util.*;
 public class TableComparisonsController {
     private final UserHomeContextFactory userHomeContextFactory;
     private final HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher;
+    private final RestApiLockService lockService;
 
     /**
      * Creates an instance of a controller by injecting dependencies.
      * @param userHomeContextFactory      User home context factory.
      * @param hierarchyNodeTreeSearcher   Node searcher.
+     * @param lockService                 Object lock service.
      */
     @Autowired
     public TableComparisonsController(UserHomeContextFactory userHomeContextFactory,
-                                      HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher) {
+                                      HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
+                                      RestApiLockService lockService) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
+        this.lockService = lockService;
     }
 
     /**
@@ -207,37 +212,40 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
-        if (tableComparisonConfigurationSpecMap == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableComparisonConfigurationSpecMap == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableComparisonConfigurationSpecMap.get(tableComparisonConfigurationName);
-        if (tableComparisonConfigurationSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+                    TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableComparisonConfigurationSpecMap.get(tableComparisonConfigurationName);
+                    if (tableComparisonConfigurationSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        String newName = tableComparisonConfigurationModel.getTableComparisonConfigurationName();
-        if (Strings.isNullOrEmpty(newName)) {
-            newName = tableComparisonConfigurationName;
-        }
+                    String newName = tableComparisonConfigurationModel.getTableComparisonConfigurationName();
+                    if (Strings.isNullOrEmpty(newName)) {
+                        newName = tableComparisonConfigurationName;
+                    }
 
-        if (!Objects.equals(newName, tableComparisonConfigurationName) && tableComparisonConfigurationSpecMap.containsKey(newName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a reference table configuration with this name already exists
-        }
+                    if (!Objects.equals(newName, tableComparisonConfigurationName) && tableComparisonConfigurationSpecMap.containsKey(newName)) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a reference table configuration with this name already exists
+                    }
 
-        if (!newName.equals(tableComparisonConfigurationName)) {
-            // If renaming actually happened.
-            tableComparisonConfigurationSpecMap.remove(tableComparisonConfigurationName);
-            tableComparisonConfigurationSpec.setHierarchyId(null);
-            tableComparisonConfigurationSpecMap.put(newName, tableComparisonConfigurationSpec);
-        }
+                    if (!newName.equals(tableComparisonConfigurationName)) {
+                        // If renaming actually happened.
+                        tableComparisonConfigurationSpecMap.remove(tableComparisonConfigurationName);
+                        tableComparisonConfigurationSpec.setHierarchyId(null);
+                        tableComparisonConfigurationSpecMap.put(newName, tableComparisonConfigurationSpec);
+                    }
 
-        tableComparisonConfigurationModel.copyToTableComparisonSpec(tableComparisonConfigurationSpec);
+                    tableComparisonConfigurationModel.copyToTableComparisonSpec(tableComparisonConfigurationSpec);
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -276,22 +284,25 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        if (tableSpec.getTableComparisons().containsKey(tableComparisonConfigurationModel.getTableComparisonConfigurationName())) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a table comparison configuration with this name already exists
-        }
+                    if (tableSpec.getTableComparisons().containsKey(tableComparisonConfigurationModel.getTableComparisonConfigurationName())) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a table comparison configuration with this name already exists
+                    }
 
-        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = new TableComparisonConfigurationSpec();
-        tableComparisonConfigurationModel.copyToTableComparisonSpec(tableComparisonConfigurationSpec);
-        tableSpec.getTableComparisons().put(tableComparisonConfigurationModel.getTableComparisonConfigurationName(), tableComparisonConfigurationSpec);
+                    TableComparisonConfigurationSpec tableComparisonConfigurationSpec = new TableComparisonConfigurationSpec();
+                    tableComparisonConfigurationModel.copyToTableComparisonSpec(tableComparisonConfigurationSpec);
+                    tableSpec.getTableComparisons().put(tableComparisonConfigurationModel.getTableComparisonConfigurationName(), tableComparisonConfigurationSpec);
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+                });
     }
 
     /**
@@ -328,27 +339,30 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = tableSpec.getTableComparisons();
-        if (tableComparisonConfigurationSpecMap == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+                    TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = tableSpec.getTableComparisons();
+                    if (tableComparisonConfigurationSpecMap == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        // If reference table configuration is not found, return success (idempotence).
-        tableComparisonConfigurationSpecMap.remove(tableComparisonConfigurationName);
+                    // If reference table configuration is not found, return success (idempotence).
+                    tableComparisonConfigurationSpecMap.remove(tableComparisonConfigurationName);
 
-        Collection<AbstractComparisonCheckCategorySpecMap<?>> comparisonCheckCategoryMaps = this.hierarchyNodeTreeSearcher.findComparisonCheckCategoryMaps(tableSpec);
-        for (AbstractComparisonCheckCategorySpecMap<?> comparisonCheckCategorySpecMap : comparisonCheckCategoryMaps) {
-            comparisonCheckCategorySpecMap.remove(tableComparisonConfigurationName);
-        }
+                    Collection<AbstractComparisonCheckCategorySpecMap<?>> comparisonCheckCategoryMaps = this.hierarchyNodeTreeSearcher.findComparisonCheckCategoryMaps(tableSpec);
+                    for (AbstractComparisonCheckCategorySpecMap<?> comparisonCheckCategorySpecMap : comparisonCheckCategoryMaps) {
+                        comparisonCheckCategorySpecMap.remove(tableComparisonConfigurationName);
+                    }
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -623,27 +637,30 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+                    }
 
-        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
-        if (tableComparisonConfigurationSpecMap == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+                    TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableComparisonConfigurationSpecMap == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+                    }
 
-        if (tableSpec.getTableComparisons().containsKey(tableComparisonModel.getTableComparisonConfigurationName())) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
-        }
+                    if (tableSpec.getTableComparisons().containsKey(tableComparisonModel.getTableComparisonConfigurationName())) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
+                    }
 
-        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = new TableComparisonConfigurationSpec();
-        tableSpec.getTableComparisons().put(tableComparisonModel.getTableComparisonConfigurationName(), tableComparisonConfigurationSpec);
-        tableComparisonModel.copyToTableSpec(tableSpec, tableComparisonModel.getTableComparisonConfigurationName(), checkType, checkTimeScale);
+                    TableComparisonConfigurationSpec tableComparisonConfigurationSpec = new TableComparisonConfigurationSpec();
+                    tableSpec.getTableComparisons().put(tableComparisonModel.getTableComparisonConfigurationName(), tableComparisonConfigurationSpec);
+                    tableComparisonModel.copyToTableSpec(tableSpec, tableComparisonModel.getTableComparisonConfigurationName(), checkType, checkTimeScale);
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+                });
     }
 
     /**
@@ -834,26 +851,29 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+                    }
 
-        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
-        if (tableComparisonConfigurationSpecMap == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+                    TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableComparisonConfigurationSpecMap == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+                    }
 
-        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableComparisonConfigurationSpecMap.get(tableComparisonConfigurationName);
-        if (tableComparisonConfigurationSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+                    TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableComparisonConfigurationSpecMap.get(tableComparisonConfigurationName);
+                    if (tableComparisonConfigurationSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+                    }
 
-        tableComparisonModel.copyToTableSpec(tableSpec, tableComparisonConfigurationName, checkType, checkTimeScale);
+                    tableComparisonModel.copyToTableSpec(tableSpec, tableComparisonConfigurationName, checkType, checkTimeScale);
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+                });
     }
 
     /**

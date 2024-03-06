@@ -1,5 +1,5 @@
 # DQOps REST API dictionaries models reference
-The references of all objects used by [dictionaries](../operations/dictionaries.md) REST API operations are listed below.
+The references of all objects used by [dictionaries](/docs/client/operations/dictionaries.md) REST API operations are listed below.
 
 
 ## DataDictionaryListModel

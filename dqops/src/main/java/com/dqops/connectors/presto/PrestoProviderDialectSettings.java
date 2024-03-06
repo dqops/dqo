@@ -55,7 +55,7 @@ public class PrestoProviderDialectSettings extends ProviderDialectSettings {
 
         String columnType = columnTypeSnapshot.getColumnType().toLowerCase(Locale.ROOT);
         if (StringCheckUtility.containsAny(columnType, "timestamp with time zone", "timestamp")) {
-            return DataTypeCategory.datetime_instant;
+            return DataTypeCategory.datetime_timestamp;
         }
 
         return super.detectColumnType(columnTypeSnapshot);

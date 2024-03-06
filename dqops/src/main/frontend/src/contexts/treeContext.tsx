@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addFirstLevelTab } from '../redux/actions/source.actions';
 import { getFirstLevelActiveTab } from '../redux/selectors';
 import { useActionDispatch } from '../hooks/useActionDispatch';
+import { urlencodeDecoder, urlencodeEncoder } from '../utils';
 
 const TreeContext = React.createContext({} as any);
 
@@ -107,7 +108,7 @@ function TreeProvider(props: any) {
       const res: AxiosResponse<ConnectionModel[]> =
         await ConnectionApiClient.getAllConnections();
       const mappedConnectionsToTreeData = res.data.map((item) => ({
-        id: item.connection_name ?? '',
+        id: urlencodeDecoder(item.connection_name ?? ''),
         parentId: null,
         label: item.connection_name ?? '',
         items: [],
@@ -144,7 +145,7 @@ function TreeProvider(props: any) {
 
   const addConnection = async (connection: ConnectionModel) => {
     const newNode = {
-      id: connection.connection_name ?? '',
+      id: urlencodeDecoder(connection.connection_name ?? ''),
       parentId: null,
       label: connection.connection_name ?? '',
       items: [],
@@ -233,7 +234,7 @@ function TreeProvider(props: any) {
     );
 
     const items = res.data.map((schema) => ({
-      id: `${node.id}.${schema.schema_name}`,
+      id: `${node.id}.${urlencodeDecoder(schema.schema_name ?? '')}`,
       label: schema.schema_name || '',
       level: TREE_LEVEL.SCHEMA,
       parentId: node.id,
@@ -260,7 +261,7 @@ function TreeProvider(props: any) {
 
   const addSchema = async (node: CustomTreeNode, schemaName: string) => {
     const newNode = {
-      id: `${node.id}.${schemaName}`,
+      id: `${node.id}.${urlencodeDecoder(schemaName)}`,
       label: schemaName || '',
       level: TREE_LEVEL.SCHEMA,
       parentId: node.id,
@@ -280,7 +281,7 @@ function TreeProvider(props: any) {
       node.label
     );
     const items = res.data.map((table) => ({
-      id: `${node.id}.${table.target?.table_name}`,
+      id: `${node.id}.${urlencodeDecoder(table.target?.table_name ?? '')}`,
       label: table.target?.table_name || '',
       level: TREE_LEVEL.TABLE,
       parentId: node.id,
@@ -458,11 +459,12 @@ function TreeProvider(props: any) {
   const parseNodeId = (id: TreeNodeId) => {
     const terms = id.toString().split('.');
 
-    const table = terms[2];
-    const schema = terms[1];
-    const connection = terms[0];
-    const column = terms[4];
-
+    const table = urlencodeEncoder(terms[2]);
+    const schema = urlencodeEncoder(terms[1]);
+    const connection = urlencodeEncoder(terms[0]);
+    const column = urlencodeEncoder(terms[4]);
+    console.log(connection, schema, table, terms)
+    
     return { connection, schema, table, column };
   };
 
@@ -475,8 +477,9 @@ function TreeProvider(props: any) {
         schema ?? '',
         table ?? ''
       );
+      console.log(connection, schema, table)
     const items = res.data.map((column) => ({
-      id: `${node.id}.${column.column_name}`,
+      id: `${node.id}.${urlencodeDecoder(column.column_name ?? '')}`,
       label: column.column_name || '',
       level: TREE_LEVEL.COLUMN,
       parentId: node.id,
@@ -636,7 +639,7 @@ function TreeProvider(props: any) {
     const items: CustomTreeNode[] = [];
     checks?.forEach((check) => {
       items.push({
-        id: `${node.id}.${check?.check_category}_${check?.check_name}`,
+        id: `${node.id}.${urlencodeDecoder(check?.check_category ?? '')}_${urlencodeDecoder(check?.check_name ?? '')}`,
         label: check?.check_name || '',
         level: TREE_LEVEL.CHECK,
         parentId: node.id,
@@ -713,7 +716,7 @@ function TreeProvider(props: any) {
   const changeActiveTab = async (node: CustomTreeNode, isNew = false) => {
     if (!node) return;
     const nodeId = node.id.toString();
-    const existTab = tabs.find((item) => item.value === node.id.toString());
+    const existTab = tabs.find((item) => item.value === nodeId);
     if (!existTab) {
       const newTab = {
         label: node.label ?? '',
@@ -1124,7 +1127,7 @@ function TreeProvider(props: any) {
 
   const switchTab = async (node: CustomTreeNode, checkType: CheckTypes) => {
     if (!node) return;
-
+    console.log(node)
     setSelectedTreeNode(node);
     const defaultConnectionTab =
       checkType === CheckTypes.SOURCES ? 'detail' : 'schemas';
@@ -1202,6 +1205,7 @@ function TreeProvider(props: any) {
         node.label,
         tab
       );
+  
 
       if (firstLevelActiveTab === url) {
         return;
@@ -1220,6 +1224,18 @@ function TreeProvider(props: any) {
           label: node.label
         })
       );
+      console.log(url,   ROUTES.TABLE_LEVEL_PAGE(
+        checkType,
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        node.label,
+        tab
+      ), ROUTES.TABLE_LEVEL_VALUE(
+            checkType,
+            connectionNode?.label ?? '',
+            schemaNode?.label ?? '',
+            node.label
+          ))
       history.push(
         ROUTES.TABLE_LEVEL_PAGE(
           checkType,

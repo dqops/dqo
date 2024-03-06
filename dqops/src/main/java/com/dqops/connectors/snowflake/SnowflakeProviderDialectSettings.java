@@ -55,7 +55,7 @@ public class SnowflakeProviderDialectSettings extends ProviderDialectSettings {
 
         String columnType = columnTypeSnapshot.getColumnType().toLowerCase(Locale.ROOT);
         if (StringCheckUtility.containsAny(columnType, "timestamp_ltz", "timestamp_tz")) {
-            return DataTypeCategory.datetime_instant;
+            return DataTypeCategory.datetime_timestamp;
         }
 
         if (StringCheckUtility.containsAny(columnType, "timestamp_ntz")) {

@@ -18,20 +18,20 @@ package com.dqops.data.checkresults.services.models;
 
 import com.dqops.checks.CheckType;
 import com.dqops.data.incidents.services.models.IncidentDailyIssuesCount;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import io.opencensus.trace.Link;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.dqops.checks.CheckTimeScale.daily;
+import static com.dqops.checks.CheckTimeScale.monthly;
 
 /**
  * Model that returns histograms of the data quality issue occurrences related to a data quality incident.
@@ -48,16 +48,28 @@ public class IncidentIssueHistogramModel {
     private boolean hasProfilingIssues;
 
     /**
-     * True when this data quality incident is based on data quality issues from monitoring checks within the filters applied to search for linked data quality issues.
+     * True when this data quality incident is based on data quality issues from daily monitoring checks within the filters applied to search for linked data quality issues.
      */
-    @JsonPropertyDescription("True when this data quality incident is based on data quality issues from monitoring checks within the filters applied to search for linked data quality issues.")
-    private boolean hasMonitoringIssues;
+    @JsonPropertyDescription("True when this data quality incident is based on data quality issues from daily monitoring checks within the filters applied to search for linked data quality issues.")
+    private boolean hasDailyMonitoringIssues;
 
     /**
-     * True when this data quality incident is based on data quality issues from partitioned checks within the filters applied to search for linked data quality issues.
+     * True when this data quality incident is based on data quality issues from monthly monitoring checks within the filters applied to search for linked data quality issues.
      */
-    @JsonPropertyDescription("True when this data quality incident is based on data quality issues from partitioned checks within the filters applied to search for linked data quality issues.")
-    private boolean hasPartitionedIssues;
+    @JsonPropertyDescription("True when this data quality incident is based on data quality issues from monthly monitoring checks within the filters applied to search for linked data quality issues.")
+    private boolean hasMonthlyMonitoringIssues;
+
+    /**
+     * True when this data quality incident is based on data quality issues from daily partitioned checks within the filters applied to search for linked data quality issues.
+     */
+    @JsonPropertyDescription("True when this data quality incident is based on data quality issues from daily partitioned checks within the filters applied to search for linked data quality issues.")
+    private boolean hasDailyPartitionedIssues;
+
+    /**
+     * True when this data quality incident is based on data quality issues from monthly partitioned checks within the filters applied to search for linked data quality issues.
+     */
+    @JsonPropertyDescription("True when this data quality incident is based on data quality issues from monthly partitioned checks within the filters applied to search for linked data quality issues.")
+    private boolean hasMonthlyPartitionedIssues;
 
     /**
      * A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.
@@ -80,8 +92,9 @@ public class IncidentIssueHistogramModel {
     /**
      * Turns on a flag for profiling, monitoring or partitioned checks when an issue in that type was detected.
      * @param checkType Check type.
+     * @param timeScale Check time scale.
      */
-    public void markCheckType(CheckType checkType) {
+    public void markCheckType(CheckType checkType, TimePeriodGradient timeScale) {
         if (checkType == null) {
             return;
         }
@@ -92,11 +105,25 @@ public class IncidentIssueHistogramModel {
                 break;
 
             case monitoring:
-                this.hasMonitoringIssues = true;
+                switch (timeScale) {
+                    case day:
+                        this.hasDailyMonitoringIssues = true;
+                        break;
+                    case month:
+                        this.hasMonthlyMonitoringIssues = true;
+                        break;
+                }
                 break;
 
             case partitioned:
-                this.hasPartitionedIssues = true;
+                switch (timeScale) {
+                    case day:
+                        this.hasDailyPartitionedIssues = true;
+                        break;
+                    case month:
+                        this.hasMonthlyPartitionedIssues = true;
+                        break;
+                }
                 break;
         }
     }

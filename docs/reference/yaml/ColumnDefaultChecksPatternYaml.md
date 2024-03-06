@@ -81,7 +81,7 @@ The structure of this object is described below
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`column`</span>|The target column name filter. Accepts wildcards in the format: *id, *, c_*.|*string*| | | |
 |<span class="no-wrap-code ">`data_type`</span>|The target column data type filter. Filters by a physical (database specific) data type name imported from the data source. Accepts wildcards in the format: *int, *, big*.|*string*| | | |
-|<span class="no-wrap-code ">`data_type_category`</span>|The filter for a target data type category.|*enum*|*numeric_integer*<br/>*numeric_decimal*<br/>*numeric_float*<br/>*datetime_instant*<br/>*datetime_datetime*<br/>*datetime_date*<br/>*datetime_time*<br/>*string*<br/>*text*<br/>*json*<br/>*bool*<br/>*binary*<br/>*array*<br/>*other*<br/>| | |
+|<span class="no-wrap-code ">`data_type_category`</span>|The filter for a target data type category.|*enum*|*numeric_integer*<br/>*numeric_decimal*<br/>*numeric_float*<br/>*datetime_timestamp*<br/>*datetime_datetime*<br/>*datetime_date*<br/>*datetime_time*<br/>*text*<br/>*clob*<br/>*json*<br/>*bool*<br/>*binary*<br/>*array*<br/>*other*<br/>| | |
 |<span class="no-wrap-code ">`connection`</span>|The data source connection name filter. Accepts wildcards in the format: *conn, *, conn*.|*string*| | | |
 |<span class="no-wrap-code ">`schema`</span>|The schema name filter. Accepts wildcards in the format: *_prod, *, pub*.|*string*| | | |
 |<span class="no-wrap-code ">`table`</span>|The table name filter. Accepts wildcards in the format: *_customers, *, fact_*.|*string*| | | |

@@ -45,7 +45,7 @@ public class DuckdbQueriesProvider {
         setCustomRepository.append("SET extension_directory = ");
         setCustomRepository.append("'");
         setCustomRepository.append(dqoHomePath);
-        setCustomRepository.append("/bin/duckdb");
+        setCustomRepository.append("/bin");
         setCustomRepository.append("'");
         return setCustomRepository.toString();
     }

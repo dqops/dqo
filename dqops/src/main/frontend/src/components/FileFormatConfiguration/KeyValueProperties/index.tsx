@@ -55,6 +55,14 @@ const KeyValueProperties = ({
     }
   }, [arr]);
 
+  useEffect(() => {
+    if (properties) {
+      setArr(convertObjectToArray(properties ?? {}));
+    } else {
+      setArr([{ ['']: '' }]);
+    }
+  }, [properties]);
+
   return (
     <div className="py-4">
       <table className="my-3 w-full">

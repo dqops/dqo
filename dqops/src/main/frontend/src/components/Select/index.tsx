@@ -34,7 +34,7 @@ export interface SelectProps {
   addLabel?: string;
   prefix?: string;
   empty?: boolean;
-  disableIcon?: boolean
+  disableIcon?: boolean;
 }
 
 const Select = ({
@@ -116,13 +116,11 @@ const Select = ({
             ) : (
               placeholder
             )}
-            {disableIcon === true ? 
-            <></> : 
-            <SvgIcon
-              name="chevron-down"
-              className="absolute right-2 w-4"
-            />
-            }   
+            {disableIcon === true ? (
+              <></>
+            ) : (
+              <SvgIcon name="chevron-down" className="absolute right-2 w-4" />
+            )}
           </div>
         </MenuHandler>
         {!disabled && (
@@ -131,15 +129,15 @@ const Select = ({
               'z-50 min-w-40 bg-gray-50 !p-0 max-h-81 overflow-auto',
               menuClassName
             )}
-            style={{zIndex: "200"}}
+            style={{ zIndex: '200' }}
           >
             {options.map((option, index) => (
               <MenuItem
                 data-testid="select-option"
                 key={index}
-                className="py-2 px-4 z-50 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm"
+                className="h-8 py-2 px-4 z-50 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm"
                 onClick={() => handleClick(option)}
-                style={{ minWidth: menuWidth, zIndex: "100" }}
+                style={{ minWidth: menuWidth, zIndex: '100' }}
               >
                 <div
                   className={clsx(

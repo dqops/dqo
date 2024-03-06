@@ -11139,366 +11139,6 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
-  /api/defaults/defaultchecks/dataobservability/monitoring/daily/column:
-    get:
-      tags:
-      - "Defaults"
-      summary: "getDefaultDataObservabilityDailyMonitoringColumnChecks"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the daily monitoring (Data Observability and monitoring) checks that are\
-        \ configured for all imported columns on a column level."
-      operationId: "getDefaultDataObservabilityDailyMonitoringColumnChecks"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CheckContainerModel"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "Defaults"
-      summary: "updateDefaultDataObservabilityDailyMonitoringColumnChecks"
-      description: "New configuration of the default daily monitoring (data observability)\
-        \ checks on a column level. These checks will be applied on new columns."
-      operationId: "updateDefaultDataObservabilityDailyMonitoringColumnChecks"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Model with the changes to be applied to the default configuration\
-          \ of the data observability daily monitoring checks configuration"
-        required: false
-        schema:
-          $ref: "#/definitions/CheckContainerModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoVoid"
-        204:
-          description: "The default configuration of daily monitoring (daily data\
-            \ observability) checks successfully updated."
-        400:
-          description: "Bad request, adjust before retrying"
-        406:
-          description: "Rejected, missing required fields"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/defaults/defaultchecks/dataobservability/monitoring/daily/table:
-    get:
-      tags:
-      - "Defaults"
-      summary: "getDefaultDataObservabilityDailyMonitoringTableChecks"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the daily monitoring (Data Observability and monitoring) checks that are\
-        \ configured for all imported tables on a table level."
-      operationId: "getDefaultDataObservabilityDailyMonitoringTableChecks"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CheckContainerModel"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "Defaults"
-      summary: "updateDefaultDataObservabilityDailyMonitoringTableChecks"
-      description: "New configuration of the default daily monitoring (data observability)\
-        \ checks on a table level. These checks will be applied on new tables."
-      operationId: "updateDefaultDataObservabilityDailyMonitoringTableChecks"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Model with the changes to be applied to the default configuration\
-          \ of the data observability daily monitoring checks configuration"
-        required: false
-        schema:
-          $ref: "#/definitions/CheckContainerModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoVoid"
-        204:
-          description: "The default configuration of daily monitoring (daily data\
-            \ observability) checks successfully updated."
-        400:
-          description: "Bad request, adjust before retrying"
-        406:
-          description: "Rejected, missing required fields"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/defaults/defaultchecks/dataobservability/monitoring/monthly/column:
-    get:
-      tags:
-      - "Defaults"
-      summary: "getDefaultDataObservabilityMonthlyMonitoringColumnChecks"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the monthly monitoring (Data Observability end of month scores) checks that\
-        \ are configured for all imported columns on a column level."
-      operationId: "getDefaultDataObservabilityMonthlyMonitoringColumnChecks"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CheckContainerModel"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "Defaults"
-      summary: "updateDefaultDataObservabilityMonthlyMonitoringColumnChecks"
-      description: "New configuration of the default monthly monitoring checkpoints\
-        \ on a column level. These checks will be applied on new columns."
-      operationId: "updateDefaultDataObservabilityMonthlyMonitoringColumnChecks"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Model with the changes to be applied to the default configuration\
-          \ of the data observability monthly monitoring checks configuration"
-        required: false
-        schema:
-          $ref: "#/definitions/CheckContainerModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoVoid"
-        204:
-          description: "The default configuration of daily monitoring (daily data\
-            \ observability) checks successfully updated."
-        400:
-          description: "Bad request, adjust before retrying"
-        406:
-          description: "Rejected, missing required fields"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/defaults/defaultchecks/dataobservability/monitoring/monthly/table:
-    get:
-      tags:
-      - "Defaults"
-      summary: "getDefaultDataObservabilityMonthlyMonitoringTableChecks"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the monthly monitoring (Data Observability end of month scores) checks that\
-        \ are configured for all imported tables on a table level."
-      operationId: "getDefaultDataObservabilityMonthlyMonitoringTableChecks"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CheckContainerModel"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "Defaults"
-      summary: "updateDefaultDataObservabilityMonthlyMonitoringTableChecks"
-      description: "New configuration of the default monthly monitoring checkpoints\
-        \ on a table level. These checks will be applied on new tables."
-      operationId: "updateDefaultDataObservabilityMonthlyMonitoringTableChecks"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Model with the changes to be applied to the default configuration\
-          \ of the data observability monthly monitoring checks configuration"
-        required: false
-        schema:
-          $ref: "#/definitions/CheckContainerModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoVoid"
-        204:
-          description: "The default configuration of daily monitoring (daily data\
-            \ observability) checks successfully updated."
-        400:
-          description: "Bad request, adjust before retrying"
-        406:
-          description: "Rejected, missing required fields"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/defaults/defaultchecks/profiling/column:
-    get:
-      tags:
-      - "Defaults"
-      summary: "getDefaultProfilingColumnChecks"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the profiling checks that are configured for all imported column on a column\
-        \ level."
-      operationId: "getDefaultProfilingColumnChecks"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CheckContainerModel"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "Defaults"
-      summary: "updateDefaultProfilingColumnChecks"
-      description: "New configuration of the default profiling checks on a column\
-        \ level. These checks will be applied to new columns."
-      operationId: "updateDefaultProfilingColumnChecks"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Model with the changes to be applied to the data quality profiling\
-          \ checks configuration"
-        required: false
-        schema:
-          $ref: "#/definitions/CheckContainerModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoVoid"
-        204:
-          description: "The default configuration of profiling checks successfully\
-            \ updated."
-        400:
-          description: "Bad request, adjust before retrying"
-        406:
-          description: "Rejected, missing required fields"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/defaults/defaultchecks/profiling/table:
-    get:
-      tags:
-      - "Defaults"
-      summary: "getDefaultProfilingTableChecks"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the profiling checks that are configured for all imported tables on a table\
-        \ level."
-      operationId: "getDefaultProfilingTableChecks"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CheckContainerModel"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "Defaults"
-      summary: "updateDefaultProfilingTableChecks"
-      description: "New configuration of the default profiling checks on a table level.\
-        \ These checks will be applied to new tables."
-      operationId: "updateDefaultProfilingTableChecks"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Model with the changes to be applied to the data quality profiling\
-          \ checks configuration"
-        required: false
-        schema:
-          $ref: "#/definitions/CheckContainerModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoVoid"
-        204:
-          description: "The default configuration of profiling checks successfully\
-            \ updated."
-        400:
-          description: "Bad request, adjust before retrying"
-        406:
-          description: "Rejected, missing required fields"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
   /api/defaults/defaultschedule/{schedulingGroup}:
     get:
       tags:
@@ -31477,9 +31117,9 @@ definitions:
         type: "string"
         description: "The region for the storage credentials. The value can be in\
           \ the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-      aws_secret_access_key:
-        type: "string"
       aws_access_key_id:
+        type: "string"
+      aws_secret_access_key:
         type: "string"
   Duration:
     type: "object"
@@ -31837,16 +31477,26 @@ definitions:
         description: "True when this data quality incident is based on data quality\
           \ issues from profiling checks within the filters applied to search for\
           \ linked data quality issues."
-      hasMonitoringIssues:
+      hasDailyMonitoringIssues:
         type: "boolean"
         description: "True when this data quality incident is based on data quality\
-          \ issues from monitoring checks within the filters applied to search for\
-          \ linked data quality issues."
-      hasPartitionedIssues:
+          \ issues from daily monitoring checks within the filters applied to search\
+          \ for linked data quality issues."
+      hasMonthlyMonitoringIssues:
         type: "boolean"
         description: "True when this data quality incident is based on data quality\
-          \ issues from partitioned checks within the filters applied to search for\
-          \ linked data quality issues."
+          \ issues from monthly monitoring checks within the filters applied to search\
+          \ for linked data quality issues."
+      hasDailyPartitionedIssues:
+        type: "boolean"
+        description: "True when this data quality incident is based on data quality\
+          \ issues from daily partitioned checks within the filters applied to search\
+          \ for linked data quality issues."
+      hasMonthlyPartitionedIssues:
+        type: "boolean"
+        description: "True when this data quality incident is based on data quality\
+          \ issues from monthly partitioned checks within the filters applied to search\
+          \ for linked data quality issues."
       days:
         type: "object"
         description: "A map of the numbers of data quality issues per day, the day\
@@ -37381,12 +37031,12 @@ definitions:
         - "numeric_integer"
         - "numeric_decimal"
         - "numeric_float"
-        - "datetime_instant"
+        - "datetime_timestamp"
         - "datetime_datetime"
         - "datetime_date"
         - "datetime_time"
-        - "string"
         - "text"
+        - "clob"
         - "json"
         - "bool"
         - "binary"

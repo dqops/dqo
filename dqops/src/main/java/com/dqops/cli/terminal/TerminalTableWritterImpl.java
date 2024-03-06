@@ -33,13 +33,23 @@ import tech.tablesaw.api.TextColumn;
 @Component
 public class TerminalTableWritterImpl implements TerminalTableWritter {
 	private final FileWriter fileWriter;
-	private final TerminalFactory terminalFactory;
+	private final TerminalReader terminalReader;
+	private final TerminalWriter terminalWriter;
 
 	@Autowired
 	TerminalTableWritterImpl(TerminalFactory terminalFactory,
 							 FileWriter fileWriter) {
-		this.terminalFactory = terminalFactory;
 		this.fileWriter = fileWriter;
+		this.terminalReader = terminalFactory.getReader();
+		this.terminalWriter = terminalFactory.getWriter();
+	}
+
+	TerminalTableWritterImpl(TerminalWriter terminalWriter,
+							 TerminalReader terminalReader,
+							 FileWriter fileWriter) {
+		this.fileWriter = fileWriter;
+		this.terminalReader = terminalReader;
+		this.terminalWriter = terminalWriter;
 	}
 
 	/**
@@ -50,11 +60,9 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	public Integer pickTableRowWithPaging(String question, Table table) {
 		RowSelectionTableModel tableModel = new RowSelectionTableModel(table);
-		TerminalReader terminalReader = this.terminalFactory.getReader();
-		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
 
 		terminalWriter.writeLine(question);
-		this.writeTable(tableModel, false);
+		this.writeTable(tableModel, false, true);
 
 		while (true) {
 			String line = terminalReader.prompt("Please enter one of the [] values: ", "", false);
@@ -77,38 +85,20 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	@Override
 	public CliOperationStatus writeTableToFile(FormattedTableDto<?> tableData) {
 		TableModel model = new BeanListTableModel<>(tableData.getRows(), tableData.getHeaders());
-
-		TableBuilder tableBuilder = new TableBuilder(model);
-		tableBuilder.addInnerBorder(BorderStyle.oldschool);
-		tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-
-		String renderedTable = tableBuilder.build().render(180);
-
+		String renderedTable = renderTable(model, true, 180);
 		return this.fileWriter.writeStringToFile(renderedTable);
 	}
 
 	@Override
 	public CliOperationStatus writeTableToFile(Table table) {
 		TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table);
-
-		TableBuilder tableBuilder = new TableBuilder(tableModel);
-		tableBuilder.addInnerBorder(BorderStyle.oldschool);
-		tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-
-		String renderedTable = tableBuilder.build().render(180);
-
+		String renderedTable = renderTable(tableModel, true, 180);
 		return this.fileWriter.writeStringToFile(renderedTable);
 	}
 
 	@Override
 	public CliOperationStatus writeTableToFile(TableModel tableModel) {
-		TableBuilder tableBuilder = new TableBuilder(tableModel);
-
-		tableBuilder.addInnerBorder(BorderStyle.oldschool);
-		tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-
-		String renderedTable = tableBuilder.build().render(180);
-
+		String renderedTable = renderTable(tableModel, true, 180);
 		return this.fileWriter.writeStringToFile(renderedTable);
 	}
 
@@ -119,61 +109,47 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeTable(FormattedTableDto<?> tableData, boolean addBorder) {
-		TerminalReader terminalReader = this.terminalFactory.getReader();
-		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
-
-		int height = addBorder ? terminalWriter.getTerminalHeight() / 3 : terminalWriter.getTerminalHeight() - 2;
-		if( height == 0) {
-			height = 1;
-		}
+		final int pageHeight = getPageHeight(addBorder);
+		final int lastTableIndex = tableData.getRows().size();
 		int rowsLeft = tableData.getRows().size();
-		int index = 0;
+		int pageIndex = 0;
 
 		while (rowsLeft > 0) {
-			int start = index * height;
-			int maxEnd = tableData.getRows().size();
-			if (start >= maxEnd) {
+			int pageStartTableIndex = pageIndex * pageHeight;
+			if (pageStartTableIndex >= lastTableIndex) {
 				break;
 			}
-			int end = Math.min(start + height, maxEnd);
-			TableModel model = new BeanListTableModel<>(tableData.getRows().subList(start, end), tableData.getHeaders());
+			int pageEndTableIndex = Math.min(pageStartTableIndex + pageHeight, lastTableIndex);
 
-			TableBuilder tableBuilder = new TableBuilder(model);
-			if (addBorder) {
-				tableBuilder.addInnerBorder(BorderStyle.oldschool);
-				tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-			}
-			String renderedTable = tableBuilder.build().render(terminalWriter.getTerminalWidth() - 1);
-
+			TableModel model = new BeanListTableModel<>(tableData.getRows().subList(pageStartTableIndex, pageEndTableIndex), tableData.getHeaders());
+			String renderedTable = renderTable(model, addBorder);
 			terminalWriter.write(renderedTable);
 
-			if (rowsLeft >= height) {
-				try {
-					int response = terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", 'y', false);
-					if (response == 'N' || response == 'n') {
-						return;
-					}
-					else if (response == 'a' || response == 'A') {
-						writeWholeTable(tableData, addBorder);
-						return;
-					}
-					else if (response == 's' || response == 'S') {
-						CliOperationStatus cliOperationStatus = this.writeTableToFile(tableData);
-						terminalWriter.writeLine(cliOperationStatus.getMessage());
-						return;
-					}
-					else if (response == 'y' || response == 'Y') {
-						rowsLeft -= height;
-						index++;
-					}
-				} catch (Exception e) {
+			if (rowsLeft >= pageHeight) {
+				boolean shouldPrintNextPage = pagingPrompt(tableData, addBorder);
+				if(!shouldPrintNextPage){
 					return;
 				}
+				rowsLeft -= pageHeight;
+				pageIndex++;
 			}
 			else {
 				return;
 			}
 		}
+	}
+
+	/**
+	 * Returns the page height of terminal.
+	 * @param addBorder Whether to add a border.
+	 * @return Page heights in lines.
+	 */
+	private int getPageHeight(boolean addBorder){
+		int pageHeight = (addBorder ? terminalWriter.getTerminalHeight() / 3 : terminalWriter.getTerminalHeight() - 2);
+		if( pageHeight == 0) {
+			pageHeight = 1;
+		}
+		return pageHeight;
 	}
 
 	/**
@@ -183,61 +159,179 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeTable(Table table, boolean addBorder) {
-		TerminalReader terminalReader = this.terminalFactory.getReader();
-		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
+		writeTable(table, addBorder, false);
+	}
 
-		int height = addBorder ? terminalWriter.getTerminalHeight() / 3 : terminalWriter.getTerminalHeight() - 2;
-		if( height == 0) {
-			height = 1;
-		}
+	/**
+	 * Writes a table dataset with paging with a header that is extracted from the column names.
+	 * @param table Table (dataset).
+	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 * @param noHeader Whether the header should be rendered.
+	 */
+	@Override
+	public void writeTable(Table table, boolean addBorder, boolean noHeader) {
+		final int pageHeight = getPageHeight(addBorder);
+		final int lastTableIndex = table.rowCount();
 		int rowsLeft = table.rowCount();
-		int index = 0;
+		int pageIndex = 0;
 
 		while (rowsLeft > 0) {
-			int start = index * height;
-			int maxEnd = table.rowCount();
-			if (start >= maxEnd) {
+			int pageStartTableIndex = pageIndex * pageHeight;
+			if (pageStartTableIndex >= lastTableIndex) {
 				break;
 			}
-			int end = Math.min(start + height, maxEnd);
-			TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table.inRange(start, end));
+			int pageEndTableIndex = Math.min(pageStartTableIndex + pageHeight, lastTableIndex);
 
-			TableBuilder tableBuilder = new TableBuilder(tableModel);
-			if (addBorder) {
-				tableBuilder.addInnerBorder(BorderStyle.oldschool);
-				tableBuilder.addHeaderBorder(BorderStyle.oldschool);
+			TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table.inRange(pageStartTableIndex, pageEndTableIndex));
+			String renderedTable = renderTable(tableModel, addBorder);
+			if(noHeader){
+				int secondLineIndex = renderedTable.indexOf("\n") + 1;
+				renderedTable = renderedTable.substring(secondLineIndex);
 			}
-			String renderedTable = tableBuilder.build().render(terminalWriter.getTerminalWidth() - 1);
-
 			terminalWriter.write(renderedTable);
 
-			if (rowsLeft >= height) {
-				try {
-					int response = terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", 'y', false);
-					if (response == 'N' || response == 'n') {
-						return;
-					}
-					else if (response == 'a' || response == 'A') {
-						writeWholeTable(table, addBorder);
-						return;
-					}
-					else if (response == 's' || response == 'S') {
-						CliOperationStatus cliOperationStatus = this.writeTableToFile(table);
-						terminalWriter.writeLine(cliOperationStatus.getMessage());
-						return;
-					}
-					else if (response == 'y' || response == 'Y') {
-						rowsLeft -= height;
-						index++;
-					}
-				} catch (Exception e) {
+			if (rowsLeft >= pageHeight) {
+				boolean shouldPrintNextPage = pagingPrompt(table, addBorder);
+				if(!shouldPrintNextPage){
 					return;
 				}
+				rowsLeft -= pageHeight;
+				pageIndex++;
 			}
 			else {
 				return;
 			}
 		}
+	}
+
+	/**
+	 * Renders a table with paging using a given table model.
+	 * @param tableModel Table model for the spring shell table.
+	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 * @param noHeader Whether to push the first line as a row or only as a header.
+	 *                 If set to true, the first row is pushed as a header providing a valid number of columns.
+	 *                 Then the header values should be treated as placeholders.
+	 */
+	@Override
+	public void writeTable(TableModel tableModel, boolean addBorder, boolean noHeader) {
+		int tableStartIndex = noHeader ? 0 : 1;
+		TextColumn[] headers = retrieveHeaders(tableModel);
+		Table resultTable = Table.create().addColumns(headers);
+
+		for(int y = tableStartIndex; y < tableModel.getRowCount(); y++) {
+			Row row = resultTable.appendRow();
+			for (int x = 0; x < tableModel.getColumnCount(); x++) {
+				String rowString = tableModel.getValue(y, x).toString();
+				row.setString(x, rowString);
+			}
+		}
+
+		writeTable(resultTable, addBorder, noHeader);
+	}
+
+	/**
+	 * Renders a table with paging using a given table model.
+	 * @param tableModel Table model for the spring shell table.
+	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 */
+	@Override
+	public void writeTable(TableModel tableModel, boolean addBorder) {
+		writeTable(tableModel, addBorder, false);
+	}
+
+	/**
+	 * Renders a table model.
+	 * @param tableData Table data.
+	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 */
+	@Override
+	public void writeWholeTable(FormattedTableDto<?> tableData, boolean addBorder) {
+		TableModel model = new BeanListTableModel<>(tableData.getRows(), tableData.getHeaders());
+		String renderedTable = renderTable(model, addBorder);
+		terminalWriter.write(renderedTable);
+	}
+
+	/**
+	 * Writes a table dataset with a header that is extracted from the column names.
+	 * @param table Table (dataset).
+	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 */
+	@Override
+	public void writeWholeTable(Table table, boolean addBorder) {
+		TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table);
+		String renderedTable = renderTable(tableModel, addBorder);
+		terminalWriter.write(renderedTable);
+	}
+
+	/**
+	 * Renders a table using a given table model.
+	 * @param tableModel Table model for the spring shell table.
+	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 */
+	@Override
+	public void writeWholeTable(TableModel tableModel, boolean addBorder) {
+		String renderedTable = renderTable(tableModel, addBorder);
+        terminalWriter.write(renderedTable);
+	}
+
+	/**
+	 * Paging prompt.
+	 * @param tableData The table with data
+	 * @param addBorder Whether to render a border.
+	 * @return Whether to continue rendering of the next page.
+	 */
+	private boolean pagingPrompt(FormattedTableDto<?> tableData, boolean addBorder){
+		try {
+			int response = terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", 'y', false);
+			if (response == 'N' || response == 'n') {
+				return false;
+			}
+			else if (response == 'a' || response == 'A') {
+				writeWholeTable(tableData, addBorder);
+				return false;
+			}
+			else if (response == 's' || response == 'S') {
+				CliOperationStatus cliOperationStatus = this.writeTableToFile(tableData);
+				terminalWriter.writeLine(cliOperationStatus.getMessage());
+				return false;
+			}
+			else if (response == 'y' || response == 'Y') {
+				return true;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+		return false;
+	}
+
+	/**
+	 * Paging prompt.
+	 * @param table The table with data
+	 * @param addBorder Whether to render a border.
+	 * @return Whether to continue rendering of the next page.
+	 */
+	private boolean pagingPrompt(Table table, boolean addBorder){
+		try {
+			int response = terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", 'y', false);
+			if (response == 'N' || response == 'n') {
+				return false;
+			}
+			else if (response == 'a' || response == 'A') {
+				writeWholeTable(table, addBorder);
+				return false;
+			}
+			else if (response == 's' || response == 'S') {
+				CliOperationStatus cliOperationStatus = this.writeTableToFile(table);
+				terminalWriter.writeLine(cliOperationStatus.getMessage());
+				return false;
+			}
+			else if (response == 'y' || response == 'Y') {
+				return true;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+		return false;
 	}
 
 	private TextColumn[] retrieveHeaders(TableModel tableModel) {
@@ -252,75 +346,30 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	}
 
 	/**
-	 * Renders a table with paging using a given table model.
-	 * @param tableModel Table model for the spring shell table.
-	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 * Renders table to a string.
+	 * @param tableModel Table with data.
+	 * @param addBorder Whether to render a border.
+	 * @param totalAvailableWidth totalAvailableWidth
+	 * @return Rendered table.
 	 */
-	@Override
-	public void writeTable(TableModel tableModel, boolean addBorder) {
-		TextColumn[] headers = retrieveHeaders(tableModel);
-		Table resultTable = Table.create().addColumns(headers);
-
-		for(int y = 1; y < tableModel.getRowCount(); y++) {
-			Row row = resultTable.appendRow();
-			for (int x = 0; x < tableModel.getColumnCount(); x++) {
-				row.setString(x, tableModel.getValue(y, x).toString());
-			}
-		}
-		writeTable(resultTable, addBorder);
-	}
-
-	/**
-	 * Renders a table model.
-	 * @param tableData Table data.
-	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
-	 */
-	@Override
-	public void writeWholeTable(FormattedTableDto<?> tableData, boolean addBorder) {
-		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
-		TableModel model = new BeanListTableModel<>(tableData.getRows(), tableData.getHeaders());
-
-		TableBuilder tableBuilder = new TableBuilder(model);
-		if (addBorder) {
-			tableBuilder.addInnerBorder(BorderStyle.oldschool);
-			tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-		}
-		String renderedTable = tableBuilder.build().render(terminalWriter.getTerminalWidth() - 1);
-		terminalWriter.write(renderedTable);
-	}
-
-	/**
-	 * Writes a table dataset with a header that is extracted from the column names.
-	 * @param table Table (dataset).
-	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
-	 */
-	@Override
-	public void writeWholeTable(Table table, boolean addBorder) {
-		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
-		TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table);
+	private String renderTable(TableModel tableModel, boolean addBorder, int totalAvailableWidth){
 		TableBuilder tableBuilder = new TableBuilder(tableModel);
 		if (addBorder) {
 			tableBuilder.addInnerBorder(BorderStyle.oldschool);
 			tableBuilder.addHeaderBorder(BorderStyle.oldschool);
 		}
-		String renderedTable = tableBuilder.build().render(terminalWriter.getTerminalWidth() - 1);
-		terminalWriter.write(renderedTable);
+		String renderedTable = tableBuilder.build().render(totalAvailableWidth);
+		return renderedTable;
 	}
 
 	/**
-	 * Renders a table using a given table model.
-	 * @param tableModel Table model for the spring shell table.
-	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 * Renders table to a string. The width of the table will fit to the terminal.
+	 * @param tableModel Table with data.
+	 * @param addBorder Whether to render a border.
+	 * @return Rendered table.
 	 */
-	@Override
-	public void writeWholeTable(TableModel tableModel, boolean addBorder) {
-		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
-		TableBuilder tableBuilder = new TableBuilder(tableModel);
-		if (addBorder) {
-			tableBuilder.addInnerBorder(BorderStyle.oldschool);
-			tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-		}
-		String renderedTable = tableBuilder.build().render(terminalWriter.getTerminalWidth() - 1);
-        terminalWriter.write(renderedTable);
+	private String renderTable(TableModel tableModel, boolean addBorder){
+		return renderTable(tableModel, addBorder, terminalWriter.getTerminalWidth() - 1);
 	}
+
 }

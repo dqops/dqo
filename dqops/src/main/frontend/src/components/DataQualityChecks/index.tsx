@@ -308,7 +308,7 @@ const DataQualityChecks = ({
   }
 
   if (!checksUI?.categories) {
-    return <div className="p-4">No Checks</div>;
+    return <div className="p-4">Please wait, loading data quality checks.</div>;
   }
 
   const timeWindowOptions = Object.keys(RUN_CHECK_TIME_WINDOW_FILTERS).map(
