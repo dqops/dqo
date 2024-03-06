@@ -53,7 +53,7 @@ export default function DefaultCheckTargetConfiguration({
             value={target?.priority}
             onChange={(e) =>
               onChangeTarget({
-                priority: !isNaN(Number(e.target.value))
+                priority: !isNaN(Number(e.target.value)) && e.target.value !== ''
                   ? Number(e.target.value)
                   : undefined
               })
@@ -106,7 +106,7 @@ export default function DefaultCheckTargetConfiguration({
               }
               onChange={(e) =>
                 onChangeTarget({
-                  table_priority: !isNaN(Number(e.target.value))
+                  table_priority: !isNaN(Number(e.target.value)) && e.target.value !== ''
                     ? Number(e.target.value)
                     : undefined
                 })
