@@ -116,7 +116,7 @@ const TableDetails = () => {
           file_format:
             {
               [fileFormatType as keyof FileFormatSpec]: configuration,
-              file_paths: paths.slice(0, -1)
+              file_paths: paths
             } ?? undefined
         }
       )
@@ -138,10 +138,11 @@ const TableDetails = () => {
   }, [tableBasic?.file_format]);
 
   const onAddPath = () => {
-    setPaths((prev) => [...prev, '']);
     handleChange({});
+    setPaths((prev) => [...prev, '']);
   };
   const onChangePath = (value: string, index?: number) => {
+    handleChange({});
     const copiedPaths = [...paths];
     if (index !== undefined) {
       copiedPaths[index] = value;
