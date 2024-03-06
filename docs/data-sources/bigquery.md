@@ -20,7 +20,7 @@ To add BigQuery data source connection to DQOps you need the following:
 
 To navigate to the BigQuery connection settings:
 
-1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
+1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
 
@@ -31,7 +31,7 @@ To navigate to the BigQuery connection settings:
 
 ### **Fill in the connection settings**
 
-After navigating to the BigQuery connection settings, you will need to fill in the connection details.
+After navigating to the BigQuery connection settings, you will need to fill in its details.
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-bigquery.png)
 
@@ -53,7 +53,7 @@ For example:
 
 After filling in the connection settings, click the **Test Connection** button to test the connection.
 
-Click the **Save** connection button when the test is successful otherwise you can check the details of what went wrong.
+Click the **Save** connection button when the test is successful otherwise, you can check the details of what went wrong.
 
 
 ### **Import metadata using the user interface**
@@ -69,7 +69,7 @@ Click the **Save** connection button when the test is successful otherwise you c
 
 When new tables are imported, DQOps automatically activates profiling and monitoring checks, such as row count, table 
 availability and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m. By clicking 
-on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks or modify 
+on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks, or modify 
 the schedule for newly imported tables.
 
 ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png)
@@ -162,9 +162,9 @@ spec:
 ```
 
 ### **Reference of all connection parameters**
-The complete documentation of all connection parameters used in the `spec.bigquery` node is
-described in the reference of the [BigQueryParametersSpec](../reference/yaml/ConnectionYaml.md#bigqueryparametersspec)
-YAML files format reference.
+Complete documentation of all connection parameters used in the `spec.bigquery` node is
+described in the reference section of the [BigQueryParametersSpec](../reference/yaml/ConnectionYaml.md#bigqueryparametersspec)
+YAML file format.
 
 
 ## Using Google Application Credentials authentication

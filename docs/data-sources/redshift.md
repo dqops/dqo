@@ -20,7 +20,7 @@ to [Allowed IP Addresses in Redshift Network Policies](https://docs.aws.amazon.c
 
 To navigate to the Redshift connection settings:
 
-1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
+1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
 
@@ -30,7 +30,7 @@ To navigate to the Redshift connection settings:
 
 ### **Fill in the connection settings**
 
-After navigating to the Redshift connection settings, you will need to fill in the connection details.
+After navigating to the Redshift connection settings, you will need to fill in its details.
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-redshift.png)
 
@@ -51,7 +51,7 @@ For example:
 
 ![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-envvar.jpg)
     
-To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value
+To add optional JDBC connection properties, just type the **JDBC connection property** and the **Value**. The value
 can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
     
 For example:
@@ -62,7 +62,7 @@ To remove the property click on the trash icon at the end of the input field.
 
 After filling in the connection settings, click the **Test Connection** button to test the connection.
 
-Click the **Save** connection button when the test is successful otherwise you can check the details of what went wrong.
+Click the **Save** connection button when the test is successful otherwise, you can check the details of what went wrong.
 
 
 ### **Import metadata using the user interface**
@@ -81,7 +81,7 @@ Now we can import schemas and tables.
 
 
 When new tables are imported, DQOps automatically activates profiling and monitoring checks, such as row count, 
-table availability and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m. 
+table availability, and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m. 
 By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks 
 or modify the schedule for newly imported tables.
 
@@ -178,9 +178,9 @@ spec:
 ```
 
 ### **Reference of all connection parameters**
-The complete documentation of all connection parameters used in the `spec.redshift` node is
-described in the reference of the [RedshiftParametersSpec](../reference/yaml/ConnectionYaml.md#redshiftparametersspec)
-YAML files format reference.
+Complete documentation of all connection parameters used in the `spec.redshift` node is
+described in the reference section of the [RedshiftParametersSpec](../reference/yaml/ConnectionYaml.md#redshiftparametersspec)
+YAML file format.
 
 ## Next steps
 

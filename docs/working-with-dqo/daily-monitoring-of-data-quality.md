@@ -186,7 +186,7 @@ To import source schemas and tables:
     ![Importing tables](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-tables.png)
 
 When new tables are imported, DQOps automatically activates profiling and monitoring checks, and opens an Advisor 
-that allows you to quickly collect basic statistics, run profiling checks or modify the schedule for newly imported tables.
+that allows you to quickly collect basic statistics, run profiling checks, or modify the schedule for newly imported tables.
 But let's close the Advisor with the X button in the top right corner and verify the activation of the default checks.
 
 ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/advisor.png)
