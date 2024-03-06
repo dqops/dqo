@@ -31117,9 +31117,9 @@ definitions:
         type: "string"
         description: "The region for the storage credentials. The value can be in\
           \ the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-      aws_secret_access_key:
-        type: "string"
       aws_access_key_id:
+        type: "string"
+      aws_secret_access_key:
         type: "string"
   Duration:
     type: "object"
@@ -31477,16 +31477,26 @@ definitions:
         description: "True when this data quality incident is based on data quality\
           \ issues from profiling checks within the filters applied to search for\
           \ linked data quality issues."
-      hasMonitoringIssues:
+      hasDailyMonitoringIssues:
         type: "boolean"
         description: "True when this data quality incident is based on data quality\
-          \ issues from monitoring checks within the filters applied to search for\
-          \ linked data quality issues."
-      hasPartitionedIssues:
+          \ issues from daily monitoring checks within the filters applied to search\
+          \ for linked data quality issues."
+      hasMonthlyMonitoringIssues:
         type: "boolean"
         description: "True when this data quality incident is based on data quality\
-          \ issues from partitioned checks within the filters applied to search for\
-          \ linked data quality issues."
+          \ issues from monthly monitoring checks within the filters applied to search\
+          \ for linked data quality issues."
+      hasDailyPartitionedIssues:
+        type: "boolean"
+        description: "True when this data quality incident is based on data quality\
+          \ issues from daily partitioned checks within the filters applied to search\
+          \ for linked data quality issues."
+      hasMonthlyPartitionedIssues:
+        type: "boolean"
+        description: "True when this data quality incident is based on data quality\
+          \ issues from monthly partitioned checks within the filters applied to search\
+          \ for linked data quality issues."
       days:
         type: "object"
         description: "A map of the numbers of data quality issues per day, the day\

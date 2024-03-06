@@ -236,22 +236,22 @@ export const IncidentDetail = () => {
     {
       checkType: CheckTypes.PARTITIONED,
       timeScale: 'daily',
-      show: histograms?.hasPartitionedIssues
+      show: histograms?.hasDailyPartitionedIssues
     },
     {
       checkType: CheckTypes.PARTITIONED,
       timeScale: 'monthly',
-      show: histograms?.hasPartitionedIssues
+      show: histograms?.hasMonthlyPartitionedIssues
     },
     {
       checkType: CheckTypes.MONITORING,
       timeScale: 'daily',
-      show: histograms?.hasMonitoringIssues
+      show: histograms?.hasDailyMonitoringIssues
     },
     {
       checkType: CheckTypes.MONITORING,
       timeScale: 'monthly',
-      show: histograms?.hasMonitoringIssues
+      show: histograms?.hasMonthlyMonitoringIssues
     }
   ];
 
