@@ -1,8 +1,6 @@
 import {
   CheckTemplate,
   ConnectionModelProviderTypeEnum,
-  DqoJobChangeModelStatusEnum,
-  DqoJobEntryParametersModel,
   DqoJobHistoryEntryModel,
   TableComparisonGroupingColumnPairModel,
   TimeWindowFilterParameters
@@ -376,7 +374,7 @@ export const databaseOptions: IDatabaseOption[] = [
   {
     type: ConnectionModelProviderTypeEnum.duckdb,
     name: 'CSV',
-    iconName: 'duckdb',
+    iconName: 'csv',
     displayName: 'CSV'
   },
   {
@@ -394,7 +392,7 @@ export const databaseOptions: IDatabaseOption[] = [
   {
     type: ConnectionModelProviderTypeEnum.duckdb,
     name: 'JSON',
-    iconName: 'duckdb',
+    iconName: 'json',
     displayName: 'JSON'
   },
   {
@@ -424,7 +422,7 @@ export const databaseOptions: IDatabaseOption[] = [
   {
     type: ConnectionModelProviderTypeEnum.duckdb,
     name: 'Parquet',
-    iconName: 'duckdb',
+    iconName: 'parquet',
     displayName: 'Parquet'
   },
   {

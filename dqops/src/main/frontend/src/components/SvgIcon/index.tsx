@@ -100,8 +100,11 @@ import { ReactComponent as PrestoSvg } from './svg/presto.svg';
 import { ReactComponent as TrinoSvg } from './svg/trino.svg';
 import { ReactComponent as AmazonAthenaSvg } from './svg/amazon-athena.svg';
 import { ReactComponent as SingleStoreDbSvg } from './svg/single-store.svg';
-import { ReactComponent as DataDictionarySvg } from './svg/data-dictionary.svg'
-import { ReactComponent as DuckdbSvg } from './svg/duckdb.svg'
+import { ReactComponent as DataDictionarySvg } from './svg/data-dictionary.svg';
+import { ReactComponent as DuckdbSvg } from './svg/duckdb.svg';
+import { ReactComponent as CsvSvg } from './svg/csv-icon.svg';
+import { ReactComponent as JsonSvg } from './svg/json-icon.svg';
+import { ReactComponent as ParquetSvg } from './svg/parquet-icon.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -212,6 +215,9 @@ const iconsMap: any = {
   singlestoredb: SingleStoreDbSvg,
   datadictionary: DataDictionarySvg,
   duckdb: DuckdbSvg,
+  csv: CsvSvg,
+  json: JsonSvg,
+  parquet: ParquetSvg,
 };
 
 interface SvgIconProps {
