@@ -14,7 +14,7 @@ Additional configuration is required **only for using remote storage** (AWS S3).
 When using a remote cloud storage, ensure that your account has access to the remote directory containing Parquet files.
 The permissions acquired should enable the listing of files and directories, as well as reading the content of files.
 
-## Add Parquet connection using the user interface
+## Add connection to Parquet files using the user interface
 
 ### **Navigate to the connection settings**
 
@@ -24,7 +24,7 @@ To navigate to the Parquet connection settings:
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
 
-2. Select Parquet database type. // todo: screen
+2. Select the Parquet file connection option. // todo: screen
 
     ![Selecting Parquet database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-spark.png)
 
@@ -39,25 +39,25 @@ After navigating to the Parquet connection settings, you will need to fill in it
 |-----------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name             |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
 | Parallel jobs limit         |                                          | New limit. Null value will disable limit.                                                                                                                                                                                                 |
-| Storage type                | `storage-type`                             | Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                 |
-| Source files type           | `source-files-type`                        | Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                 |
-| JDBC connection property    |                                          | Optional setting. DQOps supports using JDBC driver to access DuckDB. [JDBC Concepts.](https://docs.oracle.com/en/database/oracle/oracle-database/23/jjdbc/introducing-JDBC.html).                                                         |
-| User                        | `user`                                     | DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                      |
-| Password                    | `password`                                 | DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                       |
-| Region                      | `region`                                   | The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                          |
-| Virtual schema name / Path  | `directories`                              | Virtual schema name to directory mappings. The path must be an absolute path.                                                                                                                                                             |
+| Storage type                | `storage-type`                           | The storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                |
+| Files format                | `files-format-type`                      | Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                 |
+| JDBC connection property    |                                          | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                  |
+| User name/Key ID            | `user`                                   | DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                      |
+| Password/Secret Key         | `password`                               | DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                       |
+| Region                      | `region`                                 | The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                          |
+| Virtual schema name / Path  | `directories`                            | Mapping virtual schema name to the directory. The path must be an absolute.                                                                                                                                                               |
 
-**Parquet format specific settings**
+**Parquet format options**
 
 The format properties of a Parquet can be configured with the following settings.
 
-| Parquet format specific settings | Property name in YAML configuration file  | Description                                                                                                                                                                                        |
-|----------------------------------|-------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Binary as string                 | `binary-as-string`                          | Parquet files generated by legacy writers do not correctly set the UTF8 flag for strings, causing string columns to be loaded as BLOB instead. Set this to true to load binary columns as strings. | 
-| Filename                         | `filename`                                  | Whether or not an extra filename column should be included in the result.                                                                                                                          | 
-| File row number                  | `file-row-number`                           | Whether or not to include the file_row_number column.                                                                                                                                              | 
-| Hive partitioning                | `hive-partitioning`                         | Whether or not to interpret the path as a hive partitioned path.                                                                                                                                   | 
-| Union by name                    | `union-by-name`                             | Whether the columns of multiple schemas should be unified by name, rather than by position.                                                                                                        | 
+| Parquet format options   | Property name in YAML configuration file   | Description                                                                                                                                                                                        |
+|--------------------------|--------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Binary as string         | `binary-as-string`                         | Parquet files generated by legacy writers do not correctly set the UTF8 flag for strings, causing string columns to be loaded as BLOB instead. Set this to true to load binary columns as strings. | 
+| Filename                 | `filename`                                 | Specifies whether or not an extra filename column should be included in the result.                                                                                                                | 
+| File row number          | `file-row-number`                          | Specifies whether or not to include the file_row_number column.                                                                                                                                    | 
+| Hive partitioning        | `hive-partitioning`                        | Specifies whether to interpret the path as a hive-partitioned path.                                                                                                                                | 
+| Union by name            | `union-by-name`                            | Specifies whether the columns of multiple schemas should be unified by name, rather than by position.                                                                                              | 
 
 
 ### Environment variables in parameters
@@ -118,8 +118,8 @@ Select the **duckdb** provider, which provides support for the Parquet file form
 
 !!! info "Windows file system"
 
-    When using the file system of Windows remember to put double backslash (\\) in a path on the CLI prompt.
-    A single forward slash (/) can also be used.
+   When using the Windows file system remember to put a double backslash (\\) in the path on the CLI prompt. 
+   You can also use a single slash (/).
 
 
 ```
@@ -158,7 +158,7 @@ You can also run the command with parameters to add a connection in just a singl
 dqo> connection add --name=connection1
 --provider=duckdb
 --duckdb-storage-type=local
---duckdb-source-files-type=parquet
+--duckdb-files-format-type=parquet
 --duckdb-directories=files=/usr/share/clients_data
 ```
 

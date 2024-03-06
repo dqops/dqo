@@ -110,7 +110,7 @@ const DuckdbConnection = ({
           />
           <FieldTypeInput
             data={sharedCredentials}
-            label="Password/Token"
+            label="Password/Secret Key"
             className="mb-4"
             maskingType="password"
             value={duckdb?.password}

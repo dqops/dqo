@@ -35,41 +35,41 @@ After navigating to the JSON connection settings, you will need to fill in its d
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-spark1.png)
 
-| JSON connection settings    | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
-|-----------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name             |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-| Parallel jobs limit         |                                          | New limit. Null value will disable limit.                                                                                                                                                                                                 |
-| Storage type                | `storage-type`                             | Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                 |
-| Source files type           | `source-files-type`                        | Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                 |
-| JDBC connection property    |                                          | Optional setting. DQOps supports using JDBC driver to access DuckDB. [JDBC Concepts.](https://docs.oracle.com/en/database/oracle/oracle-database/23/jjdbc/introducing-JDBC.html).                                                         |
-| User                        | `user`                                     | DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                      |
-| Password                    | `password`                                 | DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                       |
-| Region                      | `region`                                   | The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                          |
-| Virtual schema name / Path  | `directories`                              | Virtual schema name to directory mappings. The path must be an absolute path.                                                                                                                                                             |
+| JSON connection settings   | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
+|----------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name            |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
+| Parallel jobs limit        |                                          | New limit. Null value will disable limit.                                                                                                                                                                                                 |
+| Storage type               | `storage-type`                           | The storage type.                                                                                                                                                                                                                         |
+| Files format               | `files-format-type`                      | Type of source files for DuckDB.                                                                                                                                                                                                          |
+| JDBC connection property   |                                          | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                  |
+| User name/Key ID           | `user`                                   | DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                      |
+| Password/Secret Key        | `password`                               | DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                       |
+| Region                     | `region`                                 | The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                          |
+| Virtual schema name / Path | `directories`                            | Mapping virtual schema name to the directory. The path must be an absolute.                                                                                                                                                               |
 
 
-**JSON format specific settings**
+**JSON format options**
 
-The format properties of a JSON file are detected automatically based on a data sample from the file. The default sample size is 20480 rows.
+JSON file format properties are detected automatically based on a sample of the file data. 
+The default sample size is 20480 rows.
 
-For a very specific JSON format the following properties can be configured.
+The following properties can be configured for a very specific JSON format.
 
-| JSON format specific settings | Property name in YAML configuration file | Description                                                                                                                                                                                   |
-|------------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Auto detect                 | `auto-detect`                              | Whether to auto-detect detect the names of the keys and data types of the values automatically.                                                                                                                                           | 
-| Compression                 | `compression`                              | The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are none, gzip, zstd.                                            | 
-| Dateformat                  | `dateformat`                               | Specifies the date format to use when parsing dates.                                                                                                                                                                                      | 
-| Convert strings to integers | `convert-strings-to-integers`              | Whether strings representing integer values should be converted to a numerical type.                                                                                                                                                      | 
-| Dateformat                  | `dateformat`                               | Specifies the date format to use when parsing dates.                                                                                                                                                                                      | 
-| Filename                    | `filename`                                 | Whether or not an extra filename column should be included in the result.                                                                                                                                                                 | 
-| Format                      | `format`                                   | Json format. Can be one of \['auto', 'unstructured', 'newline_delimited', 'array'\].                                                                                                                                                      | 
-| Hive partitioning           | `hive-partitioning`                        | Whether or not to interpret the path as a hive partitioned path.                                                                                                                                                                          | 
-| Ignore errors               | `ignore-errors`                            | Option to ignore any parsing errors encountered - and instead ignore rows with errors.                                                                                                                                                    | 
-| Maximum depth               | `maximum-depth`                            | Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types.                                                                                                                 | 
-| Maximum object size         | `maximum-object-size`                      | The maximum size of a JSON object (in bytes).                                                                                                                                                                                             | 
-| Records                     | `records`                                  | Can be one of ['auto', 'true', 'false'].                                                                                                                                                                                                  | 
-| Sample size                 | `sample-size`                              | The number of lines at the top of the file to skip.                                                                                                                                                                                       | 
-| Timestamp format            | `timestampformat`                          | Specifies the date format to use when parsing timestamps.                                                                                                                                                                                 | 
+| JSON format options | Property name in YAML configuration file | Description                                                                                                                                                                                     |
+|-------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Compression                   | `compression`                              | The compression type for the file. By default, this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are none, gzip, zstd. | 
+| Date format                   | `dateformat`                               | Specifies the date format used when parsing dates.                                                                                                                                              | 
+| Json Format                   | `format`                                   | Json format. Can be one of \['auto', 'unstructured', 'newline_delimited', 'array'\].                                                                                                            | 
+| Maximum depth                 | `maximum-depth`                            | Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types.                                                                       | 
+| Maximum object size           | `maximum-object-size`                      | The maximum size of a JSON object (in bytes).                                                                                                                                                   | 
+| Records                       | `records`                                  | Can be one of ['auto', 'true', 'false'].                                                                                                                                                        | 
+| Sample size                   | `sample-size`                              | The number of sample rows for automatic parameter detection.                                                                                                                                    | 
+| Timestamp format              | `timestampformat`                          | Specifies the date format used when parsing timestamps.                                                                                                                                         | 
+| Convert strings to integers   | `convert-strings-to-integers`              | Specifies whether strings representing integer values should be converted to a numerical type.                                                                                                  | 
+| Filename                      | `filename`                                 | Specifies whether an additional file name column should be included in the result.                                                                                                              | 
+| Hive partitioning             | `hive-partitioning`                        | Specifies whether to interpret the path as a hive-partitioned path.                                                                                                                             | 
+| Ignore errors                 | `ignore-errors`                            | An option to ignore any parsing errors encountered - and instead ignore rows with errors.                                                                                                       | 
+| Auto detect                   | `auto-detect`                              | (Not available in UI) Whether to auto-detect detect the names of the keys and data types of the values automatically.                                                                           | 
 
 
 ### Environment variables in parameters
@@ -130,8 +130,8 @@ Select the **duckdb** provider, which provides support for the JSON file format.
 
 !!! info "Windows file system"
 
-    When using the file system of Windows remember to put double backslash (\\) in a path on the CLI prompt.
-    A single forward slash (/) can also be used.
+   When using the Windows file system remember to put a double backslash (\\) in the path on the CLI prompt.
+   You can also use a single slash (/).
 
 
 ```
@@ -170,7 +170,7 @@ You can also run the command with parameters to add a connection in just a singl
 dqo> connection add --name=connection1
 --provider=duckdb
 --duckdb-storage-type=local
---duckdb-source-files-type=json
+--duckdb-files-format-type=json
 --duckdb-directories=files=/usr/share/clients_data
 ```
 

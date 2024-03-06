@@ -1,7 +1,7 @@
 import React from 'react';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import SelectInput from '../SelectInput';
-import { DuckdbParametersSpecSourceFilesTypeEnum } from '../../api';
+import { DuckdbParametersSpecFilesFormatTypeEnum } from '../../api';
 import CsvFormatConfiguration from './FormatsConfiguration/CsvFormatConfiguration';
 import JsonFormatConfiguration from './FormatsConfiguration/JsonFormatConfiguration';
 import ParquetFormatConfiguration from './FormatsConfiguration/ParquetFormatConfiguration';
@@ -10,9 +10,9 @@ import { TConfiguration } from './TConfiguration';
 import KeyValueProperties from './KeyValueProperties';
 
 type TFileFormatConfigurationProps = {
-  fileFormatType: DuckdbParametersSpecSourceFilesTypeEnum;
+  fileFormatType: DuckdbParametersSpecFilesFormatTypeEnum;
   configuration: TConfiguration;
-  onChangeFile: (val: DuckdbParametersSpecSourceFilesTypeEnum) => void;
+  onChangeFile: (val: DuckdbParametersSpecFilesFormatTypeEnum) => void;
   onChangeConfiguration: (params: Partial<TConfiguration>) => void;
   cleanConfiguration: () => void;
   freezeFileType: boolean;
@@ -30,7 +30,7 @@ export default function FileFormatConfiguration({
 }: TFileFormatConfigurationProps) {
   const renderConfiguration = () => {
     switch (fileFormatType) {
-      case DuckdbParametersSpecSourceFilesTypeEnum.csv: {
+      case DuckdbParametersSpecFilesFormatTypeEnum.csv: {
         return (
           <CsvFormatConfiguration
             configuration={configuration}
@@ -38,7 +38,7 @@ export default function FileFormatConfiguration({
           />
         );
       }
-      case DuckdbParametersSpecSourceFilesTypeEnum.json: {
+      case DuckdbParametersSpecFilesFormatTypeEnum.json: {
         return (
           <JsonFormatConfiguration
             configuration={configuration}
@@ -46,7 +46,7 @@ export default function FileFormatConfiguration({
           />
         );
       }
-      case DuckdbParametersSpecSourceFilesTypeEnum.parquet: {
+      case DuckdbParametersSpecFilesFormatTypeEnum.parquet: {
         return (
           <ParquetFormatConfiguration
             configuration={configuration}
@@ -60,25 +60,25 @@ export default function FileFormatConfiguration({
   const sourceFilesTypeOptions = [
     {
       label: 'CSV',
-      value: DuckdbParametersSpecSourceFilesTypeEnum.csv
+      value: DuckdbParametersSpecFilesFormatTypeEnum.csv
     },
     {
       label: 'JSON',
-      value: DuckdbParametersSpecSourceFilesTypeEnum.json
+      value: DuckdbParametersSpecFilesFormatTypeEnum.json
     },
     {
       label: 'Parquet',
-      value: DuckdbParametersSpecSourceFilesTypeEnum.parquet
+      value: DuckdbParametersSpecFilesFormatTypeEnum.parquet
     }
   ];
 
   return (
     <SectionWrapper
-      title="File format configuration"
+      title="Files format configuration"
       className="text-sm my-4 text-black"
     >
       <div className="flex items-center gap-x-5 py-4">
-        <div>File format</div>
+        <div>Files format</div>
         {!freezeFileType && (
           <SelectInput
             options={sourceFilesTypeOptions}
@@ -87,7 +87,7 @@ export default function FileFormatConfiguration({
               cleanConfiguration();
             }}
             value={
-              fileFormatType === DuckdbParametersSpecSourceFilesTypeEnum.parquet
+              fileFormatType === DuckdbParametersSpecFilesFormatTypeEnum.parquet
                 ? fileFormatType.replace(/./, (c) => c.toUpperCase())
                 : fileFormatType.toUpperCase()
             }
