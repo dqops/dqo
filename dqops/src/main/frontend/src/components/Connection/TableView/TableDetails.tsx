@@ -141,9 +141,13 @@ const TableDetails = () => {
     setPaths((prev) => [...prev, '']);
     handleChange({});
   };
-  const onChangePath = (value: string) => {
+  const onChangePath = (value: string, index?: number) => {
     const copiedPaths = [...paths];
-    copiedPaths[paths.length - 1] = value;
+    if (index !== undefined) {
+      copiedPaths[index] = value;
+    } else {
+      copiedPaths[paths.length - 1] = value;
+    }
     setPaths(copiedPaths);
   };
   const onDeletePath = (index: number) => {

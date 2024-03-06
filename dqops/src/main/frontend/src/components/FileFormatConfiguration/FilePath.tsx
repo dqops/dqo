@@ -6,7 +6,7 @@ import SvgIcon from '../SvgIcon';
 type TFilePathProps = {
   paths: string[];
   onAddPath: () => void;
-  onChangePath: (str: string) => void;
+  onChangePath: (str: string, index?: number) => void;
   onDeletePath: (index: number) => void;
 };
 export default function FilePath({
@@ -25,9 +25,13 @@ export default function FilePath({
       </div>
       {paths.slice(0, paths.length - 1).map((x, index) => (
         <div className="flex items-center w-full " key={index}>
-          <div className="pr-4 min-w-40 w-11/12 py-2">
-            <div>{x}</div>
-          </div>
+          <div className="pr-4 min-w-40 py-2 w-11/12">
+          <Input
+            className="focus:!ring-0 focus:!border"
+            value={x}
+            onChange={(e) => onChangePath(e.target.value, index)}
+          />
+        </div>
           <div className="max-w-34 min-w-34 py-2">
             <div className="flex justify-center">
               {' '}
