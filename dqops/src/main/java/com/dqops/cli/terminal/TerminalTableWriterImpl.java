@@ -62,7 +62,7 @@ public class TerminalTableWriterImpl implements TerminalTableWritter {
 		RowSelectionTableModel tableModel = new RowSelectionTableModel(table);
 
 		terminalWriter.writeLine(question);
-		this.writeTable(tableModel, false);
+		this.writeTable(tableModel, false, true);
 
 		while (true) {
 			String line = terminalReader.prompt("Please enter one of the [] values: ", "", false);
@@ -189,22 +189,32 @@ public class TerminalTableWriterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeTable(Table table, boolean addBorder) {
+		writeTable(table, addBorder, false);
+	}
 
-		int height = addBorder ? terminalWriter.getTerminalHeight() / 3 : terminalWriter.getTerminalHeight() - 2;
-		if( height == 0) {
-			height = 1;
+	/**
+	 * Writes a table dataset with paging with a header that is extracted from the column names.
+	 * @param table Table (dataset).
+	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 * @param noHeader Whether the header should be rendered.
+	 */
+	@Override
+	public void writeTable(Table table, boolean addBorder, boolean noHeader) {
+		int pageHeight = addBorder ? terminalWriter.getTerminalHeight() / 3 : terminalWriter.getTerminalHeight() - 2;
+		if( pageHeight == 0) {
+			pageHeight = 1;
 		}
-		int rowsLeft = table.rowCount() + 1;
-		int index = 0;
+		int rowsLeft = table.rowCount() + 1; // the header is the first row
+		final int lastTableIndex = table.rowCount();
+		int pageIndex = 0;
 
 		while (rowsLeft > 0) {
-			int start = index * height;
-			int maxEnd = table.rowCount();
-			if (start > maxEnd) {
+			int pageStartTableIndex = pageIndex * pageHeight;
+			if (pageStartTableIndex > lastTableIndex) {
 				break;
 			}
-			int end = Math.min(start + height, maxEnd);
-			TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table.inRange(start, end));
+			int pageEndTableIndex = Math.min(pageStartTableIndex + pageHeight, lastTableIndex);
+			TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table.inRange(pageStartTableIndex, pageEndTableIndex));
 
 			TableBuilder tableBuilder = new TableBuilder(tableModel);
 			if (addBorder) {
@@ -213,9 +223,14 @@ public class TerminalTableWriterImpl implements TerminalTableWritter {
 			}
 			String renderedTable = tableBuilder.build().render(terminalWriter.getTerminalWidth() - 1);
 
+			if(noHeader){
+				int secondLineIndex = renderedTable.indexOf("\n") + 1;
+				renderedTable = renderedTable.substring(secondLineIndex);
+			}
+
 			terminalWriter.write(renderedTable);
 
-			if (rowsLeft >= height) {
+			if (rowsLeft >= pageHeight) {
 				try {
 					int response = terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", 'y', false);
 					if (response == 'N' || response == 'n') {
@@ -231,8 +246,8 @@ public class TerminalTableWriterImpl implements TerminalTableWritter {
 						return;
 					}
 					else if (response == 'y' || response == 'Y') {
-						rowsLeft -= height;
-						index++;
+						rowsLeft -= pageHeight;
+						pageIndex++;
 					}
 				} catch (Exception e) {
 					return;
@@ -259,20 +274,35 @@ public class TerminalTableWriterImpl implements TerminalTableWritter {
 	 * Renders a table with paging using a given table model.
 	 * @param tableModel Table model for the spring shell table.
 	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 * @param noHeader Whether to push the first line as a row or only as a header.
+	 *                 If set to true, the first row is pushed as a header providing a valid number of columns.
+	 *                 Then the header values should be treated as placeholders.
 	 */
 	@Override
-	public void writeTable(TableModel tableModel, boolean addBorder) {
+	public void writeTable(TableModel tableModel, boolean addBorder, boolean noHeader) {
+		int tableStartIndex = noHeader ? 0 : 1;
 		TextColumn[] headers = retrieveHeaders(tableModel);
 		Table resultTable = Table.create().addColumns(headers);
 
-		for(int y = 1; y < tableModel.getRowCount(); y++) {
+		for(int y = tableStartIndex; y < tableModel.getRowCount(); y++) {
 			Row row = resultTable.appendRow();
 			for (int x = 0; x < tableModel.getColumnCount(); x++) {
 				String rowString = tableModel.getValue(y, x).toString();
 				row.setString(x, rowString);
 			}
 		}
-		writeTable(resultTable, addBorder);
+
+		writeTable(resultTable, addBorder, noHeader);
+	}
+
+	/**
+	 * Renders a table with paging using a given table model.
+	 * @param tableModel Table model for the spring shell table.
+	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 */
+	@Override
+	public void writeTable(TableModel tableModel, boolean addBorder) {
+		writeTable(tableModel, addBorder, false);
 	}
 
 	/**

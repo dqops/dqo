@@ -42,10 +42,7 @@ class TerminalTableWriterImplTest extends BaseTest {
 
         sut.writeTable(tableModel, false);
 
-        String writtenTerminalText = terminalWriter.getWrittenText();
-
-        String trimmedLines = Arrays.stream(writtenTerminalText.replace(" ", " ")
-                .split("\n")).map(s -> s.trim()).collect(Collectors.joining("\n"));
+        String trimmedLines = trimEachRow(terminalWriter.getWrittenText());
 
         Assert.assertEquals("""
                     [1]  value_1""", trimmedLines);
@@ -61,35 +58,44 @@ class TerminalTableWriterImplTest extends BaseTest {
 
         sut.writeTable(tableModel, false);
 
-        String writtenTerminalText = terminalWriter.getWrittenText();
-
-        String trimmedLines = Arrays.stream(writtenTerminalText.replace(" ", " ")
-                .split("\n")).map(s -> s.trim()).collect(Collectors.joining("\n"));
+        String trimmedLines = trimEachRow(terminalWriter.getWrittenText());
 
         Assert.assertEquals("""
                     [1]  value_1
                     [2]  value_2""", trimmedLines);
     }
 
-    // todo: what should be outputted?
-//    @Test
-//    void writeTable_noSchema_returnsNone(){
-//        Column<String> col1 = TextColumn.create("schema name");
-//
-//        TableModel tableModel = new RowSelectionTableModel(Table.create(col1));
-//
-//        sut.writeTable(tableModel, false);
-//
-//        String writtenTerminalText = writerImplWrapper.getWrittenText();
-//
-//        String trimmedLines = Arrays.stream(writtenTerminalText.replace(" ", " ")
-//                .split("\n")).map(s -> s.trim()).collect(Collectors.joining("\n"));
-//
-//        Assert.assertEquals("", trimmedLines);
-//    }
-
     @Test   // User prompt will appear once, just before the last element
     void writeTable_schemaCountSameAsTerminalHeightWhichIs10_returns10Values(){
+        Column<String> col1 = TextColumn.create("header");
+        for (int i = 1; i <= terminalWriter.getTerminalHeight(); i++) {
+            col1.append("value_" + i);
+        }
+
+        TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(Table.create(col1));
+        lineReader.addStringPromptPushQueueElement("y");
+
+        sut.writeTable(tableModel, false);
+
+        String trimmedLines = trimEachRow(terminalWriter.getWrittenText());
+
+        Assert.assertEquals("""
+                header
+                value_1
+                value_2
+                value_3
+                value_4
+                value_5
+                value_6
+                value_7
+                value_8
+                header
+                value_9
+                value_10""", trimmedLines);
+    }
+
+    @Test   // User prompt will appear once, just before the last element
+    void writeTable_10ElementsWithHeaderPerPage_returns10Values(){
         Column<String> col1 = TextColumn.create("schema name");
 
         for (int i = 1; i <= terminalWriter.getTerminalHeight(); i++) {
@@ -100,12 +106,9 @@ class TerminalTableWriterImplTest extends BaseTest {
 
         lineReader.addStringPromptPushQueueElement("y");
 
-        sut.writeTable(tableModel, false);
+        sut.writeTable(tableModel, false, true);
 
-        String writtenTerminalText = terminalWriter.getWrittenText();
-
-        String trimmedLines = Arrays.stream(writtenTerminalText.replace(" ", " ")
-                .split("\n")).map(s -> s.trim()).collect(Collectors.joining("\n"));
+        String trimmedLines = trimEachRow(terminalWriter.getWrittenText());
 
         Assert.assertEquals("""
                 [ 1]  value_1
@@ -133,12 +136,9 @@ class TerminalTableWriterImplTest extends BaseTest {
         lineReader.addStringPromptPushQueueElement("y");
         lineReader.addStringPromptPushQueueElement("y");
 
-        sut.writeTable(tableModel, false);
+        sut.writeTable(tableModel, false, true);
 
-        String writtenTerminalText = terminalWriter.getWrittenText();
-
-        String trimmedLines = Arrays.stream(writtenTerminalText.replace(" ", " ")
-                .split("\n")).map(s -> s.trim()).collect(Collectors.joining("\n"));
+        String trimmedLines = trimEachRow(terminalWriter.getWrittenText());
 
         Assert.assertEquals("""
                 [ 1]  value_1
@@ -166,6 +166,12 @@ class TerminalTableWriterImplTest extends BaseTest {
                 [23]  value_23
                 [24]  value_24
                 [25]  value_25""", trimmedLines);
+    }
+
+    private String trimEachRow(String multilineText){
+        String trimmedLines = Arrays.stream(multilineText.replace(" ", " ")
+                .split("\n")).map(s -> s.trim()).collect(Collectors.joining("\n"));
+        return trimmedLines;
     }
 
 
