@@ -2,7 +2,7 @@ package com.dqops.connectors.duckdb.fileslisting;
 
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
-import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.metadata.sources.PhysicalTableName;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -31,7 +31,7 @@ public class LocalSystemTablesLister {
         File[] files = Path.of(pathPrefixString).toFile().listFiles();
         String folderPrefix = StringUtils.removeEnd(StringUtils.removeEnd(pathPrefixString, "/"), "\\");
 
-        DuckdbSourceFilesType sourceFilesTypeString = duckdb.getSourceFilesType();
+        DuckdbFilesFormatType sourceFilesTypeString = duckdb.getFilesFormatType();
 
         List<SourceTableModel> sourceTableModels = Arrays.stream(files).map(file -> {
             String fileName = file.toString().substring(folderPrefix.length() + 1);
@@ -53,7 +53,7 @@ public class LocalSystemTablesLister {
      * @param filesType File type used for extension matching.
      * @return Whether the file is valid
      */
-    private static boolean isFolderOrFileOfValidExtension(File file, String absolutePathPrefix, DuckdbSourceFilesType filesType){
+    private static boolean isFolderOrFileOfValidExtension(File file, String absolutePathPrefix, DuckdbFilesFormatType filesType){
         String folderPrefix = StringUtils.removeEnd(StringUtils.removeEnd(absolutePathPrefix, "/"), "\\");
         String fileName = file.toString().substring(folderPrefix.length() + 1);
 

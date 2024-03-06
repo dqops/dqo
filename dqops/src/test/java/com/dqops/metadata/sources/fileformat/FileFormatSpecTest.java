@@ -3,7 +3,7 @@ package com.dqops.metadata.sources.fileformat;
 import com.dqops.BaseTest;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
-import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.TableSpec;
@@ -38,7 +38,7 @@ public class FileFormatSpecTest extends BaseTest {
     void buildTableOptionsString_whenSourceFilesTypeIsCsv_callsCsvDuckdbReadMethod() {
         this.sut.setCsv(new CsvFileFormatSpec());
         this.sut.getFilePaths().add("/a/file/path");
-        DuckdbParametersSpec duckdb = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv).getDuckdb();
+        DuckdbParametersSpec duckdb = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv).getDuckdb();
         TableSpec tableSpec = new TableSpec();
         tableSpec.getColumns().put("col1", new ColumnSpec(){{
             setTypeSnapshot(new ColumnTypeSnapshotSpec("STRING"));
@@ -53,7 +53,7 @@ public class FileFormatSpecTest extends BaseTest {
     void buildTableOptionsString_whenSourceFilesTypeIsJson_callsJsonDuckdbReadMethod() {
         this.sut.setJson(new JsonFileFormatSpec());
         this.sut.getFilePaths().add("/a/file/path");
-        DuckdbParametersSpec duckdb = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.json).getDuckdb();
+        DuckdbParametersSpec duckdb = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.json).getDuckdb();
         TableSpec tableSpec = new TableSpec();
         tableSpec.getColumns().put("col1", new ColumnSpec(){{
             setTypeSnapshot(new ColumnTypeSnapshotSpec("STRING"));
@@ -68,7 +68,7 @@ public class FileFormatSpecTest extends BaseTest {
     void buildTableOptionsString_whenSourceFilesTypeIsParquet_callsParquetDuckdbReadMethod() {
         this.sut.setParquet(new ParquetFileFormatSpec());
         this.sut.getFilePaths().add("/a/file/path");
-        DuckdbParametersSpec duckdb = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.parquet).getDuckdb();
+        DuckdbParametersSpec duckdb = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.parquet).getDuckdb();
         TableSpec tableSpec = new TableSpec();
         tableSpec.getColumns().put("col1", new ColumnSpec(){{
             setTypeSnapshot(new ColumnTypeSnapshotSpec("STRING"));

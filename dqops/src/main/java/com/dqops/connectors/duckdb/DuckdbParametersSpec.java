@@ -57,13 +57,13 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         }
     };
 
-    @CommandLine.Option(names = {"--duckdb-read-mode"}, description = "DuckDB read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--duckdb-read-mode"}, description = "DuckDB read mode.")
+    @JsonPropertyDescription("DuckDB read mode.")
     private DuckdbReadMode readMode = DuckdbReadMode.files;
 
-    @CommandLine.Option(names = {"--duckdb-source-files-type"}, description = "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private DuckdbSourceFilesType sourceFilesType;
+    @CommandLine.Option(names = {"--duckdb-files-format-type"}, description = "Type of source files format for DuckDB.")
+    @JsonPropertyDescription("Type of source files format for DuckDB.")
+    private DuckdbFilesFormatType filesFormatType;
 
     @CommandLine.Option(names = {"--duckdb-database"}, description = "DuckDB database name for in-memory read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("DuckDB database name for in-memory read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -94,8 +94,8 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> directories = new HashMap<>();
 
-    @CommandLine.Option(names = {"--duckdb-storage-type"}, description = "The storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("The storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--duckdb-storage-type"}, description = "The storage type.")
+    @JsonPropertyDescription("The storage type.")
     private DuckdbStorageType storageType;
 
     @CommandLine.Option(names = {"--duckdb-user"}, description = "DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -128,20 +128,20 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns a sourceFilesType value.
-     * @return sourceFilesType value.
+     * Returns a filesFormatType value.
+     * @return filesFormatType value.
      */
-    public DuckdbSourceFilesType getSourceFilesType() {
-        return sourceFilesType;
+    public DuckdbFilesFormatType getFilesFormatType() {
+        return filesFormatType;
     }
 
     /**
-     * Sets a sourceFilesType value.
-     * @param sourceFilesType sourceFilesType value.
+     * Sets a filesFormatType value.
+     * @param filesFormatType filesFormatType value.
      */
-    public void setSourceFilesType(DuckdbSourceFilesType sourceFilesType) {
-        setDirtyIf(!Objects.equals(sourceFilesType, sourceFilesType));
-        this.sourceFilesType = sourceFilesType;
+    public void setFilesFormatType(DuckdbFilesFormatType filesFormatType) {
+        setDirtyIf(!Objects.equals(filesFormatType, filesFormatType));
+        this.filesFormatType = filesFormatType;
     }
 
     /**
@@ -335,15 +335,15 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
 
     /**
      * Returns state that whether the file format for the specific file type is set.
-     * @param duckdbSourceFilesType Type of files.
+     * @param duckdbFilesFormatType Type of files.
      * @return State that whether the file format for the specific file type is set.
      */
-    public boolean isFormatSetForType(DuckdbSourceFilesType duckdbSourceFilesType){
-        switch(duckdbSourceFilesType){
+    public boolean isFormatSetForType(DuckdbFilesFormatType duckdbFilesFormatType){
+        switch(duckdbFilesFormatType){
             case csv: return this.getCsv() != null;
             case json: return this.getJson() != null;
             case parquet: return this.getParquet() != null;
-            default: throw new RuntimeException("The file format is not supported : " + duckdbSourceFilesType);
+            default: throw new RuntimeException("The file format is not supported : " + duckdbFilesFormatType);
         }
     }
 

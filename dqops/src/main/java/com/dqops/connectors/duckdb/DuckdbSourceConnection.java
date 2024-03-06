@@ -269,7 +269,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             List<SourceTableModel> sourceTableModels = super.listTables(schemaName, secretValueLookupContext);
             return sourceTableModels;
         }
-        if(duckdb == null || duckdb.getSourceFilesType() == null){
+        if(duckdb == null || duckdb.getFilesFormatType() == null){
             return new ArrayList<>();
         }
 

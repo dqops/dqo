@@ -132,11 +132,11 @@ public class DuckdbConnectionProvider extends AbstractSqlConnectionProvider {
             duckdbSpec.setStorageType(terminalReader.promptEnum("Type of storage", DuckdbStorageType.class, DuckdbStorageType.local,true));
         }
 
-        if(duckdbSpec.getSourceFilesType() == null){
+        if(duckdbSpec.getFilesFormatType() == null){
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--duckdb-source-files-type");
+                throw new CliRequiredParameterMissingException("--duckdb-files-format-type");
             }
-            duckdbSpec.setSourceFilesType(terminalReader.promptEnum("Type of source files for DuckDB", DuckdbSourceFilesType.class, null, false));
+            duckdbSpec.setFilesFormatType(terminalReader.promptEnum("Type of source files for DuckDB", DuckdbFilesFormatType.class, null, false));
         }
 
         if (duckdbSpec.getDirectories().isEmpty()) {
