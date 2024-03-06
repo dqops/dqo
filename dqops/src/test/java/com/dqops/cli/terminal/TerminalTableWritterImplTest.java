@@ -15,10 +15,10 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-class TerminalTableWriterImplTest extends BaseTest {
+class TerminalTableWritterImplTest extends BaseTest {
 
     private TerminalWriterImplWrapper terminalWriter;
-    private TerminalTableWriterImpl sut;
+    private TerminalTableWritterImpl sut;
     private LineReaderWrapper lineReader;
 
     @BeforeEach
@@ -28,7 +28,7 @@ class TerminalTableWriterImplTest extends BaseTest {
         lineReader = new LineReaderWrapper();
         TerminalReaderImpl terminalReader = new TerminalReaderImpl(terminalFactory.getWriter(), lineReader);
         FileWriter fileWriter = BeanFactoryObjectMother.getBeanFactory().getBean(FileWriter.class);
-        sut = new TerminalTableWriterImpl(terminalWriter, terminalReader, fileWriter);
+        sut = new TerminalTableWritterImpl(terminalWriter, terminalReader, fileWriter);
         terminalWriter.setTerminalWidth(50);
         terminalWriter.setTerminalHeight(10);
     }

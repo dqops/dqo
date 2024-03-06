@@ -31,22 +31,22 @@ import tech.tablesaw.api.TextColumn;
  * File wrapper. Provides access to the file services.
  */
 @Component
-public class TerminalTableWriterImpl implements TerminalTableWritter {
+public class TerminalTableWritterImpl implements TerminalTableWritter {
 	private final FileWriter fileWriter;
 	private final TerminalReader terminalReader;
 	private final TerminalWriter terminalWriter;
 
 	@Autowired
-	TerminalTableWriterImpl(TerminalFactory terminalFactory,
-							FileWriter fileWriter) {
+	TerminalTableWritterImpl(TerminalFactory terminalFactory,
+							 FileWriter fileWriter) {
 		this.fileWriter = fileWriter;
 		this.terminalReader = terminalFactory.getReader();
 		this.terminalWriter = terminalFactory.getWriter();
 	}
 
-	TerminalTableWriterImpl(TerminalWriter terminalWriter,
-							TerminalReader terminalReader,
-							FileWriter fileWriter) {
+	TerminalTableWritterImpl(TerminalWriter terminalWriter,
+							 TerminalReader terminalReader,
+							 FileWriter fileWriter) {
 		this.fileWriter = fileWriter;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
