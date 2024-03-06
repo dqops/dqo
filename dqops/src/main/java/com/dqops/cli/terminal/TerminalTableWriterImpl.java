@@ -85,38 +85,20 @@ public class TerminalTableWriterImpl implements TerminalTableWritter {
 	@Override
 	public CliOperationStatus writeTableToFile(FormattedTableDto<?> tableData) {
 		TableModel model = new BeanListTableModel<>(tableData.getRows(), tableData.getHeaders());
-
-		TableBuilder tableBuilder = new TableBuilder(model);
-		tableBuilder.addInnerBorder(BorderStyle.oldschool);
-		tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-
-		String renderedTable = tableBuilder.build().render(180);
-
+		String renderedTable = renderTable(model, true, 180);
 		return this.fileWriter.writeStringToFile(renderedTable);
 	}
 
 	@Override
 	public CliOperationStatus writeTableToFile(Table table) {
 		TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table);
-
-		TableBuilder tableBuilder = new TableBuilder(tableModel);
-		tableBuilder.addInnerBorder(BorderStyle.oldschool);
-		tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-
-		String renderedTable = tableBuilder.build().render(180);
-
+		String renderedTable = renderTable(tableModel, true, 180);
 		return this.fileWriter.writeStringToFile(renderedTable);
 	}
 
 	@Override
 	public CliOperationStatus writeTableToFile(TableModel tableModel) {
-		TableBuilder tableBuilder = new TableBuilder(tableModel);
-
-		tableBuilder.addInnerBorder(BorderStyle.oldschool);
-		tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-
-		String renderedTable = tableBuilder.build().render(180);
-
+		String renderedTable = renderTable(tableModel, true, 180);
 		return this.fileWriter.writeStringToFile(renderedTable);
 	}
 
@@ -127,59 +109,47 @@ public class TerminalTableWriterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeTable(FormattedTableDto<?> tableData, boolean addBorder) {
-
-		int height = addBorder ? terminalWriter.getTerminalHeight() / 3 : terminalWriter.getTerminalHeight() - 2;
-		if( height == 0) {
-			height = 1;
-		}
+		final int pageHeight = getPageHeight(addBorder);
+		final int lastTableIndex = tableData.getRows().size();
 		int rowsLeft = tableData.getRows().size();
-		int index = 0;
+		int pageIndex = 0;
 
 		while (rowsLeft > 0) {
-			int start = index * height;
-			int maxEnd = tableData.getRows().size();
-			if (start >= maxEnd) {
+			int pageStartTableIndex = pageIndex * pageHeight;
+			if (pageStartTableIndex >= lastTableIndex) {
 				break;
 			}
-			int end = Math.min(start + height, maxEnd);
-			TableModel model = new BeanListTableModel<>(tableData.getRows().subList(start, end), tableData.getHeaders());
+			int pageEndTableIndex = Math.min(pageStartTableIndex + pageHeight, lastTableIndex);
 
-			TableBuilder tableBuilder = new TableBuilder(model);
-			if (addBorder) {
-				tableBuilder.addInnerBorder(BorderStyle.oldschool);
-				tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-			}
-			String renderedTable = tableBuilder.build().render(terminalWriter.getTerminalWidth() - 1);
-
+			TableModel model = new BeanListTableModel<>(tableData.getRows().subList(pageStartTableIndex, pageEndTableIndex), tableData.getHeaders());
+			String renderedTable = renderTable(model, addBorder);
 			terminalWriter.write(renderedTable);
 
-			if (rowsLeft >= height) {
-				try {
-					int response = terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", 'y', false);
-					if (response == 'N' || response == 'n') {
-						return;
-					}
-					else if (response == 'a' || response == 'A') {
-						writeWholeTable(tableData, addBorder);
-						return;
-					}
-					else if (response == 's' || response == 'S') {
-						CliOperationStatus cliOperationStatus = this.writeTableToFile(tableData);
-						terminalWriter.writeLine(cliOperationStatus.getMessage());
-						return;
-					}
-					else if (response == 'y' || response == 'Y') {
-						rowsLeft -= height;
-						index++;
-					}
-				} catch (Exception e) {
+			if (rowsLeft >= pageHeight) {
+				boolean shouldPrintNextPage = pagingPrompt(tableData, addBorder);
+				if(!shouldPrintNextPage){
 					return;
 				}
+				rowsLeft -= pageHeight;
+				pageIndex++;
 			}
 			else {
 				return;
 			}
 		}
+	}
+
+	/**
+	 * Returns the page height of terminal.
+	 * @param addBorder Whether to add a border.
+	 * @return Page heights in lines.
+	 */
+	private int getPageHeight(boolean addBorder){
+		int pageHeight = (addBorder ? terminalWriter.getTerminalHeight() / 3 : terminalWriter.getTerminalHeight() - 2);
+		if( pageHeight == 0) {
+			pageHeight = 1;
+		}
+		return pageHeight;
 	}
 
 	/**
@@ -200,74 +170,38 @@ public class TerminalTableWriterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeTable(Table table, boolean addBorder, boolean noHeader) {
-		int pageHeight = addBorder ? terminalWriter.getTerminalHeight() / 3 : terminalWriter.getTerminalHeight() - 2;
-		if( pageHeight == 0) {
-			pageHeight = 1;
-		}
-		int rowsLeft = table.rowCount() + 1; // the header is the first row
+		final int pageHeight = getPageHeight(addBorder);
 		final int lastTableIndex = table.rowCount();
+		int rowsLeft = table.rowCount();
 		int pageIndex = 0;
 
 		while (rowsLeft > 0) {
 			int pageStartTableIndex = pageIndex * pageHeight;
-			if (pageStartTableIndex > lastTableIndex) {
+			if (pageStartTableIndex >= lastTableIndex) {
 				break;
 			}
 			int pageEndTableIndex = Math.min(pageStartTableIndex + pageHeight, lastTableIndex);
+
 			TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table.inRange(pageStartTableIndex, pageEndTableIndex));
-
-			TableBuilder tableBuilder = new TableBuilder(tableModel);
-			if (addBorder) {
-				tableBuilder.addInnerBorder(BorderStyle.oldschool);
-				tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-			}
-			String renderedTable = tableBuilder.build().render(terminalWriter.getTerminalWidth() - 1);
-
+			String renderedTable = renderTable(tableModel, addBorder);
 			if(noHeader){
 				int secondLineIndex = renderedTable.indexOf("\n") + 1;
 				renderedTable = renderedTable.substring(secondLineIndex);
 			}
-
 			terminalWriter.write(renderedTable);
 
 			if (rowsLeft >= pageHeight) {
-				try {
-					int response = terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", 'y', false);
-					if (response == 'N' || response == 'n') {
-						return;
-					}
-					else if (response == 'a' || response == 'A') {
-						writeWholeTable(table, addBorder);
-						return;
-					}
-					else if (response == 's' || response == 'S') {
-						CliOperationStatus cliOperationStatus = this.writeTableToFile(table);
-						terminalWriter.writeLine(cliOperationStatus.getMessage());
-						return;
-					}
-					else if (response == 'y' || response == 'Y') {
-						rowsLeft -= pageHeight;
-						pageIndex++;
-					}
-				} catch (Exception e) {
+				boolean shouldPrintNextPage = pagingPrompt(table, addBorder);
+				if(!shouldPrintNextPage){
 					return;
 				}
+				rowsLeft -= pageHeight;
+				pageIndex++;
 			}
 			else {
 				return;
 			}
 		}
-	}
-
-	private TextColumn[] retrieveHeaders(TableModel tableModel) {
-		int columnCount = tableModel.getColumnCount();
-		TextColumn[] result = new TextColumn[columnCount];
-
-		for (int i = 0; i < columnCount; i++) {
-			result[i] = TextColumn.create(tableModel.getValue(0, i).toString());
-		}
-
-		return result;
 	}
 
 	/**
@@ -313,13 +247,7 @@ public class TerminalTableWriterImpl implements TerminalTableWritter {
 	@Override
 	public void writeWholeTable(FormattedTableDto<?> tableData, boolean addBorder) {
 		TableModel model = new BeanListTableModel<>(tableData.getRows(), tableData.getHeaders());
-
-		TableBuilder tableBuilder = new TableBuilder(model);
-		if (addBorder) {
-			tableBuilder.addInnerBorder(BorderStyle.oldschool);
-			tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-		}
-		String renderedTable = tableBuilder.build().render(terminalWriter.getTerminalWidth() - 1);
+		String renderedTable = renderTable(model, addBorder);
 		terminalWriter.write(renderedTable);
 	}
 
@@ -331,12 +259,7 @@ public class TerminalTableWriterImpl implements TerminalTableWritter {
 	@Override
 	public void writeWholeTable(Table table, boolean addBorder) {
 		TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table);
-		TableBuilder tableBuilder = new TableBuilder(tableModel);
-		if (addBorder) {
-			tableBuilder.addInnerBorder(BorderStyle.oldschool);
-			tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-		}
-		String renderedTable = tableBuilder.build().render(terminalWriter.getTerminalWidth() - 1);
+		String renderedTable = renderTable(tableModel, addBorder);
 		terminalWriter.write(renderedTable);
 	}
 
@@ -347,12 +270,106 @@ public class TerminalTableWriterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeWholeTable(TableModel tableModel, boolean addBorder) {
+		String renderedTable = renderTable(tableModel, addBorder);
+        terminalWriter.write(renderedTable);
+	}
+
+	/**
+	 * Paging prompt.
+	 * @param tableData The table with data
+	 * @param addBorder Whether to render a border.
+	 * @return Whether to continue rendering of the next page.
+	 */
+	private boolean pagingPrompt(FormattedTableDto<?> tableData, boolean addBorder){
+		try {
+			int response = terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", 'y', false);
+			if (response == 'N' || response == 'n') {
+				return false;
+			}
+			else if (response == 'a' || response == 'A') {
+				writeWholeTable(tableData, addBorder);
+				return false;
+			}
+			else if (response == 's' || response == 'S') {
+				CliOperationStatus cliOperationStatus = this.writeTableToFile(tableData);
+				terminalWriter.writeLine(cliOperationStatus.getMessage());
+				return false;
+			}
+			else if (response == 'y' || response == 'Y') {
+				return true;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+		return false;
+	}
+
+	/**
+	 * Paging prompt.
+	 * @param table The table with data
+	 * @param addBorder Whether to render a border.
+	 * @return Whether to continue rendering of the next page.
+	 */
+	private boolean pagingPrompt(Table table, boolean addBorder){
+		try {
+			int response = terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", 'y', false);
+			if (response == 'N' || response == 'n') {
+				return false;
+			}
+			else if (response == 'a' || response == 'A') {
+				writeWholeTable(table, addBorder);
+				return false;
+			}
+			else if (response == 's' || response == 'S') {
+				CliOperationStatus cliOperationStatus = this.writeTableToFile(table);
+				terminalWriter.writeLine(cliOperationStatus.getMessage());
+				return false;
+			}
+			else if (response == 'y' || response == 'Y') {
+				return true;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+		return false;
+	}
+
+	private TextColumn[] retrieveHeaders(TableModel tableModel) {
+		int columnCount = tableModel.getColumnCount();
+		TextColumn[] result = new TextColumn[columnCount];
+
+		for (int i = 0; i < columnCount; i++) {
+			result[i] = TextColumn.create(tableModel.getValue(0, i).toString());
+		}
+
+		return result;
+	}
+
+	/**
+	 * Renders table to a string.
+	 * @param tableModel Table with data.
+	 * @param addBorder Whether to render a border.
+	 * @param totalAvailableWidth totalAvailableWidth
+	 * @return Rendered table.
+	 */
+	private String renderTable(TableModel tableModel, boolean addBorder, int totalAvailableWidth){
 		TableBuilder tableBuilder = new TableBuilder(tableModel);
 		if (addBorder) {
 			tableBuilder.addInnerBorder(BorderStyle.oldschool);
 			tableBuilder.addHeaderBorder(BorderStyle.oldschool);
 		}
-		String renderedTable = tableBuilder.build().render(terminalWriter.getTerminalWidth() - 1);
-        terminalWriter.write(renderedTable);
+		String renderedTable = tableBuilder.build().render(totalAvailableWidth);
+		return renderedTable;
 	}
+
+	/**
+	 * Renders table to a string. The width of the table will fit to the terminal.
+	 * @param tableModel Table with data.
+	 * @param addBorder Whether to render a border.
+	 * @return Rendered table.
+	 */
+	private String renderTable(TableModel tableModel, boolean addBorder){
+		return renderTable(tableModel, addBorder, terminalWriter.getTerminalWidth() - 1);
+	}
+
 }

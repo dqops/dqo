@@ -34,13 +34,13 @@ class TerminalTableWriterImplTest extends BaseTest {
     }
 
     @Test
-    void writeTable_oneSchemaName_returnsIt(){
-        Column<String> col1 = TextColumn.create("schema name");
+    void writeTable_oneRowWithSetNoHeader_returnsOneLine(){
+        Column<String> col1 = TextColumn.create("schema name header");
         col1.append("value_1");
 
         TableModel tableModel = new RowSelectionTableModel(Table.create(col1));
 
-        sut.writeTable(tableModel, false);
+        sut.writeTable(tableModel, false, true);
 
         String trimmedLines = trimEachRow(terminalWriter.getWrittenText());
 
@@ -49,7 +49,20 @@ class TerminalTableWriterImplTest extends BaseTest {
     }
 
     @Test
-    void writeTable_twoSchemaNames_returnsBoth(){
+    void writeTable_justHeaderInTable_returnsNothing(){
+        Column<String> col1 = TextColumn.create("header");
+
+        TableModel tableModel = new TablesawDatasetTableModel(Table.create(col1));
+
+        sut.writeTable(tableModel, false);
+
+        String trimmedLines = trimEachRow(terminalWriter.getWrittenText());
+
+        Assert.assertEquals("", trimmedLines);
+    }
+
+    @Test
+    void writeTable_twoRowsWithSetNoHeader_returnsTwoLines(){
         Column<String> col1 = TextColumn.create("schema name");
         col1.append("value_1");
         col1.append("value_2");
@@ -66,7 +79,7 @@ class TerminalTableWriterImplTest extends BaseTest {
     }
 
     @Test   // User prompt will appear once, just before the last element
-    void writeTable_schemaCountSameAsTerminalHeightWhichIs10_returns10Values(){
+    void writeTable_rowsCountSameAsTerminalHeightWhichIs10_returns12Lines(){
         Column<String> col1 = TextColumn.create("header");
         for (int i = 1; i <= terminalWriter.getTerminalHeight(); i++) {
             col1.append("value_" + i);
@@ -79,6 +92,7 @@ class TerminalTableWriterImplTest extends BaseTest {
 
         String trimmedLines = trimEachRow(terminalWriter.getWrittenText());
 
+        Assert.assertEquals(12, trimmedLines.split("\n").length);
         Assert.assertEquals("""
                 header
                 value_1
@@ -95,7 +109,7 @@ class TerminalTableWriterImplTest extends BaseTest {
     }
 
     @Test   // User prompt will appear once, just before the last element
-    void writeTable_10ElementsWithHeaderPerPage_returns10Values(){
+    void writeTable_10RowsWithSetNoHeader_returns10Lines(){
         Column<String> col1 = TextColumn.create("schema name");
 
         for (int i = 1; i <= terminalWriter.getTerminalHeight(); i++) {
@@ -124,7 +138,7 @@ class TerminalTableWriterImplTest extends BaseTest {
     }
 
     @Test
-    void writeTable_50SchemasWhichPromptsUserTwice_returnsAllValues(){
+    void writeTable_50SchemasWhichPromptsUserTwiceWithSetNoHeader_returns25Lines(){
         Column<String> col1 = TextColumn.create("schema name");
 
         for (int i = 1; i <= 25; i++) {
