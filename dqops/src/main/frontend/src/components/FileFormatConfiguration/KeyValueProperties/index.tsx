@@ -33,7 +33,6 @@ function convertArrayToObject(array: { [key: string]: string }[]): {
 const getStorageTypeDefaultPrefix = (storageType?: DuckdbParametersSpecStorageTypeEnum) : string => {
   switch (storageType) {
     case 's3':
-      console.log("set s3");
       return "s3://";
     default:
       return "";
@@ -64,8 +63,21 @@ const KeyValueProperties = ({
 
   arr.forEach(obj => {
     for (const key in obj) {
-      if(obj[key] === ''){
-        obj[key] = getStorageTypeDefaultPrefix(storageType);
+      switch(storageType){
+        case 'local':
+          if(obj[key] === '' || obj[key] === "s3://"){
+            obj[key] = '';
+          }
+          break;
+        case 's3':
+          if(obj[key] === ''){
+            obj[key] = getStorageTypeDefaultPrefix(storageType);
+          }
+          break;
+        default:
+          if(obj[key] === '' || obj[key] === "s3://"){
+            obj[key] = '';
+          }
       }
     }
   })
