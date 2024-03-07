@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import KeyValuePropertyItem from './KeyValuePropertyItem';
 import { DuckdbParametersSpecStorageTypeEnum, SharedCredentialListModel } from '../../../api';
+import SvgIcon from '../../SvgIcon';
+import { Tooltip } from '@material-tailwind/react';
 
 interface IKeyValueProperties {
   properties?: { [key: string]: string };
@@ -80,9 +82,33 @@ const KeyValueProperties = ({
         <thead>
           <tr>
             <th className="text-left min-w-40 pr-4">
-              Virtual schema name
+              <div className='flex gap-2 items-center'>
+                Virtual schema name
+                <Tooltip 
+                  className="max-w-80 py-4 px-4 bg-gray-800 m-4"
+                  content="A name that will point to the prefix"
+                  placement="top-start"
+                >
+                  <div>
+                    <SvgIcon name="info" className="w-5 h-5 text-gray-700 cursor-pointer"/>
+                  </div>
+                </Tooltip>
+              </div>
             </th>
-            <th className="text-left min-w-40 pr-4">Path</th>
+            <th className="text-left min-w-40 pr-4">
+              <div className='flex gap-2 items-center'>
+                Path
+                <Tooltip 
+                  className="max-w-80 py-4 px-4 bg-gray-800 m-4"
+                  content="An absolute directory to a folder with files or files. E.g.: /usr/share/data/ or s3://bucket_name/data/"
+                  placement="top-start"
+                >
+                  <div>
+                    <SvgIcon name="info" className="w-5 h-5 text-gray-700 cursor-pointer"/>
+                  </div>
+                </Tooltip>  
+              </div>
+            </th>
             <th className="px-8 min-w-40">Action</th>
           </tr>
         </thead>
