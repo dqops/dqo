@@ -235,52 +235,52 @@ export default function EditCheckPattern({
       ).then((res) => setTarget(res?.data));
     }
   };
-  useEffect(() => {
-    if (!pattern_name) return;
+  const getChecks = async () => {
+    const callBack = (value: AxiosResponse<CheckContainerModel, any>) => {
+      setCheckContainers((prev) => ({
+        ...prev,
+        [activeTab as TCheckTypes]: value.data
+      }));
+    };
 
-    const getChecks = async () => {
-      const callBack = (value: AxiosResponse<CheckContainerModel, any>) => {
-        setCheckContainers((prev) => ({
-          ...prev,
-          [activeTab as TCheckTypes]: value.data
-        }));
-      };
-
-      const apiClients = {
-        column: {
-          [CheckRunMonitoringScheduleGroup.profiling]:
-            DefaultColumnCheckPatternsApiClient.getDefaultProfilingColumnChecksPattern,
-          [CheckRunMonitoringScheduleGroup.monitoring_daily]:
-            DefaultColumnCheckPatternsApiClient.getDefaultMonitoringDailyColumnChecksPattern,
-          [CheckRunMonitoringScheduleGroup.monitoring_monthly]:
-            DefaultColumnCheckPatternsApiClient.getDefaultMonitoringMonthlyColumnChecksPattern,
-          [CheckRunMonitoringScheduleGroup.partitioned_daily]:
-            DefaultColumnCheckPatternsApiClient.getDefaultPartitionedDailyColumnChecksPattern,
-          [CheckRunMonitoringScheduleGroup.partitioned_monthly]:
-            DefaultColumnCheckPatternsApiClient.getDefaultPartitionedMonthlyColumnChecksPattern
-        },
-        table: {
-          [CheckRunMonitoringScheduleGroup.profiling]:
-            DefaultTableCheckPatternsApiClient.getDefaultProfilingTableChecksPattern,
-          [CheckRunMonitoringScheduleGroup.monitoring_daily]:
-            DefaultTableCheckPatternsApiClient.getDefaultMonitoringDailyTableChecksPattern,
-          [CheckRunMonitoringScheduleGroup.monitoring_monthly]:
-            DefaultTableCheckPatternsApiClient.getDefaultMonitoringMonthlyTableChecksPattern,
-          [CheckRunMonitoringScheduleGroup.partitioned_daily]:
-            DefaultTableCheckPatternsApiClient.getDefaultPartitionedDailyTableChecksPattern,
-          [CheckRunMonitoringScheduleGroup.partitioned_monthly]:
-            DefaultTableCheckPatternsApiClient.getDefaultPartitionedMonthlyTableChecksPattern
-        }
-      };
-
-      const apiClient =
-        type === 'column' ? apiClients.column : apiClients.table;
-
-      const apiCall = apiClient[activeTab as CheckRunMonitoringScheduleGroup];
-      if (apiCall) {
-        await apiCall(pattern_name).then(callBack);
+    const apiClients = {
+      column: {
+        [CheckRunMonitoringScheduleGroup.profiling]:
+          DefaultColumnCheckPatternsApiClient.getDefaultProfilingColumnChecksPattern,
+        [CheckRunMonitoringScheduleGroup.monitoring_daily]:
+          DefaultColumnCheckPatternsApiClient.getDefaultMonitoringDailyColumnChecksPattern,
+        [CheckRunMonitoringScheduleGroup.monitoring_monthly]:
+          DefaultColumnCheckPatternsApiClient.getDefaultMonitoringMonthlyColumnChecksPattern,
+        [CheckRunMonitoringScheduleGroup.partitioned_daily]:
+          DefaultColumnCheckPatternsApiClient.getDefaultPartitionedDailyColumnChecksPattern,
+        [CheckRunMonitoringScheduleGroup.partitioned_monthly]:
+          DefaultColumnCheckPatternsApiClient.getDefaultPartitionedMonthlyColumnChecksPattern
+      },
+      table: {
+        [CheckRunMonitoringScheduleGroup.profiling]:
+          DefaultTableCheckPatternsApiClient.getDefaultProfilingTableChecksPattern,
+        [CheckRunMonitoringScheduleGroup.monitoring_daily]:
+          DefaultTableCheckPatternsApiClient.getDefaultMonitoringDailyTableChecksPattern,
+        [CheckRunMonitoringScheduleGroup.monitoring_monthly]:
+          DefaultTableCheckPatternsApiClient.getDefaultMonitoringMonthlyTableChecksPattern,
+        [CheckRunMonitoringScheduleGroup.partitioned_daily]:
+          DefaultTableCheckPatternsApiClient.getDefaultPartitionedDailyTableChecksPattern,
+        [CheckRunMonitoringScheduleGroup.partitioned_monthly]:
+          DefaultTableCheckPatternsApiClient.getDefaultPartitionedMonthlyTableChecksPattern
       }
     };
+
+    const apiClient =
+      type === 'column' ? apiClients.column : apiClients.table;
+
+    const apiCall = apiClient[activeTab as CheckRunMonitoringScheduleGroup];
+    if (apiCall) {
+      await apiCall(pattern_name).then(callBack);
+    }
+  };
+
+  useEffect(() => {
+    if (!pattern_name) return;
     if (
       !checkContainers?.[activeTab as TCheckTypes] ||
       Object.keys(checkContainers?.[activeTab as TCheckTypes] ?? {}).length ===
@@ -288,7 +288,12 @@ export default function EditCheckPattern({
     ) {
       getChecks();
     }
-  }, [pattern_name, create, activeTab]);
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (!pattern_name) return;
+      getChecks();
+  }, [pattern_name, create, type]);
 
   useEffect(() => {
     getTarget();
@@ -299,6 +304,7 @@ export default function EditCheckPattern({
   }, [create]);
 
   function getCheckOverview(): void {}
+
 
   return (
     <>
