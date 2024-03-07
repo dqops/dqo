@@ -73,30 +73,33 @@ export default function FileFormatConfiguration({
   ];
 
   return (
-    <SectionWrapper
-      title="Files format configuration"
-      className="text-sm my-4 text-black"
-    >
-      <div className="flex items-center gap-x-5 py-4">
-        <div>Files format</div>
-        {!freezeFileType && (
-          <SelectInput
-            options={sourceFilesTypeOptions}
-            onChange={(value) => {
-              onChangeFile(value);
-              cleanConfiguration();
-            }}
-            value={
-              fileFormatType === DuckdbParametersSpecFilesFormatTypeEnum.parquet
-                ? fileFormatType.replace(/./, (c) => c.toUpperCase())
-                : fileFormatType.toUpperCase()
-            }
-          />
-        )}
-        {freezeFileType && <div>{fileFormatType}</div>}
-      </div>
-      {children}
-      <div className="pt-8">{renderConfiguration()}</div>
-    </SectionWrapper>
+    <div className='mt-8'>
+      <SectionWrapper
+        title="Files format configuration"
+        className="text-sm my-8 text-black"
+      >
+        <div className="flex items-center gap-x-5">
+          <div>Files format</div>
+          {!freezeFileType && (
+            <SelectInput
+              options={sourceFilesTypeOptions}
+              onChange={(value) => {
+                onChangeFile(value);
+                cleanConfiguration();
+              }}
+              value={
+                fileFormatType === DuckdbParametersSpecFilesFormatTypeEnum.parquet
+                  ? fileFormatType.replace(/./, (c) => c.toUpperCase())
+                  : fileFormatType.toUpperCase()
+              }
+            />
+          )}
+          {freezeFileType && <div>{fileFormatType}</div>}
+        </div>
+        {children}
+        <div className='pt-4'>{renderConfiguration()}</div>
+      </SectionWrapper>
+      
+    </div>
   );
 }

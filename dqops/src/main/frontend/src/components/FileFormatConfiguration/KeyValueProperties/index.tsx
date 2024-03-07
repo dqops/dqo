@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import KeyValuePropertyItem from './KeyValuePropertyItem';
 import { SharedCredentialListModel } from '../../../api';
-import KeyValuePropertyAddItem from './KeyValuePropertyAddItem';
 
 interface IKeyValueProperties {
   properties?: { [key: string]: string };
@@ -56,15 +55,15 @@ const KeyValueProperties = ({
   }, [arr]);
 
   return (
-    <div className="py-4">
-      <table className="my-3 w-full">
+    <div className="pt-2">
+      <table className="mt-3 w-full">
         <thead>
           <tr>
-            <th className="text-left min-w-40 pr-4 py-2">
+            <th className="text-left min-w-40 pr-4">
               Virtual schema name
             </th>
-            <th className="text-left min-w-40 pr-4 py-2">Path</th>
-            <th className="px-8 min-w-40 py-2">Action</th>
+            <th className="text-left min-w-40 pr-4">Path</th>
+            <th className="px-8 min-w-40">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -77,11 +76,6 @@ const KeyValueProperties = ({
               sharedCredentials={sharedCredentials}
             />
           ))}
-          {/* <KeyValuePropertyAddItem
-            properties={arr}
-            onChange={onChangeArr}
-            sharedCredentials={sharedCredentials}
-          /> */}
         </tbody>
       </table>
     </div>
