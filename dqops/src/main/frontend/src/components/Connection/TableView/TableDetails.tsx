@@ -232,9 +232,7 @@ const TableDetails = () => {
             <td className="px-4 py-2">Profiling checks result truncation</td>
             <td className="px-4 py-2">
               <Select
-                options={[
-                  { label: '', value: undefined },
-                  ...Object.values(
+                options={Object.values(
                     TableListModelProfilingChecksResultTruncationEnum
                   ).map((x) => ({
                     label: x
@@ -242,7 +240,7 @@ const TableDetails = () => {
                       .replace(/./, (c) => c.toUpperCase()),
                     value: x
                   }))
-                ]}
+                }
                 value={
                   tableBasic?.advanced_profiling_result_truncation ??
                   TableListModelProfilingChecksResultTruncationEnum.one_per_month
