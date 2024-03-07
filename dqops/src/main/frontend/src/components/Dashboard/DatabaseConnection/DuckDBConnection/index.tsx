@@ -27,8 +27,12 @@ const DuckdbConnection = ({
   sharedCredentials,
   freezeFileType = false
 }: IDuckdbConnectionProps) => {
+
+  const [storageType, setStorageType] = useState(duckdb?.storage_type);
+
   const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
     if (!onChange) return;
+    setStorageType(obj?.storage_type);
     onChange({
       ...duckdb,
       ...obj
@@ -66,7 +70,7 @@ const DuckdbConnection = ({
 
   const storageTypeOptions = [
     {
-      label: 'Local',
+      label: 'Local files',
       value: undefined
     },
     {
@@ -92,7 +96,7 @@ const DuckdbConnection = ({
     <SectionWrapper title="DuckDB connection parameters" className="mb-4">
 
       <Select
-          label="Storage type"
+          label="Files location"
           options={storageTypeOptions}
           className="mb-4"
           value={ duckdb?.storage_type }
@@ -137,10 +141,9 @@ const DuckdbConnection = ({
       >
         <KeyValueProperties
           properties={duckdb?.directories}
-          onChange={(directories) => {
-            handleChange({ directories: directories });
-          }}
+          onChange={(directories) => { handleChange({ directories: directories })}}
           sharedCredentials={sharedCredentials}
+          storageType={storageType}
         />
       </FileFormatConfiguration>
       <JdbcPropertiesView

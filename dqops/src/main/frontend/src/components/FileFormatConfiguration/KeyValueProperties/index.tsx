@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import KeyValuePropertyItem from './KeyValuePropertyItem';
-import { SharedCredentialListModel } from '../../../api';
+import { DuckdbParametersSpecStorageTypeEnum, SharedCredentialListModel } from '../../../api';
 
 interface IKeyValueProperties {
   properties?: { [key: string]: string };
   onChange: (properties: { [key: string]: string }) => void;
   sharedCredentials?: SharedCredentialListModel[];
+  storageType?: DuckdbParametersSpecStorageTypeEnum;
 }
 
 function convertObjectToArray(obj: {
@@ -27,10 +28,21 @@ function convertArrayToObject(array: { [key: string]: string }[]): {
   }, {});
 }
 
+const getStorageTypeDefaultPrefix = (storageType?: DuckdbParametersSpecStorageTypeEnum) : string => {
+  switch (storageType) {
+    case 's3':
+      console.log("set s3");
+      return "s3://";
+    default:
+      return "";
+  }
+}
+
 const KeyValueProperties = ({
   properties,
   onChange,
-  sharedCredentials
+  sharedCredentials,
+  storageType,
 }: IKeyValueProperties) => {
   const [arr, setArr] = useState(convertObjectToArray(properties ?? {}));
 
@@ -47,6 +59,14 @@ const KeyValueProperties = ({
       onChange(convertArrayToObject(array));
     }
   };
+
+  arr.forEach(obj => {
+    for (const key in obj) {
+      if(obj[key] === ''){
+        obj[key] = getStorageTypeDefaultPrefix(storageType);
+      }
+    }
+  })
 
   useEffect(() => {
     if (arr.length === 0) {
