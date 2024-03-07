@@ -7,6 +7,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.sources.fileformat.csv.NewLineCharacterType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -81,7 +82,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     @JsonPropertyDescription("Set the new line character(s) in the file. Options are '\\r','\\n', or '\\r\\n'.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String newLine;
+    private NewLineCharacterType newLine;
 
     @JsonPropertyDescription("Specifies the quoting string to be used when a data value is quoted.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -362,7 +363,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
      *
      * @return New line value.
      */
-    public String getNewLine() {
+    public NewLineCharacterType getNewLine() {
         return newLine;
     }
 
@@ -371,7 +372,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
      *
      * @param newLine New line value.
      */
-    public void setNewLine(String newLine) {
+    public void setNewLine(NewLineCharacterType newLine) {
         setDirtyIf(!Objects.equals(this.newLine, newLine));
         this.newLine = newLine;
     }
@@ -484,7 +485,6 @@ public class CsvFileFormatSpec extends AbstractSpec {
         cloned.decimalSeparator = secretValueProvider.expandValue(cloned.decimalSeparator, lookupContext);
         cloned.delim = secretValueProvider.expandValue(cloned.delim, lookupContext);
         cloned.escape = secretValueProvider.expandValue(cloned.escape, lookupContext);
-        cloned.newLine = secretValueProvider.expandValue(cloned.newLine, lookupContext);
         cloned.quote = secretValueProvider.expandValue(cloned.quote, lookupContext);
         cloned.timestampformat = secretValueProvider.expandValue(cloned.timestampformat, lookupContext);
         return cloned;
