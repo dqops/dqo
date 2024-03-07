@@ -21,7 +21,7 @@ import {
   ConnectionSpecProviderTypeEnum,
   FileFormatSpec,
   TableListModelProfilingChecksResultTruncationEnum,
-  DuckdbParametersSpecSourceFilesTypeEnum
+  DuckdbParametersSpecFilesFormatTypeEnum
 } from '../../../api';
 import NumberInput from '../../NumberInput';
 import clsx from 'clsx';
@@ -49,8 +49,8 @@ const TableDetails = () => {
   const format =
     (Object.keys(tableBasic?.file_format ?? {}).find((x) =>
       x.includes('format')
-    ) as DuckdbParametersSpecSourceFilesTypeEnum) ??
-    DuckdbParametersSpecSourceFilesTypeEnum.csv;
+    ) as DuckdbParametersSpecFilesFormatTypeEnum) ??
+    DuckdbParametersSpecFilesFormatTypeEnum.csv;
 
   const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
   const [paths, setPaths] = useState<Array<string>>(
@@ -59,7 +59,7 @@ const TableDetails = () => {
       : ['']
   );
   const [fileFormatType, setFileFormatType] =
-    useState<DuckdbParametersSpecSourceFilesTypeEnum>(format);
+    useState<DuckdbParametersSpecFilesFormatTypeEnum>(format);
   const [configuration, setConfiguration] = useState<TConfiguration>(
     tableBasic?.file_format?.[format] ?? {}
   );
@@ -151,7 +151,7 @@ const TableDetails = () => {
     handleChange({});
   };
 
-  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => {
+  const onChangeFile = (val: DuckdbParametersSpecFilesFormatTypeEnum) => {
     setFileFormatType(val);
     setConfiguration({});
   };

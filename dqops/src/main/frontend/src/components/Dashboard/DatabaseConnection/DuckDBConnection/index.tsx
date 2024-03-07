@@ -4,7 +4,7 @@ import SectionWrapper from '../../SectionWrapper';
 import {
   DuckdbParametersSpec,
   SharedCredentialListModel,
-  DuckdbParametersSpecSourceFilesTypeEnum,
+  DuckdbParametersSpecFilesFormatTypeEnum,
   DuckdbParametersSpecStorageTypeEnum
 } from '../../../../api';
 import FileFormatConfiguration from '../../../FileFormatConfiguration/FileFormatConfiguration';
@@ -36,8 +36,8 @@ const DuckdbConnection = ({
   };
 
   const [fileFormatType, setFileFormatType] =
-    useState<DuckdbParametersSpecSourceFilesTypeEnum>(
-      duckdb?.source_files_type ?? DuckdbParametersSpecSourceFilesTypeEnum.csv
+    useState<DuckdbParametersSpecFilesFormatTypeEnum>(
+      duckdb?.files_format_type ?? DuckdbParametersSpecFilesFormatTypeEnum.csv
     );
 
   const [configuration, setConfiguration] = useState<TConfiguration>({});
@@ -54,11 +54,11 @@ const DuckdbConnection = ({
     setConfiguration({});
   };
 
-  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => {
+  const onChangeFile = (val: DuckdbParametersSpecFilesFormatTypeEnum) => {
     handleChange({
       [fileFormatType as keyof DuckdbParametersSpec]: undefined,
       [val as keyof DuckdbParametersSpec]: {},
-      source_files_type: val
+      files_format_type: val
     });
     setFileFormatType(val);
     cleanConfiguration();

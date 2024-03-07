@@ -8,7 +8,7 @@ import {
   BigQueryParametersSpecJobsCreateProjectEnum,
   ConnectionModel,
   ConnectionModelProviderTypeEnum,
-  DuckdbParametersSpecSourceFilesTypeEnum,
+  DuckdbParametersSpecFilesFormatTypeEnum,
   MysqlParametersSpecMysqlEngineTypeEnum,
   SingleStoreDbParametersSpecLoadBalancingModeEnum,
   TrinoParametersSpecAthenaAuthenticationModeEnum,
@@ -114,21 +114,21 @@ const CreateConnection = () => {
         break;
       }
       case ConnectionModelProviderTypeEnum.duckdb: {
-        let fileFormat: DuckdbParametersSpecSourceFilesTypeEnum = DuckdbParametersSpecSourceFilesTypeEnum.csv;
+        let fileFormat: DuckdbParametersSpecFilesFormatTypeEnum = DuckdbParametersSpecFilesFormatTypeEnum.csv;
         switch(nameOfDatabase){
           case "CSV":
-            fileFormat = DuckdbParametersSpecSourceFilesTypeEnum.csv;
+            fileFormat = DuckdbParametersSpecFilesFormatTypeEnum.csv;
             break;
           case "JSON":
-            fileFormat = DuckdbParametersSpecSourceFilesTypeEnum.json;
+            fileFormat = DuckdbParametersSpecFilesFormatTypeEnum.json;
             break;
           case "Parquet":
-            fileFormat = DuckdbParametersSpecSourceFilesTypeEnum.parquet;
+            fileFormat = DuckdbParametersSpecFilesFormatTypeEnum.parquet;
             break;
         }
         copiedDatabase.duckdb = {
           directories: { files: '' },
-          source_files_type: fileFormat
+          files_format_type: fileFormat
         };
       }
     }
