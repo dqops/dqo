@@ -63,8 +63,9 @@ export default function DefaultCheckPatternsTable({
   const editPattern = (type: string, pattern: string) => {
     openDefaultCheckPatternFirstLevelTab(type, pattern);
   };
-  const [dir, setDir] = useState<'asc' | 'desc'>('asc');
+  const [dir, setDir] = useState<'asc' | 'desc'>('desc');
   const [patternDelete, setPatternDelete] = useState('');
+  const [indexSortingElement, setIndexSortingElement] = useState(1)
   const targetSpecKey = type === 'column' ? 'target_column' : 'target_table';
   const headerElement = type === 'column' ? headerElementColumnPatterns : headerElementTablePatterns;
 
@@ -88,34 +89,38 @@ export default function DefaultCheckPatternsTable({
     return arr;
   };
 
+  const sortPreparedPattern = (elem: THeaderElement, index: number, dir: "asc" | "desc") => {
+    (onChange(
+      sortPatterns(
+        getPreparedPatterns(),
+        elem.key as keyof TPattern,
+        dir
+      )
+    ),
+    setDir(dir),
+    setIndexSortingElement(index)
+    )
+  }
+
   return (
     <table>
       <thead>
         <tr>
-          {headerElement.map((elem) => (
+          {headerElement.map((elem, index) => (
             <th
               className="px-4"
               key={elem.label}
-              onClick={() =>
-                elem.key &&
-                (onChange(
-                  sortPatterns(
-                    getPreparedPatterns(),
-                    elem.key as keyof TPattern,
-                    dir
-                  )
-                ),
-                setDir(dir === 'asc' ? 'desc' : 'asc'))
-              }
             >
               <div className="flex gap-x-1 items-center cursor-default">
                 <div>{elem.label}</div>
-                {elem.key && (
-                  <div>
-                    <SvgIcon name="chevron-up" className="w-2 h-2" />
-                    <SvgIcon name="chevron-down" className="w-2 h-2" />
-                  </div>
-                )}
+                <div>
+                  {!(indexSortingElement === index && dir === 'asc') ?
+                  <SvgIcon name="chevron-up" className="w-2 h-2 text-black" onClick={() => sortPreparedPattern(elem, index, 'asc')}/>
+                   : <div className='w-2 h-2'/>}
+                  {!(indexSortingElement === index && dir === 'desc') ?
+                  <SvgIcon name="chevron-down" className="w-2 h-2 text-black" onClick={() => sortPreparedPattern(elem, index, 'desc')}/>
+                  : <div className='w-2 h-2'/>}
+                </div>
               </div>
             </th>
           ))}
