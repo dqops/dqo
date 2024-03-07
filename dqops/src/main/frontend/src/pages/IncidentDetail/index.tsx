@@ -351,17 +351,17 @@ export const IncidentDetail = () => {
           <SectionWrapper title="Table">
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Connection</div>
-              <div className="flex-[2] font-bold">
+              <div className="flex-[2] font-bold whitespace-normal break-all">
                 {incidentDetail?.connection}
               </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Schema</div>
-              <div className="flex-[2] font-bold">{incidentDetail?.schema}</div>
+              <div className="flex-[2] font-bold whitespace-normal break-all">{incidentDetail?.schema}</div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Table</div>
-              <div className="flex-[2] font-bold">{incidentDetail?.table}</div>
+              <div className="flex-[2] font-bold whitespace-normal break-all">{incidentDetail?.table}</div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Table priority</div>

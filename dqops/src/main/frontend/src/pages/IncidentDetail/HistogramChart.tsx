@@ -85,7 +85,7 @@ export const HistogramChart = ({
       <SectionWrapper title="Filter by columns">
         {Object.keys(histograms?.columns || {}).map((column, index) => (
           <div
-            className={clsx('flex gap-2 mb-2 cursor-pointer', {
+            className={clsx('flex gap-2 mb-2 cursor-pointer whitespace-normal break-all', {
               'font-bold text-gray-700': histogramFilter?.column === column,
               'text-gray-500':
                 histogramFilter?.column && histogramFilter?.column !== column
@@ -108,7 +108,7 @@ export const HistogramChart = ({
       <SectionWrapper title="Filter by check name">
         {Object.keys(histograms?.checks || {}).map((check, index) => (
           <div
-            className={clsx('flex gap-2 mb-2 cursor-pointer', {
+            className={clsx('flex gap-2 mb-2 cursor-pointer whitespace-normal break-all', {
               'font-bold text-gray-700': histogramFilter?.check === check,
               'text-gray-500':
                 histogramFilter?.check && histogramFilter?.check !== check
