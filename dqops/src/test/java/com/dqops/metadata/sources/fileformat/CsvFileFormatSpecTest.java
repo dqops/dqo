@@ -31,7 +31,7 @@ public class CsvFileFormatSpecTest extends BaseTest {
             setHeader(true);
             setHivePartitioning(true);
             setIgnoreErrors(true);
-            setNewLine(NewLineCharacterType.LF);
+            setNewLine(NewLineCharacterType.lf);
             setQuote("\"");
             setSkip(1L);
             setTimestampformat("%A, %-d %B %Y - %I:%M:%S %p");

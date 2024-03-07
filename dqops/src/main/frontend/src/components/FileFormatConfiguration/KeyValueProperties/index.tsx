@@ -100,7 +100,7 @@ const KeyValueProperties = ({
                 Path
                 <Tooltip 
                   className="max-w-80 py-4 px-4 bg-gray-800 m-4"
-                  content="An absolute directory to a folder with files or files. E.g.: /usr/share/data/ or s3://bucket_name/data/"
+                  content="The absolute path to a folder containing either files or another folder with files. E.g.: /usr/share/data/ or s3://bucket_name/data/"
                   placement="top-start"
                 >
                   <div>

@@ -34,16 +34,16 @@ const compressionEnumOptions = [
 
 const newLineEnumOptions = [
   {
-    value: CsvFileFormatSpecNewLineEnum.x5cx5cn,
-    label: CsvFileFormatSpecNewLineEnum.x5cx5cn
+    value: CsvFileFormatSpecNewLineEnum.cr,
+    label: CsvFileFormatSpecNewLineEnum.cr
   },
   {
-    value: CsvFileFormatSpecNewLineEnum.x5cx5cr,
-    label: CsvFileFormatSpecNewLineEnum.x5cx5cr
+    value: CsvFileFormatSpecNewLineEnum.lf,
+    label: CsvFileFormatSpecNewLineEnum.lf
   },
   {
-    value: CsvFileFormatSpecNewLineEnum.x5cx5crx5cx5cn,
-    label: CsvFileFormatSpecNewLineEnum.x5cx5crx5cx5cn
+    value: CsvFileFormatSpecNewLineEnum.crlf,
+    label: CsvFileFormatSpecNewLineEnum.crlf
   }
 ];
 
