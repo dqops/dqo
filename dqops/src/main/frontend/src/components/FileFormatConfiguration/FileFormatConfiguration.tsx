@@ -5,9 +5,7 @@ import { DuckdbParametersSpecFilesFormatTypeEnum } from '../../api';
 import CsvFormatConfiguration from './FormatsConfiguration/CsvFormatConfiguration';
 import JsonFormatConfiguration from './FormatsConfiguration/JsonFormatConfiguration';
 import ParquetFormatConfiguration from './FormatsConfiguration/ParquetFormatConfiguration';
-import FilePath from './FilePath';
 import { TConfiguration } from './TConfiguration';
-import KeyValueProperties from './KeyValueProperties';
 
 type TFileFormatConfigurationProps = {
   fileFormatType: DuckdbParametersSpecFilesFormatTypeEnum;
@@ -75,11 +73,11 @@ export default function FileFormatConfiguration({
   return (
     <div className='mt-8'>
       <SectionWrapper
-        title="Files format configuration"
-        className="text-sm my-8 text-black"
+        title="Import configuration"
+        className="text-sm text-black"
       >
         <div className="flex items-center gap-x-5">
-          <div>Files format</div>
+          <div>File format</div>
           {!freezeFileType && (
             <SelectInput
               options={sourceFilesTypeOptions}

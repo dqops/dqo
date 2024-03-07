@@ -26,13 +26,13 @@ export default function FormatConfigurationRenderer({
 
   const [isSectionExpanded, setIsSectionExpanded] = useState(false);
 
-  const title = `Default ${type} format options`;
+  const title = `Additional ${type} format options`;
 
   return (
     <div>
       {isSectionExpanded === false ? (
         <div
-          className="flex items-center text-black cursor-default ml-4"
+          className="flex items-center text-black cursor-default"
           onClick={() => setIsSectionExpanded(true)}
         >
           <SvgIcon name="chevron-right" className="w-5 h-5" />

@@ -48,28 +48,28 @@ After navigating to the JSON connection settings, you will need to fill in its d
 | Virtual schema name / Path | `directories`                            | Mapping virtual schema name to the directory. The path must be an absolute.                                                                                                                                                               |
 
 
-**JSON format options**
+**Additional JSON format options**
 
 JSON file format properties are detected automatically based on a sample of the file data. 
 The default sample size is 20480 rows.
 
 The following properties can be configured for a very specific JSON format.
 
-| JSON format options | Property name in YAML configuration file | Description                                                                                                                                                                                     |
-|-------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Compression                   | `compression`                              | The compression type for the file. By default, this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are none, gzip, zstd. | 
-| Date format                   | `dateformat`                               | Specifies the date format used when parsing dates.                                                                                                                                              | 
-| Json Format                   | `format`                                   | Json format. Can be one of \['auto', 'unstructured', 'newline_delimited', 'array'\].                                                                                                            | 
-| Maximum depth                 | `maximum-depth`                            | Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types.                                                                       | 
-| Maximum object size           | `maximum-object-size`                      | The maximum size of a JSON object (in bytes).                                                                                                                                                   | 
-| Records                       | `records`                                  | Can be one of ['auto', 'true', 'false'].                                                                                                                                                        | 
-| Sample size                   | `sample-size`                              | The number of sample rows for automatic parameter detection.                                                                                                                                    | 
-| Timestamp format              | `timestampformat`                          | Specifies the date format used when parsing timestamps.                                                                                                                                         | 
-| Convert strings to integers   | `convert-strings-to-integers`              | Specifies whether strings representing integer values should be converted to a numerical type.                                                                                                  | 
-| Filename                      | `filename`                                 | Specifies whether an additional file name column should be included in the result.                                                                                                              | 
-| Hive partitioning             | `hive-partitioning`                        | Specifies whether to interpret the path as a hive-partitioned path.                                                                                                                             | 
-| Ignore errors                 | `ignore-errors`                            | An option to ignore any parsing errors encountered - and instead ignore rows with errors.                                                                                                       | 
-| Auto detect                   | `auto-detect`                              | (Not available in UI) Whether to auto-detect detect the names of the keys and data types of the values automatically.                                                                           | 
+| Additional JSON format options | Property name in YAML configuration file | Description                                                                                                                                                                                     |
+|--------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Compression                    | `compression`                              | The compression type for the file. By default, this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are none, gzip, zstd. | 
+| Date format                    | `dateformat`                               | Specifies the date format used when parsing dates.                                                                                                                                              | 
+| Json Format                    | `format`                                   | Json format. Can be one of \['auto', 'unstructured', 'newline_delimited', 'array'\].                                                                                                            | 
+| Maximum depth                  | `maximum-depth`                            | Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types.                                                                       | 
+| Maximum object size            | `maximum-object-size`                      | The maximum size of a JSON object (in bytes).                                                                                                                                                   | 
+| Records                        | `records`                                  | Can be one of ['auto', 'true', 'false'].                                                                                                                                                        | 
+| Sample size                    | `sample-size`                              | The number of sample rows for automatic parameter detection.                                                                                                                                    | 
+| Timestamp format               | `timestampformat`                          | Specifies the date format used when parsing timestamps.                                                                                                                                         | 
+| Convert strings to integers    | `convert-strings-to-integers`              | Specifies whether strings representing integer values should be converted to a numerical type.                                                                                                  | 
+| Filename                       | `filename`                                 | Specifies whether an additional file name column should be included in the result.                                                                                                              | 
+| Hive partitioning              | `hive-partitioning`                        | Specifies whether to interpret the path as a hive-partitioned path.                                                                                                                             | 
+| Ignore errors                  | `ignore-errors`                            | An option to ignore any parsing errors encountered - and instead ignore rows with errors.                                                                                                       | 
+| Auto detect                    | `auto-detect`                              | (Not available in UI) Whether to auto-detect detect the names of the keys and data types of the values automatically.                                                                           | 
 
 
 ### Environment variables in parameters
