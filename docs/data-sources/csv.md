@@ -38,14 +38,14 @@ After navigating to the CSV connection settings, you will need to fill in its de
 | CSV connection settings    | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
 |----------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name            |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-| Parallel jobs limit        |                                          | New limit. Null value will disable limit.                                                                                                                                                                                                 |
+| Parallel jobs limit        |                                          | New limit. A null value will disable the limit.                                                                                                                                                                                                 |
 | Storage type               | `storage-type`                           | The storage type.                                                                                                                                                                                                                         |
 | Files format               | `files-format-type`                      | Type of source files for DuckDB.                                                                                                                                                                                                          |
 | JDBC connection property   |                                          | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                  |
 | User name/Key ID           | `user`                                   | DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                      |
 | Password/Secret Key        | `password`                               | DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                       |
 | Region                     | `region`                                 | The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                          |
-| Virtual schema name / Path | `directories`                            | Mapping virtual schema name to the directory. The path must be an absolute.                                                                                                                                                               |
+| Virtual schema name / Path | `directories`                            | Mapping the virtual schema name to the directory. The path must be absolute.                                                                                                                                                           |
 
 **Additional CSV format options**
 
@@ -237,17 +237,17 @@ s3://project_bucket_a38cfb32
 ```
 
 1.  Setting the path prefix to the s3://project_bucket_a38cfb3/clients_data allows you to load its children: market_dictionary.csv or the sales folder with all the files directly in it (without subfolders of sales). 
-    The path has to  absolute.
+    The path has to be absolute.
 2.  To load a single file from the sales folder, the path prefix must be set to the file’s parent folder: s3://project_bucket_a38cfb32/clients_data/sales
 
 Setting the path prefix to the s3://project_bucket_a38cfb3/clients_data allows you to load its children: market_dictionary.csv or the sales folder with all the files directly in it (without subfolders of sales). 
-The path has to  absolute.
+The path has to be absolute.
 
 To load a single file from the sales folder, the path prefix must be set to the file’s parent folder: s3://project_bucket_a38cfb32/clients_data/sales
 
 
 To work on files hosted in AWS S3, it is recommended to create a special user in IAM to be used as a service account. 
-The service account must have access to the bucket with permissions to list and read objects.
+The service account must have access to the bucket with permission to list and read objects.
 
 
 !!! tip "Service account credentials of the service account can be passed in three ways"
@@ -296,24 +296,24 @@ Finally, if both are not set explicitly, the automatically detected properties o
 
 **No common prefix for files**
 
-When files are placed in different locations where you cannot  specify a common prefix, you can use an absolute path for each file.
+When files are placed in different locations where you cannot specify a common prefix, you can use an absolute path for each file.
 
-You have to manually create a table in the UI. Open Data Sources, expand your connection and select three dots on the schema to which you want to add a new table.
+You have to manually create a table in the UI. Open Data Sources, expand your connection, and select three dots on the schema to which you want to add a new table.
 
 Fill in the "File path or file name pattern" field with the absolute path to the file and add the new table by clicking the **Save** button.
 
 
-!!! tip "Creating new table manually in the user home"
+!!! tip "Creating a new table manually in the user home"
     You can also add a new table manually in the sources folder of your user home by creating a new YAML file in the connection folder.
 
 ### Working with partitioned files // todo
 
-In order to work efficiently with partitions, you need to set the `hive-partition` parameter in CSV format settings. 
+To work efficiently with partitions, you need to set the `hive-partition` parameter in CSV format settings. 
 
-// todo: describe that the path has to be modified on a table level when hive-partition is set
+// todo: describe that the path has to be modified on a table level when the hive partition is set
 
 ## Next steps
 
-- We have provided a variety of use cases which use openly available datasets [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
+- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../integrations/webhooks/index.md).
-- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you to calculate separate data quality KPI scores for different groups of rows.
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you calculate separate data quality KPI scores for different groups of rows.
