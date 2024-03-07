@@ -12,7 +12,7 @@ export default function ColumnLevelPatterns() {
 
   const getPatterns = async () => {
     DefaultColumnCheckPatternsApiClient.getAllDefaultColumnChecksPatterns().then(
-      (res) => setPatterns(sortPatterns(res.data ?? [], 'priority', 'asc'))
+      (res) => setPatterns(sortPatterns(res.data ?? [], 'priority', 'desc'))
     );
   };
 
