@@ -53,6 +53,7 @@ export interface IJobsState {
   isLicenseFree: boolean;
   userProfile: DqoUserProfileModel;
   jobList: TJobList;
+  isErrorModalOpen: boolean;
 }
 
 const initialState: IJobsState = {
@@ -75,7 +76,8 @@ const initialState: IJobsState = {
   isCronScheduled: true,
   isLicenseFree: false,
   userProfile: {},
-  jobList: {}
+  jobList: {},
+  isErrorModalOpen: false
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -404,6 +406,12 @@ const schemaReducer = (state = initialState, action: any) => {
         ...state,
         jobList,
         job_dictionary_state
+      };
+    }
+    case JOB_ACTION.SET_IS_ERROR_MODAL_OPEN: {
+      return {
+        ...state,
+        isErrorModalOpen: action.isErrorModalOpen
       };
     }
     default:
