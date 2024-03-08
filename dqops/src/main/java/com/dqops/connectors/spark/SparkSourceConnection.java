@@ -99,11 +99,6 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
         String password = this.getSecretValueProvider().expandValue(sparkParametersSpec.getPassword(), secretValueLookupContext);
         hikariConfig.setPassword(password);
 
-        String options =  this.getSecretValueProvider().expandValue(sparkParametersSpec.getOptions(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(options)) {
-            dataSourceProperties.put("options", options);
-        }
-
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
     }

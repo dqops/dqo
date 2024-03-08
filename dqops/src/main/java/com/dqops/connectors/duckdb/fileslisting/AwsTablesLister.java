@@ -2,7 +2,7 @@ package com.dqops.connectors.duckdb.fileslisting;
 
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
-import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.metadata.sources.PhysicalTableName;
 import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -60,7 +60,7 @@ public class AwsTablesLister {
      */
     public static List<SourceTableModel> filterAndTransform(DuckdbParametersSpec duckdb, List<String> files, String schemaName){
         List<SourceTableModel> sourceTableModels = files.stream()
-                .filter(file -> isFolderOrFileOfValidExtension(file, duckdb.getSourceFilesType()))
+                .filter(file -> isFolderOrFileOfValidExtension(file, duckdb.getFilesFormatType()))
                 .map(file -> {
                         String cleanedFilePath = file.endsWith("/") ? file.substring(0, file.length() - 1) : file;
                         String fileName = cleanedFilePath.substring(cleanedFilePath.lastIndexOf("/") + 1);
@@ -77,7 +77,7 @@ public class AwsTablesLister {
      * @param filesType File type used for extension matching.
      * @return Whether the file is valid
      */
-    private static boolean isFolderOrFileOfValidExtension(String storageObjectName, DuckdbSourceFilesType filesType){
+    private static boolean isFolderOrFileOfValidExtension(String storageObjectName, DuckdbFilesFormatType filesType){
         String sourceFilesTypeString = filesType.toString();
         return storageObjectName.toLowerCase().endsWith("." + sourceFilesTypeString)
                 || storageObjectName.toLowerCase().endsWith(".gz")

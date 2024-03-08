@@ -5,6 +5,7 @@ import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnSpecMap;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.sources.fileformat.csv.NewLineCharacterType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -30,7 +31,7 @@ public class CsvFileFormatSpecTest extends BaseTest {
             setHeader(true);
             setHivePartitioning(true);
             setIgnoreErrors(true);
-            setNewLine("\n");
+            setNewLine(NewLineCharacterType.lf);
             setQuote("\"");
             setSkip(1L);
             setTimestampformat("%A, %-d %B %Y - %I:%M:%S %p");

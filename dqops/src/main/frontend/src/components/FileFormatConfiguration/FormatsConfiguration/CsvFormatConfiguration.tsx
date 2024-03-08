@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import {
   CsvFileFormatSpec,
-  CsvFileFormatSpecCompressionEnum
+  CsvFileFormatSpecCompressionEnum,
+  CsvFileFormatSpecNewLineEnum
 } from '../../../api';
 import { TConfigurationItemRow } from './RowItem/TConfigurationItemRow';
 import { TConfigurationItemRowBoolean } from './RowItem/TConfigurationItemRowBoolean';
@@ -28,6 +29,21 @@ const compressionEnumOptions = [
   {
     value: CsvFileFormatSpecCompressionEnum.zstd,
     label: CsvFileFormatSpecCompressionEnum.zstd
+  }
+];
+
+const newLineEnumOptions = [
+  {
+    value: CsvFileFormatSpecNewLineEnum.cr,
+    label: CsvFileFormatSpecNewLineEnum.cr
+  },
+  {
+    value: CsvFileFormatSpecNewLineEnum.lf,
+    label: CsvFileFormatSpecNewLineEnum.lf
+  },
+  {
+    value: CsvFileFormatSpecNewLineEnum.crlf,
+    label: CsvFileFormatSpecNewLineEnum.crlf
   }
 ];
 
@@ -76,7 +92,15 @@ export default function CsvFormatConfiguration({
       {
         label: 'New line',
         value: configuration?.new_line,
-        onChange: (str) => onChangeConfiguration({ new_line: str.toString() })
+        onChange: (str) => onChangeConfiguration({ 
+          new_line:
+            String(str).length > 0
+              ? (str as CsvFileFormatSpecNewLineEnum)
+              : undefined
+        }),
+        isEnum: true,
+        options: [{ label: '', value: '' }, ...newLineEnumOptions],
+        defaultValue: ''
       },
       {
         label: 'Quote',

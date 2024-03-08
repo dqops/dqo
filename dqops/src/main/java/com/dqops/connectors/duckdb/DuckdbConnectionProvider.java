@@ -32,7 +32,10 @@ import org.springframework.stereotype.Component;
 import tech.tablesaw.api.ColumnType;
 import tech.tablesaw.columns.Column;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 /**
  * DuckDB source connection provider.
@@ -118,11 +121,46 @@ public class DuckdbConnectionProvider extends AbstractSqlConnectionProvider {
             duckdbSpec.setDatabase(terminalReader.prompt("DuckDB in memory database name (--duckdb-database)", "${DUCKDB_DATABASE}", false));
         }
 
-        if(duckdbSpec.getReadMode().equals(DuckdbReadMode.files) && duckdbSpec.getSourceFilesType() == null){
+        if(duckdbSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
+            return;
+        }
+
+        if(duckdbSpec.getStorageType() == null){
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--duckdb-source-files-type");
+                throw new CliRequiredParameterMissingException("--duckdb-storage-type");
             }
-            duckdbSpec.setSourceFilesType(terminalReader.promptEnum("Type of source files for DuckDB.", DuckdbSourceFilesType.class, null,true));
+            duckdbSpec.setStorageType(terminalReader.promptEnum("Type of storage", DuckdbStorageType.class, DuckdbStorageType.local,true));
+        }
+
+        if(duckdbSpec.getFilesFormatType() == null){
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--duckdb-files-format-type");
+            }
+            duckdbSpec.setFilesFormatType(terminalReader.promptEnum("Type of source files for DuckDB", DuckdbFilesFormatType.class, null, false));
+        }
+
+        if (duckdbSpec.getDirectories().isEmpty()) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--duckdb-directories");
+            }
+
+            String directoriesRaw = terminalReader.prompt("Virtual schema names and paths (in a pattern schema=path)", null, false);
+            if(!directoriesRaw.contains("/") && !directoriesRaw.contains("\\")){
+                throw new RuntimeException("The provided path is invalid. The path should be an absolute path to the directory with folders or files. On Windows use double backslash (\\\\).");
+            }
+            List<String> directories = Arrays.stream(directoriesRaw.split(",")).collect(Collectors.toList());
+
+            for (String directory : directories) {
+                List<String> schemaDirectory = Arrays.stream(directory.split("="))
+                        .map(String::trim)
+                        .collect(Collectors.toList());
+                if(schemaDirectory.size() != 2){
+                    throw new RuntimeException("Unbalanced values for " + directory + "." +
+                            "Ensure you provide directories in a schema=path pattern.");
+                }
+                duckdbSpec.getDirectories().put(schemaDirectory.get(0), schemaDirectory.get(1));
+            }
+
         }
 
     }

@@ -33,7 +33,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
         }
     };
 
-    @JsonPropertyDescription("Whether to auto-detect detect the names of the keys and data types of the values automatically")
+    @JsonPropertyDescription("Whether to auto-detect detect the names of the keys and data types of the values automatically.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean autoDetect = true;
 
@@ -53,7 +53,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean filename;
 
-    @JsonPropertyDescription("Can be one of ['auto', 'unstructured', 'newline_delimited', 'array'].")
+    @JsonPropertyDescription("Json format. Can be one of ['auto', 'unstructured', 'newline_delimited', 'array'].")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private JsonFormatType format = JsonFormatType.auto;
 
@@ -65,15 +65,15 @@ public class JsonFileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean ignoreErrors;
 
-    @JsonPropertyDescription("Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types")
+    @JsonPropertyDescription("Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Long maximumDepth;
 
-    @JsonPropertyDescription("The maximum size of a JSON object (in bytes)")
+    @JsonPropertyDescription("The maximum size of a JSON object (in bytes).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Long maximumObjectSize;
 
-    @JsonPropertyDescription("Can be one of ['auto', 'true', 'false']")
+    @JsonPropertyDescription("Can be one of ['auto', 'true', 'false'].")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private JsonRecordsType records;
 

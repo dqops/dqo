@@ -17,7 +17,7 @@ import {
   ConnectionModel,
   ConnectionSpecProviderTypeEnum,
   FileFormatSpec,
-  DuckdbParametersSpecSourceFilesTypeEnum
+  DuckdbParametersSpecFilesFormatTypeEnum
 } from '../../api';
 import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
 import { TConfiguration } from '../../components/FileFormatConfiguration/TConfiguration';
@@ -38,8 +38,8 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   const { refreshNode } = useTree();
   const [paths, setPaths] = useState<Array<string>>(['']);
   const [fileFormatType, setFileFormatType] =
-    useState<DuckdbParametersSpecSourceFilesTypeEnum>(
-      DuckdbParametersSpecSourceFilesTypeEnum.csv
+    useState<DuckdbParametersSpecFilesFormatTypeEnum>(
+      DuckdbParametersSpecFilesFormatTypeEnum.csv
     );
   const [configuration, setConfiguration] = useState<TConfiguration>({});
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
@@ -152,7 +152,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   const onDeletePath = (index: number) =>
     setPaths((prev) => prev.filter((x, i) => i !== index));
 
-  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) =>
+  const onChangeFile = (val: DuckdbParametersSpecFilesFormatTypeEnum) =>
     setFileFormatType(val);
 
   return (

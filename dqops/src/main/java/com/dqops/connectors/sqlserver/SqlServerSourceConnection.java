@@ -157,11 +157,6 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
                 throw new RuntimeException("Given enum is not supported : " + authenticationMode);
         }
 
-        String options =  this.getSecretValueProvider().expandValue(sqlserverSpec.getOptions(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(options)) {
-            dataSourceProperties.put("options", options);
-        }
-
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
     }

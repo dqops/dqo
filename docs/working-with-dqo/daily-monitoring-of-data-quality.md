@@ -32,7 +32,7 @@ To import source schemas and tables:
     ![Importing tables](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-tables.png)
 
 When new tables are imported, DQOps automatically activates profiling and monitoring checks, and opens an Advisor 
-that allows you to quickly collect basic statistics, run profiling checks or modify the schedule for newly imported tables.
+that allows you to quickly collect basic statistics, run profiling checks, or modify the schedule for newly imported tables.
 But let's close the Advisor with the X button in the top right corner and verify the activation of the default checks.
 
 ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/advisor.png)
@@ -251,4 +251,4 @@ This dashboard allows filtering data by:
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../dqops-installation/run-dqops-as-docker-container.md).
 - DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](collecting-basic-data-statistics.md).
-- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](set-up-data-grouping-for-data-quality-checks.md) can help you to calculate separate data quality KPI scores for different groups of rows.
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](set-up-data-grouping-for-data-quality-checks.md) can help you calculate separate data quality KPI scores for different groups of rows.

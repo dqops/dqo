@@ -395,11 +395,6 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
         String password = this.getSecretValueProvider().expandValue(oracleParametersSpec.getPassword(), secretValueLookupContext);
         hikariConfig.setPassword(password);
 
-        String options =  this.getSecretValueProvider().expandValue(oracleParametersSpec.getOptions(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(options)) {
-            dataSourceProperties.put("options", options);
-        }
-
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
     }

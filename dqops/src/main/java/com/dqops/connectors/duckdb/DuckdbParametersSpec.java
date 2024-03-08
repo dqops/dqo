@@ -57,21 +57,17 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         }
     };
 
-    @CommandLine.Option(names = {"--duckdb-read-mode"}, description = "DuckDB read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--duckdb-read-mode"}, description = "DuckDB read mode.")
+    @JsonPropertyDescription("DuckDB read mode.")
     private DuckdbReadMode readMode = DuckdbReadMode.files;
 
-    @CommandLine.Option(names = {"--duckdb-source-files-type"}, description = "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private DuckdbSourceFilesType sourceFilesType;
+    @CommandLine.Option(names = {"--duckdb-files-format-type"}, description = "Type of source files format for DuckDB.")
+    @JsonPropertyDescription("Type of source files format for DuckDB.")
+    private DuckdbFilesFormatType filesFormatType;
 
-    @CommandLine.Option(names = {"--duckdb-database"}, description = "DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--duckdb-database"}, description = "DuckDB database name for in-memory read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("DuckDB database name for in-memory read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String database;
-
-    @CommandLine.Option(names = {"--duckdb-options"}, description = "DuckDB connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
-    @JsonPropertyDescription("DuckDB connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DUCKDB_OPTIONS} configuration with a custom environment variable.")
-    private String options;
 
     @CommandLine.Option(names = {"-Duck"}, description = "DuckDB additional properties that are added to the JDBC connection string")
     @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
@@ -93,20 +89,21 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ParquetFileFormatSpec parquet;
 
-    @JsonPropertyDescription("Schema to directory mappings.")
+    @CommandLine.Option(names = "--duckdb-directories", split = ",")
+    @JsonPropertyDescription("Virtual schema name to directory mappings. The path must be an absolute path.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> directories = new HashMap<>();
 
-    @CommandLine.Option(names = {"--duckdb-secrets-type"}, description = "The secrets type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("The secrets type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private DuckdbSecretsType secretsType;
+    @CommandLine.Option(names = {"--duckdb-storage-type"}, description = "The storage type.")
+    @JsonPropertyDescription("The storage type.")
+    private DuckdbStorageType storageType;
 
-    @CommandLine.Option(names = {"--duckdb-user"}, description = "DuckDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("DuckDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--duckdb-user"}, description = "DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String user;
 
-    @CommandLine.Option(names = {"--duckdb-password"}, description = "DuckDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("DuckDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--duckdb-password"}, description = "DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String password;
 
     @CommandLine.Option(names = {"--duckdb-region"}, description = "The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -131,20 +128,20 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns a sourceFilesType value.
-     * @return sourceFilesType value.
+     * Returns a filesFormatType value.
+     * @return filesFormatType value.
      */
-    public DuckdbSourceFilesType getSourceFilesType() {
-        return sourceFilesType;
+    public DuckdbFilesFormatType getFilesFormatType() {
+        return filesFormatType;
     }
 
     /**
-     * Sets a sourceFilesType value.
-     * @param sourceFilesType sourceFilesType value.
+     * Sets a filesFormatType value.
+     * @param filesFormatType filesFormatType value.
      */
-    public void setSourceFilesType(DuckdbSourceFilesType sourceFilesType) {
-        setDirtyIf(!Objects.equals(sourceFilesType, sourceFilesType));
-        this.sourceFilesType = sourceFilesType;
+    public void setFilesFormatType(DuckdbFilesFormatType filesFormatType) {
+        setDirtyIf(!Objects.equals(filesFormatType, filesFormatType));
+        this.filesFormatType = filesFormatType;
     }
 
     /**
@@ -162,23 +159,6 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     public void setDatabase(String database) {
         setDirtyIf(!Objects.equals(this.database, database));
         this.database = database;
-    }
-
-    /**
-     * Returns the custom connection initialization options.
-     * @return Connection initialization options.
-     */
-    public String getOptions() {
-        return options;
-    }
-
-    /**
-     * Sets the connection initialization options.
-     * @param options Connection initialization options.
-     */
-    public void setOptions(String options) {
-        setDirtyIf(!Objects.equals(this.options, options));
-        this.options = options;
     }
 
     /**
@@ -270,20 +250,20 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the secrets type.
-     * @return the secrets type.
+     * Returns the storage type.
+     * @return the storage type.
      */
-    public DuckdbSecretsType getSecretsType() {
-        return secretsType;
+    public DuckdbStorageType getStorageType() {
+        return storageType;
     }
 
     /**
-     * Sets the secrets type.
-     * @param secretsType the secrets type.
+     * Sets the storage type.
+     * @param storageType the storage type.
      */
-    public void setSecretsType(DuckdbSecretsType secretsType) {
-        setDirtyIf(!Objects.equals(this.secretsType, secretsType));
-        this.secretsType = secretsType;
+    public void setStorageType(DuckdbStorageType storageType) {
+        setDirtyIf(!Objects.equals(this.storageType, storageType));
+        this.storageType = storageType;
     }
 
     /**
@@ -355,15 +335,15 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
 
     /**
      * Returns state that whether the file format for the specific file type is set.
-     * @param duckdbSourceFilesType Type of files.
+     * @param duckdbFilesFormatType Type of files.
      * @return State that whether the file format for the specific file type is set.
      */
-    public boolean isFormatSetForType(DuckdbSourceFilesType duckdbSourceFilesType){
-        switch(duckdbSourceFilesType){
+    public boolean isFormatSetForType(DuckdbFilesFormatType duckdbFilesFormatType){
+        switch(duckdbFilesFormatType){
             case csv: return this.getCsv() != null;
             case json: return this.getJson() != null;
             case parquet: return this.getParquet() != null;
-            default: throw new RuntimeException("The file format is not supported : " + duckdbSourceFilesType);
+            default: throw new RuntimeException("The file format is not supported : " + duckdbFilesFormatType);
         }
     }
 
@@ -395,7 +375,6 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     public DuckdbParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         DuckdbParametersSpec cloned = this.deepClone();
         cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
-        cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
         if(cloned.csv != null){
             cloned.csv = cloned.csv.expandAndTrim(secretValueProvider, lookupContext);
@@ -416,9 +395,9 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      */
     public void fillSpecWithDefaultCredentials(SecretValueLookupContext secretValueLookupContext){
-        DuckdbSecretsType secretsType = this.getSecretsType();
+        DuckdbStorageType storageType = this.getStorageType();
 
-        switch (secretsType){
+        switch (storageType){
             case s3:
                 if(Strings.isNullOrEmpty(this.getAwsAccessKeyId()) || Strings.isNullOrEmpty(this.getAwsSecretAccessKey())){
                     Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
@@ -449,7 +428,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
 
                 break;
             default:
-                throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + secretsType);
+                throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + storageType);
         }
     }
 

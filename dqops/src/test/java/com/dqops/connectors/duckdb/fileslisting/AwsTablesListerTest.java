@@ -4,7 +4,7 @@ import com.dqops.BaseTest;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
-import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,13 +20,13 @@ class AwsTablesListerTest extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.duckdb = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv).getDuckdb();
+        this.duckdb = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv).getDuckdb();
     }
 
     @Test
     void filterAndTransform_fromFiles_createCollection() {
         List<String> filesList = List.of("file_1.csv", "file_2.csv", "file_3.csv");
-        DuckdbParametersSpec duckdb = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv).getDuckdb();
+        DuckdbParametersSpec duckdb = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv).getDuckdb();
 
         List<SourceTableModel> sourceTableModels = AwsTablesLister.filterAndTransform(duckdb, filesList, schema);
 

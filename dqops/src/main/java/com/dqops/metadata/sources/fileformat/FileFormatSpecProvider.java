@@ -1,8 +1,8 @@
 package com.dqops.metadata.sources.fileformat;
 
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
-import com.dqops.connectors.duckdb.DuckdbSecretsType;
-import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
+import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.metadata.sources.TableSpec;
 
 import java.io.File;
@@ -24,7 +24,7 @@ public class FileFormatSpecProvider {
      * @return FileFormatSpec
      */
     public static FileFormatSpec resolveFileFormat(DuckdbParametersSpec duckdbParametersSpec, TableSpec tableSpec) {
-        DuckdbSourceFilesType filesType = duckdbParametersSpec.getSourceFilesType();
+        DuckdbFilesFormatType filesType = duckdbParametersSpec.getFilesFormatType();
         if (filesType == null) {
             return null;
         }
@@ -70,15 +70,17 @@ public class FileFormatSpecProvider {
             return filePathListSpec;
         }
 
+        DuckdbStorageType storageType = duckdb.getStorageType();
+
         String filePath = isPathAbsoluteSystemsWide(tableName)
                 ? tableName
-                : createAbsoluteFilePathFrom(pathPrefix, tableName, duckdb.getSecretsType());
+                : createAbsoluteFilePathFrom(pathPrefix, tableName, storageType);
 
         // todo: what if the file extension eg. json will not match the source file types e.g. csv on the parameter spec??
-        String fileExtension = "." + duckdb.getSourceFilesType().toString();
-        String separator = duckdb.getSecretsType() == null ? File.separator : "/";
+        String fileExtension = "." + duckdb.getFilesFormatType().toString();
+        String separator = (storageType == null || storageType.equals(DuckdbStorageType.local)) ? File.separator : "/";
         if(!filePath.toLowerCase().endsWith(fileExtension)){
-            filePath = filePath + separator + "**" + fileExtension;
+            filePath = filePath + separator + "**" + fileExtension; // todo: ensure wildcards are valid
         }
         filePathListSpec.add(filePath);
         return filePathListSpec;
@@ -88,11 +90,11 @@ public class FileFormatSpecProvider {
      * Creates an absolute path to the table name which stands for file name or a folder with files.
      * @param pathPrefix Path prefix, should be absolute.
      * @param tableName Table name
-     * @param secretsType Duckdb secrets type
+     * @param storageType Duckdb secrets type
      * @return Absolute file path string to data.
      */
-    private static String createAbsoluteFilePathFrom(String pathPrefix, String tableName, DuckdbSecretsType secretsType){
-        if(secretsType == null){
+    private static String createAbsoluteFilePathFrom(String pathPrefix, String tableName, DuckdbStorageType storageType){
+        if(storageType == null || storageType.equals(DuckdbStorageType.local)){
             return Path.of(pathPrefix, tableName).toString();
         } else {
             String pathPrefixWithTrailingSlash = pathPrefix + (pathPrefix.endsWith("/") ? "" : "/");
@@ -116,14 +118,14 @@ public class FileFormatSpecProvider {
     /**
      * Sets the specific file format (based on DuckdbSourceFilesType's source file types) on the file format object passed as first argument.
      * @param fileFormatSpec
-     * @param duckdbSourceFilesType
+     * @param duckdbFilesFormatType
      */
-    private static void fillDefaultFileFormat(FileFormatSpec fileFormatSpec, DuckdbSourceFilesType duckdbSourceFilesType){
-        switch(duckdbSourceFilesType){
+    private static void fillDefaultFileFormat(FileFormatSpec fileFormatSpec, DuckdbFilesFormatType duckdbFilesFormatType){
+        switch(duckdbFilesFormatType){
             case csv: fileFormatSpec.setCsv(new CsvFileFormatSpec()); break;
             case json: fileFormatSpec.setJson(new JsonFileFormatSpec()); break;
             case parquet: fileFormatSpec.setParquet(new ParquetFileFormatSpec()); break;
-            default: throw new RuntimeException("Cant fill default file format for files type: " + duckdbSourceFilesType);
+            default: throw new RuntimeException("Can't fill default file format for files type: " + duckdbFilesFormatType);
         }
     }
 

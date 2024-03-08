@@ -3,7 +3,7 @@ package com.dqops.metadata.sources.fileformat;
 import com.dqops.BaseTest;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
-import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.sampledata.SampleCsvFileNames;
@@ -27,7 +27,7 @@ public class FileFormatSpecProviderTest extends BaseTest {
         TableSpec tableSpec = new TableSpec(new PhysicalTableName("schema_name_example", "table_name_example"));
         tableSpec.setFileFormat(FileFormatSpecObjectMother.createForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day));
 
-        DuckdbParametersSpec duckdbParametersSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv).getDuckdb();
+        DuckdbParametersSpec duckdbParametersSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv).getDuckdb();
         duckdbParametersSpec.setCsv(new CsvFileFormatSpec(){{
                 setAutoDetect(false);
         }});
@@ -46,7 +46,7 @@ public class FileFormatSpecProviderTest extends BaseTest {
         String pathPrefix = "prefix_example";
         TableSpec tableSpec = new TableSpec(new PhysicalTableName(schemaName, tableName));
 
-        DuckdbParametersSpec duckdbParametersSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv).getDuckdb();
+        DuckdbParametersSpec duckdbParametersSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv).getDuckdb();
         duckdbParametersSpec.setCsv(new CsvFileFormatSpec(){{
                 setAutoDetect(false);
         }});
@@ -72,7 +72,7 @@ public class FileFormatSpecProviderTest extends BaseTest {
                 }});
         }});
 
-        DuckdbParametersSpec duckdbParametersSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv).getDuckdb();
+        DuckdbParametersSpec duckdbParametersSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv).getDuckdb();
         duckdbParametersSpec.setCsv(new CsvFileFormatSpec(){{
                 setAutoDetect(false);
         }});
@@ -95,7 +95,8 @@ public class FileFormatSpecProviderTest extends BaseTest {
                     }});
                 }});
 
-        DuckdbParametersSpec duckdbParametersSpec = new DuckdbParametersSpec(){{setSourceFilesType(DuckdbSourceFilesType.csv);}};
+        DuckdbParametersSpec duckdbParametersSpec = new DuckdbParametersSpec(){{
+            setFilesFormatType(DuckdbFilesFormatType.csv);}};
 
         FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
 
@@ -132,7 +133,7 @@ public class FileFormatSpecProviderTest extends BaseTest {
 
         DuckdbParametersSpec duckdbParametersSpec = new DuckdbParametersSpec();
         duckdbParametersSpec.setDirectories(Map.of(schemaName, filePath));
-        duckdbParametersSpec.setSourceFilesType(DuckdbSourceFilesType.csv);
+        duckdbParametersSpec.setFilesFormatType(DuckdbFilesFormatType.csv);
 
         FilePathListSpec fileFormatSpec = FileFormatSpecProvider.guessFilePaths(duckdbParametersSpec, tableSpec);
 
@@ -152,7 +153,7 @@ public class FileFormatSpecProviderTest extends BaseTest {
 
         DuckdbParametersSpec duckdbParametersSpec = new DuckdbParametersSpec();
         duckdbParametersSpec.setDirectories(Map.of(schemaName, filesFolder));
-        duckdbParametersSpec.setSourceFilesType(DuckdbSourceFilesType.csv);
+        duckdbParametersSpec.setFilesFormatType(DuckdbFilesFormatType.csv);
 
         FilePathListSpec fileFormatSpec = FileFormatSpecProvider.guessFilePaths(duckdbParametersSpec, tableSpec);
 
@@ -171,7 +172,7 @@ public class FileFormatSpecProviderTest extends BaseTest {
 
         DuckdbParametersSpec duckdbParametersSpec = new DuckdbParametersSpec();
         duckdbParametersSpec.setDirectories(Map.of(schemaName, filesFolder));
-        duckdbParametersSpec.setSourceFilesType(DuckdbSourceFilesType.csv);
+        duckdbParametersSpec.setFilesFormatType(DuckdbFilesFormatType.csv);
 
         FilePathListSpec fileFormatSpec = FileFormatSpecProvider.guessFilePaths(duckdbParametersSpec, tableSpec);
 
@@ -190,7 +191,7 @@ public class FileFormatSpecProviderTest extends BaseTest {
 
         DuckdbParametersSpec duckdbParametersSpec = new DuckdbParametersSpec();
         duckdbParametersSpec.setDirectories(Map.of(schemaName, filesFolder));
-        duckdbParametersSpec.setSourceFilesType(DuckdbSourceFilesType.csv);
+        duckdbParametersSpec.setFilesFormatType(DuckdbFilesFormatType.csv);
 
         FilePathListSpec fileFormatSpec = FileFormatSpecProvider.guessFilePaths(duckdbParametersSpec, tableSpec);
 
@@ -206,7 +207,7 @@ public class FileFormatSpecProviderTest extends BaseTest {
         TableSpec tableSpec = new TableSpec(new PhysicalTableName(schemaName, tableName));
 
         DuckdbParametersSpec duckdbParametersSpec = new DuckdbParametersSpec();
-        duckdbParametersSpec.setSourceFilesType(DuckdbSourceFilesType.csv);
+        duckdbParametersSpec.setFilesFormatType(DuckdbFilesFormatType.csv);
 
         FilePathListSpec fileFormatSpec = FileFormatSpecProvider.guessFilePaths(duckdbParametersSpec, tableSpec);
 

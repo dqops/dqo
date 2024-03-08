@@ -3,7 +3,7 @@ package com.dqops.connectors.duckdb.fileslisting;
 import com.dqops.BaseTest;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
-import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderImpl;
 import com.dqops.utils.BeanFactoryObjectMother;
@@ -32,7 +32,7 @@ class AwsTablesListerIntegrationTest extends BaseTest {
         duckdbParametersSpec.setUser(secretValueProvider.expandValue("${DQOPS_TEST_AWS_ACCESS_KEY_ID}", secretValueLookupContext));
         duckdbParametersSpec.setPassword(secretValueProvider.expandValue("${DQOPS_TEST_AWS_SECRET_ACCESS_KEY}", secretValueLookupContext));
         duckdbParametersSpec.setRegion(secretValueProvider.expandValue("${DQOPS_TEST_AWS_REGION}", secretValueLookupContext));
-        duckdbParametersSpec.setSourceFilesType(DuckdbSourceFilesType.csv);
+        duckdbParametersSpec.setFilesFormatType(DuckdbFilesFormatType.csv);
     }
 
     @Test

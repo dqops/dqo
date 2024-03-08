@@ -12,7 +12,7 @@ class DuckdbQueriesProviderTest extends BaseTest {
 
     @Test
     void provideCreateSecretQuery_forS3_createsQuery() {
-        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFilesOnS3(DuckdbSourceFilesType.csv);
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFilesOnS3(DuckdbFilesFormatType.csv);
         HashCode hashCode = DuckdbSecretManager.calculateHash64(connectionSpec);
         String createSecretQuery = DuckdbQueriesProvider.provideCreateSecretQuery(connectionSpec, hashCode);
 

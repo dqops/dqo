@@ -27,7 +27,7 @@ import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
-import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityObjectMother;
@@ -318,7 +318,7 @@ public class SchemasControllerUTTests extends BaseTest {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew(connectionName);
-        connectionWrapper.setSpec(DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv));
+        connectionWrapper.setSpec(DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv));
         connectionWrapper.getSpec().getDuckdb().setDirectories(Map.of("schema1", "/dev/data"));
         connectionWrapper.getTables().createAndAddNew(
                 new PhysicalTableName("schema1", "tab1"));

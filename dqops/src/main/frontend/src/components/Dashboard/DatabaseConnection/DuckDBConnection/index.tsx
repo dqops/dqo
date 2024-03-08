@@ -4,14 +4,15 @@ import SectionWrapper from '../../SectionWrapper';
 import {
   DuckdbParametersSpec,
   SharedCredentialListModel,
-  DuckdbParametersSpecSourceFilesTypeEnum,
-  DuckdbParametersSpecSecretsTypeEnum
+  DuckdbParametersSpecFilesFormatTypeEnum,
+  DuckdbParametersSpecStorageTypeEnum
 } from '../../../../api';
 import FileFormatConfiguration from '../../../FileFormatConfiguration/FileFormatConfiguration';
 import { TConfiguration } from '../../../../components/FileFormatConfiguration/TConfiguration';
 import KeyValueProperties from '../../../FileFormatConfiguration/KeyValueProperties';
 import Select from '../../../Select';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import JdbcPropertiesView from '../JdbcProperties';
 
 interface IDuckdbConnectionProps {
   duckdb?: DuckdbParametersSpec;
@@ -26,8 +27,12 @@ const DuckdbConnection = ({
   sharedCredentials,
   freezeFileType = false
 }: IDuckdbConnectionProps) => {
+
+  const [storageType, setStorageType] = useState(duckdb?.storage_type);
+
   const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
     if (!onChange) return;
+    setStorageType(obj?.storage_type);
     onChange({
       ...duckdb,
       ...obj
@@ -35,8 +40,8 @@ const DuckdbConnection = ({
   };
   console.log(duckdb)
   const [fileFormatType, setFileFormatType] =
-    useState<DuckdbParametersSpecSourceFilesTypeEnum>(
-      duckdb?.source_files_type ?? DuckdbParametersSpecSourceFilesTypeEnum.csv
+    useState<DuckdbParametersSpecFilesFormatTypeEnum>(
+      duckdb?.files_format_type ?? DuckdbParametersSpecFilesFormatTypeEnum.csv
     );
 
   const [configuration, setConfiguration] = useState<TConfiguration>({});
@@ -54,53 +59,52 @@ const DuckdbConnection = ({
     setConfiguration({});
   };
 
-  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => {
+  const onChangeFile = (val: DuckdbParametersSpecFilesFormatTypeEnum) => {
     handleChange({
       [fileFormatType as keyof DuckdbParametersSpec]: undefined,
       [val as keyof DuckdbParametersSpec]: {},
-      source_files_type: val
+      files_format_type: val
     });
     setFileFormatType(val);
     cleanConfiguration();
   };
 
-  const secretsTypeOptions = [
+  const storageTypeOptions = [
     {
-      label: 'Local',
+      label: 'Local files',
       value: undefined
     },
     {
       label: 'AWS S3',
-      value: DuckdbParametersSpecSecretsTypeEnum.s3
-    }
+      value: DuckdbParametersSpecStorageTypeEnum.s3
+    },
     // todo: uncomment below when implemented
     // {
     //   label: 'Google Cloud Storage',
-    //   value: DuckdbParametersSpecSecretsTypeEnum.gcs
+    //   value: DuckdbParametersSpecStorageTypeEnum.gcs
     // },
     // {
     //   label: 'Azure Blob Storage',
-    //   value: DuckdbParametersSpecSecretsTypeEnum.azure
+    //   value: DuckdbParametersSpecStorageTypeEnum.azure
     // },
     // {
     //   label: 'Cloudflare R2',
-    //   value: DuckdbParametersSpecSecretsTypeEnum.r2
+    //   value: DuckdbParametersSpecStorageTypeEnum.r2
     // }
   ];
 
   return (
     <SectionWrapper title="DuckDB connection parameters" className="mb-4">
-      <Select
-        label="Storage type"
-        options={secretsTypeOptions}
-        className="mb-4"
-        value={duckdb?.secrets_type}
-        onChange={(value) => {
-          handleChange({ secrets_type: value });
-        }}
-      />
 
-      {duckdb?.secrets_type === DuckdbParametersSpecSecretsTypeEnum.s3 && (
+      <Select
+          label="Files location"
+          options={storageTypeOptions}
+          className="mb-4"
+          value={ duckdb?.storage_type }
+          onChange={(value) => { handleChange({ storage_type: value })}}
+        />
+
+      { duckdb?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 &&
         <>
           <FieldTypeInput
             data={sharedCredentials}
@@ -111,7 +115,7 @@ const DuckdbConnection = ({
           />
           <FieldTypeInput
             data={sharedCredentials}
-            label="Password/Token"
+            label="Password/Secret Key"
             className="mb-4"
             maskingType="password"
             value={duckdb?.password}
@@ -126,7 +130,7 @@ const DuckdbConnection = ({
             onChange={(value) => handleChange({ region: value })}
           />
         </>
-      )}
+      }
 
       <FileFormatConfiguration
         fileFormatType={fileFormatType}
@@ -138,12 +142,16 @@ const DuckdbConnection = ({
       >
         <KeyValueProperties
           properties={duckdb?.directories}
-          onChange={(directories) => {
-            handleChange({ directories: directories });
-          }}
+          onChange={(directories) => { handleChange({ directories: directories })}}
           sharedCredentials={sharedCredentials}
+          storageType={storageType}
         />
       </FileFormatConfiguration>
+      <JdbcPropertiesView
+        properties={duckdb?.properties}
+        onChange={(properties) => handleChange({ properties })}
+        sharedCredentials={sharedCredentials}
+      />
     </SectionWrapper>
   );
 };

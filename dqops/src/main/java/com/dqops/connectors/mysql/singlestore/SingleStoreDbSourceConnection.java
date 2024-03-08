@@ -104,11 +104,6 @@ public class SingleStoreDbSourceConnection {
             dataSourceProperties.put("useSsl", useSsl);
         }
 
-        String options =  secretValueProvider.expandValue(mysqlParametersSpec.getOptions(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(options)) {
-            dataSourceProperties.put("options", options);
-        }
-
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
     }

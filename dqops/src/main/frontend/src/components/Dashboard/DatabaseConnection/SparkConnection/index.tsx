@@ -60,13 +60,6 @@ const SparkConnection = ({
         value={spark?.password}
         onChange={(value) => handleChange({ password: value })}
       />
-      <FieldTypeInput
-        data={sharedCredentials}
-        label="Options"
-        className="mb-4"
-        value={spark?.options}
-        onChange={(value) => handleChange({ options: value })}
-      />
       <JdbcPropertiesView
         properties={spark?.properties}
         onChange={(properties) => handleChange({ properties })}
