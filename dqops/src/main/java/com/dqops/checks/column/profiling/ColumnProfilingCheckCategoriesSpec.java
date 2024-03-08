@@ -509,14 +509,14 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      */
     @Override
     public TimeSeriesConfigurationSpec getTimeSeriesConfiguration(TableSpec tableSpec) {
-        ProfilingTimePeriod profilingTimePeriod = tableSpec != null && tableSpec.getProfilingChecks() != null &&
+        ProfilingTimePeriodTruncation profilingTimePeriodTruncation = tableSpec != null && tableSpec.getProfilingChecks() != null &&
                 tableSpec.getProfilingChecks().getResultTruncation() != null ?
-                tableSpec.getProfilingChecks().getResultTruncation() : ProfilingTimePeriod.one_per_month;
+                tableSpec.getProfilingChecks().getResultTruncation() : ProfilingTimePeriodTruncation.one_per_month;
 
         return new TimeSeriesConfigurationSpec()
         {{
             setMode(TimeSeriesMode.current_time);
-            setTimeGradient(profilingTimePeriod.toTimePeriodGradient());
+            setTimeGradient(profilingTimePeriodTruncation.toTimePeriodGradient());
         }};
     }
 

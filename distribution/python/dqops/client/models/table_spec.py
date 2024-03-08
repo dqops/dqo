@@ -13,10 +13,12 @@ if TYPE_CHECKING:
         PartitionIncrementalTimeWindowSpec,
     )
     from ..models.table_incident_grouping_spec import TableIncidentGroupingSpec
-    from ..models.table_monitoring_checks_spec import TableMonitoringChecksSpec
+    from ..models.table_monitoring_check_categories_spec import (
+        TableMonitoringCheckCategoriesSpec,
+    )
     from ..models.table_owner_spec import TableOwnerSpec
-    from ..models.table_partitioned_checks_root_spec import (
-        TablePartitionedChecksRootSpec,
+    from ..models.table_partitioned_check_categories_spec import (
+        TablePartitionedCheckCategoriesSpec,
     )
     from ..models.table_profiling_check_categories_spec import (
         TableProfilingCheckCategoriesSpec,
@@ -71,8 +73,8 @@ class TableSpec:
         incident_grouping (Union[Unset, TableIncidentGroupingSpec]):
         owner (Union[Unset, TableOwnerSpec]):
         profiling_checks (Union[Unset, TableProfilingCheckCategoriesSpec]):
-        monitoring_checks (Union[Unset, TableMonitoringChecksSpec]):
-        partitioned_checks (Union[Unset, TablePartitionedChecksRootSpec]):
+        monitoring_checks (Union[Unset, TableMonitoringCheckCategoriesSpec]):
+        partitioned_checks (Union[Unset, TablePartitionedCheckCategoriesSpec]):
         statistics (Union[Unset, TableStatisticsCollectorsRootCategoriesSpec]):
         schedules_override (Union[Unset, DefaultSchedulesSpec]):
         columns (Union[Unset, TableSpecColumns]): Dictionary of columns, indexed by a physical column name. Column
@@ -97,8 +99,8 @@ class TableSpec:
     incident_grouping: Union[Unset, "TableIncidentGroupingSpec"] = UNSET
     owner: Union[Unset, "TableOwnerSpec"] = UNSET
     profiling_checks: Union[Unset, "TableProfilingCheckCategoriesSpec"] = UNSET
-    monitoring_checks: Union[Unset, "TableMonitoringChecksSpec"] = UNSET
-    partitioned_checks: Union[Unset, "TablePartitionedChecksRootSpec"] = UNSET
+    monitoring_checks: Union[Unset, "TableMonitoringCheckCategoriesSpec"] = UNSET
+    partitioned_checks: Union[Unset, "TablePartitionedCheckCategoriesSpec"] = UNSET
     statistics: Union[Unset, "TableStatisticsCollectorsRootCategoriesSpec"] = UNSET
     schedules_override: Union[Unset, "DefaultSchedulesSpec"] = UNSET
     columns: Union[Unset, "TableSpecColumns"] = UNSET
@@ -232,10 +234,12 @@ class TableSpec:
             PartitionIncrementalTimeWindowSpec,
         )
         from ..models.table_incident_grouping_spec import TableIncidentGroupingSpec
-        from ..models.table_monitoring_checks_spec import TableMonitoringChecksSpec
+        from ..models.table_monitoring_check_categories_spec import (
+            TableMonitoringCheckCategoriesSpec,
+        )
         from ..models.table_owner_spec import TableOwnerSpec
-        from ..models.table_partitioned_checks_root_spec import (
-            TablePartitionedChecksRootSpec,
+        from ..models.table_partitioned_check_categories_spec import (
+            TablePartitionedCheckCategoriesSpec,
         )
         from ..models.table_profiling_check_categories_spec import (
             TableProfilingCheckCategoriesSpec,
@@ -313,18 +317,20 @@ class TableSpec:
             )
 
         _monitoring_checks = d.pop("monitoring_checks", UNSET)
-        monitoring_checks: Union[Unset, TableMonitoringChecksSpec]
+        monitoring_checks: Union[Unset, TableMonitoringCheckCategoriesSpec]
         if isinstance(_monitoring_checks, Unset):
             monitoring_checks = UNSET
         else:
-            monitoring_checks = TableMonitoringChecksSpec.from_dict(_monitoring_checks)
+            monitoring_checks = TableMonitoringCheckCategoriesSpec.from_dict(
+                _monitoring_checks
+            )
 
         _partitioned_checks = d.pop("partitioned_checks", UNSET)
-        partitioned_checks: Union[Unset, TablePartitionedChecksRootSpec]
+        partitioned_checks: Union[Unset, TablePartitionedCheckCategoriesSpec]
         if isinstance(_partitioned_checks, Unset):
             partitioned_checks = UNSET
         else:
-            partitioned_checks = TablePartitionedChecksRootSpec.from_dict(
+            partitioned_checks = TablePartitionedCheckCategoriesSpec.from_dict(
                 _partitioned_checks
             )
 

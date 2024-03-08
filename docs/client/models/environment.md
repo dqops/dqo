@@ -1,5 +1,5 @@
 # DQOps REST API environment models reference
-The references of all objects used by [environment](../operations/environment.md) REST API operations are listed below.
+The references of all objects used by [environment](/docs/client/operations/environment.md) REST API operations are listed below.
 
 
 ## DqoSettingsModel

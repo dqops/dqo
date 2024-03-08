@@ -54,7 +54,7 @@ public class MysqlProviderDialectSettings extends ProviderDialectSettings {
 
         String columnType = columnTypeSnapshot.getColumnType().toLowerCase(Locale.ROOT);
         if (StringCheckUtility.containsAny(columnType, "text")) {
-            return DataTypeCategory.string;
+            return DataTypeCategory.text;
         }
 
         return super.detectColumnType(columnTypeSnapshot);

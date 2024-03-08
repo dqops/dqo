@@ -84,6 +84,6 @@ public class ColumnTextTextDatatypeDetectStatisticsCollectorSpec extends Abstrac
      */
     @Override
     public DataTypeCategory[] getSupportedDataTypes() {
-        return new DataTypeCategory[] { DataTypeCategory.string };
+        return new DataTypeCategory[] { DataTypeCategory.text};
     }
 }

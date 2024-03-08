@@ -16,7 +16,7 @@
 package com.dqops.rest.models.metadata;
 
 import com.dqops.checks.CheckType;
-import com.dqops.checks.ProfilingTimePeriod;
+import com.dqops.checks.ProfilingTimePeriodTruncation;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -102,7 +102,7 @@ public class TableListModel {
     @JsonPropertyDescription("Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent " +
             "profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private ProfilingTimePeriod profilingChecksResultTruncation;
+    private ProfilingTimePeriodTruncation profilingChecksResultTruncation;
 
     @JsonPropertyDescription("File format for a file based table, such as a CSV or Parquet file.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

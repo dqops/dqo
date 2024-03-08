@@ -271,7 +271,7 @@ spec:
                             THEN 1
                           ELSE 0
                         END
-                      ) / ({{ lib.render_target_column('analyzed_table') }})
+                      ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 {%- endif -%}
             {% endmacro -%}
             
@@ -300,7 +300,7 @@ spec:
                             THEN 1
                           ELSE 0
                         END
-                      ) / (analyzed_table."target_column")
+                      ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -1053,7 +1053,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 1
                           ELSE 0
                         END
-                      ) / ({{ lib.render_target_column('analyzed_table') }})
+                      ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 {%- endif -%}
             {% endmacro -%}
             
@@ -1081,7 +1081,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 1
                           ELSE 0
                         END
-                      ) / (analyzed_table."target_column")
+                      ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -1933,7 +1933,7 @@ spec:
                             THEN 1
                           ELSE 0
                         END
-                      ) / ({{ lib.render_target_column('analyzed_table') }})
+                      ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 {%- endif -%}
             {% endmacro -%}
             
@@ -1962,7 +1962,7 @@ spec:
                             THEN 1
                           ELSE 0
                         END
-                      ) / (analyzed_table."target_column")
+                      ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -2716,7 +2716,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 1
                           ELSE 0
                         END
-                      ) / ({{ lib.render_target_column('analyzed_table') }})
+                      ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 {%- endif -%}
             {% endmacro -%}
             
@@ -2744,7 +2744,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 1
                           ELSE 0
                         END
-                      ) / (analyzed_table."target_column")
+                      ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -3596,7 +3596,7 @@ spec:
                             THEN 1
                           ELSE 0
                         END
-                      ) / ({{ lib.render_target_column('analyzed_table') }})
+                      ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 {%- endif -%}
             {% endmacro -%}
             
@@ -3625,7 +3625,7 @@ spec:
                             THEN 1
                           ELSE 0
                         END
-                      ) / (analyzed_table."target_column")
+                      ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -4379,7 +4379,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 1
                           ELSE 0
                         END
-                      ) / ({{ lib.render_target_column('analyzed_table') }})
+                      ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 {%- endif -%}
             {% endmacro -%}
             
@@ -4407,7 +4407,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 1
                           ELSE 0
                         END
-                      ) / (analyzed_table."target_column")
+                      ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -5269,7 +5269,7 @@ spec:
                             THEN 1
                           ELSE 0
                         END
-                      ) / ({{ lib.render_target_column('analyzed_table') }})
+                      ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 {%- endif -%}
             {% endmacro -%}
             
@@ -5298,7 +5298,7 @@ spec:
                             THEN 1
                           ELSE 0
                         END
-                      ) / (analyzed_table."target_column")
+                      ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -6066,7 +6066,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 1
                           ELSE 0
                         END
-                      ) / ({{ lib.render_target_column('analyzed_table') }})
+                      ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 {%- endif -%}
             {% endmacro -%}
             
@@ -6094,7 +6094,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 1
                           ELSE 0
                         END
-                      ) / (analyzed_table."target_column")
+                      ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -6954,7 +6954,7 @@ spec:
                             THEN 1
                           ELSE 0
                         END
-                      ) / ({{ lib.render_target_column('analyzed_table') }})
+                      ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 {%- endif -%}
             {% endmacro -%}
             
@@ -6983,7 +6983,7 @@ spec:
                             THEN 1
                           ELSE 0
                         END
-                      ) / (analyzed_table."target_column")
+                      ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -7751,7 +7751,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 1
                           ELSE 0
                         END
-                      ) / ({{ lib.render_target_column('analyzed_table') }})
+                      ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 {%- endif -%}
             {% endmacro -%}
             
@@ -7779,7 +7779,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 1
                           ELSE 0
                         END
-                      ) / (analyzed_table."target_column")
+                      ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,

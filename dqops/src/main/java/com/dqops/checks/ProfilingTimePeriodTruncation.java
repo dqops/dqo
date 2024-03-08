@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * The default profiling check stores one value per month. When profiling checks is re-executed during the month,
  * the previous profiling checks value is overwritten and only the most recent value is stored.
  */
-public enum ProfilingTimePeriod {
+public enum ProfilingTimePeriodTruncation {
     /**
      * Monthly.
      */

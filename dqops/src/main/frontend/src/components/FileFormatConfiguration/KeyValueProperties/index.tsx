@@ -88,6 +88,14 @@ const KeyValueProperties = ({
     }
   }, [arr]);
 
+  useEffect(() => {
+    if (properties) {
+      setArr(convertObjectToArray(properties ?? {}));
+    } else {
+      setArr([{ ['']: '' }]);
+    }
+  }, [properties]);
+
   return (
     <div className="pt-2">
       <table className="mt-3 w-full">

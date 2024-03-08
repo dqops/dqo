@@ -15,14 +15,14 @@
  */
 package com.dqops.core.filesystem.virtual;
 
+import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.data.storage.ParquetPartitioningKeys;
 import jodd.util.ArraysUtil;
 import org.apache.commons.lang3.StringUtils;
 
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.HashSet;
 import java.util.Objects;
 
 /**
@@ -175,7 +175,7 @@ public final class FileNameSanitizer {
      * @param path DQOps encoded path (with not encoded spaces, but other components encoded).
      * @return Encoded path.
      */
-    public static Path convertEncodedPathToFullyUrlEncodedPath(Path path) {
+    public static Path convertEncodedLocalPathToFullyUrlEncodedBucketPath(Path path) {
         if (path == null) {
             return null;
         }
@@ -183,10 +183,24 @@ public final class FileNameSanitizer {
         String[] pathElements = StringUtils.split(path.toString().replace('\\', '/'), '/');
         String[] urlEncodedPathElements = new String[pathElements.length];
 
+        boolean isDataFolder = Objects.equals(pathElements[0], BuiltInFolderNames.DATA) ||
+                (Objects.equals(pathElements[0], BuiltInFolderNames.DATA_DOMAINS) && pathElements.length > 3 &&
+                        Objects.equals(pathElements[2], BuiltInFolderNames.DATA));
+
         for (int i = 0; i < pathElements.length; i++) {
-            String rawName = decodeFileSystemName(pathElements[i]);
-            urlEncodedPathElements[i] = URLEncoder.encode(rawName, StandardCharsets.UTF_8)
-                    .replace("%", "%25")
+            String rawName = pathElements[i];
+            String notEncodedPartitionPrefix = "";
+            if (isDataFolder && rawName.length() > 2 && rawName.charAt(1) == '=' &&
+                    (rawName.startsWith(ParquetPartitioningKeys.CONNECTION) ||
+                            rawName.startsWith(ParquetPartitioningKeys.SCHEMA_TABLE) ||
+                            rawName.startsWith(ParquetPartitioningKeys.MONTH))) {
+                notEncodedPartitionPrefix = rawName.substring(0, 2);
+                rawName = rawName.substring(2);
+            }
+
+            urlEncodedPathElements[i] = notEncodedPartitionPrefix +
+                    URLEncoder.encode(rawName, StandardCharsets.UTF_8)
+//                    .replace("%", "%25")
                     .replace("+", "%20"); // fixing spaces, because GCP storage bucket does not use '+' for a space
         }
 

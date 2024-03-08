@@ -80,6 +80,7 @@ export const getJobsChanges =
     JobApiClient.getJobChangesSince(sequenceNumber)
       .then((res: AxiosResponse<DqoJobQueueIncrementalSnapshotModel>) => {
         dispatch(getJobsChangesSuccess(res.data));
+        dispatch(setIsErrorModalOpen(false))
       })
       .catch((err) => {
         console.error(err);
@@ -142,4 +143,9 @@ export const setUserProfile = (userProfile : DqoUserProfileModel) => ({
 export const setError = (error: IError) => ({
   type: JOB_ACTION.SET_ERRORS,
   error
+});
+
+export const setIsErrorModalOpen = (isErrorModalOpen: boolean) => ({
+  type: JOB_ACTION.SET_IS_ERROR_MODAL_OPEN,
+  isErrorModalOpen
 });

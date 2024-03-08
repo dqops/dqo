@@ -6,7 +6,7 @@ import {
   TimeWindowFilterParameters,
   CheckContainerModel
 } from '../../api';
-import { JobApiClient, TableApiClient } from '../../services/apiClient';
+import { ColumnApiClient, JobApiClient, TableApiClient } from '../../services/apiClient';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
@@ -61,12 +61,14 @@ const TableHeader = ({
     checkTypes,
     connection,
     schema,
-    table
+    table,
+    column
   }: {
     checkTypes: CheckTypes;
     connection: string;
     schema: string;
     table: string;
+    column: string
   } = useParams();
   const dispatch = useActionDispatch();
   const history = useHistory();
@@ -118,28 +120,58 @@ const TableHeader = ({
         }))
         .filter((item) => item.checks?.length)
     };
-
-    await TableApiClient.updateTableMonitoringChecksModel(
+    let url; 
+    let value;
+    
+    if (column) {
+      await ColumnApiClient.updateColumnMonitoringChecksModel(
+        connection,
+        schema,
+        table,
+        column,
+        timeScale,
+        newUI
+      );
+  
+      url = ROUTES.COLUMN_MONITORING(
+        CheckTypes.MONITORING,
+        connection,
+        schema,
+        table,
+        column,
+        timeScale
+      );
+      value = ROUTES.COLUMN_MONITORING_VALUE(
+        CheckTypes.MONITORING,
+        connection,
+        schema,
+        table,
+        column
+      );
+    }
+    else {
+      await TableApiClient.updateTableMonitoringChecksModel(
       connection,
       schema,
       table,
       timeScale,
       newUI
-    );
+      );
 
-    const url = ROUTES.TABLE_MONITORING(
+    url = ROUTES.TABLE_MONITORING(
       CheckTypes.MONITORING,
       connection,
       schema,
       table,
       timeScale
-    );
-    const value = ROUTES.TABLE_MONITORING_VALUE(
+      );
+    value = ROUTES.TABLE_MONITORING_VALUE(
       CheckTypes.MONITORING,
       connection,
       schema,
       table
-    );
+      );
+    }
 
     dispatch(
       addFirstLevelTab(CheckTypes.MONITORING, {
@@ -176,29 +208,60 @@ const TableHeader = ({
         .filter((item) => item.checks?.length)
     };
 
-    await TableApiClient.updateTablePartitionedChecksModel(
-      connection,
-      schema,
-      table,
-      timeScale,
-      newUI
-    );
-
-    const url = ROUTES.TABLE_PARTITIONED(
+    let url; 
+    let value;
+    
+    if (column) {
+      await ColumnApiClient.updateColumnPartitionedChecksModel(
+        connection,
+        schema,
+        table,
+        column,
+        timeScale,
+        newUI
+      );
+  
+      url = ROUTES.COLUMN_PARTITIONED(
+        CheckTypes.PARTITIONED,
+        connection,
+        schema,
+        table,
+        column,
+        timeScale
+      );
+      value = ROUTES.COLUMN_PARTITIONED_VALUE(
+        CheckTypes.PARTITIONED,
+        connection,
+        schema,
+        table,
+        column
+      );
+    }
+    else {
+      await TableApiClient.updateTablePartitionedChecksModel(
+        connection,
+        schema,
+        table,
+        timeScale,
+        newUI
+        );
+        
+    url = ROUTES.TABLE_PARTITIONED(
       CheckTypes.PARTITIONED,
       connection,
       schema,
       table,
       timeScale
-    );
-    const value = ROUTES.TABLE_PARTITIONED_VALUE(
+      );
+    value = ROUTES.TABLE_PARTITIONED_VALUE(
       CheckTypes.PARTITIONED,
       connection,
       schema,
       table
-    );
+      );
+    }
 
-    dispatch(
+      dispatch(
       addFirstLevelTab(CheckTypes.PARTITIONED, {
         url,
         value,

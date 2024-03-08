@@ -331,26 +331,36 @@ const Tree = () => {
       node.level === TREE_LEVEL.CHECK ||
       (node.level === TREE_LEVEL.COLUMN && checkTypes === CheckTypes.SOURCES)
     ) {
-      return <div className="w-4 min-w-4 shrink-0" />;
+      return <div className="w-4 min-w-4 shrink-0 mr-1" />;
     }
     if (loadingNodes[node.id]) {
       return (
         <SvgIcon
-          className="w-4 min-w-4 cursor-pointer shrink-0 animate-spin"
+          className="w-4 min-w-4 cursor-pointer shrink-0 animate-spin mr-1"
           name="spinner"
         />
       );
     }
     return (
-      <SvgIcon
-        className="w-4 min-w-4 cursor-pointer shrink-0"
-        name={!node.open ? 'arrow-alt-right' : 'arrow-alt-down'}
-        onClick={() => {
-          !(node.parsingYamlError && node.parsingYamlError.length > 0)
-            ? toggleOpenNode(node.id)
-            : undefined;
-        }}
-      />
+      <div
+        className="
+      w-4 min-w-4 cursor-pointer shrink-0 relative mr-1"
+      >
+        <div
+          className="w-7 h-6 min-w-7 min-h-6 absolute top-1.5"
+          style={{ right: '-5px' }}
+          onClick={() => {
+            !(node.parsingYamlError && node.parsingYamlError.length > 0)
+              ? toggleOpenNode(node.id)
+              : undefined;
+          }}
+        >
+          <SvgIcon
+            className="w-4 min-w-4 cursor-pointer shrink-0 absolute right-1"
+            name={!node.open ? 'arrow-alt-right' : 'arrow-alt-down'}
+          />
+        </div>
+      </div>
     );
   };
 
@@ -403,7 +413,7 @@ const Tree = () => {
       <div style={{ paddingLeft: deep ? 16 : 0 }}>
         <div
           className={clsx(
-            'px-2 cursor-pointer flex space-x-1 hover:bg-gray-100  mb-0.5',
+            'px-2 cursor-pointer flex  hover:bg-gray-100  mb-0.5',
             activeTab === node.id ? 'bg-gray-100' : '',
             node.error_message !== undefined ? 'text-[#797500]' : '',
             node.level === TREE_LEVEL.TABLE &&

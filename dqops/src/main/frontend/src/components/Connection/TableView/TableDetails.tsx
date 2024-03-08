@@ -116,7 +116,7 @@ const TableDetails = () => {
           file_format:
             {
               [fileFormatType as keyof FileFormatSpec]: configuration,
-              file_paths: paths.slice(0, -1)
+              file_paths: paths
             } ?? undefined
         }
       )
@@ -138,12 +138,17 @@ const TableDetails = () => {
   }, [tableBasic?.file_format]);
 
   const onAddPath = () => {
-    setPaths((prev) => [...prev, '']);
     handleChange({});
+    setPaths((prev) => [...prev, '']);
   };
-  const onChangePath = (value: string) => {
+  const onChangePath = (value: string, index?: number) => {
+    handleChange({});
     const copiedPaths = [...paths];
-    copiedPaths[paths.length - 1] = value;
+    if (index !== undefined) {
+      copiedPaths[index] = value;
+    } else {
+      copiedPaths[paths.length - 1] = value;
+    }
     setPaths(copiedPaths);
   };
   const onDeletePath = (index: number) => {
@@ -232,9 +237,7 @@ const TableDetails = () => {
             <td className="px-4 py-2">Profiling checks result truncation</td>
             <td className="px-4 py-2">
               <Select
-                options={[
-                  { label: '', value: undefined },
-                  ...Object.values(
+                options={Object.values(
                     TableListModelProfilingChecksResultTruncationEnum
                   ).map((x) => ({
                     label: x
@@ -242,7 +245,7 @@ const TableDetails = () => {
                       .replace(/./, (c) => c.toUpperCase()),
                     value: x
                   }))
-                ]}
+                }
                 value={
                   tableBasic?.advanced_profiling_result_truncation ??
                   TableListModelProfilingChecksResultTruncationEnum.one_per_month

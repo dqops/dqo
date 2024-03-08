@@ -39,6 +39,7 @@ import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.check.CheckService;
 import com.dqops.services.check.models.AllChecksPatchParameters;
 import com.dqops.services.check.models.BulkCheckDeactivateParameters;
+import com.dqops.services.locking.RestApiLockService;
 import com.dqops.services.metadata.ConnectionService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
@@ -66,17 +67,20 @@ public class ConnectionsController {
     private final ConnectionService connectionService;
     private final UserHomeContextFactory userHomeContextFactory;
     private final DefaultSchedulesProvider defaultSchedulesProvider;
+    private final RestApiLockService lockService;
     private final CheckService checkService;
 
     @Autowired
     public ConnectionsController(ConnectionService connectionService,
                                  CheckService checkService,
                                  UserHomeContextFactory userHomeContextFactory,
-                                 DefaultSchedulesProvider defaultSchedulesProvider) {
+                                 DefaultSchedulesProvider defaultSchedulesProvider,
+                                 RestApiLockService lockService) {
         this.connectionService = connectionService;
         this.checkService = checkService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.defaultSchedulesProvider = defaultSchedulesProvider;
+        this.lockService = lockService;
     }
 
     /**
@@ -543,20 +547,23 @@ public class ConnectionsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Connection specification") @RequestBody ConnectionSpec connectionSpec) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        // TODO: validate the connectionSpec
-        connectionWrapper.setSpec(connectionSpec);
-        userHomeContext.flush();
+                    // TODO: validate the connectionSpec
+                    connectionWrapper.setSpec(connectionSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -586,22 +593,25 @@ public class ConnectionsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - connection name mismatch
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        connectionModel.copyToConnectionSpecification(existingConnectionSpec);
-        // TODO: some validation should be executed before flushing
+                    ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
+                    connectionModel.copyToConnectionSpecification(existingConnectionSpec);
+                    // TODO: some validation should be executed before flushing
 
-        userHomeContext.flush();
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -630,50 +640,53 @@ public class ConnectionsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup,
             @ApiParam("Monitoring schedule definition to store") @RequestBody MonitoringScheduleSpec monitoringScheduleSpec) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        DefaultSchedulesSpec schedules = existingConnectionSpec.getSchedules();
-        if (schedules == null) {
-            schedules = new DefaultSchedulesSpec();
-            existingConnectionSpec.setSchedules(schedules);
-        }
+                    ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
+                    DefaultSchedulesSpec schedules = existingConnectionSpec.getSchedules();
+                    if (schedules == null) {
+                        schedules = new DefaultSchedulesSpec();
+                        existingConnectionSpec.setSchedules(schedules);
+                    }
 
-        switch (schedulingGroup) {
-            case profiling:
-                schedules.setProfiling(monitoringScheduleSpec);
-                break;
+                    switch (schedulingGroup) {
+                        case profiling:
+                            schedules.setProfiling(monitoringScheduleSpec);
+                            break;
 
-            case monitoring_daily:
-                schedules.setMonitoringDaily(monitoringScheduleSpec);
-                break;
+                        case monitoring_daily:
+                            schedules.setMonitoringDaily(monitoringScheduleSpec);
+                            break;
 
-            case monitoring_monthly:
-                schedules.setMonitoringMonthly(monitoringScheduleSpec);
-                break;
+                        case monitoring_monthly:
+                            schedules.setMonitoringMonthly(monitoringScheduleSpec);
+                            break;
 
-            case partitioned_daily:
-                schedules.setPartitionedDaily(monitoringScheduleSpec);
-                break;
+                        case partitioned_daily:
+                            schedules.setPartitionedDaily(monitoringScheduleSpec);
+                            break;
 
-            case partitioned_monthly:
-                schedules.setPartitionedMonthly(monitoringScheduleSpec);
-                break;
+                        case partitioned_monthly:
+                            schedules.setPartitionedMonthly(monitoringScheduleSpec);
+                            break;
 
-            default:
-                throw new UnsupportedOperationException("Unsupported scheduling group " + schedulingGroup);
-        }
+                        default:
+                            throw new UnsupportedOperationException("Unsupported scheduling group " + schedulingGroup);
+                    }
 
-        userHomeContext.flush();
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -699,19 +712,22 @@ public class ConnectionsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("List of labels") @RequestBody LabelSetSpec labelSetSpec) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        connectionWrapper.getSpec().setLabels(labelSetSpec);
-        userHomeContext.flush();
+                    connectionWrapper.getSpec().setLabels(labelSetSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -737,19 +753,22 @@ public class ConnectionsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("List of comments") @RequestBody CommentsListSpec commentsListSpec) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        connectionWrapper.getSpec().setComments(commentsListSpec);
-        userHomeContext.flush();
+                    connectionWrapper.getSpec().setComments(commentsListSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -776,19 +795,22 @@ public class ConnectionsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Default data grouping configuration to be assigned to a connection")
                 @RequestBody DataGroupingConfigurationSpec dataGroupingConfigurationSpec) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        connectionWrapper.getSpec().setDefaultGroupingConfiguration(dataGroupingConfigurationSpec);
-        userHomeContext.flush();
+                    connectionWrapper.getSpec().setDefaultGroupingConfiguration(dataGroupingConfigurationSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -815,19 +837,22 @@ public class ConnectionsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Incident grouping and notification configuration") @RequestBody ConnectionIncidentGroupingSpec incidentGroupingSpec) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        connectionWrapper.getSpec().setIncidentGrouping(incidentGroupingSpec);
-        userHomeContext.flush();
+                    connectionWrapper.getSpec().setIncidentGrouping(incidentGroupingSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -861,20 +886,23 @@ public class ConnectionsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST); // 400 - update patch parameters not supplied
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        updatePatchParameters.getCheckSearchFilters().setConnection(connectionName);
-        updatePatchParameters.getCheckSearchFilters().setCheckName(checkName);
-        checkService.activateOrUpdateAllChecks(updatePatchParameters, principal);
+                    updatePatchParameters.getCheckSearchFilters().setConnection(connectionName);
+                    updatePatchParameters.getCheckSearchFilters().setCheckName(checkName);
+                    checkService.activateOrUpdateAllChecks(updatePatchParameters, principal);
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -903,20 +931,23 @@ public class ConnectionsController {
             @ApiParam("Check name") @PathVariable String checkName,
             @ApiParam("Check search filters and table/column selectors.")
             @RequestBody BulkCheckDeactivateParameters bulkDeactivateParameters) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        bulkDeactivateParameters.getCheckSearchFilters().setConnection(connectionName);
-        bulkDeactivateParameters.getCheckSearchFilters().setCheckName(checkName);
+                    bulkDeactivateParameters.getCheckSearchFilters().setConnection(connectionName);
+                    bulkDeactivateParameters.getCheckSearchFilters().setCheckName(checkName);
 
-        checkService.deleteChecks(bulkDeactivateParameters, principal);
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    checkService.deleteChecks(bulkDeactivateParameters, principal);
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -939,16 +970,19 @@ public class ConnectionsController {
     public ResponseEntity<Mono<DqoQueueJobId>> deleteConnection(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        PushJobResult<DeleteStoredDataResult> backgroundJob = this.connectionService.deleteConnection(connectionName, principal);
-        return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
+                    PushJobResult<DeleteStoredDataResult> backgroundJob = this.connectionService.deleteConnection(connectionName, principal);
+                    return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
+                });
     }
 }

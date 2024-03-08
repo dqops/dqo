@@ -26,7 +26,6 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.SENSOR_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.SENSOR_DETAIL} />} />
       <Route exact path={ROUTES.PATTERNS.RULE_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.RULE_DETAIL} />} />
       <Route exact path={ROUTES.PATTERNS.CHECK_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.CHECK_DETAIL} />} />
-      <Route exact path={ROUTES.PATTERNS.CHECK_DEFAULT_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.CHECK_DEFAULT_DETAIL} />} />
       <Route exact path={ROUTES.PATTERNS.DEFINITIONS} render={() => <DefinitionLayout route={ROUTES.PATTERNS.DEFINITIONS} />} />
       <Route exact path={ROUTES.PATTERNS.INCIDENT_CONNECTION} render={() => <DefinitionLayout route={ROUTES.PATTERNS.INCIDENT_CONNECTION} />} />
       <Route exact path={ROUTES.PATTERNS.USERS_LIST_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.USERS_LIST_DETAIL} />} />
@@ -37,6 +36,8 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.SHARED_CREDENTIALS_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.SHARED_CREDENTIALS_DETAIL} />} />
       <Route exact path={ROUTES.PATTERNS.DATA_DICTIONARY_LIST_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.DATA_DICTIONARY_LIST_DETAIL} />} />
       <Route exact path={ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL} />} />
+      <Route exact path={ROUTES.PATTERNS.DEFAULT_CHECKS_PATTERNS} render={() => <DefinitionLayout route={ROUTES.PATTERNS.DEFAULT_CHECKS_PATTERNS} />} />
+      <Route exact path={ROUTES.PATTERNS.DEFAULT_CHECK_PATTERN_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.DEFAULT_CHECK_PATTERN_DETAIL} />} />
 
       {/* Create Connection (packed with MainLayout) */}
       <Route exact path={ROUTES.PATTERNS.CREATE} render={() => <CreateConnection/>} />

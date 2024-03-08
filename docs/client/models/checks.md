@@ -1,5 +1,5 @@
 # DQOps REST API checks models reference
-The references of all objects used by [checks](../operations/checks.md) REST API operations are listed below.
+The references of all objects used by [checks](/docs/client/operations/checks.md) REST API operations are listed below.
 
 
 ## CheckDefinitionListModel
@@ -30,8 +30,8 @@ Check list folder model that is returned by the REST API.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`folders`</span>|A dictionary of nested folders with data quality checks. The keys are the folder names.|*Dict[string, [CheckDefinitionFolderModel](./checks.md#checkdefinitionfoldermodel)]*|
-|<span class="no-wrap-code">`checks`</span>|List of data quality checks defined in this folder.|*List[[CheckDefinitionListModel](./checks.md#checkdefinitionlistmodel)]*|
+|<span class="no-wrap-code">`folders`</span>|A dictionary of nested folders with data quality checks. The keys are the folder names.|*Dict[string, [CheckDefinitionFolderModel](/docs/client/models/checks.md#checkdefinitionfoldermodel)]*|
+|<span class="no-wrap-code">`checks`</span>|List of data quality checks defined in this folder.|*List[[CheckDefinitionListModel](/docs/client/models/checks.md#checkdefinitionlistmodel)]*|
 
 
 ___

@@ -56,7 +56,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     @JsonPropertyDescription("Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent " +
          "profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private ProfilingTimePeriod resultTruncation;
+    private ProfilingTimePeriodTruncation resultTruncation;
 
     @JsonPropertyDescription("Configuration of volume data quality checks on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -97,7 +97,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      * Returns the result truncation configuration.
      * @return Result truncation policy.
      */
-    public ProfilingTimePeriod getResultTruncation() {
+    public ProfilingTimePeriodTruncation getResultTruncation() {
         return resultTruncation;
     }
 
@@ -105,7 +105,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      * Sets the result truncation configuration.
      * @param resultTruncation New result truncation configuration.
      */
-    public void setResultTruncation(ProfilingTimePeriod resultTruncation) {
+    public void setResultTruncation(ProfilingTimePeriodTruncation resultTruncation) {
         this.setDirtyIf(!Objects.equals(this.resultTruncation, resultTruncation));
         this.resultTruncation = resultTruncation;
     }
@@ -255,12 +255,12 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      */
     @Override
     public TimeSeriesConfigurationSpec getTimeSeriesConfiguration(TableSpec tableSpec) {
-        ProfilingTimePeriod profilingTimePeriod = this.resultTruncation != null ? this.resultTruncation : ProfilingTimePeriod.one_per_month;
+        ProfilingTimePeriodTruncation profilingTimePeriodTruncation = this.resultTruncation != null ? this.resultTruncation : ProfilingTimePeriodTruncation.one_per_month;
 
         return new TimeSeriesConfigurationSpec()
         {{
             setMode(TimeSeriesMode.current_time);
-            setTimeGradient(profilingTimePeriod.toTimePeriodGradient());
+            setTimeGradient(profilingTimePeriodTruncation.toTimePeriodGradient());
         }};
     }
 

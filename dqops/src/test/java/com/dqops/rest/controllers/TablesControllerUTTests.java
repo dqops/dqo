@@ -66,6 +66,7 @@ import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.mapping.AllChecksModelFactory;
 import com.dqops.services.check.mapping.AllChecksModelFactoryImpl;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingServiceImpl;
+import com.dqops.services.locking.RestApiLockServiceImpl;
 import com.dqops.services.metadata.TableService;
 import com.dqops.services.metadata.TableServiceImpl;
 import com.dqops.utils.BeanFactoryObjectMother;
@@ -117,7 +118,7 @@ public class TablesControllerUTTests extends BaseTest {
         DefaultObservabilityConfigurationServiceImpl defaultObservabilityConfigurationService = new DefaultObservabilityConfigurationServiceImpl(ConnectionProviderRegistryObjectMother.getInstance());
 
         this.sut = new TablesController(tableService, this.userHomeContextFactory, dqoHomeContextFactory, specToUiCheckMappingService,
-                uiToSpecCheckMappingService, statisticsDataService, defaultObservabilityConfigurationService);
+                uiToSpecCheckMappingService, statisticsDataService, defaultObservabilityConfigurationService, new RestApiLockServiceImpl());
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
     }

@@ -1,5 +1,5 @@
 # DQOps REST API data_sources models reference
-The references of all objects used by [data_sources](../operations/data_sources.md) REST API operations are listed below.
+The references of all objects used by [data_sources](/docs/client/operations/data_sources.md) REST API operations are listed below.
 
 
 ## ConnectionTestStatus
@@ -60,7 +60,7 @@ Schema model returned from REST API. Describes a schema on the source database w
 |<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
 |<span class="no-wrap-code">`schema_name`</span>|Schema name.|*string*|
 |<span class="no-wrap-code">`already_imported`</span>|Has the schema been imported.|*boolean*|
-|<span class="no-wrap-code">[`import_table_job_parameters`](./jobs.md#importtablesqueuejobparameters)</span>|Job parameters for the import tables job that will import all tables from this schema.|*[ImportTablesQueueJobParameters](./jobs.md#importtablesqueuejobparameters)*|
+|<span class="no-wrap-code">[`import_table_job_parameters`](/docs/client/models/jobs.md#importtablesqueuejobparameters)</span>|Job parameters for the import tables job that will import all tables from this schema.|*[ImportTablesQueueJobParameters](/docs/client/models/jobs.md#importtablesqueuejobparameters)*|
 
 
 ___

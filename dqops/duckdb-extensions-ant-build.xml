@@ -4,24 +4,30 @@
         The file uses properties set in the pom.xml file.
     </description>
 
+    <property name="local_temp_path"
+              value="${project.basedir}/../lib/.duckdb/extensions/v${duckdb.version}/${duckdb.platform_name}"/>
+
     <property name="local_platform_path"
-              value="${project.basedir}/../home/bin/duckdb/v${duckdb.version}/${duckdb.platform_name}"/>
+              value="${project.basedir}/../home/bin/.duckdb/extensions/v${duckdb.version}/${duckdb.platform_name}"/>
 
     <property name="remote_platform_path"
               value="http://extensions.duckdb.org/v${duckdb.version}/${duckdb.platform_name}"/>
 
     <target name="fetch-files">
+        <mkdir dir="${local_temp_path}/"/>
         <mkdir dir="${local_platform_path}/"/>
 
         <get src="${remote_platform_path}/httpfs.duckdb_extension.gz"
-             dest="${local_platform_path}/httpfs.duckdb_extension.gz"
+             dest="${local_temp_path}/httpfs.duckdb_extension.gz"
              verbose="true"
              usetimestamp="true"/>
+        <gunzip src="${local_temp_path}/httpfs.duckdb_extension.gz" dest="${local_platform_path}/httpfs.duckdb_extension" />
 
         <get src="${remote_platform_path}/aws.duckdb_extension.gz"
-             dest="${local_platform_path}/aws.duckdb_extension.gz"
+             dest="${local_temp_path}/aws.duckdb_extension.gz"
              verbose="true"
              usetimestamp="true"/>
+        <gunzip src="${local_temp_path}/aws.duckdb_extension.gz" dest="${local_platform_path}/aws.duckdb_extension" />
 
         <!-- IMPORTANT! Remember to add the extension in DuckdbSourceConnection -->
 

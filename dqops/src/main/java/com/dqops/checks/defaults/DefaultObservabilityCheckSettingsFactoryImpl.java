@@ -228,8 +228,8 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         columnNullsDailyMonitoring.setDailyNullsPercentAnomaly(new ColumnNullPercentAnomalyStationaryCheckSpec() {{
             setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec());
         }});
-        columnNullsDailyMonitoring.setDailyNullsPercentChange1Day(new ColumnNullPercentChange1DayCheckSpec() {{
-            setWarning(new ChangePercent1DayRule10ParametersSpec());
+        columnNullsDailyMonitoring.setDailyNullsPercentChange(new ColumnNullPercentChangeCheckSpec() {{
+            setWarning(new ChangePercentRule10ParametersSpec());
         }});
         defaultDailyChecks.setNulls(columnNullsDailyMonitoring);
 

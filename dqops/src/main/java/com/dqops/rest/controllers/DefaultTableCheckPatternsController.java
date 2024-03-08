@@ -36,6 +36,7 @@ import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
+import com.dqops.services.locking.RestApiLockService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,6 +63,7 @@ public class DefaultTableCheckPatternsController {
     private final ExecutionContextFactory executionContextFactory;
     private final SpecToModelCheckMappingService specToModelCheckMappingService;
     private final ModelToSpecCheckMappingService modelToSpecCheckMappingService;
+    private final RestApiLockService lockService;
 
     /**
      * Creates an instance of a controller by injecting dependencies.
@@ -69,16 +71,19 @@ public class DefaultTableCheckPatternsController {
      * @param executionContextFactory Execution context factory.
      * @param specToModelCheckMappingService Check specification to UI conversion service.
      * @param modelToSpecCheckMappingService Check model to UI conversion service.
+     * @param lockService Object lock service.
      */
     @Autowired
     public DefaultTableCheckPatternsController(UserHomeContextFactory userHomeContextFactory,
                                                ExecutionContextFactory executionContextFactory,
                                                SpecToModelCheckMappingService specToModelCheckMappingService,
-                                               ModelToSpecCheckMappingService modelToSpecCheckMappingService) {
+                                               ModelToSpecCheckMappingService modelToSpecCheckMappingService,
+                                               RestApiLockService lockService) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.executionContextFactory = executionContextFactory;
         this.specToModelCheckMappingService = specToModelCheckMappingService;
         this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
+        this.lockService = lockService;
     }
 
     /**
@@ -228,24 +233,27 @@ public class DefaultTableCheckPatternsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
-        TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+                    TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
+                    TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
-        if (existingDefaultChecksPatternWrapper != null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
-        }
+                    if (existingDefaultChecksPatternWrapper != null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
+                    }
 
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-        defaultChecksPatternWrapper.setSpec(new TableDefaultChecksPatternSpec() {{
-            setTarget(patternModel.getTargetTable());
-            setPriority(patternModel.getPriority());
-        }});
-        userHomeContext.flush();
+                    TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
+                    defaultChecksPatternWrapper.setSpec(new TableDefaultChecksPatternSpec() {{
+                        setTarget(patternModel.getTargetTable());
+                        setPriority(patternModel.getPriority());
+                    }});
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+                });
     }
 
     /**
@@ -276,21 +284,24 @@ public class DefaultTableCheckPatternsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
-        TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+                    TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
+                    TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
-        if (existingDefaultChecksPatternWrapper != null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
-        }
+                    if (existingDefaultChecksPatternWrapper != null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
+                    }
 
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-        defaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
-        userHomeContext.flush();
+                    TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
+                    defaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+                });
     }
 
     /**
@@ -321,26 +332,29 @@ public class DefaultTableCheckPatternsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
-        TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+                    TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
+                    TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
-        if (existingDefaultChecksPatternWrapper == null) {
-            TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-            defaultChecksPatternWrapper.setSpec(new TableDefaultChecksPatternSpec() {{
-                setTarget(patternModel.getTargetTable());
-                setPriority(patternModel.getPriority());
-            }});
-        } else {
-            TableDefaultChecksPatternSpec currentPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
-            currentPatternSpec.setTarget(patternModel.getTargetTable());
-            currentPatternSpec.setPriority(patternModel.getPriority());
-        }
-        userHomeContext.flush();
+                    if (existingDefaultChecksPatternWrapper == null) {
+                        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
+                        defaultChecksPatternWrapper.setSpec(new TableDefaultChecksPatternSpec() {{
+                            setTarget(patternModel.getTargetTable());
+                            setPriority(patternModel.getPriority());
+                        }});
+                    } else {
+                        TableDefaultChecksPatternSpec currentPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
+                        currentPatternSpec.setTarget(patternModel.getTargetTable());
+                        currentPatternSpec.setPriority(patternModel.getPriority());
+                    }
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+                });
     }
 
     /**
@@ -371,22 +385,25 @@ public class DefaultTableCheckPatternsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
-        TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+                    TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
+                    TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
-        if (existingDefaultChecksPatternWrapper == null) {
-            TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-            defaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
-        } else {
-            TableDefaultChecksPatternSpec oldPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
-            existingDefaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
-        }
-        userHomeContext.flush();
+                    if (existingDefaultChecksPatternWrapper == null) {
+                        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
+                        defaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
+                    } else {
+                        TableDefaultChecksPatternSpec oldPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
+                        existingDefaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
+                    }
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+                });
     }
 
     /**
@@ -414,20 +431,23 @@ public class DefaultTableCheckPatternsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
-        TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+                    TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
+                    TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
-        if (existingDefaultChecksPatternWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+                    if (existingDefaultChecksPatternWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        existingDefaultChecksPatternWrapper.markForDeletion();
-        userHomeContext.flush();
+                    existingDefaultChecksPatternWrapper.markForDeletion();
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -674,26 +694,29 @@ public class DefaultTableCheckPatternsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
-        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                () -> {
+                    UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+                    UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
-                .getByObjectName(patternName, true);
+                    TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+                            .getByObjectName(patternName, true);
 
-        if (defaultChecksPatternWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+                    if (defaultChecksPatternWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.profiling, null, true);
-        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
-        defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
+                    TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+                    AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.profiling, null, true);
+                    this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
+                    defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
 
-        userHomeContext.flush();
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -725,26 +748,29 @@ public class DefaultTableCheckPatternsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
-        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                () -> {
+                    UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+                    UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
-                .getByObjectName(patternName, true);
+                    TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+                            .getByObjectName(patternName, true);
 
-        if (defaultChecksPatternWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+                    if (defaultChecksPatternWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
-        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
-        defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
+                    TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+                    AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
+                    this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
+                    defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
 
-        userHomeContext.flush();
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -776,26 +802,29 @@ public class DefaultTableCheckPatternsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
-        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                () -> {
+                    UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+                    UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
-                .getByObjectName(patternName, true);
+                    TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+                            .getByObjectName(patternName, true);
 
-        if (defaultChecksPatternWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+                    if (defaultChecksPatternWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
-        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
-        defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
+                    TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+                    AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
+                    this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
+                    defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
 
-        userHomeContext.flush();
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -827,26 +856,29 @@ public class DefaultTableCheckPatternsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
-        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                () -> {
+                    UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+                    UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
-                .getByObjectName(patternName, true);
+                    TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+                            .getByObjectName(patternName, true);
 
-        if (defaultChecksPatternWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+                    if (defaultChecksPatternWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, true);
-        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
-        defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
+                    TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+                    AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, true);
+                    this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
+                    defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
 
-        userHomeContext.flush();
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -878,25 +910,28 @@ public class DefaultTableCheckPatternsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
-        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                () -> {
+                    UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+                    UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
-                .getByObjectName(patternName, true);
+                    TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+                            .getByObjectName(patternName, true);
 
-        if (defaultChecksPatternWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+                    if (defaultChecksPatternWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, true);
-        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
-        defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
+                    TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+                    AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, true);
+                    this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
+                    defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
 
-        userHomeContext.flush();
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 }

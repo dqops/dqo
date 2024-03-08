@@ -25,11 +25,11 @@ import DataQualityContextMenu from './DataQualityContextMenu';
 import { urlencodeEncoder } from '../../utils';
 import { Tooltip } from '@material-tailwind/react';
 import { useDefinition } from '../../contexts/definitionContext';
+import { ROUTES } from '../../shared/routes';
 
 const defaultChecks = [
-  'Profiling checks',
-  'Monitoring daily',
-  'Monitoring monthly'
+  'Table-level checks patterns',
+  'Column-level checks patterns'
 ];
 
 export const DefinitionTree = () => {
@@ -54,6 +54,7 @@ export const DefinitionTree = () => {
     openCheckFirstLevelTab,
     openRuleFirstLevelTab,
     openSensorFirstLevelTab,
+    openDefaultChecksPatternsFirstLevelTab,
     toggleTree,
     nodes,
     toggleSensorFolder,
@@ -485,17 +486,17 @@ export const DefinitionTree = () => {
                     <div
                       className={clsx(
                         'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 ml-2  hover:bg-gray-300',
-                        activeTab
-                          ?.split('/')
-                          .at(activeTab?.split('/').length - 1)
-                          ?.replace('_', ' ') === x
+                        activeTab === ROUTES.DEFAULT_CHECKS_PATTERNS_VALUE(x)
                           ? 'bg-gray-300'
                           : ''
                         // check.custom ? 'font-bold' : '',
                         // selected == check.check_name ? 'bg-gray-300' : ''
                       )}
                       onClick={() => {
-                        openCheckDefaultFirstLevelTab(x);
+                        openDefaultChecksPatternsFirstLevelTab(
+                          x,
+                          x.includes('Column') ? 'column' : 'table'
+                        );
                       }}
                     >
                       <SvgIcon

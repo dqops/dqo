@@ -153,12 +153,12 @@ export const TABLE_LEVEL_TABS: {
       value: 'preview'
     },
     {
-      label: 'Profiling checks',
-      value: 'advanced'
-    },
-    {
       label: 'Table quality status',
       value: 'table-quality-status'
+    },
+    {
+      label: 'Profiling checks',
+      value: 'advanced'
     },
     {
       label: 'Table comparisons',
@@ -167,20 +167,20 @@ export const TABLE_LEVEL_TABS: {
   ],
   [CheckTypes.PARTITIONED]: [
     {
-      label: 'Daily checks',
-      value: 'daily'
-    },
-    {
       label: 'Table quality status (daily checks)',
       value: 'table-quality-status-daily'
     },
     {
-      label: 'Monthly checks',
-      value: 'monthly'
+      label: 'Daily checks',
+      value: 'daily'
     },
     {
       label: 'Table quality status (monthly checks)',
       value: 'table-quality-status-monthly'
+    },
+    {
+      label: 'Monthly checks',
+      value: 'monthly'
     },
     {
       label: 'Daily comparisons',
@@ -193,20 +193,20 @@ export const TABLE_LEVEL_TABS: {
   ],
   [CheckTypes.MONITORING]: [
     {
-      label: 'Daily checks',
-      value: 'daily'
-    },
-    {
       label: 'Table quality status (daily checks)',
       value: 'table-quality-status-daily'
     },
     {
-      label: 'Monthly checks',
-      value: 'monthly'
+      label: 'Daily checks',
+      value: 'daily'
     },
     {
       label: 'Table quality status (monthly checks)',
       value: 'table-quality-status-monthly'
+    },
+    {
+      label: 'Monthly checks',
+      value: 'monthly'
     },
     {
       label: 'Daily comparisons',

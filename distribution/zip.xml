@@ -55,10 +55,10 @@
             <directory>${project.basedir}/../home/settings</directory>
             <outputDirectory>/settings</outputDirectory>
         </fileSet>
-        <fileSet>
-            <directory>${project.basedir}/../lib/target/output/dqo-lib-${project.version}/jars</directory>
-            <outputDirectory>/jars</outputDirectory>
-        </fileSet>
+<!--        <fileSet>-->
+<!--            <directory>${project.basedir}/../lib/target/output/dqo-lib-${project.version}/jars</directory>-->
+<!--            <outputDirectory>/jars</outputDirectory>-->
+<!--        </fileSet>-->
     </fileSets>
     <files>
         <file>

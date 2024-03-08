@@ -234,6 +234,44 @@ The target column parameters are listed in the following table.
 | `data_type_category` | The category of the data type detected by DQOps. DQOps detects a database independent category of the data type.                                    |
 
 
+## Configuring check patterns in UI
+The configuration of the default data quality check patterns in DQOps is found in the *Default checks configuration* node of the *Configuration* section.
+
+### Table-level check patterns
+The list of table-level data quality checks patterns is under the *Table-level checks patterns* node.
+
+The listing screen shows a list of patterns and the filters to match the target tables.
+
+![List of table-level default data quality check patterns in DQOps](https://dqops.com/docs/images/concepts/data-observability/table-level-data-quality-checks-patterns-min.png){ loading=lazy }
+
+The search filter for the target patterns is configured on the *Target table* tab.
+
+![Target table filters pattern for activating data quality checks in DQOps](https://dqops.com/docs/images/concepts/data-observability/target-table-filters-configuration-for-default-data-quality-checks-min.png){ loading=lazy }
+
+The *Profiling*, *Monitoring Daily*, *Monitoring Monthly*, *Partition Daily*, and *Partition Monthly* tabs show a data quality check configuration editor. 
+The following screenshot shows the default configuration of the [*Volume*](../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md) and
+[*Timeliness*](../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md) data quality checks that is provided in DQOps in the **default** pattern.
+
+![Default table-level data quality checks activated by DQOps](https://dqops.com/docs/images/concepts/data-observability/default-table-level-data-quality-checks-editor-short-min.png){ loading=lazy }
+
+### Column-level check patterns
+The list of column-level data quality checks patterns is under the *Column-level checks patterns* node.
+
+The listing screen shows a list of patterns and the filters to match the target columns.
+
+![List of column-level default data quality check patterns in DQOps](https://dqops.com/docs/images/concepts/data-observability/column-level-data-quality-checks-patterns-min.png){ loading=lazy }
+
+The search filter for the target patterns is configured on the *Target column* tab.
+
+![Target column filters pattern for activating data quality checks in DQOps](https://dqops.com/docs/images/concepts/data-observability/target-column-filters-configuration-for-default-data-quality-checks-min.png){ loading=lazy }
+
+The *Profiling*, *Monitoring Daily*, *Monitoring Monthly*, *Partition Daily*, and *Partition Monthly* tabs show a data quality check configuration editor.
+The following screenshot shows the default configuration of the [*Nulls*](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md) and
+[*Uniqueness*](../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md) data quality checks that is provided in DQOps in the **default** pattern.
+
+![Default column-level data quality checks activated by DQOps](https://dqops.com/docs/images/concepts/data-observability/default-column-level-data-quality-checks-editor-short-min.png){ loading=lazy }
+
+
 ## Default table-level checks
 The default configuration of table-level checks that DQOps activates on
 all tables is described below for each [type of data quality check](definition-of-data-quality-checks/index.md#types-of-checks).
@@ -421,6 +459,27 @@ spec:
 ```
 
 ### Default daily monitoring checks
+The default configuration of column-level [monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md)
+focuses on detecting anomalies related to null values, numeric values, and column schema changes.
+
+The default column-level monitoring checks are described in the table below.
+
+| Category                                                                                                  | Data quality check                                                                                                                                                                     | Description                                                                                                                                                                                                                                       | Data quality rule                                                                                                                                                                                                                                                                                                           |
+|-----------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [nulls](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)     | <span class="no-wrap-code ">[`daily_nulls_count`](../checks/column/nulls/nulls-count.md#daily-nulls-count)</span>                                                                      | Counts null values in a monitored column. Detects partially incomplete columns that contain any null values.                                                                                                                                      | _no rules (use the dashboards to review the results)_                                                                                                                                                                                                                                                                       |
+| [nulls](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)     | <span class="no-wrap-code ">[`daily_nulls_percent`](../checks/column/nulls/nulls-percent.md#daily-nulls-percent)</span>                                                                | Measures the percentage of null values in a column.                                                                                                                                                                                               | _no rules (use the dashboards to review the results)_                                                                                                                                                                                                                                                                       |
+| [nulls](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)     | <span class="no-wrap-code ">[`daily_nulls_percent_anomaly`](../checks/column/nulls/nulls-percent-anomaly.md#daily-nulls-percent-anomaly)</span>                                        | Detects anomalies in the percentage of null values. Identifies the most significant increases or decreases in the rate of null values since the previous day or the last known value.                                                             | Raises a *warning* severity issue when the increase or decrease in the percentage of nulls is in the top 1% of the biggest day-to-day changes.                                                                                                                                                                              |
+| [nulls](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)     | <span class="no-wrap-code ">[`daily_not_nulls_percent`](../checks/column/nulls/not-nulls-percent.md#daily-not-nulls-percent)</span>                                                    | Detects empty columns by counting not null values.                                                                                                                                                                                                | _no rules (use the dashboards to review the results)_                                                                                                                                                                                                                                                                       |
+| [nulls](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)     | <span class="no-wrap-code ">[`daily_nulls_percent_change`](../checks/column/nulls/nulls-percent-change.md#daily-nulls-percent-change)</span>                                           | Detects significant changes in the percentage of null values measured as a percentage increase or decrease in the rate of null values compared to the previous day.                                                                               | Raises a *warning* severity issue when the increase or decrease in the percentage of nulls since yesterday (or the last known nulls percentage) is above 10%.                                                                                                                                                               |
+| [uniqueness](../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md) | <span class="no-wrap-code ">[`daily_distinct_count_anomaly`](../checks/column/uniqueness/distinct-count-anomaly.md#daily-distinct-count-anomaly)</span>                                | Detects anomalies in the count of distinct (unique) values. Identifies the most significant increases or decreases in the count of distinct values since the previous day or the last known value.                                                | Raises a *warning* severity issue when the increase or decrease in the count of distinct values is in the top 1% of the most significant day-to-day changes.                                                                                                                                                                |
+| [anomaly](../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)              | <span class="no-wrap-code ">[`daily_sum_anomaly`](../checks/column/anomaly/sum-anomaly.md#daily-sum-anomaly)</span>                                                                    | Detects anomalies in the sum of numeric values. Identifies the most significant increases or decreases in the sum of values since the previous day or the last known value. **_DQOps activates this check only on numeric columns._**             | Raises a *warning* severity issue when the increase or decrease in the sum of numeric values is in the top 1% of the most significant day-to-day changes.                                                                                                                                                                   |
+| [anomaly](../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)              | <span class="no-wrap-code ">[`daily_mean_anomaly`](../checks/column/anomaly/mean-anomaly.md#daily-mean-anomaly)</span>                                                                 | Detects anomalies in the mean (average) of numeric values. Identifies the most significant increases or decreases in the mean of values since the previous day or the last known value. **_DQOps activates this check only on numeric columns._** | Raises a *warning* severity issue when the increase or decrease in the sum of numeric values is in the top 1% of the most significant day-to-day changes.                                                                                                                                                                   |
+| [datatype](../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)                       | <span class="no-wrap-code ">[`daily_detected_datatype_in_text_changed`](../checks/column/datatype/detected-datatype-in-text-changed.md#daily-detected-datatype-in-text-changed)</span> | Analyzes values in text columns to detect if all values are convertible to the same data type (boolean, numeric, date, etc). **_DQOps activates this check only on text columns._**                                                               | Raises a *warning* severity issue when the values found in a text column are in a different format or a new value that is not convertible to the previously detected data type is found. For example, the column *customer_id* in the landing zone table always contained integer values, and a non-numeric value appeared. |
+| [schema](../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)                      | <span class="no-wrap-code ">[`daily_column_exists`](../checks/column/schema/column-exists.md#daily-column-exists)</span>                                                               | Verifies that the column exists in the monitored table.                                                                                                                                                                                           | Raises a *warning* severity issue when the column is missing.                                                                                                                                                                                                                                                               |
+| [schema](../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)                      | <span class="no-wrap-code ">[`daily_column_type_changed`](../checks/column/schema/column-type-changed.md#daily-column-type-changed)</span>                                             | Detects changes to the physical data type of the column since the last known data type. DQOps detects a change in the data type, length, precision, scale, and nullability.                                                                       | Raises a *warning* severity issue when the physical data type of the column is changed since the last known data type.                                                                                                                                                                                                      |
+
+The following extract of the *patterns/default.dqocolumnpattern.yaml* file shows the configuration
+of the default column-level [monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md).
 
 ``` { .yaml linenums="1" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ColumnDefaultChecksPatternYaml-schema.json
@@ -436,7 +495,7 @@ spec:
           warning:
             anomaly_percent: 1.0
         daily_not_nulls_percent: {}
-        daily_nulls_percent_change_1_day:
+        daily_nulls_percent_change:
           warning:
             max_percent: 10.0
             exact_day: true
@@ -462,20 +521,9 @@ spec:
 ```
 
 
-## Modify configuration of default checks
-
-The easiest way to change the default configuration is by using the *Default checks* editor in the *Configuration* section
-of the DQOps user interface.
-
-![Default checks editor](https://dqops.com/docs/images/concepts/default-checks-editor.png)
-
-To do so, select the **Configuration** section, and then click on **Default checks configuration** on the tree view on 
-the left side. Afterward, you can modify the default check configuration for **Profiling checks**, **Monitoring daily**,
-and **Monitoring monthly** in the workspace on the right side.
-
 
 ## Next steps
-
+- Learn how to [monitor, review and react to data quality issues](../working-with-dqo/daily-monitoring-of-data-quality.md) detected by the default data quality checks.
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../dqops-installation/run-dqops-as-docker-container.md).
 - Check the sample which shows [how to use the default DQOps data quality checks to detect empty tables](../examples/data-quality-monitoring/detect-empty-tables.md) and view the results on data quality dashboards.
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../integrations/webhooks/index.md).

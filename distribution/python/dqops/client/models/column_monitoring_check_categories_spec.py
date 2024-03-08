@@ -6,27 +6,27 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_daily_partitioned_check_categories_spec import (
-        ColumnDailyPartitionedCheckCategoriesSpec,
+    from ..models.column_daily_monitoring_check_categories_spec import (
+        ColumnDailyMonitoringCheckCategoriesSpec,
     )
-    from ..models.column_monthly_partitioned_check_categories_spec import (
-        ColumnMonthlyPartitionedCheckCategoriesSpec,
+    from ..models.column_monthly_monitoring_check_categories_spec import (
+        ColumnMonthlyMonitoringCheckCategoriesSpec,
     )
 
 
-T = TypeVar("T", bound="ColumnPartitionedChecksRootSpec")
+T = TypeVar("T", bound="ColumnMonitoringCheckCategoriesSpec")
 
 
 @_attrs_define
-class ColumnPartitionedChecksRootSpec:
+class ColumnMonitoringCheckCategoriesSpec:
     """
     Attributes:
-        daily (Union[Unset, ColumnDailyPartitionedCheckCategoriesSpec]):
-        monthly (Union[Unset, ColumnMonthlyPartitionedCheckCategoriesSpec]):
+        daily (Union[Unset, ColumnDailyMonitoringCheckCategoriesSpec]):
+        monthly (Union[Unset, ColumnMonthlyMonitoringCheckCategoriesSpec]):
     """
 
-    daily: Union[Unset, "ColumnDailyPartitionedCheckCategoriesSpec"] = UNSET
-    monthly: Union[Unset, "ColumnMonthlyPartitionedCheckCategoriesSpec"] = UNSET
+    daily: Union[Unset, "ColumnDailyMonitoringCheckCategoriesSpec"] = UNSET
+    monthly: Union[Unset, "ColumnMonthlyMonitoringCheckCategoriesSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -50,35 +50,35 @@ class ColumnPartitionedChecksRootSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_daily_partitioned_check_categories_spec import (
-            ColumnDailyPartitionedCheckCategoriesSpec,
+        from ..models.column_daily_monitoring_check_categories_spec import (
+            ColumnDailyMonitoringCheckCategoriesSpec,
         )
-        from ..models.column_monthly_partitioned_check_categories_spec import (
-            ColumnMonthlyPartitionedCheckCategoriesSpec,
+        from ..models.column_monthly_monitoring_check_categories_spec import (
+            ColumnMonthlyMonitoringCheckCategoriesSpec,
         )
 
         d = src_dict.copy()
         _daily = d.pop("daily", UNSET)
-        daily: Union[Unset, ColumnDailyPartitionedCheckCategoriesSpec]
+        daily: Union[Unset, ColumnDailyMonitoringCheckCategoriesSpec]
         if isinstance(_daily, Unset):
             daily = UNSET
         else:
-            daily = ColumnDailyPartitionedCheckCategoriesSpec.from_dict(_daily)
+            daily = ColumnDailyMonitoringCheckCategoriesSpec.from_dict(_daily)
 
         _monthly = d.pop("monthly", UNSET)
-        monthly: Union[Unset, ColumnMonthlyPartitionedCheckCategoriesSpec]
+        monthly: Union[Unset, ColumnMonthlyMonitoringCheckCategoriesSpec]
         if isinstance(_monthly, Unset):
             monthly = UNSET
         else:
-            monthly = ColumnMonthlyPartitionedCheckCategoriesSpec.from_dict(_monthly)
+            monthly = ColumnMonthlyMonitoringCheckCategoriesSpec.from_dict(_monthly)
 
-        column_partitioned_checks_root_spec = cls(
+        column_monitoring_check_categories_spec = cls(
             daily=daily,
             monthly=monthly,
         )
 
-        column_partitioned_checks_root_spec.additional_properties = d
-        return column_partitioned_checks_root_spec
+        column_monitoring_check_categories_spec.additional_properties = d
+        return column_monitoring_check_categories_spec
 
     @property
     def additional_keys(self) -> List[str]:

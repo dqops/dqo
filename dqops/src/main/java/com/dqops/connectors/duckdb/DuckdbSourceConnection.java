@@ -22,6 +22,7 @@ import com.dqops.connectors.duckdb.fileslisting.LocalSystemTablesLister;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
+import com.dqops.core.configuration.DqoDuckdbConfiguration;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.jobqueue.JobCancellationListenerHandle;
 import com.dqops.core.jobqueue.JobCancellationToken;
@@ -60,22 +61,27 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     private final HomeLocationFindService homeLocationFindService;
     private final static Object registerExtensionsLock = new Object();
     private static boolean extensionsRegistered = false;
-
+    private final DqoDuckdbConfiguration dqoDuckdbConfiguration;
+    private final static Object settingsExecutionLock = new Object();
+    private static boolean settingsConfigured = false;
 
     /**
      * Injection constructor for the duckdb connection.
      *
-     * @param jdbcConnectionPool                  Jdbc connection pool.
-     * @param secretValueProvider                 Secret value provider for the environment variable expansion.
-     * @param homeLocationFindService
+     * @param jdbcConnectionPool      Jdbc connection pool.
+     * @param secretValueProvider     Secret value provider for the environment variable expansion.
+     * @param homeLocationFindService Home location find service.
+     * @param dqoDuckdbConfiguration  Configuration settings for duckdb.
      */
     @Autowired
     public DuckdbSourceConnection(JdbcConnectionPool jdbcConnectionPool,
                                   SecretValueProvider secretValueProvider,
                                   DuckdbConnectionProvider duckdbConnectionProvider,
-                                  HomeLocationFindService homeLocationFindService) {
+                                  HomeLocationFindService homeLocationFindService,
+                                  DqoDuckdbConfiguration dqoDuckdbConfiguration) {
         super(jdbcConnectionPool, secretValueProvider, duckdbConnectionProvider);
         this.homeLocationFindService = homeLocationFindService;
+        this.dqoDuckdbConfiguration = dqoDuckdbConfiguration;
     }
 
     /**
@@ -165,8 +171,29 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     @Override
     public void open(SecretValueLookupContext secretValueLookupContext) {
         super.open(secretValueLookupContext);
+        configureSettings();
         registerExtensions();
         ensureSecretsLoaded(secretValueLookupContext);
+    }
+
+    private void configureSettings(){
+        if(settingsConfigured){
+            return;
+        }
+        try{
+            synchronized (settingsExecutionLock){
+                String memoryLimit = dqoDuckdbConfiguration.getMemoryLimit();
+                if(memoryLimit != null){
+                    String memoryLimitQuery = "SET GLOBAL memory_limit = '" + memoryLimit + "'";
+                    this.executeCommand(memoryLimitQuery, JobCancellationToken.createDummyJobCancellationToken());
+                }
+
+                String threadsQuery = "SET GLOBAL threads = " + dqoDuckdbConfiguration.getThreads();
+                this.executeCommand(threadsQuery, JobCancellationToken.createDummyJobCancellationToken());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

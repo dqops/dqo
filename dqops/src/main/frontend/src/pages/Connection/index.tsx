@@ -97,7 +97,7 @@ const ConnectionPage = () => {
   };
 
   useEffect(() => {
-    if (isUpdatedConnectionBasic && tabs.length) {
+    if (isUpdatedConnectionBasic !== undefined && tabs.length) {
       setTabs(
         tabs.map((item) =>
           item.value === 'detail'

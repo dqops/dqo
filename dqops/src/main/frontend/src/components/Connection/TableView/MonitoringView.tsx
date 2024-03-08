@@ -30,20 +30,20 @@ import { setActiveFirstLevelUrl } from '../../../redux/actions/source.actions';
 
 const initTabs = [
   {
-    label: 'Daily checks',
-    value: 'daily'
-  },
-  {
     label: 'Table quality status (daily checks)',
     value: 'table-quality-status-daily'
   },
   {
-    label: 'Monthly checks',
-    value: 'monthly'
+    label: 'Daily checks',
+    value: 'daily'
   },
   {
     label: 'Table quality status (monthly checks)',
     value: 'table-quality-status-monthly'
+  },
+  {
+    label: 'Monthly checks',
+    value: 'monthly'
   },
   {
     label: 'Daily comparisons',

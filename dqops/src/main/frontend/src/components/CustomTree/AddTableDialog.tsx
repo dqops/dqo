@@ -23,6 +23,7 @@ import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfig
 import { TConfiguration } from '../../components/FileFormatConfiguration/TConfiguration';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import FilePath from '../FileFormatConfiguration/FilePath';
+import { urlencodeDecoder, urlencodeEncoder } from '../../utils';
 
 interface AddTableDialogProps {
   open: boolean;
@@ -62,7 +63,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
     try {
       setLoading(true);
       if (node) {
-        await TableApiClient.createTable(args[0], args[1], name, {
+        await TableApiClient.createTable(urlencodeEncoder(args[0]), urlencodeEncoder(args[1]), urlencodeEncoder(name), {
           file_format:
             connectionModel.provider_type ===
             ConnectionSpecProviderTypeEnum.duckdb
@@ -73,14 +74,14 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
               : undefined
         }).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
-            connectionName: args[0],
-            schemaName: args[1],
-            tableNames: [name]
+            connectionName: urlencodeEncoder(args[0]),
+            schemaName: urlencodeEncoder(args[1]),
+            tableNames: [urlencodeEncoder(name)]
           })
         );
         refreshNode(node);
       } else {
-        await TableApiClient.createTable(connection, schema, name, {
+        await TableApiClient.createTable(urlencodeEncoder(connection), urlencodeEncoder(schema), urlencodeEncoder(name), {
           file_format:
             connectionModel.provider_type ===
             ConnectionSpecProviderTypeEnum.duckdb
@@ -91,9 +92,9 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
               : undefined
         }).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
-            connectionName: connection,
-            schemaName: schema,
-            tableNames: [name]
+            connectionName: urlencodeEncoder(connection),
+            schemaName: urlencodeEncoder(schema),
+            tableNames: [urlencodeEncoder(name)]
           })
         );
       }
@@ -101,9 +102,9 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
         addFirstLevelTab(CheckTypes.SOURCES, {
           url: ROUTES.TABLE_LEVEL_PAGE(
             CheckTypes.SOURCES,
-            connection,
-            schema,
-            name,
+            urlencodeDecoder(connection),
+            urlencodeDecoder(schema),
+            urlencodeDecoder(name),
             'detail'
           ),
           value: ROUTES.TABLE_LEVEL_VALUE(
@@ -119,9 +120,9 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
       history.push(
         ROUTES.TABLE_LEVEL_PAGE(
           CheckTypes.SOURCES,
-          connection,
-          schema,
-          name,
+          urlencodeDecoder(connection),
+          urlencodeDecoder(schema),
+          urlencodeDecoder(name),
           'detail'
         )
       );
@@ -133,7 +134,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
 
   useEffect(() => {
     const getConnectionBasic = async () => {
-      await ConnectionApiClient.getConnectionBasic(args[0]).then((res) =>
+      await ConnectionApiClient.getConnectionBasic(urlencodeEncoder(args[0])).then((res) =>
         setConnectionModel(res.data)
       );
     };
