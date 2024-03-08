@@ -1187,7 +1187,7 @@ function TreeProvider(props: any) {
         checkType === CheckTypes.MONITORING ||
         checkType === CheckTypes.PARTITIONED
       ) {
-        tab = tab || 'daily';
+        tab = tab || 'table-quality-status-daily';
       } else if (checkType === CheckTypes.PROFILING) {
         tab = tab || 'statistics';
       } else {

@@ -123,7 +123,7 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
         const tab =
           item.value === CheckTypes.MONITORING ||
           item.value === CheckTypes.PARTITIONED
-            ? 'daily'
+            ? 'table-quality-status-daily'
             : item.value === CheckTypes.PROFILING
             ? 'statistics'
             : 'detail';
