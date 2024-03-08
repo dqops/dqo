@@ -52,6 +52,8 @@ After navigating to the CSV connection settings, you will need to fill in its de
 CSV file format properties are detected automatically based on a sample of the file data. 
 The default sample size is 20480 rows.
 
+// todo: describe that user has to click on the pannel to see propeties
+// todo: copy the above description to json and parquet
 The following properties can be configured for a very specific CSV format.
 
 | Additional CSV format options | Property name in YAML configuration file | Description                                                                                                                                                                                   |
