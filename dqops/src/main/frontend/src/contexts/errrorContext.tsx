@@ -24,7 +24,7 @@ function ErrorProvider({ children }: any) {
   const { isErrorModalOpen } = useSelector(
     (state: IRootState) => state.job || {}
   );
-  
+
   useEffect(() => {
     axios.interceptors.response.use(undefined, async (error) => {
       const { response } = error;
@@ -48,13 +48,11 @@ function ErrorProvider({ children }: any) {
       }
 
       if (response?.status === 500) {
-        console.log(isErrorModalOpen)
         dispatch(setIsErrorModalOpen(true));
         setErrorMessage(response?.data?.trace);
       }
 
       if (response?.status > 500) {
-        console.log(isErrorModalOpen)
         dispatch(setIsErrorModalOpen(true));
       }
 
