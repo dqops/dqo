@@ -4,7 +4,9 @@ import ErrorModal from '../components/ErrorModal';
 import { LogErrorsApi } from "../services/apiClient";
 import { LogShippingApi } from "../api";
 import { useActionDispatch } from '../hooks/useActionDispatch';
-import { setError } from '../redux/actions/job.actions';
+import { setError, setIsErrorModalOpen } from '../redux/actions/job.actions';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../redux/reducers';
 
 const ErrorContext = React.createContext({} as any);
 
@@ -16,10 +18,13 @@ export interface IError {
 
 function ErrorProvider({ children }: any) {
   const [errors, setErrors] = useState<IError[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>()
   const dispatch = useActionDispatch();
 
+  const { isErrorModalOpen } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
+  
   useEffect(() => {
     axios.interceptors.response.use(undefined, async (error) => {
       const { response } = error;
@@ -43,12 +48,14 @@ function ErrorProvider({ children }: any) {
       }
 
       if (response?.status === 500) {
-        setIsOpen(true);
+        console.log(isErrorModalOpen)
+        dispatch(setIsErrorModalOpen(true));
         setErrorMessage(response?.data?.trace);
       }
 
       if (response?.status > 500) {
-        setIsOpen(true);
+        console.log(isErrorModalOpen)
+        dispatch(setIsErrorModalOpen(true));
       }
 
       if (response?.status < 500) {
@@ -61,7 +68,7 @@ function ErrorProvider({ children }: any) {
       }
 
       if (error && response === undefined) {
-        setIsOpen(true);
+        dispatch(setIsErrorModalOpen(true));
         return Promise.reject(error);
       }
 
@@ -85,7 +92,7 @@ function ErrorProvider({ children }: any) {
       }}
     >
       {children}
-      <ErrorModal open={isOpen} onClose={() => setIsOpen(false)} message = {errorMessage}/>
+      <ErrorModal open={isErrorModalOpen} onClose={() => setIsErrorModalOpen(false)} message = {errorMessage}/>
     </ErrorContext.Provider>
   );
 }
