@@ -463,7 +463,6 @@ function TreeProvider(props: any) {
     const schema = urlencodeEncoder(terms[1]);
     const connection = urlencodeEncoder(terms[0]);
     const column = urlencodeEncoder(terms[4]);
-    console.log(connection, schema, table, terms)
     
     return { connection, schema, table, column };
   };
@@ -477,7 +476,6 @@ function TreeProvider(props: any) {
         schema ?? '',
         table ?? ''
       );
-      console.log(connection, schema, table)
     const items = res.data.map((column) => ({
       id: `${node.id}.${urlencodeDecoder(column.column_name ?? '')}`,
       label: column.column_name || '',
@@ -752,7 +750,6 @@ function TreeProvider(props: any) {
 
   const removeNode = async (node: CustomTreeNode) => {
     setOpenNodes(openNodes.filter((item) => item.id !== node.id));
-
     const newTreeDataMaps = [
       CheckTypes.MONITORING,
       CheckTypes.SOURCES,
@@ -761,7 +758,7 @@ function TreeProvider(props: any) {
     ].reduce(
       (acc, cur) => ({
         ...acc,
-        [cur]: treeDataMaps[cur].filter(
+        [cur]: treeDataMaps[cur]?.filter(  
           (item) => !item.id.toString().startsWith(node.id.toString())
         )
       }),
@@ -785,7 +782,7 @@ function TreeProvider(props: any) {
       ].reduce(
         (acc, cur) => ({
           ...acc,
-          [cur]: (tabMaps[cur] || []).filter(
+          [cur]: (tabMaps[cur] || [])?.filter(
             (item) => !item.value.toString().startsWith(node.id.toString())
           )
         }),
@@ -1127,7 +1124,6 @@ function TreeProvider(props: any) {
 
   const switchTab = async (node: CustomTreeNode, checkType: CheckTypes) => {
     if (!node) return;
-    console.log(node)
     setSelectedTreeNode(node);
     const defaultConnectionTab =
       checkType === CheckTypes.SOURCES ? 'detail' : 'schemas';
@@ -1224,18 +1220,6 @@ function TreeProvider(props: any) {
           label: node.label
         })
       );
-      console.log(url,   ROUTES.TABLE_LEVEL_PAGE(
-        checkType,
-        connectionNode?.label ?? '',
-        schemaNode?.label ?? '',
-        node.label,
-        tab
-      ), ROUTES.TABLE_LEVEL_VALUE(
-            checkType,
-            connectionNode?.label ?? '',
-            schemaNode?.label ?? '',
-            node.label
-          ))
       history.push(
         ROUTES.TABLE_LEVEL_PAGE(
           checkType,
@@ -1826,7 +1810,6 @@ function TreeProvider(props: any) {
     }
 
     if (statusCode === 404) {
-      console.log(error);
       setObjectNotFound(true);
     }
     return Promise.reject(error);
