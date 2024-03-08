@@ -33,7 +33,7 @@ const DuckdbConnection = ({
       ...obj
     });
   };
-
+  console.log(duckdb)
   const [fileFormatType, setFileFormatType] =
     useState<DuckdbParametersSpecSourceFilesTypeEnum>(
       duckdb?.source_files_type ?? DuckdbParametersSpecSourceFilesTypeEnum.csv
@@ -45,9 +45,10 @@ const DuckdbConnection = ({
       ...prev,
       ...params
     }));
+    const config =  {...configuration, ...params}
     handleChange({
-      [fileFormatType as keyof DuckdbParametersSpec]: configuration
-    });
+      [fileFormatType as keyof DuckdbParametersSpec]: config
+    });               
   };
   const cleanConfiguration = () => {
     setConfiguration({});
