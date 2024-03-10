@@ -151,7 +151,7 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
   };
 
   const renderComponent: ReactNode = getComponent();
-
+ 
   return (
     <MainLayout>
       <div className="h-full flex flex-col">
