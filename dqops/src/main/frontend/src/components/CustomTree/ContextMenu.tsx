@@ -5,27 +5,27 @@ import {
   PopoverContent,
   PopoverHandler
 } from '@material-tailwind/react';
-import SvgIcon from '../SvgIcon';
-import { CustomTreeNode } from '../../shared/interfaces';
-import { TREE_LEVEL } from '../../shared/enums';
-import { useTree } from '../../contexts/treeContext';
+import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
 import {
-  TimeWindowFilterParameters,
+  CheckSearchFilters,
   RunChecksParameters,
   StatisticsCollectorSearchFilters,
-  CheckSearchFilters
+  TimeWindowFilterParameters
 } from '../../api';
+import { useTree } from '../../contexts/treeContext';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
-import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import { TREE_LEVEL } from '../../shared/enums';
+import { CustomTreeNode } from '../../shared/interfaces';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { urlencodeEncoder } from '../../utils';
+import SvgIcon from '../SvgIcon';
 import CollectStatisticsDialog from './CollectStatisticsDialog';
+import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
 import RunChecksDialog from './RunChecksDialog';
 import RunChecksPartitionedMenu from './RunChecksPartitionedMenu';
-import { urlencodeEncoder } from '../../utils';
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -186,10 +186,13 @@ const ContextMenu = ({
                 <RunChecksDialog
                   open={runChecksDialogOpened}
                   onClose={() => {
-                    setRunChecksDialogOpened(false), setOpen(false);
+                    setRunChecksDialogOpened(false), 
+                    setOpen(false);
                   }}
                   onClick={() => {
-                    handleRunChecks(), setOpen(false);
+                    handleRunChecks();
+                    setOpen(false);
+                    setRunChecksDialogOpened(false);
                   }}
                   runChecksJobTemplate={node.run_checks_job_template ?? {}}
                 />
@@ -224,10 +227,13 @@ const ContextMenu = ({
               <CollectStatisticsDialog
                 open={collectStatisticsDialogOpened}
                 onClose={() => {
-                  setCollectStatisticsDialogOpened(false), setOpen(false);
+                  setCollectStatisticsDialogOpened(false);
+                  setOpen(false);
                 }}
                 onClick={(filter) => {
-                  handleCollectStatisticsOnTable(filter), setOpen(false);
+                  handleCollectStatisticsOnTable(filter), 
+                  setCollectStatisticsDialogOpened(false);
+                  setOpen(false);
                 }}
                 collectStatisticsJobTemplate={
                   node.collect_statistics_job_template ?? {}
@@ -415,7 +421,7 @@ const ContextMenu = ({
             checkTypes === CheckTypes.SOURCES && (
               <div
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-                onClick={() => reimportTableMetadata(node)}
+                onClick={() => reimportTableMetadata(node, () => setOpen(false))}
               >
                 Reimport metadata
               </div>

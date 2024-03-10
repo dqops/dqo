@@ -1,15 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
 import axios, { AxiosResponse } from 'axios';
+import { useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import {
+  CheckListModel,
   CheckSearchFilters,
   ColumnListModel,
   ConnectionModel,
+  RunChecksParameters,
   SchemaModel,
-  TableListModel,
-  CheckListModel,
-  RunChecksParameters
+  TableListModel
 } from '../api';
+import { useActionDispatch } from '../hooks/useActionDispatch';
+import { toggleMenu } from '../redux/actions/job.actions';
+import { addFirstLevelTab } from '../redux/actions/source.actions';
+import { getFirstLevelActiveTab } from '../redux/selectors';
 import {
   ColumnApiClient,
   ConnectionApiClient,
@@ -19,15 +26,9 @@ import {
 } from '../services/apiClient';
 import { TREE_LEVEL } from '../shared/enums';
 import { CustomTreeNode, ITab } from '../shared/interfaces';
-import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
-import { findTreeNode } from '../utils/tree';
 import { CheckTypes, ROUTES } from '../shared/routes';
-import { useHistory, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { addFirstLevelTab } from '../redux/actions/source.actions';
-import { getFirstLevelActiveTab } from '../redux/selectors';
-import { useActionDispatch } from '../hooks/useActionDispatch';
 import { urlencodeDecoder, urlencodeEncoder } from '../utils';
+import { findTreeNode } from '../utils/tree';
 
 const TreeContext = React.createContext({} as any);
 
@@ -1794,13 +1795,17 @@ function TreeProvider(props: any) {
     setTabMaps(newTabMaps);
   };
 
-  const reimportTableMetadata = async (node: CustomTreeNode) => {
+  const reimportTableMetadata = async (node: CustomTreeNode, closeMenuCallBack?: () => void) => {
     const [connection, schema, table] = node.id.toString().split('.');
     await JobApiClient.importTables(undefined, false, undefined, {
       connectionName: connection,
       schemaName: schema,
       tableNames: [table]
     });
+    dispatch(toggleMenu(true));
+    if (closeMenuCallBack) {
+      closeMenuCallBack()
+    }
   };
 
   axios.interceptors.response.use(undefined, function (error) {
@@ -1871,3 +1876,4 @@ function useTree() {
 }
 
 export { TreeProvider, useTree };
+
