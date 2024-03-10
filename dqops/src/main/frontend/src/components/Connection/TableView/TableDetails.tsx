@@ -1,35 +1,35 @@
+import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
-import Input from '../../Input';
-import Checkbox from '../../Checkbox';
-import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
+import {
+  ConnectionModel,
+  ConnectionSpecProviderTypeEnum,
+  DuckdbParametersSpecFilesFormatTypeEnum,
+  FileFormatSpec,
+  TableListModelProfilingChecksResultTruncationEnum
+} from '../../../api';
+import { TConfiguration } from '../../../components/FileFormatConfiguration/TConfiguration';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getTableBasic,
   setUpdatedTableBasic,
   updateTableBasic
 } from '../../../redux/actions/table.actions';
-import { useParams } from 'react-router-dom';
+import { IRootState } from '../../../redux/reducers';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
-import { CheckTypes } from '../../../shared/routes';
-import Select from '../../Select';
-import {
-  ConnectionModel,
-  ConnectionSpecProviderTypeEnum,
-  FileFormatSpec,
-  TableListModelProfilingChecksResultTruncationEnum,
-  DuckdbParametersSpecFilesFormatTypeEnum
-} from '../../../api';
-import NumberInput from '../../NumberInput';
-import clsx from 'clsx';
-import { IRootState } from '../../../redux/reducers';
-import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
 import { ConnectionApiClient } from '../../../services/apiClient';
-import { TConfiguration } from '../../../components/FileFormatConfiguration/TConfiguration';
+import { CheckTypes } from '../../../shared/routes';
+import Checkbox from '../../Checkbox';
+import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
 import FilePath from '../../FileFormatConfiguration/FilePath';
+import Input from '../../Input';
+import NumberInput from '../../NumberInput';
+import Select from '../../Select';
+import ActionGroup from './TableActionGroup';
+import { useDecodedParams } from '../../../utils';
 
 const TableDetails = () => {
   const {
@@ -42,7 +42,7 @@ const TableDetails = () => {
     connection: string;
     schema: string;
     table: string;
-  } = useParams();
+  } = useDecodedParams();
   const { tableBasic, isUpdating, isUpdatedTableBasic } = useSelector(
     getFirstLevelState(checkTypes)
   );

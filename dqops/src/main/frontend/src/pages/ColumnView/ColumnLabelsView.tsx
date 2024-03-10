@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import ColumnActionGroup from './ColumnActionGroup';
 import LabelsView from '../../components/Connection/LabelsView';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getColumnLabels,
   setUpdatedLabels,
   updateColumnLabels,
 } from '../../redux/actions/column.actions';
+import { setIsUpdatedLabels } from "../../redux/actions/connection.actions";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { CheckTypes } from "../../shared/routes";
-import { useParams } from "react-router-dom";
-import { setIsUpdatedLabels } from "../../redux/actions/connection.actions";
+import ColumnActionGroup from './ColumnActionGroup';
+import { useDecodedParams } from '../../utils';
 
 interface IColumnLabelsViewProps {
   connectionName: string;
@@ -26,7 +26,7 @@ const ColumnLabelsView = ({
   tableName,
   columnName
 }: IColumnLabelsViewProps) => {
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const { labels, isUpdating, isUpdatedLabels } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));

@@ -1,17 +1,17 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import Input from '../Input';
-import Checkbox from '../Checkbox';
-import NumberInput from '../NumberInput';
-import { MonitoringScheduleSpec } from '../../api';
 import clsx from 'clsx';
-import RadioButton from '../RadioButton';
-import { useParams } from 'react-router-dom';
-import { JobApiClient } from '../../services/apiClient';
-import Switch from '../Switch';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import { setCronScheduler } from '../../redux/actions/job.actions';
+import { MonitoringScheduleSpec } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setCronScheduler } from '../../redux/actions/job.actions';
+import { IRootState } from '../../redux/reducers';
+import { JobApiClient } from '../../services/apiClient';
+import { useDecodedParams } from '../../utils';
+import Checkbox from '../Checkbox';
+import Input from '../Input';
+import NumberInput from '../NumberInput';
+import RadioButton from '../RadioButton';
+import Switch from '../Switch';
 
 interface IScheduleViewProps {
   schedule?: MonitoringScheduleSpec;
@@ -26,7 +26,7 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState<TMinutes>(defaultMinutes);
   const [hour, setHour] = useState(15);
-  const { table, column }: { table: string; column: string } = useParams();
+  const { table, column }: { table: string; column: string } = useDecodedParams();
 
   const { isCronScheduled, userProfile } = useSelector(
     (state: IRootState) => state.job || {}

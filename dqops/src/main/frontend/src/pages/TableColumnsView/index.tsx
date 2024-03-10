@@ -1,25 +1,25 @@
+import { AxiosResponse } from 'axios';
 import React, { useEffect, useMemo, useState } from 'react';
-import SvgIcon from '../../components/SvgIcon';
-import TableColumns from './TableColumns';
-import { useHistory, useParams } from 'react-router-dom';
-import ConnectionLayout from '../../components/ConnectionLayout';
-import Button from '../../components/Button';
-import {
-  ColumnApiClient,
-  JobApiClient,
-  DataGroupingConfigurationsApi
-} from '../../services/apiClient';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   DataGroupingConfigurationSpec,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../api';
-import { AxiosResponse } from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import { addFirstLevelTab } from '../../redux/actions/source.actions';
-import { ROUTES, CheckTypes } from '../../shared/routes';
+import Button from '../../components/Button';
+import SvgIcon from '../../components/SvgIcon';
 import { setCreatedDataStream } from '../../redux/actions/definition.actions';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
+import {
+  ColumnApiClient,
+  DataGroupingConfigurationsApi,
+  JobApiClient
+} from '../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import TableColumns from './TableColumns';
+import { useDecodedParams } from '../../utils';
 
 interface LocationState {
   bool: boolean;
@@ -32,7 +32,7 @@ const TableColumnsView = () => {
     connection: connectionName,
     schema: schemaName,
     table: tableName
-  }: { connection: string; schema: string; table: string } = useParams();
+  }: { connection: string; schema: string; table: string } = useDecodedParams();
   const { job_dictionary_state, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );

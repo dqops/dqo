@@ -1,18 +1,19 @@
+import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
-import Checkbox from '../Checkbox';
-import { DataGroupingConfigurationListModel, CheckModel } from '../../api';
-import TextArea from '../TextArea';
-import Select from '../Select';
-import { DataGroupingConfigurationsApi } from '../../services/apiClient';
-import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from "../../shared/routes";
-import Button from "../Button";
-import Input from "../Input";
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { CheckModel, DataGroupingConfigurationListModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
-import clsx from 'clsx';
-import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import { DataGroupingConfigurationsApi } from '../../services/apiClient';
+import { CheckTypes, ROUTES } from "../../shared/routes";
+import Button from "../Button";
+import Checkbox from '../Checkbox';
+import Input from "../Input";
+import Select from '../Select';
+import TextArea from '../TextArea';
+import { useDecodedParams } from '../../utils';
 
 interface ICheckSettingsTabProps {
   check?: CheckModel;
@@ -21,7 +22,7 @@ interface ICheckSettingsTabProps {
 }
 
 const CheckSettingsTab = ({ check, onChange, isDefaultEditing }: ICheckSettingsTabProps) => {
-  const { connection, schema, table }: { connection: string; schema: string; table: string;} = useParams();
+  const { connection, schema, table }: { connection: string; schema: string; table: string;} = useDecodedParams();
   const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<DataGroupingConfigurationListModel[]>([]);
   const history = useHistory()
   const dispatch = useActionDispatch();

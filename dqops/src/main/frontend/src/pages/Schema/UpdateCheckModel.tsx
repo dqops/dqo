@@ -1,18 +1,18 @@
-import React, { useEffect, useMemo, useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
-import Button from '../../components/Button';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   CheckConfigurationModel,
   CheckModel,
   CheckSearchFiltersCheckTypeEnum,
   CheckTemplate
 } from '../../api';
+import Button from '../../components/Button';
 import Checkbox from '../../components/Checkbox';
 import { ConnectionApiClient } from '../../services/apiClient';
 import { IFilterTemplate } from '../../shared/constants';
-import UpdateCheckRuleSensor from './MultiCheck/UpdateCheckRuleSensor';
 import { CheckTypes } from '../../shared/routes';
-import { useParams } from 'react-router-dom';
+import UpdateCheckRuleSensor from './MultiCheck/UpdateCheckRuleSensor';
+import { useDecodedParams } from '../../utils';
 
 interface UpdateCheckModelProps {
   open: boolean;
@@ -42,7 +42,7 @@ export const UpdateCheckModel = ({
     connection,
     schema
   }: { checkTypes: CheckTypes; connection: string; schema: string } =
-    useParams();
+    useDecodedParams();
   const [updatedCheck, setUpdatedCheck] = useState<CheckModel>();
   const [overideConflicts, setOverrideConflicts] = useState(true);
 

@@ -1,24 +1,24 @@
+import { AxiosResponse } from 'axios';
 import React, { useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { CheckTypes } from '../../../shared/routes';
+import { useSelector } from 'react-redux';
 import { CheckConfigurationModel, CheckTemplate } from '../../../api';
 import Tabs from '../../../components/Tabs';
-import MultiChecksTable from './MultiChecksTable/MultiChecksTable';
-import MultiChecksSearch from './MultiChecksSearch';
-import MultiChecksFilter from './MultiChecksFilter';
-import { IFilterTemplate } from '../../../shared/constants';
-import { SchemaApiClient } from '../../../services/apiClient';
-import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
-  setMultiCheckSearchedChecks,
-  setMultiCheckFilters
+  setMultiCheckFilters,
+  setMultiCheckSearchedChecks
 } from '../../../redux/actions/source.actions';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
-import { AxiosResponse } from 'axios';
+import { SchemaApiClient } from '../../../services/apiClient';
+import { IFilterTemplate } from '../../../shared/constants';
+import { CheckTypes } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
+import MultiChecksFilter from './MultiChecksFilter';
+import MultiChecksSearch from './MultiChecksSearch';
+import MultiChecksTable from './MultiChecksTable/MultiChecksTable';
 
 const tabs = [
   {
@@ -37,7 +37,7 @@ export const MultiChecks = () => {
     connection,
     schema
   }: { checkTypes: CheckTypes; connection: string; schema: string } =
-    useParams();
+    useDecodedParams();
   const { multiCheckFilters, multiCheckSearchedChecks } = useSelector(
     getFirstLevelState(checkTypes)
   );

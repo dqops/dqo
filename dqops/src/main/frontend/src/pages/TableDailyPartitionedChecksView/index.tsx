@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import SvgIcon from '../../components/SvgIcon';
-import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
+import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
+import Button from '../../components/Button';
+import DataQualityChecks from '../../components/DataQualityChecks';
+import SvgIcon from '../../components/SvgIcon';
+import TableNavigation from "../../components/TableNavigation";
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getTableDailyPartitionedChecks,
   updateTableDailyPartitionedChecks
 } from '../../redux/actions/table.actions';
-import Button from '../../components/Button';
-import { CheckResultOverviewApi } from "../../services/apiClient";
-import { useParams } from "react-router-dom";
-import ConnectionLayout from "../../components/ConnectionLayout";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import { CheckResultOverviewApi } from "../../services/apiClient";
 import { CheckTypes } from "../../shared/routes";
-import TableNavigation from "../../components/TableNavigation";
+import { useDecodedParams } from '../../utils';
 
 const TableDailyPartitionedChecksView = () => {
-  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useDecodedParams();
   const { dailyPartitionedChecks, isUpdating, loading } = useSelector(getFirstLevelState(checkTypes));
   const [updatedChecksUI, setUpdatedChecksUI] = useState<CheckContainerModel>();
   const [isUpdated, setIsUpdated] = useState(false);

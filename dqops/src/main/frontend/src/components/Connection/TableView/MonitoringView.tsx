@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import Tabs from '../../Tabs';
-import DataQualityChecks from '../../DataQualityChecks';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import {
+  CheckContainerModel,
+  CheckResultsOverviewDataModel
+} from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { setActiveFirstLevelUrl } from '../../../redux/actions/source.actions';
 import {
   getTableDailyMonitoringChecks,
   getTableMonthlyMonitoringChecks,
@@ -10,23 +15,19 @@ import {
   updateTableDailyMonitoringChecks,
   updateTableMonthlyMonitoringChecks
 } from '../../../redux/actions/table.actions';
-import { useSelector } from 'react-redux';
-import {
-  CheckResultsOverviewDataModel,
-  CheckContainerModel
-} from '../../../api';
-import TableActionGroup from './TableActionGroup';
-import { CheckResultOverviewApi } from '../../../services/apiClient';
-import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../../shared/routes';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState,
   getSecondLevelTab
 } from '../../../redux/selectors';
+import { CheckResultOverviewApi } from '../../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../../shared/routes';
+import DataQualityChecks from '../../DataQualityChecks';
+import Tabs from '../../Tabs';
+import TableActionGroup from './TableActionGroup';
 import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
 import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
-import { setActiveFirstLevelUrl } from '../../../redux/actions/source.actions';
+import { useDecodedParams } from '../../../utils';
 
 const initTabs = [
   {
@@ -68,7 +69,7 @@ const MonitoringView = () => {
     schema: string;
     table: string;
     tab: string;
-  } = useParams();
+  } = useDecodedParams();
   const activeTab = getSecondLevelTab(checkTypes, tab);
 
   const dispatch = useActionDispatch();

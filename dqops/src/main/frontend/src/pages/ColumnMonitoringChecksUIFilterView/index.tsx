@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import SvgIcon from '../../components/SvgIcon';
+import { useSelector } from 'react-redux';
+import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
+import Button from '../../components/Button';
 import DataQualityChecks from '../../components/DataQualityChecks';
-import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
+import SvgIcon from '../../components/SvgIcon';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getColumnMonitoringChecksModelFilter,
   setColumnUpdatedMonitoringChecksModelFilter
 } from '../../redux/actions/column.actions';
 import {
-  CheckResultOverviewApi,
-  ColumnApiClient
-} from '../../services/apiClient';
-import { useParams } from 'react-router-dom';
-import ConnectionLayout from '../../components/ConnectionLayout';
-import Button from '../../components/Button';
-import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../redux/selectors';
+import {
+  CheckResultOverviewApi,
+  ColumnApiClient
+} from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
-import { useSelector } from 'react-redux';
+import { useDecodedParams } from '../../utils';
 
 const ColumnMonitoringChecksUIFilterView = () => {
   const {
@@ -40,7 +39,7 @@ const ColumnMonitoringChecksUIFilterView = () => {
     timePartitioned: 'daily' | 'monthly';
     category: string;
     checkName: string;
-  } = useParams();
+  } = useDecodedParams();
   const { monitoringUIFilter, isUpdatedMonitoringUIFilter, loading } =
     useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();

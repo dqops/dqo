@@ -1,4 +1,5 @@
 import moment from 'moment/moment';
+import { useParams } from 'react-router-dom';
 
 export const getDaysString = (value: string | number) => {
   const daysDiff = moment().diff(moment(value), 'day');
@@ -162,4 +163,12 @@ export function sortByKey(key: string) {
       return 0;
     }
   };
+}
+
+export function useDecodedParams() : any {
+  const parameters = useParams();
+  Object.values(parameters).map((x) => {
+    return urlencodeEncoder(String(x))
+  })
+  return parameters;
 }

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Tabs from '../../components/Tabs';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
 import DataQualityChecks from '../../components/DataQualityChecks';
+import Tabs from '../../components/Tabs';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getColumnDailyMonitoringChecks,
@@ -10,18 +13,17 @@ import {
   updateColumnDailyMonitoringChecks,
   updateColumnMonthlyMonitoringChecks
 } from '../../redux/actions/column.actions';
-import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
-import ColumnActionGroup from './ColumnActionGroup';
-import { CheckResultOverviewApi } from '../../services/apiClient';
-import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../shared/routes';
+import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState,
   getSecondLevelTab
 } from '../../redux/selectors';
-import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
+import { CheckResultOverviewApi } from '../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
+import ColumnActionGroup from './ColumnActionGroup';
+import { tab } from '@material-tailwind/react';
 
 const initTabs = [
   {
@@ -49,7 +51,7 @@ const ColumnMonitoringChecksView = () => {
     table: string;
     column: string;
     tab: 'daily' | 'monthly';
-  } = useParams();
+  } = useDecodedParams();
   const [tabs, setTabs] = useState(initTabs);
   const dispatch = useActionDispatch();
   const history = useHistory();

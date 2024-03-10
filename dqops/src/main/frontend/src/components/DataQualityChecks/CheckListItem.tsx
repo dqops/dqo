@@ -1,33 +1,32 @@
+import { Tooltip } from '@material-tailwind/react';
+import clsx from 'clsx';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
+  CheckModel,
   CheckResultsOverviewDataModel,
   CheckResultsOverviewDataModelStatusesEnum,
   DqoJobHistoryEntryModelStatusEnum,
-  TimeWindowFilterParameters,
-  CheckModel,
   FieldModel,
   RuleParametersModel,
-  RuleThresholdsModel
+  RuleThresholdsModel,
+  TimeWindowFilterParameters
 } from '../../api';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setCurrentJobId } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
+import { JobApiClient } from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
+import { getLocalDateInUserTimeZone, useDecodedParams } from '../../utils';
+import Checkbox from '../Checkbox';
 import SvgIcon from '../SvgIcon';
+import Switch from '../Switch';
+import CheckDetails from './CheckDetails/CheckDetails';
+import CheckRuleItem from './CheckRuleItem';
 import CheckSettings from './CheckSettings';
 import SensorParameters from './SensorParameters';
-import Switch from '../Switch';
-import clsx from 'clsx';
-import CheckRuleItem from './CheckRuleItem';
-import { JobApiClient } from '../../services/apiClient';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import { Tooltip } from '@material-tailwind/react';
-import moment from 'moment';
-import CheckDetails from './CheckDetails/CheckDetails';
-import { CheckTypes } from '../../shared/routes';
-import { useParams } from 'react-router-dom';
-import Checkbox from '../Checkbox';
-import { setCurrentJobId } from '../../redux/actions/source.actions';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { getFirstLevelActiveTab } from '../../redux/selectors';
-import { getLocalDateInUserTimeZone } from '../../utils';
 
 export interface ITab {
   label: string;
@@ -91,7 +90,7 @@ const CheckListItem = ({
     schema: string;
     table: string;
     column: string;
-  } = useParams();
+  } = useDecodedParams();
   const [jobId, setJobId] = useState<number>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
   const dispatch = useActionDispatch();

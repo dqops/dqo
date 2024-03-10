@@ -5,27 +5,27 @@ import {
   PopoverContent,
   PopoverHandler
 } from '@material-tailwind/react';
-import SvgIcon from '../SvgIcon';
-import { CustomTreeNode } from '../../shared/interfaces';
-import { TREE_LEVEL } from '../../shared/enums';
-import { useTree } from '../../contexts/treeContext';
-import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
-  TimeWindowFilterParameters,
+  CheckSearchFilters,
   RunChecksParameters,
   StatisticsCollectorSearchFilters,
-  CheckSearchFilters
+  TimeWindowFilterParameters
 } from '../../api';
+import { useTree } from '../../contexts/treeContext';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
-import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import { TREE_LEVEL } from '../../shared/enums';
+import { CustomTreeNode } from '../../shared/interfaces';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { urlencodeEncoder, useDecodedParams } from '../../utils';
+import SvgIcon from '../SvgIcon';
 import CollectStatisticsDialog from './CollectStatisticsDialog';
+import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
 import RunChecksDialog from './RunChecksDialog';
 import RunChecksPartitionedMenu from './RunChecksPartitionedMenu';
-import { urlencodeEncoder } from '../../utils';
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -42,7 +42,7 @@ const ContextMenu = ({
   openAddTableDialog,
   openAddSchemaDialog
 }: ContextMenuProps) => {
-  const { checkTypes }: { checkTypes: any } = useParams();
+  const { checkTypes }: { checkTypes: any } = useDecodedParams();
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const {

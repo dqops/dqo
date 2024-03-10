@@ -1,19 +1,19 @@
 import React, { useMemo, useState } from 'react';
-import ConnectionLayout from '../../components/ConnectionLayout';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import Button from '../../components/Button';
+import SourceTablesView from '../../components/Connection/ConnectionView/SourceTablesView';
+import AddTableDialog from '../../components/CustomTree/AddTableDialog';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
-import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import Button from '../../components/Button';
-import AddTableDialog from '../../components/CustomTree/AddTableDialog';
-import { SchemaTables } from './SchemaTables';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
-import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { MultiChecks } from './MultiCheck/MultiChecks';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
-import SourceTablesView from '../../components/Connection/ConnectionView/SourceTablesView';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { MultiChecks } from './MultiCheck/MultiChecks';
+import { SchemaTables } from './SchemaTables';
+import { useDecodedParams } from '../../utils';
 
 const SchemaPage = () => {
   const {
@@ -26,7 +26,7 @@ const SchemaPage = () => {
     schema: string;
     tab: string;
     checkTypes: CheckTypes;
-  } = useParams();
+  } = useDecodedParams();
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const dispatch = useActionDispatch();

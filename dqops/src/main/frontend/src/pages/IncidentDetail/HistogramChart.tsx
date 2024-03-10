@@ -1,20 +1,20 @@
+import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { getFirstLevelIncidentsState } from '../../redux/selectors';
+import { IncidentIssueHistogramModel } from '../../api';
+import SectionWrapper from '../../components/Dashboard/SectionWrapper';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getIncidentsHistograms,
   setIncidentsHistogramFilter
 } from '../../redux/actions/incidents.actions';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { useParams } from 'react-router-dom';
-import { IncidentIssueHistogramModel } from '../../api';
 import {
   IncidentHistogramFilter,
   IncidentIssueFilter
 } from '../../redux/reducers/incidents.reducer';
-import SectionWrapper from '../../components/Dashboard/SectionWrapper';
-import clsx from 'clsx';
+import { getFirstLevelIncidentsState } from '../../redux/selectors';
 import { BarChart } from './BarChart';
+import { useDecodedParams } from '../../utils';
 
 type HistogramChartProps = {
   onChangeFilter: (obj: Partial<IncidentIssueFilter>) => void;
@@ -34,7 +34,7 @@ export const HistogramChart = ({
     year: string;
     month: string;
     id: string;
-  } = useParams();
+  } = useDecodedParams();
   const year = parseInt(strYear, 10);
   const month = parseInt(strMonth, 10);
   const {

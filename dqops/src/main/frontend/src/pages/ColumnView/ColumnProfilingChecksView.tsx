@@ -1,38 +1,38 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import DataQualityChecks from '../../components/DataQualityChecks';
-import ColumnActionGroup from './ColumnActionGroup';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
+  CheckContainerModel,
   CheckResultsOverviewDataModel,
   ColumnStatisticsModel,
-  CheckContainerModel,
   DqoJobHistoryEntryModelStatusEnum,
   TableStatisticsModel
 } from '../../api';
+import DataQualityChecks from '../../components/DataQualityChecks';
+import Tabs from '../../components/Tabs';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getColumnProfilingChecksModel,
   setUpdatedChecksModel,
   updateColumnProfilingChecksModel
 } from '../../redux/actions/column.actions';
+import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState,
+  getSecondLevelTab
+} from '../../redux/selectors';
 import {
   CheckResultOverviewApi,
   ColumnApiClient,
   JobApiClient,
   TableApiClient
 } from '../../services/apiClient';
-import {
-  getFirstLevelActiveTab,
-  getFirstLevelState,
-  getSecondLevelTab
-} from '../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useParams } from 'react-router-dom';
-import Tabs from '../../components/Tabs';
+import { useDecodedParams } from '../../utils';
+import ColumnActionGroup from './ColumnActionGroup';
 import ColumnStatisticsView from './ColumnStatisticsView';
-import { useHistory } from 'react-router-dom';
-import { IRootState } from '../../redux/reducers';
-import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 
 const tabs = [
   {
@@ -59,7 +59,7 @@ const ColumnProfilingChecksView = ({
   columnName
 }: IProfilingViewProps) => {
   const { checkTypes, tab }: { checkTypes: CheckTypes; tab: string } =
-    useParams();
+    useDecodedParams();
   const { checksUI, isUpdating, isUpdatedChecksUi, loading } = useSelector(
     getFirstLevelState(checkTypes)
   );

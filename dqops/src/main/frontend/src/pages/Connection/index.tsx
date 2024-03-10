@@ -1,25 +1,25 @@
+import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
-import ConnectionLayout from '../../components/ConnectionLayout';
+import { useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
+import ConnectionCommentView from '../../components/Connection/ConnectionView/ConnectionCommentView';
+import ConnectionDefaultGroupingConfiguration from '../../components/Connection/ConnectionView/ConnectionDataStream';
+import ConnectionDetail from '../../components/Connection/ConnectionView/ConnectionDetail';
+import ConnectionLabelsView from '../../components/Connection/ConnectionView/ConnectionLabelsView';
+import { IncidentsNotificationsView } from '../../components/Connection/ConnectionView/IncidentsNotificationsView';
+import ScheduleDetail from '../../components/Connection/ConnectionView/ScheduleDetail';
+import SchemasView from '../../components/Connection/ConnectionView/SchemasView';
+import SourceSchemasView from '../../components/Connection/ConnectionView/SourceSchemasView';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useSelector } from 'react-redux';
-import ConnectionDetail from '../../components/Connection/ConnectionView/ConnectionDetail';
-import ScheduleDetail from '../../components/Connection/ConnectionView/ScheduleDetail';
-import ConnectionCommentView from '../../components/Connection/ConnectionView/ConnectionCommentView';
-import ConnectionLabelsView from '../../components/Connection/ConnectionView/ConnectionLabelsView';
-import SourceSchemasView from '../../components/Connection/ConnectionView/SourceSchemasView';
-import SchemasView from '../../components/Connection/ConnectionView/SchemasView';
-import ConnectionDefaultGroupingConfiguration from '../../components/Connection/ConnectionView/ConnectionDataStream';
-import qs from 'query-string';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../redux/selectors';
-import { IncidentsNotificationsView } from '../../components/Connection/ConnectionView/IncidentsNotificationsView';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 
 const initSourceTabs = [
   {
@@ -67,7 +67,7 @@ const ConnectionPage = () => {
     connection,
     tab: activeTab,
     checkTypes
-  }: { connection: string; tab: string; checkTypes: CheckTypes } = useParams();
+  }: { connection: string; tab: string; checkTypes: CheckTypes } = useDecodedParams();
   const [tabs, setTabs] = useState(
     checkTypes === CheckTypes.SOURCES ? initSourceTabs : initCheckTabs
   );

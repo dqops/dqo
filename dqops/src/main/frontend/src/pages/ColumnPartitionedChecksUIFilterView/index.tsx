@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import SvgIcon from '../../components/SvgIcon';
+import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
+import Button from "../../components/Button";
 import DataQualityChecks from '../../components/DataQualityChecks';
-import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
+import SvgIcon from '../../components/SvgIcon';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getColumnPartitionedChecksModelFilter, setColumnUpdatedPartitionedChecksModelFilter,
 } from '../../redux/actions/column.actions';
-import { CheckResultOverviewApi, ColumnApiClient } from "../../services/apiClient";
-import { useParams } from "react-router-dom";
-import ConnectionLayout from "../../components/ConnectionLayout";
-import Button from "../../components/Button";
-import { CheckTypes } from "../../shared/routes";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import { CheckResultOverviewApi, ColumnApiClient } from "../../services/apiClient";
+import { CheckTypes } from "../../shared/routes";
+import { useDecodedParams } from '../../utils';
 
 const ColumnPartitionedChecksUIFilterView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, column: columnName, timePartitioned, category, checkName }: {
@@ -24,7 +23,7 @@ const ColumnPartitionedChecksUIFilterView = () => {
     timePartitioned: 'daily' | 'monthly',
     category: string,
     checkName: string
-  } = useParams();
+  } = useDecodedParams();
 
   const { partitionedChecksUIFilter, isUpdatedPartitionedChecksUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();

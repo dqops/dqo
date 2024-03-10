@@ -1,26 +1,26 @@
-import React, { useMemo, useState, useEffect } from 'react';
-import { MyData } from './TableColumnsConstans';
-import SvgIcon from '../../components/SvgIcon';
-import { dateToString, formatNumber } from '../../shared/constants';
-import { getDetectedDatatype } from '../../utils';
-import {
-  cutString,
-  renderValue,
-  calculate_color,
-  max_unique_value
-} from './TableColumnsUtils';
+import { IconButton } from '@material-tailwind/react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../api';
-import { JobApiClient } from '../../services/apiClient';
-import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useHistory, useParams } from 'react-router-dom';
-import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import Checkbox from '../../components/Checkbox';
-import { IconButton } from '@material-tailwind/react';
+import SvgIcon from '../../components/SvgIcon';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
+import { JobApiClient } from '../../services/apiClient';
+import { dateToString, formatNumber } from '../../shared/constants';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { getDetectedDatatype, useDecodedParams } from '../../utils';
+import { MyData } from './TableColumnsConstans';
+import {
+  calculate_color,
+  cutString,
+  max_unique_value,
+  renderValue
+} from './TableColumnsUtils';
 
 interface ITableColumnsBodyProps {
   columns: MyData[];
@@ -52,7 +52,7 @@ export default function TableColumnsBody({
     schema: string;
     table: string;
     checkTypes: CheckTypes;
-  } = useParams();
+  } = useDecodedParams();
   const { userProfile, job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );

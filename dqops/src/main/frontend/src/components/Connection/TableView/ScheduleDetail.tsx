@@ -1,6 +1,7 @@
+import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
-import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getTableSchedulingGroup,
@@ -9,16 +10,16 @@ import {
   setUpdatedSchedulingGroup,
   updateTableSchedulingGroup
 } from '../../../redux/actions/table.actions';
-import { useHistory, useParams } from 'react-router-dom';
-import ScheduleView from '../../ScheduleView';
-import { CheckRunMonitoringScheduleGroup } from '../../../shared/enums/scheduling.enum';
-import Tabs from '../../Tabs';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
+import { CheckRunMonitoringScheduleGroup } from '../../../shared/enums/scheduling.enum';
 import { CheckTypes } from '../../../shared/routes';
-import qs from 'query-string';
+import ScheduleView from '../../ScheduleView';
+import Tabs from '../../Tabs';
+import ActionGroup from './TableActionGroup';
+import { useDecodedParams } from '../../../utils';
 
 const pageTabs = [
   {
@@ -54,7 +55,7 @@ const ScheduleDetail = () => {
     connection: string;
     schema: string;
     table: string;
-  } = useParams();
+  } = useDecodedParams();
   const [tabs, setTabs] = useState(pageTabs);
   const { activeTab = CheckRunMonitoringScheduleGroup.profiling } = qs.parse(
     location.search

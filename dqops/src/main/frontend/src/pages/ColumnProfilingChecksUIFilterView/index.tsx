@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import SvgIcon from '../../components/SvgIcon';
+import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
+import Button from '../../components/Button';
 import DataQualityChecks from '../../components/DataQualityChecks';
-import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
+import SvgIcon from '../../components/SvgIcon';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getColumnProfilingChecksModelFilter,
   setColumnUpdatedProfilingChecksModelFilter
 } from '../../redux/actions/column.actions';
 import {
-  CheckResultOverviewApi,
-  ColumnApiClient
-} from '../../services/apiClient';
-import { useParams } from 'react-router-dom';
-import ConnectionLayout from '../../components/ConnectionLayout';
-import Button from '../../components/Button';
-import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../redux/selectors';
+import {
+  CheckResultOverviewApi,
+  ColumnApiClient
+} from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 
 const ColumnProfilingChecksUIFilterView = () => {
   const {
@@ -38,7 +37,7 @@ const ColumnProfilingChecksUIFilterView = () => {
     column: string;
     category: string;
     checkName: string;
-  } = useParams();
+  } = useDecodedParams();
   const { checksUIFilter, isUpdatedChecksUIFilter, loading } = useSelector(
     getFirstLevelState(checkTypes)
   );

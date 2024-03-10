@@ -1,24 +1,24 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import ColumnNavigation from '../../components/ColumnNavigation';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
-import ColumnDetails from './ColumnDetails';
-import ColumnCommentsView from './ColumnCommentsView';
-import ColumnLabelsView from './ColumnLabelsView';
-import ColumnMonitoringChecksView from './ColumnMonitoringChecksView';
-import ColumnProfilingView from './ColumnProfilingChecksView';
-import ColumnPartitionedChecksView from './ColumnPartitionedChecksView';
-import { useSelector } from 'react-redux';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import ConnectionLayout from '../../components/ConnectionLayout';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState,
   getSecondLevelTab
 } from '../../redux/selectors';
-import ColumnNavigation from '../../components/ColumnNavigation';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
+import ColumnCommentsView from './ColumnCommentsView';
+import ColumnDetails from './ColumnDetails';
+import ColumnLabelsView from './ColumnLabelsView';
+import ColumnMonitoringChecksView from './ColumnMonitoringChecksView';
+import ColumnPartitionedChecksView from './ColumnPartitionedChecksView';
+import ColumnProfilingView from './ColumnProfilingChecksView';
 
 const initTabs = [
   {
@@ -50,7 +50,7 @@ const ColumnView = () => {
     column: string;
     tab: string;
     checkTypes: CheckTypes;
-  } = useParams();
+  } = useDecodedParams();
   const [tabs, setTabs] = useState(initTabs);
 
   const history = useHistory();

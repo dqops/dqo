@@ -1,29 +1,28 @@
-import React, { useEffect, useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
-import Button from '../Button';
-import Input from '../Input';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import {
+  ConnectionModel,
+  ConnectionSpecProviderTypeEnum,
+  DuckdbParametersSpecFilesFormatTypeEnum,
+  FileFormatSpec
+} from '../../api';
+import { TConfiguration } from '../../components/FileFormatConfiguration/TConfiguration';
+import { useTree } from '../../contexts/treeContext';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import {
   ConnectionApiClient,
   JobApiClient,
   TableApiClient
 } from '../../services/apiClient';
 import { CustomTreeNode } from '../../shared/interfaces';
-import { useTree } from '../../contexts/treeContext';
-import { useHistory, useParams } from 'react-router-dom';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import {
-  ConnectionModel,
-  ConnectionSpecProviderTypeEnum,
-  FileFormatSpec,
-  DuckdbParametersSpecFilesFormatTypeEnum
-} from '../../api';
+import { urlencodeDecoder, urlencodeEncoder, useDecodedParams } from '../../utils';
+import Button from '../Button';
 import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
-import { TConfiguration } from '../../components/FileFormatConfiguration/TConfiguration';
-import SectionWrapper from '../Dashboard/SectionWrapper';
 import FilePath from '../FileFormatConfiguration/FilePath';
-import { urlencodeDecoder, urlencodeEncoder } from '../../utils';
+import Input from '../Input';
 
 interface AddTableDialogProps {
   open: boolean;
@@ -53,7 +52,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   };
 
   const { connection, schema }: { connection: string; schema: string } =
-    useParams();
+    useDecodedParams();
   const dispatch = useActionDispatch();
   const history = useHistory();
 

@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { JobApiClient, DataSourcesApi } from '../../../services/apiClient';
+import { useSelector } from 'react-redux';
 import { RemoteTableListModel } from '../../../api';
-import SvgIcon from '../../SvgIcon';
-import Loader from '../../Loader';
-import Checkbox from '../../Checkbox';
-import Button from '../../Button';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   setAdvisorJobId,
   toggleAdvisor
 } from '../../../redux/actions/job.actions';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import { setCurrentJobId } from '../../../redux/actions/source.actions';
-import { useParams } from 'react-router-dom';
-import { CheckTypes } from '../../../shared/routes';
+import { IRootState } from '../../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
+import { DataSourcesApi, JobApiClient } from '../../../services/apiClient';
+import { CheckTypes } from '../../../shared/routes';
+import Button from '../../Button';
+import Checkbox from '../../Checkbox';
+import Loader from '../../Loader';
+import SvgIcon from '../../SvgIcon';
+import { useDecodedParams } from '../../../utils';
 
 const SourceTablesView = () => {
   const {
@@ -26,7 +26,7 @@ const SourceTablesView = () => {
     checkTypes: CheckTypes;
     connection: string;
     schema: string;
-  } = useParams();
+  } = useDecodedParams();
   const [loading, setLoading] = useState(false);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
   const [tables, setTables] = useState<RemoteTableListModel[]>([]);

@@ -1,40 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import IncidentsLayout from '../../components/IncidentsLayout';
-import SvgIcon from '../../components/SvgIcon';
-import { useHistory, useParams } from 'react-router-dom';
-import Input from '../../components/Input';
-import { useSelector } from 'react-redux';
-import { getFirstLevelIncidentsState } from '../../redux/selectors';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import {
-  getIncidentsIssues,
-  setIncidentsFilter
-} from '../../redux/actions/incidents.actions';
-import { Pagination } from '../../components/Pagination';
+import { IconButton, Tooltip } from '@material-tailwind/react';
 import moment from 'moment';
-import useDebounce from '../../hooks/useDebounce';
-import { IncidentIssueFilter } from '../../redux/reducers/incidents.reducer';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   IncidentIssueHistogramModel,
   IncidentModel,
   IncidentModelStatusEnum
 } from '../../api';
-import Select from '../../components/Select';
-import { IncidentsApi } from '../../services/apiClient';
-import { IconButton, Tooltip } from '@material-tailwind/react';
-import { getDaysString } from '../../utils';
-import AddIssueUrlDialog from '../IncidentConnection/AddIssueUrlDialog';
-import { IncidentIssueList } from './IncidentIssueList';
-import { useTree } from '../../contexts/treeContext';
-import IncidentNavigation from './IncidentNavigation';
 import Button from '../../components/Button';
-import { HistogramChart } from './HistogramChart';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
+import Input from '../../components/Input';
+import { Pagination } from '../../components/Pagination';
+import Select from '../../components/Select';
+import SvgIcon from '../../components/SvgIcon';
+import { useTree } from '../../contexts/treeContext';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import useDebounce from '../../hooks/useDebounce';
+import {
+  getIncidentsIssues,
+  setIncidentsFilter
+} from '../../redux/actions/incidents.actions';
 import {
   addFirstLevelTab,
   addFirstLevelTab as addSourceFirstLevelTab
 } from '../../redux/actions/source.actions';
+import { IncidentIssueFilter } from '../../redux/reducers/incidents.reducer';
+import { getFirstLevelIncidentsState } from '../../redux/selectors';
+import { IncidentsApi } from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
+import { getDaysString, useDecodedParams } from '../../utils';
+import AddIssueUrlDialog from '../IncidentConnection/AddIssueUrlDialog';
+import { HistogramChart } from './HistogramChart';
+import { IncidentIssueList } from './IncidentIssueList';
+import IncidentNavigation from './IncidentNavigation';
 
 const statusOptions = [
   {
@@ -89,7 +88,7 @@ export const IncidentDetail = () => {
     year: string;
     month: string;
     id: string;
-  } = useParams();
+  } = useDecodedParams();
   const year = parseInt(strYear, 10);
   const month = parseInt(strMonth, 10);
   const [incidentDetail, setIncidentDetail] = useState<IncidentModel>();

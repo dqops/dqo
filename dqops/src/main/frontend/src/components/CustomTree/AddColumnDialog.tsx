@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
-import Button from '../Button';
-import Input from '../Input';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useTree } from '../../contexts/treeContext';
+import { IRootState } from '../../redux/reducers';
 import { ColumnApiClient } from '../../services/apiClient';
 import { CustomTreeNode } from '../../shared/interfaces';
-import { useTree } from '../../contexts/treeContext';
-import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
+import { urlencodeEncoder, useDecodedParams } from '../../utils';
+import Button from '../Button';
+import Input from '../Input';
 import TextArea from '../TextArea';
-import { urlencodeEncoder } from '../../utils';
 
 interface AddColumnDialogProps {
   open: boolean;
@@ -26,7 +25,7 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
     connection,
     table,
     schema
-  }: { connection: string; schema: string; table: string } = useParams();
+  }: { connection: string; schema: string; table: string } = useDecodedParams();
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const onCloseCleanPrevState = () => {

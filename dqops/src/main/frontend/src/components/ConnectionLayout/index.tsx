@@ -1,25 +1,22 @@
 import React, { ReactNode, useEffect, useMemo } from 'react';
-import MainLayout from '../MainLayout';
-import PageTabs from '../PageTabs';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   useHistory,
   useLocation,
-  useParams,
   useRouteMatch
 } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 import {
   closeFirstLevelTab,
   setActiveFirstLevelTab
 } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import MainLayout from '../MainLayout';
+import PageTabs from '../PageTabs';
 import { TabOption } from '../PageTabs/tab';
-import qs from 'query-string';
 
-import ConfirmDialog from '../CustomTree/ConfirmDialog';
-import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { useTree } from '../../contexts/treeContext';
+import ChecksPage from '../../pages/Checks';
 import ColumnDailyMonitoringChecksView from '../../pages/ColumnDailyMonitoringChecksView';
 import ColumnDailyPartitionedChecksView from '../../pages/ColumnDailyPartitionedChecksView';
 import ColumnMonitoringChecksUIFilterView from '../../pages/ColumnMonitoringChecksUIFilterView';
@@ -29,6 +26,8 @@ import ColumnPartitionedChecksUIFilterView from '../../pages/ColumnPartitionedCh
 import ColumnProfilingChecksUIFilterView from '../../pages/ColumnProfilingChecksUIFilterView';
 import ColumnProfilingChecksView from '../../pages/ColumnProfilingChecksView';
 import ColumnView from '../../pages/ColumnView';
+import ConnectionPage from '../../pages/Connection';
+import CreateConnection from '../../pages/CreateConnection';
 import SchemaPage from '../../pages/Schema';
 import TablePage from '../../pages/Table';
 import TableColumnsView from '../../pages/TableColumnsView';
@@ -41,16 +40,16 @@ import TableMonthlyPartitionedChecksView from '../../pages/TableMonthlyPartition
 import TablePartitionedChecksUIFilterView from '../../pages/TablePartitionedChecksUIFilterView';
 import TableProfilingChecksUIFilterView from '../../pages/TableProfilingChecksUIFilterView';
 import TableProfilingChecksView from '../../pages/TableProfilingChecksView';
-import CreateConnection from '../../pages/CreateConnection';
-import ConnectionPage from '../../pages/Connection';
-import ChecksPage from '../../pages/Checks';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
+import ConfirmDialog from '../CustomTree/ConfirmDialog';
+import { useDecodedParams } from '../../utils';
 
 interface ConnectionLayoutProps {
   route: string;
 }
 
 const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const { objectNotFound, setObjectNotFound } = useTree();
   const { tabs: pageTabs, activeTab } = useSelector(
     (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]

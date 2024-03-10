@@ -1,28 +1,29 @@
+import clsx from 'clsx';
+import moment from 'moment/moment';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
-  CheckResultsOverviewDataModel,
   CheckContainerModel,
   CheckContainerModelEffectiveScheduleEnabledStatusEnum,
   CheckModel,
+  CheckResultsOverviewDataModel,
+  CheckSearchFiltersCheckTypeEnum,
   EffectiveScheduleModelScheduleLevelEnum,
-  QualityCategoryModel,
-  CheckSearchFiltersCheckTypeEnum
+  QualityCategoryModel
 } from '../../api';
 import { useTree } from '../../contexts/treeContext';
-import clsx from 'clsx';
-import { useHistory, useParams } from 'react-router-dom';
-import CheckCategoriesView from './CheckCategoriesView';
-import TableHeader from './CheckTableHeader';
-import Loader from '../Loader';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import moment from 'moment/moment';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
-import Button from '../Button';
-import Select from '../Select';
-import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
-import { useSelector } from 'react-redux';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
+import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import Button from '../Button';
+import Loader from '../Loader';
+import Select from '../Select';
+import CheckCategoriesView from './CheckCategoriesView';
+import TableHeader from './CheckTableHeader';
+import { useDecodedParams } from '../../utils';
 
 interface IDataQualityChecksProps {
   checksUI?: CheckContainerModel;
@@ -63,7 +64,7 @@ const DataQualityChecks = ({
     column: string;
     timePartitioned: 'daily' | 'monthly';
     tab: 'daily' | 'monthly';
-  } = useParams();
+  } = useDecodedParams();
   const history = useHistory();
   const dispatch = useActionDispatch();
   const [timeWindow, setTimeWindow] = useState(

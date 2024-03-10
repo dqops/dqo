@@ -1,21 +1,21 @@
-import React, {useEffect, useState} from 'react';
-import CommentsView from '../CommentsView';
-import ActionGroup from './TableActionGroup';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CommentSpec } from '../../../api';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getTableComments,
   setIsUpdatedComments,
   setUpdatedComments,
   updateTableComments
 } from '../../../redux/actions/table.actions';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { useParams } from "react-router-dom";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 import { CheckTypes } from "../../../shared/routes";
+import { useDecodedParams } from '../../../utils';
+import CommentsView from '../CommentsView';
+import ActionGroup from './TableActionGroup';
 
 const TableCommentView = () => {
-  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useDecodedParams();
   const { updatedComments, isUpdating, isUpdatedComments } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [text, setText] = useState('');

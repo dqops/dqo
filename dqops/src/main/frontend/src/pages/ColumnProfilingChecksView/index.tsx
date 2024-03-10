@@ -1,24 +1,23 @@
+import { isEqual } from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
-import SvgIcon from '../../components/SvgIcon';
-import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
 import Button from '../../components/Button';
+import ColumnNavigation from "../../components/ColumnNavigation";
+import DataQualityChecks from '../../components/DataQualityChecks';
+import SvgIcon from '../../components/SvgIcon';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getColumnProfilingChecksModel,
   updateColumnProfilingChecksModel
 } from '../../redux/actions/column.actions';
-import { isEqual } from 'lodash';
-import { CheckResultOverviewApi } from '../../services/apiClient';
-import { useParams } from "react-router-dom";
-import ConnectionLayout from "../../components/ConnectionLayout";
-import { CheckTypes } from "../../shared/routes";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
-import ColumnNavigation from "../../components/ColumnNavigation";
+import { CheckResultOverviewApi } from '../../services/apiClient';
+import { CheckTypes } from "../../shared/routes";
+import { useDecodedParams } from '../../utils';
 
 const ColumnProfilingsView = () => {
-  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useDecodedParams();
   const { checksUI, isUpdating, loading } = useSelector(getFirstLevelState(checkTypes));
   const [updatedChecksUI, setUpdatedChecksUI] = useState<CheckContainerModel>();
   const dispatch = useActionDispatch();

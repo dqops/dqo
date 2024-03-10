@@ -1,25 +1,25 @@
+import clsx from "clsx";
 import React, { useEffect } from "react";
-import Select from "../../Select";
-import { CheckTypes } from "../../../shared/routes";
-import { useParams } from "react-router-dom";
-import { useActionDispatch } from "../../../hooks/useActionDispatch";
 import { useSelector } from "react-redux";
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
-import {
-  getTableIncidentGrouping,
-  setUpdateIncidentGroup,
-  updateTableIncidentGrouping
-} from "../../../redux/actions/source.actions";
 import {
   ConnectionIncidentGroupingSpec,
   ConnectionIncidentGroupingSpecGroupingLevelEnum,
   ConnectionIncidentGroupingSpecMinimumSeverityEnum
 } from "../../../api";
+import { useActionDispatch } from "../../../hooks/useActionDispatch";
+import {
+  getTableIncidentGrouping,
+  setUpdateIncidentGroup,
+  updateTableIncidentGrouping
+} from "../../../redux/actions/source.actions";
+import { IRootState } from "../../../redux/reducers";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
+import { CheckTypes } from "../../../shared/routes";
 import Checkbox from "../../Checkbox";
 import NumberInput from "../../NumberInput";
+import Select from "../../Select";
 import TableActionGroup from "./TableActionGroup";
-import clsx from "clsx";
-import { IRootState } from "../../../redux/reducers";
+import { useDecodedParams } from "../../../utils";
 
 
 const minimumSeverityOptions = Object.values(ConnectionIncidentGroupingSpecMinimumSeverityEnum).map((item) => ({
@@ -29,7 +29,7 @@ const minimumSeverityOptions = Object.values(ConnectionIncidentGroupingSpecMinim
 
 export const TableIncidentsNotificationsView = () => {
 
-  const { connection, schema, table, checkTypes }: { connection: string, schema: string, table: string, checkTypes: CheckTypes } = useParams();
+  const { connection, schema, table, checkTypes }: { connection: string, schema: string, table: string, checkTypes: CheckTypes } = useDecodedParams();
   const dispatch = useActionDispatch();
   const { incidentGrouping, isUpdatedIncidentGroup, isUpdating } = useSelector(getFirstLevelState(checkTypes));
   const { userProfile } = useSelector(
