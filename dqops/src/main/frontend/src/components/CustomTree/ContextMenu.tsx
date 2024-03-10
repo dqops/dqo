@@ -117,14 +117,14 @@ const ContextMenu = ({
     const [connection, schema] = node.id.toString().split('.');
     const url = ROUTES.SCHEMA_LEVEL_PAGE(
       CheckTypes.SOURCES,
-      urlencodeEncoder(connection),
-      urlencodeEncoder(schema) ?? '',
+      connection,
+      schema ?? '',
       'import-tables'
     );
     const value = ROUTES.SCHEMA_LEVEL_VALUE(
       CheckTypes.SOURCES,
-      urlencodeEncoder(connection),
-      urlencodeEncoder(schema) ?? ''
+      connection,
+      schema ?? ''
     );
     dispatch(
       addFirstLevelTab(CheckTypes.SOURCES, {

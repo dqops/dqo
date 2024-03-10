@@ -78,7 +78,7 @@ export const urlencodeDecoder = (url : string | undefined) => {
   for (let i = 0; i < url.length; i++) {
     const char = url[i];
     switch (char) {
-      // case '%': encodedValue += '%25'; break;
+       case '%': encodedValue += '%25'; break;
       case ' ': encodedValue += '%20'; break;
       case '.': encodedValue += '%2E'; break;
       case '/': encodedValue += '%2F'; break;

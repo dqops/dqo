@@ -41,8 +41,8 @@ import TablePartitionedChecksUIFilterView from '../../pages/TablePartitionedChec
 import TableProfilingChecksUIFilterView from '../../pages/TableProfilingChecksUIFilterView';
 import TableProfilingChecksView from '../../pages/TableProfilingChecksView';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
-import ConfirmDialog from '../CustomTree/ConfirmDialog';
 import { useDecodedParams } from '../../utils';
+import ConfirmDialog from '../CustomTree/ConfirmDialog';
 
 interface ConnectionLayoutProps {
   route: string;
