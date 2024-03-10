@@ -54,6 +54,9 @@ export const urlencodeEncoder = (url : string | undefined) => {
         case '%5C':
           decodedValue += '\\';
           break;
+        // case '%25':
+        //   decodedValue += '%';
+        //   break;  
         default:
           decodedValue += encodedChar;
           break;
