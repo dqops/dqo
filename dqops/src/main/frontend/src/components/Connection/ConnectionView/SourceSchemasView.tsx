@@ -109,7 +109,7 @@ const SourceSchemasView = () => {
                     className={
                       item.alreadyImported ? 'text-primary' : 'text-red-700'
                     }
-                    width={30}
+                    width={22}
                     height={22}
                   />
                 </td>
