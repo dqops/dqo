@@ -5,27 +5,27 @@ import {
   PopoverContent,
   PopoverHandler
 } from '@material-tailwind/react';
-import SvgIcon from '../SvgIcon';
-import { CustomTreeNode } from '../../shared/interfaces';
-import { TREE_LEVEL } from '../../shared/enums';
-import { useTree } from '../../contexts/treeContext';
+import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
 import {
-  TimeWindowFilterParameters,
+  CheckSearchFilters,
   RunChecksParameters,
   StatisticsCollectorSearchFilters,
-  CheckSearchFilters
+  TimeWindowFilterParameters
 } from '../../api';
+import { useTree } from '../../contexts/treeContext';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
-import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import { TREE_LEVEL } from '../../shared/enums';
+import { CustomTreeNode } from '../../shared/interfaces';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { urlencodeEncoder } from '../../utils';
+import SvgIcon from '../SvgIcon';
 import CollectStatisticsDialog from './CollectStatisticsDialog';
+import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
 import RunChecksDialog from './RunChecksDialog';
 import RunChecksPartitionedMenu from './RunChecksPartitionedMenu';
-import { urlencodeEncoder } from '../../utils';
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -415,7 +415,7 @@ const ContextMenu = ({
             checkTypes === CheckTypes.SOURCES && (
               <div
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-                onClick={() => reimportTableMetadata(node)}
+                onClick={() => reimportTableMetadata(node, () => setOpen(false))}
               >
                 Reimport metadata
               </div>
