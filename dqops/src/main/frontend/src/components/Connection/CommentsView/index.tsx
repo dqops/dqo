@@ -72,7 +72,7 @@ const CommentsView = ({
           <div className="w-9/12">Comment</div>
           <div className="w-1/12">Author</div>
           <div className="w-1/12">Date</div>
-          <div className="px-0 pr-8 py-2 text-center max-w-34 min-w-34 w-34">
+          <div className="px-0 pr-8 text-center max-w-34 min-w-34 w-34">
             Action
           </div>
         </div>
