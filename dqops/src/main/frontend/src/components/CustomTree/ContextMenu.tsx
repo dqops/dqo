@@ -186,10 +186,13 @@ const ContextMenu = ({
                 <RunChecksDialog
                   open={runChecksDialogOpened}
                   onClose={() => {
-                    setRunChecksDialogOpened(false), setOpen(false);
+                    setRunChecksDialogOpened(false), 
+                    setOpen(false);
                   }}
                   onClick={() => {
-                    handleRunChecks(), setOpen(false);
+                    handleRunChecks();
+                    setOpen(false);
+                    setRunChecksDialogOpened(false);
                   }}
                   runChecksJobTemplate={node.run_checks_job_template ?? {}}
                 />
@@ -224,10 +227,13 @@ const ContextMenu = ({
               <CollectStatisticsDialog
                 open={collectStatisticsDialogOpened}
                 onClose={() => {
-                  setCollectStatisticsDialogOpened(false), setOpen(false);
+                  setCollectStatisticsDialogOpened(false);
+                  setOpen(false);
                 }}
                 onClick={(filter) => {
-                  handleCollectStatisticsOnTable(filter), setOpen(false);
+                  handleCollectStatisticsOnTable(filter), 
+                  setCollectStatisticsDialogOpened(false);
+                  setOpen(false);
                 }}
                 collectStatisticsJobTemplate={
                   node.collect_statistics_job_template ?? {}
