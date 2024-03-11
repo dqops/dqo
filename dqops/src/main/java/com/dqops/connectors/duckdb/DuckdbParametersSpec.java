@@ -29,6 +29,7 @@ import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfil
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultConfigProfileProvider;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultCredentialProfileProvider;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -334,16 +335,35 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Whether the hive partitioning option is set on a file format.
+     * @return Whether the hive partitioning option is set on a file format.
+     */
+    @JsonIgnore
+    public boolean isSetHivePartitioning(){
+        if(filesFormatType != null){
+            switch(filesFormatType){
+                case csv: return getCsv() != null && getCsv().getHivePartitioning() != null && getCsv().getHivePartitioning();
+                case json: return getJson() != null && getJson().getHivePartitioning() != null && getJson().getHivePartitioning();
+                case parquet: return getParquet() != null && getParquet().getHivePartitioning() != null && getParquet().getHivePartitioning();
+            }
+        }
+        return false;
+    }
+
+    /**
      * Returns state that whether the file format for the specific file type is set.
-     * @param duckdbFilesFormatType Type of files.
      * @return State that whether the file format for the specific file type is set.
      */
-    public boolean isFormatSetForType(DuckdbFilesFormatType duckdbFilesFormatType){
-        switch(duckdbFilesFormatType){
+    @JsonIgnore
+    public boolean isFormatSetForType(){
+        if(filesFormatType == null){
+            throw new RuntimeException("The file format type is not set : " + filesFormatType);
+        }
+        switch(filesFormatType){
             case csv: return this.getCsv() != null;
             case json: return this.getJson() != null;
             case parquet: return this.getParquet() != null;
-            default: throw new RuntimeException("The file format is not supported : " + duckdbFilesFormatType);
+            default: throw new RuntimeException("The file format is not supported : " + filesFormatType);
         }
     }
 

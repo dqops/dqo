@@ -215,6 +215,27 @@ public class FileFormatSpecProviderTest extends BaseTest {
         Assertions.assertTrue(fileFormatSpec.isEmpty());
     }
 
+    @Test
+    void guessFilePaths_whenUsingHivePartitioning_putsDoubleWildcardInPath() {
+        String schemaName = "schema_name_example";
+        String filesFolder = "/dev/all_clients";
+        String tableName = "/dev/specific_clients";
+
+        TableSpec tableSpec = new TableSpec(new PhysicalTableName(schemaName, tableName));
+
+        DuckdbParametersSpec duckdbParametersSpec = new DuckdbParametersSpec();
+        duckdbParametersSpec.setDirectories(Map.of(schemaName, filesFolder));
+        duckdbParametersSpec.setFilesFormatType(DuckdbFilesFormatType.csv);
+        duckdbParametersSpec.setCsv(new CsvFileFormatSpec());
+        duckdbParametersSpec.getCsv().setHivePartitioning(true);
+
+        FilePathListSpec fileFormatSpec = FileFormatSpecProvider.guessFilePaths(duckdbParametersSpec, tableSpec);
+
+        String expectedTablePath = tableName + File.separator + "**" + File.separator + "*.csv";
+        Assertions.assertNotNull(fileFormatSpec);
+        Assertions.assertEquals(expectedTablePath, fileFormatSpec.get(0));
+    }
+
     @EnabledOnOs(OS.WINDOWS)
     @Test
     void isPathAbsoluteSystemsWide_forWindowsWithFlippedSlash_returnsTrue() {

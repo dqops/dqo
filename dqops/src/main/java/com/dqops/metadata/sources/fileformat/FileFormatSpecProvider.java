@@ -29,7 +29,7 @@ public class FileFormatSpecProvider {
             return null;
         }
 
-        FileFormatSpec fileFormat = tableSpec.getFileFormat() == null ? new FileFormatSpec() : tableSpec.getFileFormat();
+        FileFormatSpec fileFormat = tableSpec.getFileFormat() == null ? new FileFormatSpec() : tableSpec.getFileFormat().deepClone();
         if(fileFormat.getFilePaths().isEmpty()){
             FilePathListSpec filePathListSpec = guessFilePaths(duckdbParametersSpec, tableSpec);
             fileFormat.setFilePaths(filePathListSpec);
@@ -40,7 +40,7 @@ public class FileFormatSpecProvider {
         }
 
         FileFormatSpec fileFormatCloned = fileFormat.deepClone();
-        if (duckdbParametersSpec.isFormatSetForType(filesType)) {
+        if (duckdbParametersSpec.isFormatSetForType()) {
             switch (filesType) {
                 case csv: fileFormatCloned.setCsv(duckdbParametersSpec.getCsv().deepClone()); break;
                 case json: fileFormatCloned.setJson(duckdbParametersSpec.getJson().deepClone()); break;
@@ -76,12 +76,14 @@ public class FileFormatSpecProvider {
                 ? tableName
                 : createAbsoluteFilePathFrom(pathPrefix, tableName, storageType);
 
+        DuckdbFilesFormatType filesType = duckdb.getFilesFormatType();
+        boolean isSetHivePartitioning = duckdb.isSetHivePartitioning() || tableSpec.getFileFormat().isSetHivePartitioning(filesType);
+
         // todo: what if the file extension eg. json will not match the source file types e.g. csv on the parameter spec??
-        String fileExtension = "." + duckdb.getFilesFormatType().toString();
+        String fileExtension = "." + filesType.toString();
         String separator = (storageType == null || storageType.equals(DuckdbStorageType.local)) ? File.separator : "/";
         if(!filePath.toLowerCase().endsWith(fileExtension)){
-            filePath = filePath + separator + "*" + fileExtension;
-
+            filePath = filePath + separator + (isSetHivePartitioning ? "**" + separator : "") + "*" + fileExtension;
         }
         filePathListSpec.add(filePath);
         return filePathListSpec;
