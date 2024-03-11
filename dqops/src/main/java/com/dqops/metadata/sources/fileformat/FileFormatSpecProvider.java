@@ -80,7 +80,8 @@ public class FileFormatSpecProvider {
         String fileExtension = "." + duckdb.getFilesFormatType().toString();
         String separator = (storageType == null || storageType.equals(DuckdbStorageType.local)) ? File.separator : "/";
         if(!filePath.toLowerCase().endsWith(fileExtension)){
-            filePath = filePath + separator + "**" + fileExtension; // todo: ensure wildcards are valid
+            filePath = filePath + separator + "*" + fileExtension;
+
         }
         filePathListSpec.add(filePath);
         return filePathListSpec;
