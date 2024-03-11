@@ -65,7 +65,7 @@ public class CsvFileFormatSpecTest extends BaseTest {
         assertTrue(output.contains("header = true"));
         assertTrue(output.contains("hive_partitioning = true"));
         assertTrue(output.contains("ignore_errors = true"));
-        assertTrue(output.contains("new_line = '\n'"));
+        assertTrue(output.contains("new_line = '\\n'"));
         assertTrue(output.contains("quote = '\"'"));
         assertTrue(output.contains("skip = 1"));
         assertTrue(output.contains("timestampformat = '%A, %-d %B %Y - %I:%M:%S %p'"));

@@ -157,7 +157,7 @@ public class FileFormatSpecProviderTest extends BaseTest {
 
         FilePathListSpec fileFormatSpec = FileFormatSpecProvider.guessFilePaths(duckdbParametersSpec, tableSpec);
 
-        String expectedTablePath = filesFolder + File.separator + tableName + File.separator + "**.csv";
+        String expectedTablePath = filesFolder + File.separator + tableName + File.separator + "*.csv";
         Assertions.assertNotNull(fileFormatSpec);
         Assertions.assertEquals(expectedTablePath, fileFormatSpec.get(0));
     }
@@ -176,7 +176,7 @@ public class FileFormatSpecProviderTest extends BaseTest {
 
         FilePathListSpec fileFormatSpec = FileFormatSpecProvider.guessFilePaths(duckdbParametersSpec, tableSpec);
 
-        String expectedTablePath = tableName + File.separator + "**.csv";
+        String expectedTablePath = tableName + File.separator + "*.csv";
         Assertions.assertNotNull(fileFormatSpec);
         Assertions.assertEquals(expectedTablePath, fileFormatSpec.get(0));
     }

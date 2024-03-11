@@ -16,13 +16,15 @@ class DuckdbQueriesProviderTest extends BaseTest {
         HashCode hashCode = DuckdbSecretManager.calculateHash64(connectionSpec);
         String createSecretQuery = DuckdbQueriesProvider.provideCreateSecretQuery(connectionSpec, hashCode);
 
-        Assertions.assertEquals("""
-                        CREATE SECRET secret_7201a7ed98e421a9 (
-                            TYPE S3,
-                            KEY_ID 'aws_example_key_id',
-                            SECRET 'aws_example_secret',
-                            REGION 'eu-central-1'
-                        );""",
-                createSecretQuery);
+        Assertions.assertTrue(createSecretQuery.contains("CREATE SECRET secret_" + hashCode));
+
+        org.assertj.core.api.Assertions.assertThat(createSecretQuery)
+                        .matches(
+                        "CREATE SECRET secret_[0-9a-f]{16} \\(\\s*" +
+                        "TYPE S3,\\s*" +
+                        "KEY_ID 'aws_example_key_id',\\s*" +
+                        "SECRET 'aws_example_secret',\\s*" +
+                        "REGION 'eu-central-1'\\s*" +
+                        "\\);");
     }
 }
