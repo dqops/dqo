@@ -131,6 +131,21 @@ public class FileFormatSpec extends AbstractSpec {
     }
 
     /**
+     * Whether the hive partitioning option is set on a file format.
+     * @return Whether the hive partitioning option is set on a file format.
+     */
+    public boolean isSetHivePartitioning(DuckdbFilesFormatType duckdbFilesFormatType){
+        if(duckdbFilesFormatType != null){
+            switch(duckdbFilesFormatType){
+                case csv: return this.getCsv().getHivePartitioning();
+                case json: return this.getJson().getHivePartitioning();
+                case parquet: return this.getParquet().getHivePartitioning();
+            }
+        }
+        return false;
+    }
+
+    /**
      * Builds the table options string for use in SQL query that contains file paths to the source data files and options for the files.
      * @return Table options string.
      */
