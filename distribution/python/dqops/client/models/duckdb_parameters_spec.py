@@ -45,8 +45,8 @@ class DuckdbParametersSpec:
             ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
         region (Union[Unset, str]): The region for the storage credentials. The value can be in the
             ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
-        aws_secret_access_key (Union[Unset, str]):
         aws_access_key_id (Union[Unset, str]):
+        aws_secret_access_key (Union[Unset, str]):
     """
 
     read_mode: Union[Unset, DuckdbReadMode] = UNSET
@@ -61,8 +61,8 @@ class DuckdbParametersSpec:
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
     region: Union[Unset, str] = UNSET
-    aws_secret_access_key: Union[Unset, str] = UNSET
     aws_access_key_id: Union[Unset, str] = UNSET
+    aws_secret_access_key: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -102,8 +102,8 @@ class DuckdbParametersSpec:
         user = self.user
         password = self.password
         region = self.region
-        aws_secret_access_key = self.aws_secret_access_key
         aws_access_key_id = self.aws_access_key_id
+        aws_secret_access_key = self.aws_secret_access_key
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -132,10 +132,10 @@ class DuckdbParametersSpec:
             field_dict["password"] = password
         if region is not UNSET:
             field_dict["region"] = region
-        if aws_secret_access_key is not UNSET:
-            field_dict["aws_secret_access_key"] = aws_secret_access_key
         if aws_access_key_id is not UNSET:
             field_dict["aws_access_key_id"] = aws_access_key_id
+        if aws_secret_access_key is not UNSET:
+            field_dict["aws_secret_access_key"] = aws_secret_access_key
 
         return field_dict
 
@@ -216,9 +216,9 @@ class DuckdbParametersSpec:
 
         region = d.pop("region", UNSET)
 
-        aws_secret_access_key = d.pop("aws_secret_access_key", UNSET)
-
         aws_access_key_id = d.pop("aws_access_key_id", UNSET)
+
+        aws_secret_access_key = d.pop("aws_secret_access_key", UNSET)
 
         duckdb_parameters_spec = cls(
             read_mode=read_mode,
@@ -233,8 +233,8 @@ class DuckdbParametersSpec:
             user=user,
             password=password,
             region=region,
-            aws_secret_access_key=aws_secret_access_key,
             aws_access_key_id=aws_access_key_id,
+            aws_secret_access_key=aws_secret_access_key,
         )
 
         duckdb_parameters_spec.additional_properties = d

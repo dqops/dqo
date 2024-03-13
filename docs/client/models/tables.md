@@ -99,7 +99,7 @@ The time period for profiling checks (millisecond, daily, monthly, weekly, hourl
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|one_per_month<br/>one_per_week<br/>one_per_day<br/>one_per_hour<br/>all_results<br/>|
+|string|store_the_most_recent_result_per_month<br/>store_the_most_recent_result_per_week<br/>store_the_most_recent_result_per_day<br/>store_the_most_recent_result_per_hour<br/>store_all_results_without_date_truncation<br/>|
 
 ___
 

@@ -63311,13 +63311,13 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "aws_secret_access_key" : {
+          "aws_access_key_id" : {
             "type" : "string",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "aws_access_key_id" : {
+          "aws_secret_access_key" : {
             "type" : "string",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -63389,10 +63389,10 @@
               "type" : "string",
               "description" : "The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
             },
-            "aws_secret_access_key" : {
+            "aws_access_key_id" : {
               "type" : "string"
             },
-            "aws_access_key_id" : {
+            "aws_secret_access_key" : {
               "type" : "string"
             }
           }
@@ -73453,7 +73453,7 @@
             "profiling_checks_result_truncation" : {
               "type" : "string",
               "description" : "Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.",
-              "enum" : [ "one_per_month", "one_per_week", "one_per_day", "one_per_hour", "all_results" ]
+              "enum" : [ "store_the_most_recent_result_per_month", "store_the_most_recent_result_per_week", "store_the_most_recent_result_per_day", "store_the_most_recent_result_per_hour", "store_all_results_without_date_truncation" ]
             },
             "file_format" : {
               "description" : "File format for a file based table, such as a CSV or Parquet file.",
@@ -74212,7 +74212,7 @@
             "result_truncation" : {
               "type" : "string",
               "description" : "Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.",
-              "enum" : [ "one_per_month", "one_per_week", "one_per_day", "one_per_hour", "all_results" ]
+              "enum" : [ "store_the_most_recent_result_per_month", "store_the_most_recent_result_per_week", "store_the_most_recent_result_per_day", "store_the_most_recent_result_per_hour", "store_all_results_without_date_truncation" ]
             },
             "volume" : {
               "description" : "Configuration of volume data quality checks on a table level.",
@@ -79196,7 +79196,7 @@
       "ProfilingTimePeriodTruncation" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "one_per_month", "one_per_week", "one_per_day", "one_per_hour", "all_results" ]
+        "enum" : [ "store_the_most_recent_result_per_month", "store_the_most_recent_result_per_week", "store_the_most_recent_result_per_day", "store_the_most_recent_result_per_hour", "store_all_results_without_date_truncation" ]
       },
       "DataTypeCategory" : {
         "type" : "string",
