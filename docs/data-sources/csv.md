@@ -52,8 +52,8 @@ After navigating to the CSV connection settings, you will need to fill in its de
 CSV file format properties are detected automatically based on a sample of the file data. 
 The default sample size is 20480 rows.
 
-// todo: describe that user has to click on the pannel to see propeties
-// todo: copy the above description to json and parquet
+Click on the **Additional CSV format options** panel to configure the file format options.
+
 The following properties can be configured for a very specific CSV format.
 
 | Additional CSV format options | Property name in YAML configuration file | Description                                                                                                                                                                                   |
@@ -193,12 +193,15 @@ dqo> table import --connection={connection name}
 
 
 DQOps supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
-any number of characters. For example, use  pub* to find all schema a name with a name starting with "pub". The *
+any number of characters. For example, use pub* to find all schema a name with a name starting with "pub". The *
 character can be used at the beginning, in the middle or at the end of the name.
 
-## Storage settings - directory
+## Storage path setting
 
-// todo: introduction for the section
+To start working with data the directory prefix path has to be configured.
+The path can lead to files located locally or remotely.
+
+This section provides examples of directory configuration.
 
 ### Local file system
 
@@ -259,6 +262,97 @@ The service account must have access to the bucket with permission to list and r
     - Setting environment variables for User (Access Key ID), Password (Secret Access Key) and Region fields. [More info here.](./csv.md#Environment-variables-in-parameters).
 
 
+## File format import configuration
+
+The import configuration is available on two setting levels: the connection and the table.
+
+Both setting levels provide slightly different opportunities of configuration of available sections. File format configuration contains three sections:
+- File format
+- Virtual schema name to path mappings
+- Additional format options
+
+### File format
+
+Type of the file format selection is only configured in the connection settings when the new connection is being created.
+
+Changing the type of file format requires creation of the new connection.
+
+!!! warning "Changing the file format"
+    You should never try to change the files format type after the connection creation which will lead to connection resources corruption.
+
+### Virtual schema name to path mappings
+
+A connection can store multiple schemas.
+
+A virtual schema name is a name alias for the parent directory with data. 
+The configuration of the virtual schema in only available on the connection settings level.
+
+A path is an absolute path to that directory. The path configuration with examples [is available here](#Storage-path-setting).
+The level of the path configuration works differently. 
+The configuration on the connection level sets the parent directory in which directories or files are read.
+The configuration on the table level provides a pattern to the files.
+
+Hive partitioning patten
+
+
+### Additional format options
+
+The configuration of the additional file format options is available on two levels: connection settings and table settings.
+
+The additional format settings in connection settings is treated as a default settings common to the tables in the connection.
+The additional format settings in table settings overrides the settings from the connection when are configured in the table settings.
+
+
+Selection of the file format
+
+// todo
+
+
+
+
+### Working with partitioned files
+
+To work efficiently with partitions, you need to set the `hive-partition` parameter in CSV format settings.
+The option is available under the **Additional CSV format options** panel.
+
+Hive partitioning splits the table into multiple files under the catalog structure.
+Each of the catalog level corresponds to a column.
+The catalogs are named in the column_name=value convention.
+
+Let's consider the partitions in the folder structure:
+
+``` { .asc .annotate }
+/usr/share
+    └───client_foo
+        ├───country=US
+        │   ├───date=20240301
+        │   │   ├───3789bad902d98ab1037b7c0111ae61d.csv
+        │   │   ├───6f022116c4bc45db854caa879f0e00a.csv
+        │   │   └───a59b107e46f329217c3b4ea64ff48e7.csv
+        │   ├───date=20240302
+        │   ├───date=20240303
+        │   └───...
+        ├───country=UK
+        ├───country=JP
+        ├───country=DE
+        └───...
+```
+
+The prefix path in the connection settings should point to the directory with the dataset (e.g. /usr/share).
+
+Then the table import is necessary.
+
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/hive-partitioning-import-table.png)
+
+1. Under the Data Sources page you will see the new connection (in the example named **business_data**).
+   Expand it and click on the virtual schema name. You will see all tables that have been imported. If none was not, the page will be empty.
+2. Select the Import tables tab to see the list of the available tables under the prefix given in the connection settings.
+3. Check the name of the folder with the partitioned data.
+4. By clicking the **Import selected tables button** the table will be imported. You can reach the table by expanding the connection and the schema on the left pannel.
+
+!!! warning "Partitions discovery"
+The partitions of the data set are discovered automatically including types of columns.
+
 ## Connections configuration files
 
 Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
@@ -307,49 +401,6 @@ Fill in the "File path or file name pattern" field with the absolute path to the
 
 !!! tip "Creating a new table manually in the user home"
     You can also add a new table manually in the sources folder of your user home by creating a new YAML file in the connection folder.
-
-### Working with partitioned files
-
-To work efficiently with partitions, you need to set the `hive-partition` parameter in CSV format settings.
-The option is available under the **Additional CSV format options** panel.
-
-Hive partitioning splits the table into multiple files under the catalog structure.
-Each of the catalog level corresponds to a column.
-The catalogs are named in the column_name=value convention.
-
-Let's consider the partitions in the folder structure:
-
-``` { .asc .annotate }
-/usr/share
-    └───client_foo
-        ├───country=US
-        │   ├───date=20240301
-        │   │   ├───3789bad902d98ab1037b7c0111ae61d.csv
-        │   │   ├───6f022116c4bc45db854caa879f0e00a.csv
-        │   │   └───a59b107e46f329217c3b4ea64ff48e7.csv
-        │   ├───date=20240302
-        │   ├───date=20240303
-        │   └───...
-        ├───country=UK
-        ├───country=JP
-        ├───country=DE
-        └───...
-```
-
-The prefix path in the connection settings should point to the directory with the dataset (e.g. /usr/share).
-
-Then the table import is necessary. 
-
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/hive-partitioning-import-table.png)
-
-1. Under the Data Sources page you will see the new connection (in the example named **business_data**).
-   Expand it and click on the virtual schema name. You will see all tables that have been imported. If none was not, the page will be empty.
-2. Select the Import tables tab to see the list of the available tables under the prefix given in the connection settings.
-3. Check the name of the folder with the partitioned data.
-4. By clicking the **Import selected tables button** the table will be imported. You can reach the table by expanding the connection and the schema on the left pannel. 
-
-!!! warning "Partitions discovery"
-The partitions of the data set are discovered automatically including types of columns.
 
 
 ## Next steps

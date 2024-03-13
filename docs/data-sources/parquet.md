@@ -31,7 +31,7 @@ To navigate to the Parquet connection settings:
 
 ### **Fill in the connection settings**
 
-screAfter navigating to the Parquet connection settings, you will need to fill in its details.
+After navigating to the Parquet connection settings, you will need to fill in its details.
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-parquet.png)
 
@@ -48,6 +48,8 @@ screAfter navigating to the Parquet connection settings, you will need to fill i
 | Virtual schema name / Path  | `directories`                            | Mapping the virtual schema name to the directory. The path must be absolute.                                                                                                                                                           |
 
 **Additional Parquet format options**
+
+Click on the **Additional Parquet format options** panel to configure the file format options.
 
 The Parquet's format properties can be configured with the following settings.
 
@@ -180,9 +182,16 @@ any number of characters. For example, use  pub* to find all schema a name with 
 character can be used at the beginning, in the middle or at the end of the name.
 
 // todo: 
-## Storage settings - directory
+## Storage path settings
 ### Local file system
 ### Remote cloud storage - AWS S3
+
+## Configuration
+
+// todo:
+### Working with multiple tables in a single schema
+### Working with partitioned files
+
 
 ## Connections configuration files
 

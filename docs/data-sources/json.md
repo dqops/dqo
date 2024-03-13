@@ -53,6 +53,8 @@ After navigating to the JSON connection settings, you will need to fill in its d
 JSON file format properties are detected automatically based on a sample of the file data. 
 The default sample size is 20480 rows.
 
+Click on the **Additional JSON format options** panel to configure the file format options.
+
 The following properties can be configured for a very specific JSON format.
 
 | Additional JSON format options | Property name in YAML configuration file | Description                                                                                                                                                                                     |
@@ -192,9 +194,15 @@ any number of characters. For example, use  pub* to find all schema a name with 
 character can be used at the beginning, in the middle or at the end of the name.
 
 // todo:
-## Storage settings - directory
+## Storage path settings
 ### Local file system
 ### Remote cloud storage - AWS S3
+
+## Configuration
+
+// todo:
+### Working with multiple tables in a single schema
+### Working with partitioned files
 
 ## Connections configuration files
 
@@ -221,9 +229,6 @@ Complete documentation of all connection parameters used in the `spec.duckdb` no
 described in the reference section of the [DuckdbParametersSpec](../reference/yaml/ConnectionYaml.md#duckdbparametersspec)
 YAML file format.
 
-// todo:
-### Working with multiple tables in a single schema
-### Working with partitioned files
 
 ## Next steps
 
