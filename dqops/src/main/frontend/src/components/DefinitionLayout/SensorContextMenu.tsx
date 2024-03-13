@@ -5,17 +5,16 @@ import {
   PopoverContent,
   PopoverHandler
 } from '@material-tailwind/react';
-import SvgIcon from '../SvgIcon';
+import { useSelector } from 'react-redux';
 import { SensorFolderModel, SensorListModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab, refreshSensorsFolderTree } from '../../redux/actions/definition.actions';
-import { ROUTES } from '../../shared/routes';
-import AddFolderDialog from './AddFolderDialog';
-import ConfirmDialog from '../CustomTree/ConfirmDialog';
-import { SensorsApi } from '../../services/apiClient';
-import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { urlencodeDecoder } from '../../utils';
+import { SensorsApi } from '../../services/apiClient';
+import { ROUTES } from '../../shared/routes';
+import ConfirmDialog from '../CustomTree/ConfirmDialog';
+import SvgIcon from '../SvgIcon';
+import AddFolderDialog from './AddFolderDialog';
 
 interface SensorContextMenuProps {
   folder?: SensorFolderModel;
@@ -89,8 +88,7 @@ const SensorContextMenu = ({
   };
 
   const deleteSensorFromTree = async () => {
-    console.log(urlencodeDecoder(sensor?.full_sensor_name ?? ''))
-    await SensorsApi.deleteSensor(urlencodeDecoder(sensor?.full_sensor_name ?? '') ?? '').then(
+    await SensorsApi.deleteSensor(sensor?.full_sensor_name ?? '').then(
       () => dispatch(refreshSensorsFolderTree(refreshSensorsTreeIndicator ? false : true))
     );
   };
