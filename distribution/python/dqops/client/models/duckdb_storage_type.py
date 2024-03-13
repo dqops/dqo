@@ -1,10 +1,8 @@
 from enum import Enum
 
 
-class DuckdbSecretsType(str, Enum):
-    AZURE = "azure"
-    GCS = "gcs"
-    R2 = "r2"
+class DuckdbStorageType(str, Enum):
+    LOCAL = "local"
     S3 = "s3"
 
     def __str__(self) -> str:

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..models.profiling_time_period import ProfilingTimePeriod
+from ..models.profiling_time_period_truncation import ProfilingTimePeriodTruncation
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -39,7 +39,7 @@ class TableListModel:
             more and less important tables during a data quality improvement project, when the data quality issues on higher
             priority tables are fixed before data quality issues on less important tables.
         owner (Union[Unset, TableOwnerSpec]):
-        profiling_checks_result_truncation (Union[Unset, ProfilingTimePeriod]):
+        profiling_checks_result_truncation (Union[Unset, ProfilingTimePeriodTruncation]):
         file_format (Union[Unset, FileFormatSpec]):
         has_any_configured_checks (Union[Unset, bool]): True when the table has any checks configured.
         has_any_configured_profiling_checks (Union[Unset, bool]): True when the table has any profiling checks
@@ -78,7 +78,9 @@ class TableListModel:
     filter_: Union[Unset, str] = UNSET
     priority: Union[Unset, int] = UNSET
     owner: Union[Unset, "TableOwnerSpec"] = UNSET
-    profiling_checks_result_truncation: Union[Unset, ProfilingTimePeriod] = UNSET
+    profiling_checks_result_truncation: Union[
+        Unset, ProfilingTimePeriodTruncation
+    ] = UNSET
     file_format: Union[Unset, "FileFormatSpec"] = UNSET
     has_any_configured_checks: Union[Unset, bool] = UNSET
     has_any_configured_profiling_checks: Union[Unset, bool] = UNSET
@@ -287,11 +289,11 @@ class TableListModel:
         _profiling_checks_result_truncation = d.pop(
             "profiling_checks_result_truncation", UNSET
         )
-        profiling_checks_result_truncation: Union[Unset, ProfilingTimePeriod]
+        profiling_checks_result_truncation: Union[Unset, ProfilingTimePeriodTruncation]
         if isinstance(_profiling_checks_result_truncation, Unset):
             profiling_checks_result_truncation = UNSET
         else:
-            profiling_checks_result_truncation = ProfilingTimePeriod(
+            profiling_checks_result_truncation = ProfilingTimePeriodTruncation(
                 _profiling_checks_result_truncation
             )
 

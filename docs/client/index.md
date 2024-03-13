@@ -419,8 +419,8 @@ ImportTablesQueueJobResult(
 						)
 					)
 				),
-				monitoring_checks=TableMonitoringChecksSpec(),
-				partitioned_checks=TablePartitionedChecksRootSpec(),
+				monitoring_checks=TableMonitoringCheckCategoriesSpec(),
+				partitioned_checks=TablePartitionedCheckCategoriesSpec(),
 				columns=ColumnSpecMap()
 			)
 		]
@@ -619,6 +619,8 @@ Are you looking to address a specific issue? Head down here for full reference d
 |[Dashboards](./operations/dashboards.md)|Operations for retrieving the list of data quality dashboards supported by DQOps and issuing short-term access keys to open a dashboard.|
 |[DataGroupingConfigurations](./operations/data_grouping_configurations.md)|Operations for managing the configuration of data groupings on a table level in DQOps.|
 |[DataSources](./operations/data_sources.md)|Rest API controller that operates on data sources that are not yet imported, testing connections or retrieving the metadata (schemas and tables).|
+|[DefaultColumnCheckPatterns](./operations/default_column_check_patterns.md)|Operations for managing the configuration of the default column-level checks for columns matching a pattern.|
+|[DefaultTableCheckPatterns](./operations/default_table_check_patterns.md)|Operations for managing the configuration of the default table-level checks for tables matching a pattern.|
 |[Defaults](./operations/defaults.md)|Default settings management for configuring the default data quality checks that are configured for all imported tables and columns.|
 |[Dictionaries](./operations/dictionaries.md)|Operations for managing data dictionary CSV files in DQOps. Data dictionaries can be used in *accepted_values* data quality checks.|
 |[Environment](./operations/environment.md)|DQOps environment and configuration controller, provides access to the DQOps configuration, current user&#x27;s information and issue local API Keys for the calling user.|

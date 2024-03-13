@@ -47,18 +47,18 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "alreadyImported" : false
-	}, {
-	  "alreadyImported" : false
-	}, {
-	  "alreadyImported" : false
-	} ]
-    ```
+        ```js
+        [ {
+		  "alreadyImported" : false
+		}, {
+		  "alreadyImported" : false
+		}, {
+		  "alreadyImported" : false
+		} ]
+        ```
     
     
 
@@ -83,15 +83,15 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		SchemaRemoteModel(already_imported=False),
-		SchemaRemoteModel(already_imported=False),
-		SchemaRemoteModel(already_imported=False)
-	]
-    ```
+        ```python
+        [
+			SchemaRemoteModel(already_imported=False),
+			SchemaRemoteModel(already_imported=False),
+			SchemaRemoteModel(already_imported=False)
+		]
+        ```
     
     
     
@@ -117,15 +117,15 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		SchemaRemoteModel(already_imported=False),
-		SchemaRemoteModel(already_imported=False),
-		SchemaRemoteModel(already_imported=False)
-	]
-    ```
+        ```python
+        [
+			SchemaRemoteModel(already_imported=False),
+			SchemaRemoteModel(already_imported=False),
+			SchemaRemoteModel(already_imported=False)
+		]
+        ```
     
     
     
@@ -154,15 +154,15 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		SchemaRemoteModel(already_imported=False),
-		SchemaRemoteModel(already_imported=False),
-		SchemaRemoteModel(already_imported=False)
-	]
-    ```
+        ```python
+        [
+			SchemaRemoteModel(already_imported=False),
+			SchemaRemoteModel(already_imported=False),
+			SchemaRemoteModel(already_imported=False)
+		]
+        ```
     
     
     
@@ -191,15 +191,15 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		SchemaRemoteModel(already_imported=False),
-		SchemaRemoteModel(already_imported=False),
-		SchemaRemoteModel(already_imported=False)
-	]
-    ```
+        ```python
+        [
+			SchemaRemoteModel(already_imported=False),
+			SchemaRemoteModel(already_imported=False),
+			SchemaRemoteModel(already_imported=False)
+		]
+        ```
     
     
     
@@ -252,18 +252,18 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "alreadyImported" : false
-	}, {
-	  "alreadyImported" : false
-	}, {
-	  "alreadyImported" : false
-	} ]
-    ```
+        ```js
+        [ {
+		  "alreadyImported" : false
+		}, {
+		  "alreadyImported" : false
+		}, {
+		  "alreadyImported" : false
+		} ]
+        ```
     
     
 
@@ -289,15 +289,15 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		RemoteTableListModel(already_imported=False),
-		RemoteTableListModel(already_imported=False),
-		RemoteTableListModel(already_imported=False)
-	]
-    ```
+        ```python
+        [
+			RemoteTableListModel(already_imported=False),
+			RemoteTableListModel(already_imported=False),
+			RemoteTableListModel(already_imported=False)
+		]
+        ```
     
     
     
@@ -324,15 +324,15 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		RemoteTableListModel(already_imported=False),
-		RemoteTableListModel(already_imported=False),
-		RemoteTableListModel(already_imported=False)
-	]
-    ```
+        ```python
+        [
+			RemoteTableListModel(already_imported=False),
+			RemoteTableListModel(already_imported=False),
+			RemoteTableListModel(already_imported=False)
+		]
+        ```
     
     
     
@@ -362,15 +362,15 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		RemoteTableListModel(already_imported=False),
-		RemoteTableListModel(already_imported=False),
-		RemoteTableListModel(already_imported=False)
-	]
-    ```
+        ```python
+        [
+			RemoteTableListModel(already_imported=False),
+			RemoteTableListModel(already_imported=False),
+			RemoteTableListModel(already_imported=False)
+		]
+        ```
     
     
     
@@ -400,15 +400,15 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		RemoteTableListModel(already_imported=False),
-		RemoteTableListModel(already_imported=False),
-		RemoteTableListModel(already_imported=False)
-	]
-    ```
+        ```python
+        [
+			RemoteTableListModel(already_imported=False),
+			RemoteTableListModel(already_imported=False),
+			RemoteTableListModel(already_imported=False)
+		]
+        ```
     
     
     
@@ -470,12 +470,12 @@ http://localhost:8888/api/datasource/testconnection
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    { }
-    ```
+        ```js
+        { }
+        ```
     
     
 
@@ -556,11 +556,11 @@ http://localhost:8888/api/datasource/testconnection
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ConnectionTestModel()
-    ```
+        ```python
+        ConnectionTestModel()
+        ```
     
     
     
@@ -642,11 +642,11 @@ http://localhost:8888/api/datasource/testconnection
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ConnectionTestModel()
-    ```
+        ```python
+        ConnectionTestModel()
+        ```
     
     
     
@@ -731,11 +731,11 @@ http://localhost:8888/api/datasource/testconnection
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ConnectionTestModel()
-    ```
+        ```python
+        ConnectionTestModel()
+        ```
     
     
     
@@ -820,11 +820,11 @@ http://localhost:8888/api/datasource/testconnection
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ConnectionTestModel()
-    ```
+        ```python
+        ConnectionTestModel()
+        ```
     
     
     

@@ -472,21 +472,21 @@ http://localhost:8888/api/credentials
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "can_edit" : false,
-	  "can_access_credential" : false
-	}, {
-	  "can_edit" : false,
-	  "can_access_credential" : false
-	}, {
-	  "can_edit" : false,
-	  "can_access_credential" : false
-	} ]
-    ```
+        ```js
+        [ {
+		  "can_edit" : false,
+		  "can_access_credential" : false
+		}, {
+		  "can_edit" : false,
+		  "can_access_credential" : false
+		}, {
+		  "can_edit" : false,
+		  "can_access_credential" : false
+		} ]
+        ```
     
     
 
@@ -510,24 +510,24 @@ http://localhost:8888/api/credentials
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		SharedCredentialListModel(
-			can_edit=False,
-			can_access_credential=False
-		),
-		SharedCredentialListModel(
-			can_edit=False,
-			can_access_credential=False
-		),
-		SharedCredentialListModel(
-			can_edit=False,
-			can_access_credential=False
-		)
-	]
-    ```
+        ```python
+        [
+			SharedCredentialListModel(
+				can_edit=False,
+				can_access_credential=False
+			),
+			SharedCredentialListModel(
+				can_edit=False,
+				can_access_credential=False
+			),
+			SharedCredentialListModel(
+				can_edit=False,
+				can_access_credential=False
+			)
+		]
+        ```
     
     
     
@@ -552,24 +552,24 @@ http://localhost:8888/api/credentials
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		SharedCredentialListModel(
-			can_edit=False,
-			can_access_credential=False
-		),
-		SharedCredentialListModel(
-			can_edit=False,
-			can_access_credential=False
-		),
-		SharedCredentialListModel(
-			can_edit=False,
-			can_access_credential=False
-		)
-	]
-    ```
+        ```python
+        [
+			SharedCredentialListModel(
+				can_edit=False,
+				can_access_credential=False
+			),
+			SharedCredentialListModel(
+				can_edit=False,
+				can_access_credential=False
+			),
+			SharedCredentialListModel(
+				can_edit=False,
+				can_access_credential=False
+			)
+		]
+        ```
     
     
     
@@ -597,24 +597,24 @@ http://localhost:8888/api/credentials
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		SharedCredentialListModel(
-			can_edit=False,
-			can_access_credential=False
-		),
-		SharedCredentialListModel(
-			can_edit=False,
-			can_access_credential=False
-		),
-		SharedCredentialListModel(
-			can_edit=False,
-			can_access_credential=False
-		)
-	]
-    ```
+        ```python
+        [
+			SharedCredentialListModel(
+				can_edit=False,
+				can_access_credential=False
+			),
+			SharedCredentialListModel(
+				can_edit=False,
+				can_access_credential=False
+			),
+			SharedCredentialListModel(
+				can_edit=False,
+				can_access_credential=False
+			)
+		]
+        ```
     
     
     
@@ -642,24 +642,24 @@ http://localhost:8888/api/credentials
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		SharedCredentialListModel(
-			can_edit=False,
-			can_access_credential=False
-		),
-		SharedCredentialListModel(
-			can_edit=False,
-			can_access_credential=False
-		),
-		SharedCredentialListModel(
-			can_edit=False,
-			can_access_credential=False
-		)
-	]
-    ```
+        ```python
+        [
+			SharedCredentialListModel(
+				can_edit=False,
+				can_access_credential=False
+			),
+			SharedCredentialListModel(
+				can_edit=False,
+				can_access_credential=False
+			),
+			SharedCredentialListModel(
+				can_edit=False,
+				can_access_credential=False
+			)
+		]
+        ```
     
     
     
@@ -711,16 +711,16 @@ http://localhost:8888/api/credentials/{credentialName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "credential_name" : "sample_credential",
-	  "type" : "text",
-	  "text_value" : "sample_credential_text_value"
-	}
-    ```
+        ```js
+        {
+		  "credential_name" : "sample_credential",
+		  "type" : "text",
+		  "text_value" : "sample_credential_text_value"
+		}
+        ```
     
     
 
@@ -745,15 +745,15 @@ http://localhost:8888/api/credentials/{credentialName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SharedCredentialModel(
-		credential_name='sample_credential',
-		type=CredentialType.TEXT,
-		text_value='sample_credential_text_value'
-	)
-    ```
+        ```python
+        SharedCredentialModel(
+			credential_name='sample_credential',
+			type=CredentialType.TEXT,
+			text_value='sample_credential_text_value'
+		)
+        ```
     
     
     
@@ -779,15 +779,15 @@ http://localhost:8888/api/credentials/{credentialName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SharedCredentialModel(
-		credential_name='sample_credential',
-		type=CredentialType.TEXT,
-		text_value='sample_credential_text_value'
-	)
-    ```
+        ```python
+        SharedCredentialModel(
+			credential_name='sample_credential',
+			type=CredentialType.TEXT,
+			text_value='sample_credential_text_value'
+		)
+        ```
     
     
     
@@ -816,15 +816,15 @@ http://localhost:8888/api/credentials/{credentialName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SharedCredentialModel(
-		credential_name='sample_credential',
-		type=CredentialType.TEXT,
-		text_value='sample_credential_text_value'
-	)
-    ```
+        ```python
+        SharedCredentialModel(
+			credential_name='sample_credential',
+			type=CredentialType.TEXT,
+			text_value='sample_credential_text_value'
+		)
+        ```
     
     
     
@@ -853,15 +853,15 @@ http://localhost:8888/api/credentials/{credentialName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SharedCredentialModel(
-		credential_name='sample_credential',
-		type=CredentialType.TEXT,
-		text_value='sample_credential_text_value'
-	)
-    ```
+        ```python
+        SharedCredentialModel(
+			credential_name='sample_credential',
+			type=CredentialType.TEXT,
+			text_value='sample_credential_text_value'
+		)
+        ```
     
     
     

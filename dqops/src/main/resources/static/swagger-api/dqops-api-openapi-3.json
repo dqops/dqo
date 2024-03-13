@@ -17259,372 +17259,6 @@
       },
       "extensions" : { }
     },
-    "api/defaults/defaultchecks/dataobservability/monitoring/daily/column" : {
-      "get" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "getDefaultDataObservabilityDailyMonitoringColumnChecks",
-        "description" : "Returns UI model to show and edit the default configuration of the daily monitoring (Data Observability and monitoring) checks that are configured for all imported columns on a column level.",
-        "operationId" : "getDefaultDataObservabilityDailyMonitoringColumnChecks",
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CheckContainerModel",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            },
-            "extensions" : { }
-          }
-        },
-        "security" : [ {
-          "authorization_bearer_api_key" : [ ]
-        } ],
-        "extensions" : { }
-      },
-      "put" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "updateDefaultDataObservabilityDailyMonitoringColumnChecks",
-        "description" : "New configuration of the default daily monitoring (data observability) checks on a column level. These checks will be applied on new columns.",
-        "operationId" : "updateDefaultDataObservabilityDailyMonitoringColumnChecks",
-        "requestBody" : {
-          "description" : "Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration",
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/CheckContainerModel",
-                "exampleSetFlag" : false
-              },
-              "exampleSetFlag" : false
-            }
-          },
-          "required" : false,
-          "extensions" : { }
-        },
-        "responses" : {
-          "204" : {
-            "description" : "The default configuration of daily monitoring (daily data observability) checks successfully updated.",
-            "content" : { },
-            "extensions" : { }
-          }
-        },
-        "security" : [ {
-          "authorization_bearer_api_key" : [ ]
-        } ],
-        "extensions" : {
-          "x-codegen-request-body-name" : "body"
-        }
-      },
-      "extensions" : { }
-    },
-    "api/defaults/defaultchecks/dataobservability/monitoring/daily/table" : {
-      "get" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "getDefaultDataObservabilityDailyMonitoringTableChecks",
-        "description" : "Returns UI model to show and edit the default configuration of the daily monitoring (Data Observability and monitoring) checks that are configured for all imported tables on a table level.",
-        "operationId" : "getDefaultDataObservabilityDailyMonitoringTableChecks",
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CheckContainerModel",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            },
-            "extensions" : { }
-          }
-        },
-        "security" : [ {
-          "authorization_bearer_api_key" : [ ]
-        } ],
-        "extensions" : { }
-      },
-      "put" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "updateDefaultDataObservabilityDailyMonitoringTableChecks",
-        "description" : "New configuration of the default daily monitoring (data observability) checks on a table level. These checks will be applied on new tables.",
-        "operationId" : "updateDefaultDataObservabilityDailyMonitoringTableChecks",
-        "requestBody" : {
-          "description" : "Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration",
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/CheckContainerModel",
-                "exampleSetFlag" : false
-              },
-              "exampleSetFlag" : false
-            }
-          },
-          "required" : false,
-          "extensions" : { }
-        },
-        "responses" : {
-          "204" : {
-            "description" : "The default configuration of daily monitoring (daily data observability) checks successfully updated.",
-            "content" : { },
-            "extensions" : { }
-          }
-        },
-        "security" : [ {
-          "authorization_bearer_api_key" : [ ]
-        } ],
-        "extensions" : {
-          "x-codegen-request-body-name" : "body"
-        }
-      },
-      "extensions" : { }
-    },
-    "api/defaults/defaultchecks/dataobservability/monitoring/monthly/column" : {
-      "get" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "getDefaultDataObservabilityMonthlyMonitoringColumnChecks",
-        "description" : "Returns UI model to show and edit the default configuration of the monthly monitoring (Data Observability end of month scores) checks that are configured for all imported columns on a column level.",
-        "operationId" : "getDefaultDataObservabilityMonthlyMonitoringColumnChecks",
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CheckContainerModel",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            },
-            "extensions" : { }
-          }
-        },
-        "security" : [ {
-          "authorization_bearer_api_key" : [ ]
-        } ],
-        "extensions" : { }
-      },
-      "put" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "updateDefaultDataObservabilityMonthlyMonitoringColumnChecks",
-        "description" : "New configuration of the default monthly monitoring checkpoints on a column level. These checks will be applied on new columns.",
-        "operationId" : "updateDefaultDataObservabilityMonthlyMonitoringColumnChecks",
-        "requestBody" : {
-          "description" : "Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration",
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/CheckContainerModel",
-                "exampleSetFlag" : false
-              },
-              "exampleSetFlag" : false
-            }
-          },
-          "required" : false,
-          "extensions" : { }
-        },
-        "responses" : {
-          "204" : {
-            "description" : "The default configuration of daily monitoring (daily data observability) checks successfully updated.",
-            "content" : { },
-            "extensions" : { }
-          }
-        },
-        "security" : [ {
-          "authorization_bearer_api_key" : [ ]
-        } ],
-        "extensions" : {
-          "x-codegen-request-body-name" : "body"
-        }
-      },
-      "extensions" : { }
-    },
-    "api/defaults/defaultchecks/dataobservability/monitoring/monthly/table" : {
-      "get" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "getDefaultDataObservabilityMonthlyMonitoringTableChecks",
-        "description" : "Returns UI model to show and edit the default configuration of the monthly monitoring (Data Observability end of month scores) checks that are configured for all imported tables on a table level.",
-        "operationId" : "getDefaultDataObservabilityMonthlyMonitoringTableChecks",
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CheckContainerModel",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            },
-            "extensions" : { }
-          }
-        },
-        "security" : [ {
-          "authorization_bearer_api_key" : [ ]
-        } ],
-        "extensions" : { }
-      },
-      "put" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "updateDefaultDataObservabilityMonthlyMonitoringTableChecks",
-        "description" : "New configuration of the default monthly monitoring checkpoints on a table level. These checks will be applied on new tables.",
-        "operationId" : "updateDefaultDataObservabilityMonthlyMonitoringTableChecks",
-        "requestBody" : {
-          "description" : "Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration",
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/CheckContainerModel",
-                "exampleSetFlag" : false
-              },
-              "exampleSetFlag" : false
-            }
-          },
-          "required" : false,
-          "extensions" : { }
-        },
-        "responses" : {
-          "204" : {
-            "description" : "The default configuration of daily monitoring (daily data observability) checks successfully updated.",
-            "content" : { },
-            "extensions" : { }
-          }
-        },
-        "security" : [ {
-          "authorization_bearer_api_key" : [ ]
-        } ],
-        "extensions" : {
-          "x-codegen-request-body-name" : "body"
-        }
-      },
-      "extensions" : { }
-    },
-    "api/defaults/defaultchecks/profiling/column" : {
-      "get" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "getDefaultProfilingColumnChecks",
-        "description" : "Returns UI model to show and edit the default configuration of the profiling checks that are configured for all imported column on a column level.",
-        "operationId" : "getDefaultProfilingColumnChecks",
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CheckContainerModel",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            },
-            "extensions" : { }
-          }
-        },
-        "security" : [ {
-          "authorization_bearer_api_key" : [ ]
-        } ],
-        "extensions" : { }
-      },
-      "put" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "updateDefaultProfilingColumnChecks",
-        "description" : "New configuration of the default profiling checks on a column level. These checks will be applied to new columns.",
-        "operationId" : "updateDefaultProfilingColumnChecks",
-        "requestBody" : {
-          "description" : "Model with the changes to be applied to the data quality profiling checks configuration",
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/CheckContainerModel",
-                "exampleSetFlag" : false
-              },
-              "exampleSetFlag" : false
-            }
-          },
-          "required" : false,
-          "extensions" : { }
-        },
-        "responses" : {
-          "204" : {
-            "description" : "The default configuration of profiling checks successfully updated.",
-            "content" : { },
-            "extensions" : { }
-          }
-        },
-        "security" : [ {
-          "authorization_bearer_api_key" : [ ]
-        } ],
-        "extensions" : {
-          "x-codegen-request-body-name" : "body"
-        }
-      },
-      "extensions" : { }
-    },
-    "api/defaults/defaultchecks/profiling/table" : {
-      "get" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "getDefaultProfilingTableChecks",
-        "description" : "Returns UI model to show and edit the default configuration of the profiling checks that are configured for all imported tables on a table level.",
-        "operationId" : "getDefaultProfilingTableChecks",
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CheckContainerModel",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            },
-            "extensions" : { }
-          }
-        },
-        "security" : [ {
-          "authorization_bearer_api_key" : [ ]
-        } ],
-        "extensions" : { }
-      },
-      "put" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "updateDefaultProfilingTableChecks",
-        "description" : "New configuration of the default profiling checks on a table level. These checks will be applied to new tables.",
-        "operationId" : "updateDefaultProfilingTableChecks",
-        "requestBody" : {
-          "description" : "Model with the changes to be applied to the data quality profiling checks configuration",
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/CheckContainerModel",
-                "exampleSetFlag" : false
-              },
-              "exampleSetFlag" : false
-            }
-          },
-          "required" : false,
-          "extensions" : { }
-        },
-        "responses" : {
-          "204" : {
-            "description" : "The default configuration of profiling checks successfully updated.",
-            "content" : { },
-            "extensions" : { }
-          }
-        },
-        "security" : [ {
-          "authorization_bearer_api_key" : [ ]
-        } ],
-        "extensions" : {
-          "x-codegen-request-body-name" : "body"
-        }
-      },
-      "extensions" : { }
-    },
     "api/defaults/defaultschedule/{schedulingGroup}" : {
       "get" : {
         "tags" : [ "Defaults" ],
@@ -60997,11 +60631,8 @@
             "types" : [ "boolean" ]
           },
           "new_line" : {
-            "type" : "string",
-            "description" : "Set the new line character(s) in the file. Options are '\\r','\\n', or '\\r\\n'.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
+            "$ref" : "#/components/schemas/NewLineCharacterType",
+            "exampleSetFlag" : false
           },
           "quote" : {
             "type" : "string",
@@ -61090,7 +60721,8 @@
             },
             "new_line" : {
               "type" : "string",
-              "description" : "Set the new line character(s) in the file. Options are '\\r','\\n', or '\\r\\n'."
+              "description" : "Set the new line character(s) in the file. Options are '\\r','\\n', or '\\r\\n'.",
+              "enum" : [ "cr", "lf", "crlf" ]
             },
             "quote" : {
               "type" : "string",
@@ -62048,13 +61680,6 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "options" : {
-            "type" : "string",
-            "description" : "Databricks connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DATABRICKS_OPTIONS} configuration with a custom environment variable.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
           "properties" : {
             "type" : "object",
             "additionalProperties" : {
@@ -62111,10 +61736,6 @@
             "access_token" : {
               "type" : "string",
               "description" : "Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable."
-            },
-            "options" : {
-              "type" : "string",
-              "description" : "Databricks connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DATABRICKS_OPTIONS} configuration with a custom environment variable."
             },
             "properties" : {
               "type" : "object",
@@ -63605,20 +63226,13 @@
             "$ref" : "#/components/schemas/DuckdbReadMode",
             "exampleSetFlag" : false
           },
-          "source_files_type" : {
-            "$ref" : "#/components/schemas/DuckdbSourceFilesType",
+          "files_format_type" : {
+            "$ref" : "#/components/schemas/DuckdbFilesFormatType",
             "exampleSetFlag" : false
           },
           "database" : {
             "type" : "string",
-            "description" : "DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
-          "options" : {
-            "type" : "string",
-            "description" : "DuckDB connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DUCKDB_OPTIONS} configuration with a custom environment variable.",
+            "description" : "DuckDB database name for in-memory read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -63663,29 +63277,29 @@
               "exampleSetFlag" : false,
               "types" : [ "string" ]
             },
-            "description" : "Schema to directory mappings.",
+            "description" : "Virtual schema name to directory mappings. The path must be an absolute path.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "object" ],
             "jsonSchema" : {
               "type" : "object",
-              "description" : "Schema to directory mappings."
+              "description" : "Virtual schema name to directory mappings. The path must be an absolute path."
             }
           },
-          "secrets_type" : {
-            "$ref" : "#/components/schemas/DuckdbSecretsType",
+          "storage_type" : {
+            "$ref" : "#/components/schemas/DuckdbStorageType",
             "exampleSetFlag" : false
           },
           "user" : {
             "type" : "string",
-            "description" : "DuckDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+            "description" : "DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "password" : {
             "type" : "string",
-            "description" : "DuckDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+            "description" : "DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -63697,13 +63311,13 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "aws_access_key_id" : {
+          "aws_secret_access_key" : {
             "type" : "string",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "aws_secret_access_key" : {
+          "aws_access_key_id" : {
             "type" : "string",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -63717,21 +63331,17 @@
           "properties" : {
             "read_mode" : {
               "type" : "string",
-              "description" : "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+              "description" : "DuckDB read mode.",
               "enum" : [ "in_memory", "files" ]
             },
-            "source_files_type" : {
+            "files_format_type" : {
               "type" : "string",
-              "description" : "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+              "description" : "Type of source files format for DuckDB.",
               "enum" : [ "csv", "json", "parquet" ]
             },
             "database" : {
               "type" : "string",
-              "description" : "DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-            },
-            "options" : {
-              "type" : "string",
-              "description" : "DuckDB connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DUCKDB_OPTIONS} configuration with a custom environment variable."
+              "description" : "DuckDB database name for in-memory read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
             },
             "properties" : {
               "type" : "object",
@@ -63757,32 +63367,32 @@
             },
             "directories" : {
               "type" : "object",
-              "description" : "Schema to directory mappings.",
+              "description" : "Virtual schema name to directory mappings. The path must be an absolute path.",
               "additionalProperties" : {
                 "type" : "string"
               }
             },
-            "secrets_type" : {
+            "storage_type" : {
               "type" : "string",
-              "description" : "The secrets type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
-              "enum" : [ "s3", "gcs", "r2", "azure" ]
+              "description" : "The storage type.",
+              "enum" : [ "local", "s3" ]
             },
             "user" : {
               "type" : "string",
-              "description" : "DuckDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+              "description" : "DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
             },
             "password" : {
               "type" : "string",
-              "description" : "DuckDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+              "description" : "DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
             },
             "region" : {
               "type" : "string",
               "description" : "The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
             },
-            "aws_access_key_id" : {
+            "aws_secret_access_key" : {
               "type" : "string"
             },
-            "aws_secret_access_key" : {
+            "aws_access_key_id" : {
               "type" : "string"
             }
           }
@@ -64865,16 +64475,30 @@
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
-          "hasMonitoringIssues" : {
+          "hasDailyMonitoringIssues" : {
             "type" : "boolean",
-            "description" : "True when this data quality incident is based on data quality issues from monitoring checks within the filters applied to search for linked data quality issues.",
+            "description" : "True when this data quality incident is based on data quality issues from daily monitoring checks within the filters applied to search for linked data quality issues.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
-          "hasPartitionedIssues" : {
+          "hasMonthlyMonitoringIssues" : {
             "type" : "boolean",
-            "description" : "True when this data quality incident is based on data quality issues from partitioned checks within the filters applied to search for linked data quality issues.",
+            "description" : "True when this data quality incident is based on data quality issues from monthly monitoring checks within the filters applied to search for linked data quality issues.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "hasDailyPartitionedIssues" : {
+            "type" : "boolean",
+            "description" : "True when this data quality incident is based on data quality issues from daily partitioned checks within the filters applied to search for linked data quality issues.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "hasMonthlyPartitionedIssues" : {
+            "type" : "boolean",
+            "description" : "True when this data quality incident is based on data quality issues from monthly partitioned checks within the filters applied to search for linked data quality issues.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
@@ -64941,13 +64565,21 @@
               "type" : "boolean",
               "description" : "True when this data quality incident is based on data quality issues from profiling checks within the filters applied to search for linked data quality issues."
             },
-            "hasMonitoringIssues" : {
+            "hasDailyMonitoringIssues" : {
               "type" : "boolean",
-              "description" : "True when this data quality incident is based on data quality issues from monitoring checks within the filters applied to search for linked data quality issues."
+              "description" : "True when this data quality incident is based on data quality issues from daily monitoring checks within the filters applied to search for linked data quality issues."
             },
-            "hasPartitionedIssues" : {
+            "hasMonthlyMonitoringIssues" : {
               "type" : "boolean",
-              "description" : "True when this data quality incident is based on data quality issues from partitioned checks within the filters applied to search for linked data quality issues."
+              "description" : "True when this data quality incident is based on data quality issues from monthly monitoring checks within the filters applied to search for linked data quality issues."
+            },
+            "hasDailyPartitionedIssues" : {
+              "type" : "boolean",
+              "description" : "True when this data quality incident is based on data quality issues from daily partitioned checks within the filters applied to search for linked data quality issues."
+            },
+            "hasMonthlyPartitionedIssues" : {
+              "type" : "boolean",
+              "description" : "True when this data quality incident is based on data quality issues from monthly partitioned checks within the filters applied to search for linked data quality issues."
             },
             "days" : {
               "type" : "object",
@@ -65334,7 +64966,7 @@
         "properties" : {
           "auto_detect" : {
             "type" : "boolean",
-            "description" : "Whether to auto-detect detect the names of the keys and data types of the values automatically",
+            "description" : "Whether to auto-detect detect the names of the keys and data types of the values automatically.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
@@ -65384,7 +65016,7 @@
           },
           "maximum_depth" : {
             "type" : "integer",
-            "description" : "Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types",
+            "description" : "Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types.",
             "format" : "int64",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -65392,7 +65024,7 @@
           },
           "maximum_object_size" : {
             "type" : "integer",
-            "description" : "The maximum size of a JSON object (in bytes)",
+            "description" : "The maximum size of a JSON object (in bytes).",
             "format" : "int64",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -65425,7 +65057,7 @@
           "properties" : {
             "auto_detect" : {
               "type" : "boolean",
-              "description" : "Whether to auto-detect detect the names of the keys and data types of the values automatically"
+              "description" : "Whether to auto-detect detect the names of the keys and data types of the values automatically."
             },
             "compression" : {
               "type" : "string",
@@ -65446,7 +65078,7 @@
             },
             "format" : {
               "type" : "string",
-              "description" : "Can be one of ['auto', 'unstructured', 'newline_delimited', 'array'].",
+              "description" : "Json format. Can be one of ['auto', 'unstructured', 'newline_delimited', 'array'].",
               "enum" : [ "auto", "unstructured", "newline_delimited", "array" ]
             },
             "hive_partitioning" : {
@@ -65460,16 +65092,16 @@
             "maximum_depth" : {
               "type" : "integer",
               "format" : "int64",
-              "description" : "Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types"
+              "description" : "Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types."
             },
             "maximum_object_size" : {
               "type" : "integer",
               "format" : "int64",
-              "description" : "The maximum size of a JSON object (in bytes)"
+              "description" : "The maximum size of a JSON object (in bytes)."
             },
             "records" : {
               "type" : "string",
-              "description" : "Can be one of ['auto', 'true', 'false']",
+              "description" : "Can be one of ['auto', 'true', 'false'].",
               "enum" : [ "auto", "true", "false" ]
             },
             "sample_size" : {
@@ -66138,13 +65770,6 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "options" : {
-            "type" : "string",
-            "description" : "MySQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS} configuration with a custom environment variable.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
           "sslmode" : {
             "$ref" : "#/components/schemas/MySqlSslMode",
             "exampleSetFlag" : false
@@ -66200,10 +65825,6 @@
             "password" : {
               "type" : "string",
               "description" : "MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-            },
-            "options" : {
-              "type" : "string",
-              "description" : "MySQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS} configuration with a custom environment variable."
             },
             "sslmode" : {
               "type" : "string",
@@ -66358,13 +65979,6 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "options" : {
-            "type" : "string",
-            "description" : "Oracle connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${ORACLE_OPTIONS} configuration with a custom environment variable.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
           "initialization_sql" : {
             "type" : "string",
             "description" : "Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS'",
@@ -66414,10 +66028,6 @@
             "password" : {
               "type" : "string",
               "description" : "Oracle database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-            },
-            "options" : {
-              "type" : "string",
-              "description" : "Oracle connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${ORACLE_OPTIONS} configuration with a custom environment variable."
             },
             "initialization_sql" : {
               "type" : "string",
@@ -67272,13 +66882,6 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "options" : {
-            "type" : "string",
-            "description" : "Redshift connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
           "properties" : {
             "type" : "object",
             "additionalProperties" : {
@@ -67321,10 +66924,6 @@
             "password" : {
               "type" : "string",
               "description" : "Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-            },
-            "options" : {
-              "type" : "string",
-              "description" : "Redshift connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable."
             },
             "properties" : {
               "type" : "object",
@@ -69503,13 +69102,6 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "options" : {
-            "type" : "string",
-            "description" : "Spark connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
           "properties" : {
             "type" : "object",
             "additionalProperties" : {
@@ -69554,10 +69146,6 @@
             "password" : {
               "type" : "string",
               "description" : "Spark database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-            },
-            "options" : {
-              "type" : "string",
-              "description" : "Spark connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable."
             },
             "properties" : {
               "type" : "object",
@@ -69694,13 +69282,6 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "options" : {
-            "type" : "string",
-            "description" : "SQL Server connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
           "disable_encryption" : {
             "type" : "boolean",
             "description" : "Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.",
@@ -69754,10 +69335,6 @@
             "password" : {
               "type" : "string",
               "description" : "SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-            },
-            "options" : {
-              "type" : "string",
-              "description" : "SQL Server connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable."
             },
             "disable_encryption" : {
               "type" : "boolean",
@@ -73722,7 +73299,7 @@
             "exampleSetFlag" : false
           },
           "profiling_checks_result_truncation" : {
-            "$ref" : "#/components/schemas/ProfilingTimePeriod",
+            "$ref" : "#/components/schemas/ProfilingTimePeriodTruncation",
             "exampleSetFlag" : false
           },
           "file_format" : {
@@ -74569,7 +74146,7 @@
             }
           },
           "result_truncation" : {
-            "$ref" : "#/components/schemas/ProfilingTimePeriod",
+            "$ref" : "#/components/schemas/ProfilingTimePeriodTruncation",
             "exampleSetFlag" : false
           },
           "volume" : {
@@ -79481,6 +79058,11 @@
         "exampleSetFlag" : false,
         "enum" : [ "auto", "none", "gzip", "zstd" ]
       },
+      "NewLineCharacterType" : {
+        "type" : "string",
+        "exampleSetFlag" : false,
+        "enum" : [ "cr", "lf", "crlf" ]
+      },
       "DataGroupingDimensionSource" : {
         "type" : "string",
         "exampleSetFlag" : false,
@@ -79506,15 +79088,15 @@
         "exampleSetFlag" : false,
         "enum" : [ "in_memory", "files" ]
       },
-      "DuckdbSourceFilesType" : {
+      "DuckdbFilesFormatType" : {
         "type" : "string",
         "exampleSetFlag" : false,
         "enum" : [ "csv", "json", "parquet" ]
       },
-      "DuckdbSecretsType" : {
+      "DuckdbStorageType" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "s3", "gcs", "r2", "azure" ]
+        "enum" : [ "local", "s3" ]
       },
       "EffectiveScheduleLevelModel" : {
         "type" : "string",
@@ -79611,7 +79193,7 @@
         "exampleSetFlag" : false,
         "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "patterns", "_indexes", "_local_settings" ]
       },
-      "ProfilingTimePeriod" : {
+      "ProfilingTimePeriodTruncation" : {
         "type" : "string",
         "exampleSetFlag" : false,
         "enum" : [ "one_per_month", "one_per_week", "one_per_day", "one_per_hour", "all_results" ]

@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class DuckdbSourceFilesType(str, Enum):
+class DuckdbFilesFormatType(str, Enum):
     CSV = "csv"
     JSON = "json"
     PARQUET = "parquet"

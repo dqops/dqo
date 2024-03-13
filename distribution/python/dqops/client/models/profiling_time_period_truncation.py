@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ProfilingTimePeriod(str, Enum):
+class ProfilingTimePeriodTruncation(str, Enum):
     ALL_RESULTS = "all_results"
     ONE_PER_DAY = "one_per_day"
     ONE_PER_HOUR = "one_per_hour"

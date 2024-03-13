@@ -411,14 +411,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "can_edit" : false
-	}
-    ```
+        ```js
+        {
+		  "can_edit" : false
+		}
+        ```
     
     
 
@@ -446,11 +446,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DataGroupingConfigurationModel(can_edit=False)
-    ```
+        ```python
+        DataGroupingConfigurationModel(can_edit=False)
+        ```
     
     
     
@@ -479,11 +479,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DataGroupingConfigurationModel(can_edit=False)
-    ```
+        ```python
+        DataGroupingConfigurationModel(can_edit=False)
+        ```
     
     
     
@@ -515,11 +515,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DataGroupingConfigurationModel(can_edit=False)
-    ```
+        ```python
+        DataGroupingConfigurationModel(can_edit=False)
+        ```
     
     
     
@@ -551,11 +551,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DataGroupingConfigurationModel(can_edit=False)
-    ```
+        ```python
+        DataGroupingConfigurationModel(can_edit=False)
+        ```
     
     
     
@@ -609,21 +609,21 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "default_data_grouping_configuration" : false,
-	  "can_edit" : false
-	}, {
-	  "default_data_grouping_configuration" : false,
-	  "can_edit" : false
-	}, {
-	  "default_data_grouping_configuration" : false,
-	  "can_edit" : false
-	} ]
-    ```
+        ```js
+        [ {
+		  "default_data_grouping_configuration" : false,
+		  "can_edit" : false
+		}, {
+		  "default_data_grouping_configuration" : false,
+		  "can_edit" : false
+		}, {
+		  "default_data_grouping_configuration" : false,
+		  "can_edit" : false
+		} ]
+        ```
     
     
 
@@ -650,24 +650,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		DataGroupingConfigurationListModel(
-			default_data_grouping_configuration=False,
-			can_edit=False
-		),
-		DataGroupingConfigurationListModel(
-			default_data_grouping_configuration=False,
-			can_edit=False
-		),
-		DataGroupingConfigurationListModel(
-			default_data_grouping_configuration=False,
-			can_edit=False
-		)
-	]
-    ```
+        ```python
+        [
+			DataGroupingConfigurationListModel(
+				default_data_grouping_configuration=False,
+				can_edit=False
+			),
+			DataGroupingConfigurationListModel(
+				default_data_grouping_configuration=False,
+				can_edit=False
+			),
+			DataGroupingConfigurationListModel(
+				default_data_grouping_configuration=False,
+				can_edit=False
+			)
+		]
+        ```
     
     
     
@@ -695,24 +695,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		DataGroupingConfigurationListModel(
-			default_data_grouping_configuration=False,
-			can_edit=False
-		),
-		DataGroupingConfigurationListModel(
-			default_data_grouping_configuration=False,
-			can_edit=False
-		),
-		DataGroupingConfigurationListModel(
-			default_data_grouping_configuration=False,
-			can_edit=False
-		)
-	]
-    ```
+        ```python
+        [
+			DataGroupingConfigurationListModel(
+				default_data_grouping_configuration=False,
+				can_edit=False
+			),
+			DataGroupingConfigurationListModel(
+				default_data_grouping_configuration=False,
+				can_edit=False
+			),
+			DataGroupingConfigurationListModel(
+				default_data_grouping_configuration=False,
+				can_edit=False
+			)
+		]
+        ```
     
     
     
@@ -743,24 +743,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		DataGroupingConfigurationListModel(
-			default_data_grouping_configuration=False,
-			can_edit=False
-		),
-		DataGroupingConfigurationListModel(
-			default_data_grouping_configuration=False,
-			can_edit=False
-		),
-		DataGroupingConfigurationListModel(
-			default_data_grouping_configuration=False,
-			can_edit=False
-		)
-	]
-    ```
+        ```python
+        [
+			DataGroupingConfigurationListModel(
+				default_data_grouping_configuration=False,
+				can_edit=False
+			),
+			DataGroupingConfigurationListModel(
+				default_data_grouping_configuration=False,
+				can_edit=False
+			),
+			DataGroupingConfigurationListModel(
+				default_data_grouping_configuration=False,
+				can_edit=False
+			)
+		]
+        ```
     
     
     
@@ -791,24 +791,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		DataGroupingConfigurationListModel(
-			default_data_grouping_configuration=False,
-			can_edit=False
-		),
-		DataGroupingConfigurationListModel(
-			default_data_grouping_configuration=False,
-			can_edit=False
-		),
-		DataGroupingConfigurationListModel(
-			default_data_grouping_configuration=False,
-			can_edit=False
-		)
-	]
-    ```
+        ```python
+        [
+			DataGroupingConfigurationListModel(
+				default_data_grouping_configuration=False,
+				can_edit=False
+			),
+			DataGroupingConfigurationListModel(
+				default_data_grouping_configuration=False,
+				can_edit=False
+			),
+			DataGroupingConfigurationListModel(
+				default_data_grouping_configuration=False,
+				can_edit=False
+			)
+		]
+        ```
     
     
     

@@ -4,6 +4,7 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..models.compression_type import CompressionType
+from ..models.new_line_character_type import NewLineCharacterType
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="CsvFileFormatSpec")
@@ -11,7 +12,7 @@ T = TypeVar("T", bound="CsvFileFormatSpec")
 
 @_attrs_define
 class CsvFileFormatSpec:
-    r"""
+    """
     Attributes:
         all_varchar (Union[Unset, bool]): Option to skip type detection for CSV parsing and assume all columns to be of
             type VARCHAR.
@@ -29,7 +30,7 @@ class CsvFileFormatSpec:
         hive_partitioning (Union[Unset, bool]): Whether or not to interpret the path as a hive partitioned path.
         ignore_errors (Union[Unset, bool]): Option to ignore any parsing errors encountered - and instead ignore rows
             with errors.
-        new_line (Union[Unset, str]): Set the new line character(s) in the file. Options are '\r','\n', or '\r\n'.
+        new_line (Union[Unset, NewLineCharacterType]):
         quote (Union[Unset, str]): Specifies the quoting string to be used when a data value is quoted.
         sample_size (Union[Unset, int]): The number of sample rows for auto detection of parameters.
         skip (Union[Unset, int]): The number of lines at the top of the file to skip.
@@ -48,7 +49,7 @@ class CsvFileFormatSpec:
     header: Union[Unset, bool] = UNSET
     hive_partitioning: Union[Unset, bool] = UNSET
     ignore_errors: Union[Unset, bool] = UNSET
-    new_line: Union[Unset, str] = UNSET
+    new_line: Union[Unset, NewLineCharacterType] = UNSET
     quote: Union[Unset, str] = UNSET
     sample_size: Union[Unset, int] = UNSET
     skip: Union[Unset, int] = UNSET
@@ -71,7 +72,10 @@ class CsvFileFormatSpec:
         header = self.header
         hive_partitioning = self.hive_partitioning
         ignore_errors = self.ignore_errors
-        new_line = self.new_line
+        new_line: Union[Unset, str] = UNSET
+        if not isinstance(self.new_line, Unset):
+            new_line = self.new_line.value
+
         quote = self.quote
         sample_size = self.sample_size
         skip = self.skip
@@ -149,7 +153,12 @@ class CsvFileFormatSpec:
 
         ignore_errors = d.pop("ignore_errors", UNSET)
 
-        new_line = d.pop("new_line", UNSET)
+        _new_line = d.pop("new_line", UNSET)
+        new_line: Union[Unset, NewLineCharacterType]
+        if isinstance(_new_line, Unset):
+            new_line = UNSET
+        else:
+            new_line = NewLineCharacterType(_new_line)
 
         quote = d.pop("quote", UNSET)
 

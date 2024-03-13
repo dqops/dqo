@@ -484,21 +484,21 @@ http://localhost:8888/api/dictionaries
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "can_edit" : false,
-	  "can_access_dictionary" : false
-	}, {
-	  "can_edit" : false,
-	  "can_access_dictionary" : false
-	}, {
-	  "can_edit" : false,
-	  "can_access_dictionary" : false
-	} ]
-    ```
+        ```js
+        [ {
+		  "can_edit" : false,
+		  "can_access_dictionary" : false
+		}, {
+		  "can_edit" : false,
+		  "can_access_dictionary" : false
+		}, {
+		  "can_edit" : false,
+		  "can_access_dictionary" : false
+		} ]
+        ```
     
     
 
@@ -522,24 +522,24 @@ http://localhost:8888/api/dictionaries
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		DataDictionaryListModel(
-			can_edit=False,
-			can_access_dictionary=False
-		),
-		DataDictionaryListModel(
-			can_edit=False,
-			can_access_dictionary=False
-		),
-		DataDictionaryListModel(
-			can_edit=False,
-			can_access_dictionary=False
-		)
-	]
-    ```
+        ```python
+        [
+			DataDictionaryListModel(
+				can_edit=False,
+				can_access_dictionary=False
+			),
+			DataDictionaryListModel(
+				can_edit=False,
+				can_access_dictionary=False
+			),
+			DataDictionaryListModel(
+				can_edit=False,
+				can_access_dictionary=False
+			)
+		]
+        ```
     
     
     
@@ -564,24 +564,24 @@ http://localhost:8888/api/dictionaries
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		DataDictionaryListModel(
-			can_edit=False,
-			can_access_dictionary=False
-		),
-		DataDictionaryListModel(
-			can_edit=False,
-			can_access_dictionary=False
-		),
-		DataDictionaryListModel(
-			can_edit=False,
-			can_access_dictionary=False
-		)
-	]
-    ```
+        ```python
+        [
+			DataDictionaryListModel(
+				can_edit=False,
+				can_access_dictionary=False
+			),
+			DataDictionaryListModel(
+				can_edit=False,
+				can_access_dictionary=False
+			),
+			DataDictionaryListModel(
+				can_edit=False,
+				can_access_dictionary=False
+			)
+		]
+        ```
     
     
     
@@ -609,24 +609,24 @@ http://localhost:8888/api/dictionaries
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		DataDictionaryListModel(
-			can_edit=False,
-			can_access_dictionary=False
-		),
-		DataDictionaryListModel(
-			can_edit=False,
-			can_access_dictionary=False
-		),
-		DataDictionaryListModel(
-			can_edit=False,
-			can_access_dictionary=False
-		)
-	]
-    ```
+        ```python
+        [
+			DataDictionaryListModel(
+				can_edit=False,
+				can_access_dictionary=False
+			),
+			DataDictionaryListModel(
+				can_edit=False,
+				can_access_dictionary=False
+			),
+			DataDictionaryListModel(
+				can_edit=False,
+				can_access_dictionary=False
+			)
+		]
+        ```
     
     
     
@@ -654,24 +654,24 @@ http://localhost:8888/api/dictionaries
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		DataDictionaryListModel(
-			can_edit=False,
-			can_access_dictionary=False
-		),
-		DataDictionaryListModel(
-			can_edit=False,
-			can_access_dictionary=False
-		),
-		DataDictionaryListModel(
-			can_edit=False,
-			can_access_dictionary=False
-		)
-	]
-    ```
+        ```python
+        [
+			DataDictionaryListModel(
+				can_edit=False,
+				can_access_dictionary=False
+			),
+			DataDictionaryListModel(
+				can_edit=False,
+				can_access_dictionary=False
+			),
+			DataDictionaryListModel(
+				can_edit=False,
+				can_access_dictionary=False
+			)
+		]
+        ```
     
     
     
@@ -723,15 +723,15 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "dictionary_name" : "sample_dictionary",
-	  "file_content" : "USD\nEUR\nGBP\nAUD\nCHF\n"
-	}
-    ```
+        ```js
+        {
+		  "dictionary_name" : "sample_dictionary",
+		  "file_content" : "USD\nEUR\nGBP\nAUD\nCHF\n"
+		}
+        ```
     
     
 
@@ -756,19 +756,19 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DataDictionaryModel(
-		dictionary_name='sample_dictionary',
-		file_content='USD
-		EUR
-		GBP
-		AUD
-		CHF
-		'
-	)
-    ```
+        ```python
+        DataDictionaryModel(
+			dictionary_name='sample_dictionary',
+			file_content='USD
+			EUR
+			GBP
+			AUD
+			CHF
+			'
+		)
+        ```
     
     
     
@@ -794,19 +794,19 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DataDictionaryModel(
-		dictionary_name='sample_dictionary',
-		file_content='USD
-		EUR
-		GBP
-		AUD
-		CHF
-		'
-	)
-    ```
+        ```python
+        DataDictionaryModel(
+			dictionary_name='sample_dictionary',
+			file_content='USD
+			EUR
+			GBP
+			AUD
+			CHF
+			'
+		)
+        ```
     
     
     
@@ -835,19 +835,19 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DataDictionaryModel(
-		dictionary_name='sample_dictionary',
-		file_content='USD
-		EUR
-		GBP
-		AUD
-		CHF
-		'
-	)
-    ```
+        ```python
+        DataDictionaryModel(
+			dictionary_name='sample_dictionary',
+			file_content='USD
+			EUR
+			GBP
+			AUD
+			CHF
+			'
+		)
+        ```
     
     
     
@@ -876,19 +876,19 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DataDictionaryModel(
-		dictionary_name='sample_dictionary',
-		file_content='USD
-		EUR
-		GBP
-		AUD
-		CHF
-		'
-	)
-    ```
+        ```python
+        DataDictionaryModel(
+			dictionary_name='sample_dictionary',
+			file_content='USD
+			EUR
+			GBP
+			AUD
+			CHF
+			'
+		)
+        ```
     
     
     

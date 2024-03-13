@@ -364,30 +364,30 @@ http://localhost:8888/api/checks
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "check_name" : "sample_check",
-	  "full_check_name" : "sample_target/sample_category/sample_check",
-	  "custom" : false,
-	  "built_in" : false,
-	  "can_edit" : true
-	}, {
-	  "check_name" : "sample_check",
-	  "full_check_name" : "sample_target/sample_category/sample_check",
-	  "custom" : false,
-	  "built_in" : false,
-	  "can_edit" : true
-	}, {
-	  "check_name" : "sample_check",
-	  "full_check_name" : "sample_target/sample_category/sample_check",
-	  "custom" : false,
-	  "built_in" : false,
-	  "can_edit" : true
-	} ]
-    ```
+        ```js
+        [ {
+		  "check_name" : "sample_check",
+		  "full_check_name" : "sample_target/sample_category/sample_check",
+		  "custom" : false,
+		  "built_in" : false,
+		  "can_edit" : true
+		}, {
+		  "check_name" : "sample_check",
+		  "full_check_name" : "sample_target/sample_category/sample_check",
+		  "custom" : false,
+		  "built_in" : false,
+		  "can_edit" : true
+		}, {
+		  "check_name" : "sample_check",
+		  "full_check_name" : "sample_target/sample_category/sample_check",
+		  "custom" : false,
+		  "built_in" : false,
+		  "can_edit" : true
+		} ]
+        ```
     
     
 
@@ -411,33 +411,33 @@ http://localhost:8888/api/checks
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckDefinitionListModel(
-			check_name='sample_check',
-			full_check_name='sample_target/sample_category/sample_check',
-			custom=False,
-			built_in=False,
-			can_edit=True
-		),
-		CheckDefinitionListModel(
-			check_name='sample_check',
-			full_check_name='sample_target/sample_category/sample_check',
-			custom=False,
-			built_in=False,
-			can_edit=True
-		),
-		CheckDefinitionListModel(
-			check_name='sample_check',
-			full_check_name='sample_target/sample_category/sample_check',
-			custom=False,
-			built_in=False,
-			can_edit=True
-		)
-	]
-    ```
+        ```python
+        [
+			CheckDefinitionListModel(
+				check_name='sample_check',
+				full_check_name='sample_target/sample_category/sample_check',
+				custom=False,
+				built_in=False,
+				can_edit=True
+			),
+			CheckDefinitionListModel(
+				check_name='sample_check',
+				full_check_name='sample_target/sample_category/sample_check',
+				custom=False,
+				built_in=False,
+				can_edit=True
+			),
+			CheckDefinitionListModel(
+				check_name='sample_check',
+				full_check_name='sample_target/sample_category/sample_check',
+				custom=False,
+				built_in=False,
+				can_edit=True
+			)
+		]
+        ```
     
     
     
@@ -462,33 +462,33 @@ http://localhost:8888/api/checks
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckDefinitionListModel(
-			check_name='sample_check',
-			full_check_name='sample_target/sample_category/sample_check',
-			custom=False,
-			built_in=False,
-			can_edit=True
-		),
-		CheckDefinitionListModel(
-			check_name='sample_check',
-			full_check_name='sample_target/sample_category/sample_check',
-			custom=False,
-			built_in=False,
-			can_edit=True
-		),
-		CheckDefinitionListModel(
-			check_name='sample_check',
-			full_check_name='sample_target/sample_category/sample_check',
-			custom=False,
-			built_in=False,
-			can_edit=True
-		)
-	]
-    ```
+        ```python
+        [
+			CheckDefinitionListModel(
+				check_name='sample_check',
+				full_check_name='sample_target/sample_category/sample_check',
+				custom=False,
+				built_in=False,
+				can_edit=True
+			),
+			CheckDefinitionListModel(
+				check_name='sample_check',
+				full_check_name='sample_target/sample_category/sample_check',
+				custom=False,
+				built_in=False,
+				can_edit=True
+			),
+			CheckDefinitionListModel(
+				check_name='sample_check',
+				full_check_name='sample_target/sample_category/sample_check',
+				custom=False,
+				built_in=False,
+				can_edit=True
+			)
+		]
+        ```
     
     
     
@@ -516,33 +516,33 @@ http://localhost:8888/api/checks
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckDefinitionListModel(
-			check_name='sample_check',
-			full_check_name='sample_target/sample_category/sample_check',
-			custom=False,
-			built_in=False,
-			can_edit=True
-		),
-		CheckDefinitionListModel(
-			check_name='sample_check',
-			full_check_name='sample_target/sample_category/sample_check',
-			custom=False,
-			built_in=False,
-			can_edit=True
-		),
-		CheckDefinitionListModel(
-			check_name='sample_check',
-			full_check_name='sample_target/sample_category/sample_check',
-			custom=False,
-			built_in=False,
-			can_edit=True
-		)
-	]
-    ```
+        ```python
+        [
+			CheckDefinitionListModel(
+				check_name='sample_check',
+				full_check_name='sample_target/sample_category/sample_check',
+				custom=False,
+				built_in=False,
+				can_edit=True
+			),
+			CheckDefinitionListModel(
+				check_name='sample_check',
+				full_check_name='sample_target/sample_category/sample_check',
+				custom=False,
+				built_in=False,
+				can_edit=True
+			),
+			CheckDefinitionListModel(
+				check_name='sample_check',
+				full_check_name='sample_target/sample_category/sample_check',
+				custom=False,
+				built_in=False,
+				can_edit=True
+			)
+		]
+        ```
     
     
     
@@ -570,33 +570,33 @@ http://localhost:8888/api/checks
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckDefinitionListModel(
-			check_name='sample_check',
-			full_check_name='sample_target/sample_category/sample_check',
-			custom=False,
-			built_in=False,
-			can_edit=True
-		),
-		CheckDefinitionListModel(
-			check_name='sample_check',
-			full_check_name='sample_target/sample_category/sample_check',
-			custom=False,
-			built_in=False,
-			can_edit=True
-		),
-		CheckDefinitionListModel(
-			check_name='sample_check',
-			full_check_name='sample_target/sample_category/sample_check',
-			custom=False,
-			built_in=False,
-			can_edit=True
-		)
-	]
-    ```
+        ```python
+        [
+			CheckDefinitionListModel(
+				check_name='sample_check',
+				full_check_name='sample_target/sample_category/sample_check',
+				custom=False,
+				built_in=False,
+				can_edit=True
+			),
+			CheckDefinitionListModel(
+				check_name='sample_check',
+				full_check_name='sample_target/sample_category/sample_check',
+				custom=False,
+				built_in=False,
+				can_edit=True
+			),
+			CheckDefinitionListModel(
+				check_name='sample_check',
+				full_check_name='sample_target/sample_category/sample_check',
+				custom=False,
+				built_in=False,
+				can_edit=True
+			)
+		]
+        ```
     
     
     
@@ -648,21 +648,21 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "check_name" : "sample_check",
-	  "sensor_name" : "sample_target/sample_category/sample_sensor",
-	  "rule_name" : "sample_target/sample_category/sample_rule",
-	  "help_text" : "Sample help text",
-	  "standard" : false,
-	  "custom" : true,
-	  "built_in" : false,
-	  "can_edit" : true
-	}
-    ```
+        ```js
+        {
+		  "check_name" : "sample_check",
+		  "sensor_name" : "sample_target/sample_category/sample_sensor",
+		  "rule_name" : "sample_target/sample_category/sample_rule",
+		  "help_text" : "Sample help text",
+		  "standard" : false,
+		  "custom" : true,
+		  "built_in" : false,
+		  "can_edit" : true
+		}
+        ```
     
     
 
@@ -687,20 +687,20 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckDefinitionModel(
-		check_name='sample_check',
-		sensor_name='sample_target/sample_category/sample_sensor',
-		rule_name='sample_target/sample_category/sample_rule',
-		help_text='Sample help text',
-		standard=False,
-		custom=True,
-		built_in=False,
-		can_edit=True
-	)
-    ```
+        ```python
+        CheckDefinitionModel(
+			check_name='sample_check',
+			sensor_name='sample_target/sample_category/sample_sensor',
+			rule_name='sample_target/sample_category/sample_rule',
+			help_text='Sample help text',
+			standard=False,
+			custom=True,
+			built_in=False,
+			can_edit=True
+		)
+        ```
     
     
     
@@ -726,20 +726,20 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckDefinitionModel(
-		check_name='sample_check',
-		sensor_name='sample_target/sample_category/sample_sensor',
-		rule_name='sample_target/sample_category/sample_rule',
-		help_text='Sample help text',
-		standard=False,
-		custom=True,
-		built_in=False,
-		can_edit=True
-	)
-    ```
+        ```python
+        CheckDefinitionModel(
+			check_name='sample_check',
+			sensor_name='sample_target/sample_category/sample_sensor',
+			rule_name='sample_target/sample_category/sample_rule',
+			help_text='Sample help text',
+			standard=False,
+			custom=True,
+			built_in=False,
+			can_edit=True
+		)
+        ```
     
     
     
@@ -768,20 +768,20 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckDefinitionModel(
-		check_name='sample_check',
-		sensor_name='sample_target/sample_category/sample_sensor',
-		rule_name='sample_target/sample_category/sample_rule',
-		help_text='Sample help text',
-		standard=False,
-		custom=True,
-		built_in=False,
-		can_edit=True
-	)
-    ```
+        ```python
+        CheckDefinitionModel(
+			check_name='sample_check',
+			sensor_name='sample_target/sample_category/sample_sensor',
+			rule_name='sample_target/sample_category/sample_rule',
+			help_text='Sample help text',
+			standard=False,
+			custom=True,
+			built_in=False,
+			can_edit=True
+		)
+        ```
     
     
     
@@ -810,20 +810,20 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckDefinitionModel(
-		check_name='sample_check',
-		sensor_name='sample_target/sample_category/sample_sensor',
-		rule_name='sample_target/sample_category/sample_rule',
-		help_text='Sample help text',
-		standard=False,
-		custom=True,
-		built_in=False,
-		can_edit=True
-	)
-    ```
+        ```python
+        CheckDefinitionModel(
+			check_name='sample_check',
+			sensor_name='sample_target/sample_category/sample_sensor',
+			rule_name='sample_target/sample_category/sample_rule',
+			help_text='Sample help text',
+			standard=False,
+			custom=True,
+			built_in=False,
+			can_edit=True
+		)
+        ```
     
     
     
@@ -868,12 +868,12 @@ http://localhost:8888/api/definitions/checks
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    { }
-    ```
+        ```js
+        { }
+        ```
     
     
 
@@ -897,15 +897,15 @@ http://localhost:8888/api/definitions/checks
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckDefinitionFolderModel(
-		folders={
-		
-		}
-	)
-    ```
+        ```python
+        CheckDefinitionFolderModel(
+			folders={
+			
+			}
+		)
+        ```
     
     
     
@@ -930,15 +930,15 @@ http://localhost:8888/api/definitions/checks
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckDefinitionFolderModel(
-		folders={
-		
-		}
-	)
-    ```
+        ```python
+        CheckDefinitionFolderModel(
+			folders={
+			
+			}
+		)
+        ```
     
     
     
@@ -966,15 +966,15 @@ http://localhost:8888/api/definitions/checks
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckDefinitionFolderModel(
-		folders={
-		
-		}
-	)
-    ```
+        ```python
+        CheckDefinitionFolderModel(
+			folders={
+			
+			}
+		)
+        ```
     
     
     
@@ -1002,15 +1002,15 @@ http://localhost:8888/api/definitions/checks
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckDefinitionFolderModel(
-		folders={
-		
-		}
-	)
-    ```
+        ```python
+        CheckDefinitionFolderModel(
+			folders={
+			
+			}
+		)
+        ```
     
     
     

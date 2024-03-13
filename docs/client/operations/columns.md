@@ -326,15 +326,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "jobId" : 123456789,
-	  "createdAt" : "2007-10-11T13:42:00Z"
-	}
-    ```
+        ```js
+        {
+		  "jobId" : 123456789,
+		  "createdAt" : "2007-10-11T13:42:00Z"
+		}
+        ```
     
     
 
@@ -361,14 +361,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoQueueJobId(
-		job_id=123456789,
-		created_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```python
+        DqoQueueJobId(
+			job_id=123456789,
+			created_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -396,14 +396,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoQueueJobId(
-		job_id=123456789,
-		created_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```python
+        DqoQueueJobId(
+			job_id=123456789,
+			created_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -434,14 +434,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoQueueJobId(
-		job_id=123456789,
-		created_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```python
+        DqoQueueJobId(
+			job_id=123456789,
+			created_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -472,14 +472,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoQueueJobId(
-		job_id=123456789,
-		created_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```python
+        DqoQueueJobId(
+			job_id=123456789,
+			created_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -534,36 +534,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "connection_name" : "sample_connection",
-	  "table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "column_name" : "sample_column",
-	  "spec" : {
-	    "type_snapshot" : {
-	      "column_type" : "string",
-	      "nullable" : false,
-	      "length" : 256
-	    },
-	    "profiling_checks" : {
-	      "nulls" : {
-	        "profile_nulls_count" : {
-	          "error" : {
-	            "max_count" : 0
-	          }
-	        }
-	      }
-	    }
-	  },
-	  "can_edit" : true
-	}
-    ```
+        ```js
+        {
+		  "connection_name" : "sample_connection",
+		  "table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "column_name" : "sample_column",
+		  "spec" : {
+		    "type_snapshot" : {
+		      "column_type" : "string",
+		      "nullable" : false,
+		      "length" : 256
+		    },
+		    "profiling_checks" : {
+		      "nulls" : {
+		        "profile_nulls_count" : {
+		          "error" : {
+		            "max_count" : 0
+		          }
+		        }
+		      }
+		    }
+		  },
+		  "can_edit" : true
+		}
+        ```
     
     
 
@@ -591,39 +591,39 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnModel(
-		connection_name='sample_connection',
-		table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		column_name='sample_column',
-		spec=ColumnSpec(
-			disabled=False,
-			type_snapshot=ColumnTypeSnapshotSpec(
-				column_type='string',
-				nullable=False,
-				length=256
+        ```python
+        ColumnModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
 			),
-			profiling_checks=ColumnProfilingCheckCategoriesSpec(
-				nulls=ColumnNullsProfilingChecksSpec(
-					profile_nulls_count=ColumnNullsCountCheckSpec(
-						parameters=ColumnNullsNullsCountSensorParametersSpec(),
-						error=MaxCountRule0ErrorParametersSpec(max_count=0),
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False
-					)
+			column_name='sample_column',
+			spec=ColumnSpec(
+				disabled=False,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
 				),
-				comparisons=ColumnComparisonProfilingChecksSpecMap()
-			)
-		),
-		can_edit=True
-	)
-    ```
+				profiling_checks=ColumnProfilingCheckCategoriesSpec(
+					nulls=ColumnNullsProfilingChecksSpec(
+						profile_nulls_count=ColumnNullsCountCheckSpec(
+							parameters=ColumnNullsNullsCountSensorParametersSpec(),
+							error=MaxCountRule0ErrorParametersSpec(max_count=0),
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False
+						)
+					),
+					comparisons=ColumnComparisonProfilingChecksSpecMap()
+				)
+			),
+			can_edit=True
+		)
+        ```
     
     
     
@@ -652,39 +652,39 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnModel(
-		connection_name='sample_connection',
-		table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		column_name='sample_column',
-		spec=ColumnSpec(
-			disabled=False,
-			type_snapshot=ColumnTypeSnapshotSpec(
-				column_type='string',
-				nullable=False,
-				length=256
+        ```python
+        ColumnModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
 			),
-			profiling_checks=ColumnProfilingCheckCategoriesSpec(
-				nulls=ColumnNullsProfilingChecksSpec(
-					profile_nulls_count=ColumnNullsCountCheckSpec(
-						parameters=ColumnNullsNullsCountSensorParametersSpec(),
-						error=MaxCountRule0ErrorParametersSpec(max_count=0),
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False
-					)
+			column_name='sample_column',
+			spec=ColumnSpec(
+				disabled=False,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
 				),
-				comparisons=ColumnComparisonProfilingChecksSpecMap()
-			)
-		),
-		can_edit=True
-	)
-    ```
+				profiling_checks=ColumnProfilingCheckCategoriesSpec(
+					nulls=ColumnNullsProfilingChecksSpec(
+						profile_nulls_count=ColumnNullsCountCheckSpec(
+							parameters=ColumnNullsNullsCountSensorParametersSpec(),
+							error=MaxCountRule0ErrorParametersSpec(max_count=0),
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False
+						)
+					),
+					comparisons=ColumnComparisonProfilingChecksSpecMap()
+				)
+			),
+			can_edit=True
+		)
+        ```
     
     
     
@@ -716,39 +716,39 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnModel(
-		connection_name='sample_connection',
-		table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		column_name='sample_column',
-		spec=ColumnSpec(
-			disabled=False,
-			type_snapshot=ColumnTypeSnapshotSpec(
-				column_type='string',
-				nullable=False,
-				length=256
+        ```python
+        ColumnModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
 			),
-			profiling_checks=ColumnProfilingCheckCategoriesSpec(
-				nulls=ColumnNullsProfilingChecksSpec(
-					profile_nulls_count=ColumnNullsCountCheckSpec(
-						parameters=ColumnNullsNullsCountSensorParametersSpec(),
-						error=MaxCountRule0ErrorParametersSpec(max_count=0),
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False
-					)
+			column_name='sample_column',
+			spec=ColumnSpec(
+				disabled=False,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
 				),
-				comparisons=ColumnComparisonProfilingChecksSpecMap()
-			)
-		),
-		can_edit=True
-	)
-    ```
+				profiling_checks=ColumnProfilingCheckCategoriesSpec(
+					nulls=ColumnNullsProfilingChecksSpec(
+						profile_nulls_count=ColumnNullsCountCheckSpec(
+							parameters=ColumnNullsNullsCountSensorParametersSpec(),
+							error=MaxCountRule0ErrorParametersSpec(max_count=0),
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False
+						)
+					),
+					comparisons=ColumnComparisonProfilingChecksSpecMap()
+				)
+			),
+			can_edit=True
+		)
+        ```
     
     
     
@@ -780,39 +780,39 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnModel(
-		connection_name='sample_connection',
-		table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		column_name='sample_column',
-		spec=ColumnSpec(
-			disabled=False,
-			type_snapshot=ColumnTypeSnapshotSpec(
-				column_type='string',
-				nullable=False,
-				length=256
+        ```python
+        ColumnModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
 			),
-			profiling_checks=ColumnProfilingCheckCategoriesSpec(
-				nulls=ColumnNullsProfilingChecksSpec(
-					profile_nulls_count=ColumnNullsCountCheckSpec(
-						parameters=ColumnNullsNullsCountSensorParametersSpec(),
-						error=MaxCountRule0ErrorParametersSpec(max_count=0),
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False
-					)
+			column_name='sample_column',
+			spec=ColumnSpec(
+				disabled=False,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
 				),
-				comparisons=ColumnComparisonProfilingChecksSpecMap()
-			)
-		),
-		can_edit=True
-	)
-    ```
+				profiling_checks=ColumnProfilingCheckCategoriesSpec(
+					nulls=ColumnNullsProfilingChecksSpec(
+						profile_nulls_count=ColumnNullsCountCheckSpec(
+							parameters=ColumnNullsNullsCountSensorParametersSpec(),
+							error=MaxCountRule0ErrorParametersSpec(max_count=0),
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False
+						)
+					),
+					comparisons=ColumnComparisonProfilingChecksSpecMap()
+				)
+			),
+			can_edit=True
+		)
+        ```
     
     
     
@@ -867,30 +867,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "connection_name" : "sample_connection",
-	  "table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "column_name" : "sample_column",
-	  "has_any_configured_checks" : true,
-	  "has_any_configured_profiling_checks" : true,
-	  "type_snapshot" : {
-	    "column_type" : "string",
-	    "nullable" : false,
-	    "length" : 256
-	  },
-	  "can_edit" : false,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
+        ```js
+        {
+		  "connection_name" : "sample_connection",
+		  "table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "column_name" : "sample_column",
+		  "has_any_configured_checks" : true,
+		  "has_any_configured_profiling_checks" : true,
+		  "type_snapshot" : {
+		    "column_type" : "string",
+		    "nullable" : false,
+		    "length" : 256
+		  },
+		  "can_edit" : false,
+		  "can_collect_statistics" : true,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		}
+        ```
     
     
 
@@ -918,32 +918,32 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnListModel(
-		connection_name='sample_connection',
-		table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		column_name='sample_column',
-		disabled=False,
-		has_any_configured_checks=True,
-		has_any_configured_profiling_checks=True,
-		has_any_configured_monitoring_checks=False,
-		has_any_configured_partition_checks=False,
-		type_snapshot=ColumnTypeSnapshotSpec(
-			column_type='string',
-			nullable=False,
-			length=256
-		),
-		can_edit=False,
-		can_collect_statistics=True,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        ColumnListModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -972,32 +972,32 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnListModel(
-		connection_name='sample_connection',
-		table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		column_name='sample_column',
-		disabled=False,
-		has_any_configured_checks=True,
-		has_any_configured_profiling_checks=True,
-		has_any_configured_monitoring_checks=False,
-		has_any_configured_partition_checks=False,
-		type_snapshot=ColumnTypeSnapshotSpec(
-			column_type='string',
-			nullable=False,
-			length=256
-		),
-		can_edit=False,
-		can_collect_statistics=True,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        ColumnListModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -1029,32 +1029,32 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnListModel(
-		connection_name='sample_connection',
-		table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		column_name='sample_column',
-		disabled=False,
-		has_any_configured_checks=True,
-		has_any_configured_profiling_checks=True,
-		has_any_configured_monitoring_checks=False,
-		has_any_configured_partition_checks=False,
-		type_snapshot=ColumnTypeSnapshotSpec(
-			column_type='string',
-			nullable=False,
-			length=256
-		),
-		can_edit=False,
-		can_collect_statistics=True,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        ColumnListModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -1086,32 +1086,32 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnListModel(
-		connection_name='sample_connection',
-		table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		column_name='sample_column',
-		disabled=False,
-		has_any_configured_checks=True,
-		has_any_configured_profiling_checks=True,
-		has_any_configured_monitoring_checks=False,
-		has_any_configured_partition_checks=False,
-		type_snapshot=ColumnTypeSnapshotSpec(
-			column_type='string',
-			nullable=False,
-			length=256
-		),
-		can_edit=False,
-		can_collect_statistics=True,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        ColumnListModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -1166,24 +1166,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	}, {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	}, {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	} ]
-    ```
+        ```js
+        [ {
+		  "date" : "2007-12-03T10:15:30",
+		  "comment_by" : "sample_user",
+		  "comment" : "Sample comment"
+		}, {
+		  "date" : "2007-12-03T10:15:30",
+		  "comment_by" : "sample_user",
+		  "comment" : "Sample comment"
+		}, {
+		  "date" : "2007-12-03T10:15:30",
+		  "comment_by" : "sample_user",
+		  "comment" : "Sample comment"
+		} ]
+        ```
     
     
 
@@ -1211,27 +1211,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		)
-	]
-    ```
+        ```python
+        [
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			)
+		]
+        ```
     
     
     
@@ -1260,27 +1260,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		)
-	]
-    ```
+        ```python
+        [
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			)
+		]
+        ```
     
     
     
@@ -1312,27 +1312,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		)
-	]
-    ```
+        ```python
+        [
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			)
+		]
+        ```
     
     
     
@@ -1364,27 +1364,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		)
-	]
-    ```
+        ```python
+        [
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			)
+		]
+        ```
     
     
     
@@ -1439,12 +1439,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ "sampleString_1", "sampleString_2", "sampleString_3" ]
-    ```
+        ```js
+        [ "sampleString_1", "sampleString_2", "sampleString_3" ]
+        ```
     
     
 
@@ -1472,15 +1472,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		'sampleString_1',
-		'sampleString_2',
-		'sampleString_3'
-	]
-    ```
+        ```python
+        [
+			'sampleString_1',
+			'sampleString_2',
+			'sampleString_3'
+		]
+        ```
     
     
     
@@ -1509,15 +1509,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		'sampleString_1',
-		'sampleString_2',
-		'sampleString_3'
-	]
-    ```
+        ```python
+        [
+			'sampleString_1',
+			'sampleString_2',
+			'sampleString_3'
+		]
+        ```
     
     
     
@@ -1549,15 +1549,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		'sampleString_1',
-		'sampleString_2',
-		'sampleString_3'
-	]
-    ```
+        ```python
+        [
+			'sampleString_1',
+			'sampleString_2',
+			'sampleString_3'
+		]
+        ```
     
     
     
@@ -1589,15 +1589,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		'sampleString_1',
-		'sampleString_2',
-		'sampleString_3'
-	]
-    ```
+        ```python
+        [
+			'sampleString_1',
+			'sampleString_2',
+			'sampleString_3'
+		]
+        ```
     
     
     
@@ -1653,47 +1653,47 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "checks" : [ {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
+        ```js
+        {
+		  "checks" : [ {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_1",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_1",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_2",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_2",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_3",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_3",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		}
+        ```
     
     
 
@@ -1723,53 +1723,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -1800,53 +1800,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -1880,53 +1880,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -1960,53 +1960,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -2061,20 +2061,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "nulls" : {
-	    "daily_nulls_count" : {
-	      "error" : {
-	        "max_count" : 0
-	      }
-	    }
-	  }
-	}
-    ```
+        ```js
+        {
+		  "nulls" : {
+		    "daily_nulls_count" : {
+		      "error" : {
+		        "max_count" : 0
+		      }
+		    }
+		  }
+		}
+        ```
     
     
 
@@ -2102,22 +2102,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnDailyMonitoringCheckCategoriesSpec(
-		nulls=ColumnNullsDailyMonitoringChecksSpec(
-			daily_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnDailyMonitoringCheckCategoriesSpec(
+			nulls=ColumnNullsDailyMonitoringChecksSpec(
+				daily_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
+		)
+        ```
     
     
     
@@ -2146,22 +2146,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnDailyMonitoringCheckCategoriesSpec(
-		nulls=ColumnNullsDailyMonitoringChecksSpec(
-			daily_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnDailyMonitoringCheckCategoriesSpec(
+			nulls=ColumnNullsDailyMonitoringChecksSpec(
+				daily_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
+		)
+        ```
     
     
     
@@ -2193,22 +2193,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnDailyMonitoringCheckCategoriesSpec(
-		nulls=ColumnNullsDailyMonitoringChecksSpec(
-			daily_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnDailyMonitoringCheckCategoriesSpec(
+			nulls=ColumnNullsDailyMonitoringChecksSpec(
+				daily_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
+		)
+        ```
     
     
     
@@ -2240,22 +2240,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnDailyMonitoringCheckCategoriesSpec(
-		nulls=ColumnNullsDailyMonitoringChecksSpec(
-			daily_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnDailyMonitoringCheckCategoriesSpec(
+			nulls=ColumnNullsDailyMonitoringChecksSpec(
+				daily_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
+		)
+        ```
     
     
     
@@ -2311,35 +2311,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
+        ```js
+        {
+		  "categories" : [ {
+		    "category" : "sample_category",
+		    "help_text" : "Sample help text",
+		    "checks" : [ {
+		      "check_name" : "sample_check",
+		      "help_text" : "Sample help text",
+		      "sensor_parameters" : [ ],
+		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_grouping" : false,
+		      "disabled" : false,
+		      "exclude_from_kpi" : false,
+		      "include_in_sla" : false,
+		      "configured" : false,
+		      "can_edit" : false,
+		      "can_run_checks" : false,
+		      "can_delete_data" : false
+		    } ]
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : false,
+		  "can_delete_data" : false
+		}
+        ```
     
     
 
@@ -2369,41 +2369,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -2434,41 +2435,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -2502,41 +2504,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -2570,41 +2573,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -2662,35 +2666,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
+        ```js
+        {
+		  "categories" : [ {
+		    "category" : "sample_category",
+		    "help_text" : "Sample help text",
+		    "checks" : [ {
+		      "check_name" : "sample_check",
+		      "help_text" : "Sample help text",
+		      "sensor_parameters" : [ ],
+		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_grouping" : false,
+		      "disabled" : false,
+		      "exclude_from_kpi" : false,
+		      "include_in_sla" : false,
+		      "configured" : false,
+		      "can_edit" : false,
+		      "can_run_checks" : false,
+		      "can_delete_data" : false
+		    } ]
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : false,
+		  "can_delete_data" : false
+		}
+        ```
     
     
 
@@ -2722,41 +2726,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -2789,41 +2794,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -2859,41 +2865,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -2929,41 +2936,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -3018,20 +3026,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "nulls" : {
-	    "monthly_nulls_count" : {
-	      "error" : {
-	        "max_count" : 0
-	      }
-	    }
-	  }
-	}
-    ```
+        ```js
+        {
+		  "nulls" : {
+		    "monthly_nulls_count" : {
+		      "error" : {
+		        "max_count" : 0
+		      }
+		    }
+		  }
+		}
+        ```
     
     
 
@@ -3059,22 +3067,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnMonthlyMonitoringCheckCategoriesSpec(
-		nulls=ColumnNullsMonthlyMonitoringChecksSpec(
-			monthly_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonMonthlyMonitoringChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnMonthlyMonitoringCheckCategoriesSpec(
+			nulls=ColumnNullsMonthlyMonitoringChecksSpec(
+				monthly_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonMonthlyMonitoringChecksSpecMap()
+		)
+        ```
     
     
     
@@ -3103,22 +3111,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnMonthlyMonitoringCheckCategoriesSpec(
-		nulls=ColumnNullsMonthlyMonitoringChecksSpec(
-			monthly_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonMonthlyMonitoringChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnMonthlyMonitoringCheckCategoriesSpec(
+			nulls=ColumnNullsMonthlyMonitoringChecksSpec(
+				monthly_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonMonthlyMonitoringChecksSpecMap()
+		)
+        ```
     
     
     
@@ -3150,22 +3158,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnMonthlyMonitoringCheckCategoriesSpec(
-		nulls=ColumnNullsMonthlyMonitoringChecksSpec(
-			monthly_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonMonthlyMonitoringChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnMonthlyMonitoringCheckCategoriesSpec(
+			nulls=ColumnNullsMonthlyMonitoringChecksSpec(
+				monthly_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonMonthlyMonitoringChecksSpecMap()
+		)
+        ```
     
     
     
@@ -3197,22 +3205,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnMonthlyMonitoringCheckCategoriesSpec(
-		nulls=ColumnNullsMonthlyMonitoringChecksSpec(
-			monthly_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonMonthlyMonitoringChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnMonthlyMonitoringCheckCategoriesSpec(
+			nulls=ColumnNullsMonthlyMonitoringChecksSpec(
+				monthly_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonMonthlyMonitoringChecksSpecMap()
+		)
+        ```
     
     
     
@@ -3268,47 +3276,47 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "checks" : [ {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
+        ```js
+        {
+		  "checks" : [ {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_1",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_1",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_2",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_2",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_3",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_3",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		}
+        ```
     
     
 
@@ -3338,53 +3346,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -3415,53 +3423,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -3495,53 +3503,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -3575,53 +3583,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -3676,20 +3684,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "nulls" : {
-	    "daily_partition_nulls_count" : {
-	      "error" : {
-	        "max_count" : 0
-	      }
-	    }
-	  }
-	}
-    ```
+        ```js
+        {
+		  "nulls" : {
+		    "daily_partition_nulls_count" : {
+		      "error" : {
+		        "max_count" : 0
+		      }
+		    }
+		  }
+		}
+        ```
     
     
 
@@ -3717,22 +3725,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnDailyPartitionedCheckCategoriesSpec(
-		nulls=ColumnNullsDailyPartitionedChecksSpec(
-			daily_partition_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonDailyPartitionedChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnDailyPartitionedCheckCategoriesSpec(
+			nulls=ColumnNullsDailyPartitionedChecksSpec(
+				daily_partition_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonDailyPartitionedChecksSpecMap()
+		)
+        ```
     
     
     
@@ -3761,22 +3769,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnDailyPartitionedCheckCategoriesSpec(
-		nulls=ColumnNullsDailyPartitionedChecksSpec(
-			daily_partition_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonDailyPartitionedChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnDailyPartitionedCheckCategoriesSpec(
+			nulls=ColumnNullsDailyPartitionedChecksSpec(
+				daily_partition_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonDailyPartitionedChecksSpecMap()
+		)
+        ```
     
     
     
@@ -3808,22 +3816,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnDailyPartitionedCheckCategoriesSpec(
-		nulls=ColumnNullsDailyPartitionedChecksSpec(
-			daily_partition_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonDailyPartitionedChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnDailyPartitionedCheckCategoriesSpec(
+			nulls=ColumnNullsDailyPartitionedChecksSpec(
+				daily_partition_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonDailyPartitionedChecksSpecMap()
+		)
+        ```
     
     
     
@@ -3855,22 +3863,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnDailyPartitionedCheckCategoriesSpec(
-		nulls=ColumnNullsDailyPartitionedChecksSpec(
-			daily_partition_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonDailyPartitionedChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnDailyPartitionedCheckCategoriesSpec(
+			nulls=ColumnNullsDailyPartitionedChecksSpec(
+				daily_partition_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonDailyPartitionedChecksSpecMap()
+		)
+        ```
     
     
     
@@ -3926,35 +3934,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
+        ```js
+        {
+		  "categories" : [ {
+		    "category" : "sample_category",
+		    "help_text" : "Sample help text",
+		    "checks" : [ {
+		      "check_name" : "sample_check",
+		      "help_text" : "Sample help text",
+		      "sensor_parameters" : [ ],
+		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_grouping" : false,
+		      "disabled" : false,
+		      "exclude_from_kpi" : false,
+		      "include_in_sla" : false,
+		      "configured" : false,
+		      "can_edit" : false,
+		      "can_run_checks" : false,
+		      "can_delete_data" : false
+		    } ]
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : false,
+		  "can_delete_data" : false
+		}
+        ```
     
     
 
@@ -3984,41 +3992,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -4049,41 +4058,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -4117,41 +4127,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -4185,41 +4196,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -4277,35 +4289,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
+        ```js
+        {
+		  "categories" : [ {
+		    "category" : "sample_category",
+		    "help_text" : "Sample help text",
+		    "checks" : [ {
+		      "check_name" : "sample_check",
+		      "help_text" : "Sample help text",
+		      "sensor_parameters" : [ ],
+		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_grouping" : false,
+		      "disabled" : false,
+		      "exclude_from_kpi" : false,
+		      "include_in_sla" : false,
+		      "configured" : false,
+		      "can_edit" : false,
+		      "can_run_checks" : false,
+		      "can_delete_data" : false
+		    } ]
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : false,
+		  "can_delete_data" : false
+		}
+        ```
     
     
 
@@ -4337,41 +4349,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -4404,41 +4417,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -4474,41 +4488,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -4544,41 +4559,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -4633,20 +4649,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "nulls" : {
-	    "monthly_partition_nulls_count" : {
-	      "error" : {
-	        "max_count" : 0
-	      }
-	    }
-	  }
-	}
-    ```
+        ```js
+        {
+		  "nulls" : {
+		    "monthly_partition_nulls_count" : {
+		      "error" : {
+		        "max_count" : 0
+		      }
+		    }
+		  }
+		}
+        ```
     
     
 
@@ -4674,22 +4690,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnMonthlyPartitionedCheckCategoriesSpec(
-		nulls=ColumnNullsMonthlyPartitionedChecksSpec(
-			monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonMonthlyPartitionedChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnMonthlyPartitionedCheckCategoriesSpec(
+			nulls=ColumnNullsMonthlyPartitionedChecksSpec(
+				monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonMonthlyPartitionedChecksSpecMap()
+		)
+        ```
     
     
     
@@ -4718,22 +4734,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnMonthlyPartitionedCheckCategoriesSpec(
-		nulls=ColumnNullsMonthlyPartitionedChecksSpec(
-			monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonMonthlyPartitionedChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnMonthlyPartitionedCheckCategoriesSpec(
+			nulls=ColumnNullsMonthlyPartitionedChecksSpec(
+				monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonMonthlyPartitionedChecksSpecMap()
+		)
+        ```
     
     
     
@@ -4765,22 +4781,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnMonthlyPartitionedCheckCategoriesSpec(
-		nulls=ColumnNullsMonthlyPartitionedChecksSpec(
-			monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonMonthlyPartitionedChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnMonthlyPartitionedCheckCategoriesSpec(
+			nulls=ColumnNullsMonthlyPartitionedChecksSpec(
+				monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonMonthlyPartitionedChecksSpecMap()
+		)
+        ```
     
     
     
@@ -4812,22 +4828,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnMonthlyPartitionedCheckCategoriesSpec(
-		nulls=ColumnNullsMonthlyPartitionedChecksSpec(
-			monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonMonthlyPartitionedChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnMonthlyPartitionedCheckCategoriesSpec(
+			nulls=ColumnNullsMonthlyPartitionedChecksSpec(
+				monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonMonthlyPartitionedChecksSpecMap()
+		)
+        ```
     
     
     
@@ -4882,20 +4898,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "nulls" : {
-	    "profile_nulls_count" : {
-	      "error" : {
-	        "max_count" : 0
-	      }
-	    }
-	  }
-	}
-    ```
+        ```js
+        {
+		  "nulls" : {
+		    "profile_nulls_count" : {
+		      "error" : {
+		        "max_count" : 0
+		      }
+		    }
+		  }
+		}
+        ```
     
     
 
@@ -4923,22 +4939,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnProfilingCheckCategoriesSpec(
-		nulls=ColumnNullsProfilingChecksSpec(
-			profile_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonProfilingChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnProfilingCheckCategoriesSpec(
+			nulls=ColumnNullsProfilingChecksSpec(
+				profile_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonProfilingChecksSpecMap()
+		)
+        ```
     
     
     
@@ -4967,22 +4983,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnProfilingCheckCategoriesSpec(
-		nulls=ColumnNullsProfilingChecksSpec(
-			profile_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonProfilingChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnProfilingCheckCategoriesSpec(
+			nulls=ColumnNullsProfilingChecksSpec(
+				profile_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonProfilingChecksSpecMap()
+		)
+        ```
     
     
     
@@ -5014,22 +5030,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnProfilingCheckCategoriesSpec(
-		nulls=ColumnNullsProfilingChecksSpec(
-			profile_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonProfilingChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnProfilingCheckCategoriesSpec(
+			nulls=ColumnNullsProfilingChecksSpec(
+				profile_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonProfilingChecksSpecMap()
+		)
+        ```
     
     
     
@@ -5061,22 +5077,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnProfilingCheckCategoriesSpec(
-		nulls=ColumnNullsProfilingChecksSpec(
-			profile_nulls_count=ColumnNullsCountCheckSpec(
-				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule0ErrorParametersSpec(max_count=0),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=ColumnComparisonProfilingChecksSpecMap()
-	)
-    ```
+        ```python
+        ColumnProfilingCheckCategoriesSpec(
+			nulls=ColumnNullsProfilingChecksSpec(
+				profile_nulls_count=ColumnNullsCountCheckSpec(
+					parameters=ColumnNullsNullsCountSensorParametersSpec(),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=ColumnComparisonProfilingChecksSpecMap()
+		)
+        ```
     
     
     
@@ -5131,47 +5147,47 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "checks" : [ {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
+        ```js
+        {
+		  "checks" : [ {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_1",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_1",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_2",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_2",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_3",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_3",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		}
+        ```
     
     
 
@@ -5199,53 +5215,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -5274,53 +5290,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -5352,53 +5368,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -5430,53 +5446,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -5531,35 +5547,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
+        ```js
+        {
+		  "categories" : [ {
+		    "category" : "sample_category",
+		    "help_text" : "Sample help text",
+		    "checks" : [ {
+		      "check_name" : "sample_check",
+		      "help_text" : "Sample help text",
+		      "sensor_parameters" : [ ],
+		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_grouping" : false,
+		      "disabled" : false,
+		      "exclude_from_kpi" : false,
+		      "include_in_sla" : false,
+		      "configured" : false,
+		      "can_edit" : false,
+		      "can_run_checks" : false,
+		      "can_delete_data" : false
+		    } ]
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : false,
+		  "can_delete_data" : false
+		}
+        ```
     
     
 
@@ -5587,41 +5603,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -5650,41 +5667,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -5716,41 +5734,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -5782,41 +5801,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -5873,35 +5893,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
+        ```js
+        {
+		  "categories" : [ {
+		    "category" : "sample_category",
+		    "help_text" : "Sample help text",
+		    "checks" : [ {
+		      "check_name" : "sample_check",
+		      "help_text" : "Sample help text",
+		      "sensor_parameters" : [ ],
+		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_grouping" : false,
+		      "disabled" : false,
+		      "exclude_from_kpi" : false,
+		      "include_in_sla" : false,
+		      "configured" : false,
+		      "can_edit" : false,
+		      "can_run_checks" : false,
+		      "can_delete_data" : false
+		    } ]
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : false,
+		  "can_delete_data" : false
+		}
+        ```
     
     
 
@@ -5931,41 +5951,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -5996,41 +6017,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -6064,41 +6086,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -6132,41 +6155,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```python
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -6221,63 +6245,63 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "connection_name" : "sample_connection",
-	  "table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "column_name" : "sample_column",
-	  "has_any_configured_checks" : true,
-	  "type_snapshot" : {
-	    "column_type" : "string",
-	    "nullable" : false,
-	    "length" : 256
-	  },
-	  "statistics" : [ {
-	    "category" : "sample_category",
-	    "collector" : "sample_collector",
-	    "resultDataType" : "integer",
-	    "result" : 4372,
-	    "collectedAt" : "2007-10-11T18:00:00"
-	  }, {
-	    "category" : "sample_category",
-	    "collector" : "sample_collector",
-	    "resultDataType" : "integer",
-	    "result" : 9624,
-	    "collectedAt" : "2007-10-12T18:00:00"
-	  }, {
-	    "category" : "sample_category",
-	    "collector" : "sample_collector",
-	    "resultDataType" : "integer",
-	    "result" : 1575,
-	    "collectedAt" : "2007-10-13T18:00:00"
-	  }, {
-	    "category" : "sample_category",
-	    "collector" : "sample_collector",
-	    "resultDataType" : "integer",
-	    "result" : 5099,
-	    "collectedAt" : "2007-10-14T18:00:00"
-	  }, {
-	    "category" : "sample_category",
-	    "collector" : "sample_collector",
-	    "resultDataType" : "integer",
-	    "result" : 9922,
-	    "collectedAt" : "2007-10-15T18:00:00"
-	  } ],
-	  "collect_column_statistics_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "columnNames" : [ "sample_column" ]
-	  },
-	  "can_collect_statistics" : true
-	}
-    ```
+        ```js
+        {
+		  "connection_name" : "sample_connection",
+		  "table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "column_name" : "sample_column",
+		  "has_any_configured_checks" : true,
+		  "type_snapshot" : {
+		    "column_type" : "string",
+		    "nullable" : false,
+		    "length" : 256
+		  },
+		  "statistics" : [ {
+		    "category" : "sample_category",
+		    "collector" : "sample_collector",
+		    "resultDataType" : "integer",
+		    "result" : 4372,
+		    "collectedAt" : "2007-10-11T18:00:00"
+		  }, {
+		    "category" : "sample_category",
+		    "collector" : "sample_collector",
+		    "resultDataType" : "integer",
+		    "result" : 9624,
+		    "collectedAt" : "2007-10-12T18:00:00"
+		  }, {
+		    "category" : "sample_category",
+		    "collector" : "sample_collector",
+		    "resultDataType" : "integer",
+		    "result" : 1575,
+		    "collectedAt" : "2007-10-13T18:00:00"
+		  }, {
+		    "category" : "sample_category",
+		    "collector" : "sample_collector",
+		    "resultDataType" : "integer",
+		    "result" : 5099,
+		    "collectedAt" : "2007-10-14T18:00:00"
+		  }, {
+		    "category" : "sample_category",
+		    "collector" : "sample_collector",
+		    "resultDataType" : "integer",
+		    "result" : 9922,
+		    "collectedAt" : "2007-10-15T18:00:00"
+		  } ],
+		  "collect_column_statistics_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "columnNames" : [ "sample_column" ]
+		  },
+		  "can_collect_statistics" : true
+		}
+        ```
     
     
 
@@ -6305,71 +6329,71 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnStatisticsModel(
-		connection_name='sample_connection',
-		table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		column_name='sample_column',
-		disabled=False,
-		has_any_configured_checks=True,
-		type_snapshot=ColumnTypeSnapshotSpec(
-			column_type='string',
-			nullable=False,
-			length=256
-		),
-		statistics=[
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=4372,
-				collected_at=Some date/time value: [2007-10-11T18:00]
+        ```python
+        ColumnStatisticsModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
 			),
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=9624,
-				collected_at=Some date/time value: [2007-10-12T18:00]
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
 			),
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=1575,
-				collected_at=Some date/time value: [2007-10-13T18:00]
-			),
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=5099,
-				collected_at=Some date/time value: [2007-10-14T18:00]
-			),
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=9922,
-				collected_at=Some date/time value: [2007-10-15T18:00]
-			)
-		],
-		collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
-			column_names=[
-				'sample_column'
+			statistics=[
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=4372,
+					collected_at=Some date/time value: [2007-10-11T18:00]
+				),
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=9624,
+					collected_at=Some date/time value: [2007-10-12T18:00]
+				),
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=1575,
+					collected_at=Some date/time value: [2007-10-13T18:00]
+				),
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=5099,
+					collected_at=Some date/time value: [2007-10-14T18:00]
+				),
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=9922,
+					collected_at=Some date/time value: [2007-10-15T18:00]
+				)
 			],
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		can_collect_statistics=True
-	)
-    ```
+			collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+					'sample_column'
+				],
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			can_collect_statistics=True
+		)
+        ```
     
     
     
@@ -6398,71 +6422,71 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnStatisticsModel(
-		connection_name='sample_connection',
-		table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		column_name='sample_column',
-		disabled=False,
-		has_any_configured_checks=True,
-		type_snapshot=ColumnTypeSnapshotSpec(
-			column_type='string',
-			nullable=False,
-			length=256
-		),
-		statistics=[
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=4372,
-				collected_at=Some date/time value: [2007-10-11T18:00]
+        ```python
+        ColumnStatisticsModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
 			),
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=9624,
-				collected_at=Some date/time value: [2007-10-12T18:00]
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
 			),
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=1575,
-				collected_at=Some date/time value: [2007-10-13T18:00]
-			),
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=5099,
-				collected_at=Some date/time value: [2007-10-14T18:00]
-			),
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=9922,
-				collected_at=Some date/time value: [2007-10-15T18:00]
-			)
-		],
-		collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
-			column_names=[
-				'sample_column'
+			statistics=[
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=4372,
+					collected_at=Some date/time value: [2007-10-11T18:00]
+				),
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=9624,
+					collected_at=Some date/time value: [2007-10-12T18:00]
+				),
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=1575,
+					collected_at=Some date/time value: [2007-10-13T18:00]
+				),
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=5099,
+					collected_at=Some date/time value: [2007-10-14T18:00]
+				),
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=9922,
+					collected_at=Some date/time value: [2007-10-15T18:00]
+				)
 			],
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		can_collect_statistics=True
-	)
-    ```
+			collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+					'sample_column'
+				],
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			can_collect_statistics=True
+		)
+        ```
     
     
     
@@ -6494,71 +6518,71 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnStatisticsModel(
-		connection_name='sample_connection',
-		table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		column_name='sample_column',
-		disabled=False,
-		has_any_configured_checks=True,
-		type_snapshot=ColumnTypeSnapshotSpec(
-			column_type='string',
-			nullable=False,
-			length=256
-		),
-		statistics=[
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=4372,
-				collected_at=Some date/time value: [2007-10-11T18:00]
+        ```python
+        ColumnStatisticsModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
 			),
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=9624,
-				collected_at=Some date/time value: [2007-10-12T18:00]
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
 			),
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=1575,
-				collected_at=Some date/time value: [2007-10-13T18:00]
-			),
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=5099,
-				collected_at=Some date/time value: [2007-10-14T18:00]
-			),
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=9922,
-				collected_at=Some date/time value: [2007-10-15T18:00]
-			)
-		],
-		collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
-			column_names=[
-				'sample_column'
+			statistics=[
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=4372,
+					collected_at=Some date/time value: [2007-10-11T18:00]
+				),
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=9624,
+					collected_at=Some date/time value: [2007-10-12T18:00]
+				),
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=1575,
+					collected_at=Some date/time value: [2007-10-13T18:00]
+				),
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=5099,
+					collected_at=Some date/time value: [2007-10-14T18:00]
+				),
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=9922,
+					collected_at=Some date/time value: [2007-10-15T18:00]
+				)
 			],
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		can_collect_statistics=True
-	)
-    ```
+			collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+					'sample_column'
+				],
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			can_collect_statistics=True
+		)
+        ```
     
     
     
@@ -6590,71 +6614,71 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ColumnStatisticsModel(
-		connection_name='sample_connection',
-		table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		column_name='sample_column',
-		disabled=False,
-		has_any_configured_checks=True,
-		type_snapshot=ColumnTypeSnapshotSpec(
-			column_type='string',
-			nullable=False,
-			length=256
-		),
-		statistics=[
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=4372,
-				collected_at=Some date/time value: [2007-10-11T18:00]
+        ```python
+        ColumnStatisticsModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
 			),
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=9624,
-				collected_at=Some date/time value: [2007-10-12T18:00]
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
 			),
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=1575,
-				collected_at=Some date/time value: [2007-10-13T18:00]
-			),
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=5099,
-				collected_at=Some date/time value: [2007-10-14T18:00]
-			),
-			StatisticsMetricModel(
-				category='sample_category',
-				collector='sample_collector',
-				result_data_type=StatisticsResultDataType.INTEGER,
-				result=9922,
-				collected_at=Some date/time value: [2007-10-15T18:00]
-			)
-		],
-		collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
-			column_names=[
-				'sample_column'
+			statistics=[
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=4372,
+					collected_at=Some date/time value: [2007-10-11T18:00]
+				),
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=9624,
+					collected_at=Some date/time value: [2007-10-12T18:00]
+				),
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=1575,
+					collected_at=Some date/time value: [2007-10-13T18:00]
+				),
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=5099,
+					collected_at=Some date/time value: [2007-10-14T18:00]
+				),
+				StatisticsMetricModel(
+					category='sample_category',
+					collector='sample_collector',
+					result_data_type=StatisticsResultDataType.INTEGER,
+					result=9922,
+					collected_at=Some date/time value: [2007-10-15T18:00]
+				)
 			],
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		can_collect_statistics=True
-	)
-    ```
+			collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+					'sample_column'
+				],
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			can_collect_statistics=True
+		)
+        ```
     
     
     
@@ -6708,66 +6732,66 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "connection_name" : "sample_connection",
-	  "table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "column_name" : "sample_column",
-	  "has_any_configured_checks" : true,
-	  "has_any_configured_profiling_checks" : true,
-	  "type_snapshot" : {
-	    "column_type" : "string",
-	    "nullable" : false,
-	    "length" : 256
-	  },
-	  "can_edit" : false,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}, {
-	  "connection_name" : "sample_connection",
-	  "table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "column_name" : "sample_column",
-	  "has_any_configured_checks" : true,
-	  "has_any_configured_profiling_checks" : true,
-	  "type_snapshot" : {
-	    "column_type" : "string",
-	    "nullable" : false,
-	    "length" : 256
-	  },
-	  "can_edit" : false,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}, {
-	  "connection_name" : "sample_connection",
-	  "table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "column_name" : "sample_column",
-	  "has_any_configured_checks" : true,
-	  "has_any_configured_profiling_checks" : true,
-	  "type_snapshot" : {
-	    "column_type" : "string",
-	    "nullable" : false,
-	    "length" : 256
-	  },
-	  "can_edit" : false,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	} ]
-    ```
+        ```js
+        [ {
+		  "connection_name" : "sample_connection",
+		  "table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "column_name" : "sample_column",
+		  "has_any_configured_checks" : true,
+		  "has_any_configured_profiling_checks" : true,
+		  "type_snapshot" : {
+		    "column_type" : "string",
+		    "nullable" : false,
+		    "length" : 256
+		  },
+		  "can_edit" : false,
+		  "can_collect_statistics" : true,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		}, {
+		  "connection_name" : "sample_connection",
+		  "table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "column_name" : "sample_column",
+		  "has_any_configured_checks" : true,
+		  "has_any_configured_profiling_checks" : true,
+		  "type_snapshot" : {
+		    "column_type" : "string",
+		    "nullable" : false,
+		    "length" : 256
+		  },
+		  "can_edit" : false,
+		  "can_collect_statistics" : true,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		}, {
+		  "connection_name" : "sample_connection",
+		  "table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "column_name" : "sample_column",
+		  "has_any_configured_checks" : true,
+		  "has_any_configured_profiling_checks" : true,
+		  "type_snapshot" : {
+		    "column_type" : "string",
+		    "nullable" : false,
+		    "length" : 256
+		  },
+		  "can_edit" : false,
+		  "can_collect_statistics" : true,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		} ]
+        ```
     
     
 
@@ -6794,78 +6818,78 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		ColumnListModel(
-			connection_name='sample_connection',
-			table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
+        ```python
+        [
+			ColumnListModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column',
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			column_name='sample_column',
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			type_snapshot=ColumnTypeSnapshotSpec(
-				column_type='string',
-				nullable=False,
-				length=256
+			ColumnListModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column',
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		ColumnListModel(
-			connection_name='sample_connection',
-			table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			column_name='sample_column',
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			type_snapshot=ColumnTypeSnapshotSpec(
-				column_type='string',
-				nullable=False,
-				length=256
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		ColumnListModel(
-			connection_name='sample_connection',
-			table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			column_name='sample_column',
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			type_snapshot=ColumnTypeSnapshotSpec(
-				column_type='string',
-				nullable=False,
-				length=256
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		)
-	]
-    ```
+			ColumnListModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column',
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
+			)
+		]
+        ```
     
     
     
@@ -6893,78 +6917,78 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		ColumnListModel(
-			connection_name='sample_connection',
-			table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
+        ```python
+        [
+			ColumnListModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column',
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			column_name='sample_column',
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			type_snapshot=ColumnTypeSnapshotSpec(
-				column_type='string',
-				nullable=False,
-				length=256
+			ColumnListModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column',
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		ColumnListModel(
-			connection_name='sample_connection',
-			table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			column_name='sample_column',
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			type_snapshot=ColumnTypeSnapshotSpec(
-				column_type='string',
-				nullable=False,
-				length=256
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		ColumnListModel(
-			connection_name='sample_connection',
-			table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			column_name='sample_column',
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			type_snapshot=ColumnTypeSnapshotSpec(
-				column_type='string',
-				nullable=False,
-				length=256
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		)
-	]
-    ```
+			ColumnListModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column',
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
+			)
+		]
+        ```
     
     
     
@@ -6995,78 +7019,78 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		ColumnListModel(
-			connection_name='sample_connection',
-			table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
+        ```python
+        [
+			ColumnListModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column',
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			column_name='sample_column',
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			type_snapshot=ColumnTypeSnapshotSpec(
-				column_type='string',
-				nullable=False,
-				length=256
+			ColumnListModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column',
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		ColumnListModel(
-			connection_name='sample_connection',
-			table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			column_name='sample_column',
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			type_snapshot=ColumnTypeSnapshotSpec(
-				column_type='string',
-				nullable=False,
-				length=256
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		ColumnListModel(
-			connection_name='sample_connection',
-			table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			column_name='sample_column',
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			type_snapshot=ColumnTypeSnapshotSpec(
-				column_type='string',
-				nullable=False,
-				length=256
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		)
-	]
-    ```
+			ColumnListModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column',
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
+			)
+		]
+        ```
     
     
     
@@ -7097,78 +7121,78 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		ColumnListModel(
-			connection_name='sample_connection',
-			table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
+        ```python
+        [
+			ColumnListModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column',
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			column_name='sample_column',
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			type_snapshot=ColumnTypeSnapshotSpec(
-				column_type='string',
-				nullable=False,
-				length=256
+			ColumnListModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column',
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		ColumnListModel(
-			connection_name='sample_connection',
-			table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			column_name='sample_column',
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			type_snapshot=ColumnTypeSnapshotSpec(
-				column_type='string',
-				nullable=False,
-				length=256
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		ColumnListModel(
-			connection_name='sample_connection',
-			table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			column_name='sample_column',
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			type_snapshot=ColumnTypeSnapshotSpec(
-				column_type='string',
-				nullable=False,
-				length=256
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		)
-	]
-    ```
+			ColumnListModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column',
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
+			)
+		]
+        ```
     
     
     
@@ -7222,129 +7246,129 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "connection_name" : "sample_connection",
-	  "table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "column_statistics" : [ {
-	    "connection_name" : "sample_connection",
-	    "table" : {
-	      "schema_name" : "sample_schema",
-	      "table_name" : "sample_table"
-	    },
-	    "column_name" : "sample_column",
-	    "has_any_configured_checks" : true,
-	    "type_snapshot" : {
-	      "column_type" : "string",
-	      "nullable" : false,
-	      "length" : 256
-	    },
-	    "statistics" : [ {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 4372,
-	      "collectedAt" : "2007-10-11T18:00:00"
-	    }, {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 9624,
-	      "collectedAt" : "2007-10-12T18:00:00"
-	    }, {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 1575,
-	      "collectedAt" : "2007-10-13T18:00:00"
-	    }, {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 5099,
-	      "collectedAt" : "2007-10-14T18:00:00"
-	    }, {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 9922,
-	      "collectedAt" : "2007-10-15T18:00:00"
-	    } ],
-	    "collect_column_statistics_job_template" : {
-	      "connection" : "sample_connection",
-	      "fullTableName" : "sample_schema.sample_table",
-	      "enabled" : true,
-	      "columnNames" : [ "sample_column" ]
-	    },
-	    "can_collect_statistics" : true
-	  }, {
-	    "connection_name" : "sample_connection",
-	    "table" : {
-	      "schema_name" : "sample_schema",
-	      "table_name" : "sample_table"
-	    },
-	    "column_name" : "sample_column_1",
-	    "has_any_configured_checks" : true,
-	    "type_snapshot" : {
-	      "column_type" : "string",
-	      "nullable" : false,
-	      "length" : 256
-	    },
-	    "statistics" : [ {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 4372,
-	      "collectedAt" : "2007-10-11T18:00:00"
-	    }, {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 9624,
-	      "collectedAt" : "2007-10-12T18:00:00"
-	    }, {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 1575,
-	      "collectedAt" : "2007-10-13T18:00:00"
-	    }, {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 5099,
-	      "collectedAt" : "2007-10-14T18:00:00"
-	    }, {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 9922,
-	      "collectedAt" : "2007-10-15T18:00:00"
-	    } ],
-	    "collect_column_statistics_job_template" : {
-	      "connection" : "sample_connection",
-	      "fullTableName" : "sample_schema.sample_table",
-	      "enabled" : true,
-	      "columnNames" : [ "sample_column" ]
-	    },
-	    "can_collect_statistics" : true
-	  } ],
-	  "collect_column_statistics_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "columnNames" : [ "sample_column" ],
-	    "collectorCategory" : "sample_category"
-	  },
-	  "can_collect_statistics" : true
-	}
-    ```
+        ```js
+        {
+		  "connection_name" : "sample_connection",
+		  "table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "column_statistics" : [ {
+		    "connection_name" : "sample_connection",
+		    "table" : {
+		      "schema_name" : "sample_schema",
+		      "table_name" : "sample_table"
+		    },
+		    "column_name" : "sample_column",
+		    "has_any_configured_checks" : true,
+		    "type_snapshot" : {
+		      "column_type" : "string",
+		      "nullable" : false,
+		      "length" : 256
+		    },
+		    "statistics" : [ {
+		      "category" : "sample_category",
+		      "collector" : "sample_collector",
+		      "resultDataType" : "integer",
+		      "result" : 4372,
+		      "collectedAt" : "2007-10-11T18:00:00"
+		    }, {
+		      "category" : "sample_category",
+		      "collector" : "sample_collector",
+		      "resultDataType" : "integer",
+		      "result" : 9624,
+		      "collectedAt" : "2007-10-12T18:00:00"
+		    }, {
+		      "category" : "sample_category",
+		      "collector" : "sample_collector",
+		      "resultDataType" : "integer",
+		      "result" : 1575,
+		      "collectedAt" : "2007-10-13T18:00:00"
+		    }, {
+		      "category" : "sample_category",
+		      "collector" : "sample_collector",
+		      "resultDataType" : "integer",
+		      "result" : 5099,
+		      "collectedAt" : "2007-10-14T18:00:00"
+		    }, {
+		      "category" : "sample_category",
+		      "collector" : "sample_collector",
+		      "resultDataType" : "integer",
+		      "result" : 9922,
+		      "collectedAt" : "2007-10-15T18:00:00"
+		    } ],
+		    "collect_column_statistics_job_template" : {
+		      "connection" : "sample_connection",
+		      "fullTableName" : "sample_schema.sample_table",
+		      "enabled" : true,
+		      "columnNames" : [ "sample_column" ]
+		    },
+		    "can_collect_statistics" : true
+		  }, {
+		    "connection_name" : "sample_connection",
+		    "table" : {
+		      "schema_name" : "sample_schema",
+		      "table_name" : "sample_table"
+		    },
+		    "column_name" : "sample_column_1",
+		    "has_any_configured_checks" : true,
+		    "type_snapshot" : {
+		      "column_type" : "string",
+		      "nullable" : false,
+		      "length" : 256
+		    },
+		    "statistics" : [ {
+		      "category" : "sample_category",
+		      "collector" : "sample_collector",
+		      "resultDataType" : "integer",
+		      "result" : 4372,
+		      "collectedAt" : "2007-10-11T18:00:00"
+		    }, {
+		      "category" : "sample_category",
+		      "collector" : "sample_collector",
+		      "resultDataType" : "integer",
+		      "result" : 9624,
+		      "collectedAt" : "2007-10-12T18:00:00"
+		    }, {
+		      "category" : "sample_category",
+		      "collector" : "sample_collector",
+		      "resultDataType" : "integer",
+		      "result" : 1575,
+		      "collectedAt" : "2007-10-13T18:00:00"
+		    }, {
+		      "category" : "sample_category",
+		      "collector" : "sample_collector",
+		      "resultDataType" : "integer",
+		      "result" : 5099,
+		      "collectedAt" : "2007-10-14T18:00:00"
+		    }, {
+		      "category" : "sample_category",
+		      "collector" : "sample_collector",
+		      "resultDataType" : "integer",
+		      "result" : 9922,
+		      "collectedAt" : "2007-10-15T18:00:00"
+		    } ],
+		    "collect_column_statistics_job_template" : {
+		      "connection" : "sample_connection",
+		      "fullTableName" : "sample_schema.sample_table",
+		      "enabled" : true,
+		      "columnNames" : [ "sample_column" ]
+		    },
+		    "can_collect_statistics" : true
+		  } ],
+		  "collect_column_statistics_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "columnNames" : [ "sample_column" ],
+		    "collectorCategory" : "sample_category"
+		  },
+		  "can_collect_statistics" : true
+		}
+        ```
     
     
 
@@ -7371,151 +7395,151 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableColumnsStatisticsModel(
-		connection_name='sample_connection',
-		table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		column_statistics=[
-			ColumnStatisticsModel(
-				connection_name='sample_connection',
-				table=PhysicalTableName(
-					schema_name='sample_schema',
-					table_name='sample_table'
-				),
-				column_name='sample_column',
-				disabled=False,
-				has_any_configured_checks=True,
-				type_snapshot=ColumnTypeSnapshotSpec(
-					column_type='string',
-					nullable=False,
-					length=256
-				),
-				statistics=[
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=4372,
-						collected_at=Some date/time value: [2007-10-11T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=9624,
-						collected_at=Some date/time value: [2007-10-12T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=1575,
-						collected_at=Some date/time value: [2007-10-13T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=5099,
-						collected_at=Some date/time value: [2007-10-14T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=9922,
-						collected_at=Some date/time value: [2007-10-15T18:00]
-					)
-				],
-				collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
-					column_names=[
-						'sample_column'
-					],
-					connection='sample_connection',
-					full_table_name='sample_schema.sample_table',
-					enabled=True
-				),
-				can_collect_statistics=True
+        ```python
+        TableColumnsStatisticsModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
 			),
-			ColumnStatisticsModel(
-				connection_name='sample_connection',
-				table=PhysicalTableName(
-					schema_name='sample_schema',
-					table_name='sample_table'
-				),
-				column_name='sample_column_1',
-				disabled=False,
-				has_any_configured_checks=True,
-				type_snapshot=ColumnTypeSnapshotSpec(
-					column_type='string',
-					nullable=False,
-					length=256
-				),
-				statistics=[
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=4372,
-						collected_at=Some date/time value: [2007-10-11T18:00]
+			column_statistics=[
+				ColumnStatisticsModel(
+					connection_name='sample_connection',
+					table=PhysicalTableName(
+						schema_name='sample_schema',
+						table_name='sample_table'
 					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=9624,
-						collected_at=Some date/time value: [2007-10-12T18:00]
+					column_name='sample_column',
+					disabled=False,
+					has_any_configured_checks=True,
+					type_snapshot=ColumnTypeSnapshotSpec(
+						column_type='string',
+						nullable=False,
+						length=256
 					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=1575,
-						collected_at=Some date/time value: [2007-10-13T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=5099,
-						collected_at=Some date/time value: [2007-10-14T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=9922,
-						collected_at=Some date/time value: [2007-10-15T18:00]
-					)
-				],
-				collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
-					column_names=[
-						'sample_column'
+					statistics=[
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=4372,
+							collected_at=Some date/time value: [2007-10-11T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=9624,
+							collected_at=Some date/time value: [2007-10-12T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=1575,
+							collected_at=Some date/time value: [2007-10-13T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=5099,
+							collected_at=Some date/time value: [2007-10-14T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=9922,
+							collected_at=Some date/time value: [2007-10-15T18:00]
+						)
 					],
-					connection='sample_connection',
-					full_table_name='sample_schema.sample_table',
-					enabled=True
+					collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+						column_names=[
+							'sample_column'
+						],
+						connection='sample_connection',
+						full_table_name='sample_schema.sample_table',
+						enabled=True
+					),
+					can_collect_statistics=True
 				),
-				can_collect_statistics=True
-			)
-		],
-		collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
-			column_names=[
-				'sample_column'
+				ColumnStatisticsModel(
+					connection_name='sample_connection',
+					table=PhysicalTableName(
+						schema_name='sample_schema',
+						table_name='sample_table'
+					),
+					column_name='sample_column_1',
+					disabled=False,
+					has_any_configured_checks=True,
+					type_snapshot=ColumnTypeSnapshotSpec(
+						column_type='string',
+						nullable=False,
+						length=256
+					),
+					statistics=[
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=4372,
+							collected_at=Some date/time value: [2007-10-11T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=9624,
+							collected_at=Some date/time value: [2007-10-12T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=1575,
+							collected_at=Some date/time value: [2007-10-13T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=5099,
+							collected_at=Some date/time value: [2007-10-14T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=9922,
+							collected_at=Some date/time value: [2007-10-15T18:00]
+						)
+					],
+					collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+						column_names=[
+							'sample_column'
+						],
+						connection='sample_connection',
+						full_table_name='sample_schema.sample_table',
+						enabled=True
+					),
+					can_collect_statistics=True
+				)
 			],
-			collector_category='sample_category',
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		can_collect_statistics=True
-	)
-    ```
+			collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+					'sample_column'
+				],
+				collector_category='sample_category',
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			can_collect_statistics=True
+		)
+        ```
     
     
     
@@ -7543,151 +7567,151 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableColumnsStatisticsModel(
-		connection_name='sample_connection',
-		table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		column_statistics=[
-			ColumnStatisticsModel(
-				connection_name='sample_connection',
-				table=PhysicalTableName(
-					schema_name='sample_schema',
-					table_name='sample_table'
-				),
-				column_name='sample_column',
-				disabled=False,
-				has_any_configured_checks=True,
-				type_snapshot=ColumnTypeSnapshotSpec(
-					column_type='string',
-					nullable=False,
-					length=256
-				),
-				statistics=[
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=4372,
-						collected_at=Some date/time value: [2007-10-11T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=9624,
-						collected_at=Some date/time value: [2007-10-12T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=1575,
-						collected_at=Some date/time value: [2007-10-13T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=5099,
-						collected_at=Some date/time value: [2007-10-14T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=9922,
-						collected_at=Some date/time value: [2007-10-15T18:00]
-					)
-				],
-				collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
-					column_names=[
-						'sample_column'
-					],
-					connection='sample_connection',
-					full_table_name='sample_schema.sample_table',
-					enabled=True
-				),
-				can_collect_statistics=True
+        ```python
+        TableColumnsStatisticsModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
 			),
-			ColumnStatisticsModel(
-				connection_name='sample_connection',
-				table=PhysicalTableName(
-					schema_name='sample_schema',
-					table_name='sample_table'
-				),
-				column_name='sample_column_1',
-				disabled=False,
-				has_any_configured_checks=True,
-				type_snapshot=ColumnTypeSnapshotSpec(
-					column_type='string',
-					nullable=False,
-					length=256
-				),
-				statistics=[
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=4372,
-						collected_at=Some date/time value: [2007-10-11T18:00]
+			column_statistics=[
+				ColumnStatisticsModel(
+					connection_name='sample_connection',
+					table=PhysicalTableName(
+						schema_name='sample_schema',
+						table_name='sample_table'
 					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=9624,
-						collected_at=Some date/time value: [2007-10-12T18:00]
+					column_name='sample_column',
+					disabled=False,
+					has_any_configured_checks=True,
+					type_snapshot=ColumnTypeSnapshotSpec(
+						column_type='string',
+						nullable=False,
+						length=256
 					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=1575,
-						collected_at=Some date/time value: [2007-10-13T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=5099,
-						collected_at=Some date/time value: [2007-10-14T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=9922,
-						collected_at=Some date/time value: [2007-10-15T18:00]
-					)
-				],
-				collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
-					column_names=[
-						'sample_column'
+					statistics=[
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=4372,
+							collected_at=Some date/time value: [2007-10-11T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=9624,
+							collected_at=Some date/time value: [2007-10-12T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=1575,
+							collected_at=Some date/time value: [2007-10-13T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=5099,
+							collected_at=Some date/time value: [2007-10-14T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=9922,
+							collected_at=Some date/time value: [2007-10-15T18:00]
+						)
 					],
-					connection='sample_connection',
-					full_table_name='sample_schema.sample_table',
-					enabled=True
+					collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+						column_names=[
+							'sample_column'
+						],
+						connection='sample_connection',
+						full_table_name='sample_schema.sample_table',
+						enabled=True
+					),
+					can_collect_statistics=True
 				),
-				can_collect_statistics=True
-			)
-		],
-		collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
-			column_names=[
-				'sample_column'
+				ColumnStatisticsModel(
+					connection_name='sample_connection',
+					table=PhysicalTableName(
+						schema_name='sample_schema',
+						table_name='sample_table'
+					),
+					column_name='sample_column_1',
+					disabled=False,
+					has_any_configured_checks=True,
+					type_snapshot=ColumnTypeSnapshotSpec(
+						column_type='string',
+						nullable=False,
+						length=256
+					),
+					statistics=[
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=4372,
+							collected_at=Some date/time value: [2007-10-11T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=9624,
+							collected_at=Some date/time value: [2007-10-12T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=1575,
+							collected_at=Some date/time value: [2007-10-13T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=5099,
+							collected_at=Some date/time value: [2007-10-14T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=9922,
+							collected_at=Some date/time value: [2007-10-15T18:00]
+						)
+					],
+					collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+						column_names=[
+							'sample_column'
+						],
+						connection='sample_connection',
+						full_table_name='sample_schema.sample_table',
+						enabled=True
+					),
+					can_collect_statistics=True
+				)
 			],
-			collector_category='sample_category',
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		can_collect_statistics=True
-	)
-    ```
+			collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+					'sample_column'
+				],
+				collector_category='sample_category',
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			can_collect_statistics=True
+		)
+        ```
     
     
     
@@ -7718,151 +7742,151 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableColumnsStatisticsModel(
-		connection_name='sample_connection',
-		table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		column_statistics=[
-			ColumnStatisticsModel(
-				connection_name='sample_connection',
-				table=PhysicalTableName(
-					schema_name='sample_schema',
-					table_name='sample_table'
-				),
-				column_name='sample_column',
-				disabled=False,
-				has_any_configured_checks=True,
-				type_snapshot=ColumnTypeSnapshotSpec(
-					column_type='string',
-					nullable=False,
-					length=256
-				),
-				statistics=[
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=4372,
-						collected_at=Some date/time value: [2007-10-11T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=9624,
-						collected_at=Some date/time value: [2007-10-12T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=1575,
-						collected_at=Some date/time value: [2007-10-13T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=5099,
-						collected_at=Some date/time value: [2007-10-14T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=9922,
-						collected_at=Some date/time value: [2007-10-15T18:00]
-					)
-				],
-				collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
-					column_names=[
-						'sample_column'
-					],
-					connection='sample_connection',
-					full_table_name='sample_schema.sample_table',
-					enabled=True
-				),
-				can_collect_statistics=True
+        ```python
+        TableColumnsStatisticsModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
 			),
-			ColumnStatisticsModel(
-				connection_name='sample_connection',
-				table=PhysicalTableName(
-					schema_name='sample_schema',
-					table_name='sample_table'
-				),
-				column_name='sample_column_1',
-				disabled=False,
-				has_any_configured_checks=True,
-				type_snapshot=ColumnTypeSnapshotSpec(
-					column_type='string',
-					nullable=False,
-					length=256
-				),
-				statistics=[
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=4372,
-						collected_at=Some date/time value: [2007-10-11T18:00]
+			column_statistics=[
+				ColumnStatisticsModel(
+					connection_name='sample_connection',
+					table=PhysicalTableName(
+						schema_name='sample_schema',
+						table_name='sample_table'
 					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=9624,
-						collected_at=Some date/time value: [2007-10-12T18:00]
+					column_name='sample_column',
+					disabled=False,
+					has_any_configured_checks=True,
+					type_snapshot=ColumnTypeSnapshotSpec(
+						column_type='string',
+						nullable=False,
+						length=256
 					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=1575,
-						collected_at=Some date/time value: [2007-10-13T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=5099,
-						collected_at=Some date/time value: [2007-10-14T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=9922,
-						collected_at=Some date/time value: [2007-10-15T18:00]
-					)
-				],
-				collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
-					column_names=[
-						'sample_column'
+					statistics=[
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=4372,
+							collected_at=Some date/time value: [2007-10-11T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=9624,
+							collected_at=Some date/time value: [2007-10-12T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=1575,
+							collected_at=Some date/time value: [2007-10-13T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=5099,
+							collected_at=Some date/time value: [2007-10-14T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=9922,
+							collected_at=Some date/time value: [2007-10-15T18:00]
+						)
 					],
-					connection='sample_connection',
-					full_table_name='sample_schema.sample_table',
-					enabled=True
+					collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+						column_names=[
+							'sample_column'
+						],
+						connection='sample_connection',
+						full_table_name='sample_schema.sample_table',
+						enabled=True
+					),
+					can_collect_statistics=True
 				),
-				can_collect_statistics=True
-			)
-		],
-		collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
-			column_names=[
-				'sample_column'
+				ColumnStatisticsModel(
+					connection_name='sample_connection',
+					table=PhysicalTableName(
+						schema_name='sample_schema',
+						table_name='sample_table'
+					),
+					column_name='sample_column_1',
+					disabled=False,
+					has_any_configured_checks=True,
+					type_snapshot=ColumnTypeSnapshotSpec(
+						column_type='string',
+						nullable=False,
+						length=256
+					),
+					statistics=[
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=4372,
+							collected_at=Some date/time value: [2007-10-11T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=9624,
+							collected_at=Some date/time value: [2007-10-12T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=1575,
+							collected_at=Some date/time value: [2007-10-13T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=5099,
+							collected_at=Some date/time value: [2007-10-14T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=9922,
+							collected_at=Some date/time value: [2007-10-15T18:00]
+						)
+					],
+					collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+						column_names=[
+							'sample_column'
+						],
+						connection='sample_connection',
+						full_table_name='sample_schema.sample_table',
+						enabled=True
+					),
+					can_collect_statistics=True
+				)
 			],
-			collector_category='sample_category',
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		can_collect_statistics=True
-	)
-    ```
+			collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+					'sample_column'
+				],
+				collector_category='sample_category',
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			can_collect_statistics=True
+		)
+        ```
     
     
     
@@ -7893,151 +7917,151 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableColumnsStatisticsModel(
-		connection_name='sample_connection',
-		table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		column_statistics=[
-			ColumnStatisticsModel(
-				connection_name='sample_connection',
-				table=PhysicalTableName(
-					schema_name='sample_schema',
-					table_name='sample_table'
-				),
-				column_name='sample_column',
-				disabled=False,
-				has_any_configured_checks=True,
-				type_snapshot=ColumnTypeSnapshotSpec(
-					column_type='string',
-					nullable=False,
-					length=256
-				),
-				statistics=[
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=4372,
-						collected_at=Some date/time value: [2007-10-11T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=9624,
-						collected_at=Some date/time value: [2007-10-12T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=1575,
-						collected_at=Some date/time value: [2007-10-13T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=5099,
-						collected_at=Some date/time value: [2007-10-14T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=9922,
-						collected_at=Some date/time value: [2007-10-15T18:00]
-					)
-				],
-				collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
-					column_names=[
-						'sample_column'
-					],
-					connection='sample_connection',
-					full_table_name='sample_schema.sample_table',
-					enabled=True
-				),
-				can_collect_statistics=True
+        ```python
+        TableColumnsStatisticsModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
 			),
-			ColumnStatisticsModel(
-				connection_name='sample_connection',
-				table=PhysicalTableName(
-					schema_name='sample_schema',
-					table_name='sample_table'
-				),
-				column_name='sample_column_1',
-				disabled=False,
-				has_any_configured_checks=True,
-				type_snapshot=ColumnTypeSnapshotSpec(
-					column_type='string',
-					nullable=False,
-					length=256
-				),
-				statistics=[
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=4372,
-						collected_at=Some date/time value: [2007-10-11T18:00]
+			column_statistics=[
+				ColumnStatisticsModel(
+					connection_name='sample_connection',
+					table=PhysicalTableName(
+						schema_name='sample_schema',
+						table_name='sample_table'
 					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=9624,
-						collected_at=Some date/time value: [2007-10-12T18:00]
+					column_name='sample_column',
+					disabled=False,
+					has_any_configured_checks=True,
+					type_snapshot=ColumnTypeSnapshotSpec(
+						column_type='string',
+						nullable=False,
+						length=256
 					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=1575,
-						collected_at=Some date/time value: [2007-10-13T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=5099,
-						collected_at=Some date/time value: [2007-10-14T18:00]
-					),
-					StatisticsMetricModel(
-						category='sample_category',
-						collector='sample_collector',
-						result_data_type=StatisticsResultDataType.INTEGER,
-						result=9922,
-						collected_at=Some date/time value: [2007-10-15T18:00]
-					)
-				],
-				collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
-					column_names=[
-						'sample_column'
+					statistics=[
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=4372,
+							collected_at=Some date/time value: [2007-10-11T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=9624,
+							collected_at=Some date/time value: [2007-10-12T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=1575,
+							collected_at=Some date/time value: [2007-10-13T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=5099,
+							collected_at=Some date/time value: [2007-10-14T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=9922,
+							collected_at=Some date/time value: [2007-10-15T18:00]
+						)
 					],
-					connection='sample_connection',
-					full_table_name='sample_schema.sample_table',
-					enabled=True
+					collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+						column_names=[
+							'sample_column'
+						],
+						connection='sample_connection',
+						full_table_name='sample_schema.sample_table',
+						enabled=True
+					),
+					can_collect_statistics=True
 				),
-				can_collect_statistics=True
-			)
-		],
-		collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
-			column_names=[
-				'sample_column'
+				ColumnStatisticsModel(
+					connection_name='sample_connection',
+					table=PhysicalTableName(
+						schema_name='sample_schema',
+						table_name='sample_table'
+					),
+					column_name='sample_column_1',
+					disabled=False,
+					has_any_configured_checks=True,
+					type_snapshot=ColumnTypeSnapshotSpec(
+						column_type='string',
+						nullable=False,
+						length=256
+					),
+					statistics=[
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=4372,
+							collected_at=Some date/time value: [2007-10-11T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=9624,
+							collected_at=Some date/time value: [2007-10-12T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=1575,
+							collected_at=Some date/time value: [2007-10-13T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=5099,
+							collected_at=Some date/time value: [2007-10-14T18:00]
+						),
+						StatisticsMetricModel(
+							category='sample_category',
+							collector='sample_collector',
+							result_data_type=StatisticsResultDataType.INTEGER,
+							result=9922,
+							collected_at=Some date/time value: [2007-10-15T18:00]
+						)
+					],
+					collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+						column_names=[
+							'sample_column'
+						],
+						connection='sample_connection',
+						full_table_name='sample_schema.sample_table',
+						enabled=True
+					),
+					can_collect_statistics=True
+				)
 			],
-			collector_category='sample_category',
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		can_collect_statistics=True
-	)
-    ```
+			collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+					'sample_column'
+				],
+				collector_category='sample_category',
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			can_collect_statistics=True
+		)
+        ```
     
     
     
@@ -9326,6 +9350,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -9389,6 +9414,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -9455,6 +9481,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -9521,6 +9548,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -10111,6 +10139,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -10174,6 +10203,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -10240,6 +10270,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -10306,6 +10337,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -10894,6 +10926,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -10955,6 +10988,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -11019,6 +11053,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -11083,6 +11118,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,

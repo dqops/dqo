@@ -33,9 +33,6 @@ class DatabricksParametersSpec:
             environment variable.
         access_token (Union[Unset, str]): Databricks access token the warehouse. Supports also a
             ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable.
-        options (Union[Unset, str]): Databricks connection 'options' initialization parameter. For example setting this
-            to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports
-            also a ${DATABRICKS_OPTIONS} configuration with a custom environment variable.
         properties (Union[Unset, DatabricksParametersSpecProperties]): A dictionary of custom JDBC parameters that are
             added to the JDBC connection string, a key/value dictionary.
         database (Union[Unset, str]):
@@ -48,7 +45,6 @@ class DatabricksParametersSpec:
     password: Union[Unset, str] = UNSET
     http_path: Union[Unset, str] = UNSET
     access_token: Union[Unset, str] = UNSET
-    options: Union[Unset, str] = UNSET
     properties: Union[Unset, "DatabricksParametersSpecProperties"] = UNSET
     database: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -61,7 +57,6 @@ class DatabricksParametersSpec:
         password = self.password
         http_path = self.http_path
         access_token = self.access_token
-        options = self.options
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
@@ -85,8 +80,6 @@ class DatabricksParametersSpec:
             field_dict["http_path"] = http_path
         if access_token is not UNSET:
             field_dict["access_token"] = access_token
-        if options is not UNSET:
-            field_dict["options"] = options
         if properties is not UNSET:
             field_dict["properties"] = properties
         if database is not UNSET:
@@ -115,8 +108,6 @@ class DatabricksParametersSpec:
 
         access_token = d.pop("access_token", UNSET)
 
-        options = d.pop("options", UNSET)
-
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, DatabricksParametersSpecProperties]
         if isinstance(_properties, Unset):
@@ -134,7 +125,6 @@ class DatabricksParametersSpec:
             password=password,
             http_path=http_path,
             access_token=access_token,
-            options=options,
             properties=properties,
             database=database,
         )

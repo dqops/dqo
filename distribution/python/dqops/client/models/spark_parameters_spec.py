@@ -24,9 +24,6 @@ class SparkParametersSpec:
             dynamic substitution.
         password (Union[Unset, str]): Spark database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
             format to use dynamic substitution.
-        options (Union[Unset, str]): Spark connection 'options' initialization parameter. For example setting this to -c
-            statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a
-            ${REDSHIFT_OPTIONS} configuration with a custom environment variable.
         properties (Union[Unset, SparkParametersSpecProperties]): A dictionary of custom JDBC parameters that are added
             to the JDBC connection string, a key/value dictionary.
         database (Union[Unset, str]):
@@ -36,7 +33,6 @@ class SparkParametersSpec:
     port: Union[Unset, str] = UNSET
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
-    options: Union[Unset, str] = UNSET
     properties: Union[Unset, "SparkParametersSpecProperties"] = UNSET
     database: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -46,7 +42,6 @@ class SparkParametersSpec:
         port = self.port
         user = self.user
         password = self.password
-        options = self.options
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
@@ -64,8 +59,6 @@ class SparkParametersSpec:
             field_dict["user"] = user
         if password is not UNSET:
             field_dict["password"] = password
-        if options is not UNSET:
-            field_dict["options"] = options
         if properties is not UNSET:
             field_dict["properties"] = properties
         if database is not UNSET:
@@ -88,8 +81,6 @@ class SparkParametersSpec:
 
         password = d.pop("password", UNSET)
 
-        options = d.pop("options", UNSET)
-
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, SparkParametersSpecProperties]
         if isinstance(_properties, Unset):
@@ -104,7 +95,6 @@ class SparkParametersSpec:
             port=port,
             user=user,
             password=password,
-            options=options,
             properties=properties,
             database=database,
         )

@@ -86,6 +86,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 			quality_dimension='sample_quality_dimension',
 			supports_grouping=False,
 			standard=False,
+			default_check=False,
 			disabled=False,
 			exclude_from_kpi=False,
 			include_in_sla=False,
@@ -142,6 +143,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 			quality_dimension='sample_quality_dimension',
 			supports_grouping=False,
 			standard=False,
+			default_check=False,
 			disabled=False,
 			exclude_from_kpi=False,
 			include_in_sla=False,
@@ -201,6 +203,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 			quality_dimension='sample_quality_dimension',
 			supports_grouping=False,
 			standard=False,
+			default_check=False,
 			disabled=False,
 			exclude_from_kpi=False,
 			include_in_sla=False,
@@ -260,6 +263,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 			quality_dimension='sample_quality_dimension',
 			supports_grouping=False,
 			standard=False,
+			default_check=False,
 			disabled=False,
 			exclude_from_kpi=False,
 			include_in_sla=False,
@@ -1157,15 +1161,15 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "jobId" : 123456789,
-	  "createdAt" : "2007-10-11T13:42:00Z"
-	}
-    ```
+        ```js
+        {
+		  "jobId" : 123456789,
+		  "createdAt" : "2007-10-11T13:42:00Z"
+		}
+        ```
     
     
 
@@ -1189,14 +1193,14 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoQueueJobId(
-		job_id=123456789,
-		created_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```python
+        DqoQueueJobId(
+			job_id=123456789,
+			created_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -1221,14 +1225,14 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoQueueJobId(
-		job_id=123456789,
-		created_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```python
+        DqoQueueJobId(
+			job_id=123456789,
+			created_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -1256,14 +1260,14 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoQueueJobId(
-		job_id=123456789,
-		created_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```python
+        DqoQueueJobId(
+			job_id=123456789,
+			created_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -1291,14 +1295,14 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoQueueJobId(
-		job_id=123456789,
-		created_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```python
+        DqoQueueJobId(
+			job_id=123456789,
+			created_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -1343,150 +1347,150 @@ http://localhost:8888/api/connections
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "connection_name" : "sample_connection",
-	  "parallel_jobs_limit" : 4,
-	  "provider_type" : "postgresql",
-	  "postgresql" : {
-	    "host" : "localhost",
-	    "port" : "5432",
-	    "database" : "db",
-	    "user" : "PASSWD",
-	    "sslmode" : "disable"
-	  },
-	  "run_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true
-	  },
-	  "run_profiling_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "profiling"
-	  },
-	  "run_monitoring_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "monitoring"
-	  },
-	  "run_partition_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "partitioned"
-	  },
-	  "collect_statistics_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "columnNames" : [ ]
-	  },
-	  "data_clean_job_template" : {
-	    "connection" : "sample_connection",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true
-	  },
-	  "can_edit" : false,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}, {
-	  "connection_name" : "sample_connection",
-	  "parallel_jobs_limit" : 4,
-	  "provider_type" : "postgresql",
-	  "postgresql" : {
-	    "host" : "localhost",
-	    "port" : "5432",
-	    "database" : "db",
-	    "user" : "PASSWD",
-	    "sslmode" : "disable"
-	  },
-	  "run_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true
-	  },
-	  "run_profiling_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "profiling"
-	  },
-	  "run_monitoring_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "monitoring"
-	  },
-	  "run_partition_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "partitioned"
-	  },
-	  "collect_statistics_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "columnNames" : [ ]
-	  },
-	  "data_clean_job_template" : {
-	    "connection" : "sample_connection",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true
-	  },
-	  "can_edit" : false,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}, {
-	  "connection_name" : "sample_connection",
-	  "parallel_jobs_limit" : 4,
-	  "provider_type" : "postgresql",
-	  "postgresql" : {
-	    "host" : "localhost",
-	    "port" : "5432",
-	    "database" : "db",
-	    "user" : "PASSWD",
-	    "sslmode" : "disable"
-	  },
-	  "run_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true
-	  },
-	  "run_profiling_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "profiling"
-	  },
-	  "run_monitoring_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "monitoring"
-	  },
-	  "run_partition_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "partitioned"
-	  },
-	  "collect_statistics_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "columnNames" : [ ]
-	  },
-	  "data_clean_job_template" : {
-	    "connection" : "sample_connection",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true
-	  },
-	  "can_edit" : false,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	} ]
-    ```
+        ```js
+        [ {
+		  "connection_name" : "sample_connection",
+		  "parallel_jobs_limit" : 4,
+		  "provider_type" : "postgresql",
+		  "postgresql" : {
+		    "host" : "localhost",
+		    "port" : "5432",
+		    "database" : "db",
+		    "user" : "PASSWD",
+		    "sslmode" : "disable"
+		  },
+		  "run_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true
+		  },
+		  "run_profiling_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true,
+		    "checkType" : "profiling"
+		  },
+		  "run_monitoring_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true,
+		    "checkType" : "monitoring"
+		  },
+		  "run_partition_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true,
+		    "checkType" : "partitioned"
+		  },
+		  "collect_statistics_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true,
+		    "columnNames" : [ ]
+		  },
+		  "data_clean_job_template" : {
+		    "connection" : "sample_connection",
+		    "deleteErrors" : true,
+		    "deleteStatistics" : true,
+		    "deleteCheckResults" : true,
+		    "deleteSensorReadouts" : true
+		  },
+		  "can_edit" : false,
+		  "can_collect_statistics" : true,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		}, {
+		  "connection_name" : "sample_connection",
+		  "parallel_jobs_limit" : 4,
+		  "provider_type" : "postgresql",
+		  "postgresql" : {
+		    "host" : "localhost",
+		    "port" : "5432",
+		    "database" : "db",
+		    "user" : "PASSWD",
+		    "sslmode" : "disable"
+		  },
+		  "run_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true
+		  },
+		  "run_profiling_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true,
+		    "checkType" : "profiling"
+		  },
+		  "run_monitoring_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true,
+		    "checkType" : "monitoring"
+		  },
+		  "run_partition_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true,
+		    "checkType" : "partitioned"
+		  },
+		  "collect_statistics_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true,
+		    "columnNames" : [ ]
+		  },
+		  "data_clean_job_template" : {
+		    "connection" : "sample_connection",
+		    "deleteErrors" : true,
+		    "deleteStatistics" : true,
+		    "deleteCheckResults" : true,
+		    "deleteSensorReadouts" : true
+		  },
+		  "can_edit" : false,
+		  "can_collect_statistics" : true,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		}, {
+		  "connection_name" : "sample_connection",
+		  "parallel_jobs_limit" : 4,
+		  "provider_type" : "postgresql",
+		  "postgresql" : {
+		    "host" : "localhost",
+		    "port" : "5432",
+		    "database" : "db",
+		    "user" : "PASSWD",
+		    "sslmode" : "disable"
+		  },
+		  "run_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true
+		  },
+		  "run_profiling_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true,
+		    "checkType" : "profiling"
+		  },
+		  "run_monitoring_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true,
+		    "checkType" : "monitoring"
+		  },
+		  "run_partition_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true,
+		    "checkType" : "partitioned"
+		  },
+		  "collect_statistics_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true,
+		    "columnNames" : [ ]
+		  },
+		  "data_clean_job_template" : {
+		    "connection" : "sample_connection",
+		    "deleteErrors" : true,
+		    "deleteStatistics" : true,
+		    "deleteCheckResults" : true,
+		    "deleteSensorReadouts" : true
+		  },
+		  "can_edit" : false,
+		  "can_collect_statistics" : true,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		} ]
+        ```
     
     
 
@@ -1510,159 +1514,159 @@ http://localhost:8888/api/connections
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		ConnectionModel(
-			connection_name='sample_connection',
-			parallel_jobs_limit=4,
-			provider_type=ProviderType.POSTGRESQL,
-			postgresql=PostgresqlParametersSpec(
-				host='localhost',
-				port='5432',
-				database='db',
-				user='PASSWD',
-				sslmode=PostgresqlSslMode.DISABLE
+        ```python
+        [
+			ConnectionModel(
+				connection_name='sample_connection',
+				parallel_jobs_limit=4,
+				provider_type=ProviderType.POSTGRESQL,
+				postgresql=PostgresqlParametersSpec(
+					host='localhost',
+					port='5432',
+					database='db',
+					user='PASSWD',
+					sslmode=PostgresqlSslMode.DISABLE
+				),
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					enabled=True
+				),
+				collect_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+					
+					],
+					connection='sample_connection',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				enabled=True
+			ConnectionModel(
+				connection_name='sample_connection',
+				parallel_jobs_limit=4,
+				provider_type=ProviderType.POSTGRESQL,
+				postgresql=PostgresqlParametersSpec(
+					host='localhost',
+					port='5432',
+					database='db',
+					user='PASSWD',
+					sslmode=PostgresqlSslMode.DISABLE
+				),
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					enabled=True
+				),
+				collect_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+					
+					],
+					connection='sample_connection',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				enabled=True
-			),
-			collect_statistics_job_template=StatisticsCollectorSearchFilters(
-				column_names=[
-				
-				],
-				connection='sample_connection',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		ConnectionModel(
-			connection_name='sample_connection',
-			parallel_jobs_limit=4,
-			provider_type=ProviderType.POSTGRESQL,
-			postgresql=PostgresqlParametersSpec(
-				host='localhost',
-				port='5432',
-				database='db',
-				user='PASSWD',
-				sslmode=PostgresqlSslMode.DISABLE
-			),
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				enabled=True
-			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				enabled=True
-			),
-			collect_statistics_job_template=StatisticsCollectorSearchFilters(
-				column_names=[
-				
-				],
-				connection='sample_connection',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		ConnectionModel(
-			connection_name='sample_connection',
-			parallel_jobs_limit=4,
-			provider_type=ProviderType.POSTGRESQL,
-			postgresql=PostgresqlParametersSpec(
-				host='localhost',
-				port='5432',
-				database='db',
-				user='PASSWD',
-				sslmode=PostgresqlSslMode.DISABLE
-			),
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				enabled=True
-			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				enabled=True
-			),
-			collect_statistics_job_template=StatisticsCollectorSearchFilters(
-				column_names=[
-				
-				],
-				connection='sample_connection',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		)
-	]
-    ```
+			ConnectionModel(
+				connection_name='sample_connection',
+				parallel_jobs_limit=4,
+				provider_type=ProviderType.POSTGRESQL,
+				postgresql=PostgresqlParametersSpec(
+					host='localhost',
+					port='5432',
+					database='db',
+					user='PASSWD',
+					sslmode=PostgresqlSslMode.DISABLE
+				),
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					enabled=True
+				),
+				collect_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+					
+					],
+					connection='sample_connection',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
+			)
+		]
+        ```
     
     
     
@@ -1687,159 +1691,159 @@ http://localhost:8888/api/connections
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		ConnectionModel(
-			connection_name='sample_connection',
-			parallel_jobs_limit=4,
-			provider_type=ProviderType.POSTGRESQL,
-			postgresql=PostgresqlParametersSpec(
-				host='localhost',
-				port='5432',
-				database='db',
-				user='PASSWD',
-				sslmode=PostgresqlSslMode.DISABLE
+        ```python
+        [
+			ConnectionModel(
+				connection_name='sample_connection',
+				parallel_jobs_limit=4,
+				provider_type=ProviderType.POSTGRESQL,
+				postgresql=PostgresqlParametersSpec(
+					host='localhost',
+					port='5432',
+					database='db',
+					user='PASSWD',
+					sslmode=PostgresqlSslMode.DISABLE
+				),
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					enabled=True
+				),
+				collect_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+					
+					],
+					connection='sample_connection',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				enabled=True
+			ConnectionModel(
+				connection_name='sample_connection',
+				parallel_jobs_limit=4,
+				provider_type=ProviderType.POSTGRESQL,
+				postgresql=PostgresqlParametersSpec(
+					host='localhost',
+					port='5432',
+					database='db',
+					user='PASSWD',
+					sslmode=PostgresqlSslMode.DISABLE
+				),
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					enabled=True
+				),
+				collect_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+					
+					],
+					connection='sample_connection',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				enabled=True
-			),
-			collect_statistics_job_template=StatisticsCollectorSearchFilters(
-				column_names=[
-				
-				],
-				connection='sample_connection',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		ConnectionModel(
-			connection_name='sample_connection',
-			parallel_jobs_limit=4,
-			provider_type=ProviderType.POSTGRESQL,
-			postgresql=PostgresqlParametersSpec(
-				host='localhost',
-				port='5432',
-				database='db',
-				user='PASSWD',
-				sslmode=PostgresqlSslMode.DISABLE
-			),
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				enabled=True
-			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				enabled=True
-			),
-			collect_statistics_job_template=StatisticsCollectorSearchFilters(
-				column_names=[
-				
-				],
-				connection='sample_connection',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		ConnectionModel(
-			connection_name='sample_connection',
-			parallel_jobs_limit=4,
-			provider_type=ProviderType.POSTGRESQL,
-			postgresql=PostgresqlParametersSpec(
-				host='localhost',
-				port='5432',
-				database='db',
-				user='PASSWD',
-				sslmode=PostgresqlSslMode.DISABLE
-			),
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				enabled=True
-			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				enabled=True
-			),
-			collect_statistics_job_template=StatisticsCollectorSearchFilters(
-				column_names=[
-				
-				],
-				connection='sample_connection',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		)
-	]
-    ```
+			ConnectionModel(
+				connection_name='sample_connection',
+				parallel_jobs_limit=4,
+				provider_type=ProviderType.POSTGRESQL,
+				postgresql=PostgresqlParametersSpec(
+					host='localhost',
+					port='5432',
+					database='db',
+					user='PASSWD',
+					sslmode=PostgresqlSslMode.DISABLE
+				),
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					enabled=True
+				),
+				collect_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+					
+					],
+					connection='sample_connection',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
+			)
+		]
+        ```
     
     
     
@@ -1867,159 +1871,159 @@ http://localhost:8888/api/connections
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		ConnectionModel(
-			connection_name='sample_connection',
-			parallel_jobs_limit=4,
-			provider_type=ProviderType.POSTGRESQL,
-			postgresql=PostgresqlParametersSpec(
-				host='localhost',
-				port='5432',
-				database='db',
-				user='PASSWD',
-				sslmode=PostgresqlSslMode.DISABLE
+        ```python
+        [
+			ConnectionModel(
+				connection_name='sample_connection',
+				parallel_jobs_limit=4,
+				provider_type=ProviderType.POSTGRESQL,
+				postgresql=PostgresqlParametersSpec(
+					host='localhost',
+					port='5432',
+					database='db',
+					user='PASSWD',
+					sslmode=PostgresqlSslMode.DISABLE
+				),
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					enabled=True
+				),
+				collect_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+					
+					],
+					connection='sample_connection',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				enabled=True
+			ConnectionModel(
+				connection_name='sample_connection',
+				parallel_jobs_limit=4,
+				provider_type=ProviderType.POSTGRESQL,
+				postgresql=PostgresqlParametersSpec(
+					host='localhost',
+					port='5432',
+					database='db',
+					user='PASSWD',
+					sslmode=PostgresqlSslMode.DISABLE
+				),
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					enabled=True
+				),
+				collect_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+					
+					],
+					connection='sample_connection',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				enabled=True
-			),
-			collect_statistics_job_template=StatisticsCollectorSearchFilters(
-				column_names=[
-				
-				],
-				connection='sample_connection',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		ConnectionModel(
-			connection_name='sample_connection',
-			parallel_jobs_limit=4,
-			provider_type=ProviderType.POSTGRESQL,
-			postgresql=PostgresqlParametersSpec(
-				host='localhost',
-				port='5432',
-				database='db',
-				user='PASSWD',
-				sslmode=PostgresqlSslMode.DISABLE
-			),
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				enabled=True
-			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				enabled=True
-			),
-			collect_statistics_job_template=StatisticsCollectorSearchFilters(
-				column_names=[
-				
-				],
-				connection='sample_connection',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		ConnectionModel(
-			connection_name='sample_connection',
-			parallel_jobs_limit=4,
-			provider_type=ProviderType.POSTGRESQL,
-			postgresql=PostgresqlParametersSpec(
-				host='localhost',
-				port='5432',
-				database='db',
-				user='PASSWD',
-				sslmode=PostgresqlSslMode.DISABLE
-			),
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				enabled=True
-			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				enabled=True
-			),
-			collect_statistics_job_template=StatisticsCollectorSearchFilters(
-				column_names=[
-				
-				],
-				connection='sample_connection',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		)
-	]
-    ```
+			ConnectionModel(
+				connection_name='sample_connection',
+				parallel_jobs_limit=4,
+				provider_type=ProviderType.POSTGRESQL,
+				postgresql=PostgresqlParametersSpec(
+					host='localhost',
+					port='5432',
+					database='db',
+					user='PASSWD',
+					sslmode=PostgresqlSslMode.DISABLE
+				),
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					enabled=True
+				),
+				collect_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+					
+					],
+					connection='sample_connection',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
+			)
+		]
+        ```
     
     
     
@@ -2047,159 +2051,159 @@ http://localhost:8888/api/connections
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		ConnectionModel(
-			connection_name='sample_connection',
-			parallel_jobs_limit=4,
-			provider_type=ProviderType.POSTGRESQL,
-			postgresql=PostgresqlParametersSpec(
-				host='localhost',
-				port='5432',
-				database='db',
-				user='PASSWD',
-				sslmode=PostgresqlSslMode.DISABLE
+        ```python
+        [
+			ConnectionModel(
+				connection_name='sample_connection',
+				parallel_jobs_limit=4,
+				provider_type=ProviderType.POSTGRESQL,
+				postgresql=PostgresqlParametersSpec(
+					host='localhost',
+					port='5432',
+					database='db',
+					user='PASSWD',
+					sslmode=PostgresqlSslMode.DISABLE
+				),
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					enabled=True
+				),
+				collect_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+					
+					],
+					connection='sample_connection',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				enabled=True
+			ConnectionModel(
+				connection_name='sample_connection',
+				parallel_jobs_limit=4,
+				provider_type=ProviderType.POSTGRESQL,
+				postgresql=PostgresqlParametersSpec(
+					host='localhost',
+					port='5432',
+					database='db',
+					user='PASSWD',
+					sslmode=PostgresqlSslMode.DISABLE
+				),
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					enabled=True
+				),
+				collect_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+					
+					],
+					connection='sample_connection',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				enabled=True
-			),
-			collect_statistics_job_template=StatisticsCollectorSearchFilters(
-				column_names=[
-				
-				],
-				connection='sample_connection',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		ConnectionModel(
-			connection_name='sample_connection',
-			parallel_jobs_limit=4,
-			provider_type=ProviderType.POSTGRESQL,
-			postgresql=PostgresqlParametersSpec(
-				host='localhost',
-				port='5432',
-				database='db',
-				user='PASSWD',
-				sslmode=PostgresqlSslMode.DISABLE
-			),
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				enabled=True
-			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				enabled=True
-			),
-			collect_statistics_job_template=StatisticsCollectorSearchFilters(
-				column_names=[
-				
-				],
-				connection='sample_connection',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		ConnectionModel(
-			connection_name='sample_connection',
-			parallel_jobs_limit=4,
-			provider_type=ProviderType.POSTGRESQL,
-			postgresql=PostgresqlParametersSpec(
-				host='localhost',
-				port='5432',
-				database='db',
-				user='PASSWD',
-				sslmode=PostgresqlSslMode.DISABLE
-			),
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				enabled=True
-			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				enabled=True
-			),
-			collect_statistics_job_template=StatisticsCollectorSearchFilters(
-				column_names=[
-				
-				],
-				connection='sample_connection',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=False,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		)
-	]
-    ```
+			ConnectionModel(
+				connection_name='sample_connection',
+				parallel_jobs_limit=4,
+				provider_type=ProviderType.POSTGRESQL,
+				postgresql=PostgresqlParametersSpec(
+					host='localhost',
+					port='5432',
+					database='db',
+					user='PASSWD',
+					sslmode=PostgresqlSslMode.DISABLE
+				),
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					enabled=True
+				),
+				collect_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+					
+					],
+					connection='sample_connection',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=False,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
+			)
+		]
+        ```
     
     
     
@@ -2251,14 +2255,14 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "can_edit" : false
-	}
-    ```
+        ```js
+        {
+		  "can_edit" : false
+		}
+        ```
     
     
 
@@ -2283,11 +2287,11 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ConnectionSpecificationModel(can_edit=False)
-    ```
+        ```python
+        ConnectionSpecificationModel(can_edit=False)
+        ```
     
     
     
@@ -2313,11 +2317,11 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ConnectionSpecificationModel(can_edit=False)
-    ```
+        ```python
+        ConnectionSpecificationModel(can_edit=False)
+        ```
     
     
     
@@ -2346,11 +2350,11 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ConnectionSpecificationModel(can_edit=False)
-    ```
+        ```python
+        ConnectionSpecificationModel(can_edit=False)
+        ```
     
     
     
@@ -2379,11 +2383,11 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ConnectionSpecificationModel(can_edit=False)
-    ```
+        ```python
+        ConnectionSpecificationModel(can_edit=False)
+        ```
     
     
     
@@ -2435,58 +2439,58 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "connection_name" : "sample_connection",
-	  "parallel_jobs_limit" : 4,
-	  "provider_type" : "postgresql",
-	  "postgresql" : {
-	    "host" : "localhost",
-	    "port" : "5432",
-	    "database" : "db",
-	    "user" : "PASSWD",
-	    "sslmode" : "disable"
-	  },
-	  "run_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true
-	  },
-	  "run_profiling_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "profiling"
-	  },
-	  "run_monitoring_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "monitoring"
-	  },
-	  "run_partition_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "partitioned"
-	  },
-	  "collect_statistics_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "columnNames" : [ ]
-	  },
-	  "data_clean_job_template" : {
-	    "connection" : "sample_connection",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true
-	  },
-	  "can_edit" : false,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
+        ```js
+        {
+		  "connection_name" : "sample_connection",
+		  "parallel_jobs_limit" : 4,
+		  "provider_type" : "postgresql",
+		  "postgresql" : {
+		    "host" : "localhost",
+		    "port" : "5432",
+		    "database" : "db",
+		    "user" : "PASSWD",
+		    "sslmode" : "disable"
+		  },
+		  "run_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true
+		  },
+		  "run_profiling_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true,
+		    "checkType" : "profiling"
+		  },
+		  "run_monitoring_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true,
+		    "checkType" : "monitoring"
+		  },
+		  "run_partition_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true,
+		    "checkType" : "partitioned"
+		  },
+		  "collect_statistics_job_template" : {
+		    "connection" : "sample_connection",
+		    "enabled" : true,
+		    "columnNames" : [ ]
+		  },
+		  "data_clean_job_template" : {
+		    "connection" : "sample_connection",
+		    "deleteErrors" : true,
+		    "deleteStatistics" : true,
+		    "deleteCheckResults" : true,
+		    "deleteSensorReadouts" : true
+		  },
+		  "can_edit" : false,
+		  "can_collect_statistics" : true,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		}
+        ```
     
     
 
@@ -2511,59 +2515,59 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ConnectionModel(
-		connection_name='sample_connection',
-		parallel_jobs_limit=4,
-		provider_type=ProviderType.POSTGRESQL,
-		postgresql=PostgresqlParametersSpec(
-			host='localhost',
-			port='5432',
-			database='db',
-			user='PASSWD',
-			sslmode=PostgresqlSslMode.DISABLE
-		),
-		run_checks_job_template=CheckSearchFilters(
-			connection='sample_connection',
-			enabled=True
-		),
-		run_profiling_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.PROFILING,
-			connection='sample_connection',
-			enabled=True
-		),
-		run_monitoring_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			connection='sample_connection',
-			enabled=True
-		),
-		run_partition_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.PARTITIONED,
-			connection='sample_connection',
-			enabled=True
-		),
-		collect_statistics_job_template=StatisticsCollectorSearchFilters(
-			column_names=[
-			
-			],
-			connection='sample_connection',
-			enabled=True
-		),
-		data_clean_job_template=DeleteStoredDataQueueJobParameters(
-			connection='sample_connection',
-			delete_errors=True,
-			delete_statistics=True,
-			delete_check_results=True,
-			delete_sensor_readouts=True
-		),
-		can_edit=False,
-		can_collect_statistics=True,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        ConnectionModel(
+			connection_name='sample_connection',
+			parallel_jobs_limit=4,
+			provider_type=ProviderType.POSTGRESQL,
+			postgresql=PostgresqlParametersSpec(
+				host='localhost',
+				port='5432',
+				database='db',
+				user='PASSWD',
+				sslmode=PostgresqlSslMode.DISABLE
+			),
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				enabled=True
+			),
+			collect_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+				
+				],
+				connection='sample_connection',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -2589,59 +2593,59 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ConnectionModel(
-		connection_name='sample_connection',
-		parallel_jobs_limit=4,
-		provider_type=ProviderType.POSTGRESQL,
-		postgresql=PostgresqlParametersSpec(
-			host='localhost',
-			port='5432',
-			database='db',
-			user='PASSWD',
-			sslmode=PostgresqlSslMode.DISABLE
-		),
-		run_checks_job_template=CheckSearchFilters(
-			connection='sample_connection',
-			enabled=True
-		),
-		run_profiling_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.PROFILING,
-			connection='sample_connection',
-			enabled=True
-		),
-		run_monitoring_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			connection='sample_connection',
-			enabled=True
-		),
-		run_partition_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.PARTITIONED,
-			connection='sample_connection',
-			enabled=True
-		),
-		collect_statistics_job_template=StatisticsCollectorSearchFilters(
-			column_names=[
-			
-			],
-			connection='sample_connection',
-			enabled=True
-		),
-		data_clean_job_template=DeleteStoredDataQueueJobParameters(
-			connection='sample_connection',
-			delete_errors=True,
-			delete_statistics=True,
-			delete_check_results=True,
-			delete_sensor_readouts=True
-		),
-		can_edit=False,
-		can_collect_statistics=True,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        ConnectionModel(
+			connection_name='sample_connection',
+			parallel_jobs_limit=4,
+			provider_type=ProviderType.POSTGRESQL,
+			postgresql=PostgresqlParametersSpec(
+				host='localhost',
+				port='5432',
+				database='db',
+				user='PASSWD',
+				sslmode=PostgresqlSslMode.DISABLE
+			),
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				enabled=True
+			),
+			collect_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+				
+				],
+				connection='sample_connection',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -2670,59 +2674,59 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ConnectionModel(
-		connection_name='sample_connection',
-		parallel_jobs_limit=4,
-		provider_type=ProviderType.POSTGRESQL,
-		postgresql=PostgresqlParametersSpec(
-			host='localhost',
-			port='5432',
-			database='db',
-			user='PASSWD',
-			sslmode=PostgresqlSslMode.DISABLE
-		),
-		run_checks_job_template=CheckSearchFilters(
-			connection='sample_connection',
-			enabled=True
-		),
-		run_profiling_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.PROFILING,
-			connection='sample_connection',
-			enabled=True
-		),
-		run_monitoring_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			connection='sample_connection',
-			enabled=True
-		),
-		run_partition_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.PARTITIONED,
-			connection='sample_connection',
-			enabled=True
-		),
-		collect_statistics_job_template=StatisticsCollectorSearchFilters(
-			column_names=[
-			
-			],
-			connection='sample_connection',
-			enabled=True
-		),
-		data_clean_job_template=DeleteStoredDataQueueJobParameters(
-			connection='sample_connection',
-			delete_errors=True,
-			delete_statistics=True,
-			delete_check_results=True,
-			delete_sensor_readouts=True
-		),
-		can_edit=False,
-		can_collect_statistics=True,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        ConnectionModel(
+			connection_name='sample_connection',
+			parallel_jobs_limit=4,
+			provider_type=ProviderType.POSTGRESQL,
+			postgresql=PostgresqlParametersSpec(
+				host='localhost',
+				port='5432',
+				database='db',
+				user='PASSWD',
+				sslmode=PostgresqlSslMode.DISABLE
+			),
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				enabled=True
+			),
+			collect_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+				
+				],
+				connection='sample_connection',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -2751,59 +2755,59 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ConnectionModel(
-		connection_name='sample_connection',
-		parallel_jobs_limit=4,
-		provider_type=ProviderType.POSTGRESQL,
-		postgresql=PostgresqlParametersSpec(
-			host='localhost',
-			port='5432',
-			database='db',
-			user='PASSWD',
-			sslmode=PostgresqlSslMode.DISABLE
-		),
-		run_checks_job_template=CheckSearchFilters(
-			connection='sample_connection',
-			enabled=True
-		),
-		run_profiling_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.PROFILING,
-			connection='sample_connection',
-			enabled=True
-		),
-		run_monitoring_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			connection='sample_connection',
-			enabled=True
-		),
-		run_partition_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.PARTITIONED,
-			connection='sample_connection',
-			enabled=True
-		),
-		collect_statistics_job_template=StatisticsCollectorSearchFilters(
-			column_names=[
-			
-			],
-			connection='sample_connection',
-			enabled=True
-		),
-		data_clean_job_template=DeleteStoredDataQueueJobParameters(
-			connection='sample_connection',
-			delete_errors=True,
-			delete_statistics=True,
-			delete_check_results=True,
-			delete_sensor_readouts=True
-		),
-		can_edit=False,
-		can_collect_statistics=True,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```python
+        ConnectionModel(
+			connection_name='sample_connection',
+			parallel_jobs_limit=4,
+			provider_type=ProviderType.POSTGRESQL,
+			postgresql=PostgresqlParametersSpec(
+				host='localhost',
+				port='5432',
+				database='db',
+				user='PASSWD',
+				sslmode=PostgresqlSslMode.DISABLE
+			),
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				enabled=True
+			),
+			collect_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+				
+				],
+				connection='sample_connection',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -2855,24 +2859,24 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	}, {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	}, {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	} ]
-    ```
+        ```js
+        [ {
+		  "date" : "2007-12-03T10:15:30",
+		  "comment_by" : "sample_user",
+		  "comment" : "Sample comment"
+		}, {
+		  "date" : "2007-12-03T10:15:30",
+		  "comment_by" : "sample_user",
+		  "comment" : "Sample comment"
+		}, {
+		  "date" : "2007-12-03T10:15:30",
+		  "comment_by" : "sample_user",
+		  "comment" : "Sample comment"
+		} ]
+        ```
     
     
 
@@ -2897,27 +2901,27 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		)
-	]
-    ```
+        ```python
+        [
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			)
+		]
+        ```
     
     
     
@@ -2943,27 +2947,27 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		)
-	]
-    ```
+        ```python
+        [
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			)
+		]
+        ```
     
     
     
@@ -2992,27 +2996,27 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		)
-	]
-    ```
+        ```python
+        [
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			)
+		]
+        ```
     
     
     
@@ -3041,27 +3045,27 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		)
-	]
-    ```
+        ```python
+        [
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			)
+		]
+        ```
     
     
     
@@ -3113,18 +3117,18 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "tables_count" : 0
-	}, {
-	  "tables_count" : 0
-	}, {
-	  "tables_count" : 0
-	} ]
-    ```
+        ```js
+        [ {
+		  "tables_count" : 0
+		}, {
+		  "tables_count" : 0
+		}, {
+		  "tables_count" : 0
+		} ]
+        ```
     
     
 
@@ -3149,15 +3153,15 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CommonColumnModel(tables_count=0),
-		CommonColumnModel(tables_count=0),
-		CommonColumnModel(tables_count=0)
-	]
-    ```
+        ```python
+        [
+			CommonColumnModel(tables_count=0),
+			CommonColumnModel(tables_count=0),
+			CommonColumnModel(tables_count=0)
+		]
+        ```
     
     
     
@@ -3183,15 +3187,15 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CommonColumnModel(tables_count=0),
-		CommonColumnModel(tables_count=0),
-		CommonColumnModel(tables_count=0)
-	]
-    ```
+        ```python
+        [
+			CommonColumnModel(tables_count=0),
+			CommonColumnModel(tables_count=0),
+			CommonColumnModel(tables_count=0)
+		]
+        ```
     
     
     
@@ -3220,15 +3224,15 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CommonColumnModel(tables_count=0),
-		CommonColumnModel(tables_count=0),
-		CommonColumnModel(tables_count=0)
-	]
-    ```
+        ```python
+        [
+			CommonColumnModel(tables_count=0),
+			CommonColumnModel(tables_count=0),
+			CommonColumnModel(tables_count=0)
+		]
+        ```
     
     
     
@@ -3257,15 +3261,15 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CommonColumnModel(tables_count=0),
-		CommonColumnModel(tables_count=0),
-		CommonColumnModel(tables_count=0)
-	]
-    ```
+        ```python
+        [
+			CommonColumnModel(tables_count=0),
+			CommonColumnModel(tables_count=0),
+			CommonColumnModel(tables_count=0)
+		]
+        ```
     
     
     
@@ -3317,17 +3321,17 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "level_3" : {
-	    "source" : "column_value",
-	    "column" : "sample_column"
-	  }
-	}
-    ```
+        ```js
+        {
+		  "level_3" : {
+		    "source" : "column_value",
+		    "column" : "sample_column"
+		  }
+		}
+        ```
     
     
 
@@ -3352,16 +3356,16 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DataGroupingConfigurationSpec(
-		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.COLUMN_VALUE,
-			column='sample_column'
+        ```python
+        DataGroupingConfigurationSpec(
+			level_3=DataGroupingDimensionSpec(
+				source=DataGroupingDimensionSource.COLUMN_VALUE,
+				column='sample_column'
+			)
 		)
-	)
-    ```
+        ```
     
     
     
@@ -3387,16 +3391,16 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DataGroupingConfigurationSpec(
-		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.COLUMN_VALUE,
-			column='sample_column'
+        ```python
+        DataGroupingConfigurationSpec(
+			level_3=DataGroupingDimensionSpec(
+				source=DataGroupingDimensionSource.COLUMN_VALUE,
+				column='sample_column'
+			)
 		)
-	)
-    ```
+        ```
     
     
     
@@ -3425,16 +3429,16 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DataGroupingConfigurationSpec(
-		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.COLUMN_VALUE,
-			column='sample_column'
+        ```python
+        DataGroupingConfigurationSpec(
+			level_3=DataGroupingDimensionSpec(
+				source=DataGroupingDimensionSource.COLUMN_VALUE,
+				column='sample_column'
+			)
 		)
-	)
-    ```
+        ```
     
     
     
@@ -3463,16 +3467,16 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DataGroupingConfigurationSpec(
-		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.COLUMN_VALUE,
-			column='sample_column'
+        ```python
+        DataGroupingConfigurationSpec(
+			level_3=DataGroupingDimensionSpec(
+				source=DataGroupingDimensionSource.COLUMN_VALUE,
+				column='sample_column'
+			)
 		)
-	)
-    ```
+        ```
     
     
     
@@ -3524,24 +3528,24 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "grouping_level" : "table_dimension",
-	  "minimum_severity" : "warning",
-	  "divide_by_data_groups" : true,
-	  "max_incident_length_days" : 60,
-	  "mute_for_days" : 60,
-	  "webhooks" : {
-	    "incident_opened_webhook_url" : "https://sample_url.com/opened",
-	    "incident_acknowledged_webhook_url" : "https://sample_url.com/acknowledged",
-	    "incident_resolved_webhook_url" : "https://sample_url.com/resolved",
-	    "incident_muted_webhook_url" : "https://sample_url.com/muted"
-	  }
-	}
-    ```
+        ```js
+        {
+		  "grouping_level" : "table_dimension",
+		  "minimum_severity" : "warning",
+		  "divide_by_data_groups" : true,
+		  "max_incident_length_days" : 60,
+		  "mute_for_days" : 60,
+		  "webhooks" : {
+		    "incident_opened_webhook_url" : "https://sample_url.com/opened",
+		    "incident_acknowledged_webhook_url" : "https://sample_url.com/acknowledged",
+		    "incident_resolved_webhook_url" : "https://sample_url.com/resolved",
+		    "incident_muted_webhook_url" : "https://sample_url.com/muted"
+		  }
+		}
+        ```
     
     
 
@@ -3566,24 +3570,24 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ConnectionIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
-		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
-		divide_by_data_groups=True,
-		max_incident_length_days=60,
-		mute_for_days=60,
-		disabled=False,
-		webhooks=IncidentWebhookNotificationsSpec(
-			incident_opened_webhook_url='https://sample_url.com/opened',
-			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-			incident_resolved_webhook_url='https://sample_url.com/resolved',
-			incident_muted_webhook_url='https://sample_url.com/muted'
+        ```python
+        ConnectionIncidentGroupingSpec(
+			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
+			divide_by_data_groups=True,
+			max_incident_length_days=60,
+			mute_for_days=60,
+			disabled=False,
+			webhooks=IncidentWebhookNotificationsSpec(
+				incident_opened_webhook_url='https://sample_url.com/opened',
+				incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
+				incident_resolved_webhook_url='https://sample_url.com/resolved',
+				incident_muted_webhook_url='https://sample_url.com/muted'
+			)
 		)
-	)
-    ```
+        ```
     
     
     
@@ -3609,24 +3613,24 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ConnectionIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
-		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
-		divide_by_data_groups=True,
-		max_incident_length_days=60,
-		mute_for_days=60,
-		disabled=False,
-		webhooks=IncidentWebhookNotificationsSpec(
-			incident_opened_webhook_url='https://sample_url.com/opened',
-			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-			incident_resolved_webhook_url='https://sample_url.com/resolved',
-			incident_muted_webhook_url='https://sample_url.com/muted'
+        ```python
+        ConnectionIncidentGroupingSpec(
+			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
+			divide_by_data_groups=True,
+			max_incident_length_days=60,
+			mute_for_days=60,
+			disabled=False,
+			webhooks=IncidentWebhookNotificationsSpec(
+				incident_opened_webhook_url='https://sample_url.com/opened',
+				incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
+				incident_resolved_webhook_url='https://sample_url.com/resolved',
+				incident_muted_webhook_url='https://sample_url.com/muted'
+			)
 		)
-	)
-    ```
+        ```
     
     
     
@@ -3655,24 +3659,24 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ConnectionIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
-		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
-		divide_by_data_groups=True,
-		max_incident_length_days=60,
-		mute_for_days=60,
-		disabled=False,
-		webhooks=IncidentWebhookNotificationsSpec(
-			incident_opened_webhook_url='https://sample_url.com/opened',
-			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-			incident_resolved_webhook_url='https://sample_url.com/resolved',
-			incident_muted_webhook_url='https://sample_url.com/muted'
+        ```python
+        ConnectionIncidentGroupingSpec(
+			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
+			divide_by_data_groups=True,
+			max_incident_length_days=60,
+			mute_for_days=60,
+			disabled=False,
+			webhooks=IncidentWebhookNotificationsSpec(
+				incident_opened_webhook_url='https://sample_url.com/opened',
+				incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
+				incident_resolved_webhook_url='https://sample_url.com/resolved',
+				incident_muted_webhook_url='https://sample_url.com/muted'
+			)
 		)
-	)
-    ```
+        ```
     
     
     
@@ -3701,24 +3705,24 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ConnectionIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
-		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
-		divide_by_data_groups=True,
-		max_incident_length_days=60,
-		mute_for_days=60,
-		disabled=False,
-		webhooks=IncidentWebhookNotificationsSpec(
-			incident_opened_webhook_url='https://sample_url.com/opened',
-			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-			incident_resolved_webhook_url='https://sample_url.com/resolved',
-			incident_muted_webhook_url='https://sample_url.com/muted'
+        ```python
+        ConnectionIncidentGroupingSpec(
+			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
+			divide_by_data_groups=True,
+			max_incident_length_days=60,
+			mute_for_days=60,
+			disabled=False,
+			webhooks=IncidentWebhookNotificationsSpec(
+				incident_opened_webhook_url='https://sample_url.com/opened',
+				incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
+				incident_resolved_webhook_url='https://sample_url.com/resolved',
+				incident_muted_webhook_url='https://sample_url.com/muted'
+			)
 		)
-	)
-    ```
+        ```
     
     
     
@@ -3770,12 +3774,12 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ "sampleString_1", "sampleString_2", "sampleString_3" ]
-    ```
+        ```js
+        [ "sampleString_1", "sampleString_2", "sampleString_3" ]
+        ```
     
     
 
@@ -3800,15 +3804,15 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		'sampleString_1',
-		'sampleString_2',
-		'sampleString_3'
-	]
-    ```
+        ```python
+        [
+			'sampleString_1',
+			'sampleString_2',
+			'sampleString_3'
+		]
+        ```
     
     
     
@@ -3834,15 +3838,15 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		'sampleString_1',
-		'sampleString_2',
-		'sampleString_3'
-	]
-    ```
+        ```python
+        [
+			'sampleString_1',
+			'sampleString_2',
+			'sampleString_3'
+		]
+        ```
     
     
     
@@ -3871,15 +3875,15 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		'sampleString_1',
-		'sampleString_2',
-		'sampleString_3'
-	]
-    ```
+        ```python
+        [
+			'sampleString_1',
+			'sampleString_2',
+			'sampleString_3'
+		]
+        ```
     
     
     
@@ -3908,15 +3912,15 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		'sampleString_1',
-		'sampleString_2',
-		'sampleString_3'
-	]
-    ```
+        ```python
+        [
+			'sampleString_1',
+			'sampleString_2',
+			'sampleString_3'
+		]
+        ```
     
     
     
@@ -3969,14 +3973,14 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "cron_expression" : "0 12 1 * *"
-	}
-    ```
+        ```js
+        {
+		  "cron_expression" : "0 12 1 * *"
+		}
+        ```
     
     
 
@@ -4003,14 +4007,14 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    MonitoringScheduleSpec(
-		cron_expression='0 12 1 * *',
-		disabled=False
-	)
-    ```
+        ```python
+        MonitoringScheduleSpec(
+			cron_expression='0 12 1 * *',
+			disabled=False
+		)
+        ```
     
     
     
@@ -4038,14 +4042,14 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    MonitoringScheduleSpec(
-		cron_expression='0 12 1 * *',
-		disabled=False
-	)
-    ```
+        ```python
+        MonitoringScheduleSpec(
+			cron_expression='0 12 1 * *',
+			disabled=False
+		)
+        ```
     
     
     
@@ -4076,14 +4080,14 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    MonitoringScheduleSpec(
-		cron_expression='0 12 1 * *',
-		disabled=False
-	)
-    ```
+        ```python
+        MonitoringScheduleSpec(
+			cron_expression='0 12 1 * *',
+			disabled=False
+		)
+        ```
     
     
     
@@ -4114,14 +4118,14 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    MonitoringScheduleSpec(
-		cron_expression='0 12 1 * *',
-		disabled=False
-	)
-    ```
+        ```python
+        MonitoringScheduleSpec(
+			cron_expression='0 12 1 * *',
+			disabled=False
+		)
+        ```
     
     
     

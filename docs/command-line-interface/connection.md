@@ -88,49 +88,45 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--databricks-access-token=<accessToken>]
                 [--databricks-catalog=<catalog>] [--databricks-host=<host>]
                 [--databricks-http-path=<httpPath>]
-                [--databricks-options=<options>]
                 [--databricks-password=<password>] [--databricks-port=<port>]
                 [--databricks-user=<user>] [--duckdb-database=<database>]
-                [--duckdb-options=<options>] [--duckdb-password=<password>]
-                [--duckdb-read-mode=<readMode>] [--duckdb-region=<region>]
-                [--duckdb-secrets-type=<secretsType>]
-                [--duckdb-source-files-type=<sourceFilesType>]
-                [--duckdb-user=<user>] [--mysql-database=<database>]
+                [--duckdb-files-format-type=<filesFormatType>]
+                [--duckdb-password=<password>] [--duckdb-read-mode=<readMode>]
+                [--duckdb-region=<region>]
+                [--duckdb-storage-type=<storageType>] [--duckdb-user=<user>]
+                [--mysql-database=<database>]
                 [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
-                [--mysql-options=<options>] [--mysql-password=<password>]
-                [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
-                [--mysql-user=<user>] [-n=<name>] [-of=<outputFormat>]
-                [--oracle-database=<database>] [--oracle-host=<host>]
+                [--mysql-password=<password>] [--mysql-port=<port>]
+                [--mysql-sslmode=<sslmode>] [--mysql-user=<user>] [-n=<name>]
+                [-of=<outputFormat>] [--oracle-database=<database>]
+                [--oracle-host=<host>]
                 [--oracle-initialization-sql=<initializationSql>]
-                [--oracle-options=<options>] [--oracle-password=<password>]
-                [--oracle-port=<port>] [--oracle-user=<user>]
-                [--postgresql-database=<database>] [--postgresql-host=<host>]
-                [--postgresql-options=<options>]
+                [--oracle-password=<password>] [--oracle-port=<port>]
+                [--oracle-user=<user>] [--postgresql-database=<database>]
+                [--postgresql-host=<host>] [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
                 [--postgresql-sslmode=<sslmode>] [--postgresql-user=<user>]
                 [--presto-database=<database>] [--presto-host=<host>]
                 [--presto-password=<password>] [--presto-port=<port>]
                 [--presto-user=<user>] [--redshift-database=<database>]
-                [--redshift-host=<host>] [--redshift-options=<options>]
-                [--redshift-password=<password>] [--redshift-port=<port>]
-                [--redshift-user=<user>]
+                [--redshift-host=<host>] [--redshift-password=<password>]
+                [--redshift-port=<port>] [--redshift-user=<user>]
                 [--single-store-parameters-spec=<singleStoreDbParametersSpec>]
                 [--snowflake-account=<account>]
                 [--snowflake-database=<database>]
                 [--snowflake-password=<password>] [--snowflake-role=<role>]
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
-                [--spark-host=<host>] [--spark-options=<options>]
-                [--spark-password=<password>] [--spark-port=<port>]
-                [--spark-user=<user>]
+                [--spark-host=<host>] [--spark-password=<password>]
+                [--spark-port=<port>] [--spark-user=<user>]
                 [--sqlserver-authentication-mode=<authenticationMode>]
                 [--sqlserver-database=<database>] [--sqlserver-host=<host>]
-                [--sqlserver-options=<options>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
                 [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
                 [--trino-host=<host>] [--trino-password=<password>]
                 [--trino-port=<port>] [--trino-user=<user>]
                 [-D=<String=String>]... [-Duck=<String=String>]...
+                [--duckdb-directories=<String=String>[,<String=String>...]]...
                 [-E=<String=String>]... [-F=<String=String>]...
                 [-K=<String=String>]... [-M=<String=String>]...
                 [-O=<String=String>]... [-P=<String=String>]...
@@ -157,49 +153,45 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--databricks-access-token=<accessToken>]
                 [--databricks-catalog=<catalog>] [--databricks-host=<host>]
                 [--databricks-http-path=<httpPath>]
-                [--databricks-options=<options>]
                 [--databricks-password=<password>] [--databricks-port=<port>]
                 [--databricks-user=<user>] [--duckdb-database=<database>]
-                [--duckdb-options=<options>] [--duckdb-password=<password>]
-                [--duckdb-read-mode=<readMode>] [--duckdb-region=<region>]
-                [--duckdb-secrets-type=<secretsType>]
-                [--duckdb-source-files-type=<sourceFilesType>]
-                [--duckdb-user=<user>] [--mysql-database=<database>]
+                [--duckdb-files-format-type=<filesFormatType>]
+                [--duckdb-password=<password>] [--duckdb-read-mode=<readMode>]
+                [--duckdb-region=<region>]
+                [--duckdb-storage-type=<storageType>] [--duckdb-user=<user>]
+                [--mysql-database=<database>]
                 [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
-                [--mysql-options=<options>] [--mysql-password=<password>]
-                [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
-                [--mysql-user=<user>] [-n=<name>] [-of=<outputFormat>]
-                [--oracle-database=<database>] [--oracle-host=<host>]
+                [--mysql-password=<password>] [--mysql-port=<port>]
+                [--mysql-sslmode=<sslmode>] [--mysql-user=<user>] [-n=<name>]
+                [-of=<outputFormat>] [--oracle-database=<database>]
+                [--oracle-host=<host>]
                 [--oracle-initialization-sql=<initializationSql>]
-                [--oracle-options=<options>] [--oracle-password=<password>]
-                [--oracle-port=<port>] [--oracle-user=<user>]
-                [--postgresql-database=<database>] [--postgresql-host=<host>]
-                [--postgresql-options=<options>]
+                [--oracle-password=<password>] [--oracle-port=<port>]
+                [--oracle-user=<user>] [--postgresql-database=<database>]
+                [--postgresql-host=<host>] [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
                 [--postgresql-sslmode=<sslmode>] [--postgresql-user=<user>]
                 [--presto-database=<database>] [--presto-host=<host>]
                 [--presto-password=<password>] [--presto-port=<port>]
                 [--presto-user=<user>] [--redshift-database=<database>]
-                [--redshift-host=<host>] [--redshift-options=<options>]
-                [--redshift-password=<password>] [--redshift-port=<port>]
-                [--redshift-user=<user>]
+                [--redshift-host=<host>] [--redshift-password=<password>]
+                [--redshift-port=<port>] [--redshift-user=<user>]
                 [--single-store-parameters-spec=<singleStoreDbParametersSpec>]
                 [--snowflake-account=<account>]
                 [--snowflake-database=<database>]
                 [--snowflake-password=<password>] [--snowflake-role=<role>]
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
-                [--spark-host=<host>] [--spark-options=<options>]
-                [--spark-password=<password>] [--spark-port=<port>]
-                [--spark-user=<user>]
+                [--spark-host=<host>] [--spark-password=<password>]
+                [--spark-port=<port>] [--spark-user=<user>]
                 [--sqlserver-authentication-mode=<authenticationMode>]
                 [--sqlserver-database=<database>] [--sqlserver-host=<host>]
-                [--sqlserver-options=<options>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
                 [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
                 [--trino-host=<host>] [--trino-password=<password>]
                 [--trino-port=<port>] [--trino-user=<user>]
                 [-D=<String=String>]... [-Duck=<String=String>]...
+                [--duckdb-directories=<String=String>[,<String=String>...]]...
                 [-E=<String=String>]... [-F=<String=String>]...
                 [-K=<String=String>]... [-M=<String=String>]...
                 [-O=<String=String>]... [-P=<String=String>]...
@@ -231,25 +223,23 @@ All parameters supported by the command are listed below.
 |<div id="connection add--databricks-catalog" class="no-wrap-code">`--databricks-catalog`</div>|Databricks catalog name.| ||
 |<div id="connection add--databricks-host" class="no-wrap-code">`--databricks-host`</div>|Databricks host name| ||
 |<div id="connection add--databricks-http-path" class="no-wrap-code">`--databricks-http-path`</div>|Databricks http path to the warehouse. For example: /sql/1.0/warehouses/<warehouse instance id>| ||
-|<div id="connection add--databricks-options" class="no-wrap-code">`--databricks-options`</div>|Databricks connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection add--databricks-password" class="no-wrap-code">`--databricks-password`</div>|Databricks database password.| ||
 |<div id="connection add--databricks-port" class="no-wrap-code">`--databricks-port`</div>|Databricks port number| ||
 |<div id="connection add--databricks-user" class="no-wrap-code">`--databricks-user`</div>|Databricks user name.| ||
-|<div id="connection add--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection add--duckdb-options" class="no-wrap-code">`--duckdb-options`</div>|DuckDB connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|<div id="connection add--duckdb-password" class="no-wrap-code">`--duckdb-password`</div>|DuckDB database password. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection add--duckdb-read-mode" class="no-wrap-code">`--duckdb-read-mode`</div>|DuckDB read mode. The value can be in the null format to use dynamic substitution.| |*in_memory*<br/>*files*<br/>|
+|<div id="connection add--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name for in-memory read mode. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--duckdb-directories" class="no-wrap-code">`--duckdb-directories`</div>|| ||
+|<div id="connection add--duckdb-files-format-type" class="no-wrap-code">`--duckdb-files-format-type`</div>|Type of source files format for DuckDB.| |*csv*<br/>*json*<br/>*parquet*<br/>|
+|<div id="connection add--duckdb-password" class="no-wrap-code">`--duckdb-password`</div>|DuckDB password for a remote storage type. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--duckdb-read-mode" class="no-wrap-code">`--duckdb-read-mode`</div>|DuckDB read mode.| |*in_memory*<br/>*files*<br/>|
 |<div id="connection add--duckdb-region" class="no-wrap-code">`--duckdb-region`</div>|The region for the storage credentials. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection add--duckdb-secrets-type" class="no-wrap-code">`--duckdb-secrets-type`</div>|The secrets type. The value can be in the null format to use dynamic substitution.| |*s3*<br/>*gcs*<br/>*r2*<br/>*azure*<br/>|
-|<div id="connection add--duckdb-source-files-type" class="no-wrap-code">`--duckdb-source-files-type`</div>|Type of source files for DuckDB. The value can be in the null format to use dynamic substitution.| |*csv*<br/>*json*<br/>*parquet*<br/>|
-|<div id="connection add--duckdb-user" class="no-wrap-code">`--duckdb-user`</div>|DuckDB user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--duckdb-storage-type" class="no-wrap-code">`--duckdb-storage-type`</div>|The storage type.| |*local*<br/>*s3*<br/>|
+|<div id="connection add--duckdb-user" class="no-wrap-code">`--duckdb-user`</div>|DuckDB user name for a remote storage type. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add-fw" class="no-wrap-code">`-fw`</div><div id="connection add--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
 |<div id="connection add--headless" class="no-wrap-code">`--headless`</div><div id="connection add-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="connection add-h" class="no-wrap-code">`-h`</div><div id="connection add--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
 |<div id="connection add--mysql-database" class="no-wrap-code">`--mysql-database`</div>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--mysql-engine" class="no-wrap-code">`--mysql-engine`</div>|MySQL engine type. Supports also a null configuration with a custom environment variable.| |*mysql*<br/>*singlestoredb*<br/>|
 |<div id="connection add--mysql-host" class="no-wrap-code">`--mysql-host`</div>|MySQL host name| ||
-|<div id="connection add--mysql-options" class="no-wrap-code">`--mysql-options`</div>|MySQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection add--mysql-password" class="no-wrap-code">`--mysql-password`</div>|MySQL database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--mysql-port" class="no-wrap-code">`--mysql-port`</div>|MySQL port number| ||
 |<div id="connection add--mysql-sslmode" class="no-wrap-code">`--mysql-sslmode`</div>|SslMode MySQL connection parameter| |*DISABLED*<br/>*PREFERRED*<br/>*REQUIRED*<br/>*VERIFY_CA*<br/>*VERIFY_IDENTITY*<br/>|
@@ -258,7 +248,6 @@ All parameters supported by the command are listed below.
 |<div id="connection add--oracle-database" class="no-wrap-code">`--oracle-database`</div>|Oracle database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--oracle-host" class="no-wrap-code">`--oracle-host`</div>|Oracle host name| ||
 |<div id="connection add--oracle-initialization-sql" class="no-wrap-code">`--oracle-initialization-sql`</div>|Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS'| ||
-|<div id="connection add--oracle-options" class="no-wrap-code">`--oracle-options`</div>|Oracle connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection add--oracle-password" class="no-wrap-code">`--oracle-password`</div>|Oracle database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--oracle-port" class="no-wrap-code">`--oracle-port`</div>|Oracle port number| ||
 |<div id="connection add--oracle-user" class="no-wrap-code">`--oracle-user`</div>|Oracle user name. The value can be in the null format to use dynamic substitution.| ||
@@ -278,7 +267,6 @@ All parameters supported by the command are listed below.
 |<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>|
 |<div id="connection add--redshift-database" class="no-wrap-code">`--redshift-database`</div>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--redshift-host" class="no-wrap-code">`--redshift-host`</div>|Redshift host name| ||
-|<div id="connection add--redshift-options" class="no-wrap-code">`--redshift-options`</div>|Redshift connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection add--redshift-password" class="no-wrap-code">`--redshift-password`</div>|Redshift database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--redshift-port" class="no-wrap-code">`--redshift-port`</div>|Redshift port number| ||
 |<div id="connection add--redshift-user" class="no-wrap-code">`--redshift-user`</div>|Redshift user name. The value can be in the null format to use dynamic substitution.| ||
@@ -290,7 +278,6 @@ All parameters supported by the command are listed below.
 |<div id="connection add--snowflake-user" class="no-wrap-code">`--snowflake-user`</div>|Snowflake user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--snowflake-warehouse" class="no-wrap-code">`--snowflake-warehouse`</div>|Snowflake warehouse name.| ||
 |<div id="connection add--spark-host" class="no-wrap-code">`--spark-host`</div>|Spark host name| ||
-|<div id="connection add--spark-options" class="no-wrap-code">`--spark-options`</div>|Spark connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection add--spark-password" class="no-wrap-code">`--spark-password`</div>|Spark database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--spark-port" class="no-wrap-code">`--spark-port`</div>|Spark port number| ||
 |<div id="connection add--spark-user" class="no-wrap-code">`--spark-user`</div>|Spark user name. The value can be in the null format to use dynamic substitution.| ||
@@ -298,7 +285,6 @@ All parameters supported by the command are listed below.
 |<div id="connection add--sqlserver-database" class="no-wrap-code">`--sqlserver-database`</div>|SQL Server database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--sqlserver-disable-encryption" class="no-wrap-code">`--sqlserver-disable-encryption`</div>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.| ||
 |<div id="connection add--sqlserver-host" class="no-wrap-code">`--sqlserver-host`</div>|SQL Server host name| ||
-|<div id="connection add--sqlserver-options" class="no-wrap-code">`--sqlserver-options`</div>|SQL Server connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection add--sqlserver-password" class="no-wrap-code">`--sqlserver-password`</div>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--sqlserver-port" class="no-wrap-code">`--sqlserver-port`</div>|SQL Server port number| ||
 |<div id="connection add--sqlserver-user" class="no-wrap-code">`--sqlserver-user`</div>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
@@ -406,24 +392,22 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--databricks-access-token=<accessToken>]
                    [--databricks-catalog=<catalog>] [--databricks-host=<host>]
                    [--databricks-http-path=<httpPath>]
-                   [--databricks-options=<options>]
                    [--databricks-password=<password>]
                    [--databricks-port=<port>] [--databricks-user=<user>]
-                   [--duckdb-database=<database>] [--duckdb-options=<options>]
+                   [--duckdb-database=<database>]
+                   [--duckdb-files-format-type=<filesFormatType>]
                    [--duckdb-password=<password>]
                    [--duckdb-read-mode=<readMode>] [--duckdb-region=<region>]
-                   [--duckdb-secrets-type=<secretsType>]
-                   [--duckdb-source-files-type=<sourceFilesType>]
-                   [--duckdb-user=<user>] [--mysql-database=<database>]
+                   [--duckdb-storage-type=<storageType>] [--duckdb-user=<user>]
+                   [--mysql-database=<database>]
                    [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
-                   [--mysql-options=<options>] [--mysql-password=<password>]
-                   [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
-                   [--mysql-user=<user>] [-n=<name>] [-of=<outputFormat>]
+                   [--mysql-password=<password>] [--mysql-port=<port>]
+                   [--mysql-sslmode=<sslmode>] [--mysql-user=<user>]
+                   [-n=<name>] [-of=<outputFormat>]
                    [--oracle-database=<database>] [--oracle-host=<host>]
                    [--oracle-initialization-sql=<initializationSql>]
-                   [--oracle-options=<options>] [--oracle-password=<password>]
-                   [--oracle-port=<port>] [--oracle-user=<user>]
-                   [--postgresql-database=<database>]
+                   [--oracle-password=<password>] [--oracle-port=<port>]
+                   [--oracle-user=<user>] [--postgresql-database=<database>]
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
                    [--postgresql-port=<port>] [--postgresql-sslmode=<sslmode>]
@@ -431,7 +415,6 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--presto-host=<host>] [--presto-password=<password>]
                    [--presto-port=<port>] [--presto-user=<user>]
                    [--redshift-database=<database>] [--redshift-host=<host>]
-                   [--redshift-options=<options>]
                    [--redshift-password=<password>] [--redshift-port=<port>]
                    [--redshift-user=<user>]
                    [--single-store-parameters-spec=<singleStoreDbParametersSpec>
@@ -440,17 +423,18 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--snowflake-password=<password>] [--snowflake-role=<role>]
                    [--snowflake-user=<user>]
                    [--snowflake-warehouse=<warehouse>] [--spark-host=<host>]
-                   [--spark-options=<options>] [--spark-password=<password>]
-                   [--spark-port=<port>] [--spark-user=<user>]
+                   [--spark-password=<password>] [--spark-port=<port>]
+                   [--spark-user=<user>]
                    [--sqlserver-authentication-mode=<authenticationMode>]
                    [--sqlserver-database=<database>] [--sqlserver-host=<host>]
-                   [--sqlserver-options=<options>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                    [--sqlserver-user=<user>] [--trino-catalog=<catalog>]
                    [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
                    [--trino-password=<password>] [--trino-port=<port>]
                    [--trino-user=<user>] [-D=<String=String>]...
-                   [-Duck=<String=String>]... [-E=<String=String>]...
+                   [-Duck=<String=String>]...
+                   [--duckdb-directories=<String=String>[,
+                   <String=String>...]]... [-E=<String=String>]...
                    [-F=<String=String>]... [-K=<String=String>]...
                    [-M=<String=String>]... [-O=<String=String>]...
                    [-P=<String=String>]... [-R=<String=String>]...
@@ -476,24 +460,22 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--databricks-access-token=<accessToken>]
                    [--databricks-catalog=<catalog>] [--databricks-host=<host>]
                    [--databricks-http-path=<httpPath>]
-                   [--databricks-options=<options>]
                    [--databricks-password=<password>]
                    [--databricks-port=<port>] [--databricks-user=<user>]
-                   [--duckdb-database=<database>] [--duckdb-options=<options>]
+                   [--duckdb-database=<database>]
+                   [--duckdb-files-format-type=<filesFormatType>]
                    [--duckdb-password=<password>]
                    [--duckdb-read-mode=<readMode>] [--duckdb-region=<region>]
-                   [--duckdb-secrets-type=<secretsType>]
-                   [--duckdb-source-files-type=<sourceFilesType>]
-                   [--duckdb-user=<user>] [--mysql-database=<database>]
+                   [--duckdb-storage-type=<storageType>] [--duckdb-user=<user>]
+                   [--mysql-database=<database>]
                    [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
-                   [--mysql-options=<options>] [--mysql-password=<password>]
-                   [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
-                   [--mysql-user=<user>] [-n=<name>] [-of=<outputFormat>]
+                   [--mysql-password=<password>] [--mysql-port=<port>]
+                   [--mysql-sslmode=<sslmode>] [--mysql-user=<user>]
+                   [-n=<name>] [-of=<outputFormat>]
                    [--oracle-database=<database>] [--oracle-host=<host>]
                    [--oracle-initialization-sql=<initializationSql>]
-                   [--oracle-options=<options>] [--oracle-password=<password>]
-                   [--oracle-port=<port>] [--oracle-user=<user>]
-                   [--postgresql-database=<database>]
+                   [--oracle-password=<password>] [--oracle-port=<port>]
+                   [--oracle-user=<user>] [--postgresql-database=<database>]
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
                    [--postgresql-port=<port>] [--postgresql-sslmode=<sslmode>]
@@ -501,7 +483,6 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--presto-host=<host>] [--presto-password=<password>]
                    [--presto-port=<port>] [--presto-user=<user>]
                    [--redshift-database=<database>] [--redshift-host=<host>]
-                   [--redshift-options=<options>]
                    [--redshift-password=<password>] [--redshift-port=<port>]
                    [--redshift-user=<user>]
                    [--single-store-parameters-spec=<singleStoreDbParametersSpec>
@@ -510,17 +491,18 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--snowflake-password=<password>] [--snowflake-role=<role>]
                    [--snowflake-user=<user>]
                    [--snowflake-warehouse=<warehouse>] [--spark-host=<host>]
-                   [--spark-options=<options>] [--spark-password=<password>]
-                   [--spark-port=<port>] [--spark-user=<user>]
+                   [--spark-password=<password>] [--spark-port=<port>]
+                   [--spark-user=<user>]
                    [--sqlserver-authentication-mode=<authenticationMode>]
                    [--sqlserver-database=<database>] [--sqlserver-host=<host>]
-                   [--sqlserver-options=<options>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                    [--sqlserver-user=<user>] [--trino-catalog=<catalog>]
                    [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
                    [--trino-password=<password>] [--trino-port=<port>]
                    [--trino-user=<user>] [-D=<String=String>]...
-                   [-Duck=<String=String>]... [-E=<String=String>]...
+                   [-Duck=<String=String>]...
+                   [--duckdb-directories=<String=String>[,
+                   <String=String>...]]... [-E=<String=String>]...
                    [-F=<String=String>]... [-K=<String=String>]...
                    [-M=<String=String>]... [-O=<String=String>]...
                    [-P=<String=String>]... [-R=<String=String>]...
@@ -551,25 +533,23 @@ All parameters supported by the command are listed below.
 |<div id="connection update--databricks-catalog" class="no-wrap-code">`--databricks-catalog`</div>|Databricks catalog name.| ||
 |<div id="connection update--databricks-host" class="no-wrap-code">`--databricks-host`</div>|Databricks host name| ||
 |<div id="connection update--databricks-http-path" class="no-wrap-code">`--databricks-http-path`</div>|Databricks http path to the warehouse. For example: /sql/1.0/warehouses/<warehouse instance id>| ||
-|<div id="connection update--databricks-options" class="no-wrap-code">`--databricks-options`</div>|Databricks connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection update--databricks-password" class="no-wrap-code">`--databricks-password`</div>|Databricks database password.| ||
 |<div id="connection update--databricks-port" class="no-wrap-code">`--databricks-port`</div>|Databricks port number| ||
 |<div id="connection update--databricks-user" class="no-wrap-code">`--databricks-user`</div>|Databricks user name.| ||
-|<div id="connection update--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection update--duckdb-options" class="no-wrap-code">`--duckdb-options`</div>|DuckDB connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|<div id="connection update--duckdb-password" class="no-wrap-code">`--duckdb-password`</div>|DuckDB database password. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection update--duckdb-read-mode" class="no-wrap-code">`--duckdb-read-mode`</div>|DuckDB read mode. The value can be in the null format to use dynamic substitution.| |*in_memory*<br/>*files*<br/>|
+|<div id="connection update--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name for in-memory read mode. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--duckdb-directories" class="no-wrap-code">`--duckdb-directories`</div>|| ||
+|<div id="connection update--duckdb-files-format-type" class="no-wrap-code">`--duckdb-files-format-type`</div>|Type of source files format for DuckDB.| |*csv*<br/>*json*<br/>*parquet*<br/>|
+|<div id="connection update--duckdb-password" class="no-wrap-code">`--duckdb-password`</div>|DuckDB password for a remote storage type. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--duckdb-read-mode" class="no-wrap-code">`--duckdb-read-mode`</div>|DuckDB read mode.| |*in_memory*<br/>*files*<br/>|
 |<div id="connection update--duckdb-region" class="no-wrap-code">`--duckdb-region`</div>|The region for the storage credentials. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection update--duckdb-secrets-type" class="no-wrap-code">`--duckdb-secrets-type`</div>|The secrets type. The value can be in the null format to use dynamic substitution.| |*s3*<br/>*gcs*<br/>*r2*<br/>*azure*<br/>|
-|<div id="connection update--duckdb-source-files-type" class="no-wrap-code">`--duckdb-source-files-type`</div>|Type of source files for DuckDB. The value can be in the null format to use dynamic substitution.| |*csv*<br/>*json*<br/>*parquet*<br/>|
-|<div id="connection update--duckdb-user" class="no-wrap-code">`--duckdb-user`</div>|DuckDB user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--duckdb-storage-type" class="no-wrap-code">`--duckdb-storage-type`</div>|The storage type.| |*local*<br/>*s3*<br/>|
+|<div id="connection update--duckdb-user" class="no-wrap-code">`--duckdb-user`</div>|DuckDB user name for a remote storage type. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update-fw" class="no-wrap-code">`-fw`</div><div id="connection update--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
 |<div id="connection update--headless" class="no-wrap-code">`--headless`</div><div id="connection update-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="connection update-h" class="no-wrap-code">`-h`</div><div id="connection update--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
 |<div id="connection update--mysql-database" class="no-wrap-code">`--mysql-database`</div>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--mysql-engine" class="no-wrap-code">`--mysql-engine`</div>|MySQL engine type. Supports also a null configuration with a custom environment variable.| |*mysql*<br/>*singlestoredb*<br/>|
 |<div id="connection update--mysql-host" class="no-wrap-code">`--mysql-host`</div>|MySQL host name| ||
-|<div id="connection update--mysql-options" class="no-wrap-code">`--mysql-options`</div>|MySQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection update--mysql-password" class="no-wrap-code">`--mysql-password`</div>|MySQL database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--mysql-port" class="no-wrap-code">`--mysql-port`</div>|MySQL port number| ||
 |<div id="connection update--mysql-sslmode" class="no-wrap-code">`--mysql-sslmode`</div>|SslMode MySQL connection parameter| |*DISABLED*<br/>*PREFERRED*<br/>*REQUIRED*<br/>*VERIFY_CA*<br/>*VERIFY_IDENTITY*<br/>|
@@ -578,7 +558,6 @@ All parameters supported by the command are listed below.
 |<div id="connection update--oracle-database" class="no-wrap-code">`--oracle-database`</div>|Oracle database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--oracle-host" class="no-wrap-code">`--oracle-host`</div>|Oracle host name| ||
 |<div id="connection update--oracle-initialization-sql" class="no-wrap-code">`--oracle-initialization-sql`</div>|Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS'| ||
-|<div id="connection update--oracle-options" class="no-wrap-code">`--oracle-options`</div>|Oracle connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection update--oracle-password" class="no-wrap-code">`--oracle-password`</div>|Oracle database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--oracle-port" class="no-wrap-code">`--oracle-port`</div>|Oracle port number| ||
 |<div id="connection update--oracle-user" class="no-wrap-code">`--oracle-user`</div>|Oracle user name. The value can be in the null format to use dynamic substitution.| ||
@@ -597,7 +576,6 @@ All parameters supported by the command are listed below.
 |<div id="connection update--presto-user" class="no-wrap-code">`--presto-user`</div>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--redshift-database" class="no-wrap-code">`--redshift-database`</div>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--redshift-host" class="no-wrap-code">`--redshift-host`</div>|Redshift host name| ||
-|<div id="connection update--redshift-options" class="no-wrap-code">`--redshift-options`</div>|Redshift connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection update--redshift-password" class="no-wrap-code">`--redshift-password`</div>|Redshift database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--redshift-port" class="no-wrap-code">`--redshift-port`</div>|Redshift port number| ||
 |<div id="connection update--redshift-user" class="no-wrap-code">`--redshift-user`</div>|Redshift user name. The value can be in the null format to use dynamic substitution.| ||
@@ -609,7 +587,6 @@ All parameters supported by the command are listed below.
 |<div id="connection update--snowflake-user" class="no-wrap-code">`--snowflake-user`</div>|Snowflake user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--snowflake-warehouse" class="no-wrap-code">`--snowflake-warehouse`</div>|Snowflake warehouse name.| ||
 |<div id="connection update--spark-host" class="no-wrap-code">`--spark-host`</div>|Spark host name| ||
-|<div id="connection update--spark-options" class="no-wrap-code">`--spark-options`</div>|Spark connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection update--spark-password" class="no-wrap-code">`--spark-password`</div>|Spark database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--spark-port" class="no-wrap-code">`--spark-port`</div>|Spark port number| ||
 |<div id="connection update--spark-user" class="no-wrap-code">`--spark-user`</div>|Spark user name. The value can be in the null format to use dynamic substitution.| ||
@@ -617,7 +594,6 @@ All parameters supported by the command are listed below.
 |<div id="connection update--sqlserver-database" class="no-wrap-code">`--sqlserver-database`</div>|SQL Server database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--sqlserver-disable-encryption" class="no-wrap-code">`--sqlserver-disable-encryption`</div>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.| ||
 |<div id="connection update--sqlserver-host" class="no-wrap-code">`--sqlserver-host`</div>|SQL Server host name| ||
-|<div id="connection update--sqlserver-options" class="no-wrap-code">`--sqlserver-options`</div>|SQL Server connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection update--sqlserver-password" class="no-wrap-code">`--sqlserver-password`</div>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--sqlserver-port" class="no-wrap-code">`--sqlserver-port`</div>|SQL Server port number| ||
 |<div id="connection update--sqlserver-user" class="no-wrap-code">`--sqlserver-user`</div>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
