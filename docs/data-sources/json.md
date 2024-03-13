@@ -26,14 +26,14 @@ To navigate to the JSON connection settings:
 
 2. Select the JSON file connection option. // todo: screen
 
-    ![Selecting JSON database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-spark.png)
+    ![Selecting JSON database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-json.png)
 
 
 ### **Fill in the connection settings**
 
 After navigating to the JSON connection settings, you will need to fill in its details. // todo: screen
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-spark1.png)
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-json.png)
 
 | JSON connection settings   | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
 |----------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

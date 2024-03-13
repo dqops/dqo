@@ -52,6 +52,7 @@ nav:
       - BigQuery: "data-sources/bigquery.md"
       - CSV: "data-sources/csv.md"
       - Databricks: "data-sources/databricks.md"
+      - DuckDB: "data-sources/duckdb.md"
       - JSON: "data-sources/json.md"
       - MySQL: "data-sources/mysql.md"
       - Oracle: "data-sources/oracle.md"
