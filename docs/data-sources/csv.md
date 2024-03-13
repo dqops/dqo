@@ -308,11 +308,49 @@ Fill in the "File path or file name pattern" field with the absolute path to the
 !!! tip "Creating a new table manually in the user home"
     You can also add a new table manually in the sources folder of your user home by creating a new YAML file in the connection folder.
 
-### Working with partitioned files // todo
+### Working with partitioned files
 
-To work efficiently with partitions, you need to set the `hive-partition` parameter in CSV format settings. 
+To work efficiently with partitions, you need to set the `hive-partition` parameter in CSV format settings.
+The option is available under the **Additional CSV format options** panel.
 
-// todo: describe that the path has to be modified on a table level when the hive partition is set
+Hive partitioning splits the table into multiple files under the catalog structure.
+Each of the catalog level corresponds to a column.
+The catalogs are named in the column_name=value convention.
+
+Let's consider the partitions in the folder structure:
+
+``` { .asc .annotate }
+/usr/share
+    └───client_foo
+        ├───country=US
+        │   ├───date=20240301
+        │   │   ├───3789bad902d98ab1037b7c0111ae61d.csv
+        │   │   ├───6f022116c4bc45db854caa879f0e00a.csv
+        │   │   └───a59b107e46f329217c3b4ea64ff48e7.csv
+        │   ├───date=20240302
+        │   ├───date=20240303
+        │   └───...
+        ├───country=UK
+        ├───country=JP
+        ├───country=DE
+        └───...
+```
+
+The prefix path in the connection settings should point to the directory with the dataset (e.g. /usr/share).
+
+Then the table import is necessary. 
+
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/hive-partitioning-import-table.png)
+
+1. Under the Data Sources page you will see the new connection (in the example named **business_data**).
+   Expand it and click on the virtual schema name. You will see all tables that have been imported. If none was not, the page will be empty.
+2. Select the Import tables tab to see the list of the available tables under the prefix given in the connection settings.
+3. Check the name of the folder with the partitioned data.
+4. By clicking the **Import selected tables button** the table will be imported. You can reach the table by expanding the connection and the schema on the left pannel. 
+
+!!! warning "Partitions discovery"
+The partitions of the data set are discovered automatically including types of columns.
+
 
 ## Next steps
 
