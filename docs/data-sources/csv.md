@@ -273,11 +273,12 @@ Both setting levels provide slightly different opportunities of configuration of
 
 ### File format
 
-Type of the file format selection is only configured in the connection settings when the new connection is being created.
+Type of the file format selection is only configured at the connection settings when the new connection is being created.
 
 Changing the type of file format requires creation of the new connection.
 
 !!! warning "Changing the file format"
+    
     You should never try to change the files format type after the connection creation which will lead to connection resources corruption.
 
 ### Virtual schema name to path mappings
@@ -285,29 +286,35 @@ Changing the type of file format requires creation of the new connection.
 A connection can store multiple schemas.
 
 A virtual schema name is a name alias for the parent directory with data. 
-The configuration of the virtual schema in only available on the connection settings level.
+The configuration of the virtual schema is only available at the connection settings level.
 
 A path is an absolute path to that directory. The path configuration with examples [is available here](#Storage-path-setting).
 The level of the path configuration works differently. 
 The configuration on the connection level sets the parent directory in which directories or files are read.
 The configuration on the table level provides a pattern to the files.
 
-Hive partitioning patten
+The wildcard sign (*) replaces any number of characters on the folder level (between two slashes).
+The double wildcard sign (**) replaces any characters. It means any folders down.
+It helps to define a [hive partitioning patten](#Working-with-partitioned-files) because the patterns does not need to contain folder level wildcard for each of the partitions. 
+
+!!! info "Pointing a file path out of the parent folder scope"
+    
+    You can add a file at the table level settings that is not under the parent directory set at the path at conneciton level setting.
+    The path to the file has to be absolute.
+
+!!! info "Automatic path creation"
+
+    When adding importing the new table that path on the table level is being created automatically based on the path on the connection level setting.
+    
+    You can always modify the path pattern.
 
 
 ### Additional format options
 
 The configuration of the additional file format options is available on two levels: connection settings and table settings.
 
-The additional format settings in connection settings is treated as a default settings common to the tables in the connection.
-The additional format settings in table settings overrides the settings from the connection when are configured in the table settings.
-
-
-Selection of the file format
-
-// todo
-
-
+The additional format settings at connection settings is treated as a default settings, common to the tables in the connection.
+The additional format settings at table settings overrides the settings from the connection when are configured in the table settings.
 
 
 ### Working with partitioned files
