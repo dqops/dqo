@@ -748,8 +748,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                         if (checkType == CheckType.profiling) {
                             if (tableSpec != null && tableSpec.getProfilingChecks() != null) {
                                 if (tableSpec.getProfilingChecks().getResultTruncation() == null ||
-                                        tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriodTruncation.one_per_week ||
-                                        tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriodTruncation.one_per_month) {
+                                        tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriodTruncation.store_the_most_recent_result_per_week ||
+                                        tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriodTruncation.store_the_most_recent_result_per_month) {
                                     checkModel.pushError(CheckConfigurationRequirementsError.PROFILING_CHECKS_RESULT_TRUNCATION_TOO_COARSE);
                                 }
                             }

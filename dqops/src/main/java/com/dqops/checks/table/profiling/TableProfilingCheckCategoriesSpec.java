@@ -255,7 +255,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      */
     @Override
     public TimeSeriesConfigurationSpec getTimeSeriesConfiguration(TableSpec tableSpec) {
-        ProfilingTimePeriodTruncation profilingTimePeriodTruncation = this.resultTruncation != null ? this.resultTruncation : ProfilingTimePeriodTruncation.one_per_month;
+        ProfilingTimePeriodTruncation profilingTimePeriodTruncation = this.resultTruncation != null ? this.resultTruncation : ProfilingTimePeriodTruncation.store_the_most_recent_result_per_month;
 
         return new TimeSeriesConfigurationSpec()
         {{

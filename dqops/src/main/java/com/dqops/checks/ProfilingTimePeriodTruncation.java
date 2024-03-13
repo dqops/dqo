@@ -28,32 +28,32 @@ public enum ProfilingTimePeriodTruncation {
     /**
      * Monthly.
      */
-    @JsonProperty("one_per_month")
-    one_per_month,
+    @JsonProperty("store_the_most_recent_result_per_month")
+    store_the_most_recent_result_per_month,
 
     /**
      * Weekly.
      */
-    @JsonProperty("one_per_week")
-    one_per_week,
+    @JsonProperty("store_the_most_recent_result_per_week")
+    store_the_most_recent_result_per_week,
 
     /**
      * Daily.
      */
-    @JsonProperty("one_per_day")
-    one_per_day,
+    @JsonProperty("store_the_most_recent_result_per_day")
+    store_the_most_recent_result_per_day,
 
     /**
      * Hourly.
      */
-    @JsonProperty("one_per_hour")
-    one_per_hour,
+    @JsonProperty("store_the_most_recent_result_per_hour")
+    store_the_most_recent_result_per_hour,
 
     /**
      * Store all results at a millisecond scale.
      */
-    @JsonProperty("all_results")
-    all_results;
+    @JsonProperty("store_all_results_without_date_truncation")
+    store_all_results_without_date_truncation;
 
     /**
      * Converts the profiling time period to a supported time scale.
@@ -61,15 +61,15 @@ public enum ProfilingTimePeriodTruncation {
      */
     public TimePeriodGradient toTimePeriodGradient() {
         switch (this) {
-            case one_per_month:
+            case store_the_most_recent_result_per_month:
                 return TimePeriodGradient.month;
-            case one_per_week:
+            case store_the_most_recent_result_per_week:
                 return TimePeriodGradient.week;
-            case one_per_day:
+            case store_the_most_recent_result_per_day:
                 return TimePeriodGradient.day;
-            case one_per_hour:
+            case store_the_most_recent_result_per_hour:
                 return TimePeriodGradient.hour;
-            case all_results:
+            case store_all_results_without_date_truncation:
                 return TimePeriodGradient.millisecond;
             default:
                 throw new DqoRuntimeException("Unsupported profiling time period: " + this);
