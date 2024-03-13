@@ -19,19 +19,13 @@ Operators are available for actions such as:
 ## DQOps python package for Airflow
 
 To use DQOps Airflow Operator an installation of the python package is required.
-DQOps publishes the package on the official repository Python Package Index (PyPI). https://pypi.org/project/dqops/
+DQOps publishes the package on the [official repository Python Package Index (PyPI)](https://pypi.org/project/dqops/). 
 
 
 ## Combining DQOps with data pipelines in Airflow
 
-Start the observation of the data quality at every step of the existing data pipelines.
-Might your technology stack is based on a database that is supported in DQOps. 
-[Check the complete list of the built databases connectors](../../data-sources/index.md).
-
-For an immediate checks setup DQOps platform implements dozens of sensors. 
-Just activate a few of them choosing from the list.
-
-Any business specific type of data verification is possible since checks are that are fully customizable.
+Start the monitoring data quality at each stage of existing data pipelines.
+[DQOps supports all commonly used databases, check out the complete list here](../../data-sources/index.md).
 
 
 ## Troubleshooting 
