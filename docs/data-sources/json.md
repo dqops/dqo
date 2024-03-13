@@ -20,18 +20,18 @@ The permissions acquired should enable the listing of files and directories, as 
 
 To navigate to the JSON connection settings:
 
-1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner. // todo: screen
+1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
 
-2. Select the JSON file connection option. // todo: screen
+2. Select the JSON file connection option.
 
     ![Selecting JSON database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-json.png)
 
 
 ### **Fill in the connection settings**
 
-After navigating to the JSON connection settings, you will need to fill in its details. // todo: screen
+After navigating to the JSON connection settings, you will need to fill in its details.
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-json.png)
 

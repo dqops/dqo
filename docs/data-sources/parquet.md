@@ -20,18 +20,18 @@ The permissions acquired should enable the listing of files and directories, as 
 
 To navigate to the Parquet connection settings:
 
-1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner. // todo: screen
+1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
 
-2. Select the Parquet file connection option. // todo: screen
+2. Select the Parquet file connection option.
 
     ![Selecting Parquet database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-parquet.png)
 
 
 ### **Fill in the connection settings**
 
-After navigating to the Parquet connection settings, you will need to fill in its details. // todo: screen
+screAfter navigating to the Parquet connection settings, you will need to fill in its details.
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-parquet.png)
 

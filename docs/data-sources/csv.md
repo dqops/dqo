@@ -20,18 +20,18 @@ The permissions granted should allow you to list the files and directories, as w
 
 To navigate to the CSV connection settings:
 
-1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner. // todo: screen
+1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
 
-2. Select the CSV file connection option. // todo: screen
+2. Select the CSV file connection option.
 
     ![Selecting CSV database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-csv.png)
 
 
 ### **Fill in the connection settings**
 
-After navigating to the CSV connection settings, you will need to fill in its details. // todo: screen
+After navigating to the CSV connection settings, you will need to fill in its details.
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-csv.png)
 

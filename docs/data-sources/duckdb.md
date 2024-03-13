@@ -21,18 +21,18 @@ The permissions granted should allow you to list the files and directories, as w
 
 To navigate to the DuckDB connection settings:
 
-1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner. // todo: screen
+1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
 
-2. Select the DuckDB file connection option. // todo: screen
+2. Select the DuckDB file connection option.
 
     ![Selecting CSV database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-duckdb.png)
 
 
 ### **Fill in the connection settings**
 
-After navigating to the DuckDB connection settings, you will need to fill in its details. // todo: screen
+After navigating to the DuckDB connection settings, you will need to fill in its details.
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-duckdb.png)
 
@@ -56,7 +56,7 @@ There file formats are available:
 - [JSON](./json.md#Additional-CSV-format-options)
 - [Parquet](./parquet.md#Additional-CSV-format-options)
 
-**Open one of the pages for the format options description and configuration detals.**
+**Open one of the pages for the description of format options and the configuration details.**
 
 ### **Reference of all connection parameters**
 Complete documentation of all connection parameters used in the `spec.duckdb` node is
