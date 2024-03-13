@@ -511,7 +511,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     public TimeSeriesConfigurationSpec getTimeSeriesConfiguration(TableSpec tableSpec) {
         ProfilingTimePeriodTruncation profilingTimePeriodTruncation = tableSpec != null && tableSpec.getProfilingChecks() != null &&
                 tableSpec.getProfilingChecks().getResultTruncation() != null ?
-                tableSpec.getProfilingChecks().getResultTruncation() : ProfilingTimePeriodTruncation.one_per_month;
+                tableSpec.getProfilingChecks().getResultTruncation() : ProfilingTimePeriodTruncation.store_the_most_recent_result_per_month;
 
         return new TimeSeriesConfigurationSpec()
         {{
