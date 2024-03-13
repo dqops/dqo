@@ -279,7 +279,7 @@ Changing the type of file format requires creation of the new connection.
 
 !!! warning "Changing the file format"
     
-    You should never try to change the files format type after the connection creation which will lead to connection resources corruption.
+    You should never try to change the file format type after the connection creation which will lead to connection resources corruption.
 
 ### Virtual schema name to path mappings
 
@@ -294,17 +294,18 @@ The configuration on the connection level sets the parent directory in which dir
 The configuration on the table level provides a pattern to the files.
 
 The wildcard sign (*) replaces any number of characters on the folder level (between two slashes).
-The double wildcard sign (**) replaces any characters. It means any folders down.
-It helps to define a [hive partitioning patten](#Working-with-partitioned-files) because the patterns does not need to contain folder level wildcard for each of the partitions. 
+The double wildcard sign (**) replaces any characters (including any folders down).
+It helps to define a [hive partitioning patten](#Working-with-partitioned-files) because a pattern does not need to contain folder level wildcard for each of the partitions. 
 
 !!! info "Pointing a file path out of the parent folder scope"
     
-    You can add a file at the table level settings that is not under the parent directory set at the path at conneciton level setting.
+    You can add a file at the table level settings that is not under the parent directory set at the path at connection level setting.
+
     The path to the file has to be absolute.
 
 !!! info "Automatic path creation"
 
-    When adding importing the new table that path on the table level is being created automatically based on the path on the connection level setting.
+    When importing the new table a path is being created automatically on the table level based on the path on the connection level setting.
     
     You can always modify the path pattern.
 
@@ -313,8 +314,8 @@ It helps to define a [hive partitioning patten](#Working-with-partitioned-files)
 
 The configuration of the additional file format options is available on two levels: connection settings and table settings.
 
-The additional format settings at connection settings is treated as a default settings, common to the tables in the connection.
-The additional format settings at table settings overrides the settings from the connection when are configured in the table settings.
+The additional format options at connection settings are treated as default settings, common to the tables in the connection.
+The additional format options at table settings overrides the settings from the connection when they are configured in the table settings.
 
 
 ### Working with partitioned files
@@ -323,7 +324,7 @@ To work efficiently with partitions, you need to set the `hive-partition` parame
 The option is available under the **Additional CSV format options** panel.
 
 Hive partitioning splits the table into multiple files under the catalog structure.
-Each of the catalog level corresponds to a column.
+Each of the catalog levels corresponds to a column.
 The catalogs are named in the column_name=value convention.
 
 Let's consider the partitions in the folder structure:
@@ -355,7 +356,7 @@ Then the table import is necessary.
    Expand it and click on the virtual schema name. You will see all tables that have been imported. If none was not, the page will be empty.
 2. Select the Import tables tab to see the list of the available tables under the prefix given in the connection settings.
 3. Check the name of the folder with the partitioned data.
-4. By clicking the **Import selected tables button** the table will be imported. You can reach the table by expanding the connection and the schema on the left pannel.
+4. By clicking the **Import selected tables button** the table will be imported. You can reach the table by expanding the connection and the schema on the left panel.
 
 !!! warning "Partitions discovery"
 The partitions of the data set are discovered automatically including types of columns.
