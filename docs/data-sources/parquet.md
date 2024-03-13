@@ -218,10 +218,6 @@ Complete documentation of all connection parameters used in the `spec.duckdb` no
 described in the reference section of the [DuckdbParametersSpec](../reference/yaml/ConnectionYaml.md#duckdbparametersspec)
 YAML file format.
 
-// todo:
-### Working with multiple tables in a single schema
-### Working with partitioned files
-
 ## Next steps
 
 - We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
