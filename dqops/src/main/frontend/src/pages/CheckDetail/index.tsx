@@ -1,30 +1,26 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import DefinitionLayout from '../../components/DefinitionLayout';
-import SvgIcon from '../../components/SvgIcon';
 import { useSelector } from 'react-redux';
-import { getFirstLevelSensorState } from '../../redux/selectors';
+import { CheckDefinitionModel } from '../../api';
+import Button from '../../components/Button';
+import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import Input from '../../components/Input';
+import SvgIcon from '../../components/SvgIcon';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   addFirstLevelTab,
   closeFirstLevelTab,
-  getdataQualityChecksFolderTree,
-  opendataQualityChecksFolderTree
-} from '../../redux/actions/definition.actions';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import {
   createCheck,
-  updateCheck,
   deleteCheck,
   getCheck,
-  refreshChecksFolderTree
+  getdataQualityChecksFolderTree,
+  opendataQualityChecksFolderTree,
+  refreshChecksFolderTree,
+  updateCheck
 } from '../../redux/actions/definition.actions';
-import Input from '../../components/Input';
-import CheckEditor from './CheckEditor';
-import Button from '../../components/Button';
-import { ROUTES } from '../../shared/routes';
-import { CheckDefinitionModel } from '../../api';
-import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import { IRootState } from '../../redux/reducers';
-import { urlencodeDecoder, urlencodeEncoder } from '../../utils';
+import { getFirstLevelSensorState } from '../../redux/selectors';
+import { ROUTES } from '../../shared/routes';
+import CheckEditor from './CheckEditor';
 
 export const SensorDetail = () => {
   const { full_check_name, path, type, custom, copied } = useSelector(
@@ -116,12 +112,11 @@ export const SensorDetail = () => {
       if (copied === true) {
         await dispatch(
           createCheck(
-            urlencodeDecoder(
               String(full_check_name).replace(/\/[^/]*$/, '/') + checkName
-            ),
+            ,
             {
-              sensor_name: urlencodeDecoder(selectedSensor),
-              rule_name: urlencodeDecoder(selectedRule),
+              sensor_name: (selectedSensor),
+              rule_name: (selectedRule),
               help_text: helpText,
               standard: standard
             }
@@ -129,9 +124,9 @@ export const SensorDetail = () => {
         );
       } else {
         await dispatch(
-          createCheck(urlencodeDecoder(fullName), {
-            sensor_name: urlencodeDecoder(selectedSensor),
-            rule_name: urlencodeDecoder(selectedRule),
+          createCheck((fullName), {
+            sensor_name: (selectedSensor),
+            rule_name: (selectedRule),
             help_text: helpText,
             standard: standard
           })
@@ -169,8 +164,8 @@ export const SensorDetail = () => {
     await dispatch(
       deleteCheck(
         full_check_name
-          ? urlencodeDecoder(full_check_name)
-          : urlencodeDecoder(Array.from(path).join('/') + '/' + checkName)
+          ? (full_check_name)
+          : (Array.from(path).join('/') + '/' + checkName)
       )
     );
     dispatch(
@@ -314,10 +309,9 @@ export const SensorDetail = () => {
                 Check:{' '}
                 {full_check_name ||
                   (path !== undefined &&
-                    urlencodeEncoder(
                       Array.from(path).join('/') + '/' + checkName
-                    )) ||
-                  urlencodeEncoder(checkName)}
+                    ) ||
+                  checkName}
               </div>
             </div>
           </div>
@@ -328,8 +322,8 @@ export const SensorDetail = () => {
               <div className="text-xl font-semibold truncate">
                 Check:{' '}
                 {path
-                  ? urlencodeEncoder([...(path || []), ''].join('/'))
-                  : urlencodeEncoder(
+                  ? ([...(path || []), ''].join('/'))
+                  : (
                       String(full_check_name).replace(/\/[^/]*$/, '/')
                     )}
               </div>

@@ -1,31 +1,29 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import DefinitionLayout from '../../components/DefinitionLayout';
-import SvgIcon from '../../components/SvgIcon';
 import { useSelector } from 'react-redux';
-import { getFirstLevelSensorState } from '../../redux/selectors';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import {
-  addFirstLevelTab,
-  createSensor,
-  getSensor,
-  setUpdatedSensor,
-  closeFirstLevelTab,
-  refreshSensorsFolderTree
-} from '../../redux/actions/definition.actions';
-import Tabs from '../../components/Tabs';
-import SensorDefinition from './SensorDefinition';
 import {
   ProviderSensorModel,
   ProviderSensorModelProviderTypeEnum
 } from '../../api';
-import ProvideSensor from './ProvideSensor';
+import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import Input from '../../components/Input';
 import { SensorActionGroup } from '../../components/Sensors/SensorActionGroup';
-import { ROUTES } from '../../shared/routes';
-import { SensorsApi } from '../../services/apiClient';
-import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import SvgIcon from '../../components/SvgIcon';
+import Tabs from '../../components/Tabs';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import {
+  addFirstLevelTab,
+  closeFirstLevelTab,
+  createSensor,
+  getSensor,
+  refreshSensorsFolderTree,
+  setUpdatedSensor
+} from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
-import { urlencodeDecoder, urlencodeEncoder } from '../../utils';
+import { getFirstLevelSensorState } from '../../redux/selectors';
+import { SensorsApi } from '../../services/apiClient';
+import { ROUTES } from '../../shared/routes';
+import ProvideSensor from './ProvideSensor';
+import SensorDefinition from './SensorDefinition';
 
 const tabs = [
   {
@@ -120,7 +118,7 @@ export const SensorDetail = () => {
     dispatch(
       closeFirstLevelTab(
         '/definitions/sensors/' +
-        urlencodeDecoder(String(full_sensor_name).split('/')[
+         (String(full_sensor_name).split('/')[
             String(full_sensor_name).split('/').length - 1
           ]
       ))
@@ -160,15 +158,15 @@ export const SensorDetail = () => {
   const onCreateSensor = async () => {
     const fullName = [...(path || []), sensorName].join('/');
     if (type === 'create' && copied !== true) {
-      await dispatch(createSensor(urlencodeDecoder(fullName), 
-      {...sensorDetail, full_sensor_name:  urlencodeDecoder(fullName), custom: true, built_in: false, can_edit: true, sensor_definition_spec : sensorDetail.sensor_definition_spec ?? {}}));
+      await dispatch(createSensor( (fullName), 
+      {...sensorDetail, full_sensor_name:   (fullName), custom: true, built_in: false, can_edit: true, sensor_definition_spec : sensorDetail.sensor_definition_spec ?? {}}));
     } else if (copied === true) {
       await dispatch(
         createSensor(
-          urlencodeDecoder(String(urlencodeDecoder(full_sensor_name)).replace(/\/[^/]*$/, '/') + sensorName),
+           (String( (full_sensor_name)).replace(/\/[^/]*$/, '/') + sensorName),
           {
             ...sensorDetail,
-            full_sensor_name: urlencodeDecoder(full_sensor_name),
+            full_sensor_name:  (full_sensor_name),
             custom: true,
             built_in: false
           }
@@ -179,12 +177,12 @@ export const SensorDetail = () => {
       await dispatch(
         addFirstLevelTab({
           url: ROUTES.SENSOR_DETAIL(
-            urlencodeDecoder(String(full_sensor_name ??  fullName).split('/')[
+             (String(full_sensor_name ??  fullName).split('/')[
               String(full_sensor_name ?? fullName).split('/').length - 1
             ] ?? ''
           )),
           value: ROUTES.SENSOR_DETAIL_VALUE(
-            urlencodeDecoder(String(full_sensor_name ?? fullName).split('/')[
+             (String(full_sensor_name ?? fullName).split('/')[
               String(full_sensor_name ?? fullName).split('/').length - 1
             ]) ?? ''
           ),
@@ -200,7 +198,7 @@ export const SensorDetail = () => {
               built_in: false
             }
           },
-          label: urlencodeEncoder(sensorName)
+          label: (sensorName)
         })
       );
     
@@ -262,7 +260,7 @@ export const SensorDetail = () => {
   };
 
   const onDelete = async () => {
-    SensorsApi.deleteSensor(urlencodeDecoder(full_sensor_name)).then(async () =>
+    SensorsApi.deleteSensor( (full_sensor_name)).then(async () =>
       closeSensorFirstLevelTab(),
      
     );

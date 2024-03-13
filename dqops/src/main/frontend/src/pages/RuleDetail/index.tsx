@@ -1,8 +1,10 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import DefinitionLayout from '../../components/DefinitionLayout';
-import SvgIcon from '../../components/SvgIcon';
 import { useSelector } from 'react-redux';
-import { getFirstLevelSensorState } from '../../redux/selectors';
+import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import Input from '../../components/Input';
+import { RuleActionGroup } from '../../components/Sensors/RuleActionGroup';
+import SvgIcon from '../../components/SvgIcon';
+import Tabs from '../../components/Tabs';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   addFirstLevelTab,
@@ -12,16 +14,12 @@ import {
   refreshRuleFolderTree,
   setUpdatedRule
 } from '../../redux/actions/definition.actions';
-import Tabs from '../../components/Tabs';
-import RuleDefinition from './RuleDefinition';
-import PythonCode from './PythonCode';
-import { RuleActionGroup } from '../../components/Sensors/RuleActionGroup';
-import Input from '../../components/Input';
-import { ROUTES } from '../../shared/routes';
-import { RulesApi } from '../../services/apiClient';
-import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import { IRootState } from '../../redux/reducers';
-import { urlencodeDecoder } from '../../utils';
+import { getFirstLevelSensorState } from '../../redux/selectors';
+import { RulesApi } from '../../services/apiClient';
+import { ROUTES } from '../../shared/routes';
+import PythonCode from './PythonCode';
+import RuleDefinition from './RuleDefinition';
 
 const tabs = [
   {
@@ -54,7 +52,7 @@ export const RuleDetail = () => {
 
   useEffect(() => {
     if (full_rule_name !== undefined && !ruleDetail && (type !== 'create' || copied === true)) {
-      dispatch(getRule(urlencodeDecoder(String(full_rule_name))));
+      dispatch(getRule(String(full_rule_name)));
     }
   }, [full_rule_name, ruleDetail, type]);
 
@@ -76,10 +74,10 @@ export const RuleDetail = () => {
     const fullName = [...(path || []), ruleName].join('/');
     if (type === 'create' && copied !== true) {
       await dispatch(
-        createRule(urlencodeDecoder(fullName), {
+        createRule((fullName), {
           ...ruleDetail,
-          full_rule_name: urlencodeDecoder(fullName),
-          rule_name: urlencodeDecoder(ruleName),
+          full_rule_name: (fullName),
+          rule_name: (ruleName),
           custom: true,
           can_edit: true,
           built_in: false
@@ -87,11 +85,11 @@ export const RuleDetail = () => {
       );
     } else if (copied === true) {
       await dispatch(
-        createRule(urlencodeDecoder(String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName), {
+        createRule((String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName), {
           ...ruleDetail,
-          rule_name: urlencodeDecoder(ruleName),
+          rule_name: (ruleName),
           full_rule_name:
-          urlencodeDecoder(String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName),
+          (String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName),
           custom: true,
           built_in: false
         })
@@ -196,7 +194,7 @@ export const RuleDetail = () => {
   };
 
   const onDelete = async () => {
-    RulesApi.deleteRule(urlencodeDecoder(full_rule_name)).then(async () =>
+    RulesApi.deleteRule((full_rule_name)).then(async () =>
       closeRuleFirstLevelTab()
     );
   };
