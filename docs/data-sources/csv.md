@@ -47,7 +47,7 @@ After navigating to the CSV connection settings, you will need to fill in its de
 | Region                     | `region`                                 | The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                          |
 | Virtual schema name / Path | `directories`                            | Mapping the virtual schema name to the directory. The path must be absolute.                                                                                                                                                           |
 
-Check [how to configure the file format import](#Configuration-of-file-format-import) with more detailed files format and virtual schema name and path explanation.
+Check [how to configure the file format import](#Import-configuration) with more detailed files format and virtual schema name and path explanation.
 
 
 ### **Additional CSV format options**
@@ -199,7 +199,7 @@ any number of characters. For example, use pub* to find all schema a name with a
 character can be used at the beginning, in the middle or at the end of the name.
 
 
-## Configuration of file format import
+## Import configuration
 
 There are two levels of settings for configuring the import of file formats: the connection and the table.
 
