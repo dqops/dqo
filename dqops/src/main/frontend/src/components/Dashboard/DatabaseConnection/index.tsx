@@ -235,6 +235,11 @@ const DatabaseConnection = ({
         duckdb={database.duckdb}
         onChange={(duckdb) => onChange({ ...database, duckdb })}
         sharedCredentials={sharedCredentials}
+        freezeFileType={
+          nameOfDatabase === 'CSV' ||
+          nameOfDatabase === 'Parquet' ||
+          nameOfDatabase === 'JSON'
+        }
       />
     ),
     [ConnectionModelProviderTypeEnum.redshift]: (

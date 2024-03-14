@@ -76,9 +76,9 @@ export default function FileFormatConfiguration({
         title="Import configuration"
         className="text-sm text-black"
       >
-        <div className="flex items-center gap-x-5">
-          <div>File format</div>
-          {!freezeFileType && (
+        {!freezeFileType && (
+          <div className="flex items-center gap-x-5">
+            <div>File format</div>
             <SelectInput
               options={sourceFilesTypeOptions}
               onChange={(value) => {
@@ -92,11 +92,11 @@ export default function FileFormatConfiguration({
                   : fileFormatType.toUpperCase()
               }
             />
-          )}
-          {freezeFileType && <div>{fileFormatType}</div>}
-        </div>
+          </div>
+        )}
+        {/* {freezeFileType && <div>{fileFormatType}</div>} */}
         {children}
-        <div className="pt-4">{renderConfiguration()}</div>
+        <div>{renderConfiguration()}</div>
       </SectionWrapper>
     </div>
   );

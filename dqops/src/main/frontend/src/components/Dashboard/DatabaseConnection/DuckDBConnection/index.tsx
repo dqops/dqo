@@ -24,7 +24,7 @@ interface IDuckdbConnectionProps {
 const storageTypeOptions = [
   {
     label: 'Local files',
-    value: undefined
+    value: DuckdbParametersSpecStorageTypeEnum.local
   },
   {
     label: 'AWS S3',
@@ -46,16 +46,16 @@ const storageTypeOptions = [
 
   // remember to declare constans outside the component.
 ];
-// wyczysc path po zmianie
-//connectionName jest pusty i test connection jest succesfull
-// s3 polaczenie succesfull gdzie sa zle credentiale i w prefix nie jest dla s3
+// wyczysc path po zmianie ->
+//connectionName jest pusty i test connection jest succesfull ->
+// s3 polaczenie succesfull gdzie sa zle credentiale i w prefix nie jest dla s3 ->
 // csv/ json/ parquet readonly jak user wybieze odpowiedni typ
-// s3 path walidacja od razu po zmianie
-// propertiesy odwracana kolejnosc
-// path nie wskoczyl na s3
-// nie zapisujemy gdy path jest pusty
+// s3 path walidacja od razu po zmianie ->
+// propertiesy odwracana kolejnosc ->
+// path nie wskoczyl na s3 ->
+// nie zapisujemy gdy path jest pusty ->
 // parametry sie nie dofetchowuja na connectionie
-// margin wrapper i na dole mniej
+// margin wrapper i na dole mniej ->
 const DuckdbConnection = ({
   duckdb,
   onChange,
@@ -67,7 +67,11 @@ const DuckdbConnection = ({
       duckdb?.files_format_type ?? DuckdbParametersSpecFilesFormatTypeEnum.csv
     );
 
-  const [configuration, setConfiguration] = useState<TConfiguration>({});
+  const [configuration, setConfiguration] = useState<TConfiguration>(
+    (duckdb?.[
+      fileFormatType as keyof DuckdbParametersSpec
+    ] as TConfiguration) ?? {}
+  );
   const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
     if (!onChange) return;
     onChange({
@@ -96,13 +100,21 @@ const DuckdbConnection = ({
     cleanConfiguration();
   };
 
+  // useEffect(() => {
+  //   if (configuration) {
+  //     handleChange({
+  //       [fileFormatType as keyof DuckdbParametersSpec]: configuration
+  //     });
+  //   }
+  // }, [configuration]);
+
   useEffect(() => {
-    if (configuration) {
-      handleChange({
-        [fileFormatType as keyof DuckdbParametersSpec]: configuration
-      });
-    }
-  }, [configuration]);
+    onChangeConfiguration(
+      (duckdb?.[
+        fileFormatType as keyof DuckdbParametersSpec
+      ] as TConfiguration) ?? {}
+    );
+  }, [duckdb?.[fileFormatType as keyof DuckdbParametersSpec]]);
 
   const changeStorageTypeDirectoryPrefixes = (
     storage_type: DuckdbParametersSpecStorageTypeEnum

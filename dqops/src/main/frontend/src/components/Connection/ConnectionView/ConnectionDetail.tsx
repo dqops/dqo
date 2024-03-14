@@ -1,49 +1,49 @@
+import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import {
   ConnectionModel,
+  ConnectionSpecProviderTypeEnum,
   ConnectionTestModel,
   ConnectionTestModelConnectionTestResultEnum,
-  ConnectionSpecProviderTypeEnum,
   SharedCredentialListModel
 } from '../../../api';
-import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
-import SnowflakeConnection from '../../Dashboard/DatabaseConnection/SnowflakeConnection';
-import { useSelector } from 'react-redux';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getConnectionBasic,
   setConnectionBasic,
   setIsUpdatedConnectionBasic,
   updateConnectionBasic
 } from '../../../redux/actions/connection.actions';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import ConnectionActionGroup from './ConnectionActionGroup';
-import { useParams } from 'react-router-dom';
-import ErrorModal from '../../Dashboard/DatabaseConnection/ErrorModal';
-import Loader from '../../Loader';
-import Button from '../../Button';
-import {
-  DataSourcesApi,
-  SharedCredentialsApi
-} from '../../../services/apiClient';
-import ConfirmErrorModal from '../../Dashboard/DatabaseConnection/ConfirmErrorModal';
-import PostgreSQLConnection from '../../Dashboard/DatabaseConnection/PostgreSQLConnection';
-import RedshiftConnection from '../../Dashboard/DatabaseConnection/RedshiftConnection';
-import SqlServerConnection from '../../Dashboard/DatabaseConnection/SqlServerConnection';
-import OracleConnection from '../../Dashboard/DatabaseConnection/OracleConnection';
-import MySQLConnection from '../../Dashboard/DatabaseConnection/MySQLConnection';
-import { CheckTypes } from '../../../shared/routes';
+import { IRootState } from '../../../redux/reducers';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
-import { IRootState } from '../../../redux/reducers';
-import clsx from 'clsx';
-import Input from '../../Input';
+import {
+  DataSourcesApi,
+  SharedCredentialsApi
+} from '../../../services/apiClient';
+import { CheckTypes } from '../../../shared/routes';
+import Button from '../../Button';
+import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
+import ConfirmErrorModal from '../../Dashboard/DatabaseConnection/ConfirmErrorModal';
 import DatabricksConnection from '../../Dashboard/DatabaseConnection/DatabricksConnection';
-import PrestoConnection from '../../Dashboard/DatabaseConnection/PrestoConnection';
-import SparkConnection from '../../Dashboard/DatabaseConnection/SparkConnection';
-import TrinoConnection from '../../Dashboard/DatabaseConnection/TrinoConnection';
 import DuckdbConnection from '../../Dashboard/DatabaseConnection/DuckDBConnection';
+import ErrorModal from '../../Dashboard/DatabaseConnection/ErrorModal';
+import MySQLConnection from '../../Dashboard/DatabaseConnection/MySQLConnection';
+import OracleConnection from '../../Dashboard/DatabaseConnection/OracleConnection';
+import PostgreSQLConnection from '../../Dashboard/DatabaseConnection/PostgreSQLConnection';
+import PrestoConnection from '../../Dashboard/DatabaseConnection/PrestoConnection';
+import RedshiftConnection from '../../Dashboard/DatabaseConnection/RedshiftConnection';
+import SnowflakeConnection from '../../Dashboard/DatabaseConnection/SnowflakeConnection';
+import SparkConnection from '../../Dashboard/DatabaseConnection/SparkConnection';
+import SqlServerConnection from '../../Dashboard/DatabaseConnection/SqlServerConnection';
+import TrinoConnection from '../../Dashboard/DatabaseConnection/TrinoConnection';
+import Input from '../../Input';
+import Loader from '../../Loader';
+import ConnectionActionGroup from './ConnectionActionGroup';
 
 const ConnectionDetail = () => {
   const {
@@ -150,7 +150,7 @@ const ConnectionDetail = () => {
   useEffect(() => {
     getSharedCredentials();
   }, []);
-
+  console.log(connectionBasic?.duckdb);
   return (
     <div
       className={clsx(
