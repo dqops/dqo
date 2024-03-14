@@ -47,12 +47,15 @@ After navigating to the CSV connection settings, you will need to fill in its de
 | Region                     | `region`                                 | The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                          |
 | Virtual schema name / Path | `directories`                            | Mapping the virtual schema name to the directory. The path must be absolute.                                                                                                                                                           |
 
-**Additional CSV format options**
+Check [how to configure the file format import](#Configuration-of-file-format-import) with more detailed files format and virtual schema name and path explanation.
+
+
+### **Additional CSV format options**
 
 CSV file format properties are detected automatically based on a sample of the file data. 
 The default sample size is 20480 rows.
 
-Click on the **Additional CSV format options** panel to configure the file format options.
+Click on the **Additional CSV format options** panel to open the file format options in UI.
 
 The following properties can be configured for a very specific CSV format.
 
@@ -191,10 +194,73 @@ dqo> table import --connection={connection name}
 --table={file or folder}
 ```
 
-
 DQOps supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
 any number of characters. For example, use pub* to find all schema a name with a name starting with "pub". The *
 character can be used at the beginning, in the middle or at the end of the name.
+
+
+## Configuration of file format import
+
+There are two levels of settings for configuring the import of file formats: the connection and the table.
+
+Both of these settings allow for slightly different configurations of the available sections.
+The file format configuration consists of three sections:
+
+- File format
+- Virtual schema name to path mappings
+- Additional format options
+
+The table level settings are available on the table view after finishing of adding a new conneciton.
+To open the table view, expand the connection, then schema and click on the table.
+
+### File format
+
+The selection of the file format can only be configured at the connection settings when creating a new connection.
+
+!!! warning "Changing the file format"
+
+    Changing the type of file format requires creating a new connection.
+
+    You should never change the file format type after the connection creation. This will lead to connection resource corruption.
+
+### Virtual schema name to path mappings
+
+A connection can store multiple schemas.
+
+A **virtual schema name** is an alias for the parent directory with data.
+The configuration of the virtual schema is only available at the connection settings level.
+
+A **path** is an absolute path to that directory.
+Depending on the setting level, the configured path is utilized differently. 
+The configuration at **the connection level** sets the parent directory in which directories or files are read. 
+It is used on the import stage where is used for listing objects in the given directory. 
+
+!!! info "Automatic path creation"
+
+    When importing a new table, a path is created automatically on the table level based on the path at the connection level setting.
+    
+    You can always modify the path pattern.
+
+The configuration at **the table level** provides a pattern to the files that allow to work on them.
+
+
+!!! info "The wildcards in the path"
+    
+    The wildcard sign (\*) replaces any number of characters on the folder level (between two slashes).
+    The double wildcard sign (\*\*) replaces any characters (including any folders down).
+    This helps to define a [hive partitioning pattern](#Working-with-partitioned-files) because a pattern does not need to contain folder-level wildcard for each of the partitions.
+
+
+The [path configuration with examples is available here](#Storage-path-setting).
+
+
+### Additional format options
+
+When working with file formats, there are additional configuration options that can be set at two levels: connection settings and table settings.
+
+The additional format options set at connection settings are considered as default settings, which are common to all tables in the connection.
+Whereas, the additional format options set at table settings override the default settings from the connection when they are configured in the table settings.
+
 
 ## Storage path setting
 
@@ -226,7 +292,6 @@ The path has to be absolute.
 
 To load a single file from the sales folder, the path prefix must be set to the file’s parent folder: /usr/share/clients_data/sales
 
-
 ### Remote cloud storage - AWS S3
 
 ``` { .asc .annotate }
@@ -250,81 +315,18 @@ The path has to be absolute.
 
 To load a single file from the sales folder, the path prefix must be set to the file’s parent folder: s3://project_bucket_a38cfb32/clients_data/sales
 
-
 To work on files hosted in AWS S3, it is recommended to create a special user in IAM to be used as a service account. 
 The service account must have access to the bucket with permission to list and read objects.
-
 
 !!! tip "Service account credentials of the service account can be passed in three ways"
 
     - Default AWS credentials in your DQOps' userhome,
     - User (AccessKeyID), Password (SecretAccessKey) and Region during connection addition,
-    - Setting environment variables for User (Access Key ID), Password (Secret Access Key) and Region fields. [More info here.](./csv.md#Environment-variables-in-parameters).
-
-
-## Configuration of the file format import
-
-There are two levels of settings for configuring the import of file formats: the connection and the table.
-
-Both of these settings allow for slightly different configurations of the available sections. 
-The file format configuration consists of three sections:
-
-- File format
-- Virtual schema name to path mappings
-- Additional format options
-
-### File format
-
-The selection of the file format can only be configured at the connection settings when creating a new connection.
-
-Changing the type of file format requires creating a new connection.
-
-!!! warning "Changing the file format"
-    
-    You should never try to change the file format type after the connection creation. This will lead to connection resource corruption.
-
-### Virtual schema name to path mappings
-
-A connection can store multiple schemas.
-
-A virtual schema name is an name alias for the parent directory with data. 
-The configuration of the virtual schema is only available at the connection settings level.
-
-A path is an absolute path to that directory. The [path configuration with examples is available here](#Storage-path-setting).
-The level of the path configuration works differently. The configuration on the connection level sets the parent directory in which directories or files are read.
-The configuration on the table level provides a pattern to the files.
-// todo: escape special use of * sign
-The wildcard sign (*) replaces any number of characters on the folder level (between two slashes).
-The double wildcard sign (**) replaces any characters (including any folders down).
-This helps to define a [hive partitioning pattern](#Working-with-partitioned-files) because a pattern does not need to contain folder-level wildcard for each of the partitions. 
-
-!!! info "Pointing a file path out of the parent folder scope"
-    
-    You can add a file at the table level settings that is not under the parent directory set at the path at the connection level setting.
-
-    The path to the file has to be absolute.
-
-!!! info "Automatic path creation"
-
-    When importing a new table, a path is created automatically on the table level based on the path at the connection level setting.
-    
-    You can always modify the path pattern.
-
-
-### Additional format options
-
-When working with file formats, there are additional configuration options that can be set at two levels: connection settings and table settings.
-
-The additional format options set at connection settings are considered as default settings, which are common to all tables in the connection.
-Whereas, the additional format options set at table settings override the default settings from the connection when they are configured in the table settings.
+    - Setting environment variables for User (Access Key ID), Password (Secret Access Key) and Region fields. [More info here](./csv.md#Environment-variables-in-parameters).
 
 
 ### Working with partitioned files
-
 // todo: add screen for a param
-
-// todo: sections order
-
 // todo: links between sections
 
 To work efficiently with partitions, you need to set the `hive-partition` parameter in CSV format settings.
@@ -333,6 +335,72 @@ The option is available under the **Additional CSV format options** panel.
 Hive partitioning splits the table into multiple files under the catalog structure.
 Each of the catalog levels corresponds to a column.
 The catalogs are named in the column_name=value convention.
+
+!!! info "Partitions discovery"
+
+    The partitions of the data set are discovered automatically including types of columns.
+
+
+## Working with multiple tables in a single schema
+
+### Different CSV formats
+
+If you want to add a CSV file in a format that differs from the common CSV format used for other files in the schema, 
+override the configuration on that new file (table) level.
+
+The loaded table will try to use the properties described in the table’s YAML, if available. 
+If not, it will use the properties configured in the YAML file of the table connection. 
+Finally, if both are not set explicitly, the automatically detected properties of the CSV format are used.
+
+### No common prefix for files
+
+When files are placed in different locations where you cannot specify a common prefix, you can use an absolute path for each file.
+The absolute path has to be added on the table level setting.
+
+You have to manually create a table in the UI. Open Data Sources, expand your connection, and select three dots on the schema to which you want to add a new table.
+
+Fill in the "File path or file name pattern" field with the absolute path to the file and add the new table by clicking the **Save** button.
+
+!!! tip "Creating a new table manually in the user home"
+
+    You can also add a new table manually in the sources folder of your user home by creating a new YAML file in the connection folder.
+
+
+## Connections configuration files
+
+Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
+the name of the folder where the configuration file is stored.
+
+Below is a sample YAML file showing an example configuration of the CSV data source connection.
+
+``` yaml
+apiVersion: dqo/v1
+kind: source
+spec:
+  provider_type: duckdb
+  duckdb:
+    read_mode: files
+    source_files_type: csv
+    directories:
+      files: /usr/share/clients_data
+    storage_type: local
+```
+
+### **Reference of all connection parameters**
+Complete documentation of all connection parameters used in the `spec.duckdb` node is
+described in the reference section of the [DuckdbParametersSpec](../reference/yaml/ConnectionYaml.md#duckdbparametersspec)
+YAML file format.
+
+## Next steps
+
+- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../integrations/webhooks/index.md).
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you calculate separate data quality KPI scores for different groups of rows.
+
+
+
+
+// todo: to remove ______________________________________________________
 
 Let's consider the partitions in the folder structure:
 
@@ -364,63 +432,3 @@ Then the table import is necessary.
 2. Select the Import tables tab to see the list of the available tables under the prefix given in the connection settings.
 3. Check the name of the folder with the partitioned data.
 4. By clicking the **Import selected tables button** the table will be imported. You can reach the table by expanding the connection and the schema on the left panel.
-
-!!! info "Partitions discovery"
-
-    The partitions of the data set are discovered automatically including types of columns.
-
-## Connections configuration files
-
-Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
-the name of the folder where the configuration file is stored.
-
-Below is a sample YAML file showing an example configuration of the CSV data source connection.
-
-``` yaml
-apiVersion: dqo/v1
-kind: source
-spec:
-  provider_type: duckdb
-  duckdb:
-    read_mode: files
-    source_files_type: csv
-    directories:
-      files: /usr/share/clients_data
-    storage_type: local
-```
-
-### **Reference of all connection parameters**
-Complete documentation of all connection parameters used in the `spec.duckdb` node is
-described in the reference section of the [DuckdbParametersSpec](../reference/yaml/ConnectionYaml.md#duckdbparametersspec)
-YAML file format.
-
-
-### Working with multiple tables in a single schema
-
-**Different CSV formats**
-
-If you want to add a CSV file in a format that differs from the common CSV format used for other files in the schema, 
-override the configuration on that new file (table) level.
-
-The loaded table will try to use the properties described in the table’s YAML, if available. 
-If not, it will use the properties configured in the YAML file of the table connection. 
-Finally, if both are not set explicitly, the automatically detected properties of the CSV format are used.
-
-**No common prefix for files**
-
-When files are placed in different locations where you cannot specify a common prefix, you can use an absolute path for each file.
-
-You have to manually create a table in the UI. Open Data Sources, expand your connection, and select three dots on the schema to which you want to add a new table.
-
-Fill in the "File path or file name pattern" field with the absolute path to the file and add the new table by clicking the **Save** button.
-
-
-!!! tip "Creating a new table manually in the user home"
-    You can also add a new table manually in the sources folder of your user home by creating a new YAML file in the connection folder.
-
-
-## Next steps
-
-- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
-- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../integrations/webhooks/index.md).
-- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you calculate separate data quality KPI scores for different groups of rows.
