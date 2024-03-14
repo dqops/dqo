@@ -13,7 +13,7 @@ The file format configuration consists of three sections:
 - Virtual schema name to path mappings
 - Additional format options
 
-The table level settings are available on the table view after finishing of adding a new conneciton.
+The table level settings are available on the table view after finishing of adding a new connection.
 To open the table view, expand the connection, then schema and click on the table.
 
 ### File format
@@ -62,14 +62,14 @@ Whereas, the additional format options set at table settings override the defaul
 
 ## Working with multiple tables in a single schema
 
-### Different CSV formats
+### Different CSV or JSON formats
 
-If you want to add a CSV file in a format that differs from the common CSV format used for other files in the schema,
+If you want to add a CSV or JSON file in a format that differs from the common CSV or JSON format used for other files in the schema,
 override the configuration on that new file (table) level.
 
 The loaded table will try to use the properties described in the table’s YAML, if available.
 If not, it will use the properties configured in the YAML file of the table connection.
-Finally, if both are not set explicitly, the automatically detected properties of the CSV format are used.
+Finally, if both are not set explicitly, the automatically detected properties of the CSV or JSON format are used.
 
 ### No common prefix for files
 

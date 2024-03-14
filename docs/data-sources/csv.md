@@ -35,26 +35,24 @@ After navigating to the CSV connection settings, you will need to fill in its de
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-csv.png)
 
-| CSV connection settings  | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
-|--------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name          |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-| Parallel jobs limit      |                                          | New limit. A null value will disable the limit.                                                                                                                                                                                           |
-| Storage type             | `storage-type`                           | The storage type.                                                                                                                                                                                                                         |
-| Files format             | `files-format-type`                      | Type of source files for DuckDB.                                                                                                                                                                                                          |
-| JDBC connection property |                                          | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                  |
-| User name/Key ID         | `user`                                   | DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                      |
-| Password/Secret Key      | `password`                               | DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                       |
-| Region                   | `region`                                 | The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                          |
-| Virtual schema name      | `directories`                            | An alias for the parent directory with data. The virtual schema name is a key of the directories mapping.                                                                                                                                 |
-| Path                     | `directories`                            | The path prefix to the parent directory with data. The path must be absolute. The virtual schema name is a value of the directories mapping.                                                                                              |
+| CSV connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                 | 
+|-------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name         |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                   |
+| Parallel jobs limit     |                                          | New limit. A null value will disable the limit.                                                                                                                                                                                                             |
+| Files location          | `storage-type`                           | The files location: Local or AWS S3. To work with files hosted remotely (e.g. AWS S3), it is recommended to create a special user in IAM to be used as a service account with permission to list and read objects.                                          |
+| File format             | `files-format-type`                      | Type of source files for DuckDB.                                                                                                                                                                                                                            |
+| User name/Key ID        | `user`                                   | DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome.                       |
+| Password/Secret Key     | `password`                               | DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome.                        |
+| Region                  | `region`                                 | The region for the storage credentials for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome. |
+| Virtual schema name     | `directories`                            | An alias for the parent directory with data. The virtual schema name is a key of the directories mapping.                                                                                                                                                   |
+| Path                    | `directories`                            | The path prefix to the parent directory with data. The path must be absolute. The virtual schema name is a value of the directories mapping.                                                                                                                |
+| JDBC connection property |                                          | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                                    |
 
 
-## Setting the path to a storage
+### Setting the path to data
 
-To start working with data the directory prefix path has to be configured.
+The path determines which files could be imported.
 The path can lead to files located locally or remotely.
-
-### Local file system
 
 ``` { .asc .annotate }
 /usr/share
@@ -72,50 +70,29 @@ The path can lead to files located locally or remotely.
     The path has to be absolute.
 2.  To load a single file from the sales folder, the path prefix must be set to the file’s parent folder: /usr/share/clients_data/sales
 
-Setting the path prefix to the /usr/share/clients_data allows to load its children: market_dictionary.csv or the sales folder with all files appearing directly in it (without subfolders of sales).
+For example when we have a local file system shown above and you want to load the market_dictionary.csv or the sales folder with all files appearing directly in it (without subfolders of sales), set the path prefix to the /usr/share/clients_data.
 The path has to be absolute.
 
 To load a single file from the sales folder, the path prefix must be set to the file’s parent folder: /usr/share/clients_data/sales
 
-### Remote cloud storage - AWS S3
 
-``` { .asc .annotate }
-s3://project_bucket_a38cfb32
-    ├───...
-    └───clients_data(1)
-        ├───market_dictionary.csv
-        └───sales(2)
-            ├───dec_2023.csv
-            ├───jan_2024.csv
-            ├───feb_2024.csv
-            └───...
-```
+### Working with partitioned files
 
-1.  Setting the path prefix to the s3://project_bucket_a38cfb3/clients_data allows you to load its children: market_dictionary.csv or the sales folder with all the files directly in it (without subfolders of sales).
-    The path has to be absolute.
-2.  To load a single file from the sales folder, the path prefix must be set to the file’s parent folder: s3://project_bucket_a38cfb32/clients_data/sales
+To work efficiently with partitions, you need to set the `hive-partition` parameter in CSV format settings.
+The option is available under the **Additional CSV format options** panel.
 
-Setting the path prefix to the s3://project_bucket_a38cfb3/clients_data allows you to load its children: market_dictionary.csv or the sales folder with all the files directly in it (without subfolders of sales).
-The path has to be absolute.
+Hive partitioning splits the table into multiple files under the catalog structure.
+Each of the catalog levels corresponds to a column.
+The catalogs are named in the column_name=value convention.
 
-To load a single file from the sales folder, the path prefix must be set to the file’s parent folder: s3://project_bucket_a38cfb32/clients_data/sales
-
-To work with files hosted in AWS S3, it is recommended to create a special user in IAM to be used as a service account.
-The service account must have access to the bucket with permission to list and read objects.
-
-!!! tip "Service account credentials of the service account can be passed in three ways"
-
-    - Default AWS credentials in your DQOps' userhome,
-    - User (AccessKeyID), Password (SecretAccessKey) and Region during connection addition,
-    - Setting environment variables for User (Access Key ID), Password (Secret Access Key) and Region fields. [More info here](./csv.md#Environment-variables-in-parameters).
-
+The partitions of the data set and types of columns are discovered automatically.
 
 ### Additional CSV format options
 
 CSV file format properties are detected automatically based on a sample of the file data.
 The default sample size is 20480 rows.
 
-In **case of invalid import** of the data expand the **Additional CSV format options** panel with file format options by clicking on it in UI.
+In **case of invalid import** of the data, expand the **Additional CSV format options** panel with file format options by clicking on it in UI.
 
 The following properties can be configured for a very specific CSV format.
 
@@ -138,20 +115,6 @@ The following properties can be configured for a very specific CSV format.
 | Hive partitioning             | `hive-partitioning`                      | Specifies whether to interpret the path as a hive-partitioned path.                                                                                                                           | 
 | Ignore errors                 | `ignore-errors`                          | An option to ignore any parsing errors encountered - and instead ignore rows with errors.                                                                                                     | 
 | Auto detect                   | `auto-detect`                            | (Not available in UI) Enables auto-detection of CSV parameters. Default is true                                                                                                               | 
-
-### Working with partitioned files
-
-To work efficiently with partitions, you need to set the `hive-partition` parameter in CSV format settings.
-The option is available under the **Additional CSV format options** panel.
-
-Hive partitioning splits the table into multiple files under the catalog structure.
-Each of the catalog levels corresponds to a column.
-The catalogs are named in the column_name=value convention.
-
-!!! info "Partitions discovery"
-
-    The partitions of the data set and types of columns are discovered automatically.
-
 
 ### Environment variables in parameters
 
@@ -298,7 +261,7 @@ YAML file format.
 
 ## Next steps
 
-- Expand opportunities when [working with files](../working-with-dqo/working-with-files.md)
+- Learn about more advanced importing when [working with files](../working-with-dqo/working-with-files.md)
 - We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../integrations/webhooks/index.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you calculate separate data quality KPI scores for different groups of rows.

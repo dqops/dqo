@@ -37,31 +37,23 @@ After navigating to the DuckDB connection settings, you will need to fill in its
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-duckdb.png)
 
 | DuckDB connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
-|----------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name            |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-| Parallel jobs limit        |                                          | New limit. A null value will disable the limit.                                                                                                                                                                                                 |
-| Storage type               | `storage-type`                           | The storage type.                                                                                                                                                                                                                         |
-| Files format               | `files-format-type`                      | Type of source files for DuckDB.                                                                                                                                                                                                          |
-| JDBC connection property   |                                          | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                  |
-| User name/Key ID           | `user`                                   | DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                      |
-| Password/Secret Key        | `password`                               | DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                       |
-| Region                     | `region`                                 | The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                          |
-| Virtual schema name / Path | `directories`                            | Mapping the virtual schema name to the directory. The path must be absolute.                                                                                                                                                           |
+|-------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name         |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                   |
+| Parallel jobs limit     |                                          | New limit. A null value will disable the limit.                                                                                                                                                                                                             |
+| Files location          | `storage-type`                           | The files location: Local or AWS S3. To work with files hosted remotely (e.g. AWS S3), it is recommended to create a special user in IAM to be used as a service account with permission to list and read objects.                                          |
+| File format             | `files-format-type`                      | Type of source files for DuckDB.                                                                                                                                                                                                                            |
+| User name/Key ID        | `user`                                   | DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome.                       |
+| Password/Secret Key     | `password`                               | DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome.                        |
+| Region                  | `region`                                 | The region for the storage credentials for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome. |
+| Virtual schema name     | `directories`                            | An alias for the parent directory with data. The virtual schema name is a key of the directories mapping.                                                                                                                                                   |
+| Path                    | `directories`                            | The path prefix to the parent directory with data. The path must be absolute. The virtual schema name is a value of the directories mapping.                                                                                                                |
+| JDBC connection property |                                          | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                                    |
 
-Selecting the expected file format will allow to edit the additional format options.
+To continue, select one of the supported file formats.
 
-There file formats are available:
-
-- [CSV](./csv.md#Additional-CSV-format-options)
-- [JSON](./json.md#Additional-CSV-format-options)
-- [Parquet](./parquet.md#Additional-CSV-format-options)
-
-**Open one of the pages for the description of format options and the configuration details.**
-
-### **Reference of all connection parameters**
-Complete documentation of all connection parameters used in the `spec.duckdb` node is
-described in the reference section of the [DuckdbParametersSpec](../reference/yaml/ConnectionYaml.md#duckdbparametersspec)
-YAML file format.
+- [CSV](./csv.md#Setting-the-path-to-data)
+- [JSON](./json.md#Setting-the-path-to-data)
+- [Parquet](./parquet.md#Setting-the-path-to-data)
 
 ## Next steps
 
