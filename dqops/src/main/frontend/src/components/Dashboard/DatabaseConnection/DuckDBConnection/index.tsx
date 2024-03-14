@@ -46,7 +46,16 @@ const storageTypeOptions = [
 
   // remember to declare constans outside the component.
 ];
-
+// wyczysc path po zmianie
+//connectionName jest pusty i test connection jest succesfull
+// s3 polaczenie succesfull gdzie sa zle credentiale i w prefix nie jest dla s3
+// csv/ json/ parquet readonly jak user wybieze odpowiedni typ
+// s3 path walidacja od razu po zmianie
+// propertiesy odwracana kolejnosc
+// path nie wskoczyl na s3
+// nie zapisujemy gdy path jest pusty
+// parametry sie nie dofetchowuja na connectionie
+// margin wrapper i na dole mniej
 const DuckdbConnection = ({
   duckdb,
   onChange,
@@ -95,6 +104,24 @@ const DuckdbConnection = ({
     }
   }, [configuration]);
 
+  const changeStorageTypeDirectoryPrefixes = (
+    storage_type: DuckdbParametersSpecStorageTypeEnum
+  ) => {
+    const directories = { ...duckdb?.directories };
+
+    Object.keys(directories ?? {}).forEach((key) => {
+      if (directories[key].length && directories[key] !== 's3://') {
+        return;
+      }
+      if (storage_type === DuckdbParametersSpecStorageTypeEnum.s3) {
+        directories[key] = 's3://';
+      } else {
+        directories[key] = '';
+      }
+    });
+    handleChange({ directories, storage_type });
+  };
+
   return (
     <SectionWrapper title="DuckDB connection parameters" className="mb-4">
       <Select
@@ -102,9 +129,7 @@ const DuckdbConnection = ({
         options={storageTypeOptions}
         className="mb-4"
         value={duckdb?.storage_type}
-        onChange={(value) => {
-          handleChange({ storage_type: value });
-        }}
+        onChange={changeStorageTypeDirectoryPrefixes}
       />
 
       {duckdb?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 && (

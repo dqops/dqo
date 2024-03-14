@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
+import SectionWrapper from '../Dashboard/SectionWrapper';
+import SvgIcon from '../SvgIcon';
 import ConfigurationItemRow from './FormatsConfiguration/RowItem/ConfigurationItemRow';
 import ConfigurationItemRowBoolean from './FormatsConfiguration/RowItem/ConfigurationItemRowBoolean';
 import { TConfigurationItemRow } from './FormatsConfiguration/RowItem/TConfigurationItemRow';
 import { TConfigurationItemRowBoolean } from './FormatsConfiguration/RowItem/TConfigurationItemRowBoolean';
-import SectionWrapper from '../Dashboard/SectionWrapper';
-import SvgIcon from '../SvgIcon';
 
 type TConfigurationProps = {
   configuraitonStrings?: TConfigurationItemRow[];
@@ -23,7 +23,6 @@ export default function FormatConfigurationRenderer({
   configurationBooleans,
   type
 }: TConfigurationProps) {
-
   const [isSectionExpanded, setIsSectionExpanded] = useState(false);
 
   const title = `Additional ${type} format options`;
@@ -39,15 +38,15 @@ export default function FormatConfigurationRenderer({
           <span className="font-bold">{title}</span>
         </div>
       ) : (
-        <SectionWrapper 
+        <SectionWrapper
           title={title}
           onClick={() => setIsSectionExpanded(false)}
           svgIcon={true}
-          className='mt-2'
+          className="mt-2"
         >
           <div />
           {configuraitonStrings && (
-            <div style={divStyle}>
+            <div style={divStyle} className="pt-2">
               {configuraitonStrings.map((x, index) => (
                 <ConfigurationItemRow
                   key={index}
@@ -63,7 +62,7 @@ export default function FormatConfigurationRenderer({
           )}
 
           {configurationBooleans && (
-            <div style={divStyle} className="py-5">
+            <div style={divStyle} className="pb-2 pt-4">
               {configurationBooleans.map((x, index) => (
                 <ConfigurationItemRowBoolean
                   key={index}
