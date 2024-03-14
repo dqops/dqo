@@ -87,6 +87,7 @@ The catalogs are named in the column_name=value convention.
 
 The partitions of the data set and types of columns are discovered automatically.
 
+
 ### Additional CSV format options
 
 CSV file format properties are detected automatically based on a sample of the file data.
@@ -233,6 +234,7 @@ dqo> table import --connection={connection name}
 DQOps supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
 any number of characters. For example, use pub* to find all schema a name with a name starting with "pub". The *
 character can be used at the beginning, in the middle or at the end of the name.
+
 
 ## Connections configuration files
 
