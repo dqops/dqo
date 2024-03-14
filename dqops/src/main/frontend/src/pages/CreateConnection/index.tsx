@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 
-import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
-import SelectDatabase from '../../components/Dashboard/SelectDatabase';
-import MainLayout from '../../components/MainLayout';
-import ImportSchemas from '../../components/ImportSchemas';
 import {
   BigQueryParametersSpecJobsCreateProjectEnum,
   ConnectionModel,
@@ -14,6 +10,10 @@ import {
   TrinoParametersSpecAthenaAuthenticationModeEnum,
   TrinoParametersSpecTrinoEngineTypeEnum
 } from '../../api';
+import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
+import SelectDatabase from '../../components/Dashboard/SelectDatabase';
+import ImportSchemas from '../../components/ImportSchemas';
+import MainLayout from '../../components/MainLayout';
 import { BigQueryAuthenticationMode } from '../../shared/enums/bigquery.enum';
 
 const CreateConnection = () => {

@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import SectionWrapper from '../../SectionWrapper';
 import {
   DuckdbParametersSpec,
-  SharedCredentialListModel,
   DuckdbParametersSpecFilesFormatTypeEnum,
-  DuckdbParametersSpecStorageTypeEnum
+  DuckdbParametersSpecStorageTypeEnum,
+  SharedCredentialListModel
 } from '../../../../api';
-import FileFormatConfiguration from '../../../FileFormatConfiguration/FileFormatConfiguration';
 import { TConfiguration } from '../../../../components/FileFormatConfiguration/TConfiguration';
+import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import FileFormatConfiguration from '../../../FileFormatConfiguration/FileFormatConfiguration';
 import KeyValueProperties from '../../../FileFormatConfiguration/KeyValueProperties';
 import Select from '../../../Select';
-import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import SectionWrapper from '../../SectionWrapper';
 import JdbcPropertiesView from '../JdbcProperties';
 
 interface IDuckdbConnectionProps {
@@ -21,39 +21,57 @@ interface IDuckdbConnectionProps {
   freezeFileType?: boolean;
 }
 
+const storageTypeOptions = [
+  {
+    label: 'Local files',
+    value: undefined
+  },
+  {
+    label: 'AWS S3',
+    value: DuckdbParametersSpecStorageTypeEnum.s3
+  }
+  // todo: uncomment below when implemented
+  // {
+  //   label: 'Google Cloud Storage',
+  //   value: DuckdbParametersSpecStorageTypeEnum.gcs
+  // },
+  // {
+  //   label: 'Azure Blob Storage',
+  //   value: DuckdbParametersSpecStorageTypeEnum.azure
+  // },
+  // {
+  //   label: 'Cloudflare R2',
+  //   value: DuckdbParametersSpecStorageTypeEnum.r2
+  // }
+
+  // remember to declare constans outside the component.
+];
+
 const DuckdbConnection = ({
   duckdb,
   onChange,
   sharedCredentials,
   freezeFileType = false
 }: IDuckdbConnectionProps) => {
-
-  const [storageType, setStorageType] = useState(duckdb?.storage_type);
-
-  const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
-    if (!onChange) return;
-    setStorageType(obj?.storage_type);
-    onChange({
-      ...duckdb,
-      ...obj
-    });
-  };
-  console.log(duckdb)
   const [fileFormatType, setFileFormatType] =
     useState<DuckdbParametersSpecFilesFormatTypeEnum>(
       duckdb?.files_format_type ?? DuckdbParametersSpecFilesFormatTypeEnum.csv
     );
 
   const [configuration, setConfiguration] = useState<TConfiguration>({});
+  const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
+    if (!onChange) return;
+    onChange({
+      ...duckdb,
+      ...obj
+    });
+  };
+
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
     setConfiguration((prev) => ({
       ...prev,
       ...params
     }));
-    const config =  {...configuration, ...params}
-    handleChange({
-      [fileFormatType as keyof DuckdbParametersSpec]: config
-    });               
   };
   const cleanConfiguration = () => {
     setConfiguration({});
@@ -69,42 +87,27 @@ const DuckdbConnection = ({
     cleanConfiguration();
   };
 
-  const storageTypeOptions = [
-    {
-      label: 'Local files',
-      value: undefined
-    },
-    {
-      label: 'AWS S3',
-      value: DuckdbParametersSpecStorageTypeEnum.s3
-    },
-    // todo: uncomment below when implemented
-    // {
-    //   label: 'Google Cloud Storage',
-    //   value: DuckdbParametersSpecStorageTypeEnum.gcs
-    // },
-    // {
-    //   label: 'Azure Blob Storage',
-    //   value: DuckdbParametersSpecStorageTypeEnum.azure
-    // },
-    // {
-    //   label: 'Cloudflare R2',
-    //   value: DuckdbParametersSpecStorageTypeEnum.r2
-    // }
-  ];
+  useEffect(() => {
+    if (configuration) {
+      handleChange({
+        [fileFormatType as keyof DuckdbParametersSpec]: configuration
+      });
+    }
+  }, [configuration]);
 
   return (
     <SectionWrapper title="DuckDB connection parameters" className="mb-4">
-
       <Select
-          label="Files location"
-          options={storageTypeOptions}
-          className="mb-4"
-          value={ duckdb?.storage_type }
-          onChange={(value) => { handleChange({ storage_type: value })}}
-        />
+        label="Files location"
+        options={storageTypeOptions}
+        className="mb-4"
+        value={duckdb?.storage_type}
+        onChange={(value) => {
+          handleChange({ storage_type: value });
+        }}
+      />
 
-      { duckdb?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 &&
+      {duckdb?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 && (
         <>
           <FieldTypeInput
             data={sharedCredentials}
@@ -130,7 +133,7 @@ const DuckdbConnection = ({
             onChange={(value) => handleChange({ region: value })}
           />
         </>
-      }
+      )}
 
       <FileFormatConfiguration
         fileFormatType={fileFormatType}
@@ -142,9 +145,11 @@ const DuckdbConnection = ({
       >
         <KeyValueProperties
           properties={duckdb?.directories}
-          onChange={(directories) => { handleChange({ directories: directories })}}
+          onChange={(directories) => {
+            handleChange({ directories: directories });
+          }}
           sharedCredentials={sharedCredentials}
-          storageType={storageType}
+          storageType={duckdb?.storage_type}
         />
       </FileFormatConfiguration>
       <JdbcPropertiesView
