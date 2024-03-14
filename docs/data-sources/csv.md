@@ -107,11 +107,11 @@ Now we can import CSV files.
 
 1. Import the selected virtual schemas by clicking on the **Import Tables** button next to the source schema name from which you want to import tables.
 
-   ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-schemas.png)
+    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-schemas.png)
 
 2. Select the tables (folders with CSV files or just the files) you want to import or import all tables using the buttons in the upper right corner.
 
-   ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.png)
+    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.png)
 
 When new tables are imported, DQOps automatically activates profiling and monitoring checks, such as row count,
 table availability, and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m.
@@ -262,63 +262,70 @@ The service account must have access to the bucket with permission to list and r
     - Setting environment variables for User (Access Key ID), Password (Secret Access Key) and Region fields. [More info here.](./csv.md#Environment-variables-in-parameters).
 
 
-## File format import configuration
+## Configuration of the file format import
 
-The import configuration is available on two setting levels: the connection and the table.
+There are two levels of settings for configuring the import of file formats: the connection and the table.
 
-Both setting levels provide slightly different opportunities of configuration of available sections. File format configuration contains three sections:
+Both of these settings allow for slightly different configurations of the available sections. 
+The file format configuration consists of three sections:
+
 - File format
 - Virtual schema name to path mappings
 - Additional format options
 
 ### File format
 
-Type of the file format selection is only configured at the connection settings when the new connection is being created.
+The selection of the file format can only be configured at the connection settings when creating a new connection.
 
-Changing the type of file format requires creation of the new connection.
+Changing the type of file format requires creating a new connection.
 
 !!! warning "Changing the file format"
     
-    You should never try to change the file format type after the connection creation which will lead to connection resources corruption.
+    You should never try to change the file format type after the connection creation. This will lead to connection resource corruption.
 
 ### Virtual schema name to path mappings
 
 A connection can store multiple schemas.
 
-A virtual schema name is a name alias for the parent directory with data. 
+A virtual schema name is an name alias for the parent directory with data. 
 The configuration of the virtual schema is only available at the connection settings level.
 
-A path is an absolute path to that directory. The path configuration with examples [is available here](#Storage-path-setting).
-The level of the path configuration works differently. 
-The configuration on the connection level sets the parent directory in which directories or files are read.
+A path is an absolute path to that directory. The [path configuration with examples is available here](#Storage-path-setting).
+The level of the path configuration works differently. The configuration on the connection level sets the parent directory in which directories or files are read.
 The configuration on the table level provides a pattern to the files.
-
+// todo: escape special use of * sign
 The wildcard sign (*) replaces any number of characters on the folder level (between two slashes).
 The double wildcard sign (**) replaces any characters (including any folders down).
-It helps to define a [hive partitioning patten](#Working-with-partitioned-files) because a pattern does not need to contain folder level wildcard for each of the partitions. 
+This helps to define a [hive partitioning pattern](#Working-with-partitioned-files) because a pattern does not need to contain folder-level wildcard for each of the partitions. 
 
 !!! info "Pointing a file path out of the parent folder scope"
     
-    You can add a file at the table level settings that is not under the parent directory set at the path at connection level setting.
+    You can add a file at the table level settings that is not under the parent directory set at the path at the connection level setting.
 
     The path to the file has to be absolute.
 
 !!! info "Automatic path creation"
 
-    When importing the new table a path is being created automatically on the table level based on the path on the connection level setting.
+    When importing a new table, a path is created automatically on the table level based on the path at the connection level setting.
     
     You can always modify the path pattern.
 
 
 ### Additional format options
 
-The configuration of the additional file format options is available on two levels: connection settings and table settings.
+When working with file formats, there are additional configuration options that can be set at two levels: connection settings and table settings.
 
-The additional format options at connection settings are treated as default settings, common to the tables in the connection.
-The additional format options at table settings overrides the settings from the connection when they are configured in the table settings.
+The additional format options set at connection settings are considered as default settings, which are common to all tables in the connection.
+Whereas, the additional format options set at table settings override the default settings from the connection when they are configured in the table settings.
 
 
 ### Working with partitioned files
+
+// todo: add screen for a param
+
+// todo: sections order
+
+// todo: links between sections
 
 To work efficiently with partitions, you need to set the `hive-partition` parameter in CSV format settings.
 The option is available under the **Additional CSV format options** panel.
@@ -358,8 +365,9 @@ Then the table import is necessary.
 3. Check the name of the folder with the partitioned data.
 4. By clicking the **Import selected tables button** the table will be imported. You can reach the table by expanding the connection and the schema on the left panel.
 
-!!! warning "Partitions discovery"
-The partitions of the data set are discovered automatically including types of columns.
+!!! info "Partitions discovery"
+
+    The partitions of the data set are discovered automatically including types of columns.
 
 ## Connections configuration files
 
