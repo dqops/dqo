@@ -52,6 +52,7 @@ nav:
       - BigQuery: "data-sources/bigquery.md"
       - CSV: "data-sources/csv.md"
       - Databricks: "data-sources/databricks.md"
+      - DuckDB: "data-sources/duckdb.md"
       - JSON: "data-sources/json.md"
       - MySQL: "data-sources/mysql.md"
       - Oracle: "data-sources/oracle.md"
@@ -141,6 +142,7 @@ nav:
       - Managing errors: "working-with-dqo/managing-errors.md"
       - Creating custom data quality checks: "working-with-dqo/creating-custom-data-quality-checks.md"
       - Working with DQOps Shell: "working-with-dqo/working-with-dqo-shell.md"
+      - Working with files: "working-with-dqo/working-with-files.md"
   - Integrations:
       - "integrations/index.md"
       - Airflow:
