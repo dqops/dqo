@@ -32,14 +32,15 @@ public class DuckdbTestConnection {
         directories.keySet().forEach(schema -> {
             List<SourceTableModel> tables;
 
-            if(duckdbParametersSpec.getStorageType().equals(DuckdbStorageType.s3)) {
+            DuckdbStorageType storageType = duckdbParametersSpec.getStorageType();
+            if(storageType != null && storageType.equals(DuckdbStorageType.s3)) {
                 tables = AwsTablesLister.listTables(duckdbParametersSpec, schema);
             }
             else {
                 tables = LocalSystemTablesLister.listTables(duckdbParametersSpec, schema);
             }
 
-            if(tables.isEmpty()){
+            if(tables == null || tables.isEmpty()){
                 throw new RuntimeException("No files found in the path " + directories.get(schema) + ".");
             }
 
