@@ -58,30 +58,26 @@ const KeyValueProperties = ({
   }, [firstLevelActiveTab, storageType]);
 
   return (
-    <div>
-      <table className="my-3 w-full">
-        <thead>
-          <tr>
-            <th className="text-left min-w-40 pr-4 py-2">
-              Virtual schema name
-            </th>
-            <th className="text-left min-w-40 pr-4 py-2">Path</th>
-            <th className="px-8 min-w-40 py-2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {arr.map((_, index) => (
-            <KeyValuePropertyItem
-              key={index}
-              index={index}
-              properties={arr}
-              onChange={onChangeArr}
-              sharedCredentials={sharedCredentials}
-            />
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <table className="my-3 w-full">
+      <thead>
+        <tr>
+          <th className="text-left min-w-40 pr-4 py-2">Virtual schema name</th>
+          <th className="text-left min-w-40 pr-4 py-2">Path</th>
+          <th className="px-8 min-w-40 py-2">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {arr.map((_, index) => (
+          <KeyValuePropertyItem
+            key={index}
+            index={index}
+            properties={arr}
+            onChange={onChangeArr}
+            sharedCredentials={sharedCredentials}
+          />
+        ))}
+      </tbody>
+    </table>
   );
 };
 

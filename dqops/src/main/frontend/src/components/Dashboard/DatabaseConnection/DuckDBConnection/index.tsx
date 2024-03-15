@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
+import { cloneDeep } from 'lodash';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import {
   DuckdbParametersSpec,
   DuckdbParametersSpecFilesFormatTypeEnum,
@@ -7,6 +10,8 @@ import {
   SharedCredentialListModel
 } from '../../../../api';
 import { TConfiguration } from '../../../../components/FileFormatConfiguration/TConfiguration';
+import { getFirstLevelActiveTab } from '../../../../redux/selectors';
+import { CheckTypes } from '../../../../shared/routes';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import FileFormatConfiguration from '../../../FileFormatConfiguration/FileFormatConfiguration';
 import KeyValueProperties from '../../../FileFormatConfiguration/KeyValueProperties';
@@ -62,33 +67,33 @@ const DuckdbConnection = ({
   sharedCredentials,
   freezeFileType = false
 }: IDuckdbConnectionProps) => {
-  const [fileFormatType, setFileFormatType] =
-    useState<DuckdbParametersSpecFilesFormatTypeEnum>(
-      duckdb?.files_format_type ?? DuckdbParametersSpecFilesFormatTypeEnum.csv
-    );
-
-  const [configuration, setConfiguration] = useState<TConfiguration>(
-    (duckdb?.[
-      fileFormatType as keyof DuckdbParametersSpec
-    ] as TConfiguration) ?? {}
+  const [copiedDatabase, setCopiedDatabase] = useState<DuckdbParametersSpec>(
+    duckdb ?? {}
   );
+  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const [fileFormatType, setFileFormatType] = useState<
+    keyof DuckdbParametersSpec
+  >(duckdb?.files_format_type ?? DuckdbParametersSpecFilesFormatTypeEnum.csv);
   const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
     if (!onChange) return;
+    const copiedDb = cloneDeep(duckdb);
     onChange({
-      ...duckdb,
+      ...copiedDb,
       ...obj
     });
   };
 
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
-    setConfiguration((prev) => ({
-      ...prev,
+    const conf = {
+      ...(copiedDatabase?.[fileFormatType] as TConfiguration),
       ...params
-    }));
+    };
+    handleChange({
+      [fileFormatType as keyof DuckdbParametersSpec]: conf
+    });
   };
-  const cleanConfiguration = () => {
-    setConfiguration({});
-  };
+  const cleanConfiguration = () => {};
 
   const onChangeFile = (val: DuckdbParametersSpecFilesFormatTypeEnum) => {
     handleChange({
@@ -100,21 +105,9 @@ const DuckdbConnection = ({
     cleanConfiguration();
   };
 
-  // useEffect(() => {
-  //   if (configuration) {
-  //     handleChange({
-  //       [fileFormatType as keyof DuckdbParametersSpec]: configuration
-  //     });
-  //   }
-  // }, [configuration]);
-
   useEffect(() => {
-    onChangeConfiguration(
-      (duckdb?.[
-        fileFormatType as keyof DuckdbParametersSpec
-      ] as TConfiguration) ?? {}
-    );
-  }, [duckdb?.[fileFormatType as keyof DuckdbParametersSpec]]);
+    setCopiedDatabase(cloneDeep(duckdb) ?? {});
+  }, [duckdb, firstLevelActiveTab]);
 
   const changeStorageTypeDirectoryPrefixes = (
     storage_type: DuckdbParametersSpecStorageTypeEnum
@@ -173,9 +166,15 @@ const DuckdbConnection = ({
       )}
 
       <FileFormatConfiguration
-        fileFormatType={fileFormatType}
+        fileFormatType={
+          fileFormatType as DuckdbParametersSpecFilesFormatTypeEnum
+        }
         onChangeFile={onChangeFile}
-        configuration={configuration}
+        configuration={
+          copiedDatabase?.[
+            fileFormatType as keyof DuckdbParametersSpec
+          ] as TConfiguration
+        }
         onChangeConfiguration={onChangeConfiguration}
         cleanConfiguration={cleanConfiguration}
         freezeFileType={freezeFileType}
