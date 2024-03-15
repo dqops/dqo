@@ -656,7 +656,7 @@ http://localhost:8888/api/default/checks/table
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "pattern_name" : "default",
 		  "priority" : 100,
@@ -711,7 +711,7 @@ http://localhost:8888/api/default/checks/table
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DefaultTableChecksPatternListModel(
 				pattern_name='default',
@@ -771,7 +771,7 @@ http://localhost:8888/api/default/checks/table
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DefaultTableChecksPatternListModel(
 				pattern_name='default',
@@ -834,7 +834,7 @@ http://localhost:8888/api/default/checks/table
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DefaultTableChecksPatternListModel(
 				pattern_name='default',
@@ -897,7 +897,7 @@ http://localhost:8888/api/default/checks/table
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DefaultTableChecksPatternListModel(
 				pattern_name='default',
@@ -985,7 +985,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/daily
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "categories" : [ {
 		    "category" : "sample_category",
@@ -1037,7 +1037,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/daily
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -1098,7 +1098,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/daily
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -1162,7 +1162,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/daily
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -1226,7 +1226,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/daily
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -1314,7 +1314,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/monthly
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "categories" : [ {
 		    "category" : "sample_category",
@@ -1366,7 +1366,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/monthly
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -1427,7 +1427,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/monthly
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -1491,7 +1491,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/monthly
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -1555,7 +1555,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/monthly
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -1643,7 +1643,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/daily
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "categories" : [ {
 		    "category" : "sample_category",
@@ -1695,7 +1695,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/daily
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -1756,7 +1756,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/daily
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -1820,7 +1820,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/daily
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -1884,7 +1884,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/daily
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -1972,7 +1972,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/monthly
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "categories" : [ {
 		    "category" : "sample_category",
@@ -2024,7 +2024,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/monthly
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -2085,7 +2085,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/monthly
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -2149,7 +2149,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/monthly
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -2213,7 +2213,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/monthly
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -2301,7 +2301,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/profiling
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "categories" : [ {
 		    "category" : "sample_category",
@@ -2353,7 +2353,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/profiling
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -2414,7 +2414,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/profiling
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -2478,7 +2478,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/profiling
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -2542,7 +2542,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/profiling
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -2630,7 +2630,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "pattern_name" : "default",
 		  "pattern_spec" : {
@@ -2676,7 +2676,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DefaultTableChecksPatternModel(
 			pattern_name='default',
 			pattern_spec=TableDefaultChecksPatternSpec(
@@ -2729,7 +2729,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DefaultTableChecksPatternModel(
 			pattern_name='default',
 			pattern_spec=TableDefaultChecksPatternSpec(
@@ -2785,7 +2785,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DefaultTableChecksPatternModel(
 			pattern_name='default',
 			pattern_spec=TableDefaultChecksPatternSpec(
@@ -2841,7 +2841,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DefaultTableChecksPatternModel(
 			pattern_name='default',
 			pattern_spec=TableDefaultChecksPatternSpec(
@@ -2921,7 +2921,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "pattern_name" : "default",
 		  "priority" : 100,
@@ -2959,7 +2959,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DefaultTableChecksPatternListModel(
 			pattern_name='default',
 			priority=100,
@@ -2998,7 +2998,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DefaultTableChecksPatternListModel(
 			pattern_name='default',
 			priority=100,
@@ -3040,7 +3040,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DefaultTableChecksPatternListModel(
 			pattern_name='default',
 			priority=100,
@@ -3082,7 +3082,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DefaultTableChecksPatternListModel(
 			pattern_name='default',
 			priority=100,

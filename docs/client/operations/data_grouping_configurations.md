@@ -414,7 +414,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "can_edit" : false
 		}
@@ -448,7 +448,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DataGroupingConfigurationModel(can_edit=False)
         ```
     
@@ -481,7 +481,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DataGroupingConfigurationModel(can_edit=False)
         ```
     
@@ -517,7 +517,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DataGroupingConfigurationModel(can_edit=False)
         ```
     
@@ -553,7 +553,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DataGroupingConfigurationModel(can_edit=False)
         ```
     
@@ -612,7 +612,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "default_data_grouping_configuration" : false,
 		  "can_edit" : false
@@ -652,7 +652,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DataGroupingConfigurationListModel(
 				default_data_grouping_configuration=False,
@@ -697,7 +697,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DataGroupingConfigurationListModel(
 				default_data_grouping_configuration=False,
@@ -745,7 +745,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DataGroupingConfigurationListModel(
 				default_data_grouping_configuration=False,
@@ -793,7 +793,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DataGroupingConfigurationListModel(
 				default_data_grouping_configuration=False,

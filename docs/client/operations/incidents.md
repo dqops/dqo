@@ -43,7 +43,7 @@ http://localhost:8888/api/incidentstat
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "openIncidents" : 0
 		}, {
@@ -77,7 +77,7 @@ http://localhost:8888/api/incidentstat
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			IncidentsPerConnectionModel(open_incidents=0),
 			IncidentsPerConnectionModel(open_incidents=0),
@@ -110,7 +110,7 @@ http://localhost:8888/api/incidentstat
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			IncidentsPerConnectionModel(open_incidents=0),
 			IncidentsPerConnectionModel(open_incidents=0),
@@ -146,7 +146,7 @@ http://localhost:8888/api/incidentstat
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			IncidentsPerConnectionModel(open_incidents=0),
 			IncidentsPerConnectionModel(open_incidents=0),
@@ -182,7 +182,7 @@ http://localhost:8888/api/incidentstat
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			IncidentsPerConnectionModel(open_incidents=0),
 			IncidentsPerConnectionModel(open_incidents=0),
@@ -253,7 +253,7 @@ http://localhost:8888/api/incidents/{connectionName}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "year" : 0,
 		  "month" : 0,
@@ -302,7 +302,7 @@ http://localhost:8888/api/incidents/{connectionName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			IncidentModel(
 				year=0,
@@ -356,7 +356,7 @@ http://localhost:8888/api/incidents/{connectionName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			IncidentModel(
 				year=0,
@@ -413,7 +413,7 @@ http://localhost:8888/api/incidents/{connectionName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			IncidentModel(
 				year=0,
@@ -470,7 +470,7 @@ http://localhost:8888/api/incidents/{connectionName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			IncidentModel(
 				year=0,
@@ -552,7 +552,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "year" : 0,
 		  "month" : 0,
@@ -590,7 +590,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         IncidentModel(
 			year=0,
 			month=0,
@@ -629,7 +629,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         IncidentModel(
 			year=0,
 			month=0,
@@ -671,7 +671,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         IncidentModel(
 			year=0,
 			month=0,
@@ -713,7 +713,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         IncidentModel(
 			year=0,
 			month=0,
@@ -784,7 +784,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "hasProfilingIssues" : false,
 		  "hasDailyMonitoringIssues" : false,
@@ -825,7 +825,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         IncidentIssueHistogramModel(
 			has_profiling_issues=False,
 			has_daily_monitoring_issues=False,
@@ -873,7 +873,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         IncidentIssueHistogramModel(
 			has_profiling_issues=False,
 			has_daily_monitoring_issues=False,
@@ -924,7 +924,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         IncidentIssueHistogramModel(
 			has_profiling_issues=False,
 			has_daily_monitoring_issues=False,
@@ -975,7 +975,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         IncidentIssueHistogramModel(
 			has_profiling_issues=False,
 			has_daily_monitoring_issues=False,
@@ -1059,7 +1059,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "id" : "3854372",
 		  "checkHash" : 0,
@@ -1174,7 +1174,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultEntryModel(
 				id='3854372',
@@ -1294,7 +1294,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultEntryModel(
 				id='3854372',
@@ -1417,7 +1417,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultEntryModel(
 				id='3854372',
@@ -1540,7 +1540,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultEntryModel(
 				id='3854372',

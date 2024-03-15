@@ -631,7 +631,7 @@ http://localhost:8888/api/users
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "email" : "sample_user@mail.com",
 		  "accountRole" : "operator"
@@ -668,7 +668,7 @@ http://localhost:8888/api/users
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DqoCloudUserModel(
 				email='sample_user@mail.com',
@@ -710,7 +710,7 @@ http://localhost:8888/api/users
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DqoCloudUserModel(
 				email='sample_user@mail.com',
@@ -755,7 +755,7 @@ http://localhost:8888/api/users
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DqoCloudUserModel(
 				email='sample_user@mail.com',
@@ -800,7 +800,7 @@ http://localhost:8888/api/users
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DqoCloudUserModel(
 				email='sample_user@mail.com',
@@ -870,7 +870,7 @@ http://localhost:8888/api/users/{email}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "email" : "sample_user@mail.com",
 		  "accountRole" : "operator"
@@ -902,7 +902,7 @@ http://localhost:8888/api/users/{email}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoCloudUserModel(
 			email='sample_user@mail.com',
 			account_role=DqoUserRole.OPERATOR
@@ -935,7 +935,7 @@ http://localhost:8888/api/users/{email}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoCloudUserModel(
 			email='sample_user@mail.com',
 			account_role=DqoUserRole.OPERATOR
@@ -971,7 +971,7 @@ http://localhost:8888/api/users/{email}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoCloudUserModel(
 			email='sample_user@mail.com',
 			account_role=DqoUserRole.OPERATOR
@@ -1007,7 +1007,7 @@ http://localhost:8888/api/users/{email}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoCloudUserModel(
 			email='sample_user@mail.com',
 			account_role=DqoUserRole.OPERATOR

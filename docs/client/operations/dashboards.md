@@ -43,7 +43,7 @@ http://localhost:8888/api/dashboards
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ { }, { }, { } ]
         ```
     
@@ -71,7 +71,7 @@ http://localhost:8888/api/dashboards
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DashboardsFolderSpec(
 				standard=False,
@@ -116,7 +116,7 @@ http://localhost:8888/api/dashboards
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DashboardsFolderSpec(
 				standard=False,
@@ -164,7 +164,7 @@ http://localhost:8888/api/dashboards
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DashboardsFolderSpec(
 				standard=False,
@@ -212,7 +212,7 @@ http://localhost:8888/api/dashboards
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DashboardsFolderSpec(
 				standard=False,
@@ -287,7 +287,7 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         { }
         ```
     
@@ -317,7 +317,7 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -348,7 +348,7 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -382,7 +382,7 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -416,7 +416,7 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -476,7 +476,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         { }
         ```
     
@@ -507,7 +507,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -539,7 +539,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -574,7 +574,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -609,7 +609,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -670,7 +670,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         { }
         ```
     
@@ -702,7 +702,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -735,7 +735,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -771,7 +771,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -807,7 +807,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -869,7 +869,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         { }
         ```
     
@@ -902,7 +902,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -936,7 +936,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -973,7 +973,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -1010,7 +1010,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -1073,7 +1073,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         { }
         ```
     
@@ -1107,7 +1107,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -1142,7 +1142,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -1180,7 +1180,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     
@@ -1218,7 +1218,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         AuthenticatedDashboardModel()
         ```
     

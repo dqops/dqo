@@ -1164,7 +1164,7 @@ http://localhost:8888/api/connections/{connectionName}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "jobId" : 123456789,
 		  "createdAt" : "2007-10-11T13:42:00Z"
@@ -1195,7 +1195,7 @@ http://localhost:8888/api/connections/{connectionName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoQueueJobId(
 			job_id=123456789,
 			created_at='2007-10-11T13:42:00Z'
@@ -1227,7 +1227,7 @@ http://localhost:8888/api/connections/{connectionName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoQueueJobId(
 			job_id=123456789,
 			created_at='2007-10-11T13:42:00Z'
@@ -1262,7 +1262,7 @@ http://localhost:8888/api/connections/{connectionName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoQueueJobId(
 			job_id=123456789,
 			created_at='2007-10-11T13:42:00Z'
@@ -1297,7 +1297,7 @@ http://localhost:8888/api/connections/{connectionName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoQueueJobId(
 			job_id=123456789,
 			created_at='2007-10-11T13:42:00Z'
@@ -1350,7 +1350,7 @@ http://localhost:8888/api/connections
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "connection_name" : "sample_connection",
 		  "parallel_jobs_limit" : 4,
@@ -1516,7 +1516,7 @@ http://localhost:8888/api/connections
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ConnectionModel(
 				connection_name='sample_connection',
@@ -1693,7 +1693,7 @@ http://localhost:8888/api/connections
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ConnectionModel(
 				connection_name='sample_connection',
@@ -1873,7 +1873,7 @@ http://localhost:8888/api/connections
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ConnectionModel(
 				connection_name='sample_connection',
@@ -2053,7 +2053,7 @@ http://localhost:8888/api/connections
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ConnectionModel(
 				connection_name='sample_connection',
@@ -2258,7 +2258,7 @@ http://localhost:8888/api/connections/{connectionName}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "can_edit" : false
 		}
@@ -2289,7 +2289,7 @@ http://localhost:8888/api/connections/{connectionName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ConnectionSpecificationModel(can_edit=False)
         ```
     
@@ -2319,7 +2319,7 @@ http://localhost:8888/api/connections/{connectionName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ConnectionSpecificationModel(can_edit=False)
         ```
     
@@ -2352,7 +2352,7 @@ http://localhost:8888/api/connections/{connectionName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ConnectionSpecificationModel(can_edit=False)
         ```
     
@@ -2385,7 +2385,7 @@ http://localhost:8888/api/connections/{connectionName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ConnectionSpecificationModel(can_edit=False)
         ```
     
@@ -2442,7 +2442,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "connection_name" : "sample_connection",
 		  "parallel_jobs_limit" : 4,
@@ -2517,7 +2517,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ConnectionModel(
 			connection_name='sample_connection',
 			parallel_jobs_limit=4,
@@ -2595,7 +2595,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ConnectionModel(
 			connection_name='sample_connection',
 			parallel_jobs_limit=4,
@@ -2676,7 +2676,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ConnectionModel(
 			connection_name='sample_connection',
 			parallel_jobs_limit=4,
@@ -2757,7 +2757,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ConnectionModel(
 			connection_name='sample_connection',
 			parallel_jobs_limit=4,
@@ -2862,7 +2862,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "date" : "2007-12-03T10:15:30",
 		  "comment_by" : "sample_user",
@@ -2903,7 +2903,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CommentSpec(
 				date=Some date/time value: [2007-12-03T10:15:30],
@@ -2949,7 +2949,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CommentSpec(
 				date=Some date/time value: [2007-12-03T10:15:30],
@@ -2998,7 +2998,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CommentSpec(
 				date=Some date/time value: [2007-12-03T10:15:30],
@@ -3047,7 +3047,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CommentSpec(
 				date=Some date/time value: [2007-12-03T10:15:30],
@@ -3120,7 +3120,7 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "tables_count" : 0
 		}, {
@@ -3155,7 +3155,7 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CommonColumnModel(tables_count=0),
 			CommonColumnModel(tables_count=0),
@@ -3189,7 +3189,7 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CommonColumnModel(tables_count=0),
 			CommonColumnModel(tables_count=0),
@@ -3226,7 +3226,7 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CommonColumnModel(tables_count=0),
 			CommonColumnModel(tables_count=0),
@@ -3263,7 +3263,7 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CommonColumnModel(tables_count=0),
 			CommonColumnModel(tables_count=0),
@@ -3324,7 +3324,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "level_3" : {
 		    "source" : "column_value",
@@ -3358,7 +3358,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DataGroupingConfigurationSpec(
 			level_3=DataGroupingDimensionSpec(
 				source=DataGroupingDimensionSource.COLUMN_VALUE,
@@ -3393,7 +3393,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DataGroupingConfigurationSpec(
 			level_3=DataGroupingDimensionSpec(
 				source=DataGroupingDimensionSource.COLUMN_VALUE,
@@ -3431,7 +3431,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DataGroupingConfigurationSpec(
 			level_3=DataGroupingDimensionSpec(
 				source=DataGroupingDimensionSource.COLUMN_VALUE,
@@ -3469,7 +3469,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DataGroupingConfigurationSpec(
 			level_3=DataGroupingDimensionSpec(
 				source=DataGroupingDimensionSource.COLUMN_VALUE,
@@ -3531,7 +3531,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "grouping_level" : "table_dimension",
 		  "minimum_severity" : "warning",
@@ -3572,7 +3572,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ConnectionIncidentGroupingSpec(
 			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
 			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
@@ -3615,7 +3615,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ConnectionIncidentGroupingSpec(
 			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
 			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
@@ -3661,7 +3661,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ConnectionIncidentGroupingSpec(
 			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
 			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
@@ -3707,7 +3707,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ConnectionIncidentGroupingSpec(
 			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
 			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
@@ -3777,7 +3777,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ "sampleString_1", "sampleString_2", "sampleString_3" ]
         ```
     
@@ -3806,7 +3806,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			'sampleString_1',
 			'sampleString_2',
@@ -3840,7 +3840,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			'sampleString_1',
 			'sampleString_2',
@@ -3877,7 +3877,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			'sampleString_1',
 			'sampleString_2',
@@ -3914,7 +3914,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			'sampleString_1',
 			'sampleString_2',
@@ -3976,7 +3976,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "cron_expression" : "0 12 1 * *"
 		}
@@ -4009,7 +4009,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         MonitoringScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
@@ -4044,7 +4044,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         MonitoringScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
@@ -4082,7 +4082,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         MonitoringScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
@@ -4120,7 +4120,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         MonitoringScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False

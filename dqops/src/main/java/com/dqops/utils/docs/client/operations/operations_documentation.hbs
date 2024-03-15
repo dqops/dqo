@@ -54,12 +54,12 @@ Follow the [link]({{clientSourceUrl}}) to see the source code on GitHub.
     {{#if (or returnValueSampleJson returnValueSamplePython)}}
     ??? example "Expand to see the returned result"
     {{#if (eq executionMethod.codeFormatting "python")}}
-        ```python
+        ```
         {{{indent returnValueSamplePython 2}}}
         ```
     {{/if}}
     {{#if (eq executionMethod.codeFormatting "bash")}}
-        ```js
+        ```
         {{{indent returnValueSampleJson 2}}}
         ```
     {{/if}}

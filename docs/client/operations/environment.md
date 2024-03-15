@@ -43,7 +43,7 @@ http://localhost:8888/api/environment/settings
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "properties" : { }
 		}
@@ -73,7 +73,7 @@ http://localhost:8888/api/environment/settings
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoSettingsModel(
 			properties={
 			
@@ -106,7 +106,7 @@ http://localhost:8888/api/environment/settings
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoSettingsModel(
 			properties={
 			
@@ -142,7 +142,7 @@ http://localhost:8888/api/environment/settings
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoSettingsModel(
 			properties={
 			
@@ -178,7 +178,7 @@ http://localhost:8888/api/environment/settings
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoSettingsModel(
 			properties={
 			
@@ -232,7 +232,7 @@ http://localhost:8888/api/environment/profile
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "data_quality_data_warehouse_enabled" : false,
 		  "can_manage_account" : false,
@@ -278,7 +278,7 @@ http://localhost:8888/api/environment/profile
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoUserProfileModel(
 			data_quality_data_warehouse_enabled=False,
 			can_manage_account=False,
@@ -325,7 +325,7 @@ http://localhost:8888/api/environment/profile
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoUserProfileModel(
 			data_quality_data_warehouse_enabled=False,
 			can_manage_account=False,
@@ -375,7 +375,7 @@ http://localhost:8888/api/environment/profile
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoUserProfileModel(
 			data_quality_data_warehouse_enabled=False,
 			can_manage_account=False,
@@ -425,7 +425,7 @@ http://localhost:8888/api/environment/profile
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoUserProfileModel(
 			data_quality_data_warehouse_enabled=False,
 			can_manage_account=False,
@@ -493,7 +493,7 @@ http://localhost:8888/api/environment/issueapikey
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         "sample_string_value"
         ```
     
@@ -521,7 +521,7 @@ http://localhost:8888/api/environment/issueapikey
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         'sample_string_value'
         ```
     
@@ -550,7 +550,7 @@ http://localhost:8888/api/environment/issueapikey
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         'sample_string_value'
         ```
     
@@ -582,7 +582,7 @@ http://localhost:8888/api/environment/issueapikey
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         'sample_string_value'
         ```
     
@@ -614,7 +614,7 @@ http://localhost:8888/api/environment/issueapikey
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         'sample_string_value'
         ```
     

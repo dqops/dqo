@@ -54,7 +54,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "table_comparison_results" : { },
 		  "column_comparison_results" : { }
@@ -91,7 +91,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonResultsModel(
 			table_comparison_results={
 			
@@ -133,7 +133,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonResultsModel(
 			table_comparison_results={
 			
@@ -178,7 +178,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonResultsModel(
 			table_comparison_results={
 			
@@ -223,7 +223,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonResultsModel(
 			table_comparison_results={
 			
@@ -291,7 +291,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "table_comparison_results" : { },
 		  "column_comparison_results" : { }
@@ -328,7 +328,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonResultsModel(
 			table_comparison_results={
 			
@@ -370,7 +370,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonResultsModel(
 			table_comparison_results={
 			
@@ -415,7 +415,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonResultsModel(
 			table_comparison_results={
 			
@@ -460,7 +460,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonResultsModel(
 			table_comparison_results={
 			
@@ -527,7 +527,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "table_comparison_results" : { },
 		  "column_comparison_results" : { }
@@ -562,7 +562,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonResultsModel(
 			table_comparison_results={
 			
@@ -602,7 +602,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonResultsModel(
 			table_comparison_results={
 			
@@ -645,7 +645,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonResultsModel(
 			table_comparison_results={
 			
@@ -688,7 +688,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonResultsModel(
 			table_comparison_results={
 			

@@ -50,7 +50,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "alreadyImported" : false
 		}, {
@@ -85,7 +85,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			SchemaRemoteModel(already_imported=False),
 			SchemaRemoteModel(already_imported=False),
@@ -119,7 +119,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			SchemaRemoteModel(already_imported=False),
 			SchemaRemoteModel(already_imported=False),
@@ -156,7 +156,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			SchemaRemoteModel(already_imported=False),
 			SchemaRemoteModel(already_imported=False),
@@ -193,7 +193,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			SchemaRemoteModel(already_imported=False),
 			SchemaRemoteModel(already_imported=False),
@@ -255,7 +255,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "alreadyImported" : false
 		}, {
@@ -291,7 +291,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			RemoteTableListModel(already_imported=False),
 			RemoteTableListModel(already_imported=False),
@@ -326,7 +326,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			RemoteTableListModel(already_imported=False),
 			RemoteTableListModel(already_imported=False),
@@ -364,7 +364,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			RemoteTableListModel(already_imported=False),
 			RemoteTableListModel(already_imported=False),
@@ -402,7 +402,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			RemoteTableListModel(already_imported=False),
 			RemoteTableListModel(already_imported=False),
@@ -473,7 +473,7 @@ http://localhost:8888/api/datasource/testconnection
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         { }
         ```
     
@@ -558,7 +558,7 @@ http://localhost:8888/api/datasource/testconnection
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ConnectionTestModel()
         ```
     
@@ -644,7 +644,7 @@ http://localhost:8888/api/datasource/testconnection
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ConnectionTestModel()
         ```
     
@@ -733,7 +733,7 @@ http://localhost:8888/api/datasource/testconnection
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ConnectionTestModel()
         ```
     
@@ -822,7 +822,7 @@ http://localhost:8888/api/datasource/testconnection
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ConnectionTestModel()
         ```
     

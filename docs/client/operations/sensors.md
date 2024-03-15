@@ -399,7 +399,7 @@ http://localhost:8888/api/sensors
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "custom" : false,
 		  "built_in" : false,
@@ -439,7 +439,7 @@ http://localhost:8888/api/sensors
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			SensorListModel(
 				custom=False,
@@ -484,7 +484,7 @@ http://localhost:8888/api/sensors
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			SensorListModel(
 				custom=False,
@@ -532,7 +532,7 @@ http://localhost:8888/api/sensors
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			SensorListModel(
 				custom=False,
@@ -580,7 +580,7 @@ http://localhost:8888/api/sensors
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			SensorListModel(
 				custom=False,
@@ -653,7 +653,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "full_sensor_name" : "sample_target/sample_category/sample_sensor",
 		  "sensor_definition_spec" : {
@@ -698,7 +698,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SensorModel(
 			full_sensor_name='sample_target/sample_category/sample_sensor',
 			sensor_definition_spec=SensorDefinitionSpec(
@@ -742,7 +742,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SensorModel(
 			full_sensor_name='sample_target/sample_category/sample_sensor',
 			sensor_definition_spec=SensorDefinitionSpec(
@@ -789,7 +789,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SensorModel(
 			full_sensor_name='sample_target/sample_category/sample_sensor',
 			sensor_definition_spec=SensorDefinitionSpec(
@@ -836,7 +836,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SensorModel(
 			full_sensor_name='sample_target/sample_category/sample_sensor',
 			sensor_definition_spec=SensorDefinitionSpec(
@@ -900,7 +900,7 @@ http://localhost:8888/api/definitions/sensors
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "all_sensors" : [ ]
 		}
@@ -930,7 +930,7 @@ http://localhost:8888/api/definitions/sensors
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SensorFolderModel(
 			folders={
 			
@@ -966,7 +966,7 @@ http://localhost:8888/api/definitions/sensors
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SensorFolderModel(
 			folders={
 			
@@ -1005,7 +1005,7 @@ http://localhost:8888/api/definitions/sensors
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SensorFolderModel(
 			folders={
 			
@@ -1044,7 +1044,7 @@ http://localhost:8888/api/definitions/sensors
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SensorFolderModel(
 			folders={
 			

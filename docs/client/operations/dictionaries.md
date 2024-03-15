@@ -487,7 +487,7 @@ http://localhost:8888/api/dictionaries
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "can_edit" : false,
 		  "can_access_dictionary" : false
@@ -524,7 +524,7 @@ http://localhost:8888/api/dictionaries
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DataDictionaryListModel(
 				can_edit=False,
@@ -566,7 +566,7 @@ http://localhost:8888/api/dictionaries
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DataDictionaryListModel(
 				can_edit=False,
@@ -611,7 +611,7 @@ http://localhost:8888/api/dictionaries
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DataDictionaryListModel(
 				can_edit=False,
@@ -656,7 +656,7 @@ http://localhost:8888/api/dictionaries
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			DataDictionaryListModel(
 				can_edit=False,
@@ -726,7 +726,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "dictionary_name" : "sample_dictionary",
 		  "file_content" : "USD\nEUR\nGBP\nAUD\nCHF\n"
@@ -758,7 +758,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DataDictionaryModel(
 			dictionary_name='sample_dictionary',
 			file_content='USD
@@ -796,7 +796,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DataDictionaryModel(
 			dictionary_name='sample_dictionary',
 			file_content='USD
@@ -837,7 +837,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DataDictionaryModel(
 			dictionary_name='sample_dictionary',
 			file_content='USD
@@ -878,7 +878,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DataDictionaryModel(
 			dictionary_name='sample_dictionary',
 			file_content='USD
