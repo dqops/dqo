@@ -35,24 +35,26 @@ After navigating to the Parquet connection settings, you will need to fill in it
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-parquet.png)
 
-| Parquet connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
-|-------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name         |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                   |
-| Parallel jobs limit     |                                          | New limit. A null value will disable the limit.                                                                                                                                                                                                             |
-| Files location          | `storage-type`                           | The files location: Local or AWS S3. To work with files hosted remotely (e.g. AWS S3), it is recommended to create a special user in IAM to be used as a service account with permission to list and read objects.                                          |
-| File format             | `files-format-type`                      | Type of source files for DuckDB.                                                                                                                                                                                                                            |
-| User name/Key ID        | `user`                                   | DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome.                       |
-| Password/Secret Key     | `password`                               | DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome.                        |
-| Region                  | `region`                                 | The region for the storage credentials for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome. |
-| Virtual schema name     | `directories`                            | An alias for the parent directory with data. The virtual schema name is a key of the directories mapping.                                                                                                                                                   |
-| Path                    | `directories`                            | The path prefix to the parent directory with data. The path must be absolute. The virtual schema name is a value of the directories mapping.                                                                                                                |
-| JDBC connection property |                                          | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                                    |
+| Parquet connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                            | 
+|-----------------------------|------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name             |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                              |
+| Parallel jobs limit         |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                                                                                                        |
+| Files location              | `storage-type`                           | You have the option to import files stored locally or on AWS S3. If you choose to work with files on AWS S3, it is recommended that you create a specialized user in IAM. This user should be used as a service account and given permission to list and read objects. |
+| File format                 | `files-format-type`                      | Type of source files for DuckDB.                                                                                                                                                                                                                                       |
+| User name/Key ID            | `user`                                   | DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome.                                  |
+| Password/Secret Key         | `password`                               | DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome.                                   |
+| Region                      | `region`                                 | The region for the storage credentials for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome.            |
+| Virtual schema name         | `directories`                            | An alias for the parent directory with data. The virtual schema name is a key of the directories mapping.                                                                                                                                                              |
+| Path                        | `directories`                            | The path prefix to the parent directory with data. The path must be absolute. The virtual schema name is a value of the directories mapping.                                                                                                                           |
+| JDBC connection property    |                                          | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                                               |
 
 
-### Setting the path to data
+### Setting the path to data import
 
-The path determines which files could be imported.
-The path can lead to files located locally or remotely.
+To import files, you need to set the path first.
+The path can lead to files located either locally or remotely.
+
+The following example shows a folder structure with Parquet files.
 
 ``` { .asc .annotate }
 /usr/share
@@ -66,11 +68,10 @@ The path can lead to files located locally or remotely.
             └───...
 ```
 
-1.  Setting the path prefix to the /usr/share/clients_data allows to load its children: market_dictionary.parquet or the sales folder with all files appearing directly in it (without subfolders of sales).
-    The path has to be absolute.
-2.  To load a single file from the sales folder, the path prefix must be set to the file’s parent folder: /usr/share/clients_data/sales
+1.  Setting the path prefix to the **/usr/share/clients_data** allows to load its children: market_dictionary.parquet or the sales folder with all files appearing directly in it (without subfolders of sales). The path has to be absolute.
+2.  Setting the path prefix to the **/usr/share/clients_data/sales** allows to load a single file from the sales folder.
 
-For example when we have a local file system shown above and you want to load the market_dictionary.parquet or the sales folder with all files appearing directly in it (without subfolders of sales), set the path prefix to the /usr/share/clients_data.
+If you want to load the market_dictionary.parquet or the sales folder with all files appearing directly in it (without subfolders of sales), set the path prefix to the /usr/share/clients_data.
 The path has to be absolute.
 
 To load a single file from the sales folder, the path prefix must be set to the file’s parent folder: /usr/share/clients_data/sales
