@@ -19,15 +19,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-class DuckdbTestConnectionTest extends BaseTest {
+class DuckdbTestConnectionTestImpl extends BaseTest {
 
-    private DuckdbTestConnection sut;
+    private DuckdbTestConnectionImpl sut;
     private DuckdbParametersSpec duckdbParametersSpec;
 
     @BeforeEach
     void setUp() {
         this.duckdbParametersSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv).getDuckdb();
-        this.sut = new DuckdbTestConnection();
+        this.sut = new DuckdbTestConnectionImpl();
     }
 
     @Test
