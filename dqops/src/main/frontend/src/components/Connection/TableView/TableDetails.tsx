@@ -1,35 +1,35 @@
+import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
-import Input from '../../Input';
-import Checkbox from '../../Checkbox';
-import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import {
+  ConnectionModel,
+  ConnectionSpecProviderTypeEnum,
+  DuckdbParametersSpecFilesFormatTypeEnum,
+  FileFormatSpec,
+  TableListModelProfilingChecksResultTruncationEnum
+} from '../../../api';
+import { TConfiguration } from '../../../components/FileFormatConfiguration/TConfiguration';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getTableBasic,
   setUpdatedTableBasic,
   updateTableBasic
 } from '../../../redux/actions/table.actions';
-import { useParams } from 'react-router-dom';
+import { IRootState } from '../../../redux/reducers';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
-import { CheckTypes } from '../../../shared/routes';
-import Select from '../../Select';
-import {
-  ConnectionModel,
-  ConnectionSpecProviderTypeEnum,
-  FileFormatSpec,
-  TableListModelProfilingChecksResultTruncationEnum,
-  DuckdbParametersSpecFilesFormatTypeEnum
-} from '../../../api';
-import NumberInput from '../../NumberInput';
-import clsx from 'clsx';
-import { IRootState } from '../../../redux/reducers';
-import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
 import { ConnectionApiClient } from '../../../services/apiClient';
-import { TConfiguration } from '../../../components/FileFormatConfiguration/TConfiguration';
+import { CheckTypes } from '../../../shared/routes';
+import Checkbox from '../../Checkbox';
+import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
 import FilePath from '../../FileFormatConfiguration/FilePath';
+import Input from '../../Input';
+import NumberInput from '../../NumberInput';
+import Select from '../../Select';
+import ActionGroup from './TableActionGroup';
 
 const TableDetails = () => {
   const {
@@ -53,27 +53,28 @@ const TableDetails = () => {
     DuckdbParametersSpecFilesFormatTypeEnum.csv;
 
   const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
-  const [paths, setPaths] = useState<Array<string>>(
-    tableBasic?.file_format?.file_paths
-      ? [...tableBasic.file_format.file_paths, '']
-      : ['']
-  );
+
   const [fileFormatType, setFileFormatType] =
     useState<DuckdbParametersSpecFilesFormatTypeEnum>(format);
-  const [configuration, setConfiguration] = useState<TConfiguration>(
-    tableBasic?.file_format?.[format] ?? {}
-  );
 
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
-    setConfiguration((prev) => ({
-      ...prev,
-      ...params
-    }));
-    handleChange({});
+    // setConfiguration((prev) => ({
+    //   ...prev,
+    //   ...params
+    // }));
+    handleChange({
+      file_format: {
+        ...tableBasic.file_format,
+        [fileFormatType as keyof FileFormatSpec]: {
+          ...tableBasic.file_format?.[fileFormatType as keyof FileFormatSpec],
+          ...params
+        }
+      }
+    });
   };
 
   const cleanConfiguration = () => {
-    setConfiguration({});
+    // setConfiguration({});
   };
 
   const dispatch = useActionDispatch();
@@ -82,14 +83,20 @@ const TableDetails = () => {
   useEffect(() => {
     dispatch(
       getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table)
-    );
+    ).then(() => {
+      // if (tableBasic?.file_format?.[format]) {
+      //   setConfiguration(tableBasic?.file_format[format]);
+      // }
+      // if (tableBasic?.file_format?.file_paths) {
+      //   setPaths([...tableBasic.file_format.file_paths, '']);
+    });
     const getConnectionBasic = async () => {
       await ConnectionApiClient.getConnectionBasic(connection).then((res) =>
         setConnectionModel(res.data)
       );
     };
     getConnectionBasic();
-  }, [checkTypes, firstLevelActiveTab, connection, schema, table]);
+  }, [checkTypes, connection, schema, table]);
 
   const handleChange = (obj: any) => {
     dispatch(
@@ -111,54 +118,60 @@ const TableDetails = () => {
         connection,
         schema,
         table,
-        {
-          ...tableBasic,
-          file_format:
-            {
-              [fileFormatType as keyof FileFormatSpec]: configuration,
-              file_paths: paths
-            } ?? undefined
-        }
+        tableBasic
       )
     );
     await dispatch(
       getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table)
     );
   };
-  useEffect(() => {
-    if (
-      Object.keys(configuration ?? {}).length === 0 &&
-      tableBasic?.file_format?.[format]
-    ) {
-      setConfiguration(tableBasic?.file_format[format]);
-    }
-    if (paths?.length === 1 && tableBasic?.file_format?.file_paths) {
-      setPaths([...tableBasic.file_format.file_paths, '']);
-    }
-  }, [tableBasic?.file_format]);
 
   const onAddPath = () => {
-    handleChange({});
-    setPaths((prev) => [...prev, '']);
+    handleChange({
+      file_format: {
+        ...tableBasic.file_format,
+        file_paths: [...tableBasic.file_format.file_paths, '']
+      }
+    });
+    // setPaths((prev) => [...prev, '']);
   };
   const onChangePath = (value: string, index?: number) => {
-    handleChange({});
-    const copiedPaths = [...paths];
+    const copiedPaths = [...(tableBasic.file_format.file_paths as any[])];
     if (index !== undefined) {
       copiedPaths[index] = value;
     } else {
-      copiedPaths[paths.length - 1] = value;
+      copiedPaths[(tableBasic.file_format.file_paths as any[]).length - 1] =
+        value;
     }
-    setPaths(copiedPaths);
+    handleChange({
+      file_format: {
+        ...tableBasic.file_format,
+        file_paths: copiedPaths
+      }
+    });
+    // setPaths(copiedPaths);
   };
   const onDeletePath = (index: number) => {
-    setPaths((prev) => prev.filter((_, i) => i !== index));
-    handleChange({});
+    // setPaths((prev) => prev.filter((_, i) => i !== index));
+    handleChange({
+      file_format: {
+        ...tableBasic.file_format,
+        file_paths: (tableBasic.file_format.file_paths as any[]).filter(
+          (_, i) => i !== index
+        )
+      }
+    });
   };
 
   const onChangeFile = (val: DuckdbParametersSpecFilesFormatTypeEnum) => {
+    handleChange({
+      file_format: {
+        ...tableBasic.file_format,
+        [fileFormatType]: undefined,
+        [val]: {}
+      }
+    });
     setFileFormatType(val);
-    setConfiguration({});
   };
 
   return (
@@ -238,14 +251,13 @@ const TableDetails = () => {
             <td className="px-4 py-2">
               <Select
                 options={Object.values(
-                    TableListModelProfilingChecksResultTruncationEnum
-                  ).map((x) => ({
-                    label: x
-                      ?.replaceAll('_', ' ')
-                      .replace(/./, (c) => c.toUpperCase()),
-                    value: x
-                  }))
-                }
+                  TableListModelProfilingChecksResultTruncationEnum
+                ).map((x) => ({
+                  label: x
+                    ?.replaceAll('_', ' ')
+                    .replace(/./, (c) => c.toUpperCase()),
+                  value: x
+                }))}
                 value={
                   tableBasic?.advanced_profiling_result_truncation ??
                   TableListModelProfilingChecksResultTruncationEnum.store_the_most_recent_result_per_month
@@ -271,13 +283,13 @@ const TableDetails = () => {
         <FileFormatConfiguration
           fileFormatType={fileFormatType}
           onChangeFile={onChangeFile}
-          configuration={configuration}
+          configuration={tableBasic?.file_format?.[format]}
           onChangeConfiguration={onChangeConfiguration}
           cleanConfiguration={cleanConfiguration}
           freezeFileType={false}
         >
           <FilePath
-            paths={paths}
+            paths={tableBasic?.file_format.file_paths as any[]}
             onAddPath={onAddPath}
             onChangePath={onChangePath}
             onDeletePath={onDeletePath}

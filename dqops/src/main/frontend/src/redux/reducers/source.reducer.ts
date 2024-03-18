@@ -14,10 +14,10 @@
 /// limitations under the License.
 ///
 
-import { SOURCE_ACTION } from '../types';
-import { CheckTypes } from '../../shared/routes';
-import { CheckRunMonitoringScheduleGroup } from '../../shared/enums/scheduling.enum';
 import { DataGroupingConfigurationSpec } from '../../api';
+import { CheckRunMonitoringScheduleGroup } from '../../shared/enums/scheduling.enum';
+import { CheckTypes } from '../../shared/routes';
+import { SOURCE_ACTION } from '../types';
 
 export interface INestTab {
   url: string;

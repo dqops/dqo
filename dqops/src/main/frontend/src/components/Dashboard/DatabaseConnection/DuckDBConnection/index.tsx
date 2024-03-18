@@ -189,7 +189,6 @@ const DuckdbConnection = ({
             }));
           }}
           sharedCredentials={sharedCredentials}
-          storageType={copiedDatabase?.storage_type}
         />
       </FileFormatConfiguration>
       <JdbcPropertiesView
