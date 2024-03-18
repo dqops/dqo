@@ -1,9 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SharedCredentialListModel } from '../../../../api';
-import {
-  convertArrayToObject,
-  convertObjectToArray
-} from '../../../../utils/object';
 import JdbcPropertyItem from './JdbcPropertyItem';
 
 interface IProperties {
@@ -15,29 +11,46 @@ interface IJdbcPropertiesViewProps {
   onChange: (properties: IProperties) => void;
   sharedCredentials?: SharedCredentialListModel[];
 }
+function convertObjectToArray(obj: {
+  [key: string]: string;
+}): { [key: string]: string }[] {
+  return Object.entries(obj).map(([key, value]) => ({ [key]: value }));
+}
+
+function convertArrayToObject(array: { [key: string]: string }[]): {
+  [key: string]: string;
+} {
+  return array.reduce((result, currentObject) => {
+    for (const key in currentObject) {
+      if (Object.prototype.hasOwnProperty.call(currentObject, key)) {
+        result[key] = currentObject[key];
+      }
+    }
+    return result;
+  }, {});
+}
 
 const JdbcPropertiesView = ({
   properties,
   onChange,
   sharedCredentials
 }: IJdbcPropertiesViewProps) => {
-  const entries: [string, string][] = convertObjectToArray(properties).concat([
-    ['', '']
-  ]);
+  const [arr, setArr] = useState(convertObjectToArray(properties ?? {}));
 
-  const onRemove = (key: number) => {
-    onChange(
-      convertArrayToObject(entries.filter((item, index) => index !== key))
-    );
+  const onChangeArr = (
+    array: {
+      [key: string]: string;
+    }[]
+  ) => {
+    setArr(array);
+    onChange(convertArrayToObject(array));
   };
 
-  const onChangeProperty = (key: number, val: [string, string]) => {
-    onChange(
-      convertArrayToObject(
-        entries.map((item, index) => (index === key ? val : item))
-      )
-    );
-  };
+  // useEffect(() => {
+  //   if (properties) {
+  //     setArr(convertObjectToArray(properties ?? {}));
+  //   }
+  // }, [firstLevelActiveTab, storageType]);
 
   return (
     <div className="py-4">
@@ -52,15 +65,12 @@ const JdbcPropertiesView = ({
           </tr>
         </thead>
         <tbody>
-          {entries.map(([key, value], index) => (
+          {arr.map((_, index) => (
             <JdbcPropertyItem
               key={index}
-              idx={index}
-              name={key}
-              value={value}
-              isLast={index === entries.length - 1}
-              onRemove={onRemove}
-              onChange={onChangeProperty}
+              index={index}
+              properties={arr}
+              onChange={onChangeArr}
               sharedCredentials={sharedCredentials}
             />
           ))}

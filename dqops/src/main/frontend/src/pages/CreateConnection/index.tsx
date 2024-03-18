@@ -131,7 +131,8 @@ const CreateConnection = () => {
         copiedDatabase.duckdb = {
           directories: { files: '' },
           files_format_type: fileFormat,
-          storage_type: DuckdbParametersSpecStorageTypeEnum.local
+          storage_type: DuckdbParametersSpecStorageTypeEnum.local,
+          properties: { '': '' }
         };
       }
     }
