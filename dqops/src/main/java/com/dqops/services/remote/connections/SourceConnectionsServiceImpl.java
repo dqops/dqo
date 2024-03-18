@@ -19,6 +19,7 @@ import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.SourceConnection;
+import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.fileslisting.DuckdbTestConnection;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.secrets.SecretValueLookupContext;
@@ -95,7 +96,8 @@ public class SourceConnectionsServiceImpl implements SourceConnectionsService {
             SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext);
 
             if(providerType.equals(ProviderType.duckdb)){
-                duckdbTestConnection.testConnection(sourceConnection);
+                DuckdbParametersSpec duckdbParametersSpec = sourceConnection.getConnectionSpec().getDuckdb();
+                duckdbTestConnection.testConnection(duckdbParametersSpec);
             } else {
                 sourceConnection.listSchemas();
             }

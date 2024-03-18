@@ -1,21 +1,27 @@
 package com.dqops.connectors.duckdb.fileslisting;
 
-import com.dqops.connectors.SourceConnection;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Used for testing a connection for DuckDB.
+ */
+@Component
 public class DuckdbTestConnection {
 
-    public void testConnection(SourceConnection sourceConnection){
+    /**
+     * Tests the connection by listing files. Throws exception on misconfiguration such as no schema name, lack or invalid paths, no files in a path, etc.
+     * @param duckdbParametersSpec DuckdbParametersSpec that allow to list files.
+     */
+    public void testConnection(DuckdbParametersSpec duckdbParametersSpec){
 
-        DuckdbParametersSpec duckdbParametersSpec = sourceConnection.getConnectionSpec().getDuckdb();
-
-        Map<String, String> directories = sourceConnection.getConnectionSpec().getDuckdb().getDirectories();
+        Map<String, String> directories = duckdbParametersSpec.getDirectories();
 
         if(directories == null || directories.size() == 0){
             throw new RuntimeException("Virtual schema name is not configured in the Import configuration.");
