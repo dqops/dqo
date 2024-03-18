@@ -112,13 +112,10 @@ description: DQOps is an open-source data quality platform for data quality and 
 ## Supported data sources
 [![Athena](https://dqops.com/docs/images/connections/athena2.png){ class=glightbox-ignored-image }](data-sources/athena.md)
 &nbsp; &nbsp; &nbsp; [![Google BigQuery](https://dqops.com/docs/images/connections/google-bigquery.png){ class=glightbox-ignored-image }](data-sources/bigquery.md)
-&nbsp; &nbsp; &nbsp; [![CSV](https://dqops.com/docs/images/connections/csv-icon1.png){ class=glightbox-ignored-image }](data-sources/csv.md)
 &nbsp; &nbsp; &nbsp; [![Databricks](https://dqops.com/docs/images/connections/databricks.png){ class=glightbox-ignored-image }](data-sources/databricks.md)
 &nbsp; &nbsp; &nbsp; [![DuckDB](https://dqops.com/docs/images/connections/duckdb-titled1.png){ class=glightbox-ignored-image }](data-sources/duckdb.md)
-&nbsp; &nbsp; &nbsp; [![JSON](https://dqops.com/docs/images/connections/json-icon1.png){ class=glightbox-ignored-image }](data-sources/json.md)
 &nbsp; &nbsp; &nbsp; [![MySQL](https://dqops.com/docs/images/connections/mysql.png){ class=glightbox-ignored-image }](data-sources/mysql.md)
 &nbsp; &nbsp; &nbsp; [![Oracle](https://dqops.com/docs/images/connections/oracle2.png){ class=glightbox-ignored-image }](data-sources/oracle.md)
-&nbsp; &nbsp; &nbsp; [![Parquet](https://dqops.com/docs/images/connections/parquet-icon1.png){ class=glightbox-ignored-image }](data-sources/parquet.md)
 &nbsp; &nbsp; &nbsp; [![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png){ class=glightbox-ignored-image }](data-sources/postgresql.md)
 &nbsp; &nbsp; &nbsp; [![Presto](https://dqops.com/docs/images/connections/presto1.png){ class=glightbox-ignored-image }](data-sources/presto.md)
 &nbsp; &nbsp; &nbsp; [![Amazon Redshift](https://dqops.com/docs/images/connections/amazon-redshift1.png){ class=glightbox-ignored-image }](data-sources/redshift.md)
@@ -127,6 +124,11 @@ description: DQOps is an open-source data quality platform for data quality and 
 &nbsp; &nbsp; &nbsp; [![Spark](https://dqops.com/docs/images/connections/spark.png){ class=glightbox-ignored-image }](data-sources/spark.md)
 &nbsp; &nbsp; &nbsp; [![Microsoft SQL Server](https://dqops.com/docs/images/connections/microsoft-sql-server.png){ class=glightbox-ignored-image }](data-sources/sql-server.md)
 &nbsp; &nbsp; &nbsp; [![Trino](https://dqops.com/docs/images/connections/trino1.png){ class=glightbox-ignored-image }](data-sources/trino.md)
+
+## Supported flat files
+[![CSV](https://dqops.com/docs/images/connections/csv-icon2.png){ class=glightbox-ignored-image }](data-sources/csv.md)
+&nbsp; &nbsp; &nbsp; [![JSON](https://dqops.com/docs/images/connections/json-icon2.png){ class=glightbox-ignored-image }](data-sources/json.md)
+&nbsp; &nbsp; &nbsp; [![Parquet](https://dqops.com/docs/images/connections/parquet-icon2.png){ class=glightbox-ignored-image }](data-sources/parquet.md)
 
 ## Getting started
 !!! info "Start with DQOps"
