@@ -113,13 +113,14 @@ Database provider type (--provider):
  [ 3] mysql
  [ 4] oracle
  [ 5] postgresql
- [ 6] presto
- [ 7] redshift
- [ 8] snowflake
- [ 9] spark
- [10] sqlserver
- [11] trino
-Please enter one of the [] values: 11
+ [ 6] duckdb
+ [ 7] presto
+ [ 8] redshift
+ [ 9] snowflake
+ [10] spark
+ [11] sqlserver
+ [12] trino
+Please enter one of the [] values: 12
 Trino engine type (--trino-engine):
  [ 1] trino
  [ 2] athena

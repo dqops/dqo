@@ -79,12 +79,11 @@ To load a single file from the sales folder, the path prefix must be set to the 
 
 ### Working with partitioned files
 
-To work efficiently with partitions, you need to set the `hive-partition` parameter in CSV format settings.
-The option is available under the **Additional CSV format options** panel.
+To work with partitioned files, you need to set the `hive-partition` parameter in CSV format settings.
+The option can be found under the **Additional CSV format options** panel.
 
-Hive partitioning splits the table into multiple files under the catalog structure.
-Each of the catalog levels corresponds to a column.
-The catalogs are named in the column_name=value convention.
+Hive partitioning divides a table into multiple files based on the catalog structure.
+Each catalog level is associated with a column and the catalogs are named in the format of column_name=value.
 
 The partitions of the data set and types of columns are discovered automatically.
 

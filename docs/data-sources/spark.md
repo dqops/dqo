@@ -101,13 +101,14 @@ Database provider type (--provider):
  [ 3] mysql
  [ 4] oracle
  [ 5] postgresql
- [ 6] presto
- [ 7] redshift
- [ 8] snowflake
- [ 9] spark
- [10] sqlserver
- [11] trino
-Please enter one of the [] values: 9
+ [ 6] duckdb
+ [ 7] presto
+ [ 8] redshift
+ [ 9] snowflake
+ [10] spark
+ [11] sqlserver
+ [12] trino
+Please enter one of the [] values: 10
 Spark host name (--spark-host) [${SPARK_HOST}]: localhost
 Spark port number (--spark-port) [${SPARK_PORT}]: 10000
 Spark user name (--spark-user) [${SPARK_USER}]: 
