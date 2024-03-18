@@ -41,9 +41,8 @@ public class DuckdbTestConnection {
             }
 
             if(tables == null || tables.isEmpty()){
-                throw new RuntimeException("No files found in the path " + directories.get(schema) + ".");
+                throw new RuntimeException("No files found in the path " + directories.get(schema));
             }
-
         });
 
     }
