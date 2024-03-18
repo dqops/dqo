@@ -1,29 +1,28 @@
-import React, { useEffect, useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
-import Button from '../Button';
-import Input from '../Input';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import {
+  ConnectionModel,
+  ConnectionSpecProviderTypeEnum,
+  DuckdbParametersSpecFilesFormatTypeEnum,
+  FileFormatSpec
+} from '../../api';
+import { TConfiguration } from '../../components/FileFormatConfiguration/TConfiguration';
+import { useTree } from '../../contexts/treeContext';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import {
   ConnectionApiClient,
   JobApiClient,
   TableApiClient
 } from '../../services/apiClient';
 import { CustomTreeNode } from '../../shared/interfaces';
-import { useTree } from '../../contexts/treeContext';
-import { useHistory, useParams } from 'react-router-dom';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import {
-  ConnectionModel,
-  ConnectionSpecProviderTypeEnum,
-  FileFormatSpec,
-  DuckdbParametersSpecFilesFormatTypeEnum
-} from '../../api';
-import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
-import { TConfiguration } from '../../components/FileFormatConfiguration/TConfiguration';
-import SectionWrapper from '../Dashboard/SectionWrapper';
-import FilePath from '../FileFormatConfiguration/FilePath';
 import { urlencodeDecoder, urlencodeEncoder } from '../../utils';
+import Button from '../Button';
+import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
+import FilePath from '../FileFormatConfiguration/FilePath';
+import Input from '../Input';
 
 interface AddTableDialogProps {
   open: boolean;
@@ -63,16 +62,21 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
     try {
       setLoading(true);
       if (node) {
-        await TableApiClient.createTable(urlencodeEncoder(args[0]), urlencodeEncoder(args[1]), urlencodeEncoder(name), {
-          file_format:
-            connectionModel.provider_type ===
-            ConnectionSpecProviderTypeEnum.duckdb
-              ? {
-                  [fileFormatType as keyof FileFormatSpec]: configuration,
-                  file_paths: paths.slice(0, -1)
-                }
-              : undefined
-        }).then(() =>
+        await TableApiClient.createTable(
+          urlencodeEncoder(args[0]),
+          urlencodeEncoder(args[1]),
+          urlencodeEncoder(name),
+          {
+            file_format:
+              connectionModel.provider_type ===
+              ConnectionSpecProviderTypeEnum.duckdb
+                ? {
+                    [fileFormatType as keyof FileFormatSpec]: configuration,
+                    file_paths: paths.slice(0, -1)
+                  }
+                : undefined
+          }
+        ).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
             connectionName: urlencodeEncoder(args[0]),
             schemaName: urlencodeEncoder(args[1]),
@@ -81,16 +85,21 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
         );
         refreshNode(node);
       } else {
-        await TableApiClient.createTable(urlencodeEncoder(connection), urlencodeEncoder(schema), urlencodeEncoder(name), {
-          file_format:
-            connectionModel.provider_type ===
-            ConnectionSpecProviderTypeEnum.duckdb
-              ? {
-                  [fileFormatType as keyof FileFormatSpec]: configuration,
-                  file_paths: paths.slice(0, -1)
-                }
-              : undefined
-        }).then(() =>
+        await TableApiClient.createTable(
+          urlencodeEncoder(connection),
+          urlencodeEncoder(schema),
+          urlencodeEncoder(name),
+          {
+            file_format:
+              connectionModel.provider_type ===
+              ConnectionSpecProviderTypeEnum.duckdb
+                ? {
+                    [fileFormatType as keyof FileFormatSpec]: configuration,
+                    file_paths: paths.slice(0, -1)
+                  }
+                : undefined
+          }
+        ).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
             connectionName: urlencodeEncoder(connection),
             schemaName: urlencodeEncoder(schema),
@@ -126,6 +135,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           'detail'
         )
       );
+      cleanState();
       onClose();
     } finally {
       setLoading(false);
@@ -134,9 +144,9 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
 
   useEffect(() => {
     const getConnectionBasic = async () => {
-      await ConnectionApiClient.getConnectionBasic(urlencodeEncoder(args[0])).then((res) =>
-        setConnectionModel(res.data)
-      );
+      await ConnectionApiClient.getConnectionBasic(
+        urlencodeEncoder(args[0])
+      ).then((res) => setConnectionModel(res.data));
     };
     if (node) {
       getConnectionBasic();
@@ -154,6 +164,12 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
 
   const onChangeFile = (val: DuckdbParametersSpecFilesFormatTypeEnum) =>
     setFileFormatType(val);
+
+  const cleanState = () => {
+    setConfiguration({});
+    setName('');
+    setPaths(['']);
+  };
 
   return (
     <Dialog open={open} handler={onClose}>
@@ -192,7 +208,10 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           color="primary"
           variant="outlined"
           className="px-8"
-          onClick={onClose}
+          onClick={() => {
+            onClose();
+            cleanState();
+          }}
           label="Cancel"
         />
         <Button
