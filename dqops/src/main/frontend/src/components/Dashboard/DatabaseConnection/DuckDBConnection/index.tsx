@@ -68,7 +68,7 @@ const DuckdbConnection = ({
   freezeFileType = false
 }: IDuckdbConnectionProps) => {
   const [copiedDatabase, setCopiedDatabase] = useState<DuckdbParametersSpec>(
-    duckdb ?? {}
+    cloneDeep(duckdb) ?? {}
   );
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -77,21 +77,21 @@ const DuckdbConnection = ({
   >(duckdb?.files_format_type ?? DuckdbParametersSpecFilesFormatTypeEnum.csv);
   const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
     if (!onChange) return;
-    const copiedDb = cloneDeep(duckdb);
     onChange({
-      ...copiedDb,
+      ...copiedDatabase,
       ...obj
     });
   };
 
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
-    const conf = {
-      ...(copiedDatabase?.[fileFormatType] as TConfiguration),
-      ...params
+    const updatedObj = {
+      ...copiedDatabase,
+      [fileFormatType]: {
+        ...(copiedDatabase?.[fileFormatType] as TConfiguration),
+        ...params
+      }
     };
-    handleChange({
-      [fileFormatType as keyof DuckdbParametersSpec]: conf
-    });
+    setCopiedDatabase(updatedObj);
   };
   const cleanConfiguration = () => {};
 
@@ -106,8 +106,12 @@ const DuckdbConnection = ({
   };
 
   useEffect(() => {
+    onChange(cloneDeep(copiedDatabase) ?? {});
+  }, [copiedDatabase]);
+
+  useEffect(() => {
     setCopiedDatabase(cloneDeep(duckdb) ?? {});
-  }, [duckdb, firstLevelActiveTab]);
+  }, [firstLevelActiveTab]);
 
   const changeStorageTypeDirectoryPrefixes = (
     storage_type: DuckdbParametersSpecStorageTypeEnum

@@ -207,7 +207,6 @@ const DatabaseConnection = ({
   useEffect(() => {
     getSharedCredentials();
   }, []);
-
   const components = {
     [ConnectionModelProviderTypeEnum.bigquery]: (
       <BigqueryConnection
