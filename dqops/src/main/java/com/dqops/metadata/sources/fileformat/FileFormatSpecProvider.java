@@ -3,6 +3,7 @@ package com.dqops.metadata.sources.fileformat;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.fileslisting.AwsConstants;
 import com.dqops.metadata.sources.TableSpec;
 
 import java.io.File;
@@ -114,7 +115,7 @@ public class FileFormatSpecProvider {
     public static boolean isPathAbsoluteSystemsWide(String path){
         return path.startsWith("/")
                 || path.startsWith("\\")
-                || path.startsWith("s3://")
+                || path.startsWith(AwsConstants.S3_URI_PREFIX)
                 || Path.of(path).isAbsolute();
     }
 
