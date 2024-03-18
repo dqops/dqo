@@ -367,7 +367,7 @@ http://localhost:8888/api/checks
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "check_name" : "sample_check",
 		  "full_check_name" : "sample_target/sample_category/sample_check",
@@ -413,7 +413,7 @@ http://localhost:8888/api/checks
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckDefinitionListModel(
 				check_name='sample_check',
@@ -464,7 +464,7 @@ http://localhost:8888/api/checks
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckDefinitionListModel(
 				check_name='sample_check',
@@ -518,7 +518,7 @@ http://localhost:8888/api/checks
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckDefinitionListModel(
 				check_name='sample_check',
@@ -572,7 +572,7 @@ http://localhost:8888/api/checks
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckDefinitionListModel(
 				check_name='sample_check',
@@ -651,7 +651,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "check_name" : "sample_check",
 		  "sensor_name" : "sample_target/sample_category/sample_sensor",
@@ -689,7 +689,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckDefinitionModel(
 			check_name='sample_check',
 			sensor_name='sample_target/sample_category/sample_sensor',
@@ -728,7 +728,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckDefinitionModel(
 			check_name='sample_check',
 			sensor_name='sample_target/sample_category/sample_sensor',
@@ -770,7 +770,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckDefinitionModel(
 			check_name='sample_check',
 			sensor_name='sample_target/sample_category/sample_sensor',
@@ -812,7 +812,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckDefinitionModel(
 			check_name='sample_check',
 			sensor_name='sample_target/sample_category/sample_sensor',
@@ -871,7 +871,7 @@ http://localhost:8888/api/definitions/checks
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         { }
         ```
     
@@ -899,7 +899,7 @@ http://localhost:8888/api/definitions/checks
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckDefinitionFolderModel(
 			folders={
 			
@@ -932,7 +932,7 @@ http://localhost:8888/api/definitions/checks
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckDefinitionFolderModel(
 			folders={
 			
@@ -968,7 +968,7 @@ http://localhost:8888/api/definitions/checks
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckDefinitionFolderModel(
 			folders={
 			
@@ -1004,7 +1004,7 @@ http://localhost:8888/api/definitions/checks
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckDefinitionFolderModel(
 			folders={
 			

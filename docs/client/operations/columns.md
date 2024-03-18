@@ -329,7 +329,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "jobId" : 123456789,
 		  "createdAt" : "2007-10-11T13:42:00Z"
@@ -363,7 +363,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoQueueJobId(
 			job_id=123456789,
 			created_at='2007-10-11T13:42:00Z'
@@ -398,7 +398,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoQueueJobId(
 			job_id=123456789,
 			created_at='2007-10-11T13:42:00Z'
@@ -436,7 +436,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoQueueJobId(
 			job_id=123456789,
 			created_at='2007-10-11T13:42:00Z'
@@ -474,7 +474,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoQueueJobId(
 			job_id=123456789,
 			created_at='2007-10-11T13:42:00Z'
@@ -537,7 +537,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "connection_name" : "sample_connection",
 		  "table" : {
@@ -593,7 +593,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnModel(
 			connection_name='sample_connection',
 			table=PhysicalTableName(
@@ -654,7 +654,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnModel(
 			connection_name='sample_connection',
 			table=PhysicalTableName(
@@ -718,7 +718,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnModel(
 			connection_name='sample_connection',
 			table=PhysicalTableName(
@@ -782,7 +782,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnModel(
 			connection_name='sample_connection',
 			table=PhysicalTableName(
@@ -870,7 +870,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "connection_name" : "sample_connection",
 		  "table" : {
@@ -920,7 +920,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnListModel(
 			connection_name='sample_connection',
 			table=PhysicalTableName(
@@ -974,7 +974,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnListModel(
 			connection_name='sample_connection',
 			table=PhysicalTableName(
@@ -1031,7 +1031,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnListModel(
 			connection_name='sample_connection',
 			table=PhysicalTableName(
@@ -1088,7 +1088,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnListModel(
 			connection_name='sample_connection',
 			table=PhysicalTableName(
@@ -1169,7 +1169,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "date" : "2007-12-03T10:15:30",
 		  "comment_by" : "sample_user",
@@ -1213,7 +1213,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CommentSpec(
 				date=Some date/time value: [2007-12-03T10:15:30],
@@ -1262,7 +1262,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CommentSpec(
 				date=Some date/time value: [2007-12-03T10:15:30],
@@ -1314,7 +1314,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CommentSpec(
 				date=Some date/time value: [2007-12-03T10:15:30],
@@ -1366,7 +1366,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CommentSpec(
 				date=Some date/time value: [2007-12-03T10:15:30],
@@ -1442,7 +1442,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ "sampleString_1", "sampleString_2", "sampleString_3" ]
         ```
     
@@ -1474,7 +1474,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			'sampleString_1',
 			'sampleString_2',
@@ -1511,7 +1511,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			'sampleString_1',
 			'sampleString_2',
@@ -1551,7 +1551,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			'sampleString_1',
 			'sampleString_2',
@@ -1591,7 +1591,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			'sampleString_1',
 			'sampleString_2',
@@ -1656,7 +1656,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "checks" : [ {
 		    "check_category" : "sample_category_1",
@@ -1725,7 +1725,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerListModel(
 			checks=[
 				CheckListModel(
@@ -1802,7 +1802,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerListModel(
 			checks=[
 				CheckListModel(
@@ -1882,7 +1882,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerListModel(
 			checks=[
 				CheckListModel(
@@ -1962,7 +1962,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerListModel(
 			checks=[
 				CheckListModel(
@@ -2064,7 +2064,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "nulls" : {
 		    "daily_nulls_count" : {
@@ -2104,7 +2104,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnDailyMonitoringCheckCategoriesSpec(
 			nulls=ColumnNullsDailyMonitoringChecksSpec(
 				daily_nulls_count=ColumnNullsCountCheckSpec(
@@ -2148,7 +2148,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnDailyMonitoringCheckCategoriesSpec(
 			nulls=ColumnNullsDailyMonitoringChecksSpec(
 				daily_nulls_count=ColumnNullsCountCheckSpec(
@@ -2195,7 +2195,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnDailyMonitoringCheckCategoriesSpec(
 			nulls=ColumnNullsDailyMonitoringChecksSpec(
 				daily_nulls_count=ColumnNullsCountCheckSpec(
@@ -2242,7 +2242,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnDailyMonitoringCheckCategoriesSpec(
 			nulls=ColumnNullsDailyMonitoringChecksSpec(
 				daily_nulls_count=ColumnNullsCountCheckSpec(
@@ -2314,7 +2314,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "categories" : [ {
 		    "category" : "sample_category",
@@ -2371,7 +2371,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -2437,7 +2437,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -2506,7 +2506,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -2575,7 +2575,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -2669,7 +2669,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "categories" : [ {
 		    "category" : "sample_category",
@@ -2728,7 +2728,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -2796,7 +2796,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -2867,7 +2867,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -2938,7 +2938,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -3029,7 +3029,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "nulls" : {
 		    "monthly_nulls_count" : {
@@ -3069,7 +3069,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnMonthlyMonitoringCheckCategoriesSpec(
 			nulls=ColumnNullsMonthlyMonitoringChecksSpec(
 				monthly_nulls_count=ColumnNullsCountCheckSpec(
@@ -3113,7 +3113,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnMonthlyMonitoringCheckCategoriesSpec(
 			nulls=ColumnNullsMonthlyMonitoringChecksSpec(
 				monthly_nulls_count=ColumnNullsCountCheckSpec(
@@ -3160,7 +3160,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnMonthlyMonitoringCheckCategoriesSpec(
 			nulls=ColumnNullsMonthlyMonitoringChecksSpec(
 				monthly_nulls_count=ColumnNullsCountCheckSpec(
@@ -3207,7 +3207,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnMonthlyMonitoringCheckCategoriesSpec(
 			nulls=ColumnNullsMonthlyMonitoringChecksSpec(
 				monthly_nulls_count=ColumnNullsCountCheckSpec(
@@ -3279,7 +3279,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "checks" : [ {
 		    "check_category" : "sample_category_1",
@@ -3348,7 +3348,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerListModel(
 			checks=[
 				CheckListModel(
@@ -3425,7 +3425,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerListModel(
 			checks=[
 				CheckListModel(
@@ -3505,7 +3505,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerListModel(
 			checks=[
 				CheckListModel(
@@ -3585,7 +3585,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerListModel(
 			checks=[
 				CheckListModel(
@@ -3687,7 +3687,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "nulls" : {
 		    "daily_partition_nulls_count" : {
@@ -3727,7 +3727,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnDailyPartitionedCheckCategoriesSpec(
 			nulls=ColumnNullsDailyPartitionedChecksSpec(
 				daily_partition_nulls_count=ColumnNullsCountCheckSpec(
@@ -3771,7 +3771,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnDailyPartitionedCheckCategoriesSpec(
 			nulls=ColumnNullsDailyPartitionedChecksSpec(
 				daily_partition_nulls_count=ColumnNullsCountCheckSpec(
@@ -3818,7 +3818,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnDailyPartitionedCheckCategoriesSpec(
 			nulls=ColumnNullsDailyPartitionedChecksSpec(
 				daily_partition_nulls_count=ColumnNullsCountCheckSpec(
@@ -3865,7 +3865,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnDailyPartitionedCheckCategoriesSpec(
 			nulls=ColumnNullsDailyPartitionedChecksSpec(
 				daily_partition_nulls_count=ColumnNullsCountCheckSpec(
@@ -3937,7 +3937,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "categories" : [ {
 		    "category" : "sample_category",
@@ -3994,7 +3994,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -4060,7 +4060,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -4129,7 +4129,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -4198,7 +4198,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -4292,7 +4292,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "categories" : [ {
 		    "category" : "sample_category",
@@ -4351,7 +4351,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -4419,7 +4419,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -4490,7 +4490,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -4561,7 +4561,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -4652,7 +4652,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "nulls" : {
 		    "monthly_partition_nulls_count" : {
@@ -4692,7 +4692,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnMonthlyPartitionedCheckCategoriesSpec(
 			nulls=ColumnNullsMonthlyPartitionedChecksSpec(
 				monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
@@ -4736,7 +4736,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnMonthlyPartitionedCheckCategoriesSpec(
 			nulls=ColumnNullsMonthlyPartitionedChecksSpec(
 				monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
@@ -4783,7 +4783,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnMonthlyPartitionedCheckCategoriesSpec(
 			nulls=ColumnNullsMonthlyPartitionedChecksSpec(
 				monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
@@ -4830,7 +4830,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnMonthlyPartitionedCheckCategoriesSpec(
 			nulls=ColumnNullsMonthlyPartitionedChecksSpec(
 				monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
@@ -4901,7 +4901,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "nulls" : {
 		    "profile_nulls_count" : {
@@ -4941,7 +4941,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnProfilingCheckCategoriesSpec(
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
@@ -4985,7 +4985,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnProfilingCheckCategoriesSpec(
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
@@ -5032,7 +5032,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnProfilingCheckCategoriesSpec(
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
@@ -5079,7 +5079,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnProfilingCheckCategoriesSpec(
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
@@ -5150,7 +5150,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "checks" : [ {
 		    "check_category" : "sample_category_1",
@@ -5217,7 +5217,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerListModel(
 			checks=[
 				CheckListModel(
@@ -5292,7 +5292,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerListModel(
 			checks=[
 				CheckListModel(
@@ -5370,7 +5370,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerListModel(
 			checks=[
 				CheckListModel(
@@ -5448,7 +5448,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerListModel(
 			checks=[
 				CheckListModel(
@@ -5550,7 +5550,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "categories" : [ {
 		    "category" : "sample_category",
@@ -5605,7 +5605,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -5669,7 +5669,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -5736,7 +5736,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -5803,7 +5803,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -5896,7 +5896,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "categories" : [ {
 		    "category" : "sample_category",
@@ -5953,7 +5953,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -6019,7 +6019,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -6088,7 +6088,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -6157,7 +6157,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CheckContainerModel(
 			categories=[
 				QualityCategoryModel(
@@ -6248,7 +6248,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "connection_name" : "sample_connection",
 		  "table" : {
@@ -6331,7 +6331,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnStatisticsModel(
 			connection_name='sample_connection',
 			table=PhysicalTableName(
@@ -6424,7 +6424,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnStatisticsModel(
 			connection_name='sample_connection',
 			table=PhysicalTableName(
@@ -6520,7 +6520,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnStatisticsModel(
 			connection_name='sample_connection',
 			table=PhysicalTableName(
@@ -6616,7 +6616,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ColumnStatisticsModel(
 			connection_name='sample_connection',
 			table=PhysicalTableName(
@@ -6735,7 +6735,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "connection_name" : "sample_connection",
 		  "table" : {
@@ -6820,7 +6820,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ColumnListModel(
 				connection_name='sample_connection',
@@ -6919,7 +6919,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ColumnListModel(
 				connection_name='sample_connection',
@@ -7021,7 +7021,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ColumnListModel(
 				connection_name='sample_connection',
@@ -7123,7 +7123,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ColumnListModel(
 				connection_name='sample_connection',
@@ -7249,7 +7249,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "connection_name" : "sample_connection",
 		  "table" : {
@@ -7397,7 +7397,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableColumnsStatisticsModel(
 			connection_name='sample_connection',
 			table=PhysicalTableName(
@@ -7569,7 +7569,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableColumnsStatisticsModel(
 			connection_name='sample_connection',
 			table=PhysicalTableName(
@@ -7744,7 +7744,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableColumnsStatisticsModel(
 			connection_name='sample_connection',
 			table=PhysicalTableName(
@@ -7919,7 +7919,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableColumnsStatisticsModel(
 			connection_name='sample_connection',
 			table=PhysicalTableName(

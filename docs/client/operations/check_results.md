@@ -61,7 +61,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "checkHash" : 0,
 		  "checkCategory" : "sample_category",
@@ -443,7 +443,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -845,7 +845,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -1250,7 +1250,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -1655,7 +1655,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -2090,7 +2090,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "checkHash" : 0,
 		  "checkCategory" : "sample_category",
@@ -2472,7 +2472,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -2874,7 +2874,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -3279,7 +3279,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -3684,7 +3684,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -4118,7 +4118,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "checkHash" : 0,
 		  "checkCategory" : "sample_category",
@@ -4498,7 +4498,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -4898,7 +4898,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -5301,7 +5301,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -5704,7 +5704,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -6141,7 +6141,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "connection_name" : "sample_connection",
 		  "schema_name" : "sample_schema",
@@ -6280,7 +6280,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableCurrentDataQualityStatusModel(
 			connection_name='sample_connection',
 			schema_name='sample_schema',
@@ -6420,7 +6420,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableCurrentDataQualityStatusModel(
 			connection_name='sample_connection',
 			schema_name='sample_schema',
@@ -6563,7 +6563,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableCurrentDataQualityStatusModel(
 			connection_name='sample_connection',
 			schema_name='sample_schema',
@@ -6706,7 +6706,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableCurrentDataQualityStatusModel(
 			connection_name='sample_connection',
 			schema_name='sample_schema',
@@ -6880,7 +6880,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "checkHash" : 0,
 		  "checkCategory" : "sample_category",
@@ -7261,7 +7261,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -7662,7 +7662,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -8066,7 +8066,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -8470,7 +8470,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -8904,7 +8904,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "checkHash" : 0,
 		  "checkCategory" : "sample_category",
@@ -9285,7 +9285,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -9686,7 +9686,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -10090,7 +10090,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -10494,7 +10494,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -10927,7 +10927,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "checkHash" : 0,
 		  "checkCategory" : "sample_category",
@@ -11306,7 +11306,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -11705,7 +11705,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -12107,7 +12107,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,
@@ -12509,7 +12509,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsListModel(
 				check_hash=0,

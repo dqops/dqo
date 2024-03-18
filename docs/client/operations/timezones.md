@@ -43,7 +43,7 @@ http://localhost:8888/api/timezones
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ "sampleString_1", "sampleString_2", "sampleString_3" ]
         ```
     
@@ -71,7 +71,7 @@ http://localhost:8888/api/timezones
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			'sampleString_1',
 			'sampleString_2',
@@ -104,7 +104,7 @@ http://localhost:8888/api/timezones
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			'sampleString_1',
 			'sampleString_2',
@@ -140,7 +140,7 @@ http://localhost:8888/api/timezones
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			'sampleString_1',
 			'sampleString_2',
@@ -176,7 +176,7 @@ http://localhost:8888/api/timezones
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			'sampleString_1',
 			'sampleString_2',

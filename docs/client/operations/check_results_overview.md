@@ -56,7 +56,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "checkHash" : 0,
 		  "timePeriods" : [ ],
@@ -117,7 +117,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -225,7 +225,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -336,7 +336,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -447,7 +447,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -583,7 +583,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "checkHash" : 0,
 		  "timePeriods" : [ ],
@@ -644,7 +644,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -752,7 +752,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -863,7 +863,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -974,7 +974,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -1109,7 +1109,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "checkHash" : 0,
 		  "timePeriods" : [ ],
@@ -1168,7 +1168,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -1274,7 +1274,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -1383,7 +1383,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -1492,7 +1492,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -1627,7 +1627,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "checkHash" : 0,
 		  "timePeriods" : [ ],
@@ -1687,7 +1687,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -1794,7 +1794,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -1904,7 +1904,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -2014,7 +2014,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -2149,7 +2149,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "checkHash" : 0,
 		  "timePeriods" : [ ],
@@ -2209,7 +2209,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -2316,7 +2316,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -2426,7 +2426,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -2536,7 +2536,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -2670,7 +2670,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "checkHash" : 0,
 		  "timePeriods" : [ ],
@@ -2728,7 +2728,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -2833,7 +2833,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -2941,7 +2941,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,
@@ -3049,7 +3049,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckResultsOverviewDataModel(
 				check_hash=0,

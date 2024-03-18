@@ -193,7 +193,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "jobId" : {
 		    "jobId" : 123456789,
@@ -246,7 +246,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CollectStatisticsQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -300,7 +300,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CollectStatisticsQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -357,7 +357,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CollectStatisticsQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -414,7 +414,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CollectStatisticsQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -497,7 +497,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "jobId" : {
 		    "jobId" : 123456789,
@@ -550,7 +550,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CollectStatisticsQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -604,7 +604,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CollectStatisticsQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -661,7 +661,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CollectStatisticsQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -718,7 +718,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         CollectStatisticsQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -801,7 +801,7 @@ http://localhost:8888/api/jobs/deletestoreddata
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "jobId" : {
 		    "jobId" : 123456789,
@@ -848,7 +848,7 @@ http://localhost:8888/api/jobs/deletestoreddata
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DeleteStoredDataQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -896,7 +896,7 @@ http://localhost:8888/api/jobs/deletestoreddata
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DeleteStoredDataQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -947,7 +947,7 @@ http://localhost:8888/api/jobs/deletestoreddata
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DeleteStoredDataQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -998,7 +998,7 @@ http://localhost:8888/api/jobs/deletestoreddata
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DeleteStoredDataQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -1054,7 +1054,7 @@ http://localhost:8888/api/jobs/jobs
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "jobs" : [ ],
 		  "folderSynchronizationStatus" : {
@@ -1100,7 +1100,7 @@ http://localhost:8888/api/jobs/jobs
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoJobQueueInitialSnapshotModel(
 			jobs=[
 			
@@ -1149,7 +1149,7 @@ http://localhost:8888/api/jobs/jobs
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoJobQueueInitialSnapshotModel(
 			jobs=[
 			
@@ -1201,7 +1201,7 @@ http://localhost:8888/api/jobs/jobs
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoJobQueueInitialSnapshotModel(
 			jobs=[
 			
@@ -1253,7 +1253,7 @@ http://localhost:8888/api/jobs/jobs
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoJobQueueInitialSnapshotModel(
 			jobs=[
 			
@@ -1330,7 +1330,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "status" : "finished",
 		  "statusChangedAt" : "2007-10-11T13:42:00Z"
@@ -1362,7 +1362,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoJobHistoryEntryModel(
 			status=DqoJobStatus.FINISHED,
 			status_changed_at='2007-10-11T13:42:00Z'
@@ -1395,7 +1395,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoJobHistoryEntryModel(
 			status=DqoJobStatus.FINISHED,
 			status_changed_at='2007-10-11T13:42:00Z'
@@ -1431,7 +1431,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoJobHistoryEntryModel(
 			status=DqoJobStatus.FINISHED,
 			status_changed_at='2007-10-11T13:42:00Z'
@@ -1467,7 +1467,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoJobHistoryEntryModel(
 			status=DqoJobStatus.FINISHED,
 			status_changed_at='2007-10-11T13:42:00Z'
@@ -1527,7 +1527,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "jobChanges" : [ ],
 		  "folderSynchronizationStatus" : {
@@ -1574,7 +1574,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoJobQueueIncrementalSnapshotModel(
 			job_changes=[
 			
@@ -1624,7 +1624,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoJobQueueIncrementalSnapshotModel(
 			job_changes=[
 			
@@ -1677,7 +1677,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoJobQueueIncrementalSnapshotModel(
 			job_changes=[
 			
@@ -1730,7 +1730,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoJobQueueIncrementalSnapshotModel(
 			job_changes=[
 			
@@ -1819,7 +1819,7 @@ http://localhost:8888/api/jobs/importtables
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "jobId" : {
 		    "jobId" : 123456789,
@@ -1885,7 +1885,7 @@ http://localhost:8888/api/jobs/importtables
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ImportTablesQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -1962,7 +1962,7 @@ http://localhost:8888/api/jobs/importtables
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ImportTablesQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -2042,7 +2042,7 @@ http://localhost:8888/api/jobs/importtables
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ImportTablesQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -2122,7 +2122,7 @@ http://localhost:8888/api/jobs/importtables
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         ImportTablesQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -2354,7 +2354,7 @@ http://localhost:8888/api/jobs/runchecks
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "jobId" : {
 		    "jobId" : 123456789,
@@ -2410,7 +2410,7 @@ http://localhost:8888/api/jobs/runchecks
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         RunChecksQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -2467,7 +2467,7 @@ http://localhost:8888/api/jobs/runchecks
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         RunChecksQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -2527,7 +2527,7 @@ http://localhost:8888/api/jobs/runchecks
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         RunChecksQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -2587,7 +2587,7 @@ http://localhost:8888/api/jobs/runchecks
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         RunChecksQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -2652,7 +2652,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         { }
         ```
     
@@ -2679,7 +2679,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SpringErrorPayload()
         ```
     
@@ -2707,7 +2707,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SpringErrorPayload()
         ```
     
@@ -2738,7 +2738,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SpringErrorPayload()
         ```
     
@@ -2769,7 +2769,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SpringErrorPayload()
         ```
     
@@ -2819,7 +2819,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         { }
         ```
     
@@ -2846,7 +2846,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SpringErrorPayload()
         ```
     
@@ -2874,7 +2874,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SpringErrorPayload()
         ```
     
@@ -2905,7 +2905,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SpringErrorPayload()
         ```
     
@@ -2936,7 +2936,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SpringErrorPayload()
         ```
     
@@ -3005,7 +3005,7 @@ http://localhost:8888/api/jobs/synchronize
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "status" : "queued"
 		}
@@ -3057,7 +3057,7 @@ http://localhost:8888/api/jobs/synchronize
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
         ```
     
@@ -3108,7 +3108,7 @@ http://localhost:8888/api/jobs/synchronize
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
         ```
     
@@ -3162,7 +3162,7 @@ http://localhost:8888/api/jobs/synchronize
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
         ```
     
@@ -3216,7 +3216,7 @@ http://localhost:8888/api/jobs/synchronize
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
         ```
     
@@ -3274,7 +3274,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "status" : "finished",
 		  "statusChangedAt" : "2007-10-11T13:42:00Z"
@@ -3306,7 +3306,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoJobHistoryEntryModel(
 			status=DqoJobStatus.FINISHED,
 			status_changed_at='2007-10-11T13:42:00Z'
@@ -3339,7 +3339,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoJobHistoryEntryModel(
 			status=DqoJobStatus.FINISHED,
 			status_changed_at='2007-10-11T13:42:00Z'
@@ -3375,7 +3375,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoJobHistoryEntryModel(
 			status=DqoJobStatus.FINISHED,
 			status_changed_at='2007-10-11T13:42:00Z'
@@ -3411,7 +3411,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         DqoJobHistoryEntryModel(
 			status=DqoJobStatus.FINISHED,
 			status_changed_at='2007-10-11T13:42:00Z'
@@ -3472,7 +3472,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "jobId" : {
 		    "jobId" : 123456789,
@@ -3516,7 +3516,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         RunChecksQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -3561,7 +3561,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         RunChecksQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -3609,7 +3609,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         RunChecksQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,
@@ -3657,7 +3657,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         RunChecksQueueJobResult(
 			job_id=DqoQueueJobId(
 				job_id=123456789,

@@ -61,7 +61,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "errorEntries" : [ ]
 		}, {
@@ -101,7 +101,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -152,7 +152,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -206,7 +206,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -260,7 +260,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -344,7 +344,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "errorEntries" : [ ]
 		}, {
@@ -384,7 +384,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -435,7 +435,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -489,7 +489,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -543,7 +543,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -626,7 +626,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "errorEntries" : [ ]
 		}, {
@@ -664,7 +664,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -713,7 +713,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -765,7 +765,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -817,7 +817,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -900,7 +900,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "errorEntries" : [ ]
 		}, {
@@ -939,7 +939,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -989,7 +989,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -1042,7 +1042,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -1095,7 +1095,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -1178,7 +1178,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "errorEntries" : [ ]
 		}, {
@@ -1217,7 +1217,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -1267,7 +1267,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -1320,7 +1320,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -1373,7 +1373,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -1455,7 +1455,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "errorEntries" : [ ]
 		}, {
@@ -1492,7 +1492,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -1540,7 +1540,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -1591,7 +1591,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[
@@ -1642,7 +1642,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			ErrorsListModel(
 				error_entries=[

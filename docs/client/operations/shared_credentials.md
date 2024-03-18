@@ -475,7 +475,7 @@ http://localhost:8888/api/credentials
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "can_edit" : false,
 		  "can_access_credential" : false
@@ -512,7 +512,7 @@ http://localhost:8888/api/credentials
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			SharedCredentialListModel(
 				can_edit=False,
@@ -554,7 +554,7 @@ http://localhost:8888/api/credentials
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			SharedCredentialListModel(
 				can_edit=False,
@@ -599,7 +599,7 @@ http://localhost:8888/api/credentials
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			SharedCredentialListModel(
 				can_edit=False,
@@ -644,7 +644,7 @@ http://localhost:8888/api/credentials
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			SharedCredentialListModel(
 				can_edit=False,
@@ -714,7 +714,7 @@ http://localhost:8888/api/credentials/{credentialName}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "credential_name" : "sample_credential",
 		  "type" : "text",
@@ -747,7 +747,7 @@ http://localhost:8888/api/credentials/{credentialName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SharedCredentialModel(
 			credential_name='sample_credential',
 			type=CredentialType.TEXT,
@@ -781,7 +781,7 @@ http://localhost:8888/api/credentials/{credentialName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SharedCredentialModel(
 			credential_name='sample_credential',
 			type=CredentialType.TEXT,
@@ -818,7 +818,7 @@ http://localhost:8888/api/credentials/{credentialName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SharedCredentialModel(
 			credential_name='sample_credential',
 			type=CredentialType.TEXT,
@@ -855,7 +855,7 @@ http://localhost:8888/api/credentials/{credentialName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         SharedCredentialModel(
 			credential_name='sample_credential',
 			type=CredentialType.TEXT,

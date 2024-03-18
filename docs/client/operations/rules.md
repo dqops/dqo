@@ -371,7 +371,7 @@ http://localhost:8888/api/rules
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "rule_name" : "sample_rule",
 		  "full_rule_name" : "sample_target/sample_category/sample_rule",
@@ -417,7 +417,7 @@ http://localhost:8888/api/rules
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			RuleListModel(
 				rule_name='sample_rule',
@@ -468,7 +468,7 @@ http://localhost:8888/api/rules
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			RuleListModel(
 				rule_name='sample_rule',
@@ -522,7 +522,7 @@ http://localhost:8888/api/rules
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			RuleListModel(
 				rule_name='sample_rule',
@@ -576,7 +576,7 @@ http://localhost:8888/api/rules
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			RuleListModel(
 				rule_name='sample_rule',
@@ -655,7 +655,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "rule_name" : "sample_rule",
 		  "type" : "python",
@@ -692,7 +692,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         RuleModel(
 			rule_name='sample_rule',
 			type=RuleRunnerType.PYTHON,
@@ -730,7 +730,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         RuleModel(
 			rule_name='sample_rule',
 			type=RuleRunnerType.PYTHON,
@@ -771,7 +771,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         RuleModel(
 			rule_name='sample_rule',
 			type=RuleRunnerType.PYTHON,
@@ -812,7 +812,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         RuleModel(
 			rule_name='sample_rule',
 			type=RuleRunnerType.PYTHON,
@@ -870,7 +870,7 @@ http://localhost:8888/api/definitions/rules
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "rules" : [ {
 		    "rule_name" : "sample_rule",
@@ -949,7 +949,7 @@ http://localhost:8888/api/definitions/rules
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         RuleFolderModel(
 			folders={
 			
@@ -1012,7 +1012,7 @@ http://localhost:8888/api/definitions/rules
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         RuleFolderModel(
 			folders={
 			
@@ -1078,7 +1078,7 @@ http://localhost:8888/api/definitions/rules
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         RuleFolderModel(
 			folders={
 			
@@ -1144,7 +1144,7 @@ http://localhost:8888/api/definitions/rules
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         RuleFolderModel(
 			folders={
 			

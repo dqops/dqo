@@ -61,7 +61,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "sensor_parameters" : [ ],
 		  "disabled" : false,
@@ -106,7 +106,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckConfigurationModel(
 				sensor_parameters=[
@@ -162,7 +162,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckConfigurationModel(
 				sensor_parameters=[
@@ -221,7 +221,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckConfigurationModel(
 				sensor_parameters=[
@@ -280,7 +280,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckConfigurationModel(
 				sensor_parameters=[
@@ -364,7 +364,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "sensor_parameters_definitions" : [ ]
 		}, {
@@ -403,7 +403,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckTemplate(
 				sensor_parameters_definitions=[
@@ -453,7 +453,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckTemplate(
 				sensor_parameters_definitions=[
@@ -506,7 +506,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckTemplate(
 				sensor_parameters_definitions=[
@@ -559,7 +559,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckTemplate(
 				sensor_parameters_definitions=[
@@ -643,7 +643,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "sensor_parameters" : [ ],
 		  "disabled" : false,
@@ -688,7 +688,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckConfigurationModel(
 				sensor_parameters=[
@@ -744,7 +744,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckConfigurationModel(
 				sensor_parameters=[
@@ -803,7 +803,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckConfigurationModel(
 				sensor_parameters=[
@@ -862,7 +862,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckConfigurationModel(
 				sensor_parameters=[
@@ -946,7 +946,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "sensor_parameters_definitions" : [ ]
 		}, {
@@ -985,7 +985,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckTemplate(
 				sensor_parameters_definitions=[
@@ -1035,7 +1035,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckTemplate(
 				sensor_parameters_definitions=[
@@ -1088,7 +1088,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckTemplate(
 				sensor_parameters_definitions=[
@@ -1141,7 +1141,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckTemplate(
 				sensor_parameters_definitions=[
@@ -1224,7 +1224,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "sensor_parameters" : [ ],
 		  "disabled" : false,
@@ -1267,7 +1267,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckConfigurationModel(
 				sensor_parameters=[
@@ -1321,7 +1321,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckConfigurationModel(
 				sensor_parameters=[
@@ -1378,7 +1378,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckConfigurationModel(
 				sensor_parameters=[
@@ -1435,7 +1435,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckConfigurationModel(
 				sensor_parameters=[
@@ -1518,7 +1518,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "sensor_parameters_definitions" : [ ]
 		}, {
@@ -1555,7 +1555,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckTemplate(
 				sensor_parameters_definitions=[
@@ -1603,7 +1603,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckTemplate(
 				sensor_parameters_definitions=[
@@ -1654,7 +1654,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckTemplate(
 				sensor_parameters_definitions=[
@@ -1705,7 +1705,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			CheckTemplate(
 				sensor_parameters_definitions=[
@@ -1778,7 +1778,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "can_edit" : false,
 		  "can_collect_statistics" : false,
@@ -1822,7 +1822,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			SchemaModel(
 				can_edit=False,
@@ -1871,7 +1871,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			SchemaModel(
 				can_edit=False,
@@ -1923,7 +1923,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			SchemaModel(
 				can_edit=False,
@@ -1975,7 +1975,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			SchemaModel(
 				can_edit=False,

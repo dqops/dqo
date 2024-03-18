@@ -50,7 +50,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "cron_expression" : "0 12 1 * *"
 		}
@@ -82,7 +82,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         MonitoringScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
@@ -116,7 +116,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         MonitoringScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
@@ -153,7 +153,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         MonitoringScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
@@ -190,7 +190,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         MonitoringScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
@@ -243,7 +243,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "incident_opened_webhook_url" : "https://sample_url.com/opened",
 		  "incident_acknowledged_webhook_url" : "https://sample_url.com/acknowledged",
@@ -276,7 +276,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         IncidentWebhookNotificationsSpec(
 			incident_opened_webhook_url='https://sample_url.com/opened',
 			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
@@ -310,7 +310,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         IncidentWebhookNotificationsSpec(
 			incident_opened_webhook_url='https://sample_url.com/opened',
 			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
@@ -347,7 +347,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         IncidentWebhookNotificationsSpec(
 			incident_opened_webhook_url='https://sample_url.com/opened',
 			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
@@ -384,7 +384,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         IncidentWebhookNotificationsSpec(
 			incident_opened_webhook_url='https://sample_url.com/opened',
 			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',

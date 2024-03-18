@@ -2329,7 +2329,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "table_comparison_configuration_name" : "sample_schema.sample_table",
 		  "reference_connection" : "sample_connection",
@@ -2373,7 +2373,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonConfigurationModel(
 			table_comparison_configuration_name='sample_schema.sample_table',
 			reference_connection='sample_connection',
@@ -2420,7 +2420,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonConfigurationModel(
 			table_comparison_configuration_name='sample_schema.sample_table',
 			reference_connection='sample_connection',
@@ -2470,7 +2470,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonConfigurationModel(
 			table_comparison_configuration_name='sample_schema.sample_table',
 			reference_connection='sample_connection',
@@ -2520,7 +2520,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonConfigurationModel(
 			table_comparison_configuration_name='sample_schema.sample_table',
 			reference_connection='sample_connection',
@@ -2595,7 +2595,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         [ {
 		  "table_comparison_configuration_name" : "sample_schema.sample_table",
 		  "reference_connection" : "sample_connection",
@@ -2664,7 +2664,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			TableComparisonConfigurationModel(
 				table_comparison_configuration_name='sample_schema.sample_table',
@@ -2744,7 +2744,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			TableComparisonConfigurationModel(
 				table_comparison_configuration_name='sample_schema.sample_table',
@@ -2827,7 +2827,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			TableComparisonConfigurationModel(
 				table_comparison_configuration_name='sample_schema.sample_table',
@@ -2910,7 +2910,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         [
 			TableComparisonConfigurationModel(
 				table_comparison_configuration_name='sample_schema.sample_table',
@@ -3016,7 +3016,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "table_comparison_configuration_name" : "sample_table_comparison",
 		  "compared_connection" : "unknown",
@@ -3091,7 +3091,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -3171,7 +3171,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -3254,7 +3254,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -3337,7 +3337,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -3444,7 +3444,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "table_comparison_configuration_name" : "sample_table_comparison",
 		  "compared_connection" : "unknown",
@@ -3519,7 +3519,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -3599,7 +3599,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -3682,7 +3682,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -3765,7 +3765,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -3872,7 +3872,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "table_comparison_configuration_name" : "sample_table_comparison",
 		  "compared_connection" : "unknown",
@@ -3947,7 +3947,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -4027,7 +4027,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -4110,7 +4110,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -4193,7 +4193,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -4300,7 +4300,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "table_comparison_configuration_name" : "sample_table_comparison",
 		  "compared_connection" : "unknown",
@@ -4375,7 +4375,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -4455,7 +4455,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -4538,7 +4538,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -4621,7 +4621,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -4728,7 +4728,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
     
-        ```js
+        ```
         {
 		  "table_comparison_configuration_name" : "sample_table_comparison",
 		  "compared_connection" : "unknown",
@@ -4803,7 +4803,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -4883,7 +4883,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -4966,7 +4966,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
@@ -5049,7 +5049,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
     ??? example "Expand to see the returned result"
     
-        ```python
+        ```
         TableComparisonModel(
 			table_comparison_configuration_name='sample_table_comparison',
 			compared_connection='unknown',
