@@ -1,6 +1,5 @@
+import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
-import Button from '../../Button';
-import Input from '../../Input';
 import {
   ConnectionModel,
   ConnectionModelProviderTypeEnum,
@@ -8,41 +7,41 @@ import {
   ConnectionTestModelConnectionTestResultEnum,
   SharedCredentialListModel
 } from '../../../api';
+import { useTree } from '../../../contexts/treeContext';
 import {
   ConnectionApiClient,
   DataSourcesApi,
   SharedCredentialsApi
 } from '../../../services/apiClient';
-import { useTree } from '../../../contexts/treeContext';
+import Button from '../../Button';
+import Input from '../../Input';
 import Loader from '../../Loader';
-import ErrorModal from './ErrorModal';
-import ConfirmErrorModal from './ConfirmErrorModal';
-import BigqueryConnection from './BigqueryConnection';
-import BigqueryLogo from '../../SvgIcon/svg/bigquery.svg';
-import SnowflakeConnection from './SnowflakeConnection';
-import SnowflakeLogo from '../../SvgIcon/svg/snowflake.svg';
-import PostgreSQLConnection from './PostgreSQLConnection';
-import PostgreSQLLogo from '../../SvgIcon/svg/postgresql.svg';
-import PrestoConnection from './PrestoConnection';
-import PrestoLogo from '../../SvgIcon/svg/presto.svg';
-import TrinoConnection from './TrinoConnection';
-import TrinoLogo from '../../SvgIcon/svg/trino.svg';
-import RedshiftConnection from './RedshiftConnection';
-import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
-import SqlServerConnection from './SqlServerConnection';
-import SqlServerLogo from '../../SvgIcon/svg/mssql-server.svg';
-import MySQLConnection from './MySQLConnection';
-import MySQLLogo from '../../SvgIcon/svg/mysql.svg';
-import OracleConnection from './OracleConnection';
-import OracleLogo from '../../SvgIcon/svg/oracle.svg';
 import SvgIcon from '../../SvgIcon';
-import SparkConnection from './SparkConnection';
-import SparkLogo from '../../SvgIcon/svg/spark.svg';
-import DatabricksConnection from './DatabricksConnection';
+import BigqueryLogo from '../../SvgIcon/svg/bigquery.svg';
 import DatabricksLogo from '../../SvgIcon/svg/databricks.svg';
-import SingleStoreDbLogo from '../../SvgIcon/svg/single-store.svg';
-import clsx from 'clsx';
+import SqlServerLogo from '../../SvgIcon/svg/mssql-server.svg';
+import MySQLLogo from '../../SvgIcon/svg/mysql.svg';
+import OracleLogo from '../../SvgIcon/svg/oracle.svg';
+import PostgreSQLLogo from '../../SvgIcon/svg/postgresql.svg';
+import PrestoLogo from '../../SvgIcon/svg/presto.svg';
+import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
+import SnowflakeLogo from '../../SvgIcon/svg/snowflake.svg';
+import SparkLogo from '../../SvgIcon/svg/spark.svg';
+import TrinoLogo from '../../SvgIcon/svg/trino.svg';
+import BigqueryConnection from './BigqueryConnection';
+import ConfirmErrorModal from './ConfirmErrorModal';
+import DatabricksConnection from './DatabricksConnection';
 import DuckDBConnection from './DuckDBConnection';
+import ErrorModal from './ErrorModal';
+import MySQLConnection from './MySQLConnection';
+import OracleConnection from './OracleConnection';
+import PostgreSQLConnection from './PostgreSQLConnection';
+import PrestoConnection from './PrestoConnection';
+import RedshiftConnection from './RedshiftConnection';
+import SnowflakeConnection from './SnowflakeConnection';
+import SparkConnection from './SparkConnection';
+import SqlServerConnection from './SqlServerConnection';
+import TrinoConnection from './TrinoConnection';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -208,7 +207,6 @@ const DatabaseConnection = ({
   useEffect(() => {
     getSharedCredentials();
   }, []);
-
   const components = {
     [ConnectionModelProviderTypeEnum.bigquery]: (
       <BigqueryConnection
@@ -236,6 +234,11 @@ const DatabaseConnection = ({
         duckdb={database.duckdb}
         onChange={(duckdb) => onChange({ ...database, duckdb })}
         sharedCredentials={sharedCredentials}
+        freezeFileType={
+          nameOfDatabase === 'CSV' ||
+          nameOfDatabase === 'Parquet' ||
+          nameOfDatabase === 'JSON'
+        }
       />
     ),
     [ConnectionModelProviderTypeEnum.redshift]: (

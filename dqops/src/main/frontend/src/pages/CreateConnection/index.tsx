@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 
-import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
-import SelectDatabase from '../../components/Dashboard/SelectDatabase';
-import MainLayout from '../../components/MainLayout';
-import ImportSchemas from '../../components/ImportSchemas';
 import {
   BigQueryParametersSpecJobsCreateProjectEnum,
   ConnectionModel,
   ConnectionModelProviderTypeEnum,
   DuckdbParametersSpecFilesFormatTypeEnum,
+  DuckdbParametersSpecStorageTypeEnum,
   MysqlParametersSpecMysqlEngineTypeEnum,
   SingleStoreDbParametersSpecLoadBalancingModeEnum,
   TrinoParametersSpecAthenaAuthenticationModeEnum,
   TrinoParametersSpecTrinoEngineTypeEnum
 } from '../../api';
+import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
+import SelectDatabase from '../../components/Dashboard/SelectDatabase';
+import ImportSchemas from '../../components/ImportSchemas';
+import MainLayout from '../../components/MainLayout';
 import { BigQueryAuthenticationMode } from '../../shared/enums/bigquery.enum';
 
 const CreateConnection = () => {
@@ -114,21 +115,24 @@ const CreateConnection = () => {
         break;
       }
       case ConnectionModelProviderTypeEnum.duckdb: {
-        let fileFormat: DuckdbParametersSpecFilesFormatTypeEnum = DuckdbParametersSpecFilesFormatTypeEnum.csv;
-        switch(nameOfDatabase){
-          case "CSV":
+        let fileFormat: DuckdbParametersSpecFilesFormatTypeEnum =
+          DuckdbParametersSpecFilesFormatTypeEnum.csv;
+        switch (nameOfDatabase) {
+          case 'CSV':
             fileFormat = DuckdbParametersSpecFilesFormatTypeEnum.csv;
             break;
-          case "JSON":
+          case 'JSON':
             fileFormat = DuckdbParametersSpecFilesFormatTypeEnum.json;
             break;
-          case "Parquet":
+          case 'Parquet':
             fileFormat = DuckdbParametersSpecFilesFormatTypeEnum.parquet;
             break;
         }
         copiedDatabase.duckdb = {
           directories: { files: '' },
-          files_format_type: fileFormat
+          files_format_type: fileFormat,
+          storage_type: DuckdbParametersSpecStorageTypeEnum.local,
+          properties: { '': '' }
         };
       }
     }
