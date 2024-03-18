@@ -75,32 +75,32 @@ const DuckdbConnection = ({
   const [fileFormatType, setFileFormatType] = useState<
     keyof DuckdbParametersSpec
   >(duckdb?.files_format_type ?? DuckdbParametersSpecFilesFormatTypeEnum.csv);
-  const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
-    if (!onChange) return;
-    onChange({
-      ...copiedDatabase,
-      ...obj
-    });
-  };
+  // const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
+  //   if (!onChange) return;
+  //   onChange({
+  //     ...copiedDatabase,
+  //     ...obj
+  //   });
+  // };
 
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
-    const updatedObj = {
-      ...copiedDatabase,
+    setCopiedDatabase((prev) => ({
+      ...prev,
       [fileFormatType]: {
-        ...(copiedDatabase?.[fileFormatType] as TConfiguration),
+        ...(prev?.[fileFormatType] as TConfiguration),
         ...params
       }
-    };
-    setCopiedDatabase(updatedObj);
+    }));
   };
   const cleanConfiguration = () => {};
 
   const onChangeFile = (val: DuckdbParametersSpecFilesFormatTypeEnum) => {
-    handleChange({
+    setCopiedDatabase((prev) => ({
+      ...prev,
       [fileFormatType as keyof DuckdbParametersSpec]: undefined,
       [val as keyof DuckdbParametersSpec]: {},
       files_format_type: val
-    });
+    }));
     setFileFormatType(val);
     cleanConfiguration();
   };
@@ -116,7 +116,7 @@ const DuckdbConnection = ({
   const changeStorageTypeDirectoryPrefixes = (
     storage_type: DuckdbParametersSpecStorageTypeEnum
   ) => {
-    const directories = { ...duckdb?.directories };
+    const directories = { ...copiedDatabase?.directories };
 
     Object.keys(directories ?? {}).forEach((key) => {
       if (directories[key].length && directories[key] !== 's3://') {
@@ -128,7 +128,7 @@ const DuckdbConnection = ({
         directories[key] = '';
       }
     });
-    handleChange({ directories, storage_type });
+    setCopiedDatabase((prev) => ({ ...prev, directories, storage_type }));
   };
 
   return (
@@ -137,34 +137,41 @@ const DuckdbConnection = ({
         label="Files location"
         options={storageTypeOptions}
         className="mb-4"
-        value={duckdb?.storage_type}
+        value={copiedDatabase?.storage_type}
         onChange={changeStorageTypeDirectoryPrefixes}
       />
 
-      {duckdb?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 && (
+      {copiedDatabase?.storage_type ===
+        DuckdbParametersSpecStorageTypeEnum.s3 && (
         <>
           <FieldTypeInput
             data={sharedCredentials}
             label="User name/Key ID"
             className="mb-4"
-            value={duckdb?.user}
-            onChange={(value) => handleChange({ user: value })}
+            value={copiedDatabase?.user}
+            onChange={(value) =>
+              setCopiedDatabase((prev) => ({ ...prev, user: value }))
+            }
           />
           <FieldTypeInput
             data={sharedCredentials}
             label="Password/Secret Key"
             className="mb-4"
             maskingType="password"
-            value={duckdb?.password}
-            onChange={(value) => handleChange({ password: value })}
+            value={copiedDatabase?.password}
+            onChange={(value) =>
+              setCopiedDatabase((prev) => ({ ...prev, password: value }))
+            }
           />
           <FieldTypeInput
             data={sharedCredentials}
             label="Region"
             className="mb-4"
             maskingType="region"
-            value={duckdb?.region}
-            onChange={(value) => handleChange({ region: value })}
+            value={copiedDatabase?.region}
+            onChange={(value) =>
+              setCopiedDatabase((prev) => ({ ...prev, region: value }))
+            }
           />
         </>
       )}
@@ -184,17 +191,22 @@ const DuckdbConnection = ({
         freezeFileType={freezeFileType}
       >
         <KeyValueProperties
-          properties={duckdb?.directories}
+          properties={copiedDatabase?.directories}
           onChange={(directories) => {
-            handleChange({ directories: directories });
+            setCopiedDatabase((prev) => ({
+              ...prev,
+              directories: directories
+            }));
           }}
           sharedCredentials={sharedCredentials}
-          storageType={duckdb?.storage_type}
+          storageType={copiedDatabase?.storage_type}
         />
       </FileFormatConfiguration>
       <JdbcPropertiesView
-        properties={duckdb?.properties}
-        onChange={(properties) => handleChange({ properties })}
+        properties={copiedDatabase?.properties}
+        onChange={(properties) =>
+          setCopiedDatabase((prev) => ({ ...prev, properties }))
+        }
         sharedCredentials={sharedCredentials}
       />
     </SectionWrapper>
