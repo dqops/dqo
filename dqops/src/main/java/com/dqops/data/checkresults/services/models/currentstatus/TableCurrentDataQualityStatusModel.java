@@ -133,6 +133,14 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
     private int executionErrors;
 
     /**
+     * Data quality KPI score for the table, measured as a percentage of passed data quality checks.
+     * DQOps counts data quality issues at a warning severity level as passed checks. The data quality KPI score is a value in the range 0..100.
+     */
+    @JsonPropertyDescription("Data quality KPI score for the table, measured as a percentage of passed data quality checks. " +
+            "DQOps counts data quality issues at a warning severity level as passed checks. The data quality KPI score is a value in the range 0..100.")
+    private Double dataQualityKpi;
+
+    /**
      * The dictionary of statuses for data quality checks. The keys are data quality check names, the values are the current data quality check statuses
      * that describe the most current status.
      */
@@ -185,6 +193,16 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
         }
     }
 
+    /**
+     * Calculates a data quality KPI score for a table.
+     */
+    public void calculateDataQualityKpiScore() {
+        int totalExecutedChecksWithNoExecutionErrors = this.getValidResults() + this.getWarnings() + this.getErrors() + this.getFatals();
+        Double dataQualityKpi = totalExecutedChecksWithNoExecutionErrors > 0 ?
+                (this.getValidResults() + this.getWarnings()) * 100.0 / totalExecutedChecksWithNoExecutionErrors : null;
+        setDataQualityKpi(dataQualityKpi);
+    }
+
     public static class TableCurrentDataQualityStatusModelSampleFactory implements SampleValueFactory<TableCurrentDataQualityStatusModel> {
         @Override
         public TableCurrentDataQualityStatusModel createSample() {
@@ -225,6 +243,10 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
             RuleSeverityLevel highestSeverity =
                     fatalResults > 0 ? RuleSeverityLevel.fatal : errorResults > 0 ? RuleSeverityLevel.error : warningResults > 0 ? RuleSeverityLevel.warning : RuleSeverityLevel.valid;
 
+            int totalExecutedChecksWithNoExecutionErrors = validResultsAggregate + warningResults + errorResults + fatalResults;
+            Double dataQualityKpi = totalExecutedChecksWithNoExecutionErrors > 0 ?
+                    (validResultsAggregate + warningResults) * 100.0 / totalExecutedChecksWithNoExecutionErrors : null;
+
             TableCurrentDataQualityStatusModel result = new TableCurrentDataQualityStatusModel() {{
                 setConnectionName(SampleStringsRegistry.getConnectionName());
                 setSchemaName(SampleStringsRegistry.getSchemaName());
@@ -238,6 +260,7 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
                 setHighestHistoricalSeverity(RuleSeverityLevel.fatal);
                 setChecks(sampleChecks);
                 setColumns(sampleColumns);
+                setDataQualityKpi(dataQualityKpi);
                 setFatals(0);
                 setExecutionErrors(0);
             }};

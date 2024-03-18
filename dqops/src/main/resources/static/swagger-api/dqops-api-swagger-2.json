@@ -32472,10 +32472,10 @@
           "type" : "string",
           "description" : "The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
         },
-        "aws_secret_access_key" : {
+        "aws_access_key_id" : {
           "type" : "string"
         },
-        "aws_access_key_id" : {
+        "aws_secret_access_key" : {
           "type" : "string"
         }
       }
@@ -35763,6 +35763,11 @@
           "type" : "integer",
           "format" : "int32",
           "description" : "The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. When an execution error is reported, the configuration of a data quality check on a table must be updated."
+        },
+        "data_quality_kpi" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Data quality KPI score for the table, measured as a percentage of passed data quality checks. DQOps counts data quality issues at a warning severity level as passed checks. The data quality KPI score is a value in the range 0..100."
         },
         "checks" : {
           "type" : "object",

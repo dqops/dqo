@@ -22,6 +22,10 @@ export default function CurrentTableStatus({
           )}
         </div>
       </div>
+      <div className="flex gap-x-2">
+        <div className="w-43">Data quality KPI score:</div>
+        <div>{tableDataQualityStatus.data_quality_kpi ? Number(tableDataQualityStatus.data_quality_kpi).toFixed(2) + ' %': '-'}</div>
+      </div>
     </SectionWrapper>
   );
 }

@@ -6155,6 +6155,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		  "errors" : 0,
 		  "fatals" : 0,
 		  "execution_errors" : 0,
+		  "data_quality_kpi" : 100.0,
 		  "checks" : {
 		    "table_sample_check_1" : {
 		      "current_severity" : "warning",
@@ -6294,6 +6295,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			errors=0,
 			fatals=0,
 			execution_errors=0,
+			data_quality_kpi=100.0,
 			checks={
 				'table_sample_check_1': CheckCurrentDataQualityStatusModel(
 					current_severity=CheckResultStatus.WARNING,
@@ -6434,6 +6436,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			errors=0,
 			fatals=0,
 			execution_errors=0,
+			data_quality_kpi=100.0,
 			checks={
 				'table_sample_check_1': CheckCurrentDataQualityStatusModel(
 					current_severity=CheckResultStatus.WARNING,
@@ -6577,6 +6580,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			errors=0,
 			fatals=0,
 			execution_errors=0,
+			data_quality_kpi=100.0,
 			checks={
 				'table_sample_check_1': CheckCurrentDataQualityStatusModel(
 					current_severity=CheckResultStatus.WARNING,
@@ -6720,6 +6724,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			errors=0,
 			fatals=0,
 			execution_errors=0,
+			data_quality_kpi=100.0,
 			checks={
 				'table_sample_check_1': CheckCurrentDataQualityStatusModel(
 					current_severity=CheckResultStatus.WARNING,

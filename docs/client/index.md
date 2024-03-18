@@ -472,6 +472,7 @@ TableCurrentDataQualityStatusModel(
 	errors=0,
 	fatals=0,
 	execution_errors=0,
+	data_quality_kpi=100.0,
 	checks={
 		'table_sample_check_1': CheckCurrentDataQualityStatusModel(
 			current_severity=CheckResultStatus.WARNING,

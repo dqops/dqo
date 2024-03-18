@@ -113,8 +113,8 @@ export const SchemaTables = () => {
       case CheckTypes.MONITORING:
       case CheckTypes.PARTITIONED:
         return [
-          { label: 'Daily checks', value: 'daily' },
-          { label: 'Daily table status', value: 'table-quality-status-daily' }
+          { label: 'Daily table status', value: 'table-quality-status-daily' },
+          { label: 'Daily checks', value: 'daily' }
         ];
 
       default:
