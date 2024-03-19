@@ -77,7 +77,7 @@ export default function FileFormatConfiguration({
         className="text-sm text-black"
       >
         {!freezeFileType && (
-          <div className="flex items-center gap-x-5">
+          <div className="flex items-center gap-x-5 text-sm">
             <div>File format</div>
             <SelectInput
               options={sourceFilesTypeOptions}
@@ -91,6 +91,7 @@ export default function FileFormatConfiguration({
                   ? fileFormatType.replace(/./, (c) => c.toUpperCase())
                   : fileFormatType.toUpperCase()
               }
+              className="text-sm"
             />
           </div>
         )}
