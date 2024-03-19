@@ -58,7 +58,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
 
         List<String> tableNames = connectionWrapper
                 .getTables().toList().stream()
-                .map(tw -> tw.getPhysicalTableName().toString())
+                .map(tw -> tw.getPhysicalTableName().getTableName().toString())
                 .collect(Collectors.toList());
 
         this.sut.open(secretValueLookupContext);
