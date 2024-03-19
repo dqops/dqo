@@ -1102,7 +1102,7 @@ spec:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: all
         - dashboard_name: Executed daily checks per check
-          url: https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/f33d3042-45d4-4446-b39d-3e6368bd7c88/page/c5B8C
           width: 1400
           height: 2070
           parameters:
