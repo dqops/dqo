@@ -1,25 +1,24 @@
+import { AxiosResponse } from 'axios';
 import React, { useEffect, useMemo, useState } from 'react';
-import SvgIcon from '../../components/SvgIcon';
-import TableColumns from './TableColumns';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import ConnectionLayout from '../../components/ConnectionLayout';
-import Button from '../../components/Button';
-import {
-  ColumnApiClient,
-  JobApiClient,
-  DataGroupingConfigurationsApi
-} from '../../services/apiClient';
 import {
   DataGroupingConfigurationSpec,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../api';
-import { AxiosResponse } from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import { addFirstLevelTab } from '../../redux/actions/source.actions';
-import { ROUTES, CheckTypes } from '../../shared/routes';
+import Button from '../../components/Button';
+import SvgIcon from '../../components/SvgIcon';
 import { setCreatedDataStream } from '../../redux/actions/definition.actions';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
+import {
+  ColumnApiClient,
+  DataGroupingConfigurationsApi,
+  JobApiClient
+} from '../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import TableColumns from './TableColumns';
 
 interface LocationState {
   bool: boolean;
@@ -42,7 +41,7 @@ const TableColumnsView = () => {
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
   const [selected, setSelected] = useState<number>(0);
-  const [selectedColumns, setSelectedColumns]= useState<Array<string>>([])
+  const [selectedColumns, setSelectedColumns] = useState<Array<string>>([]);
   const [jobId, setJobId] = useState<number>();
 
   const job = jobId ? job_dictionary_state[jobId] : undefined;
@@ -76,31 +75,28 @@ const TableColumnsView = () => {
     setSelected(param);
   };
 
-
   const collectStatistics = async () => {
     try {
-      await JobApiClient.collectStatisticsOnTable(
-        undefined,
-        false,
-        undefined,
-        {
-          connection: connectionName,
-          fullTableName: schemaName + "." + tableName,
-          enabled: true,
-           columnNames: selectedColumns?.[0]?.length!== 0 ? selectedColumns : [],
-        }).then((res) => setJobId(res.data.jobId?.jobId));
-      }catch (err){
-      console.error(err)
+      await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
+        connection: connectionName,
+        fullTableName: schemaName + '.' + tableName,
+        enabled: true,
+        columnNames: selectedColumns?.[0]?.length !== 0 ? selectedColumns : []
+      }).then((res) => setJobId(res.data.jobId?.jobId));
+    } catch (err) {
+      console.error(err);
     }
   };
 
   const filteredJobs = useMemo(() => {
-    return (job && (
-      job.status === DqoJobHistoryEntryModelStatusEnum.running ||
-      job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
-      job.status === DqoJobHistoryEntryModelStatusEnum.waiting ))
-    }, [job])
-     
+    return (
+      job &&
+      (job.status === DqoJobHistoryEntryModelStatusEnum.running ||
+        job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+        job.status === DqoJobHistoryEntryModelStatusEnum.waiting)
+    );
+  }, [job]);
+
   const doNothing = (): void => {};
   const postDataStream = async () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
@@ -150,7 +146,6 @@ const TableColumnsView = () => {
     setCreatedDataStream(false, '', {});
   };
 
-      
   useEffect(() => {
     if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.finished) {
       fetchColumns();
@@ -158,16 +153,15 @@ const TableColumnsView = () => {
   }, [job]);
 
   useEffect(() => {
-      fetchColumns();
+    fetchColumns();
   }, [connectionName, schemaName, tableName]);
-
 
   return (
     <>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
         <div className="flex items-center space-x-2 max-w-full">
           <SvgIcon name="column" className="w-5 h-5 shrink-0" />
-          <div className="text-xl font-semibold truncate">{`${connectionName}.${schemaName}.${tableName} columns`}</div>
+          <div className="text-lg font-semibold truncate">{`${connectionName}.${schemaName}.${tableName} columns`}</div>
         </div>
         <div className="flex items-center gap-x-2 justify-center">
           {selected !== 0 && selected <= 9 && (
@@ -193,25 +187,16 @@ const TableColumnsView = () => {
             label={
               filteredJobs
                 ? 'Collecting...'
-                : 
-                selectedColumns?.length!== 0 ? 
-                'Collect statistics on selected' : 
-                'Collect statistics'
+                : selectedColumns?.length !== 0
+                ? 'Collect statistics on selected'
+                : 'Collect statistics'
             }
-            color={
-              filteredJobs
-                ? 'secondary'
-                : 'primary'
-            }
+            color={filteredJobs ? 'secondary' : 'primary'}
             leftIcon={
-              filteredJobs ? (
-                <SvgIcon name="sync" className="w-4 h-4" />
-              ) : (
-                ''
-              )
+              filteredJobs ? <SvgIcon name="sync" className="w-4 h-4" /> : ''
             }
             onClick={collectStatistics}
-            disabled={userProfile.can_collect_statistics  !== true}
+            disabled={userProfile.can_collect_statistics !== true}
           />
         </div>
       </div>
@@ -224,7 +209,7 @@ const TableColumnsView = () => {
           setLevelsData={setLevelsData}
           setNumberOfSelected={setNumberOfSelected}
           statistics={statistics}
-          onChangeSelectedColumns = {onChangeSelectedColumns}
+          onChangeSelectedColumns={onChangeSelectedColumns}
           refreshListFunc={fetchColumns}
         />
       </div>

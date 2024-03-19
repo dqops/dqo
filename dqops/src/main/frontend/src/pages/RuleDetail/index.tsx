@@ -36,9 +36,9 @@ export const RuleDetail = () => {
   const { full_rule_name, ruleDetail, path, type, copied } = useSelector(
     getFirstLevelSensorState
   );
-  const {
-    refreshRulesTreeIndicator 
-  } = useSelector((state: IRootState) => state.definition);
+  const { refreshRulesTreeIndicator } = useSelector(
+    (state: IRootState) => state.definition
+  );
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('definition');
   const [ruleName, setRuleName] = useState(
@@ -51,7 +51,11 @@ export const RuleDetail = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
-    if (full_rule_name !== undefined && !ruleDetail && (type !== 'create' || copied === true)) {
+    if (
+      full_rule_name !== undefined &&
+      !ruleDetail &&
+      (type !== 'create' || copied === true)
+    ) {
       dispatch(getRule(String(full_rule_name)));
     }
   }, [full_rule_name, ruleDetail, type]);
@@ -74,10 +78,10 @@ export const RuleDetail = () => {
     const fullName = [...(path || []), ruleName].join('/');
     if (type === 'create' && copied !== true) {
       await dispatch(
-        createRule((fullName), {
+        createRule(fullName, {
           ...ruleDetail,
-          full_rule_name: (fullName),
-          rule_name: (ruleName),
+          full_rule_name: fullName,
+          rule_name: ruleName,
           custom: true,
           can_edit: true,
           built_in: false
@@ -85,53 +89,55 @@ export const RuleDetail = () => {
       );
     } else if (copied === true) {
       await dispatch(
-        createRule((String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName), {
+        createRule(String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName, {
           ...ruleDetail,
-          rule_name: (ruleName),
+          rule_name: ruleName,
           full_rule_name:
-          (String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName),
+            String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName,
           custom: true,
           built_in: false
         })
       );
     }
-      closeRuleFirstLevelTab();
-      await dispatch(
-        addFirstLevelTab({
-          url: ROUTES.RULE_DETAIL(
-            String(full_rule_name ?? fullName).split('/')[
-              String(full_rule_name ?? fullName).split('/').length - 1
-            ] ?? ''
-          ),
-          value: ROUTES.RULE_DETAIL_VALUE(
-            String(full_rule_name ?? fullName).split('/')[
-              String(full_rule_name ?? fullName).split('/').length - 1
-            ] ?? ''
-          ),
-          state: {
-            full_rule_name:
-              full_rule_name ? String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName : fullName,
-            path: path,
-            ruleDetail: {
-              ...ruleDetail,
-              rule_name: ruleName,
-              full_rule_name:
-               full_rule_name ? String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName : fullName,
-              custom: true,
-              built_in: false
-            }
-          },
-          label: ruleName
-        })
-      );
+    closeRuleFirstLevelTab();
+    await dispatch(
+      addFirstLevelTab({
+        url: ROUTES.RULE_DETAIL(
+          String(full_rule_name ?? fullName).split('/')[
+            String(full_rule_name ?? fullName).split('/').length - 1
+          ] ?? ''
+        ),
+        value: ROUTES.RULE_DETAIL_VALUE(
+          String(full_rule_name ?? fullName).split('/')[
+            String(full_rule_name ?? fullName).split('/').length - 1
+          ] ?? ''
+        ),
+        state: {
+          full_rule_name: full_rule_name
+            ? String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName
+            : fullName,
+          path: path,
+          ruleDetail: {
+            ...ruleDetail,
+            rule_name: ruleName,
+            full_rule_name: full_rule_name
+              ? String(full_rule_name).replace(/\/[^/]*$/, '/') + ruleName
+              : fullName,
+            custom: true,
+            built_in: false
+          }
+        },
+        label: ruleName
+      })
+    );
   };
 
   const closeRuleFirstLevelTab = () => {
-    dispatch(refreshRuleFolderTree(refreshRulesTreeIndicator ? false : true))
+    dispatch(refreshRuleFolderTree(refreshRulesTreeIndicator ? false : true));
     dispatch(
       closeFirstLevelTab(
         '/definitions/rules/' +
-        String(full_rule_name).split('/')[
+          String(full_rule_name).split('/')[
             String(full_rule_name).split('/').length - 1
           ]
       )
@@ -194,7 +200,7 @@ export const RuleDetail = () => {
   };
 
   const onDelete = async () => {
-    RulesApi.deleteRule((full_rule_name)).then(async () =>
+    RulesApi.deleteRule(full_rule_name).then(async () =>
       closeRuleFirstLevelTab()
     );
   };
@@ -212,7 +218,7 @@ export const RuleDetail = () => {
           <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 pr-[570px]">
             <div className="flex items-center space-x-2 max-w-full">
               <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
-              <div className="text-xl font-semibold truncate">
+              <div className="text-lg font-semibold truncate">
                 Rule: {full_rule_name}
               </div>
             </div>
@@ -221,7 +227,7 @@ export const RuleDetail = () => {
           <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 pr-[570px]">
             <div className="flex items-center space-x-2 max-w-full">
               <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
-              <div className="text-xl font-semibold truncate">
+              <div className="text-lg font-semibold truncate">
                 Rule:{' '}
                 {path
                   ? [...(path || []), ''].join('/')

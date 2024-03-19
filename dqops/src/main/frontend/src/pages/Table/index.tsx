@@ -1,28 +1,27 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import ConnectionLayout from '../../components/ConnectionLayout';
-import SvgIcon from '../../components/SvgIcon';
-import Tabs from '../../components/Tabs';
-import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useSelector } from 'react-redux';
-import TableDetails from '../../components/Connection/TableView/TableDetails';
-import ScheduleDetail from '../../components/Connection/TableView/ScheduleDetail';
-import ProfilingView from '../../components/Connection/TableView/ProfilingView';
+import { useHistory, useParams } from 'react-router-dom';
 import MonitoringView from '../../components/Connection/TableView/MonitoringView';
 import PartitionedChecks from '../../components/Connection/TableView/PartitionedChecks';
+import ProfilingView from '../../components/Connection/TableView/ProfilingView';
+import ScheduleDetail from '../../components/Connection/TableView/ScheduleDetail';
 import TableCommentView from '../../components/Connection/TableView/TableCommentView';
-import TableLabelsView from '../../components/Connection/TableView/TableLabelsView';
 import TableDataGroupingConfiguration from '../../components/Connection/TableView/TableDataGroupingConfigurations';
+import TableDetails from '../../components/Connection/TableView/TableDetails';
+import TableIncidentsNotificationsView from '../../components/Connection/TableView/TableIncidentsNotificationsView';
+import TableLabelsView from '../../components/Connection/TableView/TableLabelsView';
 import TimestampsView from '../../components/Connection/TableView/TimestampsView';
+import SvgIcon from '../../components/SvgIcon';
+import TableNavigation from '../../components/TableNavigation';
+import Tabs from '../../components/Tabs';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState,
   getSecondLevelTab
 } from '../../redux/selectors';
-import TableNavigation from '../../components/TableNavigation';
-import TableIncidentsNotificationsView from '../../components/Connection/TableView/TableIncidentsNotificationsView';
-import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { CheckTypes, ROUTES } from '../../shared/routes';
 
 const initTabs = [
   {
@@ -240,7 +239,7 @@ const TablePage = () => {
         <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 items-center flex-shrink-0 pr-[340px]">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="table" className="w-5 h-5 shrink-0" />
-            <div className="text-xl font-semibold truncate">{`${description}${connection}.${schema}.${table}`}</div>
+            <div className="text-lg font-semibold truncate">{`${description}${connection}.${schema}.${table}`}</div>
           </div>
         </div>
         <TableNavigation />
