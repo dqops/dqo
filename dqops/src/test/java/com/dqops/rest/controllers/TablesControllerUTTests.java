@@ -118,7 +118,7 @@ public class TablesControllerUTTests extends BaseTest {
         DefaultObservabilityConfigurationServiceImpl defaultObservabilityConfigurationService = new DefaultObservabilityConfigurationServiceImpl(ConnectionProviderRegistryObjectMother.getInstance());
 
         this.sut = new TablesController(tableService, this.userHomeContextFactory, dqoHomeContextFactory, specToUiCheckMappingService,
-                uiToSpecCheckMappingService, statisticsDataService, defaultObservabilityConfigurationService, new RestApiLockServiceImpl());
+                uiToSpecCheckMappingService, statisticsDataService, defaultObservabilityConfigurationService, new RestApiLockServiceImpl(), null);
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
     }

@@ -211,7 +211,7 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
             return true;
         }
 
-        for(HierarchyNode child : this.children()) {
+        for (HierarchyNode child : this.children()) {
             if (child.isDirty()) {
                 return true;
             }
