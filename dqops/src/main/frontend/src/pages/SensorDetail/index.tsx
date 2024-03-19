@@ -80,9 +80,9 @@ export const SensorDetail = () => {
   const { full_sensor_name, sensorDetail, path, type, copied } = useSelector(
     getFirstLevelSensorState
   );
-  const {
-    refreshSensorsTreeIndicator 
-  } = useSelector((state: IRootState) => state.definition);
+  const { refreshSensorsTreeIndicator } = useSelector(
+    (state: IRootState) => state.definition
+  );
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('definition');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -95,7 +95,11 @@ export const SensorDetail = () => {
   );
 
   useEffect(() => {
-    if (full_sensor_name !== undefined && !sensorDetail && (type !== 'create' || copied === true)) {
+    if (
+      full_sensor_name !== undefined &&
+      !sensorDetail &&
+      (type !== 'create' || copied === true)
+    ) {
       dispatch(getSensor(full_sensor_name));
     }
   }, [full_sensor_name, sensorDetail, type]);
@@ -114,14 +118,16 @@ export const SensorDetail = () => {
   }, [type, copied]);
 
   const closeSensorFirstLevelTab = () => {
-    dispatch(refreshSensorsFolderTree(refreshSensorsTreeIndicator ? false : true))
+    dispatch(
+      refreshSensorsFolderTree(refreshSensorsTreeIndicator ? false : true)
+    );
     dispatch(
       closeFirstLevelTab(
         '/definitions/sensors/' +
-         (String(full_sensor_name).split('/')[
+          String(full_sensor_name).split('/')[
             String(full_sensor_name).split('/').length - 1
           ]
-      ))
+      )
     );
   };
 
@@ -158,50 +164,59 @@ export const SensorDetail = () => {
   const onCreateSensor = async () => {
     const fullName = [...(path || []), sensorName].join('/');
     if (type === 'create' && copied !== true) {
-      await dispatch(createSensor( (fullName), 
-      {...sensorDetail, full_sensor_name:   (fullName), custom: true, built_in: false, can_edit: true, sensor_definition_spec : sensorDetail.sensor_definition_spec ?? {}}));
+      await dispatch(
+        createSensor(fullName, {
+          ...sensorDetail,
+          full_sensor_name: fullName,
+          custom: true,
+          built_in: false,
+          can_edit: true,
+          sensor_definition_spec: sensorDetail.sensor_definition_spec ?? {}
+        })
+      );
     } else if (copied === true) {
       await dispatch(
         createSensor(
-           (String( (full_sensor_name)).replace(/\/[^/]*$/, '/') + sensorName),
+          String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName,
           {
             ...sensorDetail,
-            full_sensor_name:  (full_sensor_name),
+            full_sensor_name: full_sensor_name,
             custom: true,
             built_in: false
           }
         )
       );
     }
-      closeSensorFirstLevelTab();
-      await dispatch(
-        addFirstLevelTab({
-          url: ROUTES.SENSOR_DETAIL(
-             (String(full_sensor_name ??  fullName).split('/')[
-              String(full_sensor_name ?? fullName).split('/').length - 1
-            ] ?? ''
-          )),
-          value: ROUTES.SENSOR_DETAIL_VALUE(
-             (String(full_sensor_name ?? fullName).split('/')[
-              String(full_sensor_name ?? fullName).split('/').length - 1
-            ]) ?? ''
-          ),
-          state: {
-            full_sensor_name:
-             full_sensor_name ? String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName : fullName,
-            path: path,
-            sensorDetail: {
-              ...sensorDetail,
-              full_sensor_name:
-               full_sensor_name ? String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName : fullName,
-              custom: true,
-              built_in: false
-            }
-          },
-          label: (sensorName)
-        })
-      );
-    
+    closeSensorFirstLevelTab();
+    await dispatch(
+      addFirstLevelTab({
+        url: ROUTES.SENSOR_DETAIL(
+          String(full_sensor_name ?? fullName).split('/')[
+            String(full_sensor_name ?? fullName).split('/').length - 1
+          ] ?? ''
+        ),
+        value: ROUTES.SENSOR_DETAIL_VALUE(
+          String(full_sensor_name ?? fullName).split('/')[
+            String(full_sensor_name ?? fullName).split('/').length - 1
+          ] ?? ''
+        ),
+        state: {
+          full_sensor_name: full_sensor_name
+            ? String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName
+            : fullName,
+          path: path,
+          sensorDetail: {
+            ...sensorDetail,
+            full_sensor_name: full_sensor_name
+              ? String(full_sensor_name).replace(/\/[^/]*$/, '/') + sensorName
+              : fullName,
+            custom: true,
+            built_in: false
+          }
+        },
+        label: sensorName
+      })
+    );
   };
 
   const onChangeSensorName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -260,9 +275,8 @@ export const SensorDetail = () => {
   };
 
   const onDelete = async () => {
-    SensorsApi.deleteSensor( (full_sensor_name)).then(async () =>
-      closeSensorFirstLevelTab(),
-     
+    SensorsApi.deleteSensor(full_sensor_name).then(async () =>
+      closeSensorFirstLevelTab()
     );
   };
 
@@ -278,7 +292,7 @@ export const SensorDetail = () => {
           <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
             <div className="flex items-center space-x-2 max-w-full">
               <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
-              <div className="text-xl font-semibold truncate">
+              <div className="text-lg font-semibold truncate">
                 Sensor: {full_sensor_name}
               </div>
             </div>
@@ -287,7 +301,7 @@ export const SensorDetail = () => {
           <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
             <div className="flex items-center space-x-2 max-w-full">
               <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
-              <div className="text-xl font-semibold truncate">
+              <div className="text-lg font-semibold truncate">
                 Sensor:{' '}
                 {path
                   ? [...(path || []), ''].join('/')

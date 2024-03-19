@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { SchemaApiClient } from '../../../services/apiClient';
-import { SchemaModel } from '../../../api';
-import Button from '../../Button';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import ConnectionActionGroup from './ConnectionActionGroup';
-import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../../shared/routes';
-import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+import { SchemaModel } from '../../../api';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import { IRootState } from '../../../redux/reducers';
+import { SchemaApiClient } from '../../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../../shared/routes';
+import Button from '../../Button';
+import ConnectionActionGroup from './ConnectionActionGroup';
 
 const SchemasView = () => {
   const {
@@ -76,12 +76,12 @@ const SchemasView = () => {
   };
 
   return (
-    <div className="py-4 px-8">
+    <div className="py-4 px-8 text-sm">
       {isSourceScreen && <ConnectionActionGroup />}
       <table className="w-full">
         <thead>
           <tr>
-            <th className="py-2 pl-2 text-left">Schema Name</th>
+            <th className="py-2 pl-2 text-left">Schema name</th>
             <th />
           </tr>
         </thead>
@@ -95,14 +95,14 @@ const SchemasView = () => {
                 <Button
                   label={item.schema_name}
                   variant="text"
-                  className="underline px-2"
+                  className="underline px-2 text-sm"
                   onClick={() => goToTable(item.schema_name ?? '', 'tables')}
                 />
               </td>
               {isSourceScreen ? (
                 <td className="left-80 absolute py-1 px-4 text-left">
                   <Button
-                    className="!py-2 !rounded-md"
+                    className="!py-2 !rounded-md text-sm"
                     textSize="sm"
                     label="Import tables"
                     color="primary"
@@ -113,6 +113,7 @@ const SchemasView = () => {
               ) : (
                 <div className="left-80 absolute">
                   <Button
+                    className="text-sm"
                     label="Manage checks"
                     color="primary"
                     variant="text"
@@ -132,7 +133,7 @@ const SchemasView = () => {
           variant="contained"
           color="primary"
           label="Import more schemas"
-          className="mt-4"
+          className="mt-4 text-sm"
           onClick={goToSchemas}
           disabled={userProfile.can_manage_data_sources !== true}
         />

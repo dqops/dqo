@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import DefinitionLayout from '../../components/DefinitionLayout';
 import { useSelector } from 'react-redux';
-import { getFirstLevelSensorState } from '../../redux/selectors';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { closeFirstLevelTab } from '../../redux/actions/definition.actions';
-import { SharedCredentialsApi } from '../../services/apiClient';
-import RadioButton from '../../components/RadioButton';
-import Button from '../../components/Button';
 import {
   SharedCredentialModel,
   SharedCredentialModelTypeEnum
 } from '../../api';
+import Button from '../../components/Button';
 import Input from '../../components/Input';
-import { IRootState } from '../../redux/reducers';
+import RadioButton from '../../components/RadioButton';
 import TextArea from '../../components/TextArea';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { closeFirstLevelTab } from '../../redux/actions/definition.actions';
+import { IRootState } from '../../redux/reducers';
+import { getFirstLevelSensorState } from '../../redux/selectors';
+import { SharedCredentialsApi } from '../../services/apiClient';
 
 export default function SingleSharedCredential() {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
@@ -107,7 +106,7 @@ export default function SingleSharedCredential() {
       {userProfile.can_manage_and_view_shared_credentials === true ? (
         <>
           <div className="w-full border-b border-b-gray-400 flex justify-between ">
-            <div className="text-xl font-semibold truncate flex items-center pl-5 space-x-2">
+            <div className="text-lg font-semibold truncate flex items-center pl-5 space-x-2">
               <div>Shared credential:</div>
               <Input
                 value={credentialName}
@@ -160,7 +159,7 @@ export default function SingleSharedCredential() {
             </div>
           </div>
           {incorrectBinaryText ? (
-            <div className="text-red-500 pt-5 text-xl px-5">
+            <div className="text-red-500 pt-5 text-lg px-5">
               Invalid base64 text
             </div>
           ) : null}
