@@ -1,22 +1,22 @@
 import {
-  DqoJobHistoryEntryModelJobTypeEnum,
-  DqoJobHistoryEntryModelStatusEnum
-} from '../../../api';
-import React, { useMemo, useState } from 'react';
-import SvgIcon from '../../SvgIcon';
-import {
   Accordion,
   AccordionBody,
   AccordionHeader
 } from '@material-tailwind/react';
-import moment from 'moment';
-import JobChild from '../JobChild';
-import { reduceCounter } from '../../../redux/actions/job.actions';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { JobApiClient } from '../../../services/apiClient';
 import clsx from 'clsx';
-import { IRootState } from '../../../redux/reducers';
+import moment from 'moment';
+import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import {
+  DqoJobHistoryEntryModelJobTypeEnum,
+  DqoJobHistoryEntryModelStatusEnum
+} from '../../../api';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { reduceCounter } from '../../../redux/actions/job.actions';
+import { IRootState } from '../../../redux/reducers';
+import { JobApiClient } from '../../../services/apiClient';
+import SvgIcon from '../../SvgIcon';
+import JobChild from '../JobChild';
 import TooltipRunChecks from './TooltipRunChecks';
 
 const JobItem = ({

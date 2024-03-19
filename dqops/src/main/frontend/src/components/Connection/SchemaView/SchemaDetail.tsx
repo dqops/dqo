@@ -8,7 +8,7 @@ interface ISchemaDetailProps {
 const SchemaDetail: React.FC<ISchemaDetailProps> = ({ schema }) => {
   return (
     <div className="p-4">
-      <table className="mb-6">
+      <table className="mb-6 text-sm">
         <tbody>
           <tr>
             <td className="px-4 py-2">
