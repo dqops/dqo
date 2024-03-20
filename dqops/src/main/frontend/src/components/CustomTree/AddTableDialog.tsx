@@ -95,7 +95,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
               ConnectionSpecProviderTypeEnum.duckdb
                 ? {
                     [fileFormatType as keyof FileFormatSpec]: configuration,
-                    file_paths: paths.slice(0, -1)
+                    file_paths: paths.filter((x) => x)
                   }
                 : undefined
           }
