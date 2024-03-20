@@ -27,7 +27,7 @@ public class FileFormatSpecProvider {
     public static FileFormatSpec resolveFileFormat(DuckdbParametersSpec duckdbParametersSpec, TableSpec tableSpec) {
         DuckdbFilesFormatType filesType = duckdbParametersSpec.getFilesFormatType();
         if (filesType == null) {
-            return null;
+            throw new RuntimeException("The files format is unknown. Please set files format on the connection.");
         }
 
         FileFormatSpec fileFormat = tableSpec.getFileFormat() == null ? new FileFormatSpec() : tableSpec.getFileFormat().deepClone();
