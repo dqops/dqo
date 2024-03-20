@@ -27,7 +27,9 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * Snowflake source connection.
@@ -63,7 +65,11 @@ public class SnowflakeSourceConnection extends AbstractJdbcSourceConnection {
 
         Properties dataSourceProperties = new Properties();
         if (snowflakeSpec.getProperties() != null) {
-            dataSourceProperties.putAll(snowflakeSpec.getProperties());
+            dataSourceProperties.putAll(snowflakeSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
         String warehouse = this.getSecretValueProvider().expandValue(snowflakeSpec.getWarehouse(), secretValueLookupContext);
