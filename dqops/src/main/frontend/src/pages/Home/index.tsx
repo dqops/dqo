@@ -170,7 +170,7 @@ const HomePage = () => {
                 className="w-40 bg-primary rounded-lg py-2 px-8 text-white mb-2"
                 href="https://dqops.com/contact-us/"
               >
-                Contact Us
+                Contact us
               </a>
 
               <p>Check our progress on GitHub</p>
