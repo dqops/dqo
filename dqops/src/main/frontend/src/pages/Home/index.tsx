@@ -159,8 +159,9 @@ const HomePage = () => {
                 data quality improvement
               </p>
               <a
-                href="https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/"
+                href="https://dqops.com/best-practices-for-effective-data-quality-improvement/"
                 className="mb-2"
+                target="blank"
               >
                 <img src="/images/home/download_practice.png" alt="" />
               </a>
