@@ -31105,10 +31105,6 @@ definitions:
         type: "string"
         description: "The region for the storage credentials. The value can be in\
           \ the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-      aws_secret_access_key:
-        type: "string"
-      aws_access_key_id:
-        type: "string"
   Duration:
     type: "object"
     properties:
