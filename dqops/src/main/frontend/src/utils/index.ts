@@ -1,5 +1,5 @@
 import moment from 'moment/moment';
-import { ConnectionModel } from '../api';
+import { ConnectionModel, TableListModel } from '../api';
 
 export const getDaysString = (value: string | number) => {
   const daysDiff = moment().diff(moment(value), 'day');
@@ -171,6 +171,16 @@ export function sortByKey(key: string) {
     }
   };
 }
+
+export const filterPathsDuckDbTable = (table: TableListModel) => {
+  return {
+    ...table,
+    file_format: {
+      ...table.file_format,
+      file_paths: table.file_format?.file_paths?.filter((x) => x)
+    }
+  };
+}
 export const filterDirectoriesDuckdb = (db: ConnectionModel) => {
   const directories = { ...db.duckdb?.directories };
   Object.keys(directories).forEach((key) => {
@@ -191,5 +201,5 @@ export const filterDirectoriesDuckdb = (db: ConnectionModel) => {
       directories,
       properties
     }
-  };
-};
+  }
+}
