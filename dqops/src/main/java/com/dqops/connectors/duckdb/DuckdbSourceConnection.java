@@ -59,11 +59,11 @@ import java.util.stream.Collectors;
 public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
     private final HomeLocationFindService homeLocationFindService;
-    private final static Object registerExtensionsLock = new Object();
+    private static final Object registerExtensionsLock = new Object();
     private static boolean extensionsRegistered = false;
     private final DqoDuckdbConfiguration dqoDuckdbConfiguration;
-    private final static Object settingsExecutionLock = new Object();
-    private static boolean settingsConfigured = false;
+    private static final Object settingsExecutionLock = new Object();
+    private static final boolean settingsConfigured = false;
 
     /**
      * Injection constructor for the duckdb connection.
@@ -113,7 +113,12 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         Properties dataSourceProperties = new Properties();
 
         if (duckdbSpec.getProperties() != null) {
-            dataSourceProperties.putAll(duckdbSpec.getProperties());
+            dataSourceProperties.putAll(
+                    duckdbSpec.getProperties()
+                            .entrySet().stream()
+                            .filter(x -> !x.getKey().isEmpty())
+                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
