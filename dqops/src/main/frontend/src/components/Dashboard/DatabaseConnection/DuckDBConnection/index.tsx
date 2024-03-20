@@ -65,6 +65,8 @@ const DuckdbConnection = ({
   const [fileFormatType, setFileFormatType] = useState<
     keyof DuckdbParametersSpec
   >(duckdb?.files_format_type ?? DuckdbParametersSpecFilesFormatTypeEnum.csv);
+  const [refetchDirectoriesIndicator, setRefetchDirectoriesIndicator] =
+    useState(false);
   // const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
   //   if (!onChange) return;
   //   onChange({
@@ -101,6 +103,7 @@ const DuckdbConnection = ({
 
   useEffect(() => {
     setCopiedDatabase(cloneDeep(duckdb) ?? {});
+    setRefetchDirectoriesIndicator((prev) => !prev);
   }, [firstLevelActiveTab]);
 
   const changeStorageTypeDirectoryPrefixes = (
@@ -189,6 +192,7 @@ const DuckdbConnection = ({
             }));
           }}
           sharedCredentials={sharedCredentials}
+          refetchDirectoriesIndicator={refetchDirectoriesIndicator}
         />
       </FileFormatConfiguration>
       <JdbcPropertiesView
