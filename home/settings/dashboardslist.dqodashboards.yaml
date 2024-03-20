@@ -211,10 +211,10 @@ spec:
               parameters:
                 ds0.token: '%DQO_CLOUD_TOKEN%'
                 ds0.p_check_type: profiling
-            - dashboard_name: History of table freshness
+            - dashboard_name: Monthly history of table freshness
               url: https://lookerstudio.google.com/embed/reporting/25946a87-37e9-404f-a9e4-3497bb074590/page/c5B8C
               width: 1400
-              height: 1800
+              height: 1900
               parameters:
                 ds0.token: '%DQO_CLOUD_TOKEN%'
                 ds0.p_check_type: profiling
@@ -639,10 +639,10 @@ spec:
               parameters:
                 ds0.token: '%DQO_CLOUD_TOKEN%'
                 ds0.p_check_type: monitoring
-            - dashboard_name: History of table freshness
+            - dashboard_name: Monthly history of table freshness
               url: https://lookerstudio.google.com/embed/reporting/25946a87-37e9-404f-a9e4-3497bb074590/page/c5B8C
               width: 1400
-              height: 1800
+              height: 1900
               parameters:
                 ds0.token: '%DQO_CLOUD_TOKEN%'
                 ds0.p_check_type: monitoring
