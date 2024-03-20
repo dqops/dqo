@@ -63310,18 +63310,6 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
-          },
-          "aws_access_key_id" : {
-            "type" : "string",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
-          "aws_secret_access_key" : {
-            "type" : "string",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
           }
         },
         "exampleSetFlag" : false,
@@ -63388,12 +63376,6 @@
             "region" : {
               "type" : "string",
               "description" : "The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-            },
-            "aws_access_key_id" : {
-              "type" : "string"
-            },
-            "aws_secret_access_key" : {
-              "type" : "string"
             }
           }
         }
