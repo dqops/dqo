@@ -1,4 +1,5 @@
 import moment from 'moment/moment';
+import { ConnectionModel } from '../api';
 
 export const getDaysString = (value: string | number) => {
   const daysDiff = moment().diff(moment(value), 'day');
@@ -33,8 +34,8 @@ export const getLocalDateInUserTimeZone = (date: Date): string => {
   return new Date(strDate).toLocaleString('en-US', options);
 };
 
-export const urlencodeEncoder = (url : string | undefined) => {
-  if (!url) return ''; 
+export const urlencodeEncoder = (url: string | undefined) => {
+  if (!url) return '';
 
   let decodedValue = '';
   for (let i = 0; i < url.length; i++) {
@@ -57,7 +58,7 @@ export const urlencodeEncoder = (url : string | undefined) => {
           decodedValue += encodedChar;
           break;
       }
-      i += 2; 
+      i += 2;
     } else {
       decodedValue += url[i];
     }
@@ -66,25 +67,32 @@ export const urlencodeEncoder = (url : string | undefined) => {
   return decodedValue;
 };
 
-
-export const urlencodeDecoder = (url : string | undefined) => {
-  if (!url) return ''; 
+export const urlencodeDecoder = (url: string | undefined) => {
+  if (!url) return '';
 
   let encodedValue = '';
   for (let i = 0; i < url.length; i++) {
     const char = url[i];
     switch (char) {
       // case '%': encodedValue += '%25'; break;
-      case ' ': encodedValue += '%20'; break;
-      case '.': encodedValue += '%2E'; break;
-      case '/': encodedValue += '%2F'; break;
-      case '\\': encodedValue += '%5C'; break;
-      default: encodedValue += char;
+      case ' ':
+        encodedValue += '%20';
+        break;
+      case '.':
+        encodedValue += '%2E';
+        break;
+      case '/':
+        encodedValue += '%2F';
+        break;
+      case '\\':
+        encodedValue += '%5C';
+        break;
+      default:
+        encodedValue += char;
     }
   }
   return encodedValue;
 };
-
 
 export const getDetectedDatatype = (numberForFile: any) => {
   if (Number(numberForFile) === 1) {
@@ -163,3 +171,25 @@ export function sortByKey(key: string) {
     }
   };
 }
+export const filterDirectoriesDuckdb = (db: ConnectionModel) => {
+  const directories = { ...db.duckdb?.directories };
+  Object.keys(directories).forEach((key) => {
+    if (!directories[key]) {
+      delete directories[key];
+    }
+  });
+  const properties = { ...db.duckdb?.properties };
+  Object.keys(properties).forEach((key) => {
+    if (!properties[key]) {
+      delete properties[key];
+    }
+  });
+  return {
+    ...db,
+    duckdb: {
+      ...db.duckdb,
+      directories,
+      properties
+    }
+  };
+};
