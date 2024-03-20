@@ -259,12 +259,12 @@ const TableDetails = () => {
                   value: x
                 }))}
                 value={
-                  tableBasic?.advanced_profiling_result_truncation ??
+                  tableBasic?.profiling_checks_result_truncation ??
                   TableListModelProfilingChecksResultTruncationEnum.store_the_most_recent_result_per_month
                 }
                 onChange={(selected) =>
                   handleChange({
-                    advanced_profiling_result_truncation: selected
+                    profiling_checks_result_truncation: selected
                   })
                 }
                 placeholder=""
