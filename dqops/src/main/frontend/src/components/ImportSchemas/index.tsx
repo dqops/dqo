@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { SchemaRemoteModel } from '../../api';
 import { DataSourcesApi } from '../../services/apiClient';
 import Button from '../Button';
 import SvgIcon from '../SvgIcon';
 import Tabs from '../Tabs';
-import { SchemaRemoteModel } from '../../api';
 
 interface IImportSchemasProps {
   connectionName: string;
@@ -37,7 +37,7 @@ const ImportSchemas = ({
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
         <div className="flex items-center space-x-2">
           <SvgIcon name="database" className="w-5 h-5" />
-          <div className="text-xl font-semibold">{connectionName}</div>
+          <div className="text-lg font-semibold">{connectionName}</div>
         </div>
       </div>
       <div className="border-b border-gray-300">

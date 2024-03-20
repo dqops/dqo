@@ -18,6 +18,7 @@ package com.dqops.rest.controllers;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.comments.CommentsListSpec;
@@ -68,6 +69,7 @@ public class ConnectionsController {
     private final UserHomeContextFactory userHomeContextFactory;
     private final DefaultSchedulesProvider defaultSchedulesProvider;
     private final RestApiLockService lockService;
+    private final JobSchedulerService jobSchedulerService;
     private final CheckService checkService;
 
     @Autowired
@@ -75,12 +77,14 @@ public class ConnectionsController {
                                  CheckService checkService,
                                  UserHomeContextFactory userHomeContextFactory,
                                  DefaultSchedulesProvider defaultSchedulesProvider,
-                                 RestApiLockService lockService) {
+                                 RestApiLockService lockService,
+                                 JobSchedulerService jobSchedulerService) {
         this.connectionService = connectionService;
         this.checkService = checkService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.defaultSchedulesProvider = defaultSchedulesProvider;
         this.lockService = lockService;
+        this.jobSchedulerService = jobSchedulerService;
     }
 
     /**
@@ -652,6 +656,7 @@ public class ConnectionsController {
                     }
 
                     ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
+
                     DefaultSchedulesSpec schedules = existingConnectionSpec.getSchedules();
                     if (schedules == null) {
                         schedules = new DefaultSchedulesSpec();
@@ -683,7 +688,12 @@ public class ConnectionsController {
                             throw new UnsupportedOperationException("Unsupported scheduling group " + schedulingGroup);
                     }
 
+                    boolean scheduleChanged = existingConnectionSpec.isDirty();
                     userHomeContext.flush();
+
+                    if (scheduleChanged) {
+                        this.jobSchedulerService.triggerMetadataSynchronization();
+                    }
 
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
                 });

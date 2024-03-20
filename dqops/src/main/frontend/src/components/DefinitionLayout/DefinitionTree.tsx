@@ -431,13 +431,13 @@ export const DefinitionTree = () => {
     <div
       onClick={onClick}
       className={clsx(
-        'cursor-pointer flex space-x-1 items-center mb-1 h-5 hover:bg-gray-300',
+        'cursor-pointer flex space-x-1 items-center mb-1 h-4.5 hover:bg-gray-300',
         highlightedNode === text.toLowerCase().replace(' ', '-') &&
           'bg-gray-300'
       )}
     >
       <SvgIcon name={icon} className="w-4 h-4 min-w-4 " />
-      <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+      <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
         {text}
       </div>
     </div>

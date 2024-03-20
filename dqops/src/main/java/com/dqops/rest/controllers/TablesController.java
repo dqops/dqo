@@ -30,6 +30,7 @@ import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.statistics.services.StatisticsDataService;
@@ -103,6 +104,7 @@ public class TablesController {
     private StatisticsDataService statisticsDataService;
     private DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
     private RestApiLockService lockService;
+    private JobSchedulerService jobSchedulerService;
 
     /**
      * Creates an instance of a controller by injecting dependencies.
@@ -114,6 +116,7 @@ public class TablesController {
      * @param statisticsDataService            Statistics data service, provides access to the statistics (basic profiling).
      * @param defaultObservabilityConfigurationService The service that applies the configuration of the default checks to a table.
      * @param lockService                      Object lock service.
+     * @param jobSchedulerService              Job scheduler service.
      */
     @Autowired
     public TablesController(TableService tableService,
@@ -123,7 +126,8 @@ public class TablesController {
                             ModelToSpecCheckMappingService modelToSpecCheckMappingService,
                             StatisticsDataService statisticsDataService,
                             DefaultObservabilityConfigurationService defaultObservabilityConfigurationService,
-                            RestApiLockService lockService) {
+                            RestApiLockService lockService,
+                            JobSchedulerService jobSchedulerService) {
         this.tableService = tableService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoHomeContextFactory = dqoHomeContextFactory;
@@ -132,6 +136,7 @@ public class TablesController {
         this.statisticsDataService = statisticsDataService;
         this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
         this.lockService = lockService;
+        this.jobSchedulerService = jobSchedulerService;
     }
 
     /**
@@ -2235,7 +2240,12 @@ public class TablesController {
                     }
                     schedules.setScheduleForCheckSchedulingGroup(monitoringScheduleSpec, schedulingGroup);
 
+                    boolean scheduleUpdated = tableSpec.isDirty();
                     userHomeContext.flush();
+
+                    if (scheduleUpdated && this.jobSchedulerService != null) {
+                        this.jobSchedulerService.triggerMetadataSynchronization();
+                    }
 
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
                 });

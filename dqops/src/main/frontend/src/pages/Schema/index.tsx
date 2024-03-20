@@ -1,19 +1,18 @@
 import React, { useMemo, useState } from 'react';
-import ConnectionLayout from '../../components/ConnectionLayout';
+import { useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+import Button from '../../components/Button';
+import SourceTablesView from '../../components/Connection/ConnectionView/SourceTablesView';
+import AddTableDialog from '../../components/CustomTree/AddTableDialog';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
-import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import Button from '../../components/Button';
-import AddTableDialog from '../../components/CustomTree/AddTableDialog';
-import { SchemaTables } from './SchemaTables';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
-import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { MultiChecks } from './MultiCheck/MultiChecks';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
-import SourceTablesView from '../../components/Connection/ConnectionView/SourceTablesView';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { MultiChecks } from './MultiCheck/MultiChecks';
+import { SchemaTables } from './SchemaTables';
 
 const SchemaPage = () => {
   const {
@@ -69,7 +68,7 @@ const SchemaPage = () => {
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
         <div className="flex items-center space-x-2 max-w-full">
           <SvgIcon name="schema" className="w-5 h-5 shrink-0" />
-          <div className="text-xl font-semibold truncate">{`${connection}.${schema}`}</div>
+          <div className="text-lg font-semibold truncate">{`${connection}.${schema}`}</div>
         </div>
         {isSourceScreen && activeTab === 'tables' && (
           <div className="flex gap-4 items-center">

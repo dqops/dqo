@@ -19,6 +19,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<license.licenseName>apache_v2</license.licenseName>
+		<duckdb.version>0.10.0</duckdb.version>
 	</properties>
 
 	<licenses>
@@ -199,7 +200,7 @@
 		<dependency>
 			<groupId>org.duckdb</groupId>
 			<artifactId>duckdb_jdbc</artifactId>
-			<version>0.9.2</version>
+			<version>${duckdb.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 

@@ -44,7 +44,7 @@ For example, if the data must arrive on time and without delays - the company sh
 important that the data arrives in a certain format - the company should prioritize validity.
 
 You can learn more about defining data quality requirements and how to set up the whole data quality monitoring process in our eBook 
-["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/).
+["A step-by-step guide to improve data quality"](https://dqops.com/best-practices-for-effective-data-quality-improvement/).
 
 ## What's more
 - Review the [types of data quality dashboards](types-of-data-quality-dashboards.md) that are provided with DQOps.

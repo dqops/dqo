@@ -411,14 +411,14 @@ Want to learn more about data quality?
 
     <div class="grid" markdown>
 
-    [![A step-by-step guide to improve data quality](images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ loading=lazy; class=glightbox-ignored-image }](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
+    [![A step-by-step guide to improve data quality](images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ loading=lazy; class=glightbox-ignored-image }](https://dqops.com/best-practices-for-effective-data-quality-improvement/)
     <div>
 
-    DQOps creators have written an eBook ["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
+    DQOps creators have written an eBook ["A step-by-step guide to improve data quality"](https://dqops.com/best-practices-for-effective-data-quality-improvement/)
     that describes their experience in data cleansing and data quality monitoring using DQOps. 
 
     The eBook desribes a full data quality improvement process that allows to reach a ~100% data quality KPI score within 6-12 months.
-    [Download the eBook](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/) to learn the process of managing
+    [Download the eBook](https://dqops.com/best-practices-for-effective-data-quality-improvement/) to learn the process of managing
     an iterative data quality project that leads to fixing all data quality issues.
     
     ![DQOps data quality improvement process](https://dqops.com/docs/images/dqops-data-quality-improvement-process-min.png){ loading=lazy; width="150px" }

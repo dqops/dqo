@@ -143,8 +143,11 @@ public class CheckExecutionServiceImplTests extends BaseTest {
                 commonTableNormalizationService,
                 defaultTimeZoneProvider);
 
+        DefaultObservabilityConfigurationServiceImpl defaultObservabilityConfigurationService =
+                new DefaultObservabilityConfigurationServiceImpl(ConnectionProviderRegistryObjectMother.getInstance());
+
         ScheduledTargetChecksFindService scheduledTargetChecksFindService = new ScheduledTargetChecksFindServiceImpl(
-                hierarchyNodeTreeSearcher);
+                hierarchyNodeTreeSearcher, defaultObservabilityConfigurationService);
 
         DqoQueueJobFactoryImpl dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
 
@@ -163,7 +166,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
                 null,
                 DqoSensorLimitsConfigurationPropertiesObjectMother.getDefault(),
                 new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties()),
-                new DefaultObservabilityConfigurationServiceImpl(ConnectionProviderRegistryObjectMother.getInstance()));
+                defaultObservabilityConfigurationService);
 
         this.sut = new CheckExecutionServiceImpl(
                 hierarchyNodeTreeSearcher,

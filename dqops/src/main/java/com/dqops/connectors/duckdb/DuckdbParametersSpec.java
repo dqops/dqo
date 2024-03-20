@@ -322,6 +322,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
      * Returns the AWS AccessKeyID which is placed in user field when configured.
      * @return region.
      */
+    @JsonIgnore
     public String getAwsAccessKeyId() {
         return user;
     }
@@ -330,6 +331,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
      * Returns the AWS SecretAccessKey which is placed in user field when configured.
      * @return region.
      */
+    @JsonIgnore
     public String getAwsSecretAccessKey() {
         return password;
     }
