@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { DataDictionaryListModel } from '../../api';
 import Button from '../../components/Button';
-import SvgIcon from '../../components/SvgIcon';
-import { DataDictionaryApiClient } from '../../services/apiClient';
-import { useDispatch, useSelector } from 'react-redux';
-import { addFirstLevelTab } from '../../redux/actions/definition.actions';
-import { ROUTES } from '../../shared/routes';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import SvgIcon from '../../components/SvgIcon';
+import { addFirstLevelTab } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
+import { DataDictionaryApiClient } from '../../services/apiClient';
+import { ROUTES } from '../../shared/routes';
 
 export default function DataDictionaryConfigurationTable() {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
@@ -64,12 +64,12 @@ export default function DataDictionaryConfigurationTable() {
   return (
     <tbody>
       {dictionaries?.map((dictionary, index) => (
-        <tr key={index} className="flex items-center">
+        <tr key={index} className="flex items-center text-sm">
           <td className="px-6 py-2 text-left block w-100">
             {dictionary.dictionary_name}
           </td>
           <td className="px-6 py-2 text-left block w-100 italic">
-             {'${dictionary://' + dictionary.dictionary_name + "}"}
+            {'${dictionary://' + dictionary.dictionary_name + '}'}
           </td>
           <td className="px-6 py-2 text-left block max-w-100">
             <Button

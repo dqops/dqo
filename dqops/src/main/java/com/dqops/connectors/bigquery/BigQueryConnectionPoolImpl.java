@@ -175,7 +175,8 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
             BigQueryOptions bigQueryOptions = builder.build();
             BigQuery service = bigQueryOptions.getService();
 
-            BigQueryInternalConnection bigQueryInternalConnection = new BigQueryInternalConnection(service, effectiveJobProjectId, effectiveQuotaProjectId);
+            BigQueryInternalConnection bigQueryInternalConnection = new BigQueryInternalConnection(
+                    connectionName, service, effectiveJobProjectId, effectiveQuotaProjectId);
             return bigQueryInternalConnection;
         }
         catch (Exception ex) {

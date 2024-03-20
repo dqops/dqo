@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-class DuckdbTestConnectionTestImpl extends BaseTest {
+class DuckdbTestConnectionImplTest extends BaseTest {
 
     private DuckdbTestConnectionImpl sut;
     private DuckdbParametersSpec duckdbParametersSpec;
@@ -54,7 +54,7 @@ class DuckdbTestConnectionTestImpl extends BaseTest {
             sut.testConnection(duckdbParametersSpec);
         });
 
-        String expectedMessage = "A path is not filled in the schema files.";
+        String expectedMessage = "A path is not filled in the schema: files";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
@@ -71,7 +71,7 @@ class DuckdbTestConnectionTestImpl extends BaseTest {
             sut.testConnection(duckdbParametersSpec);
         });
 
-        String expectedMessage = "A path is not filled in the schema files.";
+        String expectedMessage = "A path is not filled in the schema: files";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
@@ -83,7 +83,7 @@ class DuckdbTestConnectionTestImpl extends BaseTest {
 
         Map<String, String> directories = duckdbParametersSpec.getDirectories();
 
-        directories.put("files", "asdasd");
+        directories.put("files", "s3://asdasd");
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
             sut.testConnection(duckdbParametersSpec);
@@ -117,10 +117,7 @@ class DuckdbTestConnectionTestImpl extends BaseTest {
     }
 
     @Test
-    void testConnection_s3PathNotStartWithProtocol_throwException() {
-        this.duckdbParametersSpec.setUser("asdasd");
-        this.duckdbParametersSpec.setPassword("asdasd");
-        this.duckdbParametersSpec.setRegion("us-east-2");
+    void testConnection_s3PathNotStartWithSchema_throwException() {
         this.duckdbParametersSpec.setStorageType(DuckdbStorageType.s3);
 
         Map<String, String> directories = duckdbParametersSpec.getDirectories();
@@ -131,7 +128,7 @@ class DuckdbTestConnectionTestImpl extends BaseTest {
             sut.testConnection(duckdbParametersSpec);
         });
 
-        String expectedMessage = "Invalid S3 URI: no hostname: asdasd";
+        String expectedMessage = "S3 path must start with s3://";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));

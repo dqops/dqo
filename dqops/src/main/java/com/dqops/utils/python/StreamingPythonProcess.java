@@ -124,6 +124,12 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
                 try {
                     PythonRequestReplyMessage requestReplyMessage = this.requestReplyMessages.take();
                     if (requestReplyMessage.isEmpty()) {
+                        try {
+                            this.writeToProcessStream.close();
+                        }
+                        catch (Exception ex) {
+                            // ignore
+                        }
                         return;
                     }
 
@@ -144,8 +150,8 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
         this.processingThread.start();
 
         try {
-            processStartedFuture.get();
-        } catch (InterruptedException | ExecutionException ex) {
+            processStartedFuture.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             throw new DqoRuntimeException("Failed to start a Python process, error: " + ex.getMessage(), ex);
         }
     }
@@ -329,6 +335,23 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
         this.streamHandler = null;
         this.waitForClose.countDown();
         this.close();
+    }
+
+    /**
+     * Announces that we are closing the process. Just sends a poison pill message, letting the process to close gracefully.
+     */
+    public void announceClose() {
+        synchronized (this) {
+            if (this.closed) {
+                return;
+            }
+        }
+
+        try {
+            this.requestReplyMessages.put(PythonRequestReplyMessage.createEmpty()); // poison pill message
+        }
+        catch (InterruptedException ex) {
+        }
     }
 
     /**

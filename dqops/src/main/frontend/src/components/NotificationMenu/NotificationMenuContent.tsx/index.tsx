@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { setCronScheduler } from '../../../redux/actions/job.actions';
+import { IRootState } from '../../../redux/reducers';
+import { JobApiClient } from '../../../services/apiClient';
+import Switch from '../../Switch';
 import ErrorItem from '../ErrorItem';
 import JobItem from '../JobItem';
-import Switch from '../../Switch';
-import { setCronScheduler } from '../../../redux/actions/job.actions';
-import { JobApiClient } from '../../../services/apiClient';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 
 export default function NotificationMenuContent() {
   const { jobList, isCronScheduled, userProfile } = useSelector(
@@ -54,7 +54,7 @@ export default function NotificationMenuContent() {
 
   return (
     <>
-      <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-xl flex flex-col gap-y-2 px-4 relative">
+      <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-lg flex flex-col gap-y-2 px-4 relative">
         <div>Notifications ({notificationCount()})</div>
         <div className="flex items-center gap-x-3 text-sm">
           <div className="whitespace-no-wrap">Jobs scheduler </div>

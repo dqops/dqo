@@ -20,6 +20,7 @@ import com.dqops.connectors.RowCountLimitExceededException;
 import com.google.cloud.bigquery.*;
 import com.google.common.base.Strings;
 import org.apache.commons.codec.binary.Hex;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
@@ -28,7 +29,9 @@ import tech.tablesaw.columns.Column;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Support class that is responsible for executing SQL queries on a given connection object.
@@ -54,11 +57,18 @@ public class BigQuerySqlRunnerImpl implements BigQuerySqlRunner {
                 jobConfigurationBuilder = jobConfigurationBuilder.setMaxResults(maxRows.longValue() +
                         (failWhenMaxRowsExceeded ? 1L : 0L));
             }
+
+            LinkedHashMap<String, String> jobLabels = createJobLabels(bigQueryInternalConnection);
+            if (jobLabels != null) {
+                jobConfigurationBuilder.setLabels(jobLabels);
+            }
+
             QueryJobConfiguration queryJobConfiguration = jobConfigurationBuilder.build();
             JobId.Builder jobBuilder = JobId.newBuilder();
             if (!Strings.isNullOrEmpty(jobProjectId)) {
                 jobBuilder = jobBuilder.setProject(jobProjectId);
             }
+
             JobId jobId = jobBuilder.build();
             BigQuery bigQueryService = bigQueryInternalConnection.getBigQueryClient();
 
@@ -141,6 +151,33 @@ public class BigQuerySqlRunnerImpl implements BigQuerySqlRunner {
     }
 
     /**
+     * Creates a dictionary of job labels that identify the instance and connection.
+     * @param bigQueryInternalConnection Internal connection.
+     * @return Job labels dictionary.
+     */
+    public LinkedHashMap<String, String> createJobLabels(BigQueryInternalConnection bigQueryInternalConnection) {
+        LinkedHashMap<String, String> jobLabels = new LinkedHashMap<>();
+        if (!Strings.isNullOrEmpty(bigQueryInternalConnection.getConnectionName())) {
+            jobLabels.put("dqops-connection-name", bigQueryInternalConnection.getConnectionName().toLowerCase(Locale.ROOT));
+        }
+
+        String host = System.getenv("COMPUTERNAME");
+        if (Strings.isNullOrEmpty(host)) {
+            host = System.getenv("HOSTNAME");
+        }
+
+        if (!Strings.isNullOrEmpty(host)) {
+            jobLabels.put("dqops-hostname", host.toLowerCase(Locale.ROOT));
+        }
+
+        if (jobLabels.isEmpty()) {
+            return null;
+        }
+
+        return jobLabels;
+    }
+
+    /**
      * Executes an SQL statement that does not return results (DML or DDL).
      * @param connection Connection object.
      * @param sql SQL string to execute.
@@ -152,7 +189,14 @@ public class BigQuerySqlRunnerImpl implements BigQuerySqlRunner {
             BigQueryInternalConnection bigQueryInternalConnection = connection.getBigQueryInternalConnection();
 
             String jobProjectId = bigQueryInternalConnection.getBillingProjectId();
-            QueryJobConfiguration queryJobConfiguration = QueryJobConfiguration.newBuilder(sql).build();
+            QueryJobConfiguration.Builder jobConfigurationBuilder = QueryJobConfiguration.newBuilder(sql);
+
+            LinkedHashMap<String, String> jobLabels = createJobLabels(bigQueryInternalConnection);
+            if (jobLabels != null) {
+                jobConfigurationBuilder.setLabels(jobLabels);
+            }
+
+            QueryJobConfiguration queryJobConfiguration = jobConfigurationBuilder.build();
             JobId.Builder jobBuilder = JobId.newBuilder();
             if (!Strings.isNullOrEmpty(jobProjectId)) {
                 jobBuilder = jobBuilder.setProject(jobProjectId);

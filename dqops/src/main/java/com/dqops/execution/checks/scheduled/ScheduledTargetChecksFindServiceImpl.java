@@ -16,16 +16,23 @@
 package com.dqops.execution.checks.scheduled;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.checks.defaults.DefaultObservabilityConfigurationService;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.HierarchyNode;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.*;
+import com.dqops.metadata.sources.ConnectionWrapper;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TableWrapper;
+import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import com.dqops.metadata.userhome.UserHome;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Service that finds all checks that should be executed for a given schedule.
@@ -34,14 +41,19 @@ import java.util.Collection;
 @Component
 public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChecksFindService {
     private HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher;
+    private DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
 
     /**
      * Creates an instance.
      * @param hierarchyNodeTreeSearcher Hierarchy node searcher used to find target checks.
+     * @param defaultObservabilityConfigurationService Service that activates default checks configured as check patterns.
      */
     @Autowired
-    public ScheduledTargetChecksFindServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher) {
+    public ScheduledTargetChecksFindServiceImpl(
+            HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
+            DefaultObservabilityConfigurationService defaultObservabilityConfigurationService) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
+        this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
     }
 
     /**
@@ -68,16 +80,56 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
             scheduledChecksSearchFilters.setScheduleGroup(scheduleRoot.getScheduleGroup());
             HierarchyNode scheduleRootNode = scheduleRoot.getScheduleRootNode();
 
-            Collection<AbstractCheckSpec<?,?,?,?>> scheduledChecks = this.hierarchyNodeTreeSearcher.findScheduledChecks(
-                    scheduleRootNode, scheduledChecksSearchFilters);
+            if (scheduleRootNode instanceof ConnectionWrapper) {
+                // iterate over tables
+                ConnectionWrapper scheduledConnectionWrapper = (ConnectionWrapper) scheduleRootNode;
 
-            for (AbstractCheckSpec<?,?,?,?> targetCheck : scheduledChecks) {
-                TableWrapper targetTableWrapper = userHome.findTableFor(targetCheck.getHierarchyId());
-                ScheduledTableChecksCollection tableChecks = scheduledChecksCollection.getOrAddTableChecks(targetTableWrapper);
-                tableChecks.addCheck(targetCheck);
+                for (TableWrapper scheduledTableWrapper : scheduledConnectionWrapper.getTables()) {
+                    TableSpec clonedTableSpec = scheduledTableWrapper.getSpec().deepClone();
+                    this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(scheduledConnectionWrapper.getSpec(), clonedTableSpec, userHome);
+
+                    Collection<AbstractCheckSpec<?,?,?,?>> scheduledChecks = this.hierarchyNodeTreeSearcher.findScheduledChecks(
+                            clonedTableSpec, scheduledChecksSearchFilters);
+
+                    for (AbstractCheckSpec<?,?,?,?> targetCheck : scheduledChecks) {
+                        ScheduledTableChecksCollection tableChecks = scheduledChecksCollection.getOrAddTableChecks(clonedTableSpec);
+                        tableChecks.addCheck(targetCheck);
+                    }
+                }
+
+                continue;
             }
+
+            if (scheduleRootNode instanceof TableSpec) {
+                TableSpec originalTableSpec = (TableSpec) scheduleRootNode;
+                ConnectionWrapper connectionWrapper = userHome.findConnectionFor(originalTableSpec.getHierarchyId());
+                TableSpec clonedTableSpec = originalTableSpec.deepClone();
+                this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(connectionWrapper.getSpec(), clonedTableSpec, userHome);
+
+                Collection<AbstractCheckSpec<?,?,?,?>> scheduledChecks = this.hierarchyNodeTreeSearcher.findScheduledChecks(
+                        clonedTableSpec, scheduledChecksSearchFilters);
+
+                for (AbstractCheckSpec<?,?,?,?> targetCheck : scheduledChecks) {
+                    ScheduledTableChecksCollection tableChecks = scheduledChecksCollection.getOrAddTableChecks(clonedTableSpec);
+                    tableChecks.addCheck(targetCheck);
+                }
+
+                continue;
+            }
+
+            if (scheduleRootNode instanceof AbstractCheckSpec<?,?,?,?>) {
+                AbstractCheckSpec<?,?,?,?> targetCheckSpec =  (AbstractCheckSpec<?,?,?,?>)scheduleRootNode;
+                TableWrapper targetTableWrapper = userHome.findTableFor(targetCheckSpec.getHierarchyId());
+                ScheduledTableChecksCollection tableChecks = scheduledChecksCollection.getOrAddTableChecks(targetTableWrapper.getSpec());
+                tableChecks.addCheck(targetCheckSpec);
+                continue;
+            }
+
+            throw new DqoRuntimeException("Unsupported schedule root: " + scheduleRoot.getScheduleRootNode().getHierarchyId());
         }
 
         return scheduledChecksCollection;
     }
+
+
 }

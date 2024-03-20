@@ -122,11 +122,14 @@ const DuckdbConnection = ({
   };
 
   return (
-    <SectionWrapper title="DuckDB connection parameters" className="mb-4">
+    <SectionWrapper
+      title="DuckDB connection parameters"
+      className="mb-4 text-sm"
+    >
       <Select
         label="Files location"
         options={storageTypeOptions}
-        className="mb-4"
+        className="mb-4 text-sm"
         value={copiedDatabase?.storage_type}
         onChange={changeStorageTypeDirectoryPrefixes}
       />
@@ -137,7 +140,7 @@ const DuckdbConnection = ({
           <FieldTypeInput
             data={sharedCredentials}
             label="User name/Key ID"
-            className="mb-4"
+            className="mb-4 text-sm"
             value={copiedDatabase?.user}
             onChange={(value) =>
               setCopiedDatabase((prev) => ({ ...prev, user: value }))
@@ -146,7 +149,7 @@ const DuckdbConnection = ({
           <FieldTypeInput
             data={sharedCredentials}
             label="Password/Secret Key"
-            className="mb-4"
+            className="mb-4 text-sm"
             maskingType="password"
             value={copiedDatabase?.password}
             onChange={(value) =>
@@ -156,7 +159,7 @@ const DuckdbConnection = ({
           <FieldTypeInput
             data={sharedCredentials}
             label="Region"
-            className="mb-4"
+            className="mb-4 text-sm"
             maskingType="region"
             value={copiedDatabase?.region}
             onChange={(value) =>
@@ -189,7 +192,6 @@ const DuckdbConnection = ({
             }));
           }}
           sharedCredentials={sharedCredentials}
-          storageType={copiedDatabase?.storage_type}
         />
       </FileFormatConfiguration>
       <JdbcPropertiesView

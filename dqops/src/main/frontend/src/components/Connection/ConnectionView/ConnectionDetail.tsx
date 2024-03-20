@@ -150,7 +150,7 @@ const ConnectionDetail = () => {
   useEffect(() => {
     getSharedCredentials();
   }, []);
-  console.log(connectionBasic?.duckdb);
+
   return (
     <div
       className={clsx(

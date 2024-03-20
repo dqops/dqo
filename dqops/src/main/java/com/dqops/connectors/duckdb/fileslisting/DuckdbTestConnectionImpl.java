@@ -23,7 +23,7 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
 
         Map<String, String> directories = duckdbParametersSpec.getDirectories();
 
-        if(directories == null || directories.size() == 0){
+        if(directories == null || directories.isEmpty()){
             throw new RuntimeException("Virtual schema name is not configured in the Import configuration.");
         }
 
@@ -32,7 +32,7 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
                 .findAny();
 
         if(schemaToEmptyPath.isPresent()){
-            throw new RuntimeException("A path is not filled in the schema " + schemaToEmptyPath.get().getKey() + ".");
+            throw new RuntimeException("A path is not filled in the schema: " + schemaToEmptyPath.get().getKey());
         }
 
         directories.keySet().forEach(schema -> {
@@ -40,6 +40,15 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
 
             DuckdbStorageType storageType = duckdbParametersSpec.getStorageType();
             if(storageType != null && storageType.equals(DuckdbStorageType.s3)) {
+
+                Optional<Map.Entry<String, String>> pathWithInvalidPrefix = directories.entrySet().stream()
+                        .filter(x -> !x.getValue().toLowerCase().startsWith(AwsConstants.S3_URI_PREFIX))
+                        .findAny();
+
+                if(pathWithInvalidPrefix.isPresent()){
+                    throw new RuntimeException("S3 path must start with " + AwsConstants.S3_URI_PREFIX + " " + pathWithInvalidPrefix.get().getKey());
+                }
+
                 tables = AwsTablesLister.listTables(duckdbParametersSpec, schema);
             }
             else {

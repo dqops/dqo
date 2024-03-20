@@ -70,7 +70,7 @@ const Button = ({
       className={clsx(
         classes,
         className,
-        textSize ? `text-${textSize}` : 'text-base',
+        textSize ? `text-${textSize}` : 'text-sm',
         'rounded-lg focus:outline-none flex items-center justify-center',
         (!className || className.indexOf('py-') === -1) && 'py-2',
         (!className || className.indexOf('px-') === -1) && 'px-6',

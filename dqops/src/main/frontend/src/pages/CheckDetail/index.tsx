@@ -112,11 +112,10 @@ export const SensorDetail = () => {
       if (copied === true) {
         await dispatch(
           createCheck(
-              String(full_check_name).replace(/\/[^/]*$/, '/') + checkName
-            ,
+            String(full_check_name).replace(/\/[^/]*$/, '/') + checkName,
             {
-              sensor_name: (selectedSensor),
-              rule_name: (selectedRule),
+              sensor_name: selectedSensor,
+              rule_name: selectedRule,
               help_text: helpText,
               standard: standard
             }
@@ -124,9 +123,9 @@ export const SensorDetail = () => {
         );
       } else {
         await dispatch(
-          createCheck((fullName), {
-            sensor_name: (selectedSensor),
-            rule_name: (selectedRule),
+          createCheck(fullName, {
+            sensor_name: selectedSensor,
+            rule_name: selectedRule,
             help_text: helpText,
             standard: standard
           })
@@ -164,8 +163,8 @@ export const SensorDetail = () => {
     await dispatch(
       deleteCheck(
         full_check_name
-          ? (full_check_name)
-          : (Array.from(path).join('/') + '/' + checkName)
+          ? full_check_name
+          : Array.from(path).join('/') + '/' + checkName
       )
     );
     dispatch(
@@ -305,12 +304,11 @@ export const SensorDetail = () => {
           <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 pr-[570px]">
             <div className="flex items-center space-x-2 max-w-full">
               <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
-              <div className="text-xl font-semibold truncate">
+              <div className="text-lg font-semibold truncate">
                 Check:{' '}
                 {full_check_name ||
                   (path !== undefined &&
-                      Array.from(path).join('/') + '/' + checkName
-                    ) ||
+                    Array.from(path).join('/') + '/' + checkName) ||
                   checkName}
               </div>
             </div>
@@ -319,13 +317,11 @@ export const SensorDetail = () => {
           <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 pr-[570px]">
             <div className="flex items-center space-x-2 max-w-full">
               <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
-              <div className="text-xl font-semibold truncate">
+              <div className="text-lg font-semibold truncate">
                 Check:{' '}
                 {path
-                  ? ([...(path || []), ''].join('/'))
-                  : (
-                      String(full_check_name).replace(/\/[^/]*$/, '/')
-                    )}
+                  ? [...(path || []), ''].join('/')
+                  : String(full_check_name).replace(/\/[^/]*$/, '/')}
               </div>
               <Input
                 value={checkName}

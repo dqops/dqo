@@ -220,22 +220,35 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
     public void destroy() throws Exception {
         Throwable firstException = null;
 
+        ArrayList<StreamingPythonProcess> allProcesses = new ArrayList<>();
+
         synchronized (this.processDictionaryLock) {
             for (Stack<StreamingPythonProcess> processesStack : this.pythonModuleProcesses.values()) {
-                StreamingPythonProcess[] processesToStop = processesStack.toArray(StreamingPythonProcess[]::new);
-                for (StreamingPythonProcess pythonProcess : processesToStop) {
-                    try {
-                        pythonProcess.close();
-                    }
-                    catch (Throwable t) {
-                        if (firstException == null) {
-                            firstException = t;
-                        }
-                    }
+                allProcesses.addAll(processesStack);
+            }
+            this.pythonModuleProcesses = null;
+        }
+
+        for (StreamingPythonProcess pythonProcess : allProcesses) {
+            try {
+                pythonProcess.announceClose();
+            }
+            catch (Throwable t) {
+                if (firstException == null) {
+                    firstException = t;
                 }
             }
+        }
 
-            this.pythonModuleProcesses = null;
+        for (StreamingPythonProcess pythonProcess : allProcesses) {
+            try {
+                pythonProcess.close();
+            }
+            catch (Throwable t) {
+                if (firstException == null) {
+                    firstException = t;
+                }
+            }
         }
 
         if (firstException != null) {
