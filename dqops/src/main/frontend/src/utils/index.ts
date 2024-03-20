@@ -1,5 +1,5 @@
 import moment from 'moment/moment';
-import { TableListModel } from '../api';
+import { ConnectionModel, TableListModel } from '../api';
 
 export const getDaysString = (value: string | number) => {
   const daysDiff = moment().diff(moment(value), 'day');
@@ -180,4 +180,26 @@ export const filterPathsDuckDbTable = (table: TableListModel) => {
       file_paths: table.file_format?.file_paths?.filter((x) => x)
     }
   };
-};
+}
+export const filterDirectoriesDuckdb = (db: ConnectionModel) => {
+  const directories = { ...db.duckdb?.directories };
+  Object.keys(directories).forEach((key) => {
+    if (!directories[key]) {
+      delete directories[key];
+    }
+  });
+  const properties = { ...db.duckdb?.properties };
+  Object.keys(properties).forEach((key) => {
+    if (!properties[key]) {
+      delete properties[key];
+    }
+  });
+  return {
+    ...db,
+    duckdb: {
+      ...db.duckdb,
+      directories,
+      properties
+    }
+  }
+}

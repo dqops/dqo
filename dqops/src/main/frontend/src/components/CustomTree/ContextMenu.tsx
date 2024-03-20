@@ -368,7 +368,7 @@ const ContextMenu = ({
                     : undefined;
                 }}
               >
-                Delete data
+                Delete data quality results
               </div>
               <DeleteStoredDataExtendedPopUp
                 open={deleteDataDialogOpened}
@@ -395,7 +395,7 @@ const ContextMenu = ({
                     : undefined;
                 }}
               >
-                Delete data
+                Delete data quality results
               </div>
               <DeleteStoredDataExtendedPopUp
                 open={deleteDataDialogOpened}

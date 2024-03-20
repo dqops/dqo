@@ -13,6 +13,7 @@ import {
   DataSourcesApi,
   SharedCredentialsApi
 } from '../../../services/apiClient';
+import { filterDirectoriesDuckdb } from '../../../utils';
 import Button from '../../Button';
 import Input from '../../Input';
 import Loader from '../../Loader';
@@ -79,7 +80,9 @@ const DatabaseConnection = ({
     setIsSaving(true);
     await ConnectionApiClient.createConnectionBasic(
       database?.connection_name ?? '',
-      database
+      database.provider_type === ConnectionModelProviderTypeEnum.duckdb
+        ? filterDirectoriesDuckdb(database)
+        : database
     );
     const res = await ConnectionApiClient.getConnectionBasic(
       database.connection_name
@@ -114,7 +117,14 @@ const DatabaseConnection = ({
     setIsTesting(true);
     let testRes: ConnectionTestModel | null = null;
     try {
-      testRes = (await DataSourcesApi.testConnection(true, database)).data;
+      testRes = (
+        await DataSourcesApi.testConnection(
+          true,
+          database.provider_type === ConnectionModelProviderTypeEnum.duckdb
+            ? filterDirectoriesDuckdb(database)
+            : database
+        )
+      ).data;
       setIsTesting(false);
     } catch (err) {
       setIsTesting(false);
@@ -136,7 +146,12 @@ const DatabaseConnection = ({
   const onTestConnection = async () => {
     try {
       setIsTesting(true);
-      const res = await DataSourcesApi.testConnection(true, database);
+      const res = await DataSourcesApi.testConnection(
+        true,
+        database.provider_type === ConnectionModelProviderTypeEnum.duckdb
+          ? filterDirectoriesDuckdb(database)
+          : database
+      );
       setTestResult(res.data);
     } catch (err) {
       console.error(err);

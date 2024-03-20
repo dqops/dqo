@@ -1,5 +1,5 @@
 import { Tooltip } from '@material-tailwind/react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SharedCredentialListModel } from '../../../api';
 import SvgIcon from '../../SvgIcon';
 import KeyValuePropertyItem from './KeyValuePropertyItem';
@@ -8,6 +8,7 @@ interface IKeyValueProperties {
   properties?: { [key: string]: string };
   onChange: (properties: { [key: string]: string }) => void;
   sharedCredentials?: SharedCredentialListModel[];
+  refetchDirectoriesIndicator?: any;
 }
 
 function convertObjectToArray(obj: {
@@ -32,17 +33,25 @@ function convertArrayToObject(array: { [key: string]: string }[]): {
 const KeyValueProperties = ({
   properties,
   onChange,
-  sharedCredentials
+  sharedCredentials,
+  refetchDirectoriesIndicator
 }: IKeyValueProperties) => {
-  const arr = [...convertObjectToArray(properties ?? {})];
+  const [arr, setArr] = useState(convertObjectToArray(properties ?? {}));
 
   const onChangeArr = (
     array: {
       [key: string]: string;
     }[]
   ) => {
+    setArr(array);
     onChange(convertArrayToObject(array));
   };
+
+  useEffect(() => {
+    if (properties) {
+      setArr(convertObjectToArray(properties ?? {}));
+    }
+  }, [refetchDirectoriesIndicator]);
 
   return (
     <table className="my-3 w-full">
