@@ -48,6 +48,7 @@ export const SensorDetail = () => {
   const [isUpdated, setIsUpdated] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [helpText, setHelpText] = useState(activeCheckDetail?.help_text ?? '');
+  const [friendlyName, setFriendlyName] = useState(activeCheckDetail?.friendly_name ?? '');
   const [standard, setStandard] = useState(
     activeCheckDetail?.standard ?? false
   );
@@ -62,6 +63,10 @@ export const SensorDetail = () => {
 
   const onChangeHelpText = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setHelpText(e.target.value);
+  };
+  
+  const onChangeFriendlyName = (e: ChangeEvent<HTMLInputElement>) => {
+    setFriendlyName(e.target.value);
   };
 
   const onChangeStandard = (value: boolean) => {
@@ -90,12 +95,14 @@ export const SensorDetail = () => {
       setSelectedRule('');
       setSelectedSensor('');
       setHelpText('');
+      setFriendlyName('');
       setStandard(false);
       setcheckName('');
     } else {
       setSelectedRule(activeCheckDetail.rule_name ?? '');
       setSelectedSensor(activeCheckDetail.sensor_name ?? '');
       setHelpText(activeCheckDetail.help_text ?? '');
+      setFriendlyName(activeCheckDetail.friendly_name ?? '');
       setStandard(activeCheckDetail.standard ?? false);
       setcheckName(
         String(activeCheckDetail.check_name).split('/')[
@@ -117,6 +124,7 @@ export const SensorDetail = () => {
               sensor_name: selectedSensor,
               rule_name: selectedRule,
               help_text: helpText,
+              friendly_name: friendlyName,
               standard: standard
             }
           )
@@ -127,6 +135,7 @@ export const SensorDetail = () => {
             sensor_name: selectedSensor,
             rule_name: selectedRule,
             help_text: helpText,
+            friendly_name: friendlyName,
             standard: standard
           })
         );
@@ -150,6 +159,7 @@ export const SensorDetail = () => {
             sensor_name: selectedSensor,
             rule_name: selectedRule,
             help_text: helpText,
+            friendly_name: friendlyName,
             standard: standard
           }
         )
@@ -215,6 +225,7 @@ export const SensorDetail = () => {
           rule: selectedRule,
           checkName: checkName,
           helpText: helpText,
+          friendlyName: friendlyName,
           standard: standard
         },
         label: checkName
@@ -342,6 +353,8 @@ export const SensorDetail = () => {
           custom={custom}
           helpText={helpText}
           onChangeHelpText={onChangeHelpText}
+          friendlyName={friendlyName}
+          onChangeFriendlyName={onChangeFriendlyName}
           standard={standard}
           onChangeStandard={onChangeStandard}
           canEditDefinitions={userProfile.can_manage_definitions}

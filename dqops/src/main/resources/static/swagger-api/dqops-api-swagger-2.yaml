@@ -14065,6 +14065,9 @@ definitions:
         type: "string"
         description: "Help text that is shown in the check editor that describes the\
           \ purpose and usage of the check"
+      friendly_name:
+        type: "string"
+        description: "An alternative check's name that is shown on the check editor."
       standard:
         type: "boolean"
         description: "This is a standard data quality check that is always shown on\
@@ -14116,6 +14119,14 @@ definitions:
       help_text:
         type: "string"
         description: "Help text that describes the data quality check."
+      display_name:
+        type: "string"
+        description: "User assigned display name that is shown instead of the original\
+          \ data quality check name."
+      friendly_name:
+        type: "string"
+        description: "An alternative check's name that is shown on the check editor\
+          \ as a hint."
       sensor_parameters:
         type: "array"
         description: "List of fields for editing the sensor parameters."

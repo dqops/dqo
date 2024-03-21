@@ -399,6 +399,15 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     }
 
     /**
+     * Returns an alternative check's friendly name that is shown on the check editor. It is used to show "empty table" name next to profile_row_count check.
+     * @return An alternative name, or null when the check has no alternative name to show.
+     */
+    @JsonIgnore
+    public String getFriendlyName() {
+        return null;
+    }
+
+    /**
      * Returns the data quality check name (YAML compliant) that is used as a field name on a check category class.
      * @return Check category name, for example, "row_count", etc.
      */

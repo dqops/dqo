@@ -61,6 +61,18 @@ public class CheckModel implements Cloneable {
     private String helpText;
 
     /**
+     * User assigned display name that is shown instead of the original data quality check name.
+     */
+    @JsonPropertyDescription("User assigned display name that is shown instead of the original data quality check name.")
+    private String displayName;
+
+    /**
+     * An alternative check's name that is shown on the check editor as a hint.
+     */
+    @JsonPropertyDescription("An alternative check's name that is shown on the check editor as a hint.")
+    private String friendlyName;
+
+    /**
      * List of fields for editing the sensor parameters.
      */
     @JsonPropertyDescription("List of fields for editing the sensor parameters.")
