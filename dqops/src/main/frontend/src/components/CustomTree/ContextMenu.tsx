@@ -99,7 +99,7 @@ const ContextMenu = ({
   const importMetaData = () => {
     dispatch(
       addFirstLevelTab(checkTypes, {
-        url: ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, node.label),
+        url: ROUTES.CONNECTION_DETAIL(checkTypes, node.label, 'schemas?import_schema=true'),
         value: ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, node.label),
         label: `${node.label}`
       })
@@ -108,8 +108,8 @@ const ContextMenu = ({
       `${ROUTES.CONNECTION_DETAIL(
         checkTypes,
         node.label || '',
-        'schemas'
-      )}?import_schema=true`
+        'schemas?import_schema=true'
+      )}`
     );
   };
 
