@@ -197,7 +197,7 @@ const TableDetails = () => {
           freezeFileType={false}
         >
           <FilePath
-            paths={tableBasic?.file_format.file_paths as any[]}
+            paths={tableBasic?.file_format?.file_paths as any[]}
             onAddPath={onAddPath}
             onChangePath={onChangePath}
             onDeletePath={onDeletePath}

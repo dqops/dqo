@@ -39,7 +39,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * MySQL source connection.
@@ -178,7 +180,11 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
         }
 
         if (mysqlParametersSpec.getProperties() != null) {
-            dataSourceProperties.putAll(mysqlParametersSpec.getProperties());
+            dataSourceProperties.putAll(mysqlParametersSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
         String userName = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getUser(), secretValueLookupContext);

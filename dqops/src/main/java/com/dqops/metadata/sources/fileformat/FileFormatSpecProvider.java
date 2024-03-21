@@ -1,8 +1,8 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
-import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.fileslisting.AwsConstants;
 import com.dqops.metadata.sources.TableSpec;
 
@@ -27,7 +27,7 @@ public class FileFormatSpecProvider {
     public static FileFormatSpec resolveFileFormat(DuckdbParametersSpec duckdbParametersSpec, TableSpec tableSpec) {
         DuckdbFilesFormatType filesType = duckdbParametersSpec.getFilesFormatType();
         if (filesType == null) {
-            return null;
+            throw new RuntimeException("The files format is unknown. Please set files format on the connection.");
         }
 
         FileFormatSpec fileFormat = tableSpec.getFileFormat() == null ? new FileFormatSpec() : tableSpec.getFileFormat().deepClone();

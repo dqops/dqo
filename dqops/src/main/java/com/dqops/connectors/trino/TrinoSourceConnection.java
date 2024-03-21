@@ -44,6 +44,7 @@ import java.sql.Statement;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * Trino source connection.
@@ -117,7 +118,11 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
 
         Properties dataSourceProperties = new Properties();
         if (trinoSpec.getProperties() != null) {
-            dataSourceProperties.putAll(trinoSpec.getProperties());
+            dataSourceProperties.putAll(trinoSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
@@ -131,7 +136,11 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
 
         Properties dataSourceProperties = new Properties();
         if (trinoSpec.getProperties() != null) {
-            dataSourceProperties.putAll(trinoSpec.getProperties());
+            dataSourceProperties.putAll(trinoSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
         AthenaAuthenticationMode athenaAuthenticationMode = trinoSpec.getAthenaAuthenticationMode() == null ?

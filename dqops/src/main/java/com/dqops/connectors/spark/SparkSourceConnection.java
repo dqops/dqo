@@ -37,6 +37,7 @@ import tech.tablesaw.columns.Column;
 
 import java.sql.Statement;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Spark source connection.
@@ -90,7 +91,11 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
 
         Properties dataSourceProperties = new Properties();
         if (sparkParametersSpec.getProperties() != null) {
-            dataSourceProperties.putAll(sparkParametersSpec.getProperties());
+            dataSourceProperties.putAll(sparkParametersSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
         String userName = this.getSecretValueProvider().expandValue(sparkParametersSpec.getUser(), secretValueLookupContext);

@@ -62,7 +62,7 @@ const CheckCategoriesView = ({
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const shouldExtend = () => {
-    if (category.checks?.some((x) => x.configured === true)) {
+    if (category.checks?.some((x) => x.configured === true || x.default_check === true)) {
       setIsExtended(true);
     }
   };
