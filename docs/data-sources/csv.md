@@ -164,6 +164,43 @@ or modify the schedule for newly imported tables.
 ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-advisor-csv.png)
 
 
+### Register single file as table
+
+After creation of a schema, a single table can be registered.
+
+Expand the connection at the tree in the left pane to see the schema.
+
+Click on three dots (1.) and select the **Add table** (2.).
+
+// todo - screen 1 here
+
+It will open the **Add table** popup modal.
+
+// todo - screen 2 here
+
+Fill the table name field. Fill the path field with the absolute path to the file and save the new table configuration.
+
+The new table has been created and is present under the schema. 
+However, is still not ready to be used. 
+Importing the metadata is still needed. The metadata includes the list of columns with types.
+Click the three dots on the created table (1.) and select **Reimport metadata** (2.)
+
+// todo - screen 3 here
+
+You will see the import tables job in the right corner, in notification panel.
+
+// todo - screen 4 here
+
+When it completes. The table is ready to use. 
+When clicked on Columns under the table in tree in left pane the list of columns is present.
+
+// todo - screen 5 here
+
+You can click the collect statistics 
+// todo : should it be here ->>??  The path set on the schema not have to be a prefix to the file when used the absolute path to the file.
+// todo: should run example be present here?
+// todo: add the same section in json and parquet as well
+
 ## Add CSV connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
