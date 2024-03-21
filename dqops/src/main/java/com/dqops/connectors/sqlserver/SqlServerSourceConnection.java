@@ -34,8 +34,10 @@ import tech.tablesaw.api.Table;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * Microsoft SQL Server source connection.
@@ -104,7 +106,11 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
         }
 
         if (sqlserverSpec.getProperties() != null) {
-            dataSourceProperties.putAll(sqlserverSpec.getProperties());
+            dataSourceProperties.putAll(sqlserverSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
         SqlServerAuthenticationMode authenticationMode = sqlserverSpec.getAuthenticationMode() == null ?

@@ -40,6 +40,7 @@ import tech.tablesaw.columns.Column;
 
 import java.sql.Statement;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Databricks source connection.
@@ -93,7 +94,11 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
 
         Properties dataSourceProperties = new Properties();
         if (databricksParametersSpec.getProperties() != null) {
-            dataSourceProperties.putAll(databricksParametersSpec.getProperties());
+            dataSourceProperties.putAll(databricksParametersSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
         String catalog = this.getSecretValueProvider().expandValue(databricksParametersSpec.getCatalog(), secretValueLookupContext);
