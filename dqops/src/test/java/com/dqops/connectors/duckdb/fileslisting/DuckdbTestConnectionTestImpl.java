@@ -15,8 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class DuckdbTestConnectionImplTest extends BaseTest {
@@ -40,7 +39,7 @@ class DuckdbTestConnectionImplTest extends BaseTest {
         String expectedMessage = "Virtual schema name is not configured in the Import configuration.";
         String actualMessage = exception.getMessage();
 
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
@@ -57,7 +56,7 @@ class DuckdbTestConnectionImplTest extends BaseTest {
         String expectedMessage = "A path is not filled in the schema: files";
         String actualMessage = exception.getMessage();
 
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
@@ -74,7 +73,7 @@ class DuckdbTestConnectionImplTest extends BaseTest {
         String expectedMessage = "A path is not filled in the schema: files";
         String actualMessage = exception.getMessage();
 
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
@@ -92,7 +91,7 @@ class DuckdbTestConnectionImplTest extends BaseTest {
         String expectedMessage = "Access key ID cannot be blank.";
         String actualMessage = exception.getMessage();
 
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
@@ -113,7 +112,7 @@ class DuckdbTestConnectionImplTest extends BaseTest {
         String expectedMessage = "No files found in the path s3://dqops-duckdb-test";
         String actualMessage = exception.getMessage();
 
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
@@ -128,10 +127,10 @@ class DuckdbTestConnectionImplTest extends BaseTest {
             sut.testConnection(duckdbParametersSpec);
         });
 
-        String expectedMessage = "S3 path must start with s3://";
+        String expectedMessage = "S3 path for the schema files must start with s3://";
         String actualMessage = exception.getMessage();
 
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
@@ -156,7 +155,7 @@ class DuckdbTestConnectionImplTest extends BaseTest {
         String expectedMessage = "No files found in the path s3://dqops-duckdb-test/empty_folder/";
         String actualMessage = exception.getMessage();
 
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
@@ -173,7 +172,7 @@ class DuckdbTestConnectionImplTest extends BaseTest {
         String expectedMessage = "No files found in the path c:/not_existing_folder";
         String actualMessage = exception.getMessage();
 
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertEquals(expectedMessage, actualMessage);
     }
 
 }

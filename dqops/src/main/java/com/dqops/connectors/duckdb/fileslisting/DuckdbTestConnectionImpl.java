@@ -46,7 +46,7 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
                         .findAny();
 
                 if(pathWithInvalidPrefix.isPresent()){
-                    throw new RuntimeException("S3 path must start with " + AwsConstants.S3_URI_PREFIX + " " + pathWithInvalidPrefix.get().getKey());
+                    throw new RuntimeException("S3 path for the schema " + pathWithInvalidPrefix.get().getKey() + " must start with " + AwsConstants.S3_URI_PREFIX);
                 }
 
                 tables = AwsTablesLister.listTables(duckdbParametersSpec, schema);

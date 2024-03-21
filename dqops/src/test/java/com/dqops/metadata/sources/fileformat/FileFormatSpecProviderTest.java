@@ -18,6 +18,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 public class FileFormatSpecProviderTest extends BaseTest {
 
@@ -118,9 +120,14 @@ public class FileFormatSpecProviderTest extends BaseTest {
 
         DuckdbParametersSpec duckdbParametersSpec = new DuckdbParametersSpec();
 
-        FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
+        });
 
-        Assertions.assertNull(fileFormatSpec);
+        String expectedMessage = "The files format is unknown. Please set files format on the connection.";
+        String actualMessage = exception.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
