@@ -538,7 +538,7 @@ const CheckListItem = ({
               </div>
             )}
             <div className="text-sm relative">
-              <p>{check.display_name ?? check.check_name} {
+              <p>{check.display_name !== '' ? (check.display_name ?? check.check_name) : check.check_name} {
                 check.friendly_name &&
                 <span className="text-xxs">
                   ({check.friendly_name })
