@@ -61,6 +61,8 @@ The following example shows a folder structure with JSON files.
 /usr/share
     ├───...
     └───clients_data(1)
+        ├───annual_report_2022.csv
+        ├───annual_report_2023.parquet
         ├───market_dictionary.json
         └───sales(2)
             ├───dec_2023.json
@@ -69,10 +71,11 @@ The following example shows a folder structure with JSON files.
             └───...
 ```
 
-1.  Setting the path prefix to the **/usr/share/clients_data** allows to load its children: market_dictionary.json or the sales folder with all files appearing directly in it (without subfolders of sales). The path has to be absolute.
+1.  Setting the path prefix to the **/usr/share/clients_data** allows to load its children: market_dictionary.json or the sales folder with all files appearing directly in it (without subfolders of sales). The rest of files are omitted since they do not match the json file format. The path has to be absolute.
 2.  Setting the path prefix to the **/usr/share/clients_data/sales** allows to load a single file from the sales folder.
 
 If you want to load the market_dictionary.json or the sales folder with all files appearing directly in it (without subfolders of sales), set the path prefix to the /usr/share/clients_data.
+The rest of files are omitted since they do not match the json file format.
 The path has to be absolute.
 
 To load a single file from the sales folder, the path prefix must be set to the file’s parent folder: /usr/share/clients_data/sales
@@ -145,18 +148,18 @@ Now we can import JSON files.
 
 1. Import the selected virtual schemas by clicking on the **Import Tables** button next to the source schema name from which you want to import tables.
 
-   ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-schemas.png)
+   ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-schemas.png)
 
 2. Select the tables (folders with JSON files or just the files) you want to import or import all tables using the buttons in the upper right corner.
 
-   ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.png)
+   ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-json.png)
 
 When new tables are imported, DQOps automatically activates profiling and monitoring checks, such as row count,
 table availability, and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m.
 By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks,
 or modify the schedule for newly imported tables.
 
-![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png)
+![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-advisor-json.png)
 
 
 ## Add JSON connection using DQOps Shell
