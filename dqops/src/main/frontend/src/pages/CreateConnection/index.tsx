@@ -48,19 +48,23 @@ const CreateConnection = () => {
         break;
       }
       case ConnectionModelProviderTypeEnum.postgresql: {
-        copiedDatabase.postgresql = { port: '5432' };
+        copiedDatabase.postgresql = { port: '5432',
+        properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.redshift: {
-        copiedDatabase.redshift = { port: '5439' };
+        copiedDatabase.redshift = { port: '5439',
+        properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.sqlserver: {
-        copiedDatabase.sqlserver = { port: '1433' };
+        copiedDatabase.sqlserver = { port: '1433',
+        properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.presto: {
-        copiedDatabase.presto = { port: '8080' };
+        copiedDatabase.presto = { port: '8080',
+        properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.trino: {
@@ -75,7 +79,8 @@ const CreateConnection = () => {
             TrinoParametersSpecTrinoEngineTypeEnum.athena
               ? 'awsdatacatalog'
               : '',
-          athena_work_group: 'primary'
+          athena_work_group: 'primary',
+          properties: { '': '' }
         };
         break;
       }
@@ -91,27 +96,32 @@ const CreateConnection = () => {
               load_balancing_mode:
                 SingleStoreDbParametersSpecLoadBalancingModeEnum.none,
               use_ssl: true
-            }
+            },
+            properties: { '': '' }
           };
         } else {
           copiedDatabase.mysql = {
             port: '3306',
-            mysql_engine_type: MysqlParametersSpecMysqlEngineTypeEnum.mysql
+            mysql_engine_type: MysqlParametersSpecMysqlEngineTypeEnum.mysql,
+            properties: { '': '' }
           };
         }
 
         break;
       }
       case ConnectionModelProviderTypeEnum.oracle: {
-        copiedDatabase.oracle = { port: '1521' };
+        copiedDatabase.oracle = { port: '1521',
+        properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.spark: {
-        copiedDatabase.spark = { port: '10000' };
+        copiedDatabase.spark = { port: '10000',
+        properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.databricks: {
-        copiedDatabase.databricks = { port: '443' };
+        copiedDatabase.databricks = { port: '443',
+        properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.duckdb: {

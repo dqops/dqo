@@ -31,7 +31,7 @@ function convertArrayToObject(array: { [key: string]: string }[]): {
 }
 
 const JdbcPropertiesView = ({
-  properties,
+  properties = {[''] : ''},
   onChange,
   sharedCredentials
 }: IJdbcPropertiesViewProps) => {

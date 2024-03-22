@@ -18,7 +18,7 @@ import {
 } from '../../services/apiClient';
 import { CustomTreeNode } from '../../shared/interfaces';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { urlencodeDecoder, urlencodeEncoder } from '../../utils';
+import { urlencodeEncoder } from '../../utils';
 import Button from '../Button';
 import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
 import FilePath from '../FileFormatConfiguration/FilePath';
@@ -84,6 +84,34 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           })
         );
         refreshNode(node);
+        dispatch(
+          addFirstLevelTab(CheckTypes.SOURCES, {
+            url: ROUTES.TABLE_LEVEL_PAGE(
+              CheckTypes.SOURCES,
+              urlencodeEncoder(args[0]),
+              urlencodeEncoder(args[1]),
+              urlencodeEncoder(name),
+              'detail'
+            ),
+            value: ROUTES.TABLE_LEVEL_VALUE(
+              CheckTypes.SOURCES,
+              urlencodeEncoder(args[0]),
+              urlencodeEncoder(args[1]),
+              urlencodeEncoder(name),
+            ),
+            state: {},
+            label: name
+          })
+        );
+        history.push(
+          ROUTES.TABLE_LEVEL_PAGE(
+            CheckTypes.SOURCES,
+            urlencodeEncoder(args[0]),
+            urlencodeEncoder(args[1]),
+            urlencodeEncoder(name),
+            'detail'
+          )
+        );
       } else {
         await TableApiClient.createTable(
           urlencodeEncoder(connection),
@@ -106,35 +134,35 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
             tableNames: [urlencodeEncoder(name)]
           })
         );
-      }
-      dispatch(
-        addFirstLevelTab(CheckTypes.SOURCES, {
-          url: ROUTES.TABLE_LEVEL_PAGE(
-            CheckTypes.SOURCES,
-            urlencodeDecoder(connection),
-            urlencodeDecoder(schema),
-            urlencodeDecoder(name),
-            'detail'
-          ),
-          value: ROUTES.TABLE_LEVEL_VALUE(
+        dispatch(
+          addFirstLevelTab(CheckTypes.SOURCES, {
+            url: ROUTES.TABLE_LEVEL_PAGE(
+              CheckTypes.SOURCES,
+              connection,
+              schema,
+              name,
+              'detail'
+            ),
+            value: ROUTES.TABLE_LEVEL_VALUE(
+              CheckTypes.SOURCES,
+              connection,
+              schema,
+              name
+            ),
+            state: {},
+            label: name
+          })
+        );
+        history.push(
+          ROUTES.TABLE_LEVEL_PAGE(
             CheckTypes.SOURCES,
             connection,
             schema,
-            name
-          ),
-          state: {},
-          label: name
-        })
-      );
-      history.push(
-        ROUTES.TABLE_LEVEL_PAGE(
-          CheckTypes.SOURCES,
-          urlencodeDecoder(connection),
-          urlencodeDecoder(schema),
-          urlencodeDecoder(name),
-          'detail'
-        )
-      );
+            name,
+            'detail'
+          )
+        );
+      }
       cleanState();
       onClose();
     } finally {

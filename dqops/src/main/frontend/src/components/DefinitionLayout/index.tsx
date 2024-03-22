@@ -1,33 +1,33 @@
 import React, { ReactNode, useEffect, useMemo } from 'react';
 
-import Header from '../Header';
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import PageTabs from '../PageTabs';
 import { useHistory, useLocation } from 'react-router-dom';
-import {
-  closeFirstLevelTab,
-  setActiveFirstLevelTab
-} from '../../redux/actions/definition.actions';
-import { TabOption } from '../PageTabs/tab';
-import { ROUTES } from '../../shared/routes';
-import SensorDetail from '../../pages/SensorDetail';
+import { useDefinition } from '../../contexts/definitionContext';
 import CheckDetail from '../../pages/CheckDetail';
 import DataDictionary from '../../pages/DataDictionaryConfiguration';
 import DataDictionaryItemOverview from '../../pages/DataDictionaryConfiguration/DataDictionaryItemOverview';
+import DefaultCheckPatternConfiguration from '../../pages/DefaultCheckPatternConfiguration';
+import DefaultCheckPatterns from '../../pages/DefaultCheckPatterns/DefaultCheckPatterns';
+import DefaultSchedules from '../../pages/DefaultSchedulesDetail';
 import DefaultWebhooksDetail from '../../pages/DefaultWebhooksDetail';
 import Definitions from '../../pages/Definitions';
 import IncidentConnection from '../../pages/IncidentConnection';
 import RuleDetail from '../../pages/RuleDetail';
+import SensorDetail from '../../pages/SensorDetail';
 import SharedCredentialsDetail from '../../pages/SharedCredentialsDetail';
 import SingleSharedCredential from '../../pages/SharedCredentialsDetail/SingleSharedCredential';
 import UserListDetail from '../../pages/UserListDetail';
 import UserDetail from '../../pages/UserListDetail/UserDetail';
-import DefaultSchedules from '../../pages/DefaultSchedulesDetail'
+import {
+  closeFirstLevelTab,
+  setActiveFirstLevelTab
+} from '../../redux/actions/definition.actions';
+import { IRootState } from '../../redux/reducers';
+import { ROUTES } from '../../shared/routes';
+import Header from '../Header';
+import PageTabs from '../PageTabs';
+import { TabOption } from '../PageTabs/tab';
 import LeftView from './LeftView';
-import { useDefinition } from '../../contexts/definitionContext';
-import DefaultCheckPatterns from '../../pages/DefaultCheckPatterns/DefaultCheckPatterns';
-import DefaultCheckPatternConfiguration from '../../pages/DefaultCheckPatternConfiguration';
 
 interface LayoutProps {
   route: string
@@ -48,6 +48,10 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
   };
 
   const closeTab = (value: string) => {
+    if (pageTabs.length === 1) {
+      dispatch(setActiveFirstLevelTab(undefined))
+      history.push(`/definitions`)
+    }
     dispatch(closeFirstLevelTab(value));
   };
 

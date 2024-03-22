@@ -1,22 +1,22 @@
 import React, { ReactNode, useEffect, useMemo } from 'react';
 
-import Header from '../Header';
-import IncidentsTree from './IncidentsTree';
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import PageTabs from '../PageTabs';
-import { useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { useTree } from '../../contexts/treeContext';
+import IncidentConnection from '../../pages/IncidentConnection';
+import IncidentDetail from '../../pages/IncidentDetail';
+import Incidents from '../../pages/Incidents';
 import {
   closeFirstLevelTab,
   setActiveFirstLevelTab
 } from '../../redux/actions/incidents.actions';
-import { TabOption } from '../PageTabs/tab';
-import ConfirmDialog from '../CustomTree/ConfirmDialog';
-import { useTree } from '../../contexts/treeContext';
+import { IRootState } from '../../redux/reducers';
 import { ROUTES } from '../../shared/routes';
-import IncidentDetail from '../../pages/IncidentDetail';
-import Incidents from '../../pages/Incidents';
-import IncidentConnection from '../../pages/IncidentConnection';
+import ConfirmDialog from '../CustomTree/ConfirmDialog';
+import Header from '../Header';
+import PageTabs from '../PageTabs';
+import { TabOption } from '../PageTabs/tab';
+import IncidentsTree from './IncidentsTree';
 
 interface LayoutProps {
   route: string;
@@ -39,6 +39,9 @@ const IncidentsLayout = ({ route }: LayoutProps) => {
   };
 
   const closeTab = (value: string) => {
+    if (pageTabs.length === 1) {
+      history.push(`/incidents`)
+    }
     dispatch(closeFirstLevelTab(value));
   };
 

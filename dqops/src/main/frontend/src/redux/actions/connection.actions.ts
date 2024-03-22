@@ -20,15 +20,14 @@ import { AxiosResponse } from 'axios';
 import {
   CommentSpec,
   ConnectionModel,
-  ConnectionModelProviderTypeEnum,
   DataGroupingConfigurationSpec,
   MonitoringScheduleSpec
 } from '../../api';
 import { ConnectionApiClient } from '../../services/apiClient';
 import { CheckRunMonitoringScheduleGroup } from '../../shared/enums/scheduling.enum';
 import { CheckTypes } from '../../shared/routes';
-import { filterDirectoriesDuckdb } from '../../utils';
 import { SOURCE_ACTION } from '../types';
+import { filterPropertiesDirectories } from '../../utils';
 
 export const getConnectionsRequest = () => ({
   type: SOURCE_ACTION.GET_CONNECTIONS
@@ -126,10 +125,7 @@ export const updateConnectionBasic =
     dispatch(updateConnectionBasicRequest(checkTypes, activeTab));
     try {
       await ConnectionApiClient.updateConnectionBasic(
-        connectionName,
-        data.provider_type === ConnectionModelProviderTypeEnum.duckdb
-          ? filterDirectoriesDuckdb(data)
-          : data
+        connectionName, filterPropertiesDirectories(data)
       );
       dispatch(updateConnectionBasicSuccess(checkTypes, activeTab));
     } catch (err) {
