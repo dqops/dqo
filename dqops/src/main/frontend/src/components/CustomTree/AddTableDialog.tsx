@@ -19,7 +19,7 @@ import {
 } from '../../services/apiClient';
 import { CustomTreeNode } from '../../shared/interfaces';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { urlencodeEncoder, useDecodedParams } from '../../utils';
+import { urlencodeDecoder, useDecodedParams } from '../../utils';
 import Button from '../Button';
 import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
 import FilePath from '../FileFormatConfiguration/FilePath';
@@ -64,9 +64,9 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
       setLoading(true);
       if (node) {
         await TableApiClient.createTable(
-          urlencodeEncoder(args[0]),
-          urlencodeEncoder(args[1]),
-          urlencodeEncoder(name),
+          urlencodeDecoder(args[0]),
+          urlencodeDecoder(args[1]),
+          name,
           {
             file_format:
               connectionModel.provider_type ===
@@ -79,9 +79,9 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           }
         ).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
-            connectionName: urlencodeEncoder(args[0]),
-            schemaName: urlencodeEncoder(args[1]),
-            tableNames: [urlencodeEncoder(name)]
+            connectionName: urlencodeDecoder(args[0]),
+            schemaName: urlencodeDecoder(args[1]),
+            tableNames: [name]
           }).then((res) => 
           dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0))
         )
@@ -91,16 +91,16 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           addFirstLevelTab(CheckTypes.SOURCES, {
             url: ROUTES.TABLE_LEVEL_PAGE(
               CheckTypes.SOURCES,
-              urlencodeEncoder(args[0]),
-              urlencodeEncoder(args[1]),
-              urlencodeEncoder(name),
+              args[0],
+              args[1],
+              name,
               'detail'
             ),
             value: ROUTES.TABLE_LEVEL_VALUE(
               CheckTypes.SOURCES,
-              urlencodeEncoder(args[0]),
-              urlencodeEncoder(args[1]),
-              urlencodeEncoder(name),
+              args[0],
+              args[1],
+              name,
             ),
             state: {},
             label: name
@@ -109,17 +109,17 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
         history.push(
           ROUTES.TABLE_LEVEL_PAGE(
             CheckTypes.SOURCES,
-            urlencodeEncoder(args[0]),
-            urlencodeEncoder(args[1]),
-            urlencodeEncoder(name),
+            args[0],
+            args[1],
+            name,
             'detail'
           )
         );
       } else {
         await TableApiClient.createTable(
-          urlencodeEncoder(connection),
-          urlencodeEncoder(schema),
-          urlencodeEncoder(name),
+          connection,
+          schema,
+          name,
           {
             file_format:
               connectionModel.provider_type ===
@@ -132,9 +132,9 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           }
         ).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
-            connectionName: urlencodeEncoder(connection),
-            schemaName: urlencodeEncoder(schema),
-            tableNames: [urlencodeEncoder(name)]
+            connectionName: connection,
+            schemaName: schema,
+            tableNames: [name]
           }).then((res) => 
             dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0))
           )
@@ -178,7 +178,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   useEffect(() => {
     const getConnectionBasic = async () => {
       await ConnectionApiClient.getConnectionBasic(
-        urlencodeEncoder(args[0])
+        urlencodeDecoder(args[0])
       ).then((res) => setConnectionModel(res.data));
     };
     if (node) {
