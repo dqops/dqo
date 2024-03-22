@@ -41,7 +41,7 @@ But let's close the Advisor with the X button in the top right corner and verify
 
 To verify the activation of the default checks, go to the **Monitoring checks** section, select the table of interest from
 the tree view on the left and the **Daily checks** tab. The main workspace on the right will show the check editor.
-The toggle button next to the name of the activated default control will have a light green color. If the control has
+The toggle button next to the name of the activated default checks will have a light green color. If the check has
 been activated manually, the toggle button will have a darker green color.
 
 ![Default table checks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/default-table-checks3.png)
