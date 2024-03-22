@@ -324,7 +324,7 @@ const Tree = () => {
     setAddSchemaDialogOpen(false);
     setSelectedNode(undefined);
   };
-console.log(activeTab)
+   
   const renderIcon = (node: CustomTreeNode) => {
     if (
       node.level === TREE_LEVEL.TABLE_INCIDENTS ||
