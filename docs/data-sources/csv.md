@@ -166,41 +166,37 @@ or modify the schedule for newly imported tables.
 
 ### Register single file as table
 
-After creation of a connection, a single table can be registered.
+After creating a connection, you can register a single table.
 
-Expand the connection at the tree in the left pane to see a schema.
+To view the schema, expand the connection in the tree view on the left.
 
-Click on three dots on the schema (1.) and select the **Add table** (2.).
-It will open the **Add table** popup modal.
+Then, click on the three dots icon next to the schema name(1.) and select the **Add table** (2.) option. 
+This will open the **Add table** popup modal.
 
 ![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-1.png)
 
-Fill the table name field. Fill the path field with absolute path to the file and save the new table configuration.
+Enter the table name and the path absolute to the file. Save the new table configuration.
 
 !!! tip "Use of the relative path"
 
-    If the schema configures the path to folder of your file, you can use just a file name with extension instead of an absolute path. 
+    If the schema specifies the folder path, use only the file name with extension instead of an absolute path.
 
 !!! tip "Path in table name"
 
-    If you use the absolute path to the file. You can fill the table name only.
+    If you use the absolute file path, you only need to fill in the table name.
 
 ![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-2.png)
 
-The new table is now present under the schema.
+After saving the new table configuration, the new table will be present under the schema. 
+You can view the list of columns by clicking on "Columns" under the table in the three view on the left.
 
-You will see the import tables job in the right corner, in notification panel.
+You can verify the import tables job in the notification panel on the right corner.
 
 ![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-3.png)
 
-If it completes with success, the created table has been imported and is ready to use.
-
-When clicked on Columns under the table in tree in left pane the list of columns is present.
+If the job completes successfully, the created table will be imported and ready to use.
 
 ![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-4.png)
-
-
-// todo: add the same section in json and parquet as well
 
 ## Add CSV connection using DQOps Shell
 
