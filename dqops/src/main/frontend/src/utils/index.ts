@@ -176,12 +176,15 @@ export function sortByKey(key: string) {
   };
 }
 
-export function useDecodedParams() : any {
-  const parameters = useParams();
-  Object.values(parameters).map((x) => {
-    return urlencodeEncoder(String(x))
-  })
-  return parameters;
+export function useDecodedParams(): any {
+  const parameters: { [key: string]: any } = useParams();
+  const decodedParams: { [key: string]: any } = {};
+
+  Object.entries(parameters).forEach(([key, value]) => {
+    decodedParams[key] = urlencodeEncoder(String(value));
+  });
+
+  return decodedParams;
 }
 export const filterPathsDuckDbTable = (table: TableListModel) => {
   return {
