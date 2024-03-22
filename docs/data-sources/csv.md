@@ -164,6 +164,40 @@ or modify the schedule for newly imported tables.
 ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-advisor-csv.png)
 
 
+### Register single file as table
+
+After creating a connection, you can register a single table.
+
+To view the schema, expand the connection in the tree view on the left.
+
+Then, click on the three dots icon next to the schema name(1.) and select the **Add table** (2.) option. 
+This will open the **Add table** popup modal.
+
+![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-1.png)
+
+Enter the table name and the path absolute to the file. Save the new table configuration.
+
+!!! tip "Use of the relative path"
+
+    If the schema specifies the folder path, use only the file name with extension instead of an absolute path.
+
+!!! tip "Path in table name"
+
+    If you use the absolute file path, you only need to fill in the table name.
+
+![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-2.png)
+
+After saving the new table configuration, the new table will be present under the schema. 
+You can view the list of columns by clicking on "Columns" under the table in the three view on the left.
+
+You can verify the import tables job in the notification panel on the right corner.
+
+![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-3.png)
+
+If the job completes successfully, the created table will be imported and ready to use.
+
+![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-4.png)
+
 ## Add CSV connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
