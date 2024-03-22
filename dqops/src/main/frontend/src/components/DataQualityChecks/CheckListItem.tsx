@@ -337,7 +337,7 @@ const CheckListItem = ({
   return (
     <>
       <tr
-        className={clsx(
+        className={clsx(expanded || showDetails ? '' :
           ' border-b border-gray-100',
           !isDisabled ? 'text-gray-700' : 'opacity-75',
           check?.disabled ? 'line-through' : ''
@@ -638,7 +638,9 @@ const CheckListItem = ({
         </td>
       </tr>
       {expanded && (
-        <tr>
+        <tr className={clsx(
+        ' border-b border-gray-100'
+        )}>
           <td colSpan={6}>
             <CheckSettings
               activeTab={activeTab}
@@ -653,7 +655,9 @@ const CheckListItem = ({
         </tr>
       )}
       {showDetails && (
-        <tr>
+        <tr className={clsx(
+          ' border-b border-gray-100'
+          )}>
           <td colSpan={6}>
             <CheckDetails
               checkTypes={checkTypes}

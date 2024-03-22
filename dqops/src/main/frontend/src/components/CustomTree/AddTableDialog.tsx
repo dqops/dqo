@@ -10,6 +10,7 @@ import {
 import { TConfiguration } from '../../components/FileFormatConfiguration/TConfiguration';
 import { useTree } from '../../contexts/treeContext';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setAdvisorJobId } from '../../redux/actions/job.actions';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import {
   ConnectionApiClient,
@@ -81,7 +82,9 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
             connectionName: urlencodeDecoder(args[0]),
             schemaName: urlencodeDecoder(args[1]),
             tableNames: [name]
-          })
+          }).then((res) => 
+          dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0))
+        )
         );
         refreshNode(node);
         dispatch(
@@ -132,7 +135,9 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
             connectionName: connection,
             schemaName: schema,
             tableNames: [name]
-          })
+          }).then((res) => 
+            dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0))
+          )
         );
         dispatch(
           addFirstLevelTab(CheckTypes.SOURCES, {
