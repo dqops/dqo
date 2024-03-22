@@ -126,14 +126,16 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
             if (this.currentSeverity == null) {
                 this.currentSeverity = RuleSeverityLevel.fromCheckSeverity(checkStatusModel.getCurrentSeverity());
             } else if (checkStatusModel.getCurrentSeverity() != null &&
-                    this.currentSeverity.getSeverity() < checkStatusModel.getCurrentSeverity().getSeverity()) {
+                    this.currentSeverity.getSeverity() < checkStatusModel.getCurrentSeverity().getSeverity() &&
+                    checkStatusModel.getCurrentSeverity().getSeverity() != 4) {
                 this.currentSeverity = RuleSeverityLevel.fromCheckSeverity(checkStatusModel.getCurrentSeverity());
             }
 
             if (this.highestHistoricalSeverity == null) {
                 this.highestHistoricalSeverity = checkStatusModel.getHighestHistoricalSeverity();
             } else if (checkStatusModel.getHighestHistoricalSeverity() != null &&
-                    this.highestHistoricalSeverity.getSeverity() < checkStatusModel.getHighestHistoricalSeverity().getSeverity()) {
+                    this.highestHistoricalSeverity.getSeverity() < checkStatusModel.getHighestHistoricalSeverity().getSeverity() &&
+                    checkStatusModel.getHighestHistoricalSeverity().getSeverity() != 4) {
                 this.highestHistoricalSeverity = checkStatusModel.getHighestHistoricalSeverity();
             }
         }
