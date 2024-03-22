@@ -5,21 +5,21 @@ import {
   PopoverHandler
 } from '@material-tailwind/react';
 import React, { useState } from 'react';
-import Button from '../Button';
-import Checkbox from '../Checkbox';
+import { useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+import { IRootState } from '../../redux/reducers';
 import { JobApiClient } from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useHistory, useParams } from 'react-router-dom';
+import Button from '../Button';
+import Checkbox from '../Checkbox';
 import SvgIcon from '../SvgIcon';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 
 type HeaderBannerProps = {
   onClose: () => void;
 };
 
 export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
-  const [openPopover, setOpenPopover] = React.useState(false);
+  const [openPopover, setOpenPopover] = useState(true);
   const {
     connection
   }: { checkTypes: CheckTypes; connection: string; schema: string } =
