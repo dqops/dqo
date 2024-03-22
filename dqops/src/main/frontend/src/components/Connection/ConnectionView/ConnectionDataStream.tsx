@@ -100,9 +100,9 @@ const ConnectionDefaultGroupingConfiguration = () => {
   };
 
   return (
-    <div className="px-4">
+    <div className="px-4 text-sm">
       <div className="pt-6 px-4">
-        <p className="text-gray-700 italic text-base">
+        <p className="text-gray-700 italic">
           The following data grouping configuration will be copied to the data
           grouping configuration of tables that will be imported in the future.
           This configuration does not affect tables that have already been

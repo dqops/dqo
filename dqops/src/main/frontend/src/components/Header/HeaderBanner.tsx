@@ -20,7 +20,7 @@ type HeaderBannerProps = {
 };
 
 export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
-  const [openPopover, setOpenPopover] = React.useState(false);
+  const [openPopover, setOpenPopover] = useState(true);
   const {
     connection
   }: { checkTypes: CheckTypes; connection: string; schema: string } =

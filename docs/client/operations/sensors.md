@@ -396,24 +396,24 @@ http://localhost:8888/api/sensors
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "custom" : false,
-	  "built_in" : false,
-	  "can_edit" : false
-	}, {
-	  "custom" : false,
-	  "built_in" : false,
-	  "can_edit" : false
-	}, {
-	  "custom" : false,
-	  "built_in" : false,
-	  "can_edit" : false
-	} ]
-    ```
+        ```
+        [ {
+		  "custom" : false,
+		  "built_in" : false,
+		  "can_edit" : false
+		}, {
+		  "custom" : false,
+		  "built_in" : false,
+		  "can_edit" : false
+		}, {
+		  "custom" : false,
+		  "built_in" : false,
+		  "can_edit" : false
+		} ]
+        ```
     
     
 
@@ -437,27 +437,27 @@ http://localhost:8888/api/sensors
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		SensorListModel(
-			custom=False,
-			built_in=False,
-			can_edit=False
-		),
-		SensorListModel(
-			custom=False,
-			built_in=False,
-			can_edit=False
-		),
-		SensorListModel(
-			custom=False,
-			built_in=False,
-			can_edit=False
-		)
-	]
-    ```
+        ```
+        [
+			SensorListModel(
+				custom=False,
+				built_in=False,
+				can_edit=False
+			),
+			SensorListModel(
+				custom=False,
+				built_in=False,
+				can_edit=False
+			),
+			SensorListModel(
+				custom=False,
+				built_in=False,
+				can_edit=False
+			)
+		]
+        ```
     
     
     
@@ -482,27 +482,27 @@ http://localhost:8888/api/sensors
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		SensorListModel(
-			custom=False,
-			built_in=False,
-			can_edit=False
-		),
-		SensorListModel(
-			custom=False,
-			built_in=False,
-			can_edit=False
-		),
-		SensorListModel(
-			custom=False,
-			built_in=False,
-			can_edit=False
-		)
-	]
-    ```
+        ```
+        [
+			SensorListModel(
+				custom=False,
+				built_in=False,
+				can_edit=False
+			),
+			SensorListModel(
+				custom=False,
+				built_in=False,
+				can_edit=False
+			),
+			SensorListModel(
+				custom=False,
+				built_in=False,
+				can_edit=False
+			)
+		]
+        ```
     
     
     
@@ -530,27 +530,27 @@ http://localhost:8888/api/sensors
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		SensorListModel(
-			custom=False,
-			built_in=False,
-			can_edit=False
-		),
-		SensorListModel(
-			custom=False,
-			built_in=False,
-			can_edit=False
-		),
-		SensorListModel(
-			custom=False,
-			built_in=False,
-			can_edit=False
-		)
-	]
-    ```
+        ```
+        [
+			SensorListModel(
+				custom=False,
+				built_in=False,
+				can_edit=False
+			),
+			SensorListModel(
+				custom=False,
+				built_in=False,
+				can_edit=False
+			),
+			SensorListModel(
+				custom=False,
+				built_in=False,
+				can_edit=False
+			)
+		]
+        ```
     
     
     
@@ -578,27 +578,27 @@ http://localhost:8888/api/sensors
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		SensorListModel(
-			custom=False,
-			built_in=False,
-			can_edit=False
-		),
-		SensorListModel(
-			custom=False,
-			built_in=False,
-			can_edit=False
-		),
-		SensorListModel(
-			custom=False,
-			built_in=False,
-			can_edit=False
-		)
-	]
-    ```
+        ```
+        [
+			SensorListModel(
+				custom=False,
+				built_in=False,
+				can_edit=False
+			),
+			SensorListModel(
+				custom=False,
+				built_in=False,
+				can_edit=False
+			),
+			SensorListModel(
+				custom=False,
+				built_in=False,
+				can_edit=False
+			)
+		]
+        ```
     
     
     
@@ -650,28 +650,28 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "full_sensor_name" : "sample_target/sample_category/sample_sensor",
-	  "sensor_definition_spec" : {
-	    "fields" : [ {
-	      "field_name" : "sample_string_param",
-	      "data_type" : "string"
-	    }, {
-	      "field_name" : "sample_double_param",
-	      "data_type" : "double"
-	    } ],
-	    "default_value" : 0.0
-	  },
-	  "provider_sensor_list" : [ ],
-	  "custom" : false,
-	  "built_in" : false,
-	  "can_edit" : true
-	}
-    ```
+        ```
+        {
+		  "full_sensor_name" : "sample_target/sample_category/sample_sensor",
+		  "sensor_definition_spec" : {
+		    "fields" : [ {
+		      "field_name" : "sample_string_param",
+		      "data_type" : "string"
+		    }, {
+		      "field_name" : "sample_double_param",
+		      "data_type" : "double"
+		    } ],
+		    "default_value" : 0.0
+		  },
+		  "provider_sensor_list" : [ ],
+		  "custom" : false,
+		  "built_in" : false,
+		  "can_edit" : true
+		}
+        ```
     
     
 
@@ -696,25 +696,25 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SensorModel(
-		full_sensor_name='sample_target/sample_category/sample_sensor',
-		sensor_definition_spec=SensorDefinitionSpec(
-			fields=ParameterDefinitionsListSpec(),
-			requires_event_timestamp=False,
-			requires_ingestion_timestamp=False,
-			default_value=0.0
-		),
-		provider_sensor_list=[
-		
-		],
-		custom=False,
-		built_in=False,
-		can_edit=True
-	)
-    ```
+        ```
+        SensorModel(
+			full_sensor_name='sample_target/sample_category/sample_sensor',
+			sensor_definition_spec=SensorDefinitionSpec(
+				fields=ParameterDefinitionsListSpec(),
+				requires_event_timestamp=False,
+				requires_ingestion_timestamp=False,
+				default_value=0.0
+			),
+			provider_sensor_list=[
+			
+			],
+			custom=False,
+			built_in=False,
+			can_edit=True
+		)
+        ```
     
     
     
@@ -740,25 +740,25 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SensorModel(
-		full_sensor_name='sample_target/sample_category/sample_sensor',
-		sensor_definition_spec=SensorDefinitionSpec(
-			fields=ParameterDefinitionsListSpec(),
-			requires_event_timestamp=False,
-			requires_ingestion_timestamp=False,
-			default_value=0.0
-		),
-		provider_sensor_list=[
-		
-		],
-		custom=False,
-		built_in=False,
-		can_edit=True
-	)
-    ```
+        ```
+        SensorModel(
+			full_sensor_name='sample_target/sample_category/sample_sensor',
+			sensor_definition_spec=SensorDefinitionSpec(
+				fields=ParameterDefinitionsListSpec(),
+				requires_event_timestamp=False,
+				requires_ingestion_timestamp=False,
+				default_value=0.0
+			),
+			provider_sensor_list=[
+			
+			],
+			custom=False,
+			built_in=False,
+			can_edit=True
+		)
+        ```
     
     
     
@@ -787,25 +787,25 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SensorModel(
-		full_sensor_name='sample_target/sample_category/sample_sensor',
-		sensor_definition_spec=SensorDefinitionSpec(
-			fields=ParameterDefinitionsListSpec(),
-			requires_event_timestamp=False,
-			requires_ingestion_timestamp=False,
-			default_value=0.0
-		),
-		provider_sensor_list=[
-		
-		],
-		custom=False,
-		built_in=False,
-		can_edit=True
-	)
-    ```
+        ```
+        SensorModel(
+			full_sensor_name='sample_target/sample_category/sample_sensor',
+			sensor_definition_spec=SensorDefinitionSpec(
+				fields=ParameterDefinitionsListSpec(),
+				requires_event_timestamp=False,
+				requires_ingestion_timestamp=False,
+				default_value=0.0
+			),
+			provider_sensor_list=[
+			
+			],
+			custom=False,
+			built_in=False,
+			can_edit=True
+		)
+        ```
     
     
     
@@ -834,25 +834,25 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SensorModel(
-		full_sensor_name='sample_target/sample_category/sample_sensor',
-		sensor_definition_spec=SensorDefinitionSpec(
-			fields=ParameterDefinitionsListSpec(),
-			requires_event_timestamp=False,
-			requires_ingestion_timestamp=False,
-			default_value=0.0
-		),
-		provider_sensor_list=[
-		
-		],
-		custom=False,
-		built_in=False,
-		can_edit=True
-	)
-    ```
+        ```
+        SensorModel(
+			full_sensor_name='sample_target/sample_category/sample_sensor',
+			sensor_definition_spec=SensorDefinitionSpec(
+				fields=ParameterDefinitionsListSpec(),
+				requires_event_timestamp=False,
+				requires_ingestion_timestamp=False,
+				default_value=0.0
+			),
+			provider_sensor_list=[
+			
+			],
+			custom=False,
+			built_in=False,
+			can_edit=True
+		)
+        ```
     
     
     
@@ -897,14 +897,14 @@ http://localhost:8888/api/definitions/sensors
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "all_sensors" : [ ]
-	}
-    ```
+        ```
+        {
+		  "all_sensors" : [ ]
+		}
+        ```
     
     
 
@@ -928,18 +928,18 @@ http://localhost:8888/api/definitions/sensors
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SensorFolderModel(
-		folders={
-		
-		},
-		sensors=[
-		
-		]
-	)
-    ```
+        ```
+        SensorFolderModel(
+			folders={
+			
+			},
+			sensors=[
+			
+			]
+		)
+        ```
     
     
     
@@ -964,18 +964,18 @@ http://localhost:8888/api/definitions/sensors
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SensorFolderModel(
-		folders={
-		
-		},
-		sensors=[
-		
-		]
-	)
-    ```
+        ```
+        SensorFolderModel(
+			folders={
+			
+			},
+			sensors=[
+			
+			]
+		)
+        ```
     
     
     
@@ -1003,18 +1003,18 @@ http://localhost:8888/api/definitions/sensors
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SensorFolderModel(
-		folders={
-		
-		},
-		sensors=[
-		
-		]
-	)
-    ```
+        ```
+        SensorFolderModel(
+			folders={
+			
+			},
+			sensors=[
+			
+			]
+		)
+        ```
     
     
     
@@ -1042,18 +1042,18 @@ http://localhost:8888/api/definitions/sensors
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SensorFolderModel(
-		folders={
-		
-		},
-		sensors=[
-		
-		]
-	)
-    ```
+        ```
+        SensorFolderModel(
+			folders={
+			
+			},
+			sensors=[
+			
+			]
+		)
+        ```
     
     
     

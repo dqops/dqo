@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import ColumnNavigation from '../../components/ColumnNavigation';
@@ -207,7 +207,7 @@ const ColumnView = () => {
         <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 pr-[360px]">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="column" className="w-5 h-5 shrink-0" />
-            <div className="text-xl font-semibold truncate">{`${description}${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
+            <div className="text-lg font-semibold truncate">{`${description}${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
           </div>
         </div>
         <ColumnNavigation />

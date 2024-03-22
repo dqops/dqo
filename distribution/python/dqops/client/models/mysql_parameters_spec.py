@@ -29,9 +29,6 @@ class MysqlParametersSpec:
             dynamic substitution.
         password (Union[Unset, str]): MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
             format to use dynamic substitution.
-        options (Union[Unset, str]): MySQL connection 'options' initialization parameter. For example setting this to -c
-            statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a
-            ${MYSQL_OPTIONS} configuration with a custom environment variable.
         sslmode (Union[Unset, MySqlSslMode]):
         single_store_db_parameters_spec (Union[Unset, SingleStoreDbParametersSpec]):
         mysql_engine_type (Union[Unset, MysqlEngineType]):
@@ -44,7 +41,6 @@ class MysqlParametersSpec:
     database: Union[Unset, str] = UNSET
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
-    options: Union[Unset, str] = UNSET
     sslmode: Union[Unset, MySqlSslMode] = UNSET
     single_store_db_parameters_spec: Union[Unset, "SingleStoreDbParametersSpec"] = UNSET
     mysql_engine_type: Union[Unset, MysqlEngineType] = UNSET
@@ -57,7 +53,6 @@ class MysqlParametersSpec:
         database = self.database
         user = self.user
         password = self.password
-        options = self.options
         sslmode: Union[Unset, str] = UNSET
         if not isinstance(self.sslmode, Unset):
             sslmode = self.sslmode.value
@@ -89,8 +84,6 @@ class MysqlParametersSpec:
             field_dict["user"] = user
         if password is not UNSET:
             field_dict["password"] = password
-        if options is not UNSET:
-            field_dict["options"] = options
         if sslmode is not UNSET:
             field_dict["sslmode"] = sslmode
         if single_store_db_parameters_spec is not UNSET:
@@ -121,8 +114,6 @@ class MysqlParametersSpec:
         user = d.pop("user", UNSET)
 
         password = d.pop("password", UNSET)
-
-        options = d.pop("options", UNSET)
 
         _sslmode = d.pop("sslmode", UNSET)
         sslmode: Union[Unset, MySqlSslMode]
@@ -162,7 +153,6 @@ class MysqlParametersSpec:
             database=database,
             user=user,
             password=password,
-            options=options,
             sslmode=sslmode,
             single_store_db_parameters_spec=single_store_db_parameters_spec,
             mysql_engine_type=mysql_engine_type,

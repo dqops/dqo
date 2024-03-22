@@ -93,12 +93,13 @@ Database provider type (--provider):
  [ 3] mysql
  [ 4] oracle
  [ 5] postgresql
- [ 6] presto
- [ 7] redshift
- [ 8] snowflake
- [ 9] spark
- [10] sqlserver
- [11] trino
+ [ 6] duckdb
+ [ 7] presto
+ [ 8] redshift
+ [ 9] snowflake
+ [10] spark
+ [11] sqlserver
+ [12] trino
 Please enter one of the [] values: 1
 Source GCP project ID (--bigquery-source-project-id") [dqo-ai-testing]: dqo-ai-testing
 Billing GCP project ID (--bigquery-billing-project-id), leave null to use the default GCP project from credentials (dqo-ai-testing):

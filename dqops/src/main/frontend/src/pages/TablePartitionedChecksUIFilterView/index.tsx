@@ -7,7 +7,7 @@ import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getTablePartitionedChecksModelFilter,
-  setTableUpdatedPartitionedChecksModelFilter,
+  setTableUpdatedPartitionedChecksModelFilter
 } from '../../redux/actions/table.actions';
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { CheckResultOverviewApi, TableApiClient } from "../../services/apiClient";
@@ -18,19 +18,37 @@ const TablePartitionedChecksUIFilterView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, timePartitioned, category, checkName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string } = useDecodedParams();
   const { partitionedChecksUIFilter, isUpdatedPartitionedChecksUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
-  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const [checkResultsOverview, setCheckResultsOverview] = useState<
+    CheckResultsOverviewDataModel[]
+  >([]);
   const [isUpdating, setIsUpdating] = useState(false);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getTablePartitionedChecksOverview(connectionName, schemaName, tableName, timePartitioned, category, checkName).then((res) => {
+    CheckResultOverviewApi.getTablePartitionedChecksOverview(
+      connectionName,
+      schemaName,
+      tableName,
+      timePartitioned,
+      category,
+      checkName
+    ).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
 
   useEffect(() => {
     dispatch(
-      getTablePartitionedChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName)
+      getTablePartitionedChecksModelFilter(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName,
+        timePartitioned,
+        category,
+        checkName
+      )
     );
   }, [connectionName, schemaName, tableName, category, checkName]);
 
@@ -45,21 +63,40 @@ const TablePartitionedChecksUIFilterView = () => {
     );
 
     await dispatch(
-      getTablePartitionedChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName, false)
+      getTablePartitionedChecksModelFilter(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName,
+        timePartitioned,
+        category,
+        checkName,
+        false
+      )
     );
     setIsUpdating(false);
   };
 
   const onChange = (ui: CheckContainerModel) => {
-    dispatch(setTableUpdatedPartitionedChecksModelFilter(checkTypes, firstLevelActiveTab, ui));
+    dispatch(
+      setTableUpdatedPartitionedChecksModelFilter(
+        checkTypes,
+        firstLevelActiveTab,
+        ui
+      )
+    );
   };
 
   return (
     <>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
-        <div className="flex items-center space-x-2" style={{ maxWidth: `calc(100% - 180px)` }}>
+        <div
+          className="flex items-center space-x-2"
+          style={{ maxWidth: `calc(100% - 180px)` }}
+        >
           <SvgIcon name="search" className="w-5 h-5 shrink-0" />
-          <div className="text-xl font-semibold truncate">{`${connectionName}.${schemaName}.${tableName}.checks.${category} - ${checkName}`}</div>
+          <div className="text-lg font-semibold truncate">{`${connectionName}.${schemaName}.${tableName}.checks.${category} - ${checkName}`}</div>
         </div>
         <Button
           color={isUpdatedPartitionedChecksUIFilter ? 'primary' : 'secondary'}
@@ -79,7 +116,7 @@ const TablePartitionedChecksUIFilterView = () => {
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
           loading={loading}
-          isFiltered = {true}
+          isFiltered={true}
         />
       </div>
     </>

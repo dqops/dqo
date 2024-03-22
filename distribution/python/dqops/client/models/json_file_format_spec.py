@@ -16,7 +16,7 @@ class JsonFileFormatSpec:
     """
     Attributes:
         auto_detect (Union[Unset, bool]): Whether to auto-detect detect the names of the keys and data types of the
-            values automatically
+            values automatically.
         compression (Union[Unset, CompressionType]):
         convert_strings_to_integers (Union[Unset, bool]): Whether strings representing integer values should be
             converted to a numerical type.
@@ -27,8 +27,8 @@ class JsonFileFormatSpec:
         ignore_errors (Union[Unset, bool]): Whether to ignore parse errors (only possible when format is
             'newline_delimited').
         maximum_depth (Union[Unset, int]): Maximum nesting depth to which the automatic schema detection detects types.
-            Set to -1 to fully detect nested JSON types
-        maximum_object_size (Union[Unset, int]): The maximum size of a JSON object (in bytes)
+            Set to -1 to fully detect nested JSON types.
+        maximum_object_size (Union[Unset, int]): The maximum size of a JSON object (in bytes).
         records (Union[Unset, JsonRecordsType]):
         sample_size (Union[Unset, int]): The number of sample rows for auto detection of parameters.
         timestampformat (Union[Unset, str]): Specifies the date format to use when parsing timestamps.

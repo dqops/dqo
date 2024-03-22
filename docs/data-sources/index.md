@@ -109,9 +109,24 @@ DQOps supports the following data sources.
     <p>CockroachDB</p>
   </a>
 
+  <a href="csv/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/csv-icon.svg">
+    <p>CSV</p>
+  </a>
+
   <a href="databricks/" class="four-divs-element">
     <img src="https://dqops.com/docs/images/data-sources/databricks.svg">
     <p>Databricks</p>
+  </a>
+
+  <a href="duckdb/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/duckdb.svg">
+    <p>DuckDB</p>
+  </a>
+
+  <a href="json/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/json-icon.svg">
+    <p>JSON</p>
   </a>
 
   <a href="mysql/" class="four-divs-element">
@@ -137,6 +152,11 @@ DQOps supports the following data sources.
   <a href="mysql/" class="four-divs-element">
     <img src="https://dqops.com/docs/images/data-sources/percona-server.svg">
     <p>Percona Server for MySQL</p>
+  </a>
+
+  <a href="parquet/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/parquet-icon.svg">
+    <p>Parquet</p>
   </a>
 
   <a href="postgresql/" class="four-divs-element">

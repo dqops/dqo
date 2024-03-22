@@ -11,9 +11,10 @@ import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 import { MultiChecks } from './MultiCheck/MultiChecks';
 import { SchemaTables } from './SchemaTables';
-import { useDecodedParams } from '../../utils';
+import { tab } from '@material-tailwind/react';
 
 const SchemaPage = () => {
   const {
@@ -69,7 +70,7 @@ const SchemaPage = () => {
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
         <div className="flex items-center space-x-2 max-w-full">
           <SvgIcon name="schema" className="w-5 h-5 shrink-0" />
-          <div className="text-xl font-semibold truncate">{`${connection}.${schema}`}</div>
+          <div className="text-lg font-semibold truncate">{`${connection}.${schema}`}</div>
         </div>
         {isSourceScreen && activeTab === 'tables' && (
           <div className="flex gap-4 items-center">

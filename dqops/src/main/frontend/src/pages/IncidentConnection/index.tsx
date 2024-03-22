@@ -416,7 +416,7 @@ export const IncidentConnection = () => {
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
-            <div className="text-xl font-semibold truncate">
+            <div className="text-lg font-semibold truncate">
               Data quality incidents on {connection || ''}
             </div>
           </div>
@@ -451,6 +451,7 @@ export const IncidentConnection = () => {
                 onClick={() =>
                   onChangeFilter({ numberOfMonth: o.value, page: 1 })
                 }
+                className="text-sm"
               />
             ))}
           </div>

@@ -18,11 +18,15 @@ interface IScheduleViewProps {
   handleChange: (obj: any) => void;
   isDefault?: boolean;
 }
-type TMinutes = {'minutes' : number, 'day' : number, 'hour' : number }
+type TMinutes = { minutes: number; day: number; hour: number };
 
-const defaultMinutes = {'minutes' : 15, 'day' : 15, 'hour' : 15 }
+const defaultMinutes = { minutes: 15, day: 15, hour: 15 };
 
-const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps) => {
+const ScheduleView = ({
+  schedule,
+  handleChange,
+  isDefault
+}: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState<TMinutes>(defaultMinutes);
   const [hour, setHour] = useState(15);
@@ -78,7 +82,10 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
     if (mode === 'day') {
       handleChange({ cron_expression: `${val} ${hour} * * *` });
     }
-    setMinutes((prevState) =>  ({...prevState, [mode as keyof TMinutes] : val}));
+    setMinutes((prevState) => ({
+      ...prevState,
+      [mode as keyof TMinutes]: val
+    }));
   };
 
   const onChangeHour = (val: number) => {
@@ -97,26 +104,9 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
         return;
       }
       if (/^\*\/\d\d? \* \* \* \*$/.test(cron_expression)) {
-          setMode('minutes');
-          const matches = cron_expression.match(/^\*\/(\d\d?) \* \* \* \*$/);
-  
-          if (!matches) return;
-          if (Number(matches[1]) < 0) {
-            onChangeMinutes(0);
-        } else if (Number(matches[1]) > 59) {
-          onChangeMinutes(59);
-        } else {
-          setMinutes((prevState) => ({
-            ...prevState,
-            'minutes': Number(matches[1]),
-          }));
-        }
-        return;
-    }
-      else if (/^\d\d? \* \* \* \*$/.test(cron_expression)) {
-        setMode('hour');
-        const matches = cron_expression.match(/^(\d\d?) \* \* \* \*$/);
-  
+        setMode('minutes');
+        const matches = cron_expression.match(/^\*\/(\d\d?) \* \* \* \*$/);
+
         if (!matches) return;
         if (Number(matches[1]) < 0) {
           onChangeMinutes(0);
@@ -125,17 +115,32 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
         } else {
           setMinutes((prevState) => ({
             ...prevState,
-            'hour': Number(matches[1]),
+            minutes: Number(matches[1])
           }));
         }
         return;
-      }
-      else if (/^\d\d? \d\d? \* \* \*$/.test(cron_expression)) {
+      } else if (/^\d\d? \* \* \* \*$/.test(cron_expression)) {
+        setMode('hour');
+        const matches = cron_expression.match(/^(\d\d?) \* \* \* \*$/);
+
+        if (!matches) return;
+        if (Number(matches[1]) < 0) {
+          onChangeMinutes(0);
+        } else if (Number(matches[1]) > 59) {
+          onChangeMinutes(59);
+        } else {
+          setMinutes((prevState) => ({
+            ...prevState,
+            hour: Number(matches[1])
+          }));
+        }
+        return;
+      } else if (/^\d\d? \d\d? \* \* \*$/.test(cron_expression)) {
         setMode('day');
         const matches = cron_expression.match(/^(\d\d?) (\d\d?) \* \* \*$/);
-  
+
         if (!matches) return;
-        
+
         if (Number(matches[2]) < 0) {
           onChangeHour(0);
         } else if (Number(matches[2]) > 23) {
@@ -150,20 +155,19 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
         } else {
           setMinutes((prevState) => ({
             ...prevState,
-            'day': Number(matches[1]),
+            day: Number(matches[1])
           }));
         }
         return;
-      }
-      else {
-        setMode("custom")
+      } else {
+        setMode('custom');
         return;
       }
-     }
+    };
 
     setMinutes(defaultMinutes);
     setHour(15);
-    checkCronExpresion()
+    checkCronExpresion();
   }, [schedule]);
 
   useEffect(() => {
@@ -176,12 +180,12 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
   }, []);
 
   const onChangeCronExpression = (e: ChangeEvent<HTMLInputElement>) => {
-    if (mode === 'custom' ) {
+    if (mode === 'custom') {
       const cronExpression = e.target.value;
       handleChange({ cron_expression: cronExpression });
     }
   };
-  
+
   const getLabel = () => {
     if (table && !column) {
       return 'Use scheduling configuration from the connection levels';
@@ -195,7 +199,16 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
   return (
     <div>
       {isCronScheduled === false ? (
-        <div className={clsx("w-full h-12 flex items-center gap-x-4 text-red-500 border-b border-gray-300", userProfile.can_manage_scheduler !== true || (isDefault === true && userProfile.can_manage_data_sources !== true) ? "pointer-events-none cursor-not-allowed" : "")}>
+        <div
+          className={clsx(
+            'w-full h-12 flex items-center gap-x-4 text-red-500 border-b border-gray-300 text-sm',
+            userProfile.can_manage_scheduler !== true ||
+              (isDefault === true &&
+                userProfile.can_manage_data_sources !== true)
+              ? 'pointer-events-none cursor-not-allowed'
+              : ''
+          )}
+        >
           Warning: the job scheduler is disabled and no scheduled jobs will be
           executed, enable the job scheduler?{' '}
           <Switch
@@ -206,10 +219,15 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
       ) : (
         <></>
       )}
-      <table className="mb-6">
+      <table className="mb-6 text-sm">
         <tbody>
           <tr>
-            <td className={clsx("pr-4 py-4 text-sm", mode !== 'custom' && 'opacity-60')}>
+            <td
+              className={clsx(
+                'pr-4 py-4 text-sm',
+                mode !== 'custom' && 'opacity-60'
+              )}
+            >
               <div>Unix cron expression:</div>
             </td>
             <td className="px-4 py-4 text-sm">
@@ -217,18 +235,36 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
                 className="!text-sm"
                 value={schedule?.cron_expression}
                 onChange={onChangeCronExpression}
-                disabled={userProfile.can_manage_data_sources !== true || mode !== 'custom'}
+                disabled={
+                  userProfile.can_manage_data_sources !== true ||
+                  mode !== 'custom'
+                }
               />
             </td>
-            <td className='text-xs underline text-teal-500'>
-              <a href='https://dqops.com/docs/working-with-dqo/configure-scheduling-of-data-quality-checks/cron-formatting/' target='_blank' rel="noreferrer">Unix cron expression documentation</a>
+            <td className="text-xs underline text-teal-500">
+              <a
+                href="https://dqops.com/docs/working-with-dqo/configure-scheduling-of-data-quality-checks/cron-formatting/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Unix cron expression documentation
+              </a>
             </td>
           </tr>
           <tr>
             <td className="pr-4 py-2 text-sm">
               <div>Disable schedule:</div>
             </td>
-            <td className={clsx("px-4 py-2 text-sm", userProfile.can_manage_scheduler || (isDefault === true && userProfile.can_manage_data_sources !== true) ? "" : "cursor-not-allowed pointer-events-none")}>
+            <td
+              className={clsx(
+                'px-4 py-2 text-sm',
+                userProfile.can_manage_scheduler ||
+                  (isDefault === true &&
+                    userProfile.can_manage_data_sources !== true)
+                  ? ''
+                  : 'cursor-not-allowed pointer-events-none'
+              )}
+            >
               <div className="flex">
                 <Checkbox
                   checked={schedule?.disabled}
@@ -241,7 +277,14 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
         </tbody>
       </table>
 
-      <div className={clsx("flex flex-col text-sm" ,userProfile.can_manage_data_sources === true ? "" : "cursor-not-allowed pointer-events-none")}>
+      <div
+        className={clsx(
+          'flex flex-col text-sm',
+          userProfile.can_manage_data_sources === true
+            ? ''
+            : 'cursor-not-allowed pointer-events-none'
+        )}
+      >
         <div
           className={clsx(
             'flex items-center text-sm',
@@ -253,7 +296,6 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
             checked={mode === ''}
             onClick={() => onChangeMode('')}
             className="mb-4"
-            
           />
         </div>
         <div
@@ -274,7 +316,11 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
               max={60}
               value={minutes.minutes}
               onChange={onChangeMinutes}
-              disabled={userProfile.can_manage_scheduler !== true || (isDefault === true && userProfile.can_manage_data_sources !== true)}
+              disabled={
+                userProfile.can_manage_scheduler !== true ||
+                (isDefault === true &&
+                  userProfile.can_manage_data_sources !== true)
+              }
             />
             <div>minutes</div>
           </div>
@@ -297,7 +343,11 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
               max={60}
               value={minutes.hour}
               onChange={onChangeMinutes}
-              disabled={userProfile.can_manage_scheduler !== true || (isDefault === true && userProfile.can_manage_data_sources !== true)}
+              disabled={
+                userProfile.can_manage_scheduler !== true ||
+                (isDefault === true &&
+                  userProfile.can_manage_data_sources !== true)
+              }
             />
             <div>minutes past every hour</div>
           </div>
@@ -320,7 +370,11 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
               max={60}
               value={hour}
               onChange={onChangeHour}
-              disabled={userProfile.can_manage_scheduler !== true || (isDefault === true && userProfile.can_manage_data_sources !== true)}
+              disabled={
+                userProfile.can_manage_scheduler !== true ||
+                (isDefault === true &&
+                  userProfile.can_manage_data_sources !== true)
+              }
             />
             <div>:</div>
             <NumberInput
@@ -329,7 +383,11 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
               max={60}
               value={minutes.day}
               onChange={onChangeMinutes}
-              disabled={userProfile.can_manage_scheduler !== true || (isDefault === true && userProfile.can_manage_data_sources !== true)}
+              disabled={
+                userProfile.can_manage_scheduler !== true ||
+                (isDefault === true &&
+                  userProfile.can_manage_data_sources !== true)
+              }
             />
           </div>
         </div>

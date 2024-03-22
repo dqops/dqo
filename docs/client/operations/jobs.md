@@ -190,26 +190,26 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "jobId" : {
-	    "jobId" : 123456789,
-	    "createdAt" : "2007-10-11T13:42:00Z"
-	  },
-	  "result" : {
-	    "executed_statistics_collectors" : 3,
-	    "total_collectors_executed" : 0,
-	    "columns_analyzed" : 1,
-	    "columns_successfully_analyzed" : 0,
-	    "total_collectors_failed" : 1,
-	    "total_collected_results" : 2
-	  },
-	  "status" : "finished"
-	}
-    ```
+        ```
+        {
+		  "jobId" : {
+		    "jobId" : 123456789,
+		    "createdAt" : "2007-10-11T13:42:00Z"
+		  },
+		  "result" : {
+		    "executed_statistics_collectors" : 3,
+		    "total_collectors_executed" : 0,
+		    "columns_analyzed" : 1,
+		    "columns_successfully_analyzed" : 0,
+		    "total_collectors_failed" : 1,
+		    "total_collected_results" : 2
+		  },
+		  "status" : "finished"
+		}
+        ```
     
     
 
@@ -244,25 +244,25 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CollectStatisticsQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=CollectStatisticsResult(
-			executed_statistics_collectors=3,
-			total_collectors_executed=0,
-			columns_analyzed=1,
-			columns_successfully_analyzed=0,
-			total_collectors_failed=1,
-			total_collected_results=2
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+        ```
+        CollectStatisticsQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=CollectStatisticsResult(
+				executed_statistics_collectors=3,
+				total_collectors_executed=0,
+				columns_analyzed=1,
+				columns_successfully_analyzed=0,
+				total_collectors_failed=1,
+				total_collected_results=2
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -298,25 +298,25 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CollectStatisticsQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=CollectStatisticsResult(
-			executed_statistics_collectors=3,
-			total_collectors_executed=0,
-			columns_analyzed=1,
-			columns_successfully_analyzed=0,
-			total_collectors_failed=1,
-			total_collected_results=2
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+        ```
+        CollectStatisticsQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=CollectStatisticsResult(
+				executed_statistics_collectors=3,
+				total_collectors_executed=0,
+				columns_analyzed=1,
+				columns_successfully_analyzed=0,
+				total_collectors_failed=1,
+				total_collected_results=2
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -355,25 +355,25 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CollectStatisticsQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=CollectStatisticsResult(
-			executed_statistics_collectors=3,
-			total_collectors_executed=0,
-			columns_analyzed=1,
-			columns_successfully_analyzed=0,
-			total_collectors_failed=1,
-			total_collected_results=2
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+        ```
+        CollectStatisticsQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=CollectStatisticsResult(
+				executed_statistics_collectors=3,
+				total_collectors_executed=0,
+				columns_analyzed=1,
+				columns_successfully_analyzed=0,
+				total_collectors_failed=1,
+				total_collected_results=2
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -412,25 +412,25 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CollectStatisticsQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=CollectStatisticsResult(
-			executed_statistics_collectors=3,
-			total_collectors_executed=0,
-			columns_analyzed=1,
-			columns_successfully_analyzed=0,
-			total_collectors_failed=1,
-			total_collected_results=2
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+        ```
+        CollectStatisticsQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=CollectStatisticsResult(
+				executed_statistics_collectors=3,
+				total_collectors_executed=0,
+				columns_analyzed=1,
+				columns_successfully_analyzed=0,
+				total_collectors_failed=1,
+				total_collected_results=2
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -494,26 +494,26 @@ http://localhost:8888/api/jobs/collectstatistics/table
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "jobId" : {
-	    "jobId" : 123456789,
-	    "createdAt" : "2007-10-11T13:42:00Z"
-	  },
-	  "result" : {
-	    "executed_statistics_collectors" : 3,
-	    "total_collectors_executed" : 0,
-	    "columns_analyzed" : 1,
-	    "columns_successfully_analyzed" : 0,
-	    "total_collectors_failed" : 1,
-	    "total_collected_results" : 2
-	  },
-	  "status" : "finished"
-	}
-    ```
+        ```
+        {
+		  "jobId" : {
+		    "jobId" : 123456789,
+		    "createdAt" : "2007-10-11T13:42:00Z"
+		  },
+		  "result" : {
+		    "executed_statistics_collectors" : 3,
+		    "total_collectors_executed" : 0,
+		    "columns_analyzed" : 1,
+		    "columns_successfully_analyzed" : 0,
+		    "total_collectors_failed" : 1,
+		    "total_collected_results" : 2
+		  },
+		  "status" : "finished"
+		}
+        ```
     
     
 
@@ -548,25 +548,25 @@ http://localhost:8888/api/jobs/collectstatistics/table
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CollectStatisticsQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=CollectStatisticsResult(
-			executed_statistics_collectors=3,
-			total_collectors_executed=0,
-			columns_analyzed=1,
-			columns_successfully_analyzed=0,
-			total_collectors_failed=1,
-			total_collected_results=2
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+        ```
+        CollectStatisticsQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=CollectStatisticsResult(
+				executed_statistics_collectors=3,
+				total_collectors_executed=0,
+				columns_analyzed=1,
+				columns_successfully_analyzed=0,
+				total_collectors_failed=1,
+				total_collected_results=2
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -602,25 +602,25 @@ http://localhost:8888/api/jobs/collectstatistics/table
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CollectStatisticsQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=CollectStatisticsResult(
-			executed_statistics_collectors=3,
-			total_collectors_executed=0,
-			columns_analyzed=1,
-			columns_successfully_analyzed=0,
-			total_collectors_failed=1,
-			total_collected_results=2
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+        ```
+        CollectStatisticsQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=CollectStatisticsResult(
+				executed_statistics_collectors=3,
+				total_collectors_executed=0,
+				columns_analyzed=1,
+				columns_successfully_analyzed=0,
+				total_collectors_failed=1,
+				total_collected_results=2
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -659,25 +659,25 @@ http://localhost:8888/api/jobs/collectstatistics/table
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CollectStatisticsQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=CollectStatisticsResult(
-			executed_statistics_collectors=3,
-			total_collectors_executed=0,
-			columns_analyzed=1,
-			columns_successfully_analyzed=0,
-			total_collectors_failed=1,
-			total_collected_results=2
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+        ```
+        CollectStatisticsQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=CollectStatisticsResult(
+				executed_statistics_collectors=3,
+				total_collectors_executed=0,
+				columns_analyzed=1,
+				columns_successfully_analyzed=0,
+				total_collectors_failed=1,
+				total_collected_results=2
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -716,25 +716,25 @@ http://localhost:8888/api/jobs/collectstatistics/table
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CollectStatisticsQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=CollectStatisticsResult(
-			executed_statistics_collectors=3,
-			total_collectors_executed=0,
-			columns_analyzed=1,
-			columns_successfully_analyzed=0,
-			total_collectors_failed=1,
-			total_collected_results=2
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+        ```
+        CollectStatisticsQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=CollectStatisticsResult(
+				executed_statistics_collectors=3,
+				total_collectors_executed=0,
+				columns_analyzed=1,
+				columns_successfully_analyzed=0,
+				total_collectors_failed=1,
+				total_collected_results=2
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -798,18 +798,18 @@ http://localhost:8888/api/jobs/deletestoreddata
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "jobId" : {
-	    "jobId" : 123456789,
-	    "createdAt" : "2007-10-11T13:42:00Z"
-	  },
-	  "status" : "queued"
-	}
-    ```
+        ```
+        {
+		  "jobId" : {
+		    "jobId" : 123456789,
+		    "createdAt" : "2007-10-11T13:42:00Z"
+		  },
+		  "status" : "queued"
+		}
+        ```
     
     
 
@@ -846,17 +846,17 @@ http://localhost:8888/api/jobs/deletestoreddata
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DeleteStoredDataQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		status=DqoJobStatus.QUEUED
-	)
-    ```
+        ```
+        DeleteStoredDataQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			status=DqoJobStatus.QUEUED
+		)
+        ```
     
     
     
@@ -894,17 +894,17 @@ http://localhost:8888/api/jobs/deletestoreddata
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DeleteStoredDataQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		status=DqoJobStatus.QUEUED
-	)
-    ```
+        ```
+        DeleteStoredDataQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			status=DqoJobStatus.QUEUED
+		)
+        ```
     
     
     
@@ -945,17 +945,17 @@ http://localhost:8888/api/jobs/deletestoreddata
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DeleteStoredDataQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		status=DqoJobStatus.QUEUED
-	)
-    ```
+        ```
+        DeleteStoredDataQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			status=DqoJobStatus.QUEUED
+		)
+        ```
     
     
     
@@ -996,17 +996,17 @@ http://localhost:8888/api/jobs/deletestoreddata
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DeleteStoredDataQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		status=DqoJobStatus.QUEUED
-	)
-    ```
+        ```
+        DeleteStoredDataQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			status=DqoJobStatus.QUEUED
+		)
+        ```
     
     
     
@@ -1051,29 +1051,30 @@ http://localhost:8888/api/jobs/jobs
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "jobs" : [ ],
-	  "folderSynchronizationStatus" : {
-	    "sources" : "unchanged",
-	    "sensors" : "unchanged",
-	    "rules" : "unchanged",
-	    "checks" : "unchanged",
-	    "settings" : "unchanged",
-	    "credentials" : "unchanged",
-	    "dictionaries" : "unchanged",
-	    "data_sensor_readouts" : "unchanged",
-	    "data_check_results" : "unchanged",
-	    "data_statistics" : "unchanged",
-	    "data_errors" : "unchanged",
-	    "data_incidents" : "unchanged"
-	  },
-	  "lastSequenceNumber" : 3854372
-	}
-    ```
+        ```
+        {
+		  "jobs" : [ ],
+		  "folderSynchronizationStatus" : {
+		    "sources" : "unchanged",
+		    "sensors" : "unchanged",
+		    "rules" : "unchanged",
+		    "checks" : "unchanged",
+		    "settings" : "unchanged",
+		    "credentials" : "unchanged",
+		    "dictionaries" : "unchanged",
+		    "patterns" : "unchanged",
+		    "data_sensor_readouts" : "unchanged",
+		    "data_check_results" : "unchanged",
+		    "data_statistics" : "unchanged",
+		    "data_errors" : "unchanged",
+		    "data_incidents" : "unchanged"
+		  },
+		  "lastSequenceNumber" : 3854372
+		}
+        ```
     
     
 
@@ -1097,30 +1098,31 @@ http://localhost:8888/api/jobs/jobs
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoJobQueueInitialSnapshotModel(
-		jobs=[
-		
-		],
-		folder_synchronization_status=CloudSynchronizationFoldersStatusModel(
-			sources=FolderSynchronizationStatus.UNCHANGED,
-			sensors=FolderSynchronizationStatus.UNCHANGED,
-			rules=FolderSynchronizationStatus.UNCHANGED,
-			checks=FolderSynchronizationStatus.UNCHANGED,
-			settings=FolderSynchronizationStatus.UNCHANGED,
-			credentials=FolderSynchronizationStatus.UNCHANGED,
-			dictionaries=FolderSynchronizationStatus.UNCHANGED,
-			data_sensor_readouts=FolderSynchronizationStatus.UNCHANGED,
-			data_check_results=FolderSynchronizationStatus.UNCHANGED,
-			data_statistics=FolderSynchronizationStatus.UNCHANGED,
-			data_errors=FolderSynchronizationStatus.UNCHANGED,
-			data_incidents=FolderSynchronizationStatus.UNCHANGED
-		),
-		last_sequence_number=3854372
-	)
-    ```
+        ```
+        DqoJobQueueInitialSnapshotModel(
+			jobs=[
+			
+			],
+			folder_synchronization_status=CloudSynchronizationFoldersStatusModel(
+				sources=FolderSynchronizationStatus.UNCHANGED,
+				sensors=FolderSynchronizationStatus.UNCHANGED,
+				rules=FolderSynchronizationStatus.UNCHANGED,
+				checks=FolderSynchronizationStatus.UNCHANGED,
+				settings=FolderSynchronizationStatus.UNCHANGED,
+				credentials=FolderSynchronizationStatus.UNCHANGED,
+				dictionaries=FolderSynchronizationStatus.UNCHANGED,
+				patterns=FolderSynchronizationStatus.UNCHANGED,
+				data_sensor_readouts=FolderSynchronizationStatus.UNCHANGED,
+				data_check_results=FolderSynchronizationStatus.UNCHANGED,
+				data_statistics=FolderSynchronizationStatus.UNCHANGED,
+				data_errors=FolderSynchronizationStatus.UNCHANGED,
+				data_incidents=FolderSynchronizationStatus.UNCHANGED
+			),
+			last_sequence_number=3854372
+		)
+        ```
     
     
     
@@ -1145,30 +1147,31 @@ http://localhost:8888/api/jobs/jobs
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoJobQueueInitialSnapshotModel(
-		jobs=[
-		
-		],
-		folder_synchronization_status=CloudSynchronizationFoldersStatusModel(
-			sources=FolderSynchronizationStatus.UNCHANGED,
-			sensors=FolderSynchronizationStatus.UNCHANGED,
-			rules=FolderSynchronizationStatus.UNCHANGED,
-			checks=FolderSynchronizationStatus.UNCHANGED,
-			settings=FolderSynchronizationStatus.UNCHANGED,
-			credentials=FolderSynchronizationStatus.UNCHANGED,
-			dictionaries=FolderSynchronizationStatus.UNCHANGED,
-			data_sensor_readouts=FolderSynchronizationStatus.UNCHANGED,
-			data_check_results=FolderSynchronizationStatus.UNCHANGED,
-			data_statistics=FolderSynchronizationStatus.UNCHANGED,
-			data_errors=FolderSynchronizationStatus.UNCHANGED,
-			data_incidents=FolderSynchronizationStatus.UNCHANGED
-		),
-		last_sequence_number=3854372
-	)
-    ```
+        ```
+        DqoJobQueueInitialSnapshotModel(
+			jobs=[
+			
+			],
+			folder_synchronization_status=CloudSynchronizationFoldersStatusModel(
+				sources=FolderSynchronizationStatus.UNCHANGED,
+				sensors=FolderSynchronizationStatus.UNCHANGED,
+				rules=FolderSynchronizationStatus.UNCHANGED,
+				checks=FolderSynchronizationStatus.UNCHANGED,
+				settings=FolderSynchronizationStatus.UNCHANGED,
+				credentials=FolderSynchronizationStatus.UNCHANGED,
+				dictionaries=FolderSynchronizationStatus.UNCHANGED,
+				patterns=FolderSynchronizationStatus.UNCHANGED,
+				data_sensor_readouts=FolderSynchronizationStatus.UNCHANGED,
+				data_check_results=FolderSynchronizationStatus.UNCHANGED,
+				data_statistics=FolderSynchronizationStatus.UNCHANGED,
+				data_errors=FolderSynchronizationStatus.UNCHANGED,
+				data_incidents=FolderSynchronizationStatus.UNCHANGED
+			),
+			last_sequence_number=3854372
+		)
+        ```
     
     
     
@@ -1196,30 +1199,31 @@ http://localhost:8888/api/jobs/jobs
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoJobQueueInitialSnapshotModel(
-		jobs=[
-		
-		],
-		folder_synchronization_status=CloudSynchronizationFoldersStatusModel(
-			sources=FolderSynchronizationStatus.UNCHANGED,
-			sensors=FolderSynchronizationStatus.UNCHANGED,
-			rules=FolderSynchronizationStatus.UNCHANGED,
-			checks=FolderSynchronizationStatus.UNCHANGED,
-			settings=FolderSynchronizationStatus.UNCHANGED,
-			credentials=FolderSynchronizationStatus.UNCHANGED,
-			dictionaries=FolderSynchronizationStatus.UNCHANGED,
-			data_sensor_readouts=FolderSynchronizationStatus.UNCHANGED,
-			data_check_results=FolderSynchronizationStatus.UNCHANGED,
-			data_statistics=FolderSynchronizationStatus.UNCHANGED,
-			data_errors=FolderSynchronizationStatus.UNCHANGED,
-			data_incidents=FolderSynchronizationStatus.UNCHANGED
-		),
-		last_sequence_number=3854372
-	)
-    ```
+        ```
+        DqoJobQueueInitialSnapshotModel(
+			jobs=[
+			
+			],
+			folder_synchronization_status=CloudSynchronizationFoldersStatusModel(
+				sources=FolderSynchronizationStatus.UNCHANGED,
+				sensors=FolderSynchronizationStatus.UNCHANGED,
+				rules=FolderSynchronizationStatus.UNCHANGED,
+				checks=FolderSynchronizationStatus.UNCHANGED,
+				settings=FolderSynchronizationStatus.UNCHANGED,
+				credentials=FolderSynchronizationStatus.UNCHANGED,
+				dictionaries=FolderSynchronizationStatus.UNCHANGED,
+				patterns=FolderSynchronizationStatus.UNCHANGED,
+				data_sensor_readouts=FolderSynchronizationStatus.UNCHANGED,
+				data_check_results=FolderSynchronizationStatus.UNCHANGED,
+				data_statistics=FolderSynchronizationStatus.UNCHANGED,
+				data_errors=FolderSynchronizationStatus.UNCHANGED,
+				data_incidents=FolderSynchronizationStatus.UNCHANGED
+			),
+			last_sequence_number=3854372
+		)
+        ```
     
     
     
@@ -1247,30 +1251,31 @@ http://localhost:8888/api/jobs/jobs
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoJobQueueInitialSnapshotModel(
-		jobs=[
-		
-		],
-		folder_synchronization_status=CloudSynchronizationFoldersStatusModel(
-			sources=FolderSynchronizationStatus.UNCHANGED,
-			sensors=FolderSynchronizationStatus.UNCHANGED,
-			rules=FolderSynchronizationStatus.UNCHANGED,
-			checks=FolderSynchronizationStatus.UNCHANGED,
-			settings=FolderSynchronizationStatus.UNCHANGED,
-			credentials=FolderSynchronizationStatus.UNCHANGED,
-			dictionaries=FolderSynchronizationStatus.UNCHANGED,
-			data_sensor_readouts=FolderSynchronizationStatus.UNCHANGED,
-			data_check_results=FolderSynchronizationStatus.UNCHANGED,
-			data_statistics=FolderSynchronizationStatus.UNCHANGED,
-			data_errors=FolderSynchronizationStatus.UNCHANGED,
-			data_incidents=FolderSynchronizationStatus.UNCHANGED
-		),
-		last_sequence_number=3854372
-	)
-    ```
+        ```
+        DqoJobQueueInitialSnapshotModel(
+			jobs=[
+			
+			],
+			folder_synchronization_status=CloudSynchronizationFoldersStatusModel(
+				sources=FolderSynchronizationStatus.UNCHANGED,
+				sensors=FolderSynchronizationStatus.UNCHANGED,
+				rules=FolderSynchronizationStatus.UNCHANGED,
+				checks=FolderSynchronizationStatus.UNCHANGED,
+				settings=FolderSynchronizationStatus.UNCHANGED,
+				credentials=FolderSynchronizationStatus.UNCHANGED,
+				dictionaries=FolderSynchronizationStatus.UNCHANGED,
+				patterns=FolderSynchronizationStatus.UNCHANGED,
+				data_sensor_readouts=FolderSynchronizationStatus.UNCHANGED,
+				data_check_results=FolderSynchronizationStatus.UNCHANGED,
+				data_statistics=FolderSynchronizationStatus.UNCHANGED,
+				data_errors=FolderSynchronizationStatus.UNCHANGED,
+				data_incidents=FolderSynchronizationStatus.UNCHANGED
+			),
+			last_sequence_number=3854372
+		)
+        ```
     
     
     
@@ -1322,15 +1327,15 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "status" : "finished",
-	  "statusChangedAt" : "2007-10-11T13:42:00Z"
-	}
-    ```
+        ```
+        {
+		  "status" : "finished",
+		  "statusChangedAt" : "2007-10-11T13:42:00Z"
+		}
+        ```
     
     
 
@@ -1355,14 +1360,14 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoJobHistoryEntryModel(
-		status=DqoJobStatus.FINISHED,
-		status_changed_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```
+        DqoJobHistoryEntryModel(
+			status=DqoJobStatus.FINISHED,
+			status_changed_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -1388,14 +1393,14 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoJobHistoryEntryModel(
-		status=DqoJobStatus.FINISHED,
-		status_changed_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```
+        DqoJobHistoryEntryModel(
+			status=DqoJobStatus.FINISHED,
+			status_changed_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -1424,14 +1429,14 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoJobHistoryEntryModel(
-		status=DqoJobStatus.FINISHED,
-		status_changed_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```
+        DqoJobHistoryEntryModel(
+			status=DqoJobStatus.FINISHED,
+			status_changed_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -1460,14 +1465,14 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoJobHistoryEntryModel(
-		status=DqoJobStatus.FINISHED,
-		status_changed_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```
+        DqoJobHistoryEntryModel(
+			status=DqoJobStatus.FINISHED,
+			status_changed_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -1519,29 +1524,30 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "jobChanges" : [ ],
-	  "folderSynchronizationStatus" : {
-	    "sources" : "unchanged",
-	    "sensors" : "unchanged",
-	    "rules" : "unchanged",
-	    "checks" : "unchanged",
-	    "settings" : "unchanged",
-	    "credentials" : "unchanged",
-	    "dictionaries" : "unchanged",
-	    "data_sensor_readouts" : "unchanged",
-	    "data_check_results" : "unchanged",
-	    "data_statistics" : "unchanged",
-	    "data_errors" : "unchanged",
-	    "data_incidents" : "unchanged"
-	  },
-	  "lastSequenceNumber" : 3854372
-	}
-    ```
+        ```
+        {
+		  "jobChanges" : [ ],
+		  "folderSynchronizationStatus" : {
+		    "sources" : "unchanged",
+		    "sensors" : "unchanged",
+		    "rules" : "unchanged",
+		    "checks" : "unchanged",
+		    "settings" : "unchanged",
+		    "credentials" : "unchanged",
+		    "dictionaries" : "unchanged",
+		    "patterns" : "unchanged",
+		    "data_sensor_readouts" : "unchanged",
+		    "data_check_results" : "unchanged",
+		    "data_statistics" : "unchanged",
+		    "data_errors" : "unchanged",
+		    "data_incidents" : "unchanged"
+		  },
+		  "lastSequenceNumber" : 3854372
+		}
+        ```
     
     
 
@@ -1566,30 +1572,31 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoJobQueueIncrementalSnapshotModel(
-		job_changes=[
-		
-		],
-		folder_synchronization_status=CloudSynchronizationFoldersStatusModel(
-			sources=FolderSynchronizationStatus.UNCHANGED,
-			sensors=FolderSynchronizationStatus.UNCHANGED,
-			rules=FolderSynchronizationStatus.UNCHANGED,
-			checks=FolderSynchronizationStatus.UNCHANGED,
-			settings=FolderSynchronizationStatus.UNCHANGED,
-			credentials=FolderSynchronizationStatus.UNCHANGED,
-			dictionaries=FolderSynchronizationStatus.UNCHANGED,
-			data_sensor_readouts=FolderSynchronizationStatus.UNCHANGED,
-			data_check_results=FolderSynchronizationStatus.UNCHANGED,
-			data_statistics=FolderSynchronizationStatus.UNCHANGED,
-			data_errors=FolderSynchronizationStatus.UNCHANGED,
-			data_incidents=FolderSynchronizationStatus.UNCHANGED
-		),
-		last_sequence_number=3854372
-	)
-    ```
+        ```
+        DqoJobQueueIncrementalSnapshotModel(
+			job_changes=[
+			
+			],
+			folder_synchronization_status=CloudSynchronizationFoldersStatusModel(
+				sources=FolderSynchronizationStatus.UNCHANGED,
+				sensors=FolderSynchronizationStatus.UNCHANGED,
+				rules=FolderSynchronizationStatus.UNCHANGED,
+				checks=FolderSynchronizationStatus.UNCHANGED,
+				settings=FolderSynchronizationStatus.UNCHANGED,
+				credentials=FolderSynchronizationStatus.UNCHANGED,
+				dictionaries=FolderSynchronizationStatus.UNCHANGED,
+				patterns=FolderSynchronizationStatus.UNCHANGED,
+				data_sensor_readouts=FolderSynchronizationStatus.UNCHANGED,
+				data_check_results=FolderSynchronizationStatus.UNCHANGED,
+				data_statistics=FolderSynchronizationStatus.UNCHANGED,
+				data_errors=FolderSynchronizationStatus.UNCHANGED,
+				data_incidents=FolderSynchronizationStatus.UNCHANGED
+			),
+			last_sequence_number=3854372
+		)
+        ```
     
     
     
@@ -1615,30 +1622,31 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoJobQueueIncrementalSnapshotModel(
-		job_changes=[
-		
-		],
-		folder_synchronization_status=CloudSynchronizationFoldersStatusModel(
-			sources=FolderSynchronizationStatus.UNCHANGED,
-			sensors=FolderSynchronizationStatus.UNCHANGED,
-			rules=FolderSynchronizationStatus.UNCHANGED,
-			checks=FolderSynchronizationStatus.UNCHANGED,
-			settings=FolderSynchronizationStatus.UNCHANGED,
-			credentials=FolderSynchronizationStatus.UNCHANGED,
-			dictionaries=FolderSynchronizationStatus.UNCHANGED,
-			data_sensor_readouts=FolderSynchronizationStatus.UNCHANGED,
-			data_check_results=FolderSynchronizationStatus.UNCHANGED,
-			data_statistics=FolderSynchronizationStatus.UNCHANGED,
-			data_errors=FolderSynchronizationStatus.UNCHANGED,
-			data_incidents=FolderSynchronizationStatus.UNCHANGED
-		),
-		last_sequence_number=3854372
-	)
-    ```
+        ```
+        DqoJobQueueIncrementalSnapshotModel(
+			job_changes=[
+			
+			],
+			folder_synchronization_status=CloudSynchronizationFoldersStatusModel(
+				sources=FolderSynchronizationStatus.UNCHANGED,
+				sensors=FolderSynchronizationStatus.UNCHANGED,
+				rules=FolderSynchronizationStatus.UNCHANGED,
+				checks=FolderSynchronizationStatus.UNCHANGED,
+				settings=FolderSynchronizationStatus.UNCHANGED,
+				credentials=FolderSynchronizationStatus.UNCHANGED,
+				dictionaries=FolderSynchronizationStatus.UNCHANGED,
+				patterns=FolderSynchronizationStatus.UNCHANGED,
+				data_sensor_readouts=FolderSynchronizationStatus.UNCHANGED,
+				data_check_results=FolderSynchronizationStatus.UNCHANGED,
+				data_statistics=FolderSynchronizationStatus.UNCHANGED,
+				data_errors=FolderSynchronizationStatus.UNCHANGED,
+				data_incidents=FolderSynchronizationStatus.UNCHANGED
+			),
+			last_sequence_number=3854372
+		)
+        ```
     
     
     
@@ -1667,30 +1675,31 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoJobQueueIncrementalSnapshotModel(
-		job_changes=[
-		
-		],
-		folder_synchronization_status=CloudSynchronizationFoldersStatusModel(
-			sources=FolderSynchronizationStatus.UNCHANGED,
-			sensors=FolderSynchronizationStatus.UNCHANGED,
-			rules=FolderSynchronizationStatus.UNCHANGED,
-			checks=FolderSynchronizationStatus.UNCHANGED,
-			settings=FolderSynchronizationStatus.UNCHANGED,
-			credentials=FolderSynchronizationStatus.UNCHANGED,
-			dictionaries=FolderSynchronizationStatus.UNCHANGED,
-			data_sensor_readouts=FolderSynchronizationStatus.UNCHANGED,
-			data_check_results=FolderSynchronizationStatus.UNCHANGED,
-			data_statistics=FolderSynchronizationStatus.UNCHANGED,
-			data_errors=FolderSynchronizationStatus.UNCHANGED,
-			data_incidents=FolderSynchronizationStatus.UNCHANGED
-		),
-		last_sequence_number=3854372
-	)
-    ```
+        ```
+        DqoJobQueueIncrementalSnapshotModel(
+			job_changes=[
+			
+			],
+			folder_synchronization_status=CloudSynchronizationFoldersStatusModel(
+				sources=FolderSynchronizationStatus.UNCHANGED,
+				sensors=FolderSynchronizationStatus.UNCHANGED,
+				rules=FolderSynchronizationStatus.UNCHANGED,
+				checks=FolderSynchronizationStatus.UNCHANGED,
+				settings=FolderSynchronizationStatus.UNCHANGED,
+				credentials=FolderSynchronizationStatus.UNCHANGED,
+				dictionaries=FolderSynchronizationStatus.UNCHANGED,
+				patterns=FolderSynchronizationStatus.UNCHANGED,
+				data_sensor_readouts=FolderSynchronizationStatus.UNCHANGED,
+				data_check_results=FolderSynchronizationStatus.UNCHANGED,
+				data_statistics=FolderSynchronizationStatus.UNCHANGED,
+				data_errors=FolderSynchronizationStatus.UNCHANGED,
+				data_incidents=FolderSynchronizationStatus.UNCHANGED
+			),
+			last_sequence_number=3854372
+		)
+        ```
     
     
     
@@ -1719,30 +1728,31 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoJobQueueIncrementalSnapshotModel(
-		job_changes=[
-		
-		],
-		folder_synchronization_status=CloudSynchronizationFoldersStatusModel(
-			sources=FolderSynchronizationStatus.UNCHANGED,
-			sensors=FolderSynchronizationStatus.UNCHANGED,
-			rules=FolderSynchronizationStatus.UNCHANGED,
-			checks=FolderSynchronizationStatus.UNCHANGED,
-			settings=FolderSynchronizationStatus.UNCHANGED,
-			credentials=FolderSynchronizationStatus.UNCHANGED,
-			dictionaries=FolderSynchronizationStatus.UNCHANGED,
-			data_sensor_readouts=FolderSynchronizationStatus.UNCHANGED,
-			data_check_results=FolderSynchronizationStatus.UNCHANGED,
-			data_statistics=FolderSynchronizationStatus.UNCHANGED,
-			data_errors=FolderSynchronizationStatus.UNCHANGED,
-			data_incidents=FolderSynchronizationStatus.UNCHANGED
-		),
-		last_sequence_number=3854372
-	)
-    ```
+        ```
+        DqoJobQueueIncrementalSnapshotModel(
+			job_changes=[
+			
+			],
+			folder_synchronization_status=CloudSynchronizationFoldersStatusModel(
+				sources=FolderSynchronizationStatus.UNCHANGED,
+				sensors=FolderSynchronizationStatus.UNCHANGED,
+				rules=FolderSynchronizationStatus.UNCHANGED,
+				checks=FolderSynchronizationStatus.UNCHANGED,
+				settings=FolderSynchronizationStatus.UNCHANGED,
+				credentials=FolderSynchronizationStatus.UNCHANGED,
+				dictionaries=FolderSynchronizationStatus.UNCHANGED,
+				patterns=FolderSynchronizationStatus.UNCHANGED,
+				data_sensor_readouts=FolderSynchronizationStatus.UNCHANGED,
+				data_check_results=FolderSynchronizationStatus.UNCHANGED,
+				data_statistics=FolderSynchronizationStatus.UNCHANGED,
+				data_errors=FolderSynchronizationStatus.UNCHANGED,
+				data_incidents=FolderSynchronizationStatus.UNCHANGED
+			),
+			last_sequence_number=3854372
+		)
+        ```
     
     
     
@@ -1806,41 +1816,41 @@ http://localhost:8888/api/jobs/importtables
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "jobId" : {
-	    "jobId" : 123456789,
-	    "createdAt" : "2007-10-11T13:42:00Z"
-	  },
-	  "result" : {
-	    "source_table_specs" : [ {
-	      "timestamp_columns" : {
-	        "event_timestamp_column" : "col1",
-	        "ingestion_timestamp_column" : "col2",
-	        "partition_by_column" : "col3"
-	      },
-	      "incremental_time_window" : {
-	        "daily_partitioning_recent_days" : 7,
-	        "daily_partitioning_include_today" : true
-	      },
-	      "profiling_checks" : {
-	        "volume" : {
-	          "profile_row_count" : {
-	            "error" : {
-	              "min_count" : 1
-	            }
-	          }
-	        }
-	      },
-	      "columns" : { }
-	    } ]
-	  },
-	  "status" : "finished"
-	}
-    ```
+        ```
+        {
+		  "jobId" : {
+		    "jobId" : 123456789,
+		    "createdAt" : "2007-10-11T13:42:00Z"
+		  },
+		  "result" : {
+		    "source_table_specs" : [ {
+		      "timestamp_columns" : {
+		        "event_timestamp_column" : "col1",
+		        "ingestion_timestamp_column" : "col2",
+		        "partition_by_column" : "col3"
+		      },
+		      "incremental_time_window" : {
+		        "daily_partitioning_recent_days" : 7,
+		        "daily_partitioning_include_today" : true
+		      },
+		      "profiling_checks" : {
+		        "volume" : {
+		          "profile_row_count" : {
+		            "error" : {
+		              "min_count" : 1
+		            }
+		          }
+		        }
+		      },
+		      "columns" : { }
+		    } ]
+		  },
+		  "status" : "finished"
+		}
+        ```
     
     
 
@@ -1873,50 +1883,50 @@ http://localhost:8888/api/jobs/importtables
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ImportTablesQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=ImportTablesResult(
-			source_table_specs=[
-				TableSpec(
-					disabled=False,
-					timestamp_columns=TimestampColumnsSpec(
-						event_timestamp_column='col1',
-						ingestion_timestamp_column='col2',
-						partition_by_column='col3'
-					),
-					incremental_time_window=PartitionIncrementalTimeWindowSpec(
-						daily_partitioning_recent_days=7,
-						daily_partitioning_include_today=True,
-						monthly_partitioning_include_current_month=False
-					),
-					groupings=DataGroupingConfigurationSpecMap(),
-					table_comparisons=TableComparisonConfigurationSpecMap(),
-					profiling_checks=TableProfilingCheckCategoriesSpec(
-						volume=TableVolumeProfilingChecksSpec(
-							profile_row_count=TableRowCountCheckSpec(
-								parameters=TableVolumeRowCountSensorParametersSpec(),
-								error=MinCountRule1ParametersSpec(min_count=1),
-								disabled=False,
-								exclude_from_kpi=False,
-								include_in_sla=False
+        ```
+        ImportTablesQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=ImportTablesResult(
+				source_table_specs=[
+					TableSpec(
+						disabled=False,
+						timestamp_columns=TimestampColumnsSpec(
+							event_timestamp_column='col1',
+							ingestion_timestamp_column='col2',
+							partition_by_column='col3'
+						),
+						incremental_time_window=PartitionIncrementalTimeWindowSpec(
+							daily_partitioning_recent_days=7,
+							daily_partitioning_include_today=True,
+							monthly_partitioning_include_current_month=False
+						),
+						groupings=DataGroupingConfigurationSpecMap(),
+						table_comparisons=TableComparisonConfigurationSpecMap(),
+						profiling_checks=TableProfilingCheckCategoriesSpec(
+							volume=TableVolumeProfilingChecksSpec(
+								profile_row_count=TableRowCountCheckSpec(
+									parameters=TableVolumeRowCountSensorParametersSpec(),
+									error=MinCountRule1ParametersSpec(min_count=1),
+									disabled=False,
+									exclude_from_kpi=False,
+									include_in_sla=False
+								)
 							)
-						)
-					),
-					monitoring_checks=TableMonitoringChecksSpec(),
-					partitioned_checks=TablePartitionedChecksRootSpec(),
-					columns=ColumnSpecMap()
-				)
-			]
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+						),
+						monitoring_checks=TableMonitoringCheckCategoriesSpec(),
+						partitioned_checks=TablePartitionedCheckCategoriesSpec(),
+						columns=ColumnSpecMap()
+					)
+				]
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -1950,50 +1960,50 @@ http://localhost:8888/api/jobs/importtables
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ImportTablesQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=ImportTablesResult(
-			source_table_specs=[
-				TableSpec(
-					disabled=False,
-					timestamp_columns=TimestampColumnsSpec(
-						event_timestamp_column='col1',
-						ingestion_timestamp_column='col2',
-						partition_by_column='col3'
-					),
-					incremental_time_window=PartitionIncrementalTimeWindowSpec(
-						daily_partitioning_recent_days=7,
-						daily_partitioning_include_today=True,
-						monthly_partitioning_include_current_month=False
-					),
-					groupings=DataGroupingConfigurationSpecMap(),
-					table_comparisons=TableComparisonConfigurationSpecMap(),
-					profiling_checks=TableProfilingCheckCategoriesSpec(
-						volume=TableVolumeProfilingChecksSpec(
-							profile_row_count=TableRowCountCheckSpec(
-								parameters=TableVolumeRowCountSensorParametersSpec(),
-								error=MinCountRule1ParametersSpec(min_count=1),
-								disabled=False,
-								exclude_from_kpi=False,
-								include_in_sla=False
+        ```
+        ImportTablesQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=ImportTablesResult(
+				source_table_specs=[
+					TableSpec(
+						disabled=False,
+						timestamp_columns=TimestampColumnsSpec(
+							event_timestamp_column='col1',
+							ingestion_timestamp_column='col2',
+							partition_by_column='col3'
+						),
+						incremental_time_window=PartitionIncrementalTimeWindowSpec(
+							daily_partitioning_recent_days=7,
+							daily_partitioning_include_today=True,
+							monthly_partitioning_include_current_month=False
+						),
+						groupings=DataGroupingConfigurationSpecMap(),
+						table_comparisons=TableComparisonConfigurationSpecMap(),
+						profiling_checks=TableProfilingCheckCategoriesSpec(
+							volume=TableVolumeProfilingChecksSpec(
+								profile_row_count=TableRowCountCheckSpec(
+									parameters=TableVolumeRowCountSensorParametersSpec(),
+									error=MinCountRule1ParametersSpec(min_count=1),
+									disabled=False,
+									exclude_from_kpi=False,
+									include_in_sla=False
+								)
 							)
-						)
-					),
-					monitoring_checks=TableMonitoringChecksSpec(),
-					partitioned_checks=TablePartitionedChecksRootSpec(),
-					columns=ColumnSpecMap()
-				)
-			]
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+						),
+						monitoring_checks=TableMonitoringCheckCategoriesSpec(),
+						partitioned_checks=TablePartitionedCheckCategoriesSpec(),
+						columns=ColumnSpecMap()
+					)
+				]
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -2030,50 +2040,50 @@ http://localhost:8888/api/jobs/importtables
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ImportTablesQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=ImportTablesResult(
-			source_table_specs=[
-				TableSpec(
-					disabled=False,
-					timestamp_columns=TimestampColumnsSpec(
-						event_timestamp_column='col1',
-						ingestion_timestamp_column='col2',
-						partition_by_column='col3'
-					),
-					incremental_time_window=PartitionIncrementalTimeWindowSpec(
-						daily_partitioning_recent_days=7,
-						daily_partitioning_include_today=True,
-						monthly_partitioning_include_current_month=False
-					),
-					groupings=DataGroupingConfigurationSpecMap(),
-					table_comparisons=TableComparisonConfigurationSpecMap(),
-					profiling_checks=TableProfilingCheckCategoriesSpec(
-						volume=TableVolumeProfilingChecksSpec(
-							profile_row_count=TableRowCountCheckSpec(
-								parameters=TableVolumeRowCountSensorParametersSpec(),
-								error=MinCountRule1ParametersSpec(min_count=1),
-								disabled=False,
-								exclude_from_kpi=False,
-								include_in_sla=False
+        ```
+        ImportTablesQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=ImportTablesResult(
+				source_table_specs=[
+					TableSpec(
+						disabled=False,
+						timestamp_columns=TimestampColumnsSpec(
+							event_timestamp_column='col1',
+							ingestion_timestamp_column='col2',
+							partition_by_column='col3'
+						),
+						incremental_time_window=PartitionIncrementalTimeWindowSpec(
+							daily_partitioning_recent_days=7,
+							daily_partitioning_include_today=True,
+							monthly_partitioning_include_current_month=False
+						),
+						groupings=DataGroupingConfigurationSpecMap(),
+						table_comparisons=TableComparisonConfigurationSpecMap(),
+						profiling_checks=TableProfilingCheckCategoriesSpec(
+							volume=TableVolumeProfilingChecksSpec(
+								profile_row_count=TableRowCountCheckSpec(
+									parameters=TableVolumeRowCountSensorParametersSpec(),
+									error=MinCountRule1ParametersSpec(min_count=1),
+									disabled=False,
+									exclude_from_kpi=False,
+									include_in_sla=False
+								)
 							)
-						)
-					),
-					monitoring_checks=TableMonitoringChecksSpec(),
-					partitioned_checks=TablePartitionedChecksRootSpec(),
-					columns=ColumnSpecMap()
-				)
-			]
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+						),
+						monitoring_checks=TableMonitoringCheckCategoriesSpec(),
+						partitioned_checks=TablePartitionedCheckCategoriesSpec(),
+						columns=ColumnSpecMap()
+					)
+				]
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -2110,50 +2120,50 @@ http://localhost:8888/api/jobs/importtables
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    ImportTablesQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=ImportTablesResult(
-			source_table_specs=[
-				TableSpec(
-					disabled=False,
-					timestamp_columns=TimestampColumnsSpec(
-						event_timestamp_column='col1',
-						ingestion_timestamp_column='col2',
-						partition_by_column='col3'
-					),
-					incremental_time_window=PartitionIncrementalTimeWindowSpec(
-						daily_partitioning_recent_days=7,
-						daily_partitioning_include_today=True,
-						monthly_partitioning_include_current_month=False
-					),
-					groupings=DataGroupingConfigurationSpecMap(),
-					table_comparisons=TableComparisonConfigurationSpecMap(),
-					profiling_checks=TableProfilingCheckCategoriesSpec(
-						volume=TableVolumeProfilingChecksSpec(
-							profile_row_count=TableRowCountCheckSpec(
-								parameters=TableVolumeRowCountSensorParametersSpec(),
-								error=MinCountRule1ParametersSpec(min_count=1),
-								disabled=False,
-								exclude_from_kpi=False,
-								include_in_sla=False
+        ```
+        ImportTablesQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=ImportTablesResult(
+				source_table_specs=[
+					TableSpec(
+						disabled=False,
+						timestamp_columns=TimestampColumnsSpec(
+							event_timestamp_column='col1',
+							ingestion_timestamp_column='col2',
+							partition_by_column='col3'
+						),
+						incremental_time_window=PartitionIncrementalTimeWindowSpec(
+							daily_partitioning_recent_days=7,
+							daily_partitioning_include_today=True,
+							monthly_partitioning_include_current_month=False
+						),
+						groupings=DataGroupingConfigurationSpecMap(),
+						table_comparisons=TableComparisonConfigurationSpecMap(),
+						profiling_checks=TableProfilingCheckCategoriesSpec(
+							volume=TableVolumeProfilingChecksSpec(
+								profile_row_count=TableRowCountCheckSpec(
+									parameters=TableVolumeRowCountSensorParametersSpec(),
+									error=MinCountRule1ParametersSpec(min_count=1),
+									disabled=False,
+									exclude_from_kpi=False,
+									include_in_sla=False
+								)
 							)
-						)
-					),
-					monitoring_checks=TableMonitoringChecksSpec(),
-					partitioned_checks=TablePartitionedChecksRootSpec(),
-					columns=ColumnSpecMap()
-				)
-			]
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+						),
+						monitoring_checks=TableMonitoringCheckCategoriesSpec(),
+						partitioned_checks=TablePartitionedCheckCategoriesSpec(),
+						columns=ColumnSpecMap()
+					)
+				]
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -2341,27 +2351,27 @@ http://localhost:8888/api/jobs/runchecks
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "jobId" : {
-	    "jobId" : 123456789,
-	    "createdAt" : "2007-10-11T13:42:00Z"
-	  },
-	  "result" : {
-	    "highest_severity" : "error",
-	    "executed_checks" : 10,
-	    "valid_results" : 7,
-	    "warnings" : 1,
-	    "errors" : 2,
-	    "fatals" : 0,
-	    "execution_errors" : 0
-	  },
-	  "status" : "finished"
-	}
-    ```
+        ```
+        {
+		  "jobId" : {
+		    "jobId" : 123456789,
+		    "createdAt" : "2007-10-11T13:42:00Z"
+		  },
+		  "result" : {
+		    "highest_severity" : "error",
+		    "executed_checks" : 10,
+		    "valid_results" : 7,
+		    "warnings" : 1,
+		    "errors" : 2,
+		    "fatals" : 0,
+		    "execution_errors" : 0
+		  },
+		  "status" : "finished"
+		}
+        ```
     
     
 
@@ -2398,26 +2408,26 @@ http://localhost:8888/api/jobs/runchecks
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    RunChecksQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=RunChecksResult(
-			highest_severity=RuleSeverityLevel.ERROR,
-			executed_checks=10,
-			valid_results=7,
-			warnings=1,
-			errors=2,
-			fatals=0,
-			execution_errors=0
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+        ```
+        RunChecksQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=RunChecksResult(
+				highest_severity=RuleSeverityLevel.ERROR,
+				executed_checks=10,
+				valid_results=7,
+				warnings=1,
+				errors=2,
+				fatals=0,
+				execution_errors=0
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -2455,26 +2465,26 @@ http://localhost:8888/api/jobs/runchecks
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    RunChecksQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=RunChecksResult(
-			highest_severity=RuleSeverityLevel.ERROR,
-			executed_checks=10,
-			valid_results=7,
-			warnings=1,
-			errors=2,
-			fatals=0,
-			execution_errors=0
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+        ```
+        RunChecksQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=RunChecksResult(
+				highest_severity=RuleSeverityLevel.ERROR,
+				executed_checks=10,
+				valid_results=7,
+				warnings=1,
+				errors=2,
+				fatals=0,
+				execution_errors=0
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -2515,26 +2525,26 @@ http://localhost:8888/api/jobs/runchecks
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    RunChecksQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=RunChecksResult(
-			highest_severity=RuleSeverityLevel.ERROR,
-			executed_checks=10,
-			valid_results=7,
-			warnings=1,
-			errors=2,
-			fatals=0,
-			execution_errors=0
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+        ```
+        RunChecksQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=RunChecksResult(
+				highest_severity=RuleSeverityLevel.ERROR,
+				executed_checks=10,
+				valid_results=7,
+				warnings=1,
+				errors=2,
+				fatals=0,
+				execution_errors=0
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -2575,26 +2585,26 @@ http://localhost:8888/api/jobs/runchecks
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    RunChecksQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=RunChecksResult(
-			highest_severity=RuleSeverityLevel.ERROR,
-			executed_checks=10,
-			valid_results=7,
-			warnings=1,
-			errors=2,
-			fatals=0,
-			execution_errors=0
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+        ```
+        RunChecksQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=RunChecksResult(
+				highest_severity=RuleSeverityLevel.ERROR,
+				executed_checks=10,
+				valid_results=7,
+				warnings=1,
+				errors=2,
+				fatals=0,
+				execution_errors=0
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -2639,12 +2649,12 @@ http://localhost:8888/api/jobs/scheduler/status/start
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    { }
-    ```
+        ```
+        { }
+        ```
     
     
 
@@ -2667,11 +2677,11 @@ http://localhost:8888/api/jobs/scheduler/status/start
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SpringErrorPayload()
-    ```
+        ```
+        SpringErrorPayload()
+        ```
     
     
     
@@ -2695,11 +2705,11 @@ http://localhost:8888/api/jobs/scheduler/status/start
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SpringErrorPayload()
-    ```
+        ```
+        SpringErrorPayload()
+        ```
     
     
     
@@ -2726,11 +2736,11 @@ http://localhost:8888/api/jobs/scheduler/status/start
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SpringErrorPayload()
-    ```
+        ```
+        SpringErrorPayload()
+        ```
     
     
     
@@ -2757,11 +2767,11 @@ http://localhost:8888/api/jobs/scheduler/status/start
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SpringErrorPayload()
-    ```
+        ```
+        SpringErrorPayload()
+        ```
     
     
     
@@ -2806,12 +2816,12 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    { }
-    ```
+        ```
+        { }
+        ```
     
     
 
@@ -2834,11 +2844,11 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SpringErrorPayload()
-    ```
+        ```
+        SpringErrorPayload()
+        ```
     
     
     
@@ -2862,11 +2872,11 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SpringErrorPayload()
-    ```
+        ```
+        SpringErrorPayload()
+        ```
     
     
     
@@ -2893,11 +2903,11 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SpringErrorPayload()
-    ```
+        ```
+        SpringErrorPayload()
+        ```
     
     
     
@@ -2924,11 +2934,11 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SpringErrorPayload()
-    ```
+        ```
+        SpringErrorPayload()
+        ```
     
     
     
@@ -2987,19 +2997,19 @@ http://localhost:8888/api/jobs/synchronize
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"direction\":\"full\",\"forceRefreshNativeTables\":false,\"detectCronSchedules\":false,\"sources\":true,\"sensors\":true,\"rules\":true,\"checks\":true,\"settings\":true,\"credentials\":true,\"dictionaries\":true,\"dataSensorReadouts\":true,\"dataCheckResults\":true,\"dataStatistics\":true,\"dataErrors\":true,\"dataIncidents\":true,\"synchronizeFolderWithLocalChanges\":false}"
+		"{\"direction\":\"full\",\"forceRefreshNativeTables\":false,\"detectCronSchedules\":false,\"sources\":true,\"sensors\":true,\"rules\":true,\"checks\":true,\"settings\":true,\"credentials\":true,\"dictionaries\":true,\"patterns\":true,\"dataSensorReadouts\":true,\"dataCheckResults\":true,\"dataStatistics\":true,\"dataErrors\":true,\"dataIncidents\":true,\"synchronizeFolderWithLocalChanges\":false}"
 	
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "status" : "queued"
-	}
-    ```
+        ```
+        {
+		  "status" : "queued"
+		}
+        ```
     
     
 
@@ -3028,6 +3038,7 @@ http://localhost:8888/api/jobs/synchronize
 		settings=True,
 		credentials=True,
 		dictionaries=True,
+		patterns=True,
 		data_sensor_readouts=True,
 		data_check_results=True,
 		data_statistics=True,
@@ -3044,11 +3055,11 @@ http://localhost:8888/api/jobs/synchronize
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
-    ```
+        ```
+        SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
+        ```
     
     
     
@@ -3078,6 +3089,7 @@ http://localhost:8888/api/jobs/synchronize
 		settings=True,
 		credentials=True,
 		dictionaries=True,
+		patterns=True,
 		data_sensor_readouts=True,
 		data_check_results=True,
 		data_statistics=True,
@@ -3094,11 +3106,11 @@ http://localhost:8888/api/jobs/synchronize
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
-    ```
+        ```
+        SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
+        ```
     
     
     
@@ -3131,6 +3143,7 @@ http://localhost:8888/api/jobs/synchronize
 		settings=True,
 		credentials=True,
 		dictionaries=True,
+		patterns=True,
 		data_sensor_readouts=True,
 		data_check_results=True,
 		data_statistics=True,
@@ -3147,11 +3160,11 @@ http://localhost:8888/api/jobs/synchronize
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
-    ```
+        ```
+        SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
+        ```
     
     
     
@@ -3184,6 +3197,7 @@ http://localhost:8888/api/jobs/synchronize
 		settings=True,
 		credentials=True,
 		dictionaries=True,
+		patterns=True,
 		data_sensor_readouts=True,
 		data_check_results=True,
 		data_statistics=True,
@@ -3200,11 +3214,11 @@ http://localhost:8888/api/jobs/synchronize
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
-    ```
+        ```
+        SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
+        ```
     
     
     
@@ -3257,15 +3271,15 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "status" : "finished",
-	  "statusChangedAt" : "2007-10-11T13:42:00Z"
-	}
-    ```
+        ```
+        {
+		  "status" : "finished",
+		  "statusChangedAt" : "2007-10-11T13:42:00Z"
+		}
+        ```
     
     
 
@@ -3290,14 +3304,14 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoJobHistoryEntryModel(
-		status=DqoJobStatus.FINISHED,
-		status_changed_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```
+        DqoJobHistoryEntryModel(
+			status=DqoJobStatus.FINISHED,
+			status_changed_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -3323,14 +3337,14 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoJobHistoryEntryModel(
-		status=DqoJobStatus.FINISHED,
-		status_changed_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```
+        DqoJobHistoryEntryModel(
+			status=DqoJobStatus.FINISHED,
+			status_changed_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -3359,14 +3373,14 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoJobHistoryEntryModel(
-		status=DqoJobStatus.FINISHED,
-		status_changed_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```
+        DqoJobHistoryEntryModel(
+			status=DqoJobStatus.FINISHED,
+			status_changed_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -3395,14 +3409,14 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoJobHistoryEntryModel(
-		status=DqoJobStatus.FINISHED,
-		status_changed_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```
+        DqoJobHistoryEntryModel(
+			status=DqoJobStatus.FINISHED,
+			status_changed_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -3455,27 +3469,27 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "jobId" : {
-	    "jobId" : 123456789,
-	    "createdAt" : "2007-10-11T13:42:00Z"
-	  },
-	  "result" : {
-	    "highest_severity" : "error",
-	    "executed_checks" : 10,
-	    "valid_results" : 7,
-	    "warnings" : 1,
-	    "errors" : 2,
-	    "fatals" : 0,
-	    "execution_errors" : 0
-	  },
-	  "status" : "finished"
-	}
-    ```
+        ```
+        {
+		  "jobId" : {
+		    "jobId" : 123456789,
+		    "createdAt" : "2007-10-11T13:42:00Z"
+		  },
+		  "result" : {
+		    "highest_severity" : "error",
+		    "executed_checks" : 10,
+		    "valid_results" : 7,
+		    "warnings" : 1,
+		    "errors" : 2,
+		    "fatals" : 0,
+		    "execution_errors" : 0
+		  },
+		  "status" : "finished"
+		}
+        ```
     
     
 
@@ -3500,26 +3514,26 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    RunChecksQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=RunChecksResult(
-			highest_severity=RuleSeverityLevel.ERROR,
-			executed_checks=10,
-			valid_results=7,
-			warnings=1,
-			errors=2,
-			fatals=0,
-			execution_errors=0
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+        ```
+        RunChecksQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=RunChecksResult(
+				highest_severity=RuleSeverityLevel.ERROR,
+				executed_checks=10,
+				valid_results=7,
+				warnings=1,
+				errors=2,
+				fatals=0,
+				execution_errors=0
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -3545,26 +3559,26 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    RunChecksQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=RunChecksResult(
-			highest_severity=RuleSeverityLevel.ERROR,
-			executed_checks=10,
-			valid_results=7,
-			warnings=1,
-			errors=2,
-			fatals=0,
-			execution_errors=0
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+        ```
+        RunChecksQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=RunChecksResult(
+				highest_severity=RuleSeverityLevel.ERROR,
+				executed_checks=10,
+				valid_results=7,
+				warnings=1,
+				errors=2,
+				fatals=0,
+				execution_errors=0
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -3593,26 +3607,26 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    RunChecksQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=RunChecksResult(
-			highest_severity=RuleSeverityLevel.ERROR,
-			executed_checks=10,
-			valid_results=7,
-			warnings=1,
-			errors=2,
-			fatals=0,
-			execution_errors=0
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+        ```
+        RunChecksQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=RunChecksResult(
+				highest_severity=RuleSeverityLevel.ERROR,
+				executed_checks=10,
+				valid_results=7,
+				warnings=1,
+				errors=2,
+				fatals=0,
+				execution_errors=0
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     
@@ -3641,26 +3655,26 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    RunChecksQueueJobResult(
-		job_id=DqoQueueJobId(
-			job_id=123456789,
-			created_at='2007-10-11T13:42:00Z'
-		),
-		result=RunChecksResult(
-			highest_severity=RuleSeverityLevel.ERROR,
-			executed_checks=10,
-			valid_results=7,
-			warnings=1,
-			errors=2,
-			fatals=0,
-			execution_errors=0
-		),
-		status=DqoJobStatus.FINISHED
-	)
-    ```
+        ```
+        RunChecksQueueJobResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=RunChecksResult(
+				highest_severity=RuleSeverityLevel.ERROR,
+				executed_checks=10,
+				valid_results=7,
+				warnings=1,
+				errors=2,
+				fatals=0,
+				execution_errors=0
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
     
     
     

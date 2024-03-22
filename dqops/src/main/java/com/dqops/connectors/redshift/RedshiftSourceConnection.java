@@ -33,7 +33,9 @@ import tech.tablesaw.api.Table;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * Redshift source connection.
@@ -114,7 +116,11 @@ public class RedshiftSourceConnection extends AbstractJdbcSourceConnection {
 
         Properties dataSourceProperties = new Properties();
         if (redshiftSpec.getProperties() != null) {
-            dataSourceProperties.putAll(redshiftSpec.getProperties());
+            dataSourceProperties.putAll(redshiftSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
         String userName = this.getSecretValueProvider().expandValue(redshiftSpec.getUser(), secretValueLookupContext);

@@ -26,10 +26,16 @@ class IncidentIssueHistogramModel:
     Attributes:
         has_profiling_issues (Union[Unset, bool]): True when this data quality incident is based on data quality issues
             from profiling checks within the filters applied to search for linked data quality issues.
-        has_monitoring_issues (Union[Unset, bool]): True when this data quality incident is based on data quality issues
-            from monitoring checks within the filters applied to search for linked data quality issues.
-        has_partitioned_issues (Union[Unset, bool]): True when this data quality incident is based on data quality
-            issues from partitioned checks within the filters applied to search for linked data quality issues.
+        has_daily_monitoring_issues (Union[Unset, bool]): True when this data quality incident is based on data quality
+            issues from daily monitoring checks within the filters applied to search for linked data quality issues.
+        has_monthly_monitoring_issues (Union[Unset, bool]): True when this data quality incident is based on data
+            quality issues from monthly monitoring checks within the filters applied to search for linked data quality
+            issues.
+        has_daily_partitioned_issues (Union[Unset, bool]): True when this data quality incident is based on data quality
+            issues from daily partitioned checks within the filters applied to search for linked data quality issues.
+        has_monthly_partitioned_issues (Union[Unset, bool]): True when this data quality incident is based on data
+            quality issues from monthly partitioned checks within the filters applied to search for linked data quality
+            issues.
         days (Union[Unset, IncidentIssueHistogramModelDays]): A map of the numbers of data quality issues per day, the
             day uses the DQOps server timezone.
         columns (Union[Unset, IncidentIssueHistogramModelColumns]): A map of column names with the most data quality
@@ -39,8 +45,10 @@ class IncidentIssueHistogramModel:
     """
 
     has_profiling_issues: Union[Unset, bool] = UNSET
-    has_monitoring_issues: Union[Unset, bool] = UNSET
-    has_partitioned_issues: Union[Unset, bool] = UNSET
+    has_daily_monitoring_issues: Union[Unset, bool] = UNSET
+    has_monthly_monitoring_issues: Union[Unset, bool] = UNSET
+    has_daily_partitioned_issues: Union[Unset, bool] = UNSET
+    has_monthly_partitioned_issues: Union[Unset, bool] = UNSET
     days: Union[Unset, "IncidentIssueHistogramModelDays"] = UNSET
     columns: Union[Unset, "IncidentIssueHistogramModelColumns"] = UNSET
     checks: Union[Unset, "IncidentIssueHistogramModelChecks"] = UNSET
@@ -48,8 +56,10 @@ class IncidentIssueHistogramModel:
 
     def to_dict(self) -> Dict[str, Any]:
         has_profiling_issues = self.has_profiling_issues
-        has_monitoring_issues = self.has_monitoring_issues
-        has_partitioned_issues = self.has_partitioned_issues
+        has_daily_monitoring_issues = self.has_daily_monitoring_issues
+        has_monthly_monitoring_issues = self.has_monthly_monitoring_issues
+        has_daily_partitioned_issues = self.has_daily_partitioned_issues
+        has_monthly_partitioned_issues = self.has_monthly_partitioned_issues
         days: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.days, Unset):
             days = self.days.to_dict()
@@ -67,10 +77,14 @@ class IncidentIssueHistogramModel:
         field_dict.update({})
         if has_profiling_issues is not UNSET:
             field_dict["hasProfilingIssues"] = has_profiling_issues
-        if has_monitoring_issues is not UNSET:
-            field_dict["hasMonitoringIssues"] = has_monitoring_issues
-        if has_partitioned_issues is not UNSET:
-            field_dict["hasPartitionedIssues"] = has_partitioned_issues
+        if has_daily_monitoring_issues is not UNSET:
+            field_dict["hasDailyMonitoringIssues"] = has_daily_monitoring_issues
+        if has_monthly_monitoring_issues is not UNSET:
+            field_dict["hasMonthlyMonitoringIssues"] = has_monthly_monitoring_issues
+        if has_daily_partitioned_issues is not UNSET:
+            field_dict["hasDailyPartitionedIssues"] = has_daily_partitioned_issues
+        if has_monthly_partitioned_issues is not UNSET:
+            field_dict["hasMonthlyPartitionedIssues"] = has_monthly_partitioned_issues
         if days is not UNSET:
             field_dict["days"] = days
         if columns is not UNSET:
@@ -95,9 +109,13 @@ class IncidentIssueHistogramModel:
         d = src_dict.copy()
         has_profiling_issues = d.pop("hasProfilingIssues", UNSET)
 
-        has_monitoring_issues = d.pop("hasMonitoringIssues", UNSET)
+        has_daily_monitoring_issues = d.pop("hasDailyMonitoringIssues", UNSET)
 
-        has_partitioned_issues = d.pop("hasPartitionedIssues", UNSET)
+        has_monthly_monitoring_issues = d.pop("hasMonthlyMonitoringIssues", UNSET)
+
+        has_daily_partitioned_issues = d.pop("hasDailyPartitionedIssues", UNSET)
+
+        has_monthly_partitioned_issues = d.pop("hasMonthlyPartitionedIssues", UNSET)
 
         _days = d.pop("days", UNSET)
         days: Union[Unset, IncidentIssueHistogramModelDays]
@@ -122,8 +140,10 @@ class IncidentIssueHistogramModel:
 
         incident_issue_histogram_model = cls(
             has_profiling_issues=has_profiling_issues,
-            has_monitoring_issues=has_monitoring_issues,
-            has_partitioned_issues=has_partitioned_issues,
+            has_daily_monitoring_issues=has_daily_monitoring_issues,
+            has_monthly_monitoring_issues=has_monthly_monitoring_issues,
+            has_daily_partitioned_issues=has_daily_partitioned_issues,
+            has_monthly_partitioned_issues=has_monthly_partitioned_issues,
             days=days,
             columns=columns,
             checks=checks,

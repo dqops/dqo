@@ -49,7 +49,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
     private PipedInputStream readFromProcessStream;
     private PipedOutputStream readFromProcessStreamProcessSide;
     private InputStreamReader readFromProcessStreamReader;
-    private PumpStreamHandler streamHandler;
+    private volatile PumpStreamHandler streamHandler;
     private ByteArrayOutputStream errorStream;
     private DefaultExecutor executor;
     private CompletableFuture<Object> processFinishedErrorFuture;
@@ -63,6 +63,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
     private Thread processingThread;
     private BlockingQueue<PythonRequestReplyMessage<?,?>> requestReplyMessages = new LinkedBlockingDeque<>();
     private boolean closed;
+    private final CountDownLatch waitForClose = new CountDownLatch(1);
 
     /**
      * Streaming python process wrapper. Keeps a reference to a python process that was started in the background.
@@ -123,6 +124,12 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
                 try {
                     PythonRequestReplyMessage requestReplyMessage = this.requestReplyMessages.take();
                     if (requestReplyMessage.isEmpty()) {
+                        try {
+                            this.writeToProcessStream.close();
+                        }
+                        catch (Exception ex) {
+                            // ignore
+                        }
                         return;
                     }
 
@@ -143,8 +150,8 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
         this.processingThread.start();
 
         try {
-            processStartedFuture.get();
-        } catch (InterruptedException | ExecutionException ex) {
+            processStartedFuture.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             throw new DqoRuntimeException("Failed to start a Python process, error: " + ex.getMessage(), ex);
         }
     }
@@ -254,6 +261,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
                         try {
                             // we detected that some output was written to the stderr of the python process, it is an error and we will terminate...
                             Thread.sleep(100); // we need to wait for the remaining output
+                            this.waitForClose.countDown();
                             this.close();
 
                             String errStreamText = this.errorStream.toString(StandardCharsets.UTF_8);
@@ -287,6 +295,8 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
             this.executor.execute(cmdLine, processEnvVariables, this);
         }
         catch (Exception ex) {
+            this.waitForClose.countDown();
+            this.streamHandler = null;
             String errStreamText = this.errorStream.toString(StandardCharsets.UTF_8);
             log.error("Python process failed with an error, the error captured from the stderr: " + errStreamText +
                     ", exception message: " + ex.getMessage(), ex);
@@ -310,6 +320,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
     public void onProcessComplete(int i) {
 		this.processFinishedSuccessFuture.complete(i);
         this.streamHandler = null;
+        this.waitForClose.countDown();
         this.close();
     }
 
@@ -322,7 +333,25 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
         log.error("Python process failed, error: " + e.getMessage(), e);
 		this.processFinishedErrorFuture.complete(e);
         this.streamHandler = null;
+        this.waitForClose.countDown();
         this.close();
+    }
+
+    /**
+     * Announces that we are closing the process. Just sends a poison pill message, letting the process to close gracefully.
+     */
+    public void announceClose() {
+        synchronized (this) {
+            if (this.closed) {
+                return;
+            }
+        }
+
+        try {
+            this.requestReplyMessages.put(PythonRequestReplyMessage.createEmpty()); // poison pill message
+        }
+        catch (InterruptedException ex) {
+        }
     }
 
     /**
@@ -346,11 +375,17 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
         catch (InterruptedException ex) {
         }
 
+        try {
+            this.waitForClose.await(1000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+        }
+
         if (this.streamHandler != null) {
             try {
+                this.streamHandler.setStopTimeout(100); // there is an additional 2000ms timeout inside the stop function, making it 2100ms
                 this.streamHandler.stop();
             }
-            catch (IOException ioe) {
+            catch (Exception ex) {
             }
             finally {
                 this.streamHandler = null;

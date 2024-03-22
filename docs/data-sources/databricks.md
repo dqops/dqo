@@ -36,7 +36,7 @@ After navigating to the Databricks connection settings, you will need to fill in
 | Databricks connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
 |--------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name                |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-| Parallel jobs limit            |                                          | New limit. A null value will disable the limit.                                                                                                                                                                                                 |
+| Parallel jobs limit            |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                                                                           |
 | Host                           | host                                     | Databricks host name. Supports also a ${DATABRICKS_HOST} configuration with a custom environment variable.                                                                                                                                |
 | Port                           | port                                     | Databricks port number. The default port is 443. Supports also a ${DATABRICKS_PORT} configuration with a custom environment variable.                                                                                                     |
 | Catalog                        | catalog                                  | Databricks catalog name. Supports also a ${DATABRICKS_CATALOG} configuration with a custom environment variable.                                                                                                                          |                                                                                                                           
@@ -44,7 +44,7 @@ After navigating to the Databricks connection settings, you will need to fill in
 | Password                       | password                                 | Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable.                                                                                                                    |
 | Http Path                      | http_path                                | Databricks http path to the warehouse. For example: /sql/1.0/warehouses/<warehouse instance id>. Supports also a ${DATABRICKS_HTTP_PATH} configuration with a custom environment variable.                                                |
 | Access token                   | access_token                             | Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable.                                                                                                       |
-| JDBC connection property       |                                          | Optional setting. DQOps supports using JDBC driver to access Databricks. [JDBC Concepts.](https://docs.oracle.com/en/database/oracle/oracle-database/23/jjdbc/introducing-JDBC.html).                                                     |
+| JDBC connection property       |                                          | Optional setting. DQOps supports using JDBC driver to access Databricks. [See the Databricks documentation for JDBC connection parameter references](https://docs.databricks.com/en/integrations/jdbc/index.html).                        |
     
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -58,7 +58,7 @@ can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
 
 For example:
 
-![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties.jpg)
+![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png)
 
 To remove the property click on the trash icon at the end of the input field.
 
@@ -107,12 +107,13 @@ Database provider type (--provider):
  [ 3] mysql
  [ 4] oracle
  [ 5] postgresql
- [ 6] presto
- [ 7] redshift
- [ 8] snowflake
- [ 9] spark
- [10] sqlserver
- [11] trino
+ [ 6] duckdb
+ [ 7] presto
+ [ 8] redshift
+ [ 9] snowflake
+ [10] spark
+ [11] sqlserver
+ [12] trino
 Please enter one of the [] values: 2
 Databricks host name (--databricks-host) [${DATABRICKS_HOST}]: <databricks_host>.azuredatabricks.net
 Databricks port number (--databricks-port) [${DATABRICKS_PORT}]: 443

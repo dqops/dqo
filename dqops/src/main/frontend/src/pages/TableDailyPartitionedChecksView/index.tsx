@@ -21,11 +21,18 @@ const TableDailyPartitionedChecksView = () => {
   const [updatedChecksUI, setUpdatedChecksUI] = useState<CheckContainerModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
-  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const [checkResultsOverview, setCheckResultsOverview] = useState<
+    CheckResultsOverviewDataModel[]
+  >([]);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getTablePartitionedChecksOverview(connectionName, schemaName, tableName, 'daily').then((res) => {
+    CheckResultOverviewApi.getTablePartitionedChecksOverview(
+      connectionName,
+      schemaName,
+      tableName,
+      'daily'
+    ).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
@@ -36,7 +43,13 @@ const TableDailyPartitionedChecksView = () => {
 
   useEffect(() => {
     dispatch(
-      getTableDailyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+      getTableDailyPartitionedChecks(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName
+      )
     );
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
@@ -54,7 +67,14 @@ const TableDailyPartitionedChecksView = () => {
       )
     );
     await dispatch(
-      getTableDailyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
+      getTableDailyPartitionedChecks(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName,
+        false
+      )
     );
     setIsUpdated(false);
   };
@@ -67,9 +87,12 @@ const TableDailyPartitionedChecksView = () => {
   return (
     <>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
-        <div className="flex items-center space-x-2" style={{ maxWidth: `calc(100% - 180px)` }}>
+        <div
+          className="flex items-center space-x-2"
+          style={{ maxWidth: `calc(100% - 180px)` }}
+        >
           <SvgIcon name="table-check" className="w-5 h-5 shrink-0" />
-          <div className="text-xl font-semibold truncate">{`Daily partition checks for ${connectionName}.${schemaName}.${tableName}`}</div>
+          <div className="text-lg font-semibold truncate">{`Daily partition checks for ${connectionName}.${schemaName}.${tableName}`}</div>
         </div>
         <Button
           color={isUpdated ? 'primary' : 'secondary'}

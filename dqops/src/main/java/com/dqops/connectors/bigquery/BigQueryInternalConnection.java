@@ -21,20 +21,30 @@ import com.google.cloud.bigquery.BigQuery;
  * Internal BigQuery connection object that stores both the BigQuery service instance and the GCP project names used to execute jobs.
  */
 public class BigQueryInternalConnection {
+    private String connectionName;
     private BigQuery bigQueryClient;
     private String billingProjectId;
     private String quotaProjectId;
 
     /**
      * Creates a holder of a BigQuery client.
+     * @param connectionName Connection name, used for logging.
      * @param bigQueryClient Big query client instance.
      * @param billingProjectId GCP project id where the jobs are started.
      * @param quotaProjectId GCP quota project id.
      */
-    public BigQueryInternalConnection(BigQuery bigQueryClient, String billingProjectId, String quotaProjectId) {
+    public BigQueryInternalConnection(String connectionName, BigQuery bigQueryClient, String billingProjectId, String quotaProjectId) {
         this.bigQueryClient = bigQueryClient;
         this.billingProjectId = billingProjectId;
         this.quotaProjectId = quotaProjectId;
+    }
+
+    /**
+     * Connection name. Used for logging.
+     * @return Connection name (data source name in DQOps).
+     */
+    public String getConnectionName() {
+        return connectionName;
     }
 
     /**

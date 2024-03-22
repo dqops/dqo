@@ -65,8 +65,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                MinCountRule1ParametersSpec, \
 	                                PartitionIncrementalTimeWindowSpec, \
 	                                TableComparisonConfigurationSpecMap, \
-	                                TableMonitoringChecksSpec, \
-	                                TablePartitionedChecksRootSpec, \
+	                                TableMonitoringCheckCategoriesSpec, \
+	                                TablePartitionedCheckCategoriesSpec, \
 	                                TableProfilingCheckCategoriesSpec, \
 	                                TableRowCountCheckSpec, \
 	                                TableSpec, \
@@ -103,8 +103,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				)
 			)
 		),
-		monitoring_checks=TableMonitoringChecksSpec(),
-		partitioned_checks=TablePartitionedChecksRootSpec(),
+		monitoring_checks=TableMonitoringCheckCategoriesSpec(),
+		partitioned_checks=TablePartitionedCheckCategoriesSpec(),
 		columns=ColumnSpecMap()
 	)
 	
@@ -132,8 +132,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                MinCountRule1ParametersSpec, \
 	                                PartitionIncrementalTimeWindowSpec, \
 	                                TableComparisonConfigurationSpecMap, \
-	                                TableMonitoringChecksSpec, \
-	                                TablePartitionedChecksRootSpec, \
+	                                TableMonitoringCheckCategoriesSpec, \
+	                                TablePartitionedCheckCategoriesSpec, \
 	                                TableProfilingCheckCategoriesSpec, \
 	                                TableRowCountCheckSpec, \
 	                                TableSpec, \
@@ -170,8 +170,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				)
 			)
 		),
-		monitoring_checks=TableMonitoringChecksSpec(),
-		partitioned_checks=TablePartitionedChecksRootSpec(),
+		monitoring_checks=TableMonitoringCheckCategoriesSpec(),
+		partitioned_checks=TablePartitionedCheckCategoriesSpec(),
 		columns=ColumnSpecMap()
 	)
 	
@@ -199,8 +199,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                MinCountRule1ParametersSpec, \
 	                                PartitionIncrementalTimeWindowSpec, \
 	                                TableComparisonConfigurationSpecMap, \
-	                                TableMonitoringChecksSpec, \
-	                                TablePartitionedChecksRootSpec, \
+	                                TableMonitoringCheckCategoriesSpec, \
+	                                TablePartitionedCheckCategoriesSpec, \
 	                                TableProfilingCheckCategoriesSpec, \
 	                                TableRowCountCheckSpec, \
 	                                TableSpec, \
@@ -240,8 +240,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				)
 			)
 		),
-		monitoring_checks=TableMonitoringChecksSpec(),
-		partitioned_checks=TablePartitionedChecksRootSpec(),
+		monitoring_checks=TableMonitoringCheckCategoriesSpec(),
+		partitioned_checks=TablePartitionedCheckCategoriesSpec(),
 		columns=ColumnSpecMap()
 	)
 	
@@ -269,8 +269,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                MinCountRule1ParametersSpec, \
 	                                PartitionIncrementalTimeWindowSpec, \
 	                                TableComparisonConfigurationSpecMap, \
-	                                TableMonitoringChecksSpec, \
-	                                TablePartitionedChecksRootSpec, \
+	                                TableMonitoringCheckCategoriesSpec, \
+	                                TablePartitionedCheckCategoriesSpec, \
 	                                TableProfilingCheckCategoriesSpec, \
 	                                TableRowCountCheckSpec, \
 	                                TableSpec, \
@@ -310,8 +310,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				)
 			)
 		),
-		monitoring_checks=TableMonitoringChecksSpec(),
-		partitioned_checks=TablePartitionedChecksRootSpec(),
+		monitoring_checks=TableMonitoringCheckCategoriesSpec(),
+		partitioned_checks=TablePartitionedCheckCategoriesSpec(),
 		columns=ColumnSpecMap()
 	)
 	
@@ -376,15 +376,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "jobId" : 123456789,
-	  "createdAt" : "2007-10-11T13:42:00Z"
-	}
-    ```
+        ```
+        {
+		  "jobId" : 123456789,
+		  "createdAt" : "2007-10-11T13:42:00Z"
+		}
+        ```
     
     
 
@@ -410,14 +410,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoQueueJobId(
-		job_id=123456789,
-		created_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```
+        DqoQueueJobId(
+			job_id=123456789,
+			created_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -444,14 +444,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoQueueJobId(
-		job_id=123456789,
-		created_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```
+        DqoQueueJobId(
+			job_id=123456789,
+			created_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -481,14 +481,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoQueueJobId(
-		job_id=123456789,
-		created_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```
+        DqoQueueJobId(
+			job_id=123456789,
+			created_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -518,14 +518,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoQueueJobId(
-		job_id=123456789,
-		created_at='2007-10-11T13:42:00Z'
-	)
-    ```
+        ```
+        DqoQueueJobId(
+			job_id=123456789,
+			created_at='2007-10-11T13:42:00Z'
+		)
+        ```
     
     
     
@@ -579,14 +579,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "can_edit" : false
-	}
-    ```
+        ```
+        {
+		  "can_edit" : false
+		}
+        ```
     
     
 
@@ -613,11 +613,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableModel(can_edit=False)
-    ```
+        ```
+        TableModel(can_edit=False)
+        ```
     
     
     
@@ -645,11 +645,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableModel(can_edit=False)
-    ```
+        ```
+        TableModel(can_edit=False)
+        ```
     
     
     
@@ -680,11 +680,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableModel(can_edit=False)
-    ```
+        ```
+        TableModel(can_edit=False)
+        ```
     
     
     
@@ -715,11 +715,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableModel(can_edit=False)
-    ```
+        ```
+        TableModel(can_edit=False)
+        ```
     
     
     
@@ -773,56 +773,56 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "connection_name" : "sample_connection",
-	  "table_hash" : 2314522140819107818,
-	  "target" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "has_any_configured_checks" : true,
-	  "has_any_configured_profiling_checks" : true,
-	  "run_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true
-	  },
-	  "run_profiling_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "profiling"
-	  },
-	  "run_monitoring_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "monitoring"
-	  },
-	  "run_partition_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "partitioned"
-	  },
-	  "data_clean_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true
-	  },
-	  "can_edit" : true,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
+        ```
+        {
+		  "connection_name" : "sample_connection",
+		  "table_hash" : 2314522140819107818,
+		  "target" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "has_any_configured_checks" : true,
+		  "has_any_configured_profiling_checks" : true,
+		  "run_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true
+		  },
+		  "run_profiling_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "profiling"
+		  },
+		  "run_monitoring_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "monitoring"
+		  },
+		  "run_partition_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "partitioned"
+		  },
+		  "data_clean_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "deleteErrors" : true,
+		    "deleteStatistics" : true,
+		    "deleteCheckResults" : true,
+		    "deleteSensorReadouts" : true
+		  },
+		  "can_edit" : true,
+		  "can_collect_statistics" : true,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		}
+        ```
     
     
 
@@ -849,59 +849,59 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableListModel(
-		connection_name='sample_connection',
-		table_hash=2314522140819107818,
-		target=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		disabled=False,
-		has_any_configured_checks=True,
-		has_any_configured_profiling_checks=True,
-		has_any_configured_monitoring_checks=False,
-		has_any_configured_partition_checks=False,
-		partitioning_configuration_missing=False,
-		run_checks_job_template=CheckSearchFilters(
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		run_profiling_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.PROFILING,
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		run_monitoring_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		run_partition_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.PARTITIONED,
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		data_clean_job_template=DeleteStoredDataQueueJobParameters(
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=True,
-			delete_check_results=True,
-			delete_sensor_readouts=True
-		),
-		can_edit=True,
-		can_collect_statistics=True,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableListModel(
+			connection_name='sample_connection',
+			table_hash=2314522140819107818,
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			partitioning_configuration_missing=False,
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=True,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -929,59 +929,59 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableListModel(
-		connection_name='sample_connection',
-		table_hash=2314522140819107818,
-		target=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		disabled=False,
-		has_any_configured_checks=True,
-		has_any_configured_profiling_checks=True,
-		has_any_configured_monitoring_checks=False,
-		has_any_configured_partition_checks=False,
-		partitioning_configuration_missing=False,
-		run_checks_job_template=CheckSearchFilters(
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		run_profiling_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.PROFILING,
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		run_monitoring_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		run_partition_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.PARTITIONED,
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		data_clean_job_template=DeleteStoredDataQueueJobParameters(
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=True,
-			delete_check_results=True,
-			delete_sensor_readouts=True
-		),
-		can_edit=True,
-		can_collect_statistics=True,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableListModel(
+			connection_name='sample_connection',
+			table_hash=2314522140819107818,
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			partitioning_configuration_missing=False,
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=True,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -1012,59 +1012,59 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableListModel(
-		connection_name='sample_connection',
-		table_hash=2314522140819107818,
-		target=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		disabled=False,
-		has_any_configured_checks=True,
-		has_any_configured_profiling_checks=True,
-		has_any_configured_monitoring_checks=False,
-		has_any_configured_partition_checks=False,
-		partitioning_configuration_missing=False,
-		run_checks_job_template=CheckSearchFilters(
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		run_profiling_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.PROFILING,
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		run_monitoring_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		run_partition_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.PARTITIONED,
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		data_clean_job_template=DeleteStoredDataQueueJobParameters(
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=True,
-			delete_check_results=True,
-			delete_sensor_readouts=True
-		),
-		can_edit=True,
-		can_collect_statistics=True,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableListModel(
+			connection_name='sample_connection',
+			table_hash=2314522140819107818,
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			partitioning_configuration_missing=False,
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=True,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -1095,59 +1095,59 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableListModel(
-		connection_name='sample_connection',
-		table_hash=2314522140819107818,
-		target=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		disabled=False,
-		has_any_configured_checks=True,
-		has_any_configured_profiling_checks=True,
-		has_any_configured_monitoring_checks=False,
-		has_any_configured_partition_checks=False,
-		partitioning_configuration_missing=False,
-		run_checks_job_template=CheckSearchFilters(
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		run_profiling_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.PROFILING,
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		run_monitoring_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		run_partition_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.PARTITIONED,
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		data_clean_job_template=DeleteStoredDataQueueJobParameters(
-			connection='sample_connection',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=True,
-			delete_check_results=True,
-			delete_sensor_readouts=True
-		),
-		can_edit=True,
-		can_collect_statistics=True,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableListModel(
+			connection_name='sample_connection',
+			table_hash=2314522140819107818,
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			partitioning_configuration_missing=False,
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=True,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -1209,24 +1209,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	} ]
-    ```
+        ```
+        [ {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		}, {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		}, {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		} ]
+        ```
     
     
 
@@ -1255,33 +1255,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -1311,33 +1311,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -1370,33 +1370,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -1429,33 +1429,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -1517,24 +1517,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	} ]
-    ```
+        ```
+        [ {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		}, {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		}, {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		} ]
+        ```
     
     
 
@@ -1563,33 +1563,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -1619,33 +1619,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -1678,33 +1678,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -1737,33 +1737,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -1824,24 +1824,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	} ]
-    ```
+        ```
+        [ {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		}, {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		}, {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		} ]
+        ```
     
     
 
@@ -1868,33 +1868,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -1922,33 +1922,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -1979,33 +1979,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -2036,33 +2036,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -2116,24 +2116,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	}, {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	}, {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	} ]
-    ```
+        ```
+        [ {
+		  "date" : "2007-12-03T10:15:30",
+		  "comment_by" : "sample_user",
+		  "comment" : "Sample comment"
+		}, {
+		  "date" : "2007-12-03T10:15:30",
+		  "comment_by" : "sample_user",
+		  "comment" : "Sample comment"
+		}, {
+		  "date" : "2007-12-03T10:15:30",
+		  "comment_by" : "sample_user",
+		  "comment" : "Sample comment"
+		} ]
+        ```
     
     
 
@@ -2160,27 +2160,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		)
-	]
-    ```
+        ```
+        [
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			)
+		]
+        ```
     
     
     
@@ -2208,27 +2208,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		)
-	]
-    ```
+        ```
+        [
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			)
+		]
+        ```
     
     
     
@@ -2259,27 +2259,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		)
-	]
-    ```
+        ```
+        [
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			)
+		]
+        ```
     
     
     
@@ -2310,27 +2310,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		),
-		CommentSpec(
-			date=Some date/time value: [2007-12-03T10:15:30],
-			comment_by='sample_user',
-			comment='Sample comment'
-		)
-	]
-    ```
+        ```
+        [
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			),
+			CommentSpec(
+				date=Some date/time value: [2007-12-03T10:15:30],
+				comment_by='sample_user',
+				comment='Sample comment'
+			)
+		]
+        ```
     
     
     
@@ -2384,20 +2384,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "volume" : {
-	    "daily_row_count" : {
-	      "error" : {
-	        "min_count" : 1
-	      }
-	    }
-	  }
-	}
-    ```
+        ```
+        {
+		  "volume" : {
+		    "daily_row_count" : {
+		      "error" : {
+		        "min_count" : 1
+		      }
+		    }
+		  }
+		}
+        ```
     
     
 
@@ -2424,22 +2424,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableDailyMonitoringCheckCategoriesSpec(
-		volume=TableVolumeDailyMonitoringChecksSpec(
-			daily_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
-	)
-    ```
+        ```
+        TableDailyMonitoringCheckCategoriesSpec(
+			volume=TableVolumeDailyMonitoringChecksSpec(
+				daily_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=TableComparisonDailyMonitoringChecksSpecMap()
+		)
+        ```
     
     
     
@@ -2467,22 +2467,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableDailyMonitoringCheckCategoriesSpec(
-		volume=TableVolumeDailyMonitoringChecksSpec(
-			daily_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
-	)
-    ```
+        ```
+        TableDailyMonitoringCheckCategoriesSpec(
+			volume=TableVolumeDailyMonitoringChecksSpec(
+				daily_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=TableComparisonDailyMonitoringChecksSpecMap()
+		)
+        ```
     
     
     
@@ -2513,22 +2513,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableDailyMonitoringCheckCategoriesSpec(
-		volume=TableVolumeDailyMonitoringChecksSpec(
-			daily_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
-	)
-    ```
+        ```
+        TableDailyMonitoringCheckCategoriesSpec(
+			volume=TableVolumeDailyMonitoringChecksSpec(
+				daily_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=TableComparisonDailyMonitoringChecksSpecMap()
+		)
+        ```
     
     
     
@@ -2559,22 +2559,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableDailyMonitoringCheckCategoriesSpec(
-		volume=TableVolumeDailyMonitoringChecksSpec(
-			daily_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
-	)
-    ```
+        ```
+        TableDailyMonitoringCheckCategoriesSpec(
+			volume=TableVolumeDailyMonitoringChecksSpec(
+				daily_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=TableComparisonDailyMonitoringChecksSpecMap()
+		)
+        ```
     
     
     
@@ -2628,20 +2628,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "volume" : {
-	    "daily_partition_row_count" : {
-	      "error" : {
-	        "min_count" : 1
-	      }
-	    }
-	  }
-	}
-    ```
+        ```
+        {
+		  "volume" : {
+		    "daily_partition_row_count" : {
+		      "error" : {
+		        "min_count" : 1
+		      }
+		    }
+		  }
+		}
+        ```
     
     
 
@@ -2668,22 +2668,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableDailyPartitionedCheckCategoriesSpec(
-		volume=TableVolumeDailyPartitionedChecksSpec(
-			daily_partition_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
-	)
-    ```
+        ```
+        TableDailyPartitionedCheckCategoriesSpec(
+			volume=TableVolumeDailyPartitionedChecksSpec(
+				daily_partition_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=TableComparisonDailyPartitionedChecksSpecMap()
+		)
+        ```
     
     
     
@@ -2711,22 +2711,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableDailyPartitionedCheckCategoriesSpec(
-		volume=TableVolumeDailyPartitionedChecksSpec(
-			daily_partition_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
-	)
-    ```
+        ```
+        TableDailyPartitionedCheckCategoriesSpec(
+			volume=TableVolumeDailyPartitionedChecksSpec(
+				daily_partition_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=TableComparisonDailyPartitionedChecksSpecMap()
+		)
+        ```
     
     
     
@@ -2757,22 +2757,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableDailyPartitionedCheckCategoriesSpec(
-		volume=TableVolumeDailyPartitionedChecksSpec(
-			daily_partition_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
-	)
-    ```
+        ```
+        TableDailyPartitionedCheckCategoriesSpec(
+			volume=TableVolumeDailyPartitionedChecksSpec(
+				daily_partition_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=TableComparisonDailyPartitionedChecksSpecMap()
+		)
+        ```
     
     
     
@@ -2803,22 +2803,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableDailyPartitionedCheckCategoriesSpec(
-		volume=TableVolumeDailyPartitionedChecksSpec(
-			daily_partition_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
-	)
-    ```
+        ```
+        TableDailyPartitionedCheckCategoriesSpec(
+			volume=TableVolumeDailyPartitionedChecksSpec(
+				daily_partition_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=TableComparisonDailyPartitionedChecksSpecMap()
+		)
+        ```
     
     
     
@@ -2872,17 +2872,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "level_3" : {
-	    "source" : "column_value",
-	    "column" : "sample_column"
-	  }
-	}
-    ```
+        ```
+        {
+		  "level_3" : {
+		    "source" : "column_value",
+		    "column" : "sample_column"
+		  }
+		}
+        ```
     
     
 
@@ -2909,16 +2909,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DataGroupingConfigurationSpec(
-		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.COLUMN_VALUE,
-			column='sample_column'
+        ```
+        DataGroupingConfigurationSpec(
+			level_3=DataGroupingDimensionSpec(
+				source=DataGroupingDimensionSource.COLUMN_VALUE,
+				column='sample_column'
+			)
 		)
-	)
-    ```
+        ```
     
     
     
@@ -2946,16 +2946,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DataGroupingConfigurationSpec(
-		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.COLUMN_VALUE,
-			column='sample_column'
+        ```
+        DataGroupingConfigurationSpec(
+			level_3=DataGroupingDimensionSpec(
+				source=DataGroupingDimensionSource.COLUMN_VALUE,
+				column='sample_column'
+			)
 		)
-	)
-    ```
+        ```
     
     
     
@@ -2986,16 +2986,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DataGroupingConfigurationSpec(
-		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.COLUMN_VALUE,
-			column='sample_column'
+        ```
+        DataGroupingConfigurationSpec(
+			level_3=DataGroupingDimensionSpec(
+				source=DataGroupingDimensionSource.COLUMN_VALUE,
+				column='sample_column'
+			)
 		)
-	)
-    ```
+        ```
     
     
     
@@ -3026,16 +3026,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DataGroupingConfigurationSpec(
-		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.COLUMN_VALUE,
-			column='sample_column'
+        ```
+        DataGroupingConfigurationSpec(
+			level_3=DataGroupingDimensionSpec(
+				source=DataGroupingDimensionSource.COLUMN_VALUE,
+				column='sample_column'
+			)
 		)
-	)
-    ```
+        ```
     
     
     
@@ -3089,17 +3089,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "grouping_level" : "table_dimension",
-	  "minimum_severity" : "warning",
-	  "divide_by_data_group" : true,
-	  "disabled" : false
-	}
-    ```
+        ```
+        {
+		  "grouping_level" : "table_dimension",
+		  "minimum_severity" : "warning",
+		  "divide_by_data_group" : true,
+		  "disabled" : false
+		}
+        ```
     
     
 
@@ -3126,16 +3126,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
-		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
-		divide_by_data_group=True,
-		disabled=False
-	)
-    ```
+        ```
+        TableIncidentGroupingSpec(
+			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
+			divide_by_data_group=True,
+			disabled=False
+		)
+        ```
     
     
     
@@ -3163,16 +3163,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
-		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
-		divide_by_data_group=True,
-		disabled=False
-	)
-    ```
+        ```
+        TableIncidentGroupingSpec(
+			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
+			divide_by_data_group=True,
+			disabled=False
+		)
+        ```
     
     
     
@@ -3203,16 +3203,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
-		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
-		divide_by_data_group=True,
-		disabled=False
-	)
-    ```
+        ```
+        TableIncidentGroupingSpec(
+			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
+			divide_by_data_group=True,
+			disabled=False
+		)
+        ```
     
     
     
@@ -3243,16 +3243,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
-		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
-		divide_by_data_group=True,
-		disabled=False
-	)
-    ```
+        ```
+        TableIncidentGroupingSpec(
+			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
+			divide_by_data_group=True,
+			disabled=False
+		)
+        ```
     
     
     
@@ -3306,12 +3306,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ "sampleString_1", "sampleString_2", "sampleString_3" ]
-    ```
+        ```
+        [ "sampleString_1", "sampleString_2", "sampleString_3" ]
+        ```
     
     
 
@@ -3338,15 +3338,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		'sampleString_1',
-		'sampleString_2',
-		'sampleString_3'
-	]
-    ```
+        ```
+        [
+			'sampleString_1',
+			'sampleString_2',
+			'sampleString_3'
+		]
+        ```
     
     
     
@@ -3374,15 +3374,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		'sampleString_1',
-		'sampleString_2',
-		'sampleString_3'
-	]
-    ```
+        ```
+        [
+			'sampleString_1',
+			'sampleString_2',
+			'sampleString_3'
+		]
+        ```
     
     
     
@@ -3413,15 +3413,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		'sampleString_1',
-		'sampleString_2',
-		'sampleString_3'
-	]
-    ```
+        ```
+        [
+			'sampleString_1',
+			'sampleString_2',
+			'sampleString_3'
+		]
+        ```
     
     
     
@@ -3452,15 +3452,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		'sampleString_1',
-		'sampleString_2',
-		'sampleString_3'
-	]
-    ```
+        ```
+        [
+			'sampleString_1',
+			'sampleString_2',
+			'sampleString_3'
+		]
+        ```
     
     
     
@@ -3515,47 +3515,47 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "checks" : [ {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
+        ```
+        {
+		  "checks" : [ {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_1",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_1",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_2",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_2",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_3",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_3",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		}
+        ```
     
     
 
@@ -3584,53 +3584,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -3660,53 +3660,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -3739,53 +3739,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -3818,53 +3818,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -3919,35 +3919,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
+        ```
+        {
+		  "categories" : [ {
+		    "category" : "sample_category",
+		    "help_text" : "Sample help text",
+		    "checks" : [ {
+		      "check_name" : "sample_check",
+		      "help_text" : "Sample help text",
+		      "sensor_parameters" : [ ],
+		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_grouping" : false,
+		      "disabled" : false,
+		      "exclude_from_kpi" : false,
+		      "include_in_sla" : false,
+		      "configured" : false,
+		      "can_edit" : false,
+		      "can_run_checks" : false,
+		      "can_delete_data" : false
+		    } ]
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : false,
+		  "can_delete_data" : false
+		}
+        ```
     
     
 
@@ -3976,41 +3976,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -4040,41 +4041,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -4107,41 +4109,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -4174,41 +4177,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -4265,35 +4269,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
+        ```
+        {
+		  "categories" : [ {
+		    "category" : "sample_category",
+		    "help_text" : "Sample help text",
+		    "checks" : [ {
+		      "check_name" : "sample_check",
+		      "help_text" : "Sample help text",
+		      "sensor_parameters" : [ ],
+		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_grouping" : false,
+		      "disabled" : false,
+		      "exclude_from_kpi" : false,
+		      "include_in_sla" : false,
+		      "configured" : false,
+		      "can_edit" : false,
+		      "can_run_checks" : false,
+		      "can_delete_data" : false
+		    } ]
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : false,
+		  "can_delete_data" : false
+		}
+        ```
     
     
 
@@ -4324,41 +4328,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -4390,41 +4395,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -4459,41 +4465,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -4528,41 +4535,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -4616,20 +4624,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "volume" : {
-	    "monthly_row_count" : {
-	      "error" : {
-	        "min_count" : 1
-	      }
-	    }
-	  }
-	}
-    ```
+        ```
+        {
+		  "volume" : {
+		    "monthly_row_count" : {
+		      "error" : {
+		        "min_count" : 1
+		      }
+		    }
+		  }
+		}
+        ```
     
     
 
@@ -4656,22 +4664,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableMonthlyMonitoringCheckCategoriesSpec(
-		volume=TableVolumeMonthlyMonitoringChecksSpec(
-			monthly_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
-	)
-    ```
+        ```
+        TableMonthlyMonitoringCheckCategoriesSpec(
+			volume=TableVolumeMonthlyMonitoringChecksSpec(
+				monthly_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
+		)
+        ```
     
     
     
@@ -4699,22 +4707,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableMonthlyMonitoringCheckCategoriesSpec(
-		volume=TableVolumeMonthlyMonitoringChecksSpec(
-			monthly_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
-	)
-    ```
+        ```
+        TableMonthlyMonitoringCheckCategoriesSpec(
+			volume=TableVolumeMonthlyMonitoringChecksSpec(
+				monthly_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
+		)
+        ```
     
     
     
@@ -4745,22 +4753,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableMonthlyMonitoringCheckCategoriesSpec(
-		volume=TableVolumeMonthlyMonitoringChecksSpec(
-			monthly_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
-	)
-    ```
+        ```
+        TableMonthlyMonitoringCheckCategoriesSpec(
+			volume=TableVolumeMonthlyMonitoringChecksSpec(
+				monthly_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
+		)
+        ```
     
     
     
@@ -4791,22 +4799,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableMonthlyMonitoringCheckCategoriesSpec(
-		volume=TableVolumeMonthlyMonitoringChecksSpec(
-			monthly_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
-	)
-    ```
+        ```
+        TableMonthlyMonitoringCheckCategoriesSpec(
+			volume=TableVolumeMonthlyMonitoringChecksSpec(
+				monthly_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
+		)
+        ```
     
     
     
@@ -4863,18 +4871,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	} ]
-    ```
+        ```
+        [ {
+		  "sensor_parameters_definitions" : [ ]
+		}, {
+		  "sensor_parameters_definitions" : [ ]
+		}, {
+		  "sensor_parameters_definitions" : [ ]
+		} ]
+        ```
     
     
 
@@ -4903,27 +4911,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -4953,27 +4961,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -5006,27 +5014,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -5059,27 +5067,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -5134,47 +5142,47 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "checks" : [ {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
+        ```
+        {
+		  "checks" : [ {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_1",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_1",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_2",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_2",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_3",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_3",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		}
+        ```
     
     
 
@@ -5203,53 +5211,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -5279,53 +5287,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -5358,53 +5366,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -5437,53 +5445,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -5538,35 +5546,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
+        ```
+        {
+		  "categories" : [ {
+		    "category" : "sample_category",
+		    "help_text" : "Sample help text",
+		    "checks" : [ {
+		      "check_name" : "sample_check",
+		      "help_text" : "Sample help text",
+		      "sensor_parameters" : [ ],
+		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_grouping" : false,
+		      "disabled" : false,
+		      "exclude_from_kpi" : false,
+		      "include_in_sla" : false,
+		      "configured" : false,
+		      "can_edit" : false,
+		      "can_run_checks" : false,
+		      "can_delete_data" : false
+		    } ]
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : false,
+		  "can_delete_data" : false
+		}
+        ```
     
     
 
@@ -5595,41 +5603,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -5659,41 +5668,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -5726,41 +5736,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -5793,41 +5804,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -5884,35 +5896,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
+        ```
+        {
+		  "categories" : [ {
+		    "category" : "sample_category",
+		    "help_text" : "Sample help text",
+		    "checks" : [ {
+		      "check_name" : "sample_check",
+		      "help_text" : "Sample help text",
+		      "sensor_parameters" : [ ],
+		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_grouping" : false,
+		      "disabled" : false,
+		      "exclude_from_kpi" : false,
+		      "include_in_sla" : false,
+		      "configured" : false,
+		      "can_edit" : false,
+		      "can_run_checks" : false,
+		      "can_delete_data" : false
+		    } ]
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : false,
+		  "can_delete_data" : false
+		}
+        ```
     
     
 
@@ -5943,41 +5955,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -6009,41 +6022,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -6078,41 +6092,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -6147,41 +6162,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -6235,20 +6251,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "volume" : {
-	    "monthly_partition_row_count" : {
-	      "error" : {
-	        "min_count" : 1
-	      }
-	    }
-	  }
-	}
-    ```
+        ```
+        {
+		  "volume" : {
+		    "monthly_partition_row_count" : {
+		      "error" : {
+		        "min_count" : 1
+		      }
+		    }
+		  }
+		}
+        ```
     
     
 
@@ -6275,22 +6291,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableMonthlyPartitionedCheckCategoriesSpec(
-		volume=TableVolumeMonthlyPartitionedChecksSpec(
-			monthly_partition_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
-	)
-    ```
+        ```
+        TableMonthlyPartitionedCheckCategoriesSpec(
+			volume=TableVolumeMonthlyPartitionedChecksSpec(
+				monthly_partition_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
+		)
+        ```
     
     
     
@@ -6318,22 +6334,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableMonthlyPartitionedCheckCategoriesSpec(
-		volume=TableVolumeMonthlyPartitionedChecksSpec(
-			monthly_partition_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
-	)
-    ```
+        ```
+        TableMonthlyPartitionedCheckCategoriesSpec(
+			volume=TableVolumeMonthlyPartitionedChecksSpec(
+				monthly_partition_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
+		)
+        ```
     
     
     
@@ -6364,22 +6380,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableMonthlyPartitionedCheckCategoriesSpec(
-		volume=TableVolumeMonthlyPartitionedChecksSpec(
-			monthly_partition_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
-	)
-    ```
+        ```
+        TableMonthlyPartitionedCheckCategoriesSpec(
+			volume=TableVolumeMonthlyPartitionedChecksSpec(
+				monthly_partition_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
+		)
+        ```
     
     
     
@@ -6410,22 +6426,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableMonthlyPartitionedCheckCategoriesSpec(
-		volume=TableVolumeMonthlyPartitionedChecksSpec(
-			monthly_partition_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
-			)
-		),
-		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
-	)
-    ```
+        ```
+        TableMonthlyPartitionedCheckCategoriesSpec(
+			volume=TableVolumeMonthlyPartitionedChecksSpec(
+				monthly_partition_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
+			),
+			comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
+		)
+        ```
     
     
     
@@ -6482,18 +6498,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	} ]
-    ```
+        ```
+        [ {
+		  "sensor_parameters_definitions" : [ ]
+		}, {
+		  "sensor_parameters_definitions" : [ ]
+		}, {
+		  "sensor_parameters_definitions" : [ ]
+		} ]
+        ```
     
     
 
@@ -6522,27 +6538,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -6572,27 +6588,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -6625,27 +6641,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -6678,27 +6694,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -6752,28 +6768,28 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "connection_name" : "sample_connection",
-	  "target" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "timestamp_columns" : {
-	    "event_timestamp_column" : "col1",
-	    "ingestion_timestamp_column" : "col2",
-	    "partition_by_column" : "col3"
-	  },
-	  "incremental_time_window" : {
-	    "daily_partitioning_recent_days" : 7,
-	    "daily_partitioning_include_today" : true
-	  },
-	  "can_edit" : true
-	}
-    ```
+        ```
+        {
+		  "connection_name" : "sample_connection",
+		  "target" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "timestamp_columns" : {
+		    "event_timestamp_column" : "col1",
+		    "ingestion_timestamp_column" : "col2",
+		    "partition_by_column" : "col3"
+		  },
+		  "incremental_time_window" : {
+		    "daily_partitioning_recent_days" : 7,
+		    "daily_partitioning_include_today" : true
+		  },
+		  "can_edit" : true
+		}
+        ```
     
     
 
@@ -6800,28 +6816,28 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TablePartitioningModel(
-		connection_name='sample_connection',
-		target=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		timestamp_columns=TimestampColumnsSpec(
-			event_timestamp_column='col1',
-			ingestion_timestamp_column='col2',
-			partition_by_column='col3'
-		),
-		incremental_time_window=PartitionIncrementalTimeWindowSpec(
-			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=True,
-			monthly_partitioning_include_current_month=False
-		),
-		can_edit=True
-	)
-    ```
+        ```
+        TablePartitioningModel(
+			connection_name='sample_connection',
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			timestamp_columns=TimestampColumnsSpec(
+				event_timestamp_column='col1',
+				ingestion_timestamp_column='col2',
+				partition_by_column='col3'
+			),
+			incremental_time_window=PartitionIncrementalTimeWindowSpec(
+				daily_partitioning_recent_days=7,
+				daily_partitioning_include_today=True,
+				monthly_partitioning_include_current_month=False
+			),
+			can_edit=True
+		)
+        ```
     
     
     
@@ -6849,28 +6865,28 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TablePartitioningModel(
-		connection_name='sample_connection',
-		target=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		timestamp_columns=TimestampColumnsSpec(
-			event_timestamp_column='col1',
-			ingestion_timestamp_column='col2',
-			partition_by_column='col3'
-		),
-		incremental_time_window=PartitionIncrementalTimeWindowSpec(
-			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=True,
-			monthly_partitioning_include_current_month=False
-		),
-		can_edit=True
-	)
-    ```
+        ```
+        TablePartitioningModel(
+			connection_name='sample_connection',
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			timestamp_columns=TimestampColumnsSpec(
+				event_timestamp_column='col1',
+				ingestion_timestamp_column='col2',
+				partition_by_column='col3'
+			),
+			incremental_time_window=PartitionIncrementalTimeWindowSpec(
+				daily_partitioning_recent_days=7,
+				daily_partitioning_include_today=True,
+				monthly_partitioning_include_current_month=False
+			),
+			can_edit=True
+		)
+        ```
     
     
     
@@ -6901,28 +6917,28 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TablePartitioningModel(
-		connection_name='sample_connection',
-		target=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		timestamp_columns=TimestampColumnsSpec(
-			event_timestamp_column='col1',
-			ingestion_timestamp_column='col2',
-			partition_by_column='col3'
-		),
-		incremental_time_window=PartitionIncrementalTimeWindowSpec(
-			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=True,
-			monthly_partitioning_include_current_month=False
-		),
-		can_edit=True
-	)
-    ```
+        ```
+        TablePartitioningModel(
+			connection_name='sample_connection',
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			timestamp_columns=TimestampColumnsSpec(
+				event_timestamp_column='col1',
+				ingestion_timestamp_column='col2',
+				partition_by_column='col3'
+			),
+			incremental_time_window=PartitionIncrementalTimeWindowSpec(
+				daily_partitioning_recent_days=7,
+				daily_partitioning_include_today=True,
+				monthly_partitioning_include_current_month=False
+			),
+			can_edit=True
+		)
+        ```
     
     
     
@@ -6953,28 +6969,28 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TablePartitioningModel(
-		connection_name='sample_connection',
-		target=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		timestamp_columns=TimestampColumnsSpec(
-			event_timestamp_column='col1',
-			ingestion_timestamp_column='col2',
-			partition_by_column='col3'
-		),
-		incremental_time_window=PartitionIncrementalTimeWindowSpec(
-			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=True,
-			monthly_partitioning_include_current_month=False
-		),
-		can_edit=True
-	)
-    ```
+        ```
+        TablePartitioningModel(
+			connection_name='sample_connection',
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			timestamp_columns=TimestampColumnsSpec(
+				event_timestamp_column='col1',
+				ingestion_timestamp_column='col2',
+				partition_by_column='col3'
+			),
+			incremental_time_window=PartitionIncrementalTimeWindowSpec(
+				daily_partitioning_recent_days=7,
+				daily_partitioning_include_today=True,
+				monthly_partitioning_include_current_month=False
+			),
+			can_edit=True
+		)
+        ```
     
     
     
@@ -7028,20 +7044,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "volume" : {
-	    "profile_row_count" : {
-	      "error" : {
-	        "min_count" : 1
-	      }
-	    }
-	  }
-	}
-    ```
+        ```
+        {
+		  "volume" : {
+		    "profile_row_count" : {
+		      "error" : {
+		        "min_count" : 1
+		      }
+		    }
+		  }
+		}
+        ```
     
     
 
@@ -7068,21 +7084,21 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableProfilingCheckCategoriesSpec(
-		volume=TableVolumeProfilingChecksSpec(
-			profile_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
+        ```
+        TableProfilingCheckCategoriesSpec(
+			volume=TableVolumeProfilingChecksSpec(
+				profile_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
 			)
 		)
-	)
-    ```
+        ```
     
     
     
@@ -7110,21 +7126,21 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableProfilingCheckCategoriesSpec(
-		volume=TableVolumeProfilingChecksSpec(
-			profile_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
+        ```
+        TableProfilingCheckCategoriesSpec(
+			volume=TableVolumeProfilingChecksSpec(
+				profile_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
 			)
 		)
-	)
-    ```
+        ```
     
     
     
@@ -7155,21 +7171,21 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableProfilingCheckCategoriesSpec(
-		volume=TableVolumeProfilingChecksSpec(
-			profile_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
+        ```
+        TableProfilingCheckCategoriesSpec(
+			volume=TableVolumeProfilingChecksSpec(
+				profile_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
 			)
 		)
-	)
-    ```
+        ```
     
     
     
@@ -7200,21 +7216,21 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableProfilingCheckCategoriesSpec(
-		volume=TableVolumeProfilingChecksSpec(
-			profile_row_count=TableRowCountCheckSpec(
-				parameters=TableVolumeRowCountSensorParametersSpec(),
-				error=MinCountRule1ParametersSpec(min_count=1),
-				disabled=False,
-				exclude_from_kpi=False,
-				include_in_sla=False
+        ```
+        TableProfilingCheckCategoriesSpec(
+			volume=TableVolumeProfilingChecksSpec(
+				profile_row_count=TableRowCountCheckSpec(
+					parameters=TableVolumeRowCountSensorParametersSpec(),
+					error=MinCountRule1ParametersSpec(min_count=1),
+					disabled=False,
+					exclude_from_kpi=False,
+					include_in_sla=False
+				)
 			)
 		)
-	)
-    ```
+        ```
     
     
     
@@ -7268,47 +7284,47 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "checks" : [ {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
+        ```
+        {
+		  "checks" : [ {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_1",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_1",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_2",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_2",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_1",
+		    "check_name" : "sample_check_3",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  }, {
+		    "check_category" : "sample_category_2",
+		    "check_name" : "sample_check_3",
+		    "help_text" : "Sample help text",
+		    "configured" : true
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		}
+        ```
     
     
 
@@ -7335,53 +7351,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -7409,53 +7425,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -7486,53 +7502,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -7563,53 +7579,53 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerListModel(
-		checks=[
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_1',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_2',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_1',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			),
-			CheckListModel(
-				check_category='sample_category_2',
-				check_name='sample_check_3',
-				help_text='Sample help text',
-				configured=True
-			)
-		],
-		can_edit=False,
-		can_run_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        CheckContainerListModel(
+			checks=[
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_1',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_2',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_1',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				),
+				CheckListModel(
+					check_category='sample_category_2',
+					check_name='sample_check_3',
+					help_text='Sample help text',
+					configured=True
+				)
+			],
+			can_edit=False,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -7663,35 +7679,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
+        ```
+        {
+		  "categories" : [ {
+		    "category" : "sample_category",
+		    "help_text" : "Sample help text",
+		    "checks" : [ {
+		      "check_name" : "sample_check",
+		      "help_text" : "Sample help text",
+		      "sensor_parameters" : [ ],
+		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_grouping" : false,
+		      "disabled" : false,
+		      "exclude_from_kpi" : false,
+		      "include_in_sla" : false,
+		      "configured" : false,
+		      "can_edit" : false,
+		      "can_run_checks" : false,
+		      "can_delete_data" : false
+		    } ]
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : false,
+		  "can_delete_data" : false
+		}
+        ```
     
     
 
@@ -7718,41 +7734,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -7780,41 +7797,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -7845,41 +7863,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -7910,41 +7929,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -8000,35 +8020,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
+        ```
+        {
+		  "categories" : [ {
+		    "category" : "sample_category",
+		    "help_text" : "Sample help text",
+		    "checks" : [ {
+		      "check_name" : "sample_check",
+		      "help_text" : "Sample help text",
+		      "sensor_parameters" : [ ],
+		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_grouping" : false,
+		      "disabled" : false,
+		      "exclude_from_kpi" : false,
+		      "include_in_sla" : false,
+		      "configured" : false,
+		      "can_edit" : false,
+		      "can_run_checks" : false,
+		      "can_delete_data" : false
+		    } ]
+		  } ],
+		  "can_edit" : false,
+		  "can_run_checks" : false,
+		  "can_delete_data" : false
+		}
+        ```
     
     
 
@@ -8057,41 +8077,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -8121,41 +8142,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -8188,41 +8210,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -8255,41 +8278,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    CheckContainerModel(
-		categories=[
-			QualityCategoryModel(
-				category='sample_category',
-				help_text='Sample help text',
-				checks=[
-					CheckModel(
-						check_name='sample_check',
-						help_text='Sample help text',
-						sensor_parameters=[
-						
-						],
-						sensor_name='sample_target/sample_category/sample_sensor',
-						quality_dimension='sample_quality_dimension',
-						supports_grouping=False,
-						standard=False,
-						disabled=False,
-						exclude_from_kpi=False,
-						include_in_sla=False,
-						configured=False,
-						can_edit=False,
-						can_run_checks=False,
-						can_delete_data=False
-					)
-				]
-			)
-		],
-		can_edit=False,
-		can_run_checks=False,
-		can_delete_data=False
-	)
-    ```
+        ```
+        CheckContainerModel(
+			categories=[
+				QualityCategoryModel(
+					category='sample_category',
+					help_text='Sample help text',
+					checks=[
+						CheckModel(
+							check_name='sample_check',
+							help_text='Sample help text',
+							sensor_parameters=[
+							
+							],
+							sensor_name='sample_target/sample_category/sample_sensor',
+							quality_dimension='sample_quality_dimension',
+							supports_grouping=False,
+							standard=False,
+							default_check=False,
+							disabled=False,
+							exclude_from_kpi=False,
+							include_in_sla=False,
+							configured=False,
+							can_edit=False,
+							can_run_checks=False,
+							can_delete_data=False
+						)
+					]
+				)
+			],
+			can_edit=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+        ```
     
     
     
@@ -8345,18 +8369,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	} ]
-    ```
+        ```
+        [ {
+		  "sensor_parameters_definitions" : [ ]
+		}, {
+		  "sensor_parameters_definitions" : [ ]
+		}, {
+		  "sensor_parameters_definitions" : [ ]
+		} ]
+        ```
     
     
 
@@ -8383,27 +8407,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -8431,27 +8455,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -8482,27 +8506,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -8533,27 +8557,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -8608,14 +8632,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "cron_expression" : "0 12 1 * *"
-	}
-    ```
+        ```
+        {
+		  "cron_expression" : "0 12 1 * *"
+		}
+        ```
     
     
 
@@ -8644,14 +8668,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    MonitoringScheduleSpec(
-		cron_expression='0 12 1 * *',
-		disabled=False
-	)
-    ```
+        ```
+        MonitoringScheduleSpec(
+			cron_expression='0 12 1 * *',
+			disabled=False
+		)
+        ```
     
     
     
@@ -8681,14 +8705,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    MonitoringScheduleSpec(
-		cron_expression='0 12 1 * *',
-		disabled=False
-	)
-    ```
+        ```
+        MonitoringScheduleSpec(
+			cron_expression='0 12 1 * *',
+			disabled=False
+		)
+        ```
     
     
     
@@ -8721,14 +8745,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    MonitoringScheduleSpec(
-		cron_expression='0 12 1 * *',
-		disabled=False
-	)
-    ```
+        ```
+        MonitoringScheduleSpec(
+			cron_expression='0 12 1 * *',
+			disabled=False
+		)
+        ```
     
     
     
@@ -8761,14 +8785,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    MonitoringScheduleSpec(
-		cron_expression='0 12 1 * *',
-		disabled=False
-	)
-    ```
+        ```
+        MonitoringScheduleSpec(
+			cron_expression='0 12 1 * *',
+			disabled=False
+		)
+        ```
     
     
     
@@ -8822,14 +8846,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "can_collect_statistics" : false
-	}
-    ```
+        ```
+        {
+		  "can_collect_statistics" : false
+		}
+        ```
     
     
 
@@ -8856,11 +8880,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableStatisticsModel(can_collect_statistics=False)
-    ```
+        ```
+        TableStatisticsModel(can_collect_statistics=False)
+        ```
     
     
     
@@ -8888,11 +8912,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableStatisticsModel(can_collect_statistics=False)
-    ```
+        ```
+        TableStatisticsModel(can_collect_statistics=False)
+        ```
     
     
     
@@ -8923,11 +8947,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableStatisticsModel(can_collect_statistics=False)
-    ```
+        ```
+        TableStatisticsModel(can_collect_statistics=False)
+        ```
     
     
     
@@ -8958,11 +8982,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableStatisticsModel(can_collect_statistics=False)
-    ```
+        ```
+        TableStatisticsModel(can_collect_statistics=False)
+        ```
     
     
     
@@ -9015,144 +9039,144 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "connection_name" : "sample_connection",
-	  "table_hash" : 2314522140819107818,
-	  "target" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "has_any_configured_checks" : true,
-	  "has_any_configured_profiling_checks" : true,
-	  "run_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true
-	  },
-	  "run_profiling_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "profiling"
-	  },
-	  "run_monitoring_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "monitoring"
-	  },
-	  "run_partition_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "partitioned"
-	  },
-	  "data_clean_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true
-	  },
-	  "can_edit" : true,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}, {
-	  "connection_name" : "sample_connection",
-	  "table_hash" : 2314522140819107818,
-	  "target" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "has_any_configured_checks" : true,
-	  "has_any_configured_profiling_checks" : true,
-	  "run_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true
-	  },
-	  "run_profiling_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "profiling"
-	  },
-	  "run_monitoring_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "monitoring"
-	  },
-	  "run_partition_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "partitioned"
-	  },
-	  "data_clean_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true
-	  },
-	  "can_edit" : true,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}, {
-	  "connection_name" : "sample_connection",
-	  "table_hash" : 2314522140819107818,
-	  "target" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "has_any_configured_checks" : true,
-	  "has_any_configured_profiling_checks" : true,
-	  "run_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true
-	  },
-	  "run_profiling_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "profiling"
-	  },
-	  "run_monitoring_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "monitoring"
-	  },
-	  "run_partition_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "partitioned"
-	  },
-	  "data_clean_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true
-	  },
-	  "can_edit" : true,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	} ]
-    ```
+        ```
+        [ {
+		  "connection_name" : "sample_connection",
+		  "table_hash" : 2314522140819107818,
+		  "target" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "has_any_configured_checks" : true,
+		  "has_any_configured_profiling_checks" : true,
+		  "run_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true
+		  },
+		  "run_profiling_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "profiling"
+		  },
+		  "run_monitoring_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "monitoring"
+		  },
+		  "run_partition_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "partitioned"
+		  },
+		  "data_clean_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "deleteErrors" : true,
+		    "deleteStatistics" : true,
+		    "deleteCheckResults" : true,
+		    "deleteSensorReadouts" : true
+		  },
+		  "can_edit" : true,
+		  "can_collect_statistics" : true,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		}, {
+		  "connection_name" : "sample_connection",
+		  "table_hash" : 2314522140819107818,
+		  "target" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "has_any_configured_checks" : true,
+		  "has_any_configured_profiling_checks" : true,
+		  "run_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true
+		  },
+		  "run_profiling_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "profiling"
+		  },
+		  "run_monitoring_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "monitoring"
+		  },
+		  "run_partition_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "partitioned"
+		  },
+		  "data_clean_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "deleteErrors" : true,
+		    "deleteStatistics" : true,
+		    "deleteCheckResults" : true,
+		    "deleteSensorReadouts" : true
+		  },
+		  "can_edit" : true,
+		  "can_collect_statistics" : true,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		}, {
+		  "connection_name" : "sample_connection",
+		  "table_hash" : 2314522140819107818,
+		  "target" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "has_any_configured_checks" : true,
+		  "has_any_configured_profiling_checks" : true,
+		  "run_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true
+		  },
+		  "run_profiling_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "profiling"
+		  },
+		  "run_monitoring_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "monitoring"
+		  },
+		  "run_partition_checks_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "partitioned"
+		  },
+		  "data_clean_job_template" : {
+		    "connection" : "sample_connection",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "deleteErrors" : true,
+		    "deleteStatistics" : true,
+		    "deleteCheckResults" : true,
+		    "deleteSensorReadouts" : true
+		  },
+		  "can_edit" : true,
+		  "can_collect_statistics" : true,
+		  "can_run_checks" : true,
+		  "can_delete_data" : true
+		} ]
+        ```
     
     
 
@@ -9178,159 +9202,159 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		TableListModel(
-			connection_name='sample_connection',
-			table_hash=2314522140819107818,
-			target=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
+        ```
+        [
+			TableListModel(
+				connection_name='sample_connection',
+				table_hash=2314522140819107818,
+				target=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				partitioning_configuration_missing=False,
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=True,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			partitioning_configuration_missing=False,
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
+			TableListModel(
+				connection_name='sample_connection',
+				table_hash=2314522140819107818,
+				target=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				partitioning_configuration_missing=False,
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=True,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=True,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		TableListModel(
-			connection_name='sample_connection',
-			table_hash=2314522140819107818,
-			target=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			partitioning_configuration_missing=False,
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=True,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		TableListModel(
-			connection_name='sample_connection',
-			table_hash=2314522140819107818,
-			target=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			partitioning_configuration_missing=False,
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=True,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		)
-	]
-    ```
+			TableListModel(
+				connection_name='sample_connection',
+				table_hash=2314522140819107818,
+				target=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				partitioning_configuration_missing=False,
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=True,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
+			)
+		]
+        ```
     
     
     
@@ -9357,159 +9381,159 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		TableListModel(
-			connection_name='sample_connection',
-			table_hash=2314522140819107818,
-			target=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
+        ```
+        [
+			TableListModel(
+				connection_name='sample_connection',
+				table_hash=2314522140819107818,
+				target=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				partitioning_configuration_missing=False,
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=True,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			partitioning_configuration_missing=False,
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
+			TableListModel(
+				connection_name='sample_connection',
+				table_hash=2314522140819107818,
+				target=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				partitioning_configuration_missing=False,
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=True,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=True,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		TableListModel(
-			connection_name='sample_connection',
-			table_hash=2314522140819107818,
-			target=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			partitioning_configuration_missing=False,
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=True,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		TableListModel(
-			connection_name='sample_connection',
-			table_hash=2314522140819107818,
-			target=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			partitioning_configuration_missing=False,
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=True,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		)
-	]
-    ```
+			TableListModel(
+				connection_name='sample_connection',
+				table_hash=2314522140819107818,
+				target=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				partitioning_configuration_missing=False,
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=True,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
+			)
+		]
+        ```
     
     
     
@@ -9539,159 +9563,159 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		TableListModel(
-			connection_name='sample_connection',
-			table_hash=2314522140819107818,
-			target=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
+        ```
+        [
+			TableListModel(
+				connection_name='sample_connection',
+				table_hash=2314522140819107818,
+				target=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				partitioning_configuration_missing=False,
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=True,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			partitioning_configuration_missing=False,
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
+			TableListModel(
+				connection_name='sample_connection',
+				table_hash=2314522140819107818,
+				target=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				partitioning_configuration_missing=False,
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=True,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=True,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		TableListModel(
-			connection_name='sample_connection',
-			table_hash=2314522140819107818,
-			target=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			partitioning_configuration_missing=False,
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=True,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		TableListModel(
-			connection_name='sample_connection',
-			table_hash=2314522140819107818,
-			target=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			partitioning_configuration_missing=False,
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=True,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		)
-	]
-    ```
+			TableListModel(
+				connection_name='sample_connection',
+				table_hash=2314522140819107818,
+				target=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				partitioning_configuration_missing=False,
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=True,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
+			)
+		]
+        ```
     
     
     
@@ -9721,159 +9745,159 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		TableListModel(
-			connection_name='sample_connection',
-			table_hash=2314522140819107818,
-			target=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
+        ```
+        [
+			TableListModel(
+				connection_name='sample_connection',
+				table_hash=2314522140819107818,
+				target=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				partitioning_configuration_missing=False,
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=True,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			partitioning_configuration_missing=False,
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
+			TableListModel(
+				connection_name='sample_connection',
+				table_hash=2314522140819107818,
+				target=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				partitioning_configuration_missing=False,
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=True,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
 			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=True,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		TableListModel(
-			connection_name='sample_connection',
-			table_hash=2314522140819107818,
-			target=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			partitioning_configuration_missing=False,
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=True,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		),
-		TableListModel(
-			connection_name='sample_connection',
-			table_hash=2314522140819107818,
-			target=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			disabled=False,
-			has_any_configured_checks=True,
-			has_any_configured_profiling_checks=True,
-			has_any_configured_monitoring_checks=False,
-			has_any_configured_partition_checks=False,
-			partitioning_configuration_missing=False,
-			run_checks_job_template=CheckSearchFilters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_profiling_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PROFILING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_monitoring_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.MONITORING,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			run_partition_checks_job_template=CheckSearchFilters(
-				check_type=CheckType.PARTITIONED,
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				enabled=True
-			),
-			data_clean_job_template=DeleteStoredDataQueueJobParameters(
-				connection='sample_connection',
-				full_table_name='sample_schema.sample_table',
-				delete_errors=True,
-				delete_statistics=True,
-				delete_check_results=True,
-				delete_sensor_readouts=True
-			),
-			can_edit=True,
-			can_collect_statistics=True,
-			can_run_checks=True,
-			can_delete_data=True
-		)
-	]
-    ```
+			TableListModel(
+				connection_name='sample_connection',
+				table_hash=2314522140819107818,
+				target=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				disabled=False,
+				has_any_configured_checks=True,
+				has_any_configured_profiling_checks=True,
+				has_any_configured_monitoring_checks=False,
+				has_any_configured_partition_checks=False,
+				partitioning_configuration_missing=False,
+				run_checks_job_template=CheckSearchFilters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_profiling_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PROFILING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_monitoring_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.MONITORING,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				run_partition_checks_job_template=CheckSearchFilters(
+					check_type=CheckType.PARTITIONED,
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				data_clean_job_template=DeleteStoredDataQueueJobParameters(
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					delete_errors=True,
+					delete_statistics=True,
+					delete_check_results=True,
+					delete_sensor_readouts=True
+				),
+				can_edit=True,
+				can_collect_statistics=True,
+				can_run_checks=True,
+				can_delete_data=True
+			)
+		]
+        ```
     
     
     
@@ -9943,8 +9967,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                MinCountRule1ParametersSpec, \
 	                                PartitionIncrementalTimeWindowSpec, \
 	                                TableComparisonConfigurationSpecMap, \
-	                                TableMonitoringChecksSpec, \
-	                                TablePartitionedChecksRootSpec, \
+	                                TableMonitoringCheckCategoriesSpec, \
+	                                TablePartitionedCheckCategoriesSpec, \
 	                                TableProfilingCheckCategoriesSpec, \
 	                                TableRowCountCheckSpec, \
 	                                TableSpec, \
@@ -9981,8 +10005,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				)
 			)
 		),
-		monitoring_checks=TableMonitoringChecksSpec(),
-		partitioned_checks=TablePartitionedChecksRootSpec(),
+		monitoring_checks=TableMonitoringCheckCategoriesSpec(),
+		partitioned_checks=TablePartitionedCheckCategoriesSpec(),
 		columns=ColumnSpecMap()
 	)
 	
@@ -10010,8 +10034,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                MinCountRule1ParametersSpec, \
 	                                PartitionIncrementalTimeWindowSpec, \
 	                                TableComparisonConfigurationSpecMap, \
-	                                TableMonitoringChecksSpec, \
-	                                TablePartitionedChecksRootSpec, \
+	                                TableMonitoringCheckCategoriesSpec, \
+	                                TablePartitionedCheckCategoriesSpec, \
 	                                TableProfilingCheckCategoriesSpec, \
 	                                TableRowCountCheckSpec, \
 	                                TableSpec, \
@@ -10048,8 +10072,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				)
 			)
 		),
-		monitoring_checks=TableMonitoringChecksSpec(),
-		partitioned_checks=TablePartitionedChecksRootSpec(),
+		monitoring_checks=TableMonitoringCheckCategoriesSpec(),
+		partitioned_checks=TablePartitionedCheckCategoriesSpec(),
 		columns=ColumnSpecMap()
 	)
 	
@@ -10077,8 +10101,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                MinCountRule1ParametersSpec, \
 	                                PartitionIncrementalTimeWindowSpec, \
 	                                TableComparisonConfigurationSpecMap, \
-	                                TableMonitoringChecksSpec, \
-	                                TablePartitionedChecksRootSpec, \
+	                                TableMonitoringCheckCategoriesSpec, \
+	                                TablePartitionedCheckCategoriesSpec, \
 	                                TableProfilingCheckCategoriesSpec, \
 	                                TableRowCountCheckSpec, \
 	                                TableSpec, \
@@ -10118,8 +10142,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				)
 			)
 		),
-		monitoring_checks=TableMonitoringChecksSpec(),
-		partitioned_checks=TablePartitionedChecksRootSpec(),
+		monitoring_checks=TableMonitoringCheckCategoriesSpec(),
+		partitioned_checks=TablePartitionedCheckCategoriesSpec(),
 		columns=ColumnSpecMap()
 	)
 	
@@ -10147,8 +10171,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                MinCountRule1ParametersSpec, \
 	                                PartitionIncrementalTimeWindowSpec, \
 	                                TableComparisonConfigurationSpecMap, \
-	                                TableMonitoringChecksSpec, \
-	                                TablePartitionedChecksRootSpec, \
+	                                TableMonitoringCheckCategoriesSpec, \
+	                                TablePartitionedCheckCategoriesSpec, \
 	                                TableProfilingCheckCategoriesSpec, \
 	                                TableRowCountCheckSpec, \
 	                                TableSpec, \
@@ -10188,8 +10212,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				)
 			)
 		),
-		monitoring_checks=TableMonitoringChecksSpec(),
-		partitioned_checks=TablePartitionedChecksRootSpec(),
+		monitoring_checks=TableMonitoringCheckCategoriesSpec(),
+		partitioned_checks=TablePartitionedCheckCategoriesSpec(),
 		columns=ColumnSpecMap()
 	)
 	
@@ -11694,6 +11718,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -11756,6 +11781,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -11821,6 +11847,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -11886,6 +11913,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -12464,6 +12492,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -12526,6 +12555,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -12591,6 +12621,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -12656,6 +12687,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -13471,6 +13503,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -13531,6 +13564,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -13594,6 +13628,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -13657,6 +13692,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
 						standard=False,
+						default_check=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,

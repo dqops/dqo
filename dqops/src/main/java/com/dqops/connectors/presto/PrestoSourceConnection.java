@@ -28,7 +28,9 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * Presto source connection.
@@ -92,7 +94,11 @@ public class PrestoSourceConnection extends AbstractJdbcSourceConnection {
 
         Properties dataSourceProperties = new Properties();
         if (prestoSpec.getProperties() != null) {
-            dataSourceProperties.putAll(prestoSpec.getProperties());
+            dataSourceProperties.putAll(prestoSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
         hikariConfig.setDataSourceProperties(dataSourceProperties);
 

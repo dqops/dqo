@@ -1,7 +1,7 @@
 package com.dqops.metadata.sources.fileformat;
 
-import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -128,6 +128,21 @@ public class FileFormatSpec extends AbstractSpec {
         setDirtyIf(!Objects.equals(this.filePaths, filePaths));
         this.filePaths = filePaths;
         propagateHierarchyIdToField(filePaths, "file_paths");
+    }
+
+    /**
+     * Whether the hive partitioning option is set on a file format.
+     * @return Whether the hive partitioning option is set on a file format.
+     */
+    public boolean isSetHivePartitioning(DuckdbFilesFormatType duckdbFilesFormatType){
+        if(duckdbFilesFormatType != null){
+            switch(duckdbFilesFormatType){
+                case csv: return getCsv() != null && getCsv().getHivePartitioning() != null && getCsv().getHivePartitioning();
+                case json: return getJson() != null && getJson().getHivePartitioning() != null && getJson().getHivePartitioning();
+                case parquet: return getParquet() != null && getParquet().getHivePartitioning() != null && getParquet().getHivePartitioning();
+            }
+        }
+        return false;
     }
 
     /**

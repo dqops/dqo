@@ -1,5 +1,5 @@
 # DQOps REST API incidents models reference
-The references of all objects used by [incidents](/docs/client/operations/incidents.md) REST API operations are listed below.
+The references of all objects used by [incidents](../operations/incidents.md) REST API operations are listed below.
 
 
 ## CheckResultEntryModel
@@ -16,7 +16,7 @@ Detailed results for a single check. Represent one row in the check results tabl
 |<span class="no-wrap-code">`check_category`</span>|Check category name|*string*|
 |<span class="no-wrap-code">`check_name`</span>|Check name|*string*|
 |<span class="no-wrap-code">`check_display_name`</span>|Check display name|*string*|
-|<span class="no-wrap-code">[`check_type`](/docs/client/models/table_comparisons.md#checktype)</span>|Check type|*[CheckType](/docs/client/models/table_comparisons.md#checktype)*|
+|<span class="no-wrap-code">[`check_type`](./table_comparisons.md#checktype)</span>|Check type|*[CheckType](./table_comparisons.md#checktype)*|
 |<span class="no-wrap-code">`actual_value`</span>|Actual value|*double*|
 |<span class="no-wrap-code">`expected_value`</span>|Expected value|*double*|
 |<span class="no-wrap-code">`warning_lower_bound`</span>|Warning lower bound|*double*|
@@ -29,7 +29,7 @@ Detailed results for a single check. Represent one row in the check results tabl
 |<span class="no-wrap-code">`column_name`</span>|Column name|*string*|
 |<span class="no-wrap-code">`data_group`</span>|Data group name|*string*|
 |<span class="no-wrap-code">`duration_ms`</span>|Duration (ms)|*integer*|
-|<span class="no-wrap-code">[`time_gradient`](/docs/client/models/errors.md#timeperiodgradient)</span>|Time gradient|*[TimePeriodGradient](/docs/client/models/errors.md#timeperiodgradient)*|
+|<span class="no-wrap-code">[`time_gradient`](./errors.md#timeperiodgradient)</span>|Time gradient|*[TimePeriodGradient](./errors.md#timeperiodgradient)*|
 |<span class="no-wrap-code">`time_period`</span>|Time period|*datetime*|
 |<span class="no-wrap-code">`include_in_kpi`</span>|Include in KPI|*boolean*|
 |<span class="no-wrap-code">`include_in_sla`</span>|Include in SLA|*boolean*|
@@ -82,8 +82,10 @@ Model that returns histograms of the data quality issue occurrences related to a
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`has_profiling_issues`</span>|True when this data quality incident is based on data quality issues from profiling checks within the filters applied to search for linked data quality issues.|*boolean*|
-|<span class="no-wrap-code">`has_monitoring_issues`</span>|True when this data quality incident is based on data quality issues from monitoring checks within the filters applied to search for linked data quality issues.|*boolean*|
-|<span class="no-wrap-code">`has_partitioned_issues`</span>|True when this data quality incident is based on data quality issues from partitioned checks within the filters applied to search for linked data quality issues.|*boolean*|
+|<span class="no-wrap-code">`has_daily_monitoring_issues`</span>|True when this data quality incident is based on data quality issues from daily monitoring checks within the filters applied to search for linked data quality issues.|*boolean*|
+|<span class="no-wrap-code">`has_monthly_monitoring_issues`</span>|True when this data quality incident is based on data quality issues from monthly monitoring checks within the filters applied to search for linked data quality issues.|*boolean*|
+|<span class="no-wrap-code">`has_daily_partitioned_issues`</span>|True when this data quality incident is based on data quality issues from daily partitioned checks within the filters applied to search for linked data quality issues.|*boolean*|
+|<span class="no-wrap-code">`has_monthly_partitioned_issues`</span>|True when this data quality incident is based on data quality issues from monthly partitioned checks within the filters applied to search for linked data quality issues.|*boolean*|
 |<span class="no-wrap-code">`days`</span>|A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.|*Dict[date, [IncidentDailyIssuesCount](#incidentdailyissuescount)]*|
 |<span class="no-wrap-code">`columns`</span>|A map of column names with the most data quality issues related to the incident. The map returns the count of issues as the value.|*Dict[string, integer]*|
 |<span class="no-wrap-code">`checks`</span>|A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.|*Dict[string, integer]*|
@@ -130,7 +132,7 @@ Data quality incident model shown on an incident details screen.
 |<span class="no-wrap-code">`minimum_severity`</span>|The minimum severity of the data quality incident, copied from the incident configuration at a connection or table at the time when the incident was first seen. Possible values are: 1 - warning, 2 - error, 3 - fatal.|*integer*|
 |<span class="no-wrap-code">`failed_checks_count`</span>|The total number of failed data quality checks that were seen when the incident was raised for the first time.|*integer*|
 |<span class="no-wrap-code">`issue_url`</span>|The link (url) to a ticket in an external system that is tracking this incident.|*string*|
-|<span class="no-wrap-code">[`status`](/docs/client/models/incidents.md#incidentstatus)</span>|Incident status.|*[IncidentStatus](/docs/client/models/incidents.md#incidentstatus)*|
+|<span class="no-wrap-code">[`status`](./incidents.md#incidentstatus)</span>|Incident status.|*[IncidentStatus](./incidents.md#incidentstatus)*|
 
 
 ___

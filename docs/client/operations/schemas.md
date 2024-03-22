@@ -58,24 +58,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	} ]
-    ```
+        ```
+        [ {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		}, {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		}, {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		} ]
+        ```
     
     
 
@@ -104,33 +104,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -160,33 +160,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -219,33 +219,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -278,33 +278,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -361,18 +361,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	} ]
-    ```
+        ```
+        [ {
+		  "sensor_parameters_definitions" : [ ]
+		}, {
+		  "sensor_parameters_definitions" : [ ]
+		}, {
+		  "sensor_parameters_definitions" : [ ]
+		} ]
+        ```
     
     
 
@@ -401,27 +401,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -451,27 +451,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -504,27 +504,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -557,27 +557,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -640,24 +640,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	} ]
-    ```
+        ```
+        [ {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		}, {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		}, {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		} ]
+        ```
     
     
 
@@ -686,33 +686,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -742,33 +742,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -801,33 +801,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -860,33 +860,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -943,18 +943,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	} ]
-    ```
+        ```
+        [ {
+		  "sensor_parameters_definitions" : [ ]
+		}, {
+		  "sensor_parameters_definitions" : [ ]
+		}, {
+		  "sensor_parameters_definitions" : [ ]
+		} ]
+        ```
     
     
 
@@ -983,27 +983,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -1033,27 +1033,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -1086,27 +1086,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -1139,27 +1139,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -1221,24 +1221,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	} ]
-    ```
+        ```
+        [ {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		}, {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		}, {
+		  "sensor_parameters" : [ ],
+		  "disabled" : false,
+		  "configured" : false
+		} ]
+        ```
     
     
 
@@ -1265,33 +1265,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -1319,33 +1319,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -1376,33 +1376,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -1433,33 +1433,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		),
-		CheckConfigurationModel(
-			sensor_parameters=[
-			
-			],
-			disabled=False,
-			configured=False
-		)
-	]
-    ```
+        ```
+        [
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			),
+			CheckConfigurationModel(
+				sensor_parameters=[
+				
+				],
+				disabled=False,
+				configured=False
+			)
+		]
+        ```
     
     
     
@@ -1515,18 +1515,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	} ]
-    ```
+        ```
+        [ {
+		  "sensor_parameters_definitions" : [ ]
+		}, {
+		  "sensor_parameters_definitions" : [ ]
+		}, {
+		  "sensor_parameters_definitions" : [ ]
+		} ]
+        ```
     
     
 
@@ -1553,27 +1553,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -1601,27 +1601,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -1652,27 +1652,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -1703,27 +1703,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		),
-		CheckTemplate(
-			sensor_parameters_definitions=[
-			
-			]
-		)
-	]
-    ```
+        ```
+        [
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			),
+			CheckTemplate(
+				sensor_parameters_definitions=[
+				
+				]
+			)
+		]
+        ```
     
     
     
@@ -1775,27 +1775,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "can_edit" : false,
-	  "can_collect_statistics" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}, {
-	  "can_edit" : false,
-	  "can_collect_statistics" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}, {
-	  "can_edit" : false,
-	  "can_collect_statistics" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	} ]
-    ```
+        ```
+        [ {
+		  "can_edit" : false,
+		  "can_collect_statistics" : false,
+		  "can_run_checks" : false,
+		  "can_delete_data" : false
+		}, {
+		  "can_edit" : false,
+		  "can_collect_statistics" : false,
+		  "can_run_checks" : false,
+		  "can_delete_data" : false
+		}, {
+		  "can_edit" : false,
+		  "can_collect_statistics" : false,
+		  "can_run_checks" : false,
+		  "can_delete_data" : false
+		} ]
+        ```
     
     
 
@@ -1820,30 +1820,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		SchemaModel(
-			can_edit=False,
-			can_collect_statistics=False,
-			can_run_checks=False,
-			can_delete_data=False
-		),
-		SchemaModel(
-			can_edit=False,
-			can_collect_statistics=False,
-			can_run_checks=False,
-			can_delete_data=False
-		),
-		SchemaModel(
-			can_edit=False,
-			can_collect_statistics=False,
-			can_run_checks=False,
-			can_delete_data=False
-		)
-	]
-    ```
+        ```
+        [
+			SchemaModel(
+				can_edit=False,
+				can_collect_statistics=False,
+				can_run_checks=False,
+				can_delete_data=False
+			),
+			SchemaModel(
+				can_edit=False,
+				can_collect_statistics=False,
+				can_run_checks=False,
+				can_delete_data=False
+			),
+			SchemaModel(
+				can_edit=False,
+				can_collect_statistics=False,
+				can_run_checks=False,
+				can_delete_data=False
+			)
+		]
+        ```
     
     
     
@@ -1869,30 +1869,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		SchemaModel(
-			can_edit=False,
-			can_collect_statistics=False,
-			can_run_checks=False,
-			can_delete_data=False
-		),
-		SchemaModel(
-			can_edit=False,
-			can_collect_statistics=False,
-			can_run_checks=False,
-			can_delete_data=False
-		),
-		SchemaModel(
-			can_edit=False,
-			can_collect_statistics=False,
-			can_run_checks=False,
-			can_delete_data=False
-		)
-	]
-    ```
+        ```
+        [
+			SchemaModel(
+				can_edit=False,
+				can_collect_statistics=False,
+				can_run_checks=False,
+				can_delete_data=False
+			),
+			SchemaModel(
+				can_edit=False,
+				can_collect_statistics=False,
+				can_run_checks=False,
+				can_delete_data=False
+			),
+			SchemaModel(
+				can_edit=False,
+				can_collect_statistics=False,
+				can_run_checks=False,
+				can_delete_data=False
+			)
+		]
+        ```
     
     
     
@@ -1921,30 +1921,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		SchemaModel(
-			can_edit=False,
-			can_collect_statistics=False,
-			can_run_checks=False,
-			can_delete_data=False
-		),
-		SchemaModel(
-			can_edit=False,
-			can_collect_statistics=False,
-			can_run_checks=False,
-			can_delete_data=False
-		),
-		SchemaModel(
-			can_edit=False,
-			can_collect_statistics=False,
-			can_run_checks=False,
-			can_delete_data=False
-		)
-	]
-    ```
+        ```
+        [
+			SchemaModel(
+				can_edit=False,
+				can_collect_statistics=False,
+				can_run_checks=False,
+				can_delete_data=False
+			),
+			SchemaModel(
+				can_edit=False,
+				can_collect_statistics=False,
+				can_run_checks=False,
+				can_delete_data=False
+			),
+			SchemaModel(
+				can_edit=False,
+				can_collect_statistics=False,
+				can_run_checks=False,
+				can_delete_data=False
+			)
+		]
+        ```
     
     
     
@@ -1973,30 +1973,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		SchemaModel(
-			can_edit=False,
-			can_collect_statistics=False,
-			can_run_checks=False,
-			can_delete_data=False
-		),
-		SchemaModel(
-			can_edit=False,
-			can_collect_statistics=False,
-			can_run_checks=False,
-			can_delete_data=False
-		),
-		SchemaModel(
-			can_edit=False,
-			can_collect_statistics=False,
-			can_run_checks=False,
-			can_delete_data=False
-		)
-	]
-    ```
+        ```
+        [
+			SchemaModel(
+				can_edit=False,
+				can_collect_statistics=False,
+				can_run_checks=False,
+				can_delete_data=False
+			),
+			SchemaModel(
+				can_edit=False,
+				can_collect_statistics=False,
+				can_run_checks=False,
+				can_delete_data=False
+			),
+			SchemaModel(
+				can_edit=False,
+				can_collect_statistics=False,
+				can_run_checks=False,
+				can_delete_data=False
+			)
+		]
+        ```
     
     
     

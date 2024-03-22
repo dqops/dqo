@@ -5,17 +5,16 @@ import {
   PopoverContent,
   PopoverHandler
 } from '@material-tailwind/react';
-import SvgIcon from '../SvgIcon';
+import { useSelector } from 'react-redux';
 import { RuleListModel, SensorFolderModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab, refreshRuleFolderTree } from '../../redux/actions/definition.actions';
-import { ROUTES } from '../../shared/routes';
-import AddFolderDialog from './AddFolderDialog';
-import { RulesApi } from '../../services/apiClient';
-import ConfirmDialog from '../CustomTree/ConfirmDialog';
 import { IRootState } from '../../redux/reducers';
-import { useSelector } from 'react-redux';
-import { urlencodeDecoder } from '../../utils';
+import { RulesApi } from '../../services/apiClient';
+import { ROUTES } from '../../shared/routes';
+import ConfirmDialog from '../CustomTree/ConfirmDialog';
+import SvgIcon from '../SvgIcon';
+import AddFolderDialog from './AddFolderDialog';
 
 interface RuleContextMenuProps {
   folder?: SensorFolderModel;
@@ -88,7 +87,7 @@ const RuleContextMenu = ({
   };
 
   const deleteRuleFromTree = async () => {
-    await RulesApi.deleteRule(urlencodeDecoder(rule?.full_rule_name ?? '') ?? '').then(
+    await RulesApi.deleteRule(rule?.full_rule_name ?? '').then(
       () => dispatch(refreshRuleFolderTree(refreshRulesTreeIndicator ? false : true))
     );
   };

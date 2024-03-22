@@ -18,6 +18,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 public class FileFormatSpecProviderTest extends BaseTest {
 
@@ -118,9 +120,14 @@ public class FileFormatSpecProviderTest extends BaseTest {
 
         DuckdbParametersSpec duckdbParametersSpec = new DuckdbParametersSpec();
 
-        FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
+        });
 
-        Assertions.assertNull(fileFormatSpec);
+        String expectedMessage = "The files format is unknown. Please set files format on the connection.";
+        String actualMessage = exception.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
@@ -157,7 +164,7 @@ public class FileFormatSpecProviderTest extends BaseTest {
 
         FilePathListSpec fileFormatSpec = FileFormatSpecProvider.guessFilePaths(duckdbParametersSpec, tableSpec);
 
-        String expectedTablePath = filesFolder + File.separator + tableName + File.separator + "**.csv";
+        String expectedTablePath = filesFolder + File.separator + tableName + File.separator + "*.csv";
         Assertions.assertNotNull(fileFormatSpec);
         Assertions.assertEquals(expectedTablePath, fileFormatSpec.get(0));
     }
@@ -176,7 +183,7 @@ public class FileFormatSpecProviderTest extends BaseTest {
 
         FilePathListSpec fileFormatSpec = FileFormatSpecProvider.guessFilePaths(duckdbParametersSpec, tableSpec);
 
-        String expectedTablePath = tableName + File.separator + "**.csv";
+        String expectedTablePath = tableName + File.separator + "*.csv";
         Assertions.assertNotNull(fileFormatSpec);
         Assertions.assertEquals(expectedTablePath, fileFormatSpec.get(0));
     }
@@ -213,6 +220,27 @@ public class FileFormatSpecProviderTest extends BaseTest {
 
         Assertions.assertNotNull(fileFormatSpec);
         Assertions.assertTrue(fileFormatSpec.isEmpty());
+    }
+
+    @Test
+    void guessFilePaths_whenUsingHivePartitioning_putsDoubleWildcardInPath() {
+        String schemaName = "schema_name_example";
+        String filesFolder = "/dev/all_clients";
+        String tableName = "/dev/specific_clients";
+
+        TableSpec tableSpec = new TableSpec(new PhysicalTableName(schemaName, tableName));
+
+        DuckdbParametersSpec duckdbParametersSpec = new DuckdbParametersSpec();
+        duckdbParametersSpec.setDirectories(Map.of(schemaName, filesFolder));
+        duckdbParametersSpec.setFilesFormatType(DuckdbFilesFormatType.csv);
+        duckdbParametersSpec.setCsv(new CsvFileFormatSpec());
+        duckdbParametersSpec.getCsv().setHivePartitioning(true);
+
+        FilePathListSpec fileFormatSpec = FileFormatSpecProvider.guessFilePaths(duckdbParametersSpec, tableSpec);
+
+        String expectedTablePath = tableName + File.separator + "**" + File.separator + "*.csv";
+        Assertions.assertNotNull(fileFormatSpec);
+        Assertions.assertEquals(expectedTablePath, fileFormatSpec.get(0));
     }
 
     @EnabledOnOs(OS.WINDOWS)

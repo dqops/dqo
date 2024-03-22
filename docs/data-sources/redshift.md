@@ -56,7 +56,7 @@ can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
     
 For example:
 
-![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties.jpg)
+![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png)
     
 To remove the property click on the trash icon at the end of the input field.
 
@@ -106,13 +106,14 @@ Database provider type (--provider):
  [ 3] mysql
  [ 4] oracle
  [ 5] postgresql
- [ 6] presto
- [ 7] redshift
- [ 8] snowflake
- [ 9] spark
- [10] sqlserver
- [11] trino
-Please enter one of the [] values: 7
+ [ 6] duckdb
+ [ 7] presto
+ [ 8] redshift
+ [ 9] snowflake
+ [10] spark
+ [11] sqlserver
+ [12] trino
+Please enter one of the [] values: 8
 Redshift host (--redshift-host)[${REDSHIFT_HOST}]: localhost
 Redshift port (--redshift-port) [${REDSHIFT_PORT}]: 5439
 Redshift database (--redshift-database) [${REDSHIFT_DATABASE}]: testing

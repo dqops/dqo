@@ -1,5 +1,5 @@
 # DQOps REST API default_table_check_patterns models reference
-The references of all objects used by [default_table_check_patterns](/docs/client/operations/default_table_check_patterns.md) REST API operations are listed below.
+The references of all objects used by [default_table_check_patterns](../operations/default_table_check_patterns.md) REST API operations are listed below.
 
 
 ## TargetTablePatternSpec
@@ -48,8 +48,8 @@ Container of table level monitoring, divided by the time window (daily, monthly,
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`daily`](/docs/client/models/tables.md#tabledailymonitoringcheckcategoriesspec)</span>|Configuration of daily monitoring evaluated at a table level.|*[TableDailyMonitoringCheckCategoriesSpec](/docs/client/models/tables.md#tabledailymonitoringcheckcategoriesspec)*|
-|<span class="no-wrap-code">[`monthly`](/docs/client/models/tables.md#tablemonthlymonitoringcheckcategoriesspec)</span>|Configuration of monthly monitoring evaluated at a table level.|*[TableMonthlyMonitoringCheckCategoriesSpec](/docs/client/models/tables.md#tablemonthlymonitoringcheckcategoriesspec)*|
+|<span class="no-wrap-code">[`daily`](./tables.md#tabledailymonitoringcheckcategoriesspec)</span>|Configuration of daily monitoring evaluated at a table level.|*[TableDailyMonitoringCheckCategoriesSpec](./tables.md#tabledailymonitoringcheckcategoriesspec)*|
+|<span class="no-wrap-code">[`monthly`](./tables.md#tablemonthlymonitoringcheckcategoriesspec)</span>|Configuration of monthly monitoring evaluated at a table level.|*[TableMonthlyMonitoringCheckCategoriesSpec](./tables.md#tablemonthlymonitoringcheckcategoriesspec)*|
 
 
 ___
@@ -63,8 +63,8 @@ Container of table level partitioned checks, divided by the time window (daily, 
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`daily`](/docs/client/models/tables.md#tabledailypartitionedcheckcategoriesspec)</span>|Configuration of day partitioned data quality checks evaluated at a table level.|*[TableDailyPartitionedCheckCategoriesSpec](/docs/client/models/tables.md#tabledailypartitionedcheckcategoriesspec)*|
-|<span class="no-wrap-code">[`monthly`](/docs/client/models/tables.md#tablemonthlypartitionedcheckcategoriesspec)</span>|Configuration of monthly partitioned data quality checks evaluated at a table level..|*[TableMonthlyPartitionedCheckCategoriesSpec](/docs/client/models/tables.md#tablemonthlypartitionedcheckcategoriesspec)*|
+|<span class="no-wrap-code">[`daily`](./tables.md#tabledailypartitionedcheckcategoriesspec)</span>|Configuration of day partitioned data quality checks evaluated at a table level.|*[TableDailyPartitionedCheckCategoriesSpec](./tables.md#tabledailypartitionedcheckcategoriesspec)*|
+|<span class="no-wrap-code">[`monthly`](./tables.md#tablemonthlypartitionedcheckcategoriesspec)</span>|Configuration of monthly partitioned data quality checks evaluated at a table level..|*[TableMonthlyPartitionedCheckCategoriesSpec](./tables.md#tablemonthlypartitionedcheckcategoriesspec)*|
 
 
 ___
@@ -79,8 +79,8 @@ The default configuration of table-level data quality checks that are enabled as
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`priority`</span>|The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.|*integer*|
-|<span class="no-wrap-code">[`target`](/docs/client/models/default_table_check_patterns.md#targettablepatternspec)</span>|The target table filter that are filtering the table and connection on which the default checks are applied.|*[TargetTablePatternSpec](/docs/client/models/default_table_check_patterns.md#targettablepatternspec)*|
-|<span class="no-wrap-code">[`profiling_checks`](/docs/client/models/tables.md#tableprofilingcheckcategoriesspec)</span>|Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.|*[TableProfilingCheckCategoriesSpec](/docs/client/models/tables.md#tableprofilingcheckcategoriesspec)*|
+|<span class="no-wrap-code">[`target`](./default_table_check_patterns.md#targettablepatternspec)</span>|The target table filter that are filtering the table and connection on which the default checks are applied.|*[TargetTablePatternSpec](./default_table_check_patterns.md#targettablepatternspec)*|
+|<span class="no-wrap-code">[`profiling_checks`](./tables.md#tableprofilingcheckcategoriesspec)</span>|Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.|*[TableProfilingCheckCategoriesSpec](./tables.md#tableprofilingcheckcategoriesspec)*|
 |<span class="no-wrap-code">[`monitoring_checks`](#tablemonitoringcheckcategoriesspec)</span>|Configuration of table level monitoring checks. Monitoring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring check stores only the most recent data quality check result for each period of time.|*[TableMonitoringCheckCategoriesSpec](#tablemonitoringcheckcategoriesspec)*|
 |<span class="no-wrap-code">[`partitioned_checks`](#tablepartitionedcheckcategoriesspec)</span>|Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.|*[TablePartitionedCheckCategoriesSpec](#tablepartitionedcheckcategoriesspec)*|
 

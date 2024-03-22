@@ -310,7 +310,7 @@ export const IncidentDetail = () => {
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
-            <div className="text-xl font-semibold truncate">
+            <div className="text-lg font-semibold truncate">
               Data quality incident {`${year}/${month}/${incidentId}`}
             </div>
           </div>
@@ -325,7 +325,7 @@ export const IncidentDetail = () => {
             ></Button>
           </div>
         </div>
-        <div className="flex items-center p-4 gap-6 mb-4">
+        <div className="flex items-center p-4 gap-6 mb-4 text-sm">
           <div className="grow">
             <Input
               value={searchTerm}
@@ -342,11 +342,12 @@ export const IncidentDetail = () => {
                 label={o.label}
                 color={o.value === filters?.days ? 'primary' : undefined}
                 onClick={() => onChangeFilter({ days: o.value, page: 1 })}
+                className="text-sm"
               />
             ))}
           </div>
         </div>
-        <div className="grid grid-cols-4 gap-4 px-4">
+        <div className="grid grid-cols-4 gap-4 px-4 text-sm">
           <SectionWrapper title="Table">
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Connection</div>
@@ -356,11 +357,15 @@ export const IncidentDetail = () => {
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Schema</div>
-              <div className="flex-[2] font-bold whitespace-normal break-all">{incidentDetail?.schema}</div>
+              <div className="flex-[2] font-bold whitespace-normal break-all">
+                {incidentDetail?.schema}
+              </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Table</div>
-              <div className="flex-[2] font-bold whitespace-normal break-all">{incidentDetail?.table}</div>
+              <div className="flex-[2] font-bold whitespace-normal break-all">
+                {incidentDetail?.table}
+              </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Table priority</div>
@@ -467,14 +472,14 @@ export const IncidentDetail = () => {
                             : incidentDetail?.issueUrl}
                         </Tooltip>
                       </a>
-                    <IconButton
-                      color="teal"
-                      size="sm"
-                      onClick={() => setOpen(true)}
-                      className="!shadow-none"
-                    >
-                      <SvgIcon name="edit" className="w-4" />
-                    </IconButton>
+                      <IconButton
+                        color="teal"
+                        size="sm"
+                        onClick={() => setOpen(true)}
+                        className="!shadow-none"
+                      >
+                        <SvgIcon name="edit" className="w-4" />
+                      </IconButton>
                     </div>
                   ) : (
                     <IconButton
@@ -525,7 +530,7 @@ export const IncidentDetail = () => {
         </div>
 
         <HistogramChart onChangeFilter={onChangeFilter} days={filters.days} />
-        <div className="px-4 ">
+        <div className="px-4 text-sm">
           <div
             className="py-3 mb-5 overflow-auto"
             style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}

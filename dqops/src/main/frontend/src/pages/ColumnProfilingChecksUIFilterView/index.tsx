@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
+import { CheckContainerModel, CheckResultsOverviewDataModel, CheckResultsOverviewDataModel } from '../../api';
 import Button from '../../components/Button';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import SvgIcon from '../../components/SvgIcon';
@@ -127,7 +127,7 @@ const ColumnProfilingChecksUIFilterView = () => {
           style={{ maxWidth: `calc(100% - 180px)` }}
         >
           <SvgIcon name="search" className="w-5 h-5 shrink-0" />
-          <div className="text-xl font-semibold truncate">{`${connectionName}.${schemaName}.${tableName}.${columnName}.checks.${category} - ${checkName}`}</div>
+          <div className="text-lg font-semibold truncate">{`${connectionName}.${schemaName}.${tableName}.${columnName}.checks.${category} - ${checkName}`}</div>
         </div>
         <Button
           color={isUpdatedChecksUIFilter ? 'primary' : 'secondary'}

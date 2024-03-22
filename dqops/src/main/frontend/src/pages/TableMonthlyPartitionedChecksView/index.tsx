@@ -21,11 +21,18 @@ const TableMonthlyPartitionedChecksView = () => {
   const [updatedChecksUI, setUpdatedChecksUI] = useState<CheckContainerModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
-  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const [checkResultsOverview, setCheckResultsOverview] = useState<
+    CheckResultsOverviewDataModel[]
+  >([]);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getTablePartitionedChecksOverview(connectionName, schemaName, tableName, 'monthly').then((res) => {
+    CheckResultOverviewApi.getTablePartitionedChecksOverview(
+      connectionName,
+      schemaName,
+      tableName,
+      'monthly'
+    ).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
@@ -36,7 +43,13 @@ const TableMonthlyPartitionedChecksView = () => {
 
   useEffect(() => {
     dispatch(
-      getTableMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+      getTableMonthlyPartitionedChecks(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName
+      )
     );
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
@@ -53,7 +66,14 @@ const TableMonthlyPartitionedChecksView = () => {
       )
     );
     await dispatch(
-      getTableMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
+      getTableMonthlyPartitionedChecks(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName,
+        false
+      )
     );
     setIsUpdated(false);
   };
@@ -66,9 +86,12 @@ const TableMonthlyPartitionedChecksView = () => {
   return (
     <>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
-        <div className="flex items-center space-x-2" style={{ maxWidth: `calc(100% - 180px)` }}>
+        <div
+          className="flex items-center space-x-2"
+          style={{ maxWidth: `calc(100% - 180px)` }}
+        >
           <SvgIcon name="table-check" className="w-5 h-5 shrink-0" />
-          <div className="text-xl font-semibold truncate">{`Monthly partition checks for ${connectionName}.${schemaName}.${tableName}`}</div>
+          <div className="text-lg font-semibold truncate">{`Monthly partition checks for ${connectionName}.${schemaName}.${tableName}`}</div>
         </div>
         <Button
           color={isUpdated ? 'primary' : 'secondary'}

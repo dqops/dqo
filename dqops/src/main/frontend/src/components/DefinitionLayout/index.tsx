@@ -48,6 +48,10 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
   };
 
   const closeTab = (value: string) => {
+    if (pageTabs.length === 1) {
+      dispatch(setActiveFirstLevelTab(undefined))
+      history.push(`/definitions`)
+    }
     dispatch(closeFirstLevelTab(value));
   };
 

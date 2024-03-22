@@ -16,11 +16,13 @@ import com.dqops.sampledata.SampleCsvFilesFolderNames;
 import com.dqops.sampledata.SampleJsonFileNames;
 import com.dqops.sampledata.SampleParquetFileNames;
 import com.dqops.sampledata.files.SampleDataFilesProvider;
+import com.zaxxer.hikari.HikariConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,7 +60,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
 
         List<String> tableNames = connectionWrapper
                 .getTables().toList().stream()
-                .map(tw -> tw.getPhysicalTableName().toString())
+                .map(tw -> tw.getPhysicalTableName().getTableName().toString())
                 .collect(Collectors.toList());
 
         this.sut.open(secretValueLookupContext);
@@ -273,6 +275,33 @@ class DuckdbSourceConnectionTest extends BaseTest {
         Assertions.assertTrue(sourceTableModels.get(1).getTableName().getTableName().equals("continuous_days_one_row_per_day_2.csv"));
         Assertions.assertTrue(sourceTableModels.get(2).getTableName().getTableName().equals("continuous_days_one_row_per_day_3.csv"));
         Assertions.assertTrue(sourceTableModels.get(3).getTableName().getTableName().equals("header.csv"));
+    }
+
+    @Test
+    void createHikariConfig_onBlankKeyAnvValue_propertyIsNotAdded() {
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        this.sut.setConnectionSpec(spec);
+        spec.getDuckdb().setProperties(new HashMap<>(){{
+            put("", "");
+        }});
+
+        HikariConfig hikariConfig = sut.createHikariConfig(null);
+
+        Assertions.assertEquals(0, hikariConfig.getDataSourceProperties().size());
+    }
+
+    @Test
+    void createHikariConfig_oneKeyWithValue_propertysContrainIt() {
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        this.sut.setConnectionSpec(spec);
+        spec.getDuckdb().setProperties(new HashMap<>(){{
+            put("some_key", "some_value");
+        }});
+
+        HikariConfig hikariConfig = sut.createHikariConfig(null);
+
+        Assertions.assertEquals(1, hikariConfig.getDataSourceProperties().size());
+        Assertions.assertEquals("some_value", hikariConfig.getDataSourceProperties().get("some_key"));
     }
 
 }

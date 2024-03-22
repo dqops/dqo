@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import DefinitionLayout from '../../components/DefinitionLayout';
-import TextArea from '../../components/TextArea';
 import { useDispatch, useSelector } from 'react-redux';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import TextArea from '../../components/TextArea';
+import { closeFirstLevelTab } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
 import { getFirstLevelSensorState } from '../../redux/selectors';
-import Input from '../../components/Input';
-import Button from '../../components/Button';
 import { DataDictionaryApiClient } from '../../services/apiClient';
-import { closeFirstLevelTab } from '../../redux/actions/definition.actions';
 
 export default function DataDictionaryItemOverview() {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
@@ -52,47 +51,49 @@ export default function DataDictionaryItemOverview() {
   return (
     <>
       <div className="w-full border-b border-b-gray-400 flex justify-between ">
-        <div className="text-xl font-semibold truncate flex items-center pl-5 space-x-2">
+        <div className="text-lg font-semibold truncate flex items-center pl-5 space-x-2">
           <div>Dictionary:</div>
           <Input
-          value={dictionaryName}
-          onChange={(e) => setDictionaryName(e.target.value)}
-          disabled={dictionary_name || userProfile.can_manage_definitions !== true}
-        />
+            value={dictionaryName}
+            onChange={(e) => setDictionaryName(e.target.value)}
+            disabled={
+              dictionary_name || userProfile.can_manage_definitions !== true
+            }
+          />
+        </div>
+        <div className="flex items-center justify-center space-x-1 pr-5 overflow-hidden">
+          {dictionary_name ? (
+            <a
+              href={`/api/credentials/${dictionary_name}/download`}
+              rel="noreferrer"
+              target="_blank"
+            >
+              <Button
+                label="Download"
+                color="primary"
+                className="w-30"
+                variant="contained"
+              />
+            </a>
+          ) : null}
+          <Button
+            label={dictionary_name ? 'Save' : 'Add dictionary'}
+            color="primary"
+            variant="contained"
+            className={'my-3'}
+            onClick={dictionary_name ? editDictionary : addDictionary}
+            disabled={userProfile.can_manage_definitions !== true}
+          />
+        </div>
       </div>
-      <div className="flex items-center justify-center space-x-1 pr-5 overflow-hidden">
-        {dictionary_name ? (
-          <a
-            href={`/api/credentials/${dictionary_name}/download`}
-            rel="noreferrer"
-            target="_blank"
-          >
-            <Button
-              label="Download"
-              color="primary"
-              className="w-30"
-              variant="contained"
-            />
-          </a>
-        ) : null}
-        <Button
-          label={dictionary_name ? 'Save' : 'Add dictionary'}
-          color="primary"
-          variant="contained"
-          className={'my-3'}
-          onClick={dictionary_name ? editDictionary : addDictionary}
+      <div className="px-5">
+        <TextArea
+          className="w-full min-h-120 mt-4"
+          value={textAreaValue}
+          onChange={(e) => setTextAreaValue(e.target.value)}
           disabled={userProfile.can_manage_definitions !== true}
         />
       </div>
-    </div>
-    <div className="px-5">
-      <TextArea
-        className="w-full min-h-120 mt-4"
-        value={textAreaValue}
-        onChange={(e) => setTextAreaValue(e.target.value)}
-        disabled={userProfile.can_manage_definitions !== true}
-      />
-    </div>
-  </>
+    </>
   );
 }

@@ -40,6 +40,9 @@ const IncidentsLayout = ({ route }: LayoutProps) => {
   };
 
   const closeTab = (value: string) => {
+    if (pageTabs.length === 1) {
+      history.push(`/incidents`)
+    }
     dispatch(closeFirstLevelTab(value));
   };
 

@@ -44,9 +44,9 @@ const DefaultSchedulesDetail = () => {
 
   const fetchDefaultSchedule = async () => {
     try {
-      await SettingsApi.getDefaultSchedule(
-        activeTab
-      ).then((res) => setUpdatedSchedule(res.data));
+      await SettingsApi.getDefaultSchedule(activeTab).then((res) =>
+        setUpdatedSchedule(res.data)
+      );
     } catch (error) {
       console.error(error);
     }
@@ -57,15 +57,11 @@ const DefaultSchedulesDetail = () => {
 
   const onChangeTab = (tab: CheckRunMonitoringScheduleGroup) => {
     history.push(`${location.pathname}?activeTab=${tab}`);
-    setActiveTab(tab)
+    setActiveTab(tab);
   };
 
-  const updateDefaultSchedules = async (
-  ) => {
-    await SettingsApi.updateDefaultSchedules(
-      activeTab,
-      updatedSchedule
-    )
+  const updateDefaultSchedules = async () => {
+    await SettingsApi.updateDefaultSchedules(activeTab, updatedSchedule)
       .then(() => setIsDefaultUpdated(false))
       .catch((err) => console.error(err));
   };
@@ -81,38 +77,33 @@ const DefaultSchedulesDetail = () => {
 
   return (
     <>
-    <div className="px-4">
-    <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
-        <div className="flex items-center space-x-2 max-w-full">
-          <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
-          <div className="text-xl font-semibold truncate">
-            Default schedule editor
+      <div className="px-4">
+        <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
+          <div className="flex items-center space-x-2 max-w-full">
+            <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
+            <div className="text-lg font-semibold truncate">
+              Default schedule editor
+            </div>
           </div>
-        </div>
-        <Button
-          label="Save"
-          color="primary"
-          className="pl-14 pr-14"
-          onClick={updateDefaultSchedules}
-          disabled={!isDefaultUpdated}
-        />
-      </div>
-      <div className="border-b border-gray-300">
-        <Tabs
-          tabs={tabs}
-          activeTab={activeTab}
-          onChange={onChangeTab}
+          <Button
+            label="Save"
+            color="primary"
+            className="pl-14 pr-14"
+            onClick={updateDefaultSchedules}
+            disabled={!isDefaultUpdated}
           />
-      </div>
-      <ScheduleView
-        handleChange={handleChange}
-        schedule={updatedSchedule}
-        isDefault={true}
+        </div>
+        <div className="border-b border-gray-300">
+          <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
+        </div>
+        <ScheduleView
+          handleChange={handleChange}
+          schedule={updatedSchedule}
+          isDefault={true}
         />
-    </div>
+      </div>
     </>
   );
 };
 
 export default DefaultSchedulesDetail;
-

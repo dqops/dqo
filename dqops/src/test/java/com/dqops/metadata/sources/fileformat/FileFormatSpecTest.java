@@ -79,4 +79,11 @@ public class FileFormatSpecTest extends BaseTest {
         assertTrue(output.contains("read_parquet"));
     }
 
+    @Test
+    void isSetHivePartitioning_hivePartitioningIsNull_returnsFalse() {
+        this.sut.setCsv(new CsvFileFormatSpec());
+        assert this.sut.isFormatSetForType(DuckdbFilesFormatType.csv);
+
+        assertFalse(this.sut.isSetHivePartitioning(DuckdbFilesFormatType.csv));
+    }
 }

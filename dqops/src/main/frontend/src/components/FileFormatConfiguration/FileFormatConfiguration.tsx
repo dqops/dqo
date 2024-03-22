@@ -1,7 +1,7 @@
 import React from 'react';
+import { DuckdbParametersSpecFilesFormatTypeEnum } from '../../api';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import SelectInput from '../SelectInput';
-import { DuckdbParametersSpecFilesFormatTypeEnum } from '../../api';
 import CsvFormatConfiguration from './FormatsConfiguration/CsvFormatConfiguration';
 import JsonFormatConfiguration from './FormatsConfiguration/JsonFormatConfiguration';
 import ParquetFormatConfiguration from './FormatsConfiguration/ParquetFormatConfiguration';
@@ -16,6 +16,21 @@ type TFileFormatConfigurationProps = {
   freezeFileType: boolean;
   children: any;
 };
+
+const sourceFilesTypeOptions = [
+  {
+    label: 'CSV',
+    value: DuckdbParametersSpecFilesFormatTypeEnum.csv
+  },
+  {
+    label: 'JSON',
+    value: DuckdbParametersSpecFilesFormatTypeEnum.json
+  },
+  {
+    label: 'Parquet',
+    value: DuckdbParametersSpecFilesFormatTypeEnum.parquet
+  }
+];
 
 export default function FileFormatConfiguration({
   fileFormatType,
@@ -55,30 +70,15 @@ export default function FileFormatConfiguration({
     }
   };
 
-  const sourceFilesTypeOptions = [
-    {
-      label: 'CSV',
-      value: DuckdbParametersSpecFilesFormatTypeEnum.csv
-    },
-    {
-      label: 'JSON',
-      value: DuckdbParametersSpecFilesFormatTypeEnum.json
-    },
-    {
-      label: 'Parquet',
-      value: DuckdbParametersSpecFilesFormatTypeEnum.parquet
-    }
-  ];
-
   return (
-    <div className='mt-8'>
+    <div className="mt-8">
       <SectionWrapper
         title="Import configuration"
         className="text-sm text-black"
       >
-        <div className="flex items-center gap-x-5">
-          <div>File format</div>
-          {!freezeFileType && (
+        {!freezeFileType && (
+          <div className="flex items-center gap-x-5 text-sm">
+            <div>File format</div>
             <SelectInput
               options={sourceFilesTypeOptions}
               onChange={(value) => {
@@ -86,18 +86,19 @@ export default function FileFormatConfiguration({
                 cleanConfiguration();
               }}
               value={
-                fileFormatType === DuckdbParametersSpecFilesFormatTypeEnum.parquet
+                fileFormatType ===
+                DuckdbParametersSpecFilesFormatTypeEnum.parquet
                   ? fileFormatType.replace(/./, (c) => c.toUpperCase())
                   : fileFormatType.toUpperCase()
               }
+              className="text-sm"
             />
-          )}
-          {freezeFileType && <div>{fileFormatType}</div>}
-        </div>
+          </div>
+        )}
+        {/* {freezeFileType && <div>{fileFormatType}</div>} */}
         {children}
-        <div className='pt-4'>{renderConfiguration()}</div>
+        <div>{renderConfiguration()}</div>
       </SectionWrapper>
-      
     </div>
   );
 }

@@ -62,7 +62,7 @@ const CheckCategoriesView = ({
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const shouldExtend = () => {
-    if (category.checks?.some((x) => x.configured === true)) {
+    if (category.checks?.some((x) => x.configured === true || x.default_check === true)) {
       setIsExtended(true);
     }
   };
@@ -138,7 +138,7 @@ const CheckCategoriesView = ({
                   onClick={() => setDeleteDataDialogOpened(true)}
                 />
                 <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
-                  Delete data quality resutls for the category
+                  Delete data quality results for the category
                 </div>
               </div>
               <div className="group relative">

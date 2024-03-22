@@ -3,9 +3,9 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.duckdb_files_format_type import DuckdbFilesFormatType
 from ..models.duckdb_read_mode import DuckdbReadMode
-from ..models.duckdb_secrets_type import DuckdbSecretsType
-from ..models.duckdb_source_files_type import DuckdbSourceFilesType
+from ..models.duckdb_storage_type import DuckdbStorageType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -28,44 +28,37 @@ class DuckdbParametersSpec:
     """
     Attributes:
         read_mode (Union[Unset, DuckdbReadMode]):
-        source_files_type (Union[Unset, DuckdbSourceFilesType]):
-        database (Union[Unset, str]): DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format
-            to use dynamic substitution.
-        options (Union[Unset, str]): DuckDB connection 'options' initialization parameter. For example setting this to
-            -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also
-            a ${DUCKDB_OPTIONS} configuration with a custom environment variable.
+        files_format_type (Union[Unset, DuckdbFilesFormatType]):
+        database (Union[Unset, str]): DuckDB database name for in-memory read mode. The value can be in the
+            ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
         properties (Union[Unset, DuckdbParametersSpecProperties]): A dictionary of custom JDBC parameters that are added
             to the JDBC connection string, a key/value dictionary.
         csv (Union[Unset, CsvFileFormatSpec]):
         json (Union[Unset, JsonFileFormatSpec]):
         parquet (Union[Unset, ParquetFileFormatSpec]):
-        directories (Union[Unset, DuckdbParametersSpecDirectories]): Schema to directory mappings.
-        secrets_type (Union[Unset, DuckdbSecretsType]):
-        user (Union[Unset, str]): DuckDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use
-            dynamic substitution.
-        password (Union[Unset, str]): DuckDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
-            format to use dynamic substitution.
+        directories (Union[Unset, DuckdbParametersSpecDirectories]): Virtual schema name to directory mappings. The path
+            must be an absolute path.
+        storage_type (Union[Unset, DuckdbStorageType]):
+        user (Union[Unset, str]): DuckDB user name for a remote storage type. The value can be in the
+            ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
+        password (Union[Unset, str]): DuckDB password for a remote storage type. The value can be in the
+            ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
         region (Union[Unset, str]): The region for the storage credentials. The value can be in the
             ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
-        aws_access_key_id (Union[Unset, str]):
-        aws_secret_access_key (Union[Unset, str]):
     """
 
     read_mode: Union[Unset, DuckdbReadMode] = UNSET
-    source_files_type: Union[Unset, DuckdbSourceFilesType] = UNSET
+    files_format_type: Union[Unset, DuckdbFilesFormatType] = UNSET
     database: Union[Unset, str] = UNSET
-    options: Union[Unset, str] = UNSET
     properties: Union[Unset, "DuckdbParametersSpecProperties"] = UNSET
     csv: Union[Unset, "CsvFileFormatSpec"] = UNSET
     json: Union[Unset, "JsonFileFormatSpec"] = UNSET
     parquet: Union[Unset, "ParquetFileFormatSpec"] = UNSET
     directories: Union[Unset, "DuckdbParametersSpecDirectories"] = UNSET
-    secrets_type: Union[Unset, DuckdbSecretsType] = UNSET
+    storage_type: Union[Unset, DuckdbStorageType] = UNSET
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
     region: Union[Unset, str] = UNSET
-    aws_access_key_id: Union[Unset, str] = UNSET
-    aws_secret_access_key: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -73,12 +66,11 @@ class DuckdbParametersSpec:
         if not isinstance(self.read_mode, Unset):
             read_mode = self.read_mode.value
 
-        source_files_type: Union[Unset, str] = UNSET
-        if not isinstance(self.source_files_type, Unset):
-            source_files_type = self.source_files_type.value
+        files_format_type: Union[Unset, str] = UNSET
+        if not isinstance(self.files_format_type, Unset):
+            files_format_type = self.files_format_type.value
 
         database = self.database
-        options = self.options
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
@@ -99,27 +91,23 @@ class DuckdbParametersSpec:
         if not isinstance(self.directories, Unset):
             directories = self.directories.to_dict()
 
-        secrets_type: Union[Unset, str] = UNSET
-        if not isinstance(self.secrets_type, Unset):
-            secrets_type = self.secrets_type.value
+        storage_type: Union[Unset, str] = UNSET
+        if not isinstance(self.storage_type, Unset):
+            storage_type = self.storage_type.value
 
         user = self.user
         password = self.password
         region = self.region
-        aws_access_key_id = self.aws_access_key_id
-        aws_secret_access_key = self.aws_secret_access_key
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if read_mode is not UNSET:
             field_dict["read_mode"] = read_mode
-        if source_files_type is not UNSET:
-            field_dict["source_files_type"] = source_files_type
+        if files_format_type is not UNSET:
+            field_dict["files_format_type"] = files_format_type
         if database is not UNSET:
             field_dict["database"] = database
-        if options is not UNSET:
-            field_dict["options"] = options
         if properties is not UNSET:
             field_dict["properties"] = properties
         if csv is not UNSET:
@@ -130,18 +118,14 @@ class DuckdbParametersSpec:
             field_dict["parquet"] = parquet
         if directories is not UNSET:
             field_dict["directories"] = directories
-        if secrets_type is not UNSET:
-            field_dict["secrets_type"] = secrets_type
+        if storage_type is not UNSET:
+            field_dict["storage_type"] = storage_type
         if user is not UNSET:
             field_dict["user"] = user
         if password is not UNSET:
             field_dict["password"] = password
         if region is not UNSET:
             field_dict["region"] = region
-        if aws_access_key_id is not UNSET:
-            field_dict["aws_access_key_id"] = aws_access_key_id
-        if aws_secret_access_key is not UNSET:
-            field_dict["aws_secret_access_key"] = aws_secret_access_key
 
         return field_dict
 
@@ -165,16 +149,14 @@ class DuckdbParametersSpec:
         else:
             read_mode = DuckdbReadMode(_read_mode)
 
-        _source_files_type = d.pop("source_files_type", UNSET)
-        source_files_type: Union[Unset, DuckdbSourceFilesType]
-        if isinstance(_source_files_type, Unset):
-            source_files_type = UNSET
+        _files_format_type = d.pop("files_format_type", UNSET)
+        files_format_type: Union[Unset, DuckdbFilesFormatType]
+        if isinstance(_files_format_type, Unset):
+            files_format_type = UNSET
         else:
-            source_files_type = DuckdbSourceFilesType(_source_files_type)
+            files_format_type = DuckdbFilesFormatType(_files_format_type)
 
         database = d.pop("database", UNSET)
-
-        options = d.pop("options", UNSET)
 
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, DuckdbParametersSpecProperties]
@@ -211,12 +193,12 @@ class DuckdbParametersSpec:
         else:
             directories = DuckdbParametersSpecDirectories.from_dict(_directories)
 
-        _secrets_type = d.pop("secrets_type", UNSET)
-        secrets_type: Union[Unset, DuckdbSecretsType]
-        if isinstance(_secrets_type, Unset):
-            secrets_type = UNSET
+        _storage_type = d.pop("storage_type", UNSET)
+        storage_type: Union[Unset, DuckdbStorageType]
+        if isinstance(_storage_type, Unset):
+            storage_type = UNSET
         else:
-            secrets_type = DuckdbSecretsType(_secrets_type)
+            storage_type = DuckdbStorageType(_storage_type)
 
         user = d.pop("user", UNSET)
 
@@ -224,26 +206,19 @@ class DuckdbParametersSpec:
 
         region = d.pop("region", UNSET)
 
-        aws_access_key_id = d.pop("aws_access_key_id", UNSET)
-
-        aws_secret_access_key = d.pop("aws_secret_access_key", UNSET)
-
         duckdb_parameters_spec = cls(
             read_mode=read_mode,
-            source_files_type=source_files_type,
+            files_format_type=files_format_type,
             database=database,
-            options=options,
             properties=properties,
             csv=csv,
             json=json,
             parquet=parquet,
             directories=directories,
-            secrets_type=secrets_type,
+            storage_type=storage_type,
             user=user,
             password=password,
             region=region,
-            aws_access_key_id=aws_access_key_id,
-            aws_secret_access_key=aws_secret_access_key,
         )
 
         duckdb_parameters_spec.additional_properties = d

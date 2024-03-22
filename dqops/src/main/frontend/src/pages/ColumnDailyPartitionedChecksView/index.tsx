@@ -21,11 +21,19 @@ const ColumnDailyPartitionedChecksView = () => {
   const [updatedChecksUI, setUpdatedChecksUI] = useState<CheckContainerModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
-  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const [checkResultsOverview, setCheckResultsOverview] = useState<
+    CheckResultsOverviewDataModel[]
+  >([]);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnPartitionedChecksOverview(connectionName, schemaName, tableName, columnName, 'daily').then((res) => {
+    CheckResultOverviewApi.getColumnPartitionedChecksOverview(
+      connectionName,
+      schemaName,
+      tableName,
+      columnName,
+      'daily'
+    ).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
@@ -83,9 +91,12 @@ const ColumnDailyPartitionedChecksView = () => {
   return (
     <>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
-        <div className="flex items-center space-x-2" style={{ maxWidth: `calc(100% - 180px)` }}>
+        <div
+          className="flex items-center space-x-2"
+          style={{ maxWidth: `calc(100% - 180px)` }}
+        >
           <SvgIcon name="column-check" className="w-5 h-5 shrink-0" />
-          <div className="text-xl font-semibold truncate">{`Daily partition checks for ${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
+          <div className="text-lg font-semibold truncate">{`Daily partition checks for ${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
         </div>
         <Button
           color={isUpdated ? 'primary' : 'secondary'}

@@ -132,7 +132,7 @@ const ColumnMonitoringChecksUIFilterView = () => {
           style={{ maxWidth: `calc(100% - 180px)` }}
         >
           <SvgIcon name="search" className="w-5 h-5 shrink-0" />
-          <div className="text-xl font-semibold truncate">{`${connectionName}.${schemaName}.${tableName}.${columnName}.checks.${category} - ${checkName}`}</div>
+          <div className="text-lg font-semibold truncate">{`${connectionName}.${schemaName}.${tableName}.${columnName}.checks.${category} - ${checkName}`}</div>
         </div>
         <Button
           color={isUpdatedMonitoringUIFilter ? 'primary' : 'secondary'}

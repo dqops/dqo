@@ -113,6 +113,7 @@ description: DQOps is an open-source data quality platform for data quality and 
 [![Athena](https://dqops.com/docs/images/connections/athena2.png){ class=glightbox-ignored-image }](data-sources/athena.md)
 &nbsp; &nbsp; &nbsp; [![Google BigQuery](https://dqops.com/docs/images/connections/google-bigquery.png){ class=glightbox-ignored-image }](data-sources/bigquery.md)
 &nbsp; &nbsp; &nbsp; [![Databricks](https://dqops.com/docs/images/connections/databricks.png){ class=glightbox-ignored-image }](data-sources/databricks.md)
+&nbsp; &nbsp; &nbsp; [![DuckDB](https://dqops.com/docs/images/connections/duckdb-titled1.png){ class=glightbox-ignored-image }](data-sources/duckdb.md)
 &nbsp; &nbsp; &nbsp; [![MySQL](https://dqops.com/docs/images/connections/mysql.png){ class=glightbox-ignored-image }](data-sources/mysql.md)
 &nbsp; &nbsp; &nbsp; [![Oracle](https://dqops.com/docs/images/connections/oracle2.png){ class=glightbox-ignored-image }](data-sources/oracle.md)
 &nbsp; &nbsp; &nbsp; [![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png){ class=glightbox-ignored-image }](data-sources/postgresql.md)
@@ -123,6 +124,11 @@ description: DQOps is an open-source data quality platform for data quality and 
 &nbsp; &nbsp; &nbsp; [![Spark](https://dqops.com/docs/images/connections/spark.png){ class=glightbox-ignored-image }](data-sources/spark.md)
 &nbsp; &nbsp; &nbsp; [![Microsoft SQL Server](https://dqops.com/docs/images/connections/microsoft-sql-server.png){ class=glightbox-ignored-image }](data-sources/sql-server.md)
 &nbsp; &nbsp; &nbsp; [![Trino](https://dqops.com/docs/images/connections/trino1.png){ class=glightbox-ignored-image }](data-sources/trino.md)
+
+## Supported flat files
+[![CSV](https://dqops.com/docs/images/connections/csv-icon2.png){ class=glightbox-ignored-image }](data-sources/csv.md)
+&nbsp; &nbsp; &nbsp; [![JSON](https://dqops.com/docs/images/connections/json-icon2.png){ class=glightbox-ignored-image }](data-sources/json.md)
+&nbsp; &nbsp; &nbsp; [![Parquet](https://dqops.com/docs/images/connections/parquet-icon2.png){ class=glightbox-ignored-image }](data-sources/parquet.md)
 
 ## Getting started
 !!! info "Start with DQOps"
@@ -405,14 +411,14 @@ Want to learn more about data quality?
 
     <div class="grid" markdown>
 
-    [![A step-by-step guide to improve data quality](images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ loading=lazy; class=glightbox-ignored-image }](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
+    [![A step-by-step guide to improve data quality](images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ loading=lazy; class=glightbox-ignored-image }](https://dqops.com/best-practices-for-effective-data-quality-improvement/)
     <div>
 
-    DQOps creators have written an eBook ["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
+    DQOps creators have written an eBook ["A step-by-step guide to improve data quality"](https://dqops.com/best-practices-for-effective-data-quality-improvement/)
     that describes their experience in data cleansing and data quality monitoring using DQOps. 
 
     The eBook desribes a full data quality improvement process that allows to reach a ~100% data quality KPI score within 6-12 months.
-    [Download the eBook](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/) to learn the process of managing
+    [Download the eBook](https://dqops.com/best-practices-for-effective-data-quality-improvement/) to learn the process of managing
     an iterative data quality project that leads to fixing all data quality issues.
     
     ![DQOps data quality improvement process](https://dqops.com/docs/images/dqops-data-quality-improvement-process-min.png){ loading=lazy; width="150px" }

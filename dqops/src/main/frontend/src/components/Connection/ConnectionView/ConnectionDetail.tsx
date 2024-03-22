@@ -44,6 +44,7 @@ import TrinoConnection from '../../Dashboard/DatabaseConnection/TrinoConnection'
 import Input from '../../Input';
 import Loader from '../../Loader';
 import ConnectionActionGroup from './ConnectionActionGroup';
+import React from 'react';
 
 const ConnectionDetail = () => {
   const {

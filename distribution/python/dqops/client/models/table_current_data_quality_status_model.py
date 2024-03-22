@@ -47,6 +47,9 @@ class TableCurrentDataQualityStatusModel:
                 to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or
                 invalid python rules. When an execution error is reported, the configuration of a data quality check on a table
                 must be updated.
+            data_quality_kpi (Union[Unset, float]): Data quality KPI score for the table, measured as a percentage of passed
+                data quality checks. DQOps counts data quality issues at a warning severity level as passed checks. The data
+                quality KPI score is a value in the range 0..100.
             checks (Union[Unset, TableCurrentDataQualityStatusModelChecks]): The dictionary of statuses for data quality
                 checks. The keys are data quality check names, the values are the current data quality check statuses that
                 describe the most current status.
@@ -66,6 +69,7 @@ class TableCurrentDataQualityStatusModel:
     errors: Union[Unset, int] = UNSET
     fatals: Union[Unset, int] = UNSET
     execution_errors: Union[Unset, int] = UNSET
+    data_quality_kpi: Union[Unset, float] = UNSET
     checks: Union[Unset, "TableCurrentDataQualityStatusModelChecks"] = UNSET
     columns: Union[Unset, "TableCurrentDataQualityStatusModelColumns"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -89,6 +93,7 @@ class TableCurrentDataQualityStatusModel:
         errors = self.errors
         fatals = self.fatals
         execution_errors = self.execution_errors
+        data_quality_kpi = self.data_quality_kpi
         checks: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.checks, Unset):
             checks = self.checks.to_dict()
@@ -124,6 +129,8 @@ class TableCurrentDataQualityStatusModel:
             field_dict["fatals"] = fatals
         if execution_errors is not UNSET:
             field_dict["execution_errors"] = execution_errors
+        if data_quality_kpi is not UNSET:
+            field_dict["data_quality_kpi"] = data_quality_kpi
         if checks is not UNSET:
             field_dict["checks"] = checks
         if columns is not UNSET:
@@ -177,6 +184,8 @@ class TableCurrentDataQualityStatusModel:
 
         execution_errors = d.pop("execution_errors", UNSET)
 
+        data_quality_kpi = d.pop("data_quality_kpi", UNSET)
+
         _checks = d.pop("checks", UNSET)
         checks: Union[Unset, TableCurrentDataQualityStatusModelChecks]
         if isinstance(_checks, Unset):
@@ -204,6 +213,7 @@ class TableCurrentDataQualityStatusModel:
             errors=errors,
             fatals=fatals,
             execution_errors=execution_errors,
+            data_quality_kpi=data_quality_kpi,
             checks=checks,
             columns=columns,
         )

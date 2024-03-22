@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..models.profiling_time_period import ProfilingTimePeriod
+from ..models.profiling_time_period_truncation import ProfilingTimePeriodTruncation
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -42,7 +42,7 @@ class TableProfilingCheckCategoriesSpec:
     Attributes:
         custom (Union[Unset, TableProfilingCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys are check
             names within this category.
-        result_truncation (Union[Unset, ProfilingTimePeriod]):
+        result_truncation (Union[Unset, ProfilingTimePeriodTruncation]):
         volume (Union[Unset, TableVolumeProfilingChecksSpec]):
         timeliness (Union[Unset, TableTimelinessProfilingChecksSpec]):
         accuracy (Union[Unset, TableAccuracyProfilingChecksSpec]):
@@ -55,7 +55,7 @@ class TableProfilingCheckCategoriesSpec:
     """
 
     custom: Union[Unset, "TableProfilingCheckCategoriesSpecCustom"] = UNSET
-    result_truncation: Union[Unset, ProfilingTimePeriod] = UNSET
+    result_truncation: Union[Unset, ProfilingTimePeriodTruncation] = UNSET
     volume: Union[Unset, "TableVolumeProfilingChecksSpec"] = UNSET
     timeliness: Union[Unset, "TableTimelinessProfilingChecksSpec"] = UNSET
     accuracy: Union[Unset, "TableAccuracyProfilingChecksSpec"] = UNSET
@@ -162,11 +162,11 @@ class TableProfilingCheckCategoriesSpec:
             custom = TableProfilingCheckCategoriesSpecCustom.from_dict(_custom)
 
         _result_truncation = d.pop("result_truncation", UNSET)
-        result_truncation: Union[Unset, ProfilingTimePeriod]
+        result_truncation: Union[Unset, ProfilingTimePeriodTruncation]
         if isinstance(_result_truncation, Unset):
             result_truncation = UNSET
         else:
-            result_truncation = ProfilingTimePeriod(_result_truncation)
+            result_truncation = ProfilingTimePeriodTruncation(_result_truncation)
 
         _volume = d.pop("volume", UNSET)
         volume: Union[Unset, TableVolumeProfilingChecksSpec]

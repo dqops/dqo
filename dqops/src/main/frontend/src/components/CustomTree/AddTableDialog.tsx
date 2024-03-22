@@ -10,6 +10,7 @@ import {
 import { TConfiguration } from '../../components/FileFormatConfiguration/TConfiguration';
 import { useTree } from '../../contexts/treeContext';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setAdvisorJobId } from '../../redux/actions/job.actions';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import {
   ConnectionApiClient,
@@ -18,7 +19,7 @@ import {
 } from '../../services/apiClient';
 import { CustomTreeNode } from '../../shared/interfaces';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { urlencodeDecoder, urlencodeEncoder, useDecodedParams } from '../../utils';
+import { urlencodeEncoder, useDecodedParams } from '../../utils';
 import Button from '../Button';
 import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
 import FilePath from '../FileFormatConfiguration/FilePath';
@@ -62,69 +63,112 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
     try {
       setLoading(true);
       if (node) {
-        await TableApiClient.createTable(urlencodeEncoder(args[0]), urlencodeEncoder(args[1]), urlencodeEncoder(name), {
-          file_format:
-            connectionModel.provider_type ===
-            ConnectionSpecProviderTypeEnum.duckdb
-              ? {
-                  [fileFormatType as keyof FileFormatSpec]: configuration,
-                  file_paths: paths.slice(0, -1)
-                }
-              : undefined
-        }).then(() =>
+        await TableApiClient.createTable(
+          urlencodeEncoder(args[0]),
+          urlencodeEncoder(args[1]),
+          urlencodeEncoder(name),
+          {
+            file_format:
+              connectionModel.provider_type ===
+              ConnectionSpecProviderTypeEnum.duckdb
+                ? {
+                    [fileFormatType as keyof FileFormatSpec]: configuration,
+                    file_paths: paths.filter((x) => x)
+                  }
+                : undefined
+          }
+        ).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
             connectionName: urlencodeEncoder(args[0]),
             schemaName: urlencodeEncoder(args[1]),
             tableNames: [urlencodeEncoder(name)]
-          })
+          }).then((res) => 
+          dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0))
+        )
         );
         refreshNode(node);
+        dispatch(
+          addFirstLevelTab(CheckTypes.SOURCES, {
+            url: ROUTES.TABLE_LEVEL_PAGE(
+              CheckTypes.SOURCES,
+              urlencodeEncoder(args[0]),
+              urlencodeEncoder(args[1]),
+              urlencodeEncoder(name),
+              'detail'
+            ),
+            value: ROUTES.TABLE_LEVEL_VALUE(
+              CheckTypes.SOURCES,
+              urlencodeEncoder(args[0]),
+              urlencodeEncoder(args[1]),
+              urlencodeEncoder(name),
+            ),
+            state: {},
+            label: name
+          })
+        );
+        history.push(
+          ROUTES.TABLE_LEVEL_PAGE(
+            CheckTypes.SOURCES,
+            urlencodeEncoder(args[0]),
+            urlencodeEncoder(args[1]),
+            urlencodeEncoder(name),
+            'detail'
+          )
+        );
       } else {
-        await TableApiClient.createTable(urlencodeEncoder(connection), urlencodeEncoder(schema), urlencodeEncoder(name), {
-          file_format:
-            connectionModel.provider_type ===
-            ConnectionSpecProviderTypeEnum.duckdb
-              ? {
-                  [fileFormatType as keyof FileFormatSpec]: configuration,
-                  file_paths: paths.slice(0, -1)
-                }
-              : undefined
-        }).then(() =>
+        await TableApiClient.createTable(
+          urlencodeEncoder(connection),
+          urlencodeEncoder(schema),
+          urlencodeEncoder(name),
+          {
+            file_format:
+              connectionModel.provider_type ===
+              ConnectionSpecProviderTypeEnum.duckdb
+                ? {
+                    [fileFormatType as keyof FileFormatSpec]: configuration,
+                    file_paths: paths.filter((x) => x)
+                  }
+                : undefined
+          }
+        ).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
             connectionName: urlencodeEncoder(connection),
             schemaName: urlencodeEncoder(schema),
             tableNames: [urlencodeEncoder(name)]
+          }).then((res) => 
+            dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0))
+          )
+        );
+        dispatch(
+          addFirstLevelTab(CheckTypes.SOURCES, {
+            url: ROUTES.TABLE_LEVEL_PAGE(
+              CheckTypes.SOURCES,
+              connection,
+              schema,
+              name,
+              'detail'
+            ),
+            value: ROUTES.TABLE_LEVEL_VALUE(
+              CheckTypes.SOURCES,
+              connection,
+              schema,
+              name
+            ),
+            state: {},
+            label: name
           })
         );
-      }
-      dispatch(
-        addFirstLevelTab(CheckTypes.SOURCES, {
-          url: ROUTES.TABLE_LEVEL_PAGE(
-            CheckTypes.SOURCES,
-            urlencodeDecoder(connection),
-            urlencodeDecoder(schema),
-            urlencodeDecoder(name),
-            'detail'
-          ),
-          value: ROUTES.TABLE_LEVEL_VALUE(
+        history.push(
+          ROUTES.TABLE_LEVEL_PAGE(
             CheckTypes.SOURCES,
             connection,
             schema,
-            name
-          ),
-          state: {},
-          label: name
-        })
-      );
-      history.push(
-        ROUTES.TABLE_LEVEL_PAGE(
-          CheckTypes.SOURCES,
-          urlencodeDecoder(connection),
-          urlencodeDecoder(schema),
-          urlencodeDecoder(name),
-          'detail'
-        )
-      );
+            name,
+            'detail'
+          )
+        );
+      }
+      cleanState();
       onClose();
     } finally {
       setLoading(false);
@@ -133,9 +177,9 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
 
   useEffect(() => {
     const getConnectionBasic = async () => {
-      await ConnectionApiClient.getConnectionBasic(urlencodeEncoder(args[0])).then((res) =>
-        setConnectionModel(res.data)
-      );
+      await ConnectionApiClient.getConnectionBasic(
+        urlencodeEncoder(args[0])
+      ).then((res) => setConnectionModel(res.data));
     };
     if (node) {
       getConnectionBasic();
@@ -153,6 +197,12 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
 
   const onChangeFile = (val: DuckdbParametersSpecFilesFormatTypeEnum) =>
     setFileFormatType(val);
+
+  const cleanState = () => {
+    setConfiguration({});
+    setName('');
+    setPaths(['']);
+  };
 
   return (
     <Dialog open={open} handler={onClose}>
@@ -191,7 +241,10 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           color="primary"
           variant="outlined"
           className="px-8"
-          onClick={onClose}
+          onClick={() => {
+            onClose();
+            cleanState();
+          }}
           label="Cancel"
         />
         <Button

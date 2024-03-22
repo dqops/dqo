@@ -38,7 +38,7 @@ export default function ExtendedTextAre({
   setValue
 }: IExtendedTextAreaProps) {
   const [open, setOpen] = useState(false);
-  const [editedValue, setEditedValue] = useState(String(value));
+  const [editedValue, setEditedValue] = useState(String(value ?? ''));
 
   const onChangeEditedValue = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditedValue(e.target.value);
@@ -69,7 +69,7 @@ export default function ExtendedTextAre({
         <SvgIcon
           name="edit"
           className="w-4 h-4 text-gray-700 cursor-pointer"
-          onClick={() => setOpen(true)}
+          onClick={() => !disabled && setOpen(true)}
         />
       </div>
       <Dialog open={open} handler={() => setOpen(false)}>

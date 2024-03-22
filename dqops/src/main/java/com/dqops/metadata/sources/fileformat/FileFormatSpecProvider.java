@@ -1,8 +1,9 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
-import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.fileslisting.AwsConstants;
 import com.dqops.metadata.sources.TableSpec;
 
 import java.io.File;
@@ -26,10 +27,10 @@ public class FileFormatSpecProvider {
     public static FileFormatSpec resolveFileFormat(DuckdbParametersSpec duckdbParametersSpec, TableSpec tableSpec) {
         DuckdbFilesFormatType filesType = duckdbParametersSpec.getFilesFormatType();
         if (filesType == null) {
-            return null;
+            throw new RuntimeException("The files format is unknown. Please set files format on the connection.");
         }
 
-        FileFormatSpec fileFormat = tableSpec.getFileFormat() == null ? new FileFormatSpec() : tableSpec.getFileFormat();
+        FileFormatSpec fileFormat = tableSpec.getFileFormat() == null ? new FileFormatSpec() : tableSpec.getFileFormat().deepClone();
         if(fileFormat.getFilePaths().isEmpty()){
             FilePathListSpec filePathListSpec = guessFilePaths(duckdbParametersSpec, tableSpec);
             fileFormat.setFilePaths(filePathListSpec);
@@ -40,7 +41,7 @@ public class FileFormatSpecProvider {
         }
 
         FileFormatSpec fileFormatCloned = fileFormat.deepClone();
-        if (duckdbParametersSpec.isFormatSetForType(filesType)) {
+        if (duckdbParametersSpec.isFormatSetForType()) {
             switch (filesType) {
                 case csv: fileFormatCloned.setCsv(duckdbParametersSpec.getCsv().deepClone()); break;
                 case json: fileFormatCloned.setJson(duckdbParametersSpec.getJson().deepClone()); break;
@@ -76,11 +77,14 @@ public class FileFormatSpecProvider {
                 ? tableName
                 : createAbsoluteFilePathFrom(pathPrefix, tableName, storageType);
 
+        DuckdbFilesFormatType filesType = duckdb.getFilesFormatType();
+        boolean isSetHivePartitioning = duckdb.isSetHivePartitioning() || (tableSpec.getFileFormat() != null && tableSpec.getFileFormat().isSetHivePartitioning(filesType));
+
         // todo: what if the file extension eg. json will not match the source file types e.g. csv on the parameter spec??
-        String fileExtension = "." + duckdb.getFilesFormatType().toString();
+        String fileExtension = "." + filesType.toString();
         String separator = (storageType == null || storageType.equals(DuckdbStorageType.local)) ? File.separator : "/";
         if(!filePath.toLowerCase().endsWith(fileExtension)){
-            filePath = filePath + separator + "**" + fileExtension; // todo: ensure wildcards are valid
+            filePath = filePath + separator + (isSetHivePartitioning ? "**" + separator : "") + "*" + fileExtension;
         }
         filePathListSpec.add(filePath);
         return filePathListSpec;
@@ -111,7 +115,7 @@ public class FileFormatSpecProvider {
     public static boolean isPathAbsoluteSystemsWide(String path){
         return path.startsWith("/")
                 || path.startsWith("\\")
-                || path.startsWith("s3://")
+                || path.startsWith(AwsConstants.S3_URI_PREFIX)
                 || Path.of(path).isAbsolute();
     }
 

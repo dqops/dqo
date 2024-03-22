@@ -1,5 +1,5 @@
 # DQOps REST API table_comparison_results models reference
-The references of all objects used by [table_comparison_results](/docs/client/operations/table_comparison_results.md) REST API operations are listed below.
+The references of all objects used by [table_comparison_results](../operations/table_comparison_results.md) REST API operations are listed below.
 
 
 ## ComparisonCheckResultModel
@@ -32,7 +32,7 @@ The table comparison column results model with the information about the most re
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`column_name`</span>|Column name|*string*|
-|<span class="no-wrap-code">`column_comparison_results`</span>|The dictionary of comparison results between the tables for the specific column. The keys for the dictionary are check names. The values are summaries of the most recent comparison on this column.|*Dict[string, [ComparisonCheckResultModel](/docs/client/models/table_comparison_results.md#comparisoncheckresultmodel)]*|
+|<span class="no-wrap-code">`column_comparison_results`</span>|The dictionary of comparison results between the tables for the specific column. The keys for the dictionary are check names. The values are summaries of the most recent comparison on this column.|*Dict[string, [ComparisonCheckResultModel](./table_comparison_results.md#comparisoncheckresultmodel)]*|
 
 
 ___

@@ -72,12 +72,21 @@ To run a check:
 ### **Run checks from a tree view**
 
 You can run checks for your entire connection, schema, table, or column from the tree view on the left-hand
-side of the screen. 
+side of the screen. There are also additional parameters you can select. 
 
 To do so, click on the three-dot icon and select the **Run check** option.
 This will run all the activated checks for the selected connection, schema, table, or column.
 
 ![Run checks from the tree view](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/run-checks-from-the-tree-view.png)
+
+A dialog box will appear where you can modify different options such as connection, schema and table name, column date, and column data type.
+There are also additional parameters when you can narrow the selection to the check type, check name, sensor name, table
+comparison name, labels, or tags.
+
+After selecting options simply click the **Run checks** button to run checks.
+
+![Run all checks dialog box](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-all-checks-dialog-box.png)
+
 
 If you run **Partition checks**, you will have the additional option to choose from different incremental time windows
 when running from the tree view.

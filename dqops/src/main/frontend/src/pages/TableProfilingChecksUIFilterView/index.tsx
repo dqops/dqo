@@ -6,7 +6,8 @@ import DataQualityChecks from '../../components/DataQualityChecks';
 import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTableProfilingChecksModelFilter, setTableUpdatedProfilingChecksModelFilter,
+  getTableProfilingChecksModelFilter,
+  setTableUpdatedProfilingChecksModelFilter
 } from '../../redux/actions/table.actions';
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { CheckResultOverviewApi, TableApiClient } from "../../services/apiClient";
@@ -17,19 +18,35 @@ const TableProfilingChecksUIFilterView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, category, checkName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, category: string, checkName: string } = useDecodedParams();
   const { checksUIFilter, isUpdatedChecksUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
-  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const [checkResultsOverview, setCheckResultsOverview] = useState<
+    CheckResultsOverviewDataModel[]
+  >([]);
   const [isUpdating, setIsUpdating] = useState(false);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getTableProfilingChecksOverview(connectionName, schemaName, tableName, category, checkName).then((res) => {
+    CheckResultOverviewApi.getTableProfilingChecksOverview(
+      connectionName,
+      schemaName,
+      tableName,
+      category,
+      checkName
+    ).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
 
   useEffect(() => {
     dispatch(
-      getTableProfilingChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName)
+      getTableProfilingChecksModelFilter(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName,
+        category,
+        checkName
+      )
     );
   }, [connectionName, schemaName, tableName, category, checkName]);
 
@@ -42,21 +59,39 @@ const TableProfilingChecksUIFilterView = () => {
       checksUIFilter
     );
     dispatch(
-      getTableProfilingChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName, false)
+      getTableProfilingChecksModelFilter(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName,
+        category,
+        checkName,
+        false
+      )
     );
     setIsUpdating(false);
   };
 
   const onChange = (data: CheckContainerModel) => {
-    dispatch(setTableUpdatedProfilingChecksModelFilter(checkTypes, firstLevelActiveTab, data));
+    dispatch(
+      setTableUpdatedProfilingChecksModelFilter(
+        checkTypes,
+        firstLevelActiveTab,
+        data
+      )
+    );
   };
 
   return (
     <>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
-        <div className="flex items-center space-x-2" style={{ maxWidth: `calc(100% - 180px)` }}>
+        <div
+          className="flex items-center space-x-2"
+          style={{ maxWidth: `calc(100% - 180px)` }}
+        >
           <SvgIcon name="search" className="w-5 h-5 shrink-0" />
-          <div className="text-xl font-semibold truncate">{`${connectionName}.${schemaName}.${tableName}.checks.${category} - ${checkName}`}</div>
+          <div className="text-lg font-semibold truncate">{`${connectionName}.${schemaName}.${tableName}.checks.${category} - ${checkName}`}</div>
         </div>
         <Button
           color={isUpdatedChecksUIFilter ? 'primary' : 'secondary'}
@@ -76,7 +111,7 @@ const TableProfilingChecksUIFilterView = () => {
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
           loading={loading}
-          isFiltered = {true}
+          isFiltered={true}
         />
       </div>
     </>

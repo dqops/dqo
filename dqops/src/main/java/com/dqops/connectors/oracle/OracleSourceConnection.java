@@ -36,6 +36,7 @@ import tech.tablesaw.columns.Column;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Oracle source connection.
@@ -386,7 +387,11 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
 
         Properties dataSourceProperties = new Properties();
         if (oracleParametersSpec.getProperties() != null) {
-            dataSourceProperties.putAll(oracleParametersSpec.getProperties());
+            dataSourceProperties.putAll(oracleParametersSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
         String userName = this.getSecretValueProvider().expandValue(oracleParametersSpec.getUser(), secretValueLookupContext);

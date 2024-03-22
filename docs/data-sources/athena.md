@@ -38,19 +38,19 @@ After navigating to the Athena connection settings, you will need to fill in its
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-athena.png)
 
-| Athena connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
-|----------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Athena connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                              | 
+|----------------------------|------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name            |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-| Parallel jobs limit        |                                          | New limit. A null value will disable the limit.                                                                                                                                                                                                 |
-| Trino engine type          | trino_engine_type                        | Trino engine type. Supports also a ${TRINO_ENGINE} configuration with a custom environment variable.                                                                                                                                      |
-| Athena authentication mode | athena_authentication_mode               | The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE} configuration with a custom environment variable.                                                                                                   |
-| Athena AccessKeyId         | athena_access_key_id                     | The AWS access key id for the IAM that can access the Athena.                                                                                                                                                                             |
-| Athena SecretAccessKey     | athena_secret_access_key                 | The AWS secret access key for the IAM that can access the Athena.                                                                                                                                                                         |
-| Athena region              | athena_region                            | The AWS Region where queries will be run. Supports also a ${ATHENA_REGION} configuration with a custom environment variable.                                                                                                              |
-| Athena WorkGroup           | athena_work_group                        | The workgroup in which queries will run. Supports also a ${ATHENA_WORK_GROUP} configuration with a custom environment variable.                                                                                                           |
-| Athena OutputLocation      | athena_output_location                   | The location in Amazon S3 where query results will be stored. Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom environment variable.                                                                                 |
-| Catalog                    | catalog                                  | The catalog that contains the databases and the tables that will be accessed with the driver. Supports also a ${TRINO_CATALOG} configuration with a custom environment variable.                                                          |
-| JDBC connection property    |                                          | Optional setting. DQOps supports using JDBC driver to access Athena. [JDBC Concepts.](https://docs.oracle.com/en/database/oracle/oracle-database/23/jjdbc/introducing-JDBC.html).                                                         |
+| Parallel jobs limit        |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                                                                          |
+| Trino engine type          | trino_engine_type                        | Trino engine type. Supports also a ${TRINO_ENGINE} configuration with a custom environment variable.                                                                                                                                     |
+| Athena authentication mode | athena_authentication_mode               | The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE} configuration with a custom environment variable.                                                                                                  |
+| Athena AccessKeyId         | athena_access_key_id                     | The AWS access key id for the IAM that can access the Athena.                                                                                                                                                                            |
+| Athena SecretAccessKey     | athena_secret_access_key                 | The AWS secret access key for the IAM that can access the Athena.                                                                                                                                                                        |
+| Athena region              | athena_region                            | The AWS Region where queries will be run. Supports also a ${ATHENA_REGION} configuration with a custom environment variable.                                                                                                             |
+| Athena WorkGroup           | athena_work_group                        | The workgroup in which queries will run. Supports also a ${ATHENA_WORK_GROUP} configuration with a custom environment variable.                                                                                                          |
+| Athena OutputLocation      | athena_output_location                   | The location in Amazon S3 where query results will be stored. Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom environment variable.                                                                                |
+| Catalog                    | catalog                                  | The catalog that contains the databases and the tables that will be accessed with the driver. Supports also a ${TRINO_CATALOG} configuration with a custom environment variable.                                                         |
+| JDBC connection property    |                                          | Optional setting. DQOps supports using JDBC driver to access Athena. [See the Athena documentation for JDBC connection parameter references](https://docs.aws.amazon.com/athena/latest/ug/connect-with-jdbc.html).                       |
     
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -64,7 +64,7 @@ can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
 
 For example:
 
-![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties.jpg)
+![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png)
 
 To remove the property click on the trash icon at the end of the input field.
 
@@ -113,13 +113,14 @@ Database provider type (--provider):
  [ 3] mysql
  [ 4] oracle
  [ 5] postgresql
- [ 6] presto
- [ 7] redshift
- [ 8] snowflake
- [ 9] spark
- [10] sqlserver
- [11] trino
-Please enter one of the [] values: 11
+ [ 6] duckdb
+ [ 7] presto
+ [ 8] redshift
+ [ 9] snowflake
+ [10] spark
+ [11] sqlserver
+ [12] trino
+Please enter one of the [] values: 12
 Trino engine type (--trino-engine):
  [ 1] trino
  [ 2] athena

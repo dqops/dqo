@@ -29,6 +29,9 @@ public class LocalSystemTablesLister {
     public static List<SourceTableModel> listTables(DuckdbParametersSpec duckdb, String schemaName){
         String pathPrefixString = duckdb.getDirectories().get(schemaName);
         File[] files = Path.of(pathPrefixString).toFile().listFiles();
+        if(files == null){
+            return null;
+        }
         String folderPrefix = StringUtils.removeEnd(StringUtils.removeEnd(pathPrefixString, "/"), "\\");
 
         DuckdbFilesFormatType sourceFilesTypeString = duckdb.getFilesFormatType();
@@ -60,7 +63,7 @@ public class LocalSystemTablesLister {
         String sourceFilesTypeString = filesType.toString();
         return fileName.toLowerCase().endsWith("." + sourceFilesTypeString)
                 || fileName.toLowerCase().endsWith(".gz")
-                || !fileName.contains(".");
+                || file.isDirectory();
     }
 
 }

@@ -7,12 +7,12 @@ import {
 } from '../../api';
 import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
-import DefaultCheckTargetConfiguration from './DefaultCheckTargetConfiguration';
+import { useDefinition } from '../../contexts/definitionContext';
 import {
   DefaultColumnCheckPatternsApiClient,
   DefaultTableCheckPatternsApiClient
 } from '../../services/apiClient';
-import { useDefinition } from '../../contexts/definitionContext';
+import DefaultCheckTargetConfiguration from './DefaultCheckTargetConfiguration';
 
 type TCreateCheckPatternProps = {
   type: 'table' | 'column';
@@ -71,7 +71,7 @@ export default function CreateCheckPattern({ type }: TCreateCheckPatternProps) {
         <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
-            <div className="text-xl font-semibold truncate">
+            <div className="text-lg font-semibold truncate">
               Create {type} check pattern
             </div>
           </div>

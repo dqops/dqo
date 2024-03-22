@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useSelector } from 'react-redux';
 import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
 import Button from '../../components/Button';
 import ColumnNavigation from "../../components/ColumnNavigation";
@@ -21,22 +21,36 @@ const ColumnProfilingsView = () => {
   const { checksUI, isUpdating, loading } = useSelector(getFirstLevelState(checkTypes));
   const [updatedChecksUI, setUpdatedChecksUI] = useState<CheckContainerModel>();
   const dispatch = useActionDispatch();
-  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const [checkResultsOverview, setCheckResultsOverview] = useState<
+    CheckResultsOverviewDataModel[]
+  >([]);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnProfilingChecksOverview(connectionName, schemaName, tableName, columnName).then((res) => {
+    CheckResultOverviewApi.getColumnProfilingChecksOverview(
+      connectionName,
+      schemaName,
+      tableName,
+      columnName
+    ).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
-  
+
   useEffect(() => {
     setUpdatedChecksUI(checksUI);
   }, [checksUI]);
 
   useEffect(() => {
     dispatch(
-      getColumnProfilingChecksModel(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
+      getColumnProfilingChecksModel(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName,
+        columnName
+      )
     );
   }, [connectionName, schemaName, tableName, columnName]);
 
@@ -56,7 +70,15 @@ const ColumnProfilingsView = () => {
       )
     );
     await dispatch(
-      getColumnProfilingChecksModel(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, false)
+      getColumnProfilingChecksModel(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName,
+        columnName,
+        false
+      )
     );
   };
 
@@ -64,13 +86,16 @@ const ColumnProfilingsView = () => {
     () => !isEqual(updatedChecksUI, checksUI),
     [checksUI, updatedChecksUI]
   );
-  
+
   return (
     <>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
-        <div className="flex items-center space-x-2" style={{ maxWidth: `calc(100% - 180px)` }}>
+        <div
+          className="flex items-center space-x-2"
+          style={{ maxWidth: `calc(100% - 180px)` }}
+        >
           <SvgIcon name="column-check" className="w-5 h-5 shrink-0" />
-          <div className="text-xl font-semibold truncate">{`Profiling checks for ${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
+          <div className="text-lg font-semibold truncate">{`Profiling checks for ${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
         </div>
         <Button
           color={isUpdated ? 'primary' : 'secondary'}

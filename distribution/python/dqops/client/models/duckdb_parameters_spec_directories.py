@@ -8,7 +8,7 @@ T = TypeVar("T", bound="DuckdbParametersSpecDirectories")
 
 @_attrs_define
 class DuckdbParametersSpecDirectories:
-    """Schema to directory mappings."""
+    """Virtual schema name to directory mappings. The path must be an absolute path."""
 
     additional_properties: Dict[str, str] = _attrs_field(init=False, factory=dict)
 

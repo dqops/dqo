@@ -1,5 +1,6 @@
 import moment from 'moment/moment';
 import { useParams } from 'react-router-dom';
+import { ConnectionModel, ConnectionModelProviderTypeEnum, TableListModel } from '../api';
 
 export const getDaysString = (value: string | number) => {
   const daysDiff = moment().diff(moment(value), 'day');
@@ -34,8 +35,8 @@ export const getLocalDateInUserTimeZone = (date: Date): string => {
   return new Date(strDate).toLocaleString('en-US', options);
 };
 
-export const urlencodeEncoder = (url : string | undefined) => {
-  if (!url) return ''; 
+export const urlencodeEncoder = (url: string | undefined) => {
+  if (!url) return '';
 
   let decodedValue = '';
   for (let i = 0; i < url.length; i++) {
@@ -61,7 +62,7 @@ export const urlencodeEncoder = (url : string | undefined) => {
           decodedValue += encodedChar;
           break;
       }
-      i += 2; 
+      i += 2;
     } else {
       decodedValue += url[i];
     }
@@ -70,25 +71,32 @@ export const urlencodeEncoder = (url : string | undefined) => {
   return decodedValue;
 };
 
-
-export const urlencodeDecoder = (url : string | undefined) => {
-  if (!url) return ''; 
+export const urlencodeDecoder = (url: string | undefined) => {
+  if (!url) return '';
 
   let encodedValue = '';
   for (let i = 0; i < url.length; i++) {
     const char = url[i];
     switch (char) {
-       case '%': encodedValue += '%25'; break;
-      case ' ': encodedValue += '%20'; break;
-      case '.': encodedValue += '%2E'; break;
-      case '/': encodedValue += '%2F'; break;
-      case '\\': encodedValue += '%5C'; break;
-      default: encodedValue += char;
+      // case '%': encodedValue += '%25'; break;
+      case ' ':
+        encodedValue += '%20';
+        break;
+      case '.':
+        encodedValue += '%2E';
+        break;
+      case '/':
+        encodedValue += '%2F';
+        break;
+      case '\\':
+        encodedValue += '%5C';
+        break;
+      default:
+        encodedValue += char;
     }
   }
   return encodedValue;
 };
-
 
 export const getDetectedDatatype = (numberForFile: any) => {
   if (Number(numberForFile) === 1) {
@@ -174,4 +182,45 @@ export function useDecodedParams() : any {
     return urlencodeEncoder(String(x))
   })
   return parameters;
+}
+export const filterPathsDuckDbTable = (table: TableListModel) => {
+  return {
+    ...table,
+    file_format: {
+      ...table.file_format,
+      file_paths: table.file_format?.file_paths?.filter((x) => x)
+    }
+  };
+}
+export const filterPropertiesDirectories = (db: ConnectionModel) => {
+  const directories = { ...(db?.[db.provider_type as keyof ConnectionModel] as any)?.directories };
+  const properties = { ...(db?.[db.provider_type as keyof ConnectionModel] as any)?.properties };
+  Object.keys(properties).forEach((key) => {
+    if (!properties[key]) {
+      delete properties[key];
+    }
+  });
+ 
+  if (db.provider_type === ConnectionModelProviderTypeEnum.duckdb) {
+    Object.keys(directories).forEach((key) => {
+      if (!directories[key]) {
+        delete directories[key];
+      }
+    });
+    return {
+      ...db,
+      duckdb: {
+        ...db.duckdb,
+        directories,
+        properties
+    }
+  }
+}
+return {
+  ...db,
+  [db.provider_type as keyof ConnectionModel]: {
+    ...(db?.[db.provider_type as keyof ConnectionModel] as any),
+    properties
+    }
+  }
 }

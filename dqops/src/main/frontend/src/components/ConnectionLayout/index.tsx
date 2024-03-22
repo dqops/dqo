@@ -69,6 +69,10 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
   };
 
   const closeTab = (value: string) => {
+    if (pageTabs.length === 1) {
+      setActiveTab(undefined)
+      history.push(`/${checkTypes}`)
+    }
     dispatch(closeFirstLevelTab(checkTypes, value));
     // console.log(value)
   };

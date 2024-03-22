@@ -1,14 +1,7 @@
-import React from 'react';
-import { useEffect } from 'react';
+import { Tooltip } from '@material-tailwind/react';
+import clsx from 'clsx';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  getSensorFolderTree,
-  getRuleFolderTree,
-  toggleFirstLevelFolder,
-  getdataQualityChecksFolderTree
-} from '../../redux/actions/definition.actions';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { IRootState } from '../../redux/reducers';
 import {
   CheckDefinitionFolderModel,
   CheckDefinitionListModel,
@@ -17,15 +10,20 @@ import {
   SensorFolderModel,
   SensorListModel
 } from '../../api';
-import SvgIcon from '../SvgIcon';
-import clsx from 'clsx';
-import SensorContextMenu from './SensorContextMenu';
-import RuleContextMenu from './RuleContextMenu';
-import DataQualityContextMenu from './DataQualityContextMenu';
-import { urlencodeEncoder } from '../../utils';
-import { Tooltip } from '@material-tailwind/react';
 import { useDefinition } from '../../contexts/definitionContext';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import {
+  getRuleFolderTree,
+  getSensorFolderTree,
+  getdataQualityChecksFolderTree,
+  toggleFirstLevelFolder
+} from '../../redux/actions/definition.actions';
+import { IRootState } from '../../redux/reducers';
 import { ROUTES } from '../../shared/routes';
+import SvgIcon from '../SvgIcon';
+import DataQualityContextMenu from './DataQualityContextMenu';
+import RuleContextMenu from './RuleContextMenu';
+import SensorContextMenu from './SensorContextMenu';
 
 const defaultChecks = [
   'Table-level checks patterns',
@@ -160,7 +158,7 @@ export const DefinitionTree = () => {
                   className="w-4 h-4 min-w-4 shrink-0"
                 />
                 <div className="text-[13px] leading-1.5 whitespace-nowrap">
-                  {urlencodeEncoder(sensor.sensor_name ?? '')}
+                  {sensor.sensor_name ?? ''}
                 </div>
                 {sensor.yaml_parsing_error &&
                 sensor.yaml_parsing_error.length > 0 ? (
@@ -270,7 +268,7 @@ export const DefinitionTree = () => {
                   className="w-4 h-4 min-w-4 shrink-0"
                 />
                 <div className="text-[13px] leading-1.5 whitespace-nowrap">
-                  {urlencodeEncoder(rule.rule_name ?? '')}
+                  {rule.rule_name ?? ''}
                 </div>
                 {rule.yaml_parsing_error &&
                 rule.yaml_parsing_error.length > 0 ? (
@@ -387,7 +385,7 @@ export const DefinitionTree = () => {
                       className="w-4 h-4 min-w-4 shrink-0"
                     />
                     <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-                      {urlencodeEncoder(check.check_name ?? '')}
+                      {check.check_name ?? ''}
                     </div>
                     {check.yaml_parsing_error &&
                     check.yaml_parsing_error.length > 0 ? (
@@ -433,13 +431,13 @@ export const DefinitionTree = () => {
     <div
       onClick={onClick}
       className={clsx(
-        'cursor-pointer flex space-x-1 items-center mb-1 h-5 hover:bg-gray-300',
+        'cursor-pointer flex space-x-1 items-center mb-1 h-4.5 hover:bg-gray-300',
         highlightedNode === text.toLowerCase().replace(' ', '-') &&
           'bg-gray-300'
       )}
     >
       <SvgIcon name={icon} className="w-4 h-4 min-w-4 " />
-      <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+      <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
         {text}
       </div>
     </div>

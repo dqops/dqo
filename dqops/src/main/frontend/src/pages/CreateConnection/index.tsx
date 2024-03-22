@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 
-import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
-import SelectDatabase from '../../components/Dashboard/SelectDatabase';
-import MainLayout from '../../components/MainLayout';
-import ImportSchemas from '../../components/ImportSchemas';
 import {
   BigQueryParametersSpecJobsCreateProjectEnum,
   ConnectionModel,
   ConnectionModelProviderTypeEnum,
   DuckdbParametersSpecFilesFormatTypeEnum,
+  DuckdbParametersSpecStorageTypeEnum,
   MysqlParametersSpecMysqlEngineTypeEnum,
   SingleStoreDbParametersSpecLoadBalancingModeEnum,
   TrinoParametersSpecAthenaAuthenticationModeEnum,
   TrinoParametersSpecTrinoEngineTypeEnum
 } from '../../api';
+import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
+import SelectDatabase from '../../components/Dashboard/SelectDatabase';
+import ImportSchemas from '../../components/ImportSchemas';
+import MainLayout from '../../components/MainLayout';
 import { BigQueryAuthenticationMode } from '../../shared/enums/bigquery.enum';
 
 const CreateConnection = () => {
@@ -47,19 +48,23 @@ const CreateConnection = () => {
         break;
       }
       case ConnectionModelProviderTypeEnum.postgresql: {
-        copiedDatabase.postgresql = { port: '5432' };
+        copiedDatabase.postgresql = { port: '5432',
+        properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.redshift: {
-        copiedDatabase.redshift = { port: '5439' };
+        copiedDatabase.redshift = { port: '5439',
+        properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.sqlserver: {
-        copiedDatabase.sqlserver = { port: '1433' };
+        copiedDatabase.sqlserver = { port: '1433',
+        properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.presto: {
-        copiedDatabase.presto = { port: '8080' };
+        copiedDatabase.presto = { port: '8080',
+        properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.trino: {
@@ -74,7 +79,8 @@ const CreateConnection = () => {
             TrinoParametersSpecTrinoEngineTypeEnum.athena
               ? 'awsdatacatalog'
               : '',
-          athena_work_group: 'primary'
+          athena_work_group: 'primary',
+          properties: { '': '' }
         };
         break;
       }
@@ -90,45 +96,53 @@ const CreateConnection = () => {
               load_balancing_mode:
                 SingleStoreDbParametersSpecLoadBalancingModeEnum.none,
               use_ssl: true
-            }
+            },
+            properties: { '': '' }
           };
         } else {
           copiedDatabase.mysql = {
             port: '3306',
-            mysql_engine_type: MysqlParametersSpecMysqlEngineTypeEnum.mysql
+            mysql_engine_type: MysqlParametersSpecMysqlEngineTypeEnum.mysql,
+            properties: { '': '' }
           };
         }
 
         break;
       }
       case ConnectionModelProviderTypeEnum.oracle: {
-        copiedDatabase.oracle = { port: '1521' };
+        copiedDatabase.oracle = { port: '1521',
+        properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.spark: {
-        copiedDatabase.spark = { port: '10000' };
+        copiedDatabase.spark = { port: '10000',
+        properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.databricks: {
-        copiedDatabase.databricks = { port: '443' };
+        copiedDatabase.databricks = { port: '443',
+        properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.duckdb: {
-        let fileFormat: DuckdbParametersSpecFilesFormatTypeEnum = DuckdbParametersSpecFilesFormatTypeEnum.csv;
-        switch(nameOfDatabase){
-          case "CSV":
+        let fileFormat: DuckdbParametersSpecFilesFormatTypeEnum =
+          DuckdbParametersSpecFilesFormatTypeEnum.csv;
+        switch (nameOfDatabase) {
+          case 'CSV':
             fileFormat = DuckdbParametersSpecFilesFormatTypeEnum.csv;
             break;
-          case "JSON":
+          case 'JSON':
             fileFormat = DuckdbParametersSpecFilesFormatTypeEnum.json;
             break;
-          case "Parquet":
+          case 'Parquet':
             fileFormat = DuckdbParametersSpecFilesFormatTypeEnum.parquet;
             break;
         }
         copiedDatabase.duckdb = {
           directories: { files: '' },
-          files_format_type: fileFormat
+          files_format_type: fileFormat,
+          storage_type: DuckdbParametersSpecStorageTypeEnum.local,
+          properties: { '': '' }
         };
       }
     }

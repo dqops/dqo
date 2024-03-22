@@ -97,9 +97,10 @@ const ContextMenu = ({
   };
 
   const importMetaData = () => {
+    setOpen(false);
     dispatch(
       addFirstLevelTab(checkTypes, {
-        url: ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, node.label),
+        url: ROUTES.CONNECTION_DETAIL(checkTypes, node.label, 'schemas?import_schema=true'),
         value: ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, node.label),
         label: `${node.label}`
       })
@@ -108,12 +109,13 @@ const ContextMenu = ({
       `${ROUTES.CONNECTION_DETAIL(
         checkTypes,
         node.label || '',
-        'schemas'
-      )}?import_schema=true`
+        'schemas?import_schema=true'
+      )}`
     );
   };
 
   const importTables = () => {
+    setOpen(false);
     const [connection, schema] = node.id.toString().split('.');
     const url = ROUTES.SCHEMA_LEVEL_PAGE(
       CheckTypes.SOURCES,
@@ -186,10 +188,13 @@ const ContextMenu = ({
                 <RunChecksDialog
                   open={runChecksDialogOpened}
                   onClose={() => {
-                    setRunChecksDialogOpened(false), setOpen(false);
+                    setRunChecksDialogOpened(false), 
+                    setOpen(false);
                   }}
                   onClick={() => {
-                    handleRunChecks(), setOpen(false);
+                    handleRunChecks();
+                    setOpen(false);
+                    setRunChecksDialogOpened(false);
                   }}
                   runChecksJobTemplate={node.run_checks_job_template ?? {}}
                 />
@@ -224,10 +229,13 @@ const ContextMenu = ({
               <CollectStatisticsDialog
                 open={collectStatisticsDialogOpened}
                 onClose={() => {
-                  setCollectStatisticsDialogOpened(false), setOpen(false);
+                  setCollectStatisticsDialogOpened(false);
+                  setOpen(false);
                 }}
                 onClick={(filter) => {
-                  handleCollectStatisticsOnTable(filter), setOpen(false);
+                  handleCollectStatisticsOnTable(filter), 
+                  setCollectStatisticsDialogOpened(false);
+                  setOpen(false);
                 }}
                 collectStatisticsJobTemplate={
                   node.collect_statistics_job_template ?? {}
@@ -329,7 +337,7 @@ const ContextMenu = ({
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
               onClick={() => {
                 userProfile.can_manage_data_sources === true
-                  ? openAddTableDialog(node)
+                  ? (openAddTableDialog(node), setOpen(false))
                   : undefined;
               }}
             >
@@ -362,7 +370,7 @@ const ContextMenu = ({
                     : undefined;
                 }}
               >
-                Delete data
+                Delete data quality results
               </div>
               <DeleteStoredDataExtendedPopUp
                 open={deleteDataDialogOpened}
@@ -389,7 +397,7 @@ const ContextMenu = ({
                     : undefined;
                 }}
               >
-                Delete data
+                Delete data quality results
               </div>
               <DeleteStoredDataExtendedPopUp
                 open={deleteDataDialogOpened}
@@ -415,7 +423,7 @@ const ContextMenu = ({
             checkTypes === CheckTypes.SOURCES && (
               <div
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-                onClick={() => reimportTableMetadata(node)}
+                onClick={() => reimportTableMetadata(node, () => setOpen(false))}
               >
                 Reimport metadata
               </div>

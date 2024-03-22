@@ -13,8 +13,8 @@ import {
   IncidentIssueFilter
 } from '../../redux/reducers/incidents.reducer';
 import { getFirstLevelIncidentsState } from '../../redux/selectors';
-import { BarChart } from './BarChart';
 import { useDecodedParams } from '../../utils';
+import { BarChart } from './BarChart';
 
 type HistogramChartProps = {
   onChangeFilter: (obj: Partial<IncidentIssueFilter>) => void;
@@ -82,14 +82,17 @@ export const HistogramChart = ({
       <div className="col-span-2">
         <BarChart histograms={histograms} />
       </div>
-      <SectionWrapper title="Filter by columns">
+      <SectionWrapper title="Filter by columns" className="text-sm">
         {Object.keys(histograms?.columns || {}).map((column, index) => (
           <div
-            className={clsx('flex gap-2 mb-2 cursor-pointer whitespace-normal break-all', {
-              'font-bold text-gray-700': histogramFilter?.column === column,
-              'text-gray-500':
-                histogramFilter?.column && histogramFilter?.column !== column
-            })}
+            className={clsx(
+              'flex gap-2 mb-2 cursor-pointer whitespace-normal break-all',
+              {
+                'font-bold text-gray-700': histogramFilter?.column === column,
+                'text-gray-500':
+                  histogramFilter?.column && histogramFilter?.column !== column
+              }
+            )}
             key={index}
             onClick={() =>
               onChangeFilter({
@@ -105,14 +108,17 @@ export const HistogramChart = ({
           </div>
         ))}
       </SectionWrapper>
-      <SectionWrapper title="Filter by check name">
+      <SectionWrapper title="Filter by check name" className="text-sm">
         {Object.keys(histograms?.checks || {}).map((check, index) => (
           <div
-            className={clsx('flex gap-2 mb-2 cursor-pointer whitespace-normal break-all', {
-              'font-bold text-gray-700': histogramFilter?.check === check,
-              'text-gray-500':
-                histogramFilter?.check && histogramFilter?.check !== check
-            })}
+            className={clsx(
+              'flex gap-2 mb-2 cursor-pointer whitespace-normal break-all',
+              {
+                'font-bold text-gray-700': histogramFilter?.check === check,
+                'text-gray-500':
+                  histogramFilter?.check && histogramFilter?.check !== check
+              }
+            )}
             key={index}
             onClick={() =>
               onChangeFilter({

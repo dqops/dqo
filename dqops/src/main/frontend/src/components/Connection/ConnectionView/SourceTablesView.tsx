@@ -11,11 +11,11 @@ import { IRootState } from '../../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { DataSourcesApi, JobApiClient } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
 import Button from '../../Button';
 import Checkbox from '../../Checkbox';
 import Loader from '../../Loader';
 import SvgIcon from '../../SvgIcon';
-import { useDecodedParams } from '../../../utils';
 
 const SourceTablesView = () => {
   const {
@@ -121,24 +121,28 @@ const SourceTablesView = () => {
       <div className="flex justify-end space-x-4 mb-4">
         <Button
           color="primary"
+          className="text-sm"
           label="Select all"
           onClick={selectAll}
           disabled={selectedTables.length === tables.length}
         />
         <Button
           color="primary"
+          className="text-sm"
           label="Unselect all"
           onClick={unselectAll}
           disabled={selectedTables.length === 0}
         />
         <Button
           color="primary"
+          className="text-sm"
           label="Import selected tables"
           onClick={importSelectedTables}
           disabled={selectedTables.length === 0}
         />
         <Button
           color="primary"
+          className="text-sm"
           label="Import all tables"
           onClick={importAllTables}
         />
@@ -150,7 +154,7 @@ const SourceTablesView = () => {
       ) : (
         <table className="max-w-300">
           <thead>
-            <tr className="border-b border-gray-300">
+            <tr className="border-b border-gray-300 text-sm">
               <th />
               <th className="py-2 px-4 text-left">Source table name</th>
               <th className="py-2 px-4 text-left">Import status</th>

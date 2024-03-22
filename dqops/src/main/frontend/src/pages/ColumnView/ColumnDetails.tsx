@@ -15,8 +15,8 @@ import {
   getFirstLevelState
 } from '../../redux/selectors';
 import { CheckTypes } from '../../shared/routes';
-import ColumnActionGroup from './ColumnActionGroup';
 import { useDecodedParams } from '../../utils';
+import ColumnActionGroup from './ColumnActionGroup';
 
 interface IColumnDetailsProps {
   connectionName: string;
@@ -114,7 +114,7 @@ const TableDetails = ({
         isUpdating={isUpdating}
         isUpdated={isUpdatedColumnBasic}
       />
-      <table className="mb-6 w-160">
+      <table className="mb-6 w-160 text-sm">
         <tbody>
           <tr>
             <td className="px-4 py-2">Connection name</td>

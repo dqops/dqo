@@ -29,18 +29,18 @@ After navigating to the SingleStoreDB connection settings, you will need to fill
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-singlestore1.png)
 
-| SingleStoreDB connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                             | 
-|-----------------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name                   |                                          | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                                                 |
-| Parallel jobs limit               |                                          | New limit. A null value will disable the limit.                                                                                                                                                                                                                                               |
-| Engine Type                       | mysql_engine_type                        | MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration with a custom environment variable.                                                                                                                                                                                    |
-| Loadbalancing Mode                | load_balancing_mode                      | SingleStoreDB Failover and Load-Balancing Modes for Single Store DB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                           |
-| Host Descriptions                 | host_descriptions                        | SingleStoreDB Host descriptions. Supports also a ${SINGLE_STORE_HOST_DESCRIPTIONS} configuration with a custom environment variable.                                                                                                                                                    |
-| Schema                            | schema                                   | SingleStoreDB database/schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                            |
-| User name                         | user                                     | MySQL (SingleStoreDB) user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                               |
-| Password                          | password                                 | MySQL (SingleStoreDB) database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                       |
-| Use SSL                           | use_ssl                                  | Force enables SSL/TLS on the connection. Supports also a ${SINGLE_STORE_USE_SSL} configuration with a custom environment variable.                                                                                                                                                      |
-| JDBC connection property          |                                          | Optional setting. DQOps supports using JDBC driver to access MySQL. [JDBC Concepts.](https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-usagenotes-basic.html)                                                                                                                    |
+| SingleStoreDB connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                                             | 
+|-----------------------------------|------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name                   |                                          | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                                                                 |
+| Parallel jobs limit               |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                                                                                                                                         |
+| Engine Type                       | mysql_engine_type                        | MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration with a custom environment variable.                                                                                                                                                                                                    |
+| Loadbalancing Mode                | load_balancing_mode                      | SingleStoreDB Failover and Load-Balancing Modes for Single Store DB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                           |
+| Host Descriptions                 | host_descriptions                        | SingleStoreDB Host descriptions. Supports also a ${SINGLE_STORE_HOST_DESCRIPTIONS} configuration with a custom environment variable.                                                                                                                                                                    |
+| Schema                            | schema                                   | SingleStoreDB database/schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                                            |
+| User name                         | user                                     | MySQL (SingleStoreDB) user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                                               |
+| Password                          | password                                 | MySQL (SingleStoreDB) database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                                       |
+| Use SSL                           | use_ssl                                  | Force enables SSL/TLS on the connection. Supports also a ${SINGLE_STORE_USE_SSL} configuration with a custom environment variable.                                                                                                                                                                      |
+| JDBC connection property          |                                          | Optional setting. DQOps supports using JDBC driver to access MySQL. [See the SingleStore documentation for JDBC connection parameter references](https://docs.singlestore.com/cloud/developer-resources/connect-with-application-development-tools/connect-with-java-jdbc/the-singlestore-jdbc-driver/) |
 
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -54,7 +54,7 @@ can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
 
 For example:
 
-![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties.jpg)
+![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png)
 
 To remove the property click on the trash icon at the end of the input field.
 
@@ -103,12 +103,13 @@ Database provider type (--provider):
  [ 3] mysql
  [ 4] oracle
  [ 5] postgresql
- [ 6] presto
- [ 7] redshift
- [ 8] snowflake
- [ 9] spark
- [10] sqlserver
- [11] trino
+ [ 6] duckdb
+ [ 7] presto
+ [ 8] redshift
+ [ 9] snowflake
+ [10] spark
+ [11] sqlserver
+ [12] trino
 Please enter one of the [] values: 3
 MySQL engine type (--mysql-engine):
  [ 1] mysql

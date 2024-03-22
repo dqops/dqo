@@ -43,7 +43,7 @@ After navigating to the Snowflake connection settings, you will need to fill in 
 | User name                     | user                                     | Snowflake user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                            |
 | Password                      | password                                 | Snowflake database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                    |
 | Role                          | role                                     | Optional setting. Snowflake role name.  Supports also ${SNOWFLAKE_ROLE} configuration with a custom environment variable.                                                                                                                                |
-| JDBC connection property      |                                          | Optional setting. DQOps supports using JDBC driver to access Snowflake. [See the Snowflake documentation for JDBC connection parameter references.](https://docs.snowflake.com/en/developer-guide/jdbc/jdbc-parameters)                                  |
+| JDBC connection property      |                                          | Optional setting. DQOps supports using JDBC driver to access Snowflake. [See the Snowflake documentation for JDBC connection parameter references](https://docs.snowflake.com/en/developer-guide/jdbc/jdbc-parameters).                                  |
 
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -57,7 +57,7 @@ can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
     
 For example:
 
-![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties.jpg)
+![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png)
 
 To remove the property click on the trash icon at the end of the input field. 
 
@@ -104,13 +104,14 @@ Database provider type (--provider):
  [ 3] mysql
  [ 4] oracle
  [ 5] postgresql
- [ 6] presto
- [ 7] redshift
- [ 8] snowflake
- [ 9] spark
- [10] sqlserver
- [11] trino
-Please enter one of the [] values: 8
+ [ 6] duckdb
+ [ 7] presto
+ [ 8] redshift
+ [ 9] snowflake
+ [10] spark
+ [11] sqlserver
+ [12] trino
+Please enter one of the [] values: 9
 Snowflake account name (--snowflake-account) [${SNOWFLAKE_ACCOUNT}]: xx-kh8138
 Snowflake warehouse name (--snowflake-warehouse) [${SNOWFLAKE_WAREHOUSE}]: OMPUTE_WH
 Snowflake database name (--snowflake-database) [${SNOWFLAKE_DATABASE}]: TESTING

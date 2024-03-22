@@ -1377,12 +1377,12 @@ from .dqo_settings_model_properties_additional_property import (
 )
 from .dqo_user_profile_model import DqoUserProfileModel
 from .dqo_user_role import DqoUserRole
+from .duckdb_files_format_type import DuckdbFilesFormatType
 from .duckdb_parameters_spec import DuckdbParametersSpec
 from .duckdb_parameters_spec_directories import DuckdbParametersSpecDirectories
 from .duckdb_parameters_spec_properties import DuckdbParametersSpecProperties
 from .duckdb_read_mode import DuckdbReadMode
-from .duckdb_secrets_type import DuckdbSecretsType
-from .duckdb_source_files_type import DuckdbSourceFilesType
+from .duckdb_storage_type import DuckdbStorageType
 from .duration import Duration
 from .effective_schedule_level_model import EffectiveScheduleLevelModel
 from .effective_schedule_model import EffectiveScheduleModel
@@ -1457,6 +1457,7 @@ from .my_sql_ssl_mode import MySqlSslMode
 from .mysql_engine_type import MysqlEngineType
 from .mysql_parameters_spec import MysqlParametersSpec
 from .mysql_parameters_spec_properties import MysqlParametersSpecProperties
+from .new_line_character_type import NewLineCharacterType
 from .optional import Optional
 from .optional_incident_webhook_notifications_spec import (
     OptionalIncidentWebhookNotificationsSpec,
@@ -1474,7 +1475,7 @@ from .postgresql_parameters_spec_properties import PostgresqlParametersSpecPrope
 from .postgresql_ssl_mode import PostgresqlSslMode
 from .presto_parameters_spec import PrestoParametersSpec
 from .presto_parameters_spec_properties import PrestoParametersSpecProperties
-from .profiling_time_period import ProfilingTimePeriod
+from .profiling_time_period_truncation import ProfilingTimePeriodTruncation
 from .provider_sensor_definition_spec import ProviderSensorDefinitionSpec
 from .provider_sensor_definition_spec_parameters import (
     ProviderSensorDefinitionSpecParameters,
@@ -2484,12 +2485,12 @@ __all__ = (
     "DqoSettingsModelPropertiesAdditionalProperty",
     "DqoUserProfileModel",
     "DqoUserRole",
+    "DuckdbFilesFormatType",
     "DuckdbParametersSpec",
     "DuckdbParametersSpecDirectories",
     "DuckdbParametersSpecProperties",
     "DuckdbReadMode",
-    "DuckdbSecretsType",
-    "DuckdbSourceFilesType",
+    "DuckdbStorageType",
     "Duration",
     "EffectiveScheduleLevelModel",
     "EffectiveScheduleModel",
@@ -2556,6 +2557,7 @@ __all__ = (
     "MysqlParametersSpec",
     "MysqlParametersSpecProperties",
     "MySqlSslMode",
+    "NewLineCharacterType",
     "Optional",
     "OptionalIncidentWebhookNotificationsSpec",
     "OptionalMonitoringScheduleSpec",
@@ -2571,7 +2573,7 @@ __all__ = (
     "PostgresqlSslMode",
     "PrestoParametersSpec",
     "PrestoParametersSpecProperties",
-    "ProfilingTimePeriod",
+    "ProfilingTimePeriodTruncation",
     "ProviderSensorDefinitionSpec",
     "ProviderSensorDefinitionSpecParameters",
     "ProviderSensorListModel",

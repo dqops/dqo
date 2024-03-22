@@ -30,15 +30,15 @@ After navigating to the Spark connection settings, you will need to fill in its 
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-spark1.png)
 
-| Spark connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                             | 
-|---------------------------|------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name           |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.               |
-| Parallel jobs limit       |                                          | New limit. A null value will disable the limit.                                                                                                                                                                                                               |
-| Host                      | host                                     | Spark host name. Supports also a ${SPARK_HOST} configuration with a custom environment variable.                                                                                                                                                        |
-| Port                      | port                                     | Spark port name. The default port is 10000. Supports also a ${SPARK_PORT} configuration with a custom environment variable.                                                                                                                             |
-| User name                 | user                                     | Spark user name. The value can be in the ${SPARK_USER} format to use dynamic substitution.                                                                                                                                                              |
-| Password                  | password                                 | Spark database password. The value can be in the ${SPARK_PASSWORD} format to use dynamic substitution.                                                                                                                                                  |
-| JDBC connection property  |                                          | Optional setting. DQOps supports using JDBC driver to access Spark. [JDBC Concepts.](https://docs.oracle.com/en/database/oracle/oracle-database/23/jjdbc/introducing-JDBC.html).                                                                        |
+| Spark connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
+|---------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name           |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
+| Parallel jobs limit       |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                                                                           |
+| Host                      | host                                     | Spark host name. Supports also a ${SPARK_HOST} configuration with a custom environment variable.                                                                                                                                          |
+| Port                      | port                                     | Spark port name. The default port is 10000. Supports also a ${SPARK_PORT} configuration with a custom environment variable.                                                                                                               |
+| User name                 | user                                     | Spark user name. The value can be in the ${SPARK_USER} format to use dynamic substitution.                                                                                                                                                |
+| Password                  | password                                 | Spark database password. The value can be in the ${SPARK_PASSWORD} format to use dynamic substitution.                                                                                                                                    |
+| JDBC connection property  |                                          | Optional setting. DQOps supports using JDBC driver to access Spark. [See the Spark documentation for JDBC connection parameter references](https://spark.apache.org/docs/latest/sql-data-sources-jdbc.html).                              |
     
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -52,7 +52,7 @@ can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
 
 For example:
 
-![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties.jpg)
+![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png)
 
 To remove the property click on the trash icon at the end of the input field.
 
@@ -101,13 +101,14 @@ Database provider type (--provider):
  [ 3] mysql
  [ 4] oracle
  [ 5] postgresql
- [ 6] presto
- [ 7] redshift
- [ 8] snowflake
- [ 9] spark
- [10] sqlserver
- [11] trino
-Please enter one of the [] values: 9
+ [ 6] duckdb
+ [ 7] presto
+ [ 8] redshift
+ [ 9] snowflake
+ [10] spark
+ [11] sqlserver
+ [12] trino
+Please enter one of the [] values: 10
 Spark host name (--spark-host) [${SPARK_HOST}]: localhost
 Spark port number (--spark-port) [${SPARK_PORT}]: 10000
 Spark user name (--spark-user) [${SPARK_USER}]: 

@@ -11,11 +11,11 @@ import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import { IRootState } from '../../../redux/reducers';
 import { DataSourcesApi } from '../../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
 import Button from '../../Button';
 import Loader from '../../Loader';
 import SvgIcon from '../../SvgIcon';
 import ConnectionActionGroup from './ConnectionActionGroup';
-import { useDecodedParams } from '../../../utils';
 
 const SourceSchemasView = () => {
   const { connection }: { connection: string } = useDecodedParams();
@@ -92,7 +92,7 @@ const SourceSchemasView = () => {
         <table className="w-full">
           <thead>
             <tr>
-              <th className="py-2 pr-4 text-left">Source Schema Name</th>
+              <th className="py-2 pr-4 text-left">Source schema name</th>
               <th className="py-2 px-4 text-left">Import status</th>
               <th />
             </tr>
@@ -110,7 +110,7 @@ const SourceSchemasView = () => {
                     className={
                       item.alreadyImported ? 'text-primary' : 'text-red-700'
                     }
-                    width={30}
+                    width={22}
                     height={22}
                   />
                 </td>
