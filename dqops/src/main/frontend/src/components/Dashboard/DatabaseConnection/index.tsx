@@ -136,6 +136,13 @@ filterPropertiesDirectories(database)
       ) {
         setMessage(testRes?.errorMessage);
       }
+      else if (
+        testRes?.connectionTestResult ===
+        ConnectionTestModelConnectionTestResultEnum.FAILURE
+      ) {
+        setMessage(testRes?.errorMessage);
+        setShowConfirm(true)
+      }
     }
   };
 
