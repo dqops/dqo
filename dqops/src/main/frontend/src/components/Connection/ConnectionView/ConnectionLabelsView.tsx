@@ -1,26 +1,26 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getConnectionLabels,
   setIsUpdatedLabels,
   setLabels,
   updateConnectionLabels
 } from '../../../redux/actions/connection.actions';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import LabelsView from '../LabelsView';
-import ConnectionActionGroup from './ConnectionActionGroup';
-import { useParams } from 'react-router-dom';
-import { CheckTypes } from '../../../shared/routes';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
+import { CheckTypes } from '../../../shared/routes';
+import LabelsView from '../LabelsView';
+import ConnectionActionGroup from './ConnectionActionGroup';
+import { useDecodedParams } from '../../../utils';
 
 const ConnectionLabelsView = () => {
   const {
     connection,
     checkTypes
-  }: { connection: string; checkTypes: CheckTypes } = useParams();
+  }: { connection: string; checkTypes: CheckTypes } = useDecodedParams();
   const { isUpdating, labels, isUpdatedLabels, connectionBasic } = useSelector(
     getFirstLevelState(checkTypes)
   );

@@ -1,11 +1,10 @@
-import { Tooltip } from '@material-tailwind/react';
+import { Tooltip, tab } from '@material-tailwind/react';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
   useHistory,
   useLocation,
-  useParams,
   useRouteMatch
 } from 'react-router-dom';
 import { DqoJobChangeModelStatusEnum } from '../../api';
@@ -24,6 +23,7 @@ import {
   TABLE_LEVEL_TABS
 } from '../../shared/constants';
 import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 import HelpMenu from '../HelpMenu';
 import Logo from '../Logo';
 import NotificationMenu from '../NotificationMenu';
@@ -51,7 +51,7 @@ const Header = () => {
     timePartitioned: 'daily' | 'monthly';
     category: string;
     checkName: string;
-  } = useParams();
+  } = useDecodedParams();
 
   const dispatch = useActionDispatch();
   const { tabs, activeTab } = useSelector(

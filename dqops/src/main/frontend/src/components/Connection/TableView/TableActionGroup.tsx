@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import Button from '../../Button';
-import ConfirmDialog from './ConfirmDialog';
-import { TableApiClient } from '../../../services/apiClient';
+import { useSelector } from 'react-redux';
 import { useTree } from '../../../contexts/treeContext';
-import { useParams } from 'react-router-dom';
+import { IRootState } from '../../../redux/reducers';
+import { TableApiClient } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
+import Button from '../../Button';
 import AddColumnDialog from '../../CustomTree/AddColumnDialog';
 import SvgIcon from '../../SvgIcon';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
+import ConfirmDialog from './ConfirmDialog';
 
 interface ITableActionGroupProps {
   isDisabled?: boolean;
@@ -49,7 +49,7 @@ const TableActionGroup = ({
     connection: string;
     schema: string;
     table: string;
-  } = useParams();
+  } = useDecodedParams();
   const [isOpen, setIsOpen] = useState(false);
 
   const { deleteData } = useTree();

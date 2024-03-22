@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
-import Button from '../../components/Button';
+import Button from "../../components/Button";
 import DataQualityChecks from '../../components/DataQualityChecks';
 import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
@@ -10,35 +9,14 @@ import {
   getTableProfilingChecksModelFilter,
   setTableUpdatedProfilingChecksModelFilter
 } from '../../redux/actions/table.actions';
-import {
-  getFirstLevelActiveTab,
-  getFirstLevelState
-} from '../../redux/selectors';
-import {
-  CheckResultOverviewApi,
-  TableApiClient
-} from '../../services/apiClient';
-import { CheckTypes } from '../../shared/routes';
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import { CheckResultOverviewApi, TableApiClient } from "../../services/apiClient";
+import { CheckTypes } from "../../shared/routes";
+import { useDecodedParams } from '../../utils';
 
 const TableProfilingChecksUIFilterView = () => {
-  const {
-    checkTypes,
-    connection: connectionName,
-    schema: schemaName,
-    table: tableName,
-    category,
-    checkName
-  }: {
-    checkTypes: CheckTypes;
-    connection: string;
-    schema: string;
-    table: string;
-    category: string;
-    checkName: string;
-  } = useParams();
-  const { checksUIFilter, isUpdatedChecksUIFilter, loading } = useSelector(
-    getFirstLevelState(checkTypes)
-  );
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, category, checkName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, category: string, checkName: string } = useDecodedParams();
+  const { checksUIFilter, isUpdatedChecksUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<
     CheckResultsOverviewDataModel[]

@@ -1,7 +1,7 @@
 import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import ConnectionCommentView from '../../components/Connection/ConnectionView/ConnectionCommentView';
 import ConnectionDefaultGroupingConfiguration from '../../components/Connection/ConnectionView/ConnectionDataStream';
 import ConnectionDetail from '../../components/Connection/ConnectionView/ConnectionDetail';
@@ -19,6 +19,7 @@ import {
   getFirstLevelState
 } from '../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 
 const initSourceTabs = [
   {
@@ -66,7 +67,7 @@ const ConnectionPage = () => {
     connection,
     tab: activeTab,
     checkTypes
-  }: { connection: string; tab: string; checkTypes: CheckTypes } = useParams();
+  }: { connection: string; tab: string; checkTypes: CheckTypes } = useDecodedParams();
   const [tabs, setTabs] = useState(
     checkTypes === CheckTypes.SOURCES ? initSourceTabs : initCheckTabs
   );

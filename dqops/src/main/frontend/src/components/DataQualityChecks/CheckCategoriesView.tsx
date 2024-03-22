@@ -1,22 +1,22 @@
+import { clsx } from 'clsx';
 import React, { Fragment, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import {
+  CheckModel,
+  CheckResultsOverviewDataModel,
+  QualityCategoryModel,
+  TimeWindowFilterParameters,
+} from '../../api';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setCurrentJobId } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
+import { JobApiClient } from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
+import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
 import SvgIcon from '../SvgIcon';
 import CheckListItem from './CheckListItem';
-import {
-  CheckResultsOverviewDataModel,
-  TimeWindowFilterParameters,
-  CheckModel,
-  QualityCategoryModel,
-} from '../../api';
-import { useSelector } from 'react-redux';
-import { JobApiClient } from '../../services/apiClient';
-import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
-import { useParams } from 'react-router-dom';
-import { CheckTypes } from '../../shared/routes';
-import { setCurrentJobId } from '../../redux/actions/source.actions';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { getFirstLevelActiveTab } from '../../redux/selectors';
-import { IRootState } from '../../redux/reducers';
-import { clsx } from 'clsx';
+import { useDecodedParams } from '../../utils';
 
 type CheckIndexTuple = [check: CheckModel, index: number];
 
@@ -54,7 +54,7 @@ const CheckCategoriesView = ({
   isAlreadyDeleted
 }: CheckCategoriesViewProps) => {
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [isExtended, setIsExtended] = useState(false);

@@ -1,16 +1,17 @@
 import clsx from 'clsx';
 import moment from 'moment';
 import React, { useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useActionDispatch } from '../../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
-import { ROUTES, CheckTypes } from '../../../../shared/routes';
+import { CheckTypes, ROUTES } from '../../../../shared/routes';
+import TableQualityStatusCategory from './TableQualityStatusCategory';
+import TableQualityStatusColumnCategory from './TableQualityStatusColumnCategory';
 import {
   ITableParameters,
   TFirstLevelCheck
 } from './TableQualityStatusConstans';
-import TableQualityStatusColumnCategory from './TableQualityStatusColumnCategory';
-import TableQualityStatusCategory from './TableQualityStatusCategory';
+import { useDecodedParams } from '../../../../utils';
 
 export default function TableQualityStatusOverview({
   firstLevelChecks,
@@ -34,7 +35,7 @@ export default function TableQualityStatusOverview({
     connection: string;
     schema: string;
     table: string;
-  } = useParams();
+  } = useDecodedParams();
 
   const openFirstLevelTableTab = (
     checkTypes: CheckTypes,

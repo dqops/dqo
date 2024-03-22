@@ -2,7 +2,7 @@ import { IconButton, Tooltip } from '@material-tailwind/react';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
   IncidentIssueHistogramModel,
   IncidentModel,
@@ -29,7 +29,7 @@ import { IncidentIssueFilter } from '../../redux/reducers/incidents.reducer';
 import { getFirstLevelIncidentsState } from '../../redux/selectors';
 import { IncidentsApi } from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { getDaysString } from '../../utils';
+import { getDaysString, useDecodedParams } from '../../utils';
 import AddIssueUrlDialog from '../IncidentConnection/AddIssueUrlDialog';
 import { HistogramChart } from './HistogramChart';
 import { IncidentIssueList } from './IncidentIssueList';
@@ -88,7 +88,7 @@ export const IncidentDetail = () => {
     year: string;
     month: string;
     id: string;
-  } = useParams();
+  } = useDecodedParams();
   const year = parseInt(strYear, 10);
   const month = parseInt(strMonth, 10);
   const [incidentDetail, setIncidentDetail] = useState<IncidentModel>();

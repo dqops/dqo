@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { groupBy } from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams, useRouteMatch } from 'react-router-dom';
+import { useRouteMatch } from 'react-router-dom';
 import { ConnectionModel } from '../../../api';
 import {
   checkTypesToJobTemplateKey,
@@ -16,6 +16,7 @@ import { ConnectionApiClient } from '../../../services/apiClient';
 import { TREE_LEVEL } from '../../../shared/enums';
 import { CustomTreeNode } from '../../../shared/interfaces';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
 import { findTreeNode } from '../../../utils/tree';
 import AddColumnDialog from '../../CustomTree/AddColumnDialog';
 import AddSchemaDialog from '../../CustomTree/AddSchemaDialog';
@@ -37,7 +38,7 @@ const Tree = () => {
     refreshNode,
     setTreeData
   } = useTree();
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedNode, setSelectedNode] = useState<CustomTreeNode>();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));

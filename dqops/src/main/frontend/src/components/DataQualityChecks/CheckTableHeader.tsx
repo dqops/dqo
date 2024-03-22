@@ -1,29 +1,30 @@
-import SvgIcon from '../SvgIcon';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
+  CheckContainerModel,
   DqoJobHistoryEntryModelStatusEnum,
   SimilarCheckModelCheckTypeEnum,
-  TimeWindowFilterParameters,
-  CheckContainerModel
+  TimeWindowFilterParameters
 } from '../../api';
-import { ColumnApiClient, JobApiClient, TableApiClient } from '../../services/apiClient';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
-import CategoryMenu from './CategoryMenu';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useHistory, useParams } from 'react-router-dom';
-import Button from '../Button';
-import Checkbox from '../Checkbox';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   addFirstLevelTab,
   setCurrentJobId
 } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../redux/selectors';
+import { ColumnApiClient, JobApiClient, TableApiClient } from '../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
+import Button from '../Button';
+import Checkbox from '../Checkbox';
+import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
+import SvgIcon from '../SvgIcon';
+import CategoryMenu from './CategoryMenu';
 
 interface TableHeaderProps {
   checksUI: CheckContainerModel;
@@ -69,7 +70,7 @@ const TableHeader = ({
     schema: string;
     table: string;
     column: string
-  } = useParams();
+  } = useDecodedParams();
   const dispatch = useActionDispatch();
   const history = useHistory();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));

@@ -2,6 +2,12 @@ import { Tooltip } from '@material-tailwind/react';
 import clsx from 'clsx';
 import moment from 'moment';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { TableCurrentDataQualityStatusModel } from '../../../../api';
+import { useActionDispatch } from '../../../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
+import { CheckTypes, ROUTES } from '../../../../shared/routes';
+import { useDecodedParams } from '../../../../utils';
 import SvgIcon from '../../../SvgIcon';
 import {
   TFirstLevelCheck,
@@ -9,14 +15,9 @@ import {
 } from './TableQualityStatusConstans';
 import {
   getColor,
-  getColumnStatus,
-  getColumnCircleStatus
+  getColumnCircleStatus,
+  getColumnStatus
 } from './TableQualityStatusUtils';
-import { useHistory, useParams } from 'react-router-dom';
-import { useActionDispatch } from '../../../../hooks/useActionDispatch';
-import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
-import { CheckTypes, ROUTES } from '../../../../shared/routes';
-import { TableCurrentDataQualityStatusModel } from '../../../../api';
 
 interface ITableQualityStatusColumnCategoryProps {
   customKey: string;
@@ -61,7 +62,7 @@ export default function TableQualityStatusColumnCategory({
     connection: string;
     schema: string;
     table: string;
-  } = useParams();
+  } = useDecodedParams();
 
   const openFirstLevelColumnTab = (
     checkTypes: CheckTypes,

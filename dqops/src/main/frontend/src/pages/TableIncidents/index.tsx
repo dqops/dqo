@@ -1,14 +1,14 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import TableIncidentsNotificationsView from '../../components/Connection/TableView/TableIncidentsNotificationsView';
+import TableIncidentsNotificationsView from "../../components/Connection/TableView/TableIncidentsNotificationsView";
 import SvgIcon from '../../components/SvgIcon';
+import { useDecodedParams } from '../../utils';
 
 const TableColumnsView = () => {
   const {
     connection: connectionName,
     schema: schemaName,
     table: tableName
-  }: { connection: string; schema: string; table: string } = useParams();
+  }: { connection: string; schema: string; table: string } = useDecodedParams();
 
   return (
     <>

@@ -1,21 +1,22 @@
+import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
-import { DataGroupingConfigurationListModel } from '../../../api';
-import DataGroupingConfigurationListView from './DataGroupingConfigurationListView';
-import DataGroupingConfigurationEditView from './DataGroupingConfigurationEditView';
-import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
+import { DataGroupingConfigurationListModel } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { setCreatedDataStream } from '../../../redux/actions/definition.actions';
 import { IRootState } from '../../../redux/reducers';
-import qs from 'query-string';
+import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
+import DataGroupingConfigurationEditView from './DataGroupingConfigurationEditView';
+import DataGroupingConfigurationListView from './DataGroupingConfigurationListView';
+import { useDecodedParams } from '../../../utils';
 
 const TableDataGroupingConfiguration = () => {
   const {
     connection: connectionName,
     schema: schemaName,
     table: tableName
-  }: { connection: string; schema: string; table: string } = useParams();
+  }: { connection: string; schema: string; table: string } = useDecodedParams();
   const location = useLocation();
   const [isEditing, setIsEditing] = useState(false);
   const { dataGrouping, bool } = useSelector(

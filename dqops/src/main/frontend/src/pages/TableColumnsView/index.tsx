@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
   DataGroupingConfigurationSpec,
   DqoJobHistoryEntryModelStatusEnum,
@@ -18,6 +18,7 @@ import {
   JobApiClient
 } from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 import TableColumns from './TableColumns';
 
 interface LocationState {
@@ -31,7 +32,7 @@ const TableColumnsView = () => {
     connection: connectionName,
     schema: schemaName,
     table: tableName
-  }: { connection: string; schema: string; table: string } = useParams();
+  }: { connection: string; schema: string; table: string } = useDecodedParams();
   const { job_dictionary_state, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );

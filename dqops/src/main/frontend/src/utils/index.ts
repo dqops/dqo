@@ -1,4 +1,5 @@
 import moment from 'moment/moment';
+import { useParams } from 'react-router-dom';
 import { ConnectionModel, ConnectionModelProviderTypeEnum, TableListModel } from '../api';
 
 export const getDaysString = (value: string | number) => {
@@ -54,6 +55,9 @@ export const urlencodeEncoder = (url: string | undefined) => {
         case '%5C':
           decodedValue += '\\';
           break;
+        // case '%25':
+        //   decodedValue += '%';
+        //   break;  
         default:
           decodedValue += encodedChar;
           break;
@@ -172,6 +176,16 @@ export function sortByKey(key: string) {
   };
 }
 
+export function useDecodedParams(): any {
+  const parameters: { [key: string]: any } = useParams();
+  const decodedParams: { [key: string]: any } = {};
+
+  Object.entries(parameters).forEach(([key, value]) => {
+    decodedParams[key] = urlencodeEncoder(String(value));
+  });
+
+  return decodedParams;
+}
 export const filterPathsDuckDbTable = (table: TableListModel) => {
   return {
     ...table,

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { DataGroupingConfigurationSpec } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
@@ -15,6 +14,7 @@ import {
   getFirstLevelState
 } from '../../../redux/selectors';
 import { CheckTypes } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
 import DataGroupingConfigurationView from '../DataGroupingConfigurationView';
 import ConnectionActionGroup from './ConnectionActionGroup';
 
@@ -22,7 +22,7 @@ const ConnectionDefaultGroupingConfiguration = () => {
   const {
     connection,
     checkTypes
-  }: { connection: string; checkTypes: CheckTypes } = useParams();
+  }: { connection: string; checkTypes: CheckTypes } = useDecodedParams();
   const dispatch = useActionDispatch();
   const {
     isUpdating,

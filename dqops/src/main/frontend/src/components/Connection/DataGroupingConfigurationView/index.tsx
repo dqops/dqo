@@ -1,14 +1,14 @@
+import clsx from 'clsx';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import {
   DataGroupingConfigurationSpec,
   DataGroupingDimensionSpec
 } from '../../../api';
+import { IRootState } from '../../../redux/reducers';
 import DataGroupingDimensionItem from '../../DataQualityChecks/DataGroupingDimensionItem';
 import { Errors } from '../TableView/DataGroupingConfigurationEditView';
-import { useParams } from 'react-router-dom';
-import clsx from 'clsx';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
+import { useDecodedParams } from '../../../utils';
 
 interface IDataGroupingConfigurationViewProps {
   dataGroupingConfiguration?: DataGroupingConfigurationSpec;
@@ -23,7 +23,7 @@ const DataGroupingConfigurationView = ({
   errors,
   onClearError,
 }: IDataGroupingConfigurationViewProps) => {
-  const { table }: { table: string } = useParams();
+  const { table }: { table: string } = useDecodedParams();
   const {  userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );

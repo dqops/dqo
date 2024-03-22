@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import {
   ConnectionModel,
   ConnectionSpecProviderTypeEnum,
@@ -23,6 +22,7 @@ import {
 } from '../../../redux/selectors';
 import { ConnectionApiClient } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
 import Checkbox from '../../Checkbox';
 import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
 import FilePath from '../../FileFormatConfiguration/FilePath';
@@ -42,7 +42,7 @@ const TableDetails = () => {
     connection: string;
     schema: string;
     table: string;
-  } = useParams();
+  } = useDecodedParams();
   const { tableBasic, isUpdating, isUpdatedTableBasic } = useSelector(
     getFirstLevelState(checkTypes)
   );

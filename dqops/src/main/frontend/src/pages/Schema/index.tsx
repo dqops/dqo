@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Button from '../../components/Button';
 import SourceTablesView from '../../components/Connection/ConnectionView/SourceTablesView';
 import AddTableDialog from '../../components/CustomTree/AddTableDialog';
@@ -11,8 +11,10 @@ import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 import { MultiChecks } from './MultiCheck/MultiChecks';
 import { SchemaTables } from './SchemaTables';
+import { tab } from '@material-tailwind/react';
 
 const SchemaPage = () => {
   const {
@@ -25,7 +27,7 @@ const SchemaPage = () => {
     schema: string;
     tab: string;
     checkTypes: CheckTypes;
-  } = useParams();
+  } = useDecodedParams();
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const dispatch = useActionDispatch();

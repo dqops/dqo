@@ -1,14 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-import Button from '../Button';
-import SvgIcon from '../SvgIcon';
-import { useTree } from '../../contexts/treeContext';
-import Tree from '../MainLayout/Tree';
-import { CheckTypes } from "../../shared/routes";
 import { useSelector } from 'react-redux';
+import { useTree } from '../../contexts/treeContext';
 import { IRootState } from '../../redux/reducers';
+import { CheckTypes } from "../../shared/routes";
+import { useDecodedParams } from '../../utils';
+import Button from '../Button';
+import Tree from '../MainLayout/Tree';
+import SvgIcon from '../SvgIcon';
 
 const Sidebar = () => {
   const history = useHistory();
@@ -16,7 +17,7 @@ const Sidebar = () => {
  
   const [isResizing, setIsResizing] = useState(false);
   const { sidebarWidth, setSidebarWidth, treeData } = useTree();
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const { userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );

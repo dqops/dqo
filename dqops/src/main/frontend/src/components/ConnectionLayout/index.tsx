@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   useHistory,
   useLocation,
-  useParams,
   useRouteMatch
 } from 'react-router-dom';
 import {
@@ -42,6 +41,7 @@ import TablePartitionedChecksUIFilterView from '../../pages/TablePartitionedChec
 import TableProfilingChecksUIFilterView from '../../pages/TableProfilingChecksUIFilterView';
 import TableProfilingChecksView from '../../pages/TableProfilingChecksView';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
+import { useDecodedParams } from '../../utils';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 
 interface ConnectionLayoutProps {
@@ -49,7 +49,7 @@ interface ConnectionLayoutProps {
 }
 
 const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const { objectNotFound, setObjectNotFound, setActiveTab } = useTree();
   const { tabs: pageTabs, activeTab } = useSelector(
     (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]
@@ -155,7 +155,7 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
   };
 
   const renderComponent: ReactNode = getComponent();
-
+ 
   return (
     <MainLayout>
       <div className="h-full flex flex-col">

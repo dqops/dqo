@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { MonitoringScheduleSpec } from '../../api';
-import Button from '../../components/Button';
-import ScheduleView from '../../components/ScheduleView';
-import SvgIcon from '../../components/SvgIcon';
-import Tabs from '../../components/Tabs';
-import { SettingsApi } from '../../services/apiClient';
-import { CheckRunMonitoringScheduleGroup } from '../../shared/enums/scheduling.enum';
+import React, { useEffect, useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
+import { MonitoringScheduleSpec } from "../../api";
+import Button from "../../components/Button";
+import ScheduleView from "../../components/ScheduleView";
+import SvgIcon from "../../components/SvgIcon";
+import Tabs from "../../components/Tabs";
+import { SettingsApi } from "../../services/apiClient";
+import { CheckRunMonitoringScheduleGroup } from "../../shared/enums/scheduling.enum";
+import { useDecodedParams } from "../../utils";
 
 const tabs = [
   {
@@ -32,7 +33,7 @@ const tabs = [
 ];
 
 const DefaultSchedulesDetail = () => {
-  const { tab }: { tab: CheckRunMonitoringScheduleGroup } = useParams();
+  const {tab} : {tab : CheckRunMonitoringScheduleGroup} = useDecodedParams()
   const [updatedSchedule, setUpdatedSchedule] = useState<
     MonitoringScheduleSpec | undefined
   >();

@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import Button from '../../components/Button';
-import ConfirmDialog from './ConfirmDialog';
-import { ColumnApiClient } from '../../services/apiClient';
-import { useParams } from 'react-router-dom';
-import { CheckTypes } from '../../shared/routes';
 import clsx from 'clsx';
-import AddColumnDialog from '../../components/CustomTree/AddColumnDialog';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
+import Button from '../../components/Button';
+import AddColumnDialog from '../../components/CustomTree/AddColumnDialog';
 import SvgIcon from '../../components/SvgIcon';
+import { IRootState } from '../../redux/reducers';
+import { ColumnApiClient } from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
+import ConfirmDialog from './ConfirmDialog';
+import { useDecodedParams } from '../../utils';
 
 interface IActionGroupProps {
   isDisabled?: boolean;
@@ -31,7 +31,7 @@ const ColumnActionGroup = ({
   onCollectStatistics,
   collectStatisticsSpinner
 }: IActionGroupProps) => {
-  const { checkTypes, connection, schema, table, column }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
+  const { checkTypes, connection, schema, table, column }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useDecodedParams();
   const [isOpen, setIsOpen] = useState(false);
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;

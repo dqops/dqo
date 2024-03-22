@@ -6,10 +6,11 @@ import {
 } from '@material-tailwind/react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { IRootState } from '../../redux/reducers';
 import { JobApiClient } from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
 import SvgIcon from '../SvgIcon';
@@ -23,7 +24,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
   const {
     connection
   }: { checkTypes: CheckTypes; connection: string; schema: string } =
-    useParams();
+    useDecodedParams();
   const history = useHistory();
   const [scheduleConfigured, setScheduleConfigured] = useState(false);
   const [isCollected, setIsCollected] = useState(false);

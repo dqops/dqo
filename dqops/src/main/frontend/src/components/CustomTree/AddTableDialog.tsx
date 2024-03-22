@@ -1,6 +1,6 @@
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
   ConnectionModel,
   ConnectionSpecProviderTypeEnum,
@@ -19,7 +19,7 @@ import {
 } from '../../services/apiClient';
 import { CustomTreeNode } from '../../shared/interfaces';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { urlencodeDecoder } from '../../utils';
+import { urlencodeDecoder, useDecodedParams } from '../../utils';
 import Button from '../Button';
 import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
 import FilePath from '../FileFormatConfiguration/FilePath';
@@ -53,7 +53,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   };
 
   const { connection, schema }: { connection: string; schema: string } =
-    useParams();
+    useDecodedParams();
   const dispatch = useActionDispatch();
   const history = useHistory();
 

@@ -5,24 +5,23 @@ import {
   DialogHeader,
   Radio
 } from '@material-tailwind/react';
-import DatePicker from '../DatePicker';
-import Button from '../Button';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import moment from 'moment';
-import Checkbox from '../Checkbox';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import { CheckTypes } from '../../shared/routes';
-import { useParams } from 'react-router-dom';
-import SelectInput from '../SelectInput';
 import {
   CheckDefinitionFolderModel,
   DeleteStoredDataQueueJobParameters,
   SensorListModel
 } from '../../api';
+import { IRootState } from '../../redux/reducers';
 import { ChecksApi, SensorsApi } from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
+import { urlencodeEncoder, useDecodedParams } from '../../utils';
+import Button from '../Button';
+import Checkbox from '../Checkbox';
+import DatePicker from '../DatePicker';
 import Input from '../Input';
-import { urlencodeEncoder } from '../../utils';
+import SelectInput from '../SelectInput';
 
 type DeleteOnlyDataDialogProps = {
   open: boolean;
@@ -38,7 +37,7 @@ const DeleteStoredDataExtendedPopUp = ({
   onDelete,
   nodeId
 }: DeleteOnlyDataDialogProps) => {
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [mode, setMode] = useState('all');

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import SvgIcon from '../../components/SvgIcon';
@@ -26,7 +26,7 @@ import { IRootState } from '../../redux/reducers';
 import { IncidentFilter } from '../../redux/reducers/incidents.reducer';
 import { IncidentsApi } from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { getDaysString } from '../../utils';
+import { getDaysString, useDecodedParams } from '../../utils';
 import AddIssueUrlDialog from './AddIssueUrlDialog';
 import { SortableColumn } from './SortableColumn';
 
@@ -69,7 +69,7 @@ const statusOptions = [
 ];
 
 export const IncidentConnection = () => {
-  const { connection }: { connection: string } = useParams();
+  const { connection }: { connection: string } = useDecodedParams();
   const {
     incidents,
     isEnd,

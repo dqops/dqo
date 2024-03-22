@@ -31122,12 +31122,14 @@ definitions:
       seconds:
         type: "integer"
         format: "int64"
+      zero:
+        type: "boolean"
       nano:
         type: "integer"
         format: "int32"
       negative:
         type: "boolean"
-      zero:
+      positive:
         type: "boolean"
       units:
         type: "array"
@@ -37045,13 +37047,13 @@ definitions:
   TemporalUnit:
     type: "object"
     properties:
-      dateBased:
-        type: "boolean"
-      timeBased:
+      durationEstimated:
         type: "boolean"
       duration:
         $ref: "#/definitions/Duration"
-      durationEstimated:
+      timeBased:
+        type: "boolean"
+      dateBased:
         type: "boolean"
   TimeWindowFilterParameters:
     type: "object"

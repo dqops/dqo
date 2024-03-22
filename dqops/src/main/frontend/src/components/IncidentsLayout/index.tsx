@@ -12,6 +12,7 @@ import {
 } from '../../redux/actions/incidents.actions';
 import { IRootState } from '../../redux/reducers';
 import { ROUTES } from '../../shared/routes';
+import { urlencodeDecoder } from '../../utils';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 import Header from '../Header';
 import PageTabs from '../PageTabs';
@@ -35,7 +36,7 @@ const IncidentsLayout = ({ route }: LayoutProps) => {
 
   const handleChange = (tab: TabOption) => {
     dispatch(setActiveFirstLevelTab(tab.value));
-    history.push(tab?.url ?? '');
+    history.push(urlencodeDecoder(tab?.url ?? ''));
   };
 
   const closeTab = (value: string) => {

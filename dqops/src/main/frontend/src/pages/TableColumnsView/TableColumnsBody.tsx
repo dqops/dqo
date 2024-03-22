@@ -1,7 +1,7 @@
 import { IconButton } from '@material-tailwind/react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
@@ -13,7 +13,7 @@ import { IRootState } from '../../redux/reducers';
 import { JobApiClient } from '../../services/apiClient';
 import { dateToString, formatNumber } from '../../shared/constants';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { getDetectedDatatype } from '../../utils';
+import { getDetectedDatatype, useDecodedParams } from '../../utils';
 import { MyData } from './TableColumnsConstans';
 import {
   calculate_color,
@@ -52,7 +52,7 @@ export default function TableColumnsBody({
     schema: string;
     table: string;
     checkTypes: CheckTypes;
-  } = useParams();
+  } = useDecodedParams();
   const { userProfile, job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );

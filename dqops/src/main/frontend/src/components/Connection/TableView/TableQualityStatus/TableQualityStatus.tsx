@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { CheckResultApi } from '../../../../services/apiClient';
-import { useParams } from 'react-router-dom';
-import { CheckTypes } from '../../../../shared/routes';
 import { TableCurrentDataQualityStatusModel } from '../../../../api';
-import RadioButton from '../../../RadioButton';
+import { CheckResultApi } from '../../../../services/apiClient';
+import { CheckTypes } from '../../../../shared/routes';
 import DatePicker from '../../../DatePicker';
-import TableQualityStatusOverview from './TableQualityStatusOverview';
-import { TFirstLevelCheck } from './TableQualityStatusConstans';
-import TotalChecksExecuted from './TotalChecksExecuted';
+import RadioButton from '../../../RadioButton';
 import CurrentTableStatus from './CurrentTableStatus';
+import { TFirstLevelCheck } from './TableQualityStatusConstans';
+import TableQualityStatusOverview from './TableQualityStatusOverview';
+import TotalChecksExecuted from './TotalChecksExecuted';
+import { useDecodedParams } from '../../../../utils';
 
 interface IProps {
   timeScale?: 'daily' | 'monthly';
@@ -25,7 +25,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
     connection: string;
     schema: string;
     table: string;
-  } = useParams();
+  } = useDecodedParams();
   const [tableDataQualityStatus, setTableDataQualityStatus] =
     useState<TableCurrentDataQualityStatusModel>({});
   const [firstLevelChecks, setFirstLevelChecks] = useState<

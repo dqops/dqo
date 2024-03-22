@@ -1,4 +1,8 @@
+import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getConnectionSchedulingGroup,
   resetConnectionSchedulingGroup,
@@ -6,25 +10,22 @@ import {
   setUpdatedSchedulingGroup,
   updateConnectionSchedulingGroup
 } from '../../../redux/actions/connection.actions';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { useSelector } from 'react-redux';
-import ConnectionActionGroup from './ConnectionActionGroup';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
-import ScheduleView from '../../ScheduleView';
-import Tabs from '../../Tabs';
-import { CheckRunMonitoringScheduleGroup } from '../../../shared/enums/scheduling.enum';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
+import { CheckRunMonitoringScheduleGroup } from '../../../shared/enums/scheduling.enum';
 import { CheckTypes } from '../../../shared/routes';
-import qs from 'query-string';
+import ScheduleView from '../../ScheduleView';
+import Tabs from '../../Tabs';
+import ConnectionActionGroup from './ConnectionActionGroup';
+import { useDecodedParams } from '../../../utils';
 
 const ScheduleDetail = () => {
   const {
     connection,
     checkTypes
-  }: { checkTypes: CheckTypes; connection: string } = useParams();
+  }: { checkTypes: CheckTypes; connection: string } = useDecodedParams();
 
   const getPageTabs = () => {
     switch (checkTypes) {

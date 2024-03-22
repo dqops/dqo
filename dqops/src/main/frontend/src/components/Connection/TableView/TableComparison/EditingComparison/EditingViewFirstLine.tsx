@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import DeleteOnlyDataDialog from '../../../../CustomTree/DeleteOnlyDataDialog';
-import { TParameters } from '../../../../../shared/constants';
-import SvgIcon from '../../../../SvgIcon';
-import Button from '../../../../Button';
 import clsx from 'clsx';
-import { TableComparisonsApi } from '../../../../../services/apiClient';
-import { useParams } from 'react-router-dom';
-import { CheckTypes } from '../../../../../shared/routes';
-import { TableComparisonConfigurationModelCheckTypeEnum } from '../../../../../api';
-import { getIsButtonEnabled } from '../TableComparisonUtils';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { TableComparisonConfigurationModelCheckTypeEnum } from '../../../../../api';
 import { IRootState } from '../../../../../redux/reducers';
+import { TableComparisonsApi } from '../../../../../services/apiClient';
+import { TParameters } from '../../../../../shared/constants';
+import { CheckTypes } from '../../../../../shared/routes';
+import Button from '../../../../Button';
+import DeleteOnlyDataDialog from '../../../../CustomTree/DeleteOnlyDataDialog';
+import SvgIcon from '../../../../SvgIcon';
+import { getIsButtonEnabled } from '../TableComparisonUtils';
+import { useDecodedParams } from '../../../../../utils';
 type TEditingViewFirstLine = {
   editConfigurationParameters: TParameters;
   selectedReference: string;
@@ -46,7 +46,7 @@ export default function EditingViewFirstLine({
     connection: string;
     schema: string;
     table: string;
-  } = useParams();
+  } = useDecodedParams();
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const onUpdate = async () => {

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import Checkbox from '../../components/Checkbox';
 import Input from '../../components/Input';
 import NumberInput from '../../components/NumberInput';
@@ -16,6 +15,7 @@ import {
   getFirstLevelState
 } from '../../redux/selectors';
 import { CheckTypes } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 import ColumnActionGroup from './ColumnActionGroup';
 
 interface IColumnDetailsProps {
@@ -31,7 +31,7 @@ const TableDetails = ({
   tableName,
   columnName
 }: IColumnDetailsProps) => {
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
