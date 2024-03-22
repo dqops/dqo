@@ -11,7 +11,7 @@ import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
 import { setCreatedDataStream } from '../../redux/actions/definition.actions';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
-import { IRootState, IRootState } from '../../redux/reducers';
+import { IRootState } from '../../redux/reducers';
 import {
   ColumnApiClient,
   DataGroupingConfigurationsApi,

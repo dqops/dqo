@@ -8,7 +8,6 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getColumnPartitionedChecksModelFilter,
   setColumnUpdatedPartitionedChecksModelFilter,
-  setColumnUpdatedPartitionedChecksModelFilter
 } from '../../redux/actions/column.actions';
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { CheckResultOverviewApi, ColumnApiClient } from "../../services/apiClient";

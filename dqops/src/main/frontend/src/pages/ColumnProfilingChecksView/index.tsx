@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useSelector, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
 import Button from '../../components/Button';
 import ColumnNavigation from "../../components/ColumnNavigation";

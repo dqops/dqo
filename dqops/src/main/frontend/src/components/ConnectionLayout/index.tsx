@@ -50,7 +50,7 @@ interface ConnectionLayoutProps {
 
 const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
   const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
-  const { objectNotFound, setObjectNotFound } = useTree();
+  const { objectNotFound, setObjectNotFound, setActiveTab } = useTree();
   const { tabs: pageTabs, activeTab } = useSelector(
     (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]
   );

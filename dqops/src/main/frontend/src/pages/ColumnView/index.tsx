@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import ColumnNavigation from '../../components/ColumnNavigation';
