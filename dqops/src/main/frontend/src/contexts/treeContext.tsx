@@ -760,7 +760,7 @@ function TreeProvider(props: any) {
       (acc, cur) => ({
         ...acc,
         [cur]: treeDataMaps[cur]?.filter(  
-          (item) => !item.id.toString().startsWith(node.id.toString())
+          (item) => !(item.id.toString().startsWith(node.id.toString() + '.') || item.id.toString() === node.id.toString())
         )
       }),
       {}
@@ -784,7 +784,7 @@ function TreeProvider(props: any) {
         (acc, cur) => ({
           ...acc,
           [cur]: (tabMaps[cur] || [])?.filter(
-            (item) => !item.value.toString().startsWith(node.id.toString())
+            (item) => !(item.value.toString().startsWith(node.id.toString() + '.') || item.value.toString() === node.id.toString())
           )
         }),
         {}
