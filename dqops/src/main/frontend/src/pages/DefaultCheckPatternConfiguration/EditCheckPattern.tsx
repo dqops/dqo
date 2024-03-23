@@ -225,6 +225,7 @@ export default function EditCheckPattern({
   };
 
   const getTarget = () => {
+    if (!pattern_name) return;
     if (type === 'column') {
       DefaultColumnCheckPatternsApiClient.getDefaultColumnChecksPatternTarget(
         pattern_name
@@ -311,7 +312,7 @@ export default function EditCheckPattern({
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
             <div className="text-lg font-semibold truncate">
-              {type.replace(/./, (c) => c.toUpperCase())} check pattern{' '}
+              {type?.replace(/./, (c) => c.toUpperCase())} check pattern{' '}
               {pattern_name}
             </div>
           </div>

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   DefaultColumnChecksPatternListModel,
   DefaultTableChecksPatternListModel
 } from '../../api';
 import Button from '../../components/Button';
-import { sortPatterns } from '../../utils';
+import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import SvgIcon from '../../components/SvgIcon';
 import { useDefinition } from '../../contexts/definitionContext';
-import { useSelector } from 'react-redux';
 import { getFirstLevelSensorState } from '../../redux/selectors';
-import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import { sortPatterns } from '../../utils';
 
 type TPattern =
   | DefaultTableChecksPatternListModel
@@ -128,8 +128,8 @@ export default function DefaultCheckPatternsTable({
       </thead>
       <tbody className=" border-t border-gray-100">
         {getPreparedPatterns().map((pattern, index) => (
-          <tr key={index}>
-            <td className="px-4">{pattern.pattern_name}</td>
+          <tr key={index} className='text-sm'>
+            <td className="px-4 text-teal-500" onClick={() => editPattern(type, pattern.pattern_name ?? '')}>{pattern.pattern_name}</td>
             <td className="px-4">{pattern.priority}</td>
             <td className="px-4">{pattern?.connection}</td>
             <td className="px-4">{pattern?.schema}</td>
