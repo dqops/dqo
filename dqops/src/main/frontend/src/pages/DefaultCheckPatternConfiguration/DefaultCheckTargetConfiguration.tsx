@@ -1,5 +1,4 @@
 import React from 'react';
-import Input from '../../components/Input';
 import {
   DefaultColumnChecksPatternListModel,
   DefaultTableChecksPatternListModel,
@@ -8,6 +7,7 @@ import {
   TargetTablePatternSpec
 } from '../../api';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
+import Input from '../../components/Input';
 import Select from '../../components/Select';
 
 type TTarget =
@@ -35,7 +35,7 @@ export default function DefaultCheckTargetConfiguration({
 
   return (
     <div>
-      <div className="flex justify-between pb-6 text-black  ">
+      <div className="flex justify-between pb-6 text-black text-sm">
         <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
           <span className="w-30">Pattern name</span>
           {create === true ? (
