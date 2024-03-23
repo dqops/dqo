@@ -243,12 +243,14 @@ const ColumnProfilingChecksView = ({
         onCollectStatistics={onCollectStatistics}
         collectStatisticsSpinner={filteredCollectStatisticsJobs}
       />
-      <Tabs
-        tabs={tabs}
-        activeTab={activeTab}
-        onChange={onChangeTab}
-        className="w-full overflow-hidden max-w-full"
-      />
+      <div className="border-b border-gray-300">  
+        <Tabs
+          tabs={tabs}
+          activeTab={activeTab}
+          onChange={onChangeTab}
+          className="w-full overflow-hidden max-w-full"
+        />
+      </div>
       {activeTab === 'statistics' && (
         <ColumnStatisticsView
           columnStatisticsProp={columnStatistics}
