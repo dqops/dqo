@@ -142,7 +142,7 @@ const CheckListItem = ({
     localStorage.setItem(`${checkTypes}_${check.check_name}`, 'false');
   };
 
-  const openCheckSettings = (tab?: string) => {
+  const openCheckSettings = (activeTab?: string) => {
     if (showDetails) {
       closeCheckDetails();
     }
@@ -163,8 +163,8 @@ const CheckListItem = ({
         }
       ];
       setTabs(initTabs);
-      if (tab) {
-        setActiveTab(tab)
+      if (typeof activeTab === 'string') {
+        setActiveTab(activeTab)
       } else {
         setActiveTab(initTabs[0].value);
       }
@@ -554,7 +554,7 @@ const CheckListItem = ({
           </div>
         </td>
         <div className='flex justify-center items-center mt-6 gap-x-6'>
-        <SvgIcon name='comment' className='w-4 h-4 ' onClick={() => openCheckSettings('comments')}/>
+        {check.comments ? <SvgIcon name='comment' className='w-4 h-4 ' onClick={() => openCheckSettings('comments')}/> : null}
         {check.configuration_requirements_errors && check.configuration_requirements_errors?.length !== 0 ? 
           <Tooltip
                 content={check.configuration_requirements_errors?.map((x) => x)}
