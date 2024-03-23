@@ -5,13 +5,13 @@ import { useHistory } from 'react-router-dom';
 import { useActionDispatch } from '../../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../../../shared/routes';
+import { useDecodedParams } from '../../../../utils';
 import TableQualityStatusCategory from './TableQualityStatusCategory';
 import TableQualityStatusColumnCategory from './TableQualityStatusColumnCategory';
 import {
   ITableParameters,
   TFirstLevelCheck
 } from './TableQualityStatusConstans';
-import { useDecodedParams } from '../../../../utils';
 
 export default function TableQualityStatusOverview({
   firstLevelChecks,
@@ -153,7 +153,7 @@ export default function TableQualityStatusOverview({
           renderSecondLevelTooltip={renderSecondLevelTooltip}
           renderTooltipContent={renderTooltipContent}
         />
-        {Object.keys(tableDataQualityStatus.columns ?? {}).map((key, index) => (
+        {Object.keys(tableDataQualityStatus.columns ?? {}).sort().map((key, index) => (
           <TableQualityStatusColumnCategory
             key={key}
             customKey={key}
