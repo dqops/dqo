@@ -214,6 +214,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
               label="Table Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              className={name.length ? '' : 'border border-red-500'}
             />
           </div>
         </div>
@@ -253,6 +254,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           onClick={handleSubmit}
           label="Save"
           loading={loading}
+          disabled={!name.length}
         />
       </DialogFooter>
     </Dialog>
