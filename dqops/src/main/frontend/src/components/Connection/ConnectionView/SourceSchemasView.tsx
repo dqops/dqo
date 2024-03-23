@@ -82,7 +82,7 @@ const SourceSchemasView = () => {
   };
 
   return (
-    <div className="py-4 px-8">
+    <div className="py-4 px-8 text-sm">
       <ConnectionActionGroup />
       {loading ? (
         <div className="flex justify-center h-100">
