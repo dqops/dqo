@@ -129,7 +129,7 @@ export default function DefaultCheckPatternsTable({
       <tbody className=" border-t border-gray-100">
         {getPreparedPatterns().map((pattern, index) => (
           <tr key={index} className='text-sm'>
-            <td className="px-4 text-teal-500" onClick={() => editPattern(type, pattern.pattern_name ?? '')}>{pattern.pattern_name}</td>
+            <td className="px-4 text-teal-500 cursor-pointer" onClick={() => editPattern(type, pattern.pattern_name ?? '')}>{pattern.pattern_name}</td>
             <td className="px-4">{pattern.priority}</td>
             <td className="px-4">{pattern?.connection}</td>
             <td className="px-4">{pattern?.schema}</td>
