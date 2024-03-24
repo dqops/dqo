@@ -24,19 +24,23 @@ import com.dqops.metadata.sources.BaseProviderParametersSpec;
 import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.JsonFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.ParquetFileFormatSpec;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsConfigProfileSettingNames;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfileSettingNames;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultConfigProfileProvider;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultCredentialProfileProvider;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
+import org.apache.parquet.Strings;
 import picocli.CommandLine;
+import software.amazon.awssdk.profiles.Profile;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * DuckDB connection parameters.
@@ -54,21 +58,17 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         }
     };
 
-    @CommandLine.Option(names = {"--duckdb-read-mode"}, description = "DuckDB read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private DuckdbReadMode readMode;
+    @CommandLine.Option(names = {"--duckdb-read-mode"}, description = "DuckDB read mode.")
+    @JsonPropertyDescription("DuckDB read mode.")
+    private DuckdbReadMode readMode = DuckdbReadMode.files;
 
-    @CommandLine.Option(names = {"--duckdb-source-files-type"}, description = "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private DuckdbSourceFilesType sourceFilesType;
+    @CommandLine.Option(names = {"--duckdb-files-format-type"}, description = "Type of source files format for DuckDB.")
+    @JsonPropertyDescription("Type of source files format for DuckDB.")
+    private DuckdbFilesFormatType filesFormatType;
 
-    @CommandLine.Option(names = {"--duckdb-database"}, description = "DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--duckdb-database"}, description = "DuckDB database name for in-memory read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("DuckDB database name for in-memory read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String database;
-
-    @CommandLine.Option(names = {"--duckdb-options"}, description = "DuckDB connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
-    @JsonPropertyDescription("DuckDB connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DUCKDB_OPTIONS} configuration with a custom environment variable.")
-    private String options;
 
     @CommandLine.Option(names = {"-Duck"}, description = "DuckDB additional properties that are added to the JDBC connection string")
     @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
@@ -90,9 +90,26 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ParquetFileFormatSpec parquet;
 
-    @JsonPropertyDescription("Schema to directory mappings.")
+    @CommandLine.Option(names = "--duckdb-directories", split = ",")
+    @JsonPropertyDescription("Virtual schema name to directory mappings. The path must be an absolute path.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> directories = new HashMap<>();
+
+    @CommandLine.Option(names = {"--duckdb-storage-type"}, description = "The storage type.")
+    @JsonPropertyDescription("The storage type.")
+    private DuckdbStorageType storageType;
+
+    @CommandLine.Option(names = {"--duckdb-user"}, description = "DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String user;
+
+    @CommandLine.Option(names = {"--duckdb-password"}, description = "DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String password;
+
+    @CommandLine.Option(names = {"--duckdb-region"}, description = "The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String region;
 
     /**
      * Returns a readMode value.
@@ -112,20 +129,20 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns a sourceFilesType value.
-     * @return sourceFilesType value.
+     * Returns a filesFormatType value.
+     * @return filesFormatType value.
      */
-    public DuckdbSourceFilesType getSourceFilesType() {
-        return sourceFilesType;
+    public DuckdbFilesFormatType getFilesFormatType() {
+        return filesFormatType;
     }
 
     /**
-     * Sets a sourceFilesType value.
-     * @param sourceFilesType sourceFilesType value.
+     * Sets a filesFormatType value.
+     * @param filesFormatType filesFormatType value.
      */
-    public void setSourceFilesType(DuckdbSourceFilesType sourceFilesType) {
-        setDirtyIf(!Objects.equals(sourceFilesType, sourceFilesType));
-        this.sourceFilesType = sourceFilesType;
+    public void setFilesFormatType(DuckdbFilesFormatType filesFormatType) {
+        setDirtyIf(!Objects.equals(filesFormatType, filesFormatType));
+        this.filesFormatType = filesFormatType;
     }
 
     /**
@@ -143,23 +160,6 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     public void setDatabase(String database) {
         setDirtyIf(!Objects.equals(this.database, database));
         this.database = database;
-    }
-
-    /**
-     * Returns the custom connection initialization options.
-     * @return Connection initialization options.
-     */
-    public String getOptions() {
-        return options;
-    }
-
-    /**
-     * Sets the connection initialization options.
-     * @param options Connection initialization options.
-     */
-    public void setOptions(String options) {
-        setDirtyIf(!Objects.equals(this.options, options));
-        this.options = options;
     }
 
     /**
@@ -251,16 +251,121 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Returns the storage type.
+     * @return the storage type.
+     */
+    public DuckdbStorageType getStorageType() {
+        return storageType;
+    }
+
+    /**
+     * Sets the storage type.
+     * @param storageType the storage type.
+     */
+    public void setStorageType(DuckdbStorageType storageType) {
+        setDirtyIf(!Objects.equals(this.storageType, storageType));
+        this.storageType = storageType;
+    }
+
+    /**
+     * Returns the user that is used to log in to the data source.
+     * @return User name.
+     */
+    public String getUser() {
+        return user;
+    }
+
+    /**
+     * Sets a user name.
+     * @param user User name.
+     */
+    public void setUser(String user) {
+        setDirtyIf(!Objects.equals(this.user, user));
+        this.user = user;
+    }
+
+    /**
+     * Returns a password.
+     * @return Password.
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Sets a password.
+     * @param password Password.
+     */
+    public void setPassword(String password) {
+        setDirtyIf(!Objects.equals(this.password, password));
+        this.password = password;
+    }
+
+    /**
+     * Returns the region
+     * @return region.
+     */
+    public String getRegion() {
+        return region;
+    }
+
+    /**
+     * Sets region.
+     * @param region region.
+     */
+    public void setRegion(String region) {
+        setDirtyIf(!Objects.equals(this.region, region));
+        this.region = region;
+    }
+
+    /**
+     * Returns the AWS AccessKeyID which is placed in user field when configured.
+     * @return region.
+     */
+    @JsonIgnore
+    public String getAwsAccessKeyId() {
+        return user;
+    }
+
+    /**
+     * Returns the AWS SecretAccessKey which is placed in user field when configured.
+     * @return region.
+     */
+    @JsonIgnore
+    public String getAwsSecretAccessKey() {
+        return password;
+    }
+
+    /**
+     * Whether the hive partitioning option is set on a file format.
+     * @return Whether the hive partitioning option is set on a file format.
+     */
+    @JsonIgnore
+    public boolean isSetHivePartitioning(){
+        if(filesFormatType != null){
+            switch(filesFormatType){
+                case csv: return getCsv() != null && getCsv().getHivePartitioning() != null && getCsv().getHivePartitioning();
+                case json: return getJson() != null && getJson().getHivePartitioning() != null && getJson().getHivePartitioning();
+                case parquet: return getParquet() != null && getParquet().getHivePartitioning() != null && getParquet().getHivePartitioning();
+            }
+        }
+        return false;
+    }
+
+    /**
      * Returns state that whether the file format for the specific file type is set.
-     * @param duckdbSourceFilesType Type of files.
      * @return State that whether the file format for the specific file type is set.
      */
-    public boolean isFormatSetForType(DuckdbSourceFilesType duckdbSourceFilesType){
-        switch(duckdbSourceFilesType){
+    @JsonIgnore
+    public boolean isFormatSetForType(){
+        if(filesFormatType == null){
+            throw new RuntimeException("The file format type is not set : " + filesFormatType);
+        }
+        switch(filesFormatType){
             case csv: return this.getCsv() != null;
             case json: return this.getJson() != null;
             case parquet: return this.getParquet() != null;
-            default: throw new RuntimeException("The file format is not supported : " + duckdbSourceFilesType);
+            default: throw new RuntimeException("The file format is not supported : " + filesFormatType);
         }
     }
 
@@ -292,7 +397,6 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     public DuckdbParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         DuckdbParametersSpec cloned = this.deepClone();
         cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
-        cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
         if(cloned.csv != null){
             cloned.csv = cloned.csv.expandAndTrim(secretValueProvider, lookupContext);
@@ -300,8 +404,54 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         if(cloned.json != null){
             cloned.json = cloned.json.expandAndTrim(secretValueProvider, lookupContext);
         }
+        cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
+        cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
+        cloned.region = secretValueProvider.expandValue(cloned.region, lookupContext);
 
         return cloned;
+    }
+
+    /**
+     * Fills the spec with the default credentials (when not set) for a cloud storage when any cloud storage is used.
+     *
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     */
+    public void fillSpecWithDefaultCredentials(SecretValueLookupContext secretValueLookupContext){
+        DuckdbStorageType storageType = this.getStorageType();
+
+        switch (storageType){
+            case s3:
+                if(Strings.isNullOrEmpty(this.getAwsAccessKeyId()) || Strings.isNullOrEmpty(this.getAwsSecretAccessKey())){
+                    Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
+                    if(credentialProfile.isPresent()){
+                        Optional<String> accessKeyId = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
+                        if(!Strings.isNullOrEmpty(this.getAwsAccessKeyId()) && accessKeyId.isPresent()){
+                            String awsAccessKeyId = accessKeyId.get();
+                            this.setUser(awsAccessKeyId);
+                        }
+                        Optional<String> secretAccessKey = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
+                        if(!Strings.isNullOrEmpty(this.getAwsSecretAccessKey()) && secretAccessKey.isPresent()){
+                            String awsSecretAccessKey = secretAccessKey.get();
+                            this.setPassword(awsSecretAccessKey);
+                        }
+                    }
+                }
+
+                if(Strings.isNullOrEmpty(this.getUser())){
+                    Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
+                    if(configProfile.isPresent()){
+                        Optional<String> region = configProfile.get().property(AwsConfigProfileSettingNames.REGION);
+                        if(!Strings.isNullOrEmpty(this.getRegion()) && region.isPresent()){
+                            String awsRegion = region.get();
+                            this.setRegion(awsRegion);
+                        }
+                    }
+                }
+
+                break;
+            default:
+                throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + storageType);
+        }
     }
 
 }

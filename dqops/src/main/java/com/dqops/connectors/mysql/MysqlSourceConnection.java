@@ -26,7 +26,6 @@ import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
@@ -40,7 +39,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * MySQL source connection.
@@ -64,11 +65,10 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
      * Lists tables inside a schema. Views are also returned.
      *
      * @param schemaName Schema name.
-     * @param connectionWrapper Connection wrapper with a list of existing tables.
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName, ConnectionWrapper connectionWrapper) {
+    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
         ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
 
         StringBuilder sqlBuilder = new StringBuilder();
@@ -180,7 +180,11 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
         }
 
         if (mysqlParametersSpec.getProperties() != null) {
-            dataSourceProperties.putAll(mysqlParametersSpec.getProperties());
+            dataSourceProperties.putAll(mysqlParametersSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
         String userName = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getUser(), secretValueLookupContext);
@@ -188,11 +192,6 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
 
         String password = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getPassword(), secretValueLookupContext);
         hikariConfig.setPassword(password);
-
-        String options =  this.getSecretValueProvider().expandValue(mysqlParametersSpec.getOptions(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(options)) {
-            dataSourceProperties.put("options", options);
-        }
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;

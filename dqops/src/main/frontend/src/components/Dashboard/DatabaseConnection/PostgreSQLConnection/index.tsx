@@ -68,6 +68,7 @@ const PostgreSQLConnection = ({
         value={postgresql?.host}
         onChange={(value) => handleChange({ host: value })}
         data={sharedCredentials}
+        inputClassName={!postgresql?.host ? 'border border-red-500' : ''}
       />
       <FieldTypeInput
         label="Port"

@@ -160,8 +160,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         CheckExecutionSummary checkExecutionSummary = new CheckExecutionSummary();
         List<DqoQueueJob<CheckExecutionSummary>> childTableJobs = new ArrayList<>();
 
-        for(ScheduledTableChecksCollection scheduledChecksForTable : checksForSchedule.getTablesWithChecks()) {
-            TableWrapper targetTable = scheduledChecksForTable.getTargetTable();
+        for (ScheduledTableChecksCollection scheduledChecksForTable : checksForSchedule.getTablesWithChecks()) {
+            TableSpec targetTable = scheduledChecksForTable.getTargetTable();
             ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
 
             CheckSearchFilters checkSearchFilters = new CheckSearchFilters();

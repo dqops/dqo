@@ -1,8 +1,6 @@
 import {
   CheckTemplate,
   ConnectionModelProviderTypeEnum,
-  DqoJobChangeModelStatusEnum,
-  DqoJobEntryParametersModel,
   DqoJobHistoryEntryModel,
   TableComparisonGroupingColumnPairModel,
   TimeWindowFilterParameters
@@ -155,12 +153,12 @@ export const TABLE_LEVEL_TABS: {
       value: 'preview'
     },
     {
-      label: 'Profiling checks',
-      value: 'advanced'
-    },
-    {
       label: 'Table quality status',
       value: 'table-quality-status'
+    },
+    {
+      label: 'Profiling checks',
+      value: 'advanced'
     },
     {
       label: 'Table comparisons',
@@ -169,20 +167,20 @@ export const TABLE_LEVEL_TABS: {
   ],
   [CheckTypes.PARTITIONED]: [
     {
-      label: 'Daily checks',
-      value: 'daily'
-    },
-    {
       label: 'Table quality status (daily checks)',
       value: 'table-quality-status-daily'
     },
     {
-      label: 'Monthly checks',
-      value: 'monthly'
+      label: 'Daily checks',
+      value: 'daily'
     },
     {
       label: 'Table quality status (monthly checks)',
       value: 'table-quality-status-monthly'
+    },
+    {
+      label: 'Monthly checks',
+      value: 'monthly'
     },
     {
       label: 'Daily comparisons',
@@ -195,20 +193,20 @@ export const TABLE_LEVEL_TABS: {
   ],
   [CheckTypes.MONITORING]: [
     {
-      label: 'Daily checks',
-      value: 'daily'
-    },
-    {
       label: 'Table quality status (daily checks)',
       value: 'table-quality-status-daily'
     },
     {
-      label: 'Monthly checks',
-      value: 'monthly'
+      label: 'Daily checks',
+      value: 'daily'
     },
     {
       label: 'Table quality status (monthly checks)',
       value: 'table-quality-status-monthly'
+    },
+    {
+      label: 'Monthly checks',
+      value: 'monthly'
     },
     {
       label: 'Daily comparisons',
@@ -374,10 +372,28 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'CockroachDB'
   },
   {
+    type: ConnectionModelProviderTypeEnum.duckdb,
+    name: 'CSV',
+    iconName: 'csv',
+    displayName: 'CSV'
+  },
+  {
     type: ConnectionModelProviderTypeEnum.databricks,
     name: 'Databricks',
     iconName: 'databricks',
     displayName: 'Databricks'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.duckdb,
+    name: 'DuckDB',
+    iconName: 'duckdb',
+    displayName: 'DuckDB'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.duckdb,
+    name: 'JSON',
+    iconName: 'json',
+    displayName: 'JSON'
   },
   {
     type: ConnectionModelProviderTypeEnum.mysql,
@@ -402,6 +418,12 @@ export const databaseOptions: IDatabaseOption[] = [
     name: 'Oracle',
     iconName: 'oracle',
     displayName: 'Oracle Database'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.duckdb,
+    name: 'Parquet',
+    iconName: 'parquet',
+    displayName: 'Parquet'
   },
   {
     type: ConnectionModelProviderTypeEnum.mysql,

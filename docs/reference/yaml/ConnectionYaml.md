@@ -18,7 +18,7 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`api_version`</span>|DQOps YAML schema version|*string*| |dqo/v1| |
-|<span class="no-wrap-code ">`kind`</span>|File type|*enum*|*source*<br/>*table*<br/>*sensor*<br/>*provider_sensor*<br/>*rule*<br/>*check*<br/>*settings*<br/>*file_index*<br/>*dashboards*<br/>*default_schedules*<br/>*default_checks*<br/>*default_notifications*<br/>|source| |
+|<span class="no-wrap-code ">`kind`</span>|File type|*enum*|*source*<br/>*table*<br/>*sensor*<br/>*provider_sensor*<br/>*rule*<br/>*check*<br/>*settings*<br/>*file_index*<br/>*dashboards*<br/>*default_schedules*<br/>*default_checks*<br/>*default_table_checks*<br/>*default_column_checks*<br/>*default_notifications*<br/>|source| |
 |<span class="no-wrap-code ">[`spec`](./ConnectionYaml.md#connectionspec)</span>|Connection specification object with the connection parameters to the data source|*[ConnectionSpec](./ConnectionYaml.md#connectionspec)*| | | |
 
 
@@ -196,15 +196,18 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`read_mode`</span>|Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*enum*|*in_memory*<br/>*files*<br/>| | |
-|<span class="no-wrap-code ">`source_files_type`</span>|Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*enum*|*csv*<br/>*json*<br/>*parquet*<br/>| | |
-|<span class="no-wrap-code ">`database`</span>|DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
-|<span class="no-wrap-code ">`options`</span>|DuckDB connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DUCKDB_OPTIONS} configuration with a custom environment variable.|*string*| | | |
+|<span class="no-wrap-code ">`read_mode`</span>|DuckDB read mode.|*enum*|*in_memory*<br/>*files*<br/>| | |
+|<span class="no-wrap-code ">`files_format_type`</span>|Type of source files format for DuckDB.|*enum*|*csv*<br/>*json*<br/>*parquet*<br/>| | |
+|<span class="no-wrap-code ">`database`</span>|DuckDB database name for in-memory read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 |<span class="no-wrap-code ">[`csv`](./ConnectionYaml.md#csvfileformatspec)</span>|Csv file format specification.|*[CsvFileFormatSpec](./ConnectionYaml.md#csvfileformatspec)*| | | |
 |<span class="no-wrap-code ">[`json`](./ConnectionYaml.md#jsonfileformatspec)</span>|Json file format specification.|*[JsonFileFormatSpec](./ConnectionYaml.md#jsonfileformatspec)*| | | |
 |<span class="no-wrap-code ">[`parquet`](./ConnectionYaml.md#parquetfileformatspec)</span>|Parquet file format specification.|*[ParquetFileFormatSpec](./ConnectionYaml.md#parquetfileformatspec)*| | | |
-|<span class="no-wrap-code ">`directories`</span>|Schema to directory mappings.|*Dict[string, string]*| | | |
+|<span class="no-wrap-code ">`directories`</span>|Virtual schema name to directory mappings. The path must be an absolute path.|*Dict[string, string]*| | | |
+|<span class="no-wrap-code ">`storage_type`</span>|The storage type.|*enum*|*local*<br/>*s3*<br/>| | |
+|<span class="no-wrap-code ">`user`</span>|DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
+|<span class="no-wrap-code ">`password`</span>|DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
+|<span class="no-wrap-code ">`region`</span>|The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 
 
 
@@ -235,8 +238,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`all_varchar`</span>|Option to skip type detection for CSV parsing and assume all columns to be of type VARCHAR.|*boolean*| | | |
 |<span class="no-wrap-code ">`allow_quoted_nulls`</span>|Option to allow the conversion of quoted values to NULL values.|*boolean*| | | |
 |<span class="no-wrap-code ">`auto_detect`</span>|Enables auto detection of CSV parameters.|*boolean*| | | |
-|<span class="no-wrap-code ">`columns`</span>|A struct that specifies the column names and column types contained within the CSV file (e.g., {&#x27;col1&#x27;: &#x27;INTEGER&#x27;, &#x27;col2&#x27;: &#x27;VARCHAR&#x27;}). Using this option implies that auto detection is not used.|*Dict[string, string]*| | | |
-|<span class="no-wrap-code ">`compression`</span>|The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd.|*string*| | | |
+|<span class="no-wrap-code ">`compression`</span>|The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd.|*enum*|*auto*<br/>*none*<br/>*gzip*<br/>*zstd*<br/>| | |
 |<span class="no-wrap-code ">`dateformat`</span>|Specifies the date format to use when parsing dates.|*string*| | | |
 |<span class="no-wrap-code ">`decimal_separator`</span>|The decimal separator of numbers.|*string*| | | |
 |<span class="no-wrap-code ">`delim`</span>|Specifies the string that separates columns within each row (line) of the file.|*string*| | | |
@@ -245,8 +247,9 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`header`</span>|Specifies that the file contains a header line with the names of each column in the file.|*boolean*| | | |
 |<span class="no-wrap-code ">`hive_partitioning`</span>|Whether or not to interpret the path as a hive partitioned path.|*boolean*| | | |
 |<span class="no-wrap-code ">`ignore_errors`</span>|Option to ignore any parsing errors encountered - and instead ignore rows with errors.|*boolean*| | | |
-|<span class="no-wrap-code ">`new_line`</span>|Set the new line character(s) in the file. Options are &#x27;\r&#x27;,&#x27;\n&#x27;, or &#x27;\r\n&#x27;.|*string*| | | |
+|<span class="no-wrap-code ">`new_line`</span>|Set the new line character(s) in the file. Options are &#x27;\r&#x27;,&#x27;\n&#x27;, or &#x27;\r\n&#x27;.|*enum*|*cr*<br/>*lf*<br/>*crlf*<br/>| | |
 |<span class="no-wrap-code ">`quote`</span>|Specifies the quoting string to be used when a data value is quoted.|*string*| | | |
+|<span class="no-wrap-code ">`sample_size`</span>|The number of sample rows for auto detection of parameters.|*long*| | | |
 |<span class="no-wrap-code ">`skip`</span>|The number of lines at the top of the file to skip.|*long*| | | |
 |<span class="no-wrap-code ">`timestampformat`</span>|Specifies the date format to use when parsing timestamps.|*string*| | | |
 
@@ -276,18 +279,19 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`auto_detect`</span>|Whether to auto-detect detect the names of the keys and data types of the values automatically|*boolean*| | | |
-|<span class="no-wrap-code ">`columns`</span>|A struct that specifies the key names and value types contained within the JSON file (e.g., {key1: &#x27;INTEGER&#x27;, key2: &#x27;VARCHAR&#x27;}). If auto_detect is enabled these will be inferred|*Dict[string, string]*| | | |
-|<span class="no-wrap-code ">`compression`</span>|The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are &#x27;none&#x27;, &#x27;gzip&#x27;, &#x27;zstd&#x27;, and &#x27;auto&#x27;.|*string*| | | |
-|<span class="no-wrap-code ">`convert_strings_to_integers`</span>|	Whether strings representing integer values should be converted to a numerical type.|*boolean*| | | |
+|<span class="no-wrap-code ">`auto_detect`</span>|Whether to auto-detect detect the names of the keys and data types of the values automatically.|*boolean*| | | |
+|<span class="no-wrap-code ">`compression`</span>|The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are &#x27;none&#x27;, &#x27;gzip&#x27;, &#x27;zstd&#x27;, and &#x27;auto&#x27;.|*enum*|*auto*<br/>*none*<br/>*gzip*<br/>*zstd*<br/>| | |
+|<span class="no-wrap-code ">`convert_strings_to_integers`</span>|Whether strings representing integer values should be converted to a numerical type.|*boolean*| | | |
 |<span class="no-wrap-code ">`dateformat`</span>|Specifies the date format to use when parsing dates.|*string*| | | |
 |<span class="no-wrap-code ">`filename`</span>|Whether or not an extra filename column should be included in the result.|*boolean*| | | |
-|<span class="no-wrap-code ">`format`</span>|	Can be one of [&#x27;auto&#x27;, &#x27;unstructured&#x27;, &#x27;newline_delimited&#x27;, &#x27;array&#x27;].|*enum*|*auto*<br/>*unstructured*<br/>*newline_delimited*<br/>*array*<br/>| | |
-|<span class="no-wrap-code ">`hive_partitioning`</span>|	Whether or not to interpret the path as a hive partitioned path.|*boolean*| | | |
+|<span class="no-wrap-code ">`format`</span>|Json format. Can be one of [&#x27;auto&#x27;, &#x27;unstructured&#x27;, &#x27;newline_delimited&#x27;, &#x27;array&#x27;].|*enum*|*auto*<br/>*unstructured*<br/>*newline_delimited*<br/>*array*<br/>| | |
+|<span class="no-wrap-code ">`hive_partitioning`</span>|Whether or not to interpret the path as a hive partitioned path.|*boolean*| | | |
 |<span class="no-wrap-code ">`ignore_errors`</span>|Whether to ignore parse errors (only possible when format is &#x27;newline_delimited&#x27;).|*boolean*| | | |
-|<span class="no-wrap-code ">`maximum_object_size`</span>|	The maximum size of a JSON object (in bytes)|*long*| | | |
-|<span class="no-wrap-code ">`records`</span>|Can be one of [&#x27;auto&#x27;, &#x27;true&#x27;, &#x27;false&#x27;]|*string*| | | |
-|<span class="no-wrap-code ">`timestampformat`</span>|	Specifies the date format to use when parsing timestamps.|*string*| | | |
+|<span class="no-wrap-code ">`maximum_depth`</span>|Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types.|*long*| | | |
+|<span class="no-wrap-code ">`maximum_object_size`</span>|The maximum size of a JSON object (in bytes).|*long*| | | |
+|<span class="no-wrap-code ">`records`</span>|Can be one of [&#x27;auto&#x27;, &#x27;true&#x27;, &#x27;false&#x27;].|*enum*|*auto*<br/>*true*<br/>*false*<br/>| | |
+|<span class="no-wrap-code ">`sample_size`</span>|The number of sample rows for auto detection of parameters.|*long*| | | |
+|<span class="no-wrap-code ">`timestampformat`</span>|Specifies the date format to use when parsing timestamps.|*string*| | | |
 
 
 
@@ -352,7 +356,6 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`database`</span>|Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`user`</span>|Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
-|<span class="no-wrap-code ">`options`</span>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 
@@ -386,7 +389,6 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`database`</span>|SQL Server database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`user`</span>|SQL Server user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
-|<span class="no-wrap-code ">`options`</span>|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`disable_encryption`</span>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.|*boolean*| | | |
 |<span class="no-wrap-code ">`authentication_mode`</span>|Authenticaiton mode for the SQL Server. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*enum*|*sql_password*<br/>*active_directory_password*<br/>*active_directory_service_principal*<br/>*default_credential*<br/>| | |
 |<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
@@ -493,7 +495,6 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`database`</span>|MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`user`</span>|MySQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
-|<span class="no-wrap-code ">`options`</span>|MySQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`sslmode`</span>|SslMode MySQL connection parameter.|*enum*|*DISABLED*<br/>*PREFERRED*<br/>*REQUIRED*<br/>*VERIFY_CA*<br/>*VERIFY_IDENTITY*<br/>| | |
 |<span class="no-wrap-code ">[`single_store_db_parameters_spec`](./ConnectionYaml.md#singlestoredbparametersspec)</span>|Single Store DB parameters spec.|*[SingleStoreDbParametersSpec](./ConnectionYaml.md#singlestoredbparametersspec)*| | | |
 |<span class="no-wrap-code ">`mysql_engine_type`</span>|MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration with a custom environment variable.|*enum*|*mysql*<br/>*singlestoredb*<br/>| | |
@@ -561,7 +562,6 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`database`</span>|Oracle database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`user`</span>|Oracle user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|Oracle database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
-|<span class="no-wrap-code ">`options`</span>|Oracle connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${ORACLE_OPTIONS} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`initialization_sql`</span>|Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT&#x3D;&#x27;YYYY-DD-MM HH24:MI:SS&#x27;|*string*| | | |
 |<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
@@ -595,7 +595,6 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`port`</span>|Spark port number. The default port is 10000. Supports also a ${SPARK_PORT} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`user`</span>|Spark user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|Spark database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
-|<span class="no-wrap-code ">`options`</span>|Spark connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 
@@ -631,7 +630,6 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`password`</span>|Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`http_path`</span>|Databricks http path to the warehouse. For example: /sql/1.0/warehouses/&lt;warehouse instance id&gt;. Supports also a ${DATABRICKS_HTTP_PATH} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`access_token`</span>|Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable.|*string*| | | |
-|<span class="no-wrap-code ">`options`</span>|Databricks connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DATABRICKS_OPTIONS} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 

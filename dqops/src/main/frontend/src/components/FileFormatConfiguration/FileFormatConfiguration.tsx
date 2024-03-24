@@ -1,53 +1,49 @@
 import React from 'react';
+import { DuckdbParametersSpecFilesFormatTypeEnum } from '../../api';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import SelectInput from '../SelectInput';
-import { 
-  CsvFileFormatSpec, 
-  JsonFileFormatSpec,
-  ParquetFileFormatSpec,
-  DuckdbParametersSpecSourceFilesTypeEnum
-} from '../../api';
-import CsvFormatConfiguration from './CsvFormatConfiguration';
-import JsonFormatConfiguration from './JsonFormatConfiguration';
-import ParquetFormatConfiguration from './ParquetFormatConfiguration';
-import FilePath from './FilePath';
+import CsvFormatConfiguration from './FormatsConfiguration/CsvFormatConfiguration';
+import JsonFormatConfiguration from './FormatsConfiguration/JsonFormatConfiguration';
+import ParquetFormatConfiguration from './FormatsConfiguration/ParquetFormatConfiguration';
+import { TConfiguration } from './TConfiguration';
 
 type TFileFormatConfigurationProps = {
-  paths: string[];
-  onChangePath: (val: string) => void;
-  onAddPath: () => void;
-  fileFormatType: DuckdbParametersSpecSourceFilesTypeEnum;
-  onChangeFile: (val: DuckdbParametersSpecSourceFilesTypeEnum) => void;
+  fileFormatType: DuckdbParametersSpecFilesFormatTypeEnum;
   configuration: TConfiguration;
+  onChangeFile: (val: DuckdbParametersSpecFilesFormatTypeEnum) => void;
   onChangeConfiguration: (params: Partial<TConfiguration>) => void;
   cleanConfiguration: () => void;
-  onDeletePath: (index: number) => void;
+  freezeFileType: boolean;
+  children: any;
 };
 
-// enum fileFormat {
-//   csv = 'csv_file_format',
-//   json = 'json_file_format',
-//   parquet = 'parquet_file_format',
-//   file_path = 'file_path'
-// }
-
-type TConfiguration = CsvFileFormatSpec | JsonFileFormatSpec | ParquetFileFormatSpec;
+const sourceFilesTypeOptions = [
+  {
+    label: 'CSV',
+    value: DuckdbParametersSpecFilesFormatTypeEnum.csv
+  },
+  {
+    label: 'JSON',
+    value: DuckdbParametersSpecFilesFormatTypeEnum.json
+  },
+  {
+    label: 'Parquet',
+    value: DuckdbParametersSpecFilesFormatTypeEnum.parquet
+  }
+];
 
 export default function FileFormatConfiguration({
-  paths,
-  onAddPath,
-  onChangePath,
   fileFormatType,
   onChangeFile,
   configuration,
   cleanConfiguration,
   onChangeConfiguration,
-  onDeletePath
+  freezeFileType,
+  children
 }: TFileFormatConfigurationProps) {
-
   const renderConfiguration = () => {
     switch (fileFormatType) {
-      case DuckdbParametersSpecSourceFilesTypeEnum.csv: {
+      case DuckdbParametersSpecFilesFormatTypeEnum.csv: {
         return (
           <CsvFormatConfiguration
             configuration={configuration}
@@ -55,7 +51,7 @@ export default function FileFormatConfiguration({
           />
         );
       }
-      case DuckdbParametersSpecSourceFilesTypeEnum.json: {
+      case DuckdbParametersSpecFilesFormatTypeEnum.json: {
         return (
           <JsonFormatConfiguration
             configuration={configuration}
@@ -63,7 +59,7 @@ export default function FileFormatConfiguration({
           />
         );
       }
-      case DuckdbParametersSpecSourceFilesTypeEnum.parquet: {
+      case DuckdbParametersSpecFilesFormatTypeEnum.parquet: {
         return (
           <ParquetFormatConfiguration
             configuration={configuration}
@@ -75,31 +71,34 @@ export default function FileFormatConfiguration({
   };
 
   return (
-    <SectionWrapper
-      title="File format configuration"
-      className="text-sm my-4 text-black"
-    >
-      <FilePath
-        paths={paths}
-        onAddPath={onAddPath}
-        onChangePath={onChangePath}
-        onDeletePath={onDeletePath}
-      />
-      <div className="flex items-center gap-x-5">
-        <div>File format</div>{' '}
-        <SelectInput
-          options={Object.values(DuckdbParametersSpecSourceFilesTypeEnum).map((x) => ({
-            label: x,
-            value: x
-          }))}
-          onChange={(value) => {
-            onChangeFile(value);
-            cleanConfiguration();
-          }}
-          value={fileFormatType}
-        />{' '}
-      </div>
-      {renderConfiguration()}
-    </SectionWrapper>
+    <div className="mt-8">
+      <SectionWrapper
+        title="Import configuration"
+        className="text-sm text-black"
+      >
+        {!freezeFileType && (
+          <div className="flex items-center gap-x-5 text-sm">
+            <div>File format</div>
+            <SelectInput
+              options={sourceFilesTypeOptions}
+              onChange={(value) => {
+                onChangeFile(value);
+                cleanConfiguration();
+              }}
+              value={
+                fileFormatType ===
+                DuckdbParametersSpecFilesFormatTypeEnum.parquet
+                  ? fileFormatType.replace(/./, (c) => c.toUpperCase())
+                  : fileFormatType.toUpperCase()
+              }
+              className="text-sm"
+            />
+          </div>
+        )}
+        {/* {freezeFileType && <div>{fileFormatType}</div>} */}
+        {children}
+        <div>{renderConfiguration()}</div>
+      </SectionWrapper>
+    </div>
   );
 }

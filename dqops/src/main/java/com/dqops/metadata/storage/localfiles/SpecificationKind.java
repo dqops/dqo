@@ -51,8 +51,15 @@ public enum SpecificationKind {
     @JsonProperty("default_schedules")
     default_schedules,
 
+    @Deprecated
     @JsonProperty("default_checks")
     default_checks,
+
+    @JsonProperty("default_table_checks")
+    default_table_checks,
+
+    @JsonProperty("default_column_checks")
+    default_column_checks,
 
     @JsonProperty("default_notifications")
     default_notifications;

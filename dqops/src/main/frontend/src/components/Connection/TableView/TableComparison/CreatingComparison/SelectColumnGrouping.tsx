@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import SvgIcon from '../../../../SvgIcon';
-import { SelectGroupColumnsTable } from '../../SelectGroupColumnsTable';
-import { getRequiredColumnsIndexes } from '../TableComparisonUtils';
 import {
   DqoSettingsModel,
   TableColumnsStatisticsModel
@@ -10,9 +7,12 @@ import {
   ColumnApiClient,
   EnviromentApiClient
 } from '../../../../../services/apiClient';
-import { useParams } from 'react-router-dom';
-import { Option } from '../../../../Select';
 import { TParameters } from '../../../../../shared/constants';
+import { useDecodedParams } from '../../../../../utils';
+import { Option } from '../../../../Select';
+import SvgIcon from '../../../../SvgIcon';
+import { SelectGroupColumnsTable } from '../../SelectGroupColumnsTable';
+import { getRequiredColumnsIndexes } from '../TableComparisonUtils';
 
 type TSelectDataGrouping = {
   onChangeParameters: (obj: Partial<TParameters>) => void;
@@ -38,7 +38,7 @@ export default function SelectColumnGrouping({
     connection: string;
     schema: string;
     table: string;
-  } = useParams();
+  } = useDecodedParams();
   const [profileSettings, setProfileSettings] = useState<DqoSettingsModel>();
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [listOfWarnings, setListOfWarnings] = useState<Array<boolean>>(

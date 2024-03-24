@@ -22,7 +22,7 @@ The data quality check is evaluated on a monitored table (or column) in three ph
 
 
 - The generated SQL query is executed on the data source, capturing the data quality measure.
-  At is expected that all data quality sensors in DQOps will return a result column named *actual_value* as a data measure,
+  It is expected that all data quality sensors in DQOps will return a result column named *actual_value* as a data measure,
   which will be evaluated with data quality rules.
 
 
@@ -30,7 +30,7 @@ The data quality check is evaluated on a monitored table (or column) in three ph
   a Python function. The function determines if the measure (sensor readout) should be accepted or if the data quality
   check should fail and generate a data quality issue at one of three severity levels: warning, error, or fatal.
   
-  The data quality measure (sensor readout) is passed up to tree data quality rules because data quality rules
+  The data quality measure (sensor readout) is passed up to three data quality rules because data quality rules
   for warning, error, and fatal severity levels use different parameters (thresholds).  
 
 

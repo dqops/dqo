@@ -1,4 +1,9 @@
 import React, { useState } from 'react';
+import {
+  CheckDefinitionListModel,
+  RuleListModel,
+  SensorListModel
+} from '../api';
 import { useActionDispatch } from '../hooks/useActionDispatch';
 import {
   addFirstLevelTab,
@@ -10,14 +15,8 @@ import {
   toggleSensorFolderTree,
   toggledataQualityChecksFolderTree
 } from '../redux/actions/definition.actions';
-import {
-  SensorListModel,
-  RuleListModel,
-  CheckDefinitionListModel
-} from '../api';
-import { ROUTES } from '../shared/routes';
-import { urlencodeEncoder } from '../utils';
 import { INestTab } from '../redux/reducers/source.reducer';
+import { ROUTES } from '../shared/routes';
 
 type TTreeItems =
   | SensorListModel[]
@@ -56,14 +55,14 @@ function DefinitionProvider(props: any) {
   const openSensorFirstLevelTab = (sensor: SensorListModel) => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.SENSOR_DETAIL(urlencodeEncoder(sensor.sensor_name) ?? ''),
+        url: ROUTES.SENSOR_DETAIL(sensor.sensor_name ?? ''),
         value: ROUTES.SENSOR_DETAIL_VALUE(
-          urlencodeEncoder(sensor.sensor_name) ?? ''
+          sensor.sensor_name ??''
         ),
         state: {
-          full_sensor_name: urlencodeEncoder(sensor.full_sensor_name)
+          full_sensor_name: sensor.full_sensor_name
         },
-        label: urlencodeEncoder(sensor.sensor_name)
+        label: sensor.sensor_name
       })
     );
   };
@@ -71,12 +70,12 @@ function DefinitionProvider(props: any) {
   const openRuleFirstLevelTab = (rule: RuleListModel) => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.RULE_DETAIL(urlencodeEncoder(rule.rule_name) ?? ''),
-        value: ROUTES.RULE_DETAIL_VALUE(urlencodeEncoder(rule.rule_name) ?? ''),
+        url: ROUTES.RULE_DETAIL(rule.rule_name ?? ''),
+        value: ROUTES.RULE_DETAIL_VALUE(rule.rule_name ?? ''),
         state: {
-          full_rule_name: urlencodeEncoder(rule.full_rule_name)
+          full_rule_name: rule.full_rule_name
         },
-        label: urlencodeEncoder(rule.rule_name)
+        label: rule.rule_name
       })
     );
   };
@@ -84,30 +83,35 @@ function DefinitionProvider(props: any) {
   const openCheckFirstLevelTab = (check: CheckDefinitionListModel) => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.CHECK_DETAIL(urlencodeEncoder(check.check_name) ?? ''),
+        url: ROUTES.CHECK_DETAIL(check.check_name ?? ''),
         value: ROUTES.CHECK_DETAIL_VALUE(
-          urlencodeEncoder(check.check_name) ?? ''
+          check.check_name ?? ''
         ),
         state: {
-          full_check_name: urlencodeEncoder(check.full_check_name),
+          full_check_name: check.full_check_name,
           custom: check.custom
         },
-        label: urlencodeEncoder(check.check_name)
+        label: check.check_name
       })
     );
   };
 
-  const openCheckDefaultFirstLevelTab = (defaultCheck: string) => {
+  const openDefaultCheckPatternFirstLevelTab = (
+    type: string,
+    pattern: string,
+    state?: any
+  ) => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.CHECK_DEFAULT_DETAIL(defaultCheck.replace(/\s/g, '_')),
-        value: ROUTES.CHECK_DEFAULT_DETAIL_VALUE(
-          defaultCheck.replace(/\s/g, '_')
-        ),
+        url: ROUTES.DEFAULT_CHECK_PATTERN_DETAIL(type, pattern),
+        value: ROUTES.DEFAULT_CHECK_PATTERN_VALUE(type, pattern),
         state: {
-          type: defaultCheck
+          type,
+          pattern,
+          pattern_name: pattern,
+          ...state
         },
-        label: defaultCheck
+        label: pattern
       })
     );
   };
@@ -162,6 +166,23 @@ function DefinitionProvider(props: any) {
     );
   };
 
+  const openDefaultChecksPatternsFirstLevelTab = (
+    pattern: string,
+    type: 'table' | 'column'
+  ) => {
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.DEFAULT_CHECKS_PATTERNS(pattern),
+        value: ROUTES.DEFAULT_CHECKS_PATTERNS_VALUE(pattern),
+        state: {
+          type: type,
+          pattern_name: pattern
+        },
+        label: pattern
+      })
+    );
+  };
+
   const toggleFolderRecursively = (
     elements: string[],
     index = 0,
@@ -200,7 +221,7 @@ function DefinitionProvider(props: any) {
     ];
     if (tabs && tabs.length !== 0) {
       for (let i = 0; i < tabs.length; i++) {
-        if (tabs[i].url?.includes('default_checks')) {
+        if (tabs[i].url?.includes('patterns')) {
           configuration[3].isOpen = true;
         } else if (tabs[i]?.url?.includes('sensors')) {
           configuration[0].isOpen = true;
@@ -210,6 +231,7 @@ function DefinitionProvider(props: any) {
           if (arrayOfElemsToToggle) {
             toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
           }
+          // to do: fix expanding tree checks/default checks
         } else if (tabs[i]?.url?.includes('checks')) {
           configuration[2].isOpen = true;
           const arrayOfElemsToToggle = (
@@ -291,10 +313,11 @@ function DefinitionProvider(props: any) {
       value={{
         sidebarWidth,
         setSidebarWidth,
-        openCheckDefaultFirstLevelTab,
         openCheckFirstLevelTab,
         openRuleFirstLevelTab,
         openSensorFirstLevelTab,
+        openDefaultChecksPatternsFirstLevelTab,
+        openDefaultCheckPatternFirstLevelTab,
         toggleTree,
         toggleSensorFolder,
         toggleRuleFolder,
@@ -317,3 +340,4 @@ function useDefinition() {
 }
 
 export { DefinitionProvider, useDefinition };
+

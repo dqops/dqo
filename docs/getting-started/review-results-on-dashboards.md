@@ -64,7 +64,7 @@ You have completed our quick tutorial, and now you know how to add connections, 
 
 ## Next steps
 
-- We have provided a variety of use cases which use openly available datasets [Google Cloud](https://cloud.google.com/datasets)
+- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets)
   to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md). 
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and 
   send alert notifications directly to Slack. 
@@ -72,4 +72,4 @@ You have completed our quick tutorial, and now you know how to add connections, 
   [Slack notifications](../integrations/slack/configuring-slack-notifications.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. 
   Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md)
-  can help you to calculate separate data quality KPI scores for different groups of rows.
+  can help you calculate separate data quality KPI scores for different groups of rows.

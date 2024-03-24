@@ -17,11 +17,12 @@ package com.dqops.metadata.sources;
 
 import com.dqops.metadata.basespecs.ElementWrapper;
 import com.dqops.metadata.basespecs.ObjectName;
+import com.dqops.metadata.scheduling.SchedulingRootNode;
 
 /**
  * Connection spec wrapper.
  */
-public interface ConnectionWrapper extends ElementWrapper<ConnectionSpec>, ObjectName<String> {
+public interface ConnectionWrapper extends ElementWrapper<ConnectionSpec>, ObjectName<String>, SchedulingRootNode {
     /**
      * Gets the connection name.
      * @return Connection name.

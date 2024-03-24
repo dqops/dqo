@@ -132,7 +132,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
             ArrayList<String> tableNames = new ArrayList<>();
             tableNames.add(physicalTableName.getTableName());
-            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(physicalTableName.getSchemaName(), tableNames, connectionWrapper);
+            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(physicalTableName.getSchemaName(), tableNames, connectionWrapper, secretValueLookupContext);
 
             if (sourceTableSpecs.size() == 0) {
                 cliOperationStatus.setFailedMessage("No tables found in the data source");
@@ -218,7 +218,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
         try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
-            List<SourceTableModel> schemaModels = sourceConnection.listTables(schemaName, connectionWrapper);
+            List<SourceTableModel> schemaModels = sourceConnection.listTables(schemaName, secretValueLookupContext);
             if (schemaModels.size() == 0) {
                 cliOperationStatus.setFailedMessage("No schemas found in the data source");
                 return cliOperationStatus;

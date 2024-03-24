@@ -7,6 +7,7 @@ import Checkbox from '../../components/Checkbox';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
+import { text } from 'stream/consumers';
 
 interface CreateCheckProps {
   create: boolean;
@@ -15,9 +16,11 @@ interface CreateCheckProps {
   selectedRule: string;
   selectedSensor: string;
   setIsUpdated: React.Dispatch<React.SetStateAction<boolean>>;
-  onChangeHelpText: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   custom: any;
   helpText?: string;
+  onChangeHelpText: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  friendlyName?: string;
+  onChangeFriendlyName: (e: ChangeEvent<HTMLInputElement>) => void;
   standard?: boolean;
   onChangeStandard: (value: boolean) => void;
   canEditDefinitions?: boolean;
@@ -32,6 +35,8 @@ const CheckEditor = ({
   custom,
   helpText,
   onChangeHelpText,
+  friendlyName,
+  onChangeFriendlyName,
   standard,
   onChangeStandard,
   canEditDefinitions
@@ -226,6 +231,21 @@ const CheckEditor = ({
               custom === false || canEditDefinitions === false ? true : false
             }
           ></textarea>
+        </div>
+      </div>
+      <div className="mt-6">
+        Friendly name:
+        <div className="flex items-center gap-x-4 pt-2 w-1/2">
+          <input type="text"
+            value={friendlyName}
+            className="font-regular text-sm focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-0 border-gray-300 h-10 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none w-full leading-1.5 rounded"
+            onChange={(e) => {
+              onChangeFriendlyName(e), setIsUpdated(true);
+            }}
+            disabled={
+              custom === false || canEditDefinitions === false ? true : false
+            }
+          ></input>
         </div>
       </div>
     </div>

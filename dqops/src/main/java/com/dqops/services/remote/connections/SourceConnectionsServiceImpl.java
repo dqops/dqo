@@ -19,6 +19,8 @@ import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.SourceConnection;
+import com.dqops.connectors.duckdb.DuckdbParametersSpec;
+import com.dqops.connectors.duckdb.fileslisting.DuckdbTestConnection;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -28,8 +30,8 @@ import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rest.models.remote.ConnectionTestStatus;
 import com.dqops.rest.models.remote.ConnectionTestModel;
+import com.dqops.rest.models.remote.ConnectionTestStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,15 +45,17 @@ public class SourceConnectionsServiceImpl implements SourceConnectionsService {
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final SecretValueProvider secretValueProvider;
     private final UserHomeContextFactory userHomeContextFactory;
-
+    private final DuckdbTestConnection duckdbTestConnection;
 
     @Autowired
     public SourceConnectionsServiceImpl(ConnectionProviderRegistry connectionProviderRegistry,
                                         SecretValueProvider secretValueProvider,
-                                        UserHomeContextFactory userHomeContextFactory) {
+                                        UserHomeContextFactory userHomeContextFactory,
+                                        DuckdbTestConnection duckdbTestConnection) {
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.secretValueProvider = secretValueProvider;
         this.userHomeContextFactory = userHomeContextFactory;
+        this.duckdbTestConnection = duckdbTestConnection;
     }
 
 
@@ -90,7 +94,13 @@ public class SourceConnectionsServiceImpl implements SourceConnectionsService {
 
         try {
             SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext);
-            sourceConnection.listSchemas();
+
+            if(providerType.equals(ProviderType.duckdb)){
+                DuckdbParametersSpec duckdbParametersSpec = sourceConnection.getConnectionSpec().getDuckdb();
+                duckdbTestConnection.testConnection(duckdbParametersSpec);
+            } else {
+                sourceConnection.listSchemas();
+            }
             connectionTestModel.setConnectionTestResult(ConnectionTestStatus.SUCCESS);
 
         } catch (Exception e) {

@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import Tabs from '../../Tabs';
-import DataQualityChecks from '../../DataQualityChecks';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import {
+  CheckContainerModel,
+  CheckResultsOverviewDataModel
+} from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { setActiveFirstLevelUrl } from '../../../redux/actions/source.actions';
 import {
   getTableDailyPartitionedChecks,
   getTableMonthlyPartitionedChecks,
@@ -10,40 +15,36 @@ import {
   updateTableDailyPartitionedChecks,
   updateTableMonthlyPartitionedChecks
 } from '../../../redux/actions/table.actions';
-import { useSelector } from 'react-redux';
-import {
-  CheckResultsOverviewDataModel,
-  CheckContainerModel
-} from '../../../api';
-import TableActionGroup from './TableActionGroup';
-import { CheckResultOverviewApi } from '../../../services/apiClient';
-import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../../shared/routes';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState,
   getSecondLevelTab
 } from '../../../redux/selectors';
+import { CheckResultOverviewApi } from '../../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../../shared/routes';
+import DataQualityChecks from '../../DataQualityChecks';
+import Tabs from '../../Tabs';
+import TableActionGroup from './TableActionGroup';
 import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
 import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
-import { setActiveFirstLevelUrl } from '../../../redux/actions/source.actions';
+import { useDecodedParams } from '../../../utils';
 
 const initTabs = [
-  {
-    label: 'Daily checks',
-    value: 'daily'
-  },
   {
     label: 'Table quality status (daily checks)',
     value: 'table-quality-status-daily'
   },
   {
-    label: 'Monthly checks',
-    value: 'monthly'
+    label: 'Daily checks',
+    value: 'daily'
   },
   {
     label: 'Table quality status (monthly checks)',
     value: 'table-quality-status-monthly'
+  },
+  {
+    label: 'Monthly checks',
+    value: 'monthly'
   },
   {
     label: 'Daily comparisons',
@@ -68,7 +69,7 @@ const TablePartitionedChecksView = () => {
     schema: string;
     table: string;
     tab: string;
-  } = useParams();
+  } = useDecodedParams();
   const [tabs, setTabs] = useState(initTabs);
   const [dailyCheckResultsOverview, setDailyCheckResultsOverview] = useState<
     CheckResultsOverviewDataModel[]

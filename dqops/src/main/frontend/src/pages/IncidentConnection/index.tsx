@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import IncidentsLayout from '../../components/IncidentsLayout';
-import SvgIcon from '../../components/SvgIcon';
-import { useHistory, useParams } from 'react-router-dom';
-import Input from '../../components/Input';
-import Button from '../../components/Button';
-import StatusSelect from './StatusSelect';
 import { useSelector } from 'react-redux';
-import { getFirstLevelIncidentsState } from '../../redux/selectors';
+import { useHistory } from 'react-router-dom';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   addFirstLevelTab,
@@ -15,21 +12,23 @@ import {
   updateIncident
 } from '../../redux/actions/incidents.actions';
 import { addFirstLevelTab as addSourceFirstLevelTab } from '../../redux/actions/source.actions';
+import { getFirstLevelIncidentsState } from '../../redux/selectors';
+import StatusSelect from './StatusSelect';
 
-import { Table } from '../../components/Table';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import { Pagination } from '../../components/Pagination';
-import moment from 'moment';
-import useDebounce from '../../hooks/useDebounce';
-import { IncidentFilter } from '../../redux/reducers/incidents.reducer';
-import { IncidentModel, IncidentModelStatusEnum } from '../../api';
-import Select from '../../components/Select';
-import { IncidentsApi } from '../../services/apiClient';
 import { IconButton, Tooltip } from '@material-tailwind/react';
-import AddIssueUrlDialog from './AddIssueUrlDialog';
-import { getDaysString } from '../../utils';
-import { SortableColumn } from './SortableColumn';
+import moment from 'moment';
+import { IncidentModel, IncidentModelStatusEnum } from '../../api';
+import { Pagination } from '../../components/Pagination';
+import Select from '../../components/Select';
+import { Table } from '../../components/Table';
+import useDebounce from '../../hooks/useDebounce';
 import { IRootState } from '../../redux/reducers';
+import { IncidentFilter } from '../../redux/reducers/incidents.reducer';
+import { IncidentsApi } from '../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { getDaysString, useDecodedParams } from '../../utils';
+import AddIssueUrlDialog from './AddIssueUrlDialog';
+import { SortableColumn } from './SortableColumn';
 
 const options = [
   {
@@ -70,7 +69,7 @@ const statusOptions = [
 ];
 
 export const IncidentConnection = () => {
-  const { connection }: { connection: string } = useParams();
+  const { connection }: { connection: string } = useDecodedParams();
   const {
     incidents,
     isEnd,
@@ -417,7 +416,7 @@ export const IncidentConnection = () => {
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
-            <div className="text-xl font-semibold truncate">
+            <div className="text-lg font-semibold truncate">
               Data quality incidents on {connection || ''}
             </div>
           </div>
@@ -452,6 +451,7 @@ export const IncidentConnection = () => {
                 onClick={() =>
                   onChangeFilter({ numberOfMonth: o.value, page: 1 })
                 }
+                className="text-sm"
               />
             ))}
           </div>

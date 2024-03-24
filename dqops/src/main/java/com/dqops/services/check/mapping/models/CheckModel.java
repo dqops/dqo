@@ -61,6 +61,18 @@ public class CheckModel implements Cloneable {
     private String helpText;
 
     /**
+     * User assigned display name that is shown instead of the original data quality check name.
+     */
+    @JsonPropertyDescription("User assigned display name that is shown instead of the original data quality check name.")
+    private String displayName;
+
+    /**
+     * An alternative check's name that is shown on the check editor as a hint.
+     */
+    @JsonPropertyDescription("An alternative check's name that is shown on the check editor as a hint.")
+    private String friendlyName;
+
+    /**
      * List of fields for editing the sensor parameters.
      */
     @JsonPropertyDescription("List of fields for editing the sensor parameters.")
@@ -110,6 +122,13 @@ public class CheckModel implements Cloneable {
     @JsonPropertyDescription("This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean standard;
+
+    /**
+     * This is a check that was applied on-the-fly, because it is configured as a default data observability check and can be run, but it is not configured in the table YAML.
+     */
+    @JsonPropertyDescription("This is a check that was applied on-the-fly, because it is configured as a default data observability check and can be run, but it is not configured in the table YAML.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean defaultCheck;
 
     /**
      * Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level.

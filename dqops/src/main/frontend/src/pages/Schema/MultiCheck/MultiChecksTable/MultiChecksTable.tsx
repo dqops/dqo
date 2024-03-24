@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
-import { CheckModel, CheckTemplate } from '../../../../api';
 import { isEqual } from 'lodash';
-import { UpdateCheckModel } from '../../UpdateCheckModel';
-import MultiChecksTableItem from './MultiChecksTableItem';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { CheckModel, CheckTemplate } from '../../../../api';
+import { useActionDispatch } from '../../../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
 import { IFilterTemplate } from '../../../../shared/constants';
+import { CheckTypes, ROUTES } from '../../../../shared/routes';
+import { useDecodedParams } from '../../../../utils';
+import { UpdateCheckModel } from '../../UpdateCheckModel';
 import {
   MultiChecksTableButtons,
   MultiChecksTableHeader
 } from './MultiCheckTableHeaderButtons';
-import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
-import { useHistory, useParams } from 'react-router-dom';
-import { useActionDispatch } from '../../../../hooks/useActionDispatch';
-import { CheckTypes, ROUTES } from '../../../../shared/routes';
+import MultiChecksTableItem from './MultiChecksTableItem';
 
 type TMultiChecksTable = {
   checkTarget: 'column' | 'table' | undefined;
@@ -41,7 +42,7 @@ export default function MultiChecksTable({
     connection, 
     schema
   }: { checkTypes: CheckTypes, connection: string, schema: string} =
-    useParams();
+    useDecodedParams();
   const [selectedData, setSelectedData] = useState<CheckTemplate[]>([]);
   const [action, setAction] = useState<'bulkEnabled' | 'bulkDisabled'>();
   const [loading, setLoading] = useState(false);

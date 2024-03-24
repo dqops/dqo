@@ -16,18 +16,20 @@
 
 import { Dispatch } from 'redux';
 
-import { TableApiClient } from '../../services/apiClient';
-import { SOURCE_ACTION } from '../types';
 import {
+  CheckContainerModel,
   CommentSpec,
   DataGroupingConfigurationSpec,
   MonitoringScheduleSpec,
-  TableProfilingCheckCategoriesSpec,
   TableListModel,
-  CheckContainerModel, TablePartitioningModel
+  TablePartitioningModel,
+  TableProfilingCheckCategoriesSpec
 } from '../../api';
+import { TableApiClient } from '../../services/apiClient';
 import { CheckRunMonitoringScheduleGroup } from "../../shared/enums/scheduling.enum";
 import { CheckTypes } from "../../shared/routes";
+import { filterPathsDuckDbTable } from '../../utils';
+import { SOURCE_ACTION } from '../types';
 
 export const getTableBasicRequest = (checkType: CheckTypes, activeTab: string) => ({
   type: SOURCE_ACTION.GET_TABLE_BASIC,
@@ -92,7 +94,7 @@ export const updateTableBasic =
         connectionName,
         schemaName,
         tableName,
-        data
+        data.file_format ? filterPathsDuckDbTable(data) : data
       );
       dispatch(updateTableBasicSuccess(checkType, activeTab));
     } catch (err) {

@@ -40,14 +40,14 @@ http://localhost:8888/api/environment/settings
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "properties" : { }
-	}
-    ```
+        ```
+        {
+		  "properties" : { }
+		}
+        ```
     
     
 
@@ -71,15 +71,15 @@ http://localhost:8888/api/environment/settings
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoSettingsModel(
-		properties={
-		
-		}
-	)
-    ```
+        ```
+        DqoSettingsModel(
+			properties={
+			
+			}
+		)
+        ```
     
     
     
@@ -104,15 +104,15 @@ http://localhost:8888/api/environment/settings
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoSettingsModel(
-		properties={
-		
-		}
-	)
-    ```
+        ```
+        DqoSettingsModel(
+			properties={
+			
+			}
+		)
+        ```
     
     
     
@@ -140,15 +140,15 @@ http://localhost:8888/api/environment/settings
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoSettingsModel(
-		properties={
-		
-		}
-	)
-    ```
+        ```
+        DqoSettingsModel(
+			properties={
+			
+			}
+		)
+        ```
     
     
     
@@ -176,15 +176,15 @@ http://localhost:8888/api/environment/settings
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoSettingsModel(
-		properties={
-		
-		}
-	)
-    ```
+        ```
+        DqoSettingsModel(
+			properties={
+			
+			}
+		)
+        ```
     
     
     
@@ -229,30 +229,30 @@ http://localhost:8888/api/environment/profile
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "data_quality_data_warehouse_enabled" : false,
-	  "can_manage_account" : false,
-	  "can_view_any_object" : false,
-	  "can_manage_scheduler" : false,
-	  "can_cancel_jobs" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false,
-	  "can_collect_statistics" : false,
-	  "can_manage_data_sources" : false,
-	  "can_synchronize" : false,
-	  "can_edit_comments" : false,
-	  "can_edit_labels" : false,
-	  "can_manage_definitions" : false,
-	  "can_compare_tables" : false,
-	  "can_manage_users" : false,
-	  "can_manage_and_view_shared_credentials" : false,
-	  "can_change_own_password" : false
-	}
-    ```
+        ```
+        {
+		  "data_quality_data_warehouse_enabled" : false,
+		  "can_manage_account" : false,
+		  "can_view_any_object" : false,
+		  "can_manage_scheduler" : false,
+		  "can_cancel_jobs" : false,
+		  "can_run_checks" : false,
+		  "can_delete_data" : false,
+		  "can_collect_statistics" : false,
+		  "can_manage_data_sources" : false,
+		  "can_synchronize" : false,
+		  "can_edit_comments" : false,
+		  "can_edit_labels" : false,
+		  "can_manage_definitions" : false,
+		  "can_compare_tables" : false,
+		  "can_manage_users" : false,
+		  "can_manage_and_view_shared_credentials" : false,
+		  "can_change_own_password" : false
+		}
+        ```
     
     
 
@@ -276,29 +276,29 @@ http://localhost:8888/api/environment/profile
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoUserProfileModel(
-		data_quality_data_warehouse_enabled=False,
-		can_manage_account=False,
-		can_view_any_object=False,
-		can_manage_scheduler=False,
-		can_cancel_jobs=False,
-		can_run_checks=False,
-		can_delete_data=False,
-		can_collect_statistics=False,
-		can_manage_data_sources=False,
-		can_synchronize=False,
-		can_edit_comments=False,
-		can_edit_labels=False,
-		can_manage_definitions=False,
-		can_compare_tables=False,
-		can_manage_users=False,
-		can_manage_and_view_shared_credentials=False,
-		can_change_own_password=False
-	)
-    ```
+        ```
+        DqoUserProfileModel(
+			data_quality_data_warehouse_enabled=False,
+			can_manage_account=False,
+			can_view_any_object=False,
+			can_manage_scheduler=False,
+			can_cancel_jobs=False,
+			can_run_checks=False,
+			can_delete_data=False,
+			can_collect_statistics=False,
+			can_manage_data_sources=False,
+			can_synchronize=False,
+			can_edit_comments=False,
+			can_edit_labels=False,
+			can_manage_definitions=False,
+			can_compare_tables=False,
+			can_manage_users=False,
+			can_manage_and_view_shared_credentials=False,
+			can_change_own_password=False
+		)
+        ```
     
     
     
@@ -323,29 +323,29 @@ http://localhost:8888/api/environment/profile
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoUserProfileModel(
-		data_quality_data_warehouse_enabled=False,
-		can_manage_account=False,
-		can_view_any_object=False,
-		can_manage_scheduler=False,
-		can_cancel_jobs=False,
-		can_run_checks=False,
-		can_delete_data=False,
-		can_collect_statistics=False,
-		can_manage_data_sources=False,
-		can_synchronize=False,
-		can_edit_comments=False,
-		can_edit_labels=False,
-		can_manage_definitions=False,
-		can_compare_tables=False,
-		can_manage_users=False,
-		can_manage_and_view_shared_credentials=False,
-		can_change_own_password=False
-	)
-    ```
+        ```
+        DqoUserProfileModel(
+			data_quality_data_warehouse_enabled=False,
+			can_manage_account=False,
+			can_view_any_object=False,
+			can_manage_scheduler=False,
+			can_cancel_jobs=False,
+			can_run_checks=False,
+			can_delete_data=False,
+			can_collect_statistics=False,
+			can_manage_data_sources=False,
+			can_synchronize=False,
+			can_edit_comments=False,
+			can_edit_labels=False,
+			can_manage_definitions=False,
+			can_compare_tables=False,
+			can_manage_users=False,
+			can_manage_and_view_shared_credentials=False,
+			can_change_own_password=False
+		)
+        ```
     
     
     
@@ -373,29 +373,29 @@ http://localhost:8888/api/environment/profile
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoUserProfileModel(
-		data_quality_data_warehouse_enabled=False,
-		can_manage_account=False,
-		can_view_any_object=False,
-		can_manage_scheduler=False,
-		can_cancel_jobs=False,
-		can_run_checks=False,
-		can_delete_data=False,
-		can_collect_statistics=False,
-		can_manage_data_sources=False,
-		can_synchronize=False,
-		can_edit_comments=False,
-		can_edit_labels=False,
-		can_manage_definitions=False,
-		can_compare_tables=False,
-		can_manage_users=False,
-		can_manage_and_view_shared_credentials=False,
-		can_change_own_password=False
-	)
-    ```
+        ```
+        DqoUserProfileModel(
+			data_quality_data_warehouse_enabled=False,
+			can_manage_account=False,
+			can_view_any_object=False,
+			can_manage_scheduler=False,
+			can_cancel_jobs=False,
+			can_run_checks=False,
+			can_delete_data=False,
+			can_collect_statistics=False,
+			can_manage_data_sources=False,
+			can_synchronize=False,
+			can_edit_comments=False,
+			can_edit_labels=False,
+			can_manage_definitions=False,
+			can_compare_tables=False,
+			can_manage_users=False,
+			can_manage_and_view_shared_credentials=False,
+			can_change_own_password=False
+		)
+        ```
     
     
     
@@ -423,29 +423,29 @@ http://localhost:8888/api/environment/profile
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    DqoUserProfileModel(
-		data_quality_data_warehouse_enabled=False,
-		can_manage_account=False,
-		can_view_any_object=False,
-		can_manage_scheduler=False,
-		can_cancel_jobs=False,
-		can_run_checks=False,
-		can_delete_data=False,
-		can_collect_statistics=False,
-		can_manage_data_sources=False,
-		can_synchronize=False,
-		can_edit_comments=False,
-		can_edit_labels=False,
-		can_manage_definitions=False,
-		can_compare_tables=False,
-		can_manage_users=False,
-		can_manage_and_view_shared_credentials=False,
-		can_change_own_password=False
-	)
-    ```
+        ```
+        DqoUserProfileModel(
+			data_quality_data_warehouse_enabled=False,
+			can_manage_account=False,
+			can_view_any_object=False,
+			can_manage_scheduler=False,
+			can_cancel_jobs=False,
+			can_run_checks=False,
+			can_delete_data=False,
+			can_collect_statistics=False,
+			can_manage_data_sources=False,
+			can_synchronize=False,
+			can_edit_comments=False,
+			can_edit_labels=False,
+			can_manage_definitions=False,
+			can_compare_tables=False,
+			can_manage_users=False,
+			can_manage_and_view_shared_credentials=False,
+			can_change_own_password=False
+		)
+        ```
     
     
     
@@ -490,12 +490,12 @@ http://localhost:8888/api/environment/issueapikey
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    "sample_string_value"
-    ```
+        ```
+        "sample_string_value"
+        ```
     
     
 
@@ -519,11 +519,11 @@ http://localhost:8888/api/environment/issueapikey
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    'sample_string_value'
-    ```
+        ```
+        'sample_string_value'
+        ```
     
     
     
@@ -548,11 +548,11 @@ http://localhost:8888/api/environment/issueapikey
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    'sample_string_value'
-    ```
+        ```
+        'sample_string_value'
+        ```
     
     
     
@@ -580,11 +580,11 @@ http://localhost:8888/api/environment/issueapikey
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    'sample_string_value'
-    ```
+        ```
+        'sample_string_value'
+        ```
     
     
     
@@ -612,11 +612,11 @@ http://localhost:8888/api/environment/issueapikey
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    'sample_string_value'
-    ```
+        ```
+        'sample_string_value'
+        ```
     
     
     

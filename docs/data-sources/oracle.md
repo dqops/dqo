@@ -1,5 +1,5 @@
 # Oracle
-Read this guide to learn how to connect DQOps to Oracle from the UI, command-line, or directly in YAML files. All parameters are documented.
+Read this guide to learn how to connect DQOps to Oracle from the UI, command-line interface, or directly in YAML files. All parameters are documented.
 
 ## Overview
 
@@ -12,7 +12,7 @@ users such as delivering high performance, protecting users from unauthorized ac
 
 To navigate to the Oracle connection settings:
 
-1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
+1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
 
@@ -23,21 +23,20 @@ To navigate to the Oracle connection settings:
 
 ### **Fill in the connection settings**
 
-After navigating to the Oracle connection settings, you will need to fill in the connection details.
+After navigating to the Oracle connection settings, you will need to fill in its details.
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-oracle2.png)
 
-| Oracle connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
-|----------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name            |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-| Host                       | host                                     | Oracle host name. Supports also a ${ORACLE_HOST} configuration with a custom environment variable.                                                                                                                                        |
-| Port                       | port                                     | Oracle port name. The default port is 1521. Supports also a ${ORACLE_PORT} configuration with a custom environment variable.                                                                                                              |
-| Database                   | database                                 | Oracle database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                            |
-| User name                  | user                                     | Oracle user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                |
-| Password                   | password                                 | Oracle database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                        |
-| Options                    | options                                  | Oracle connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.                                                      |
-| Initialization SQL         | initialization_sql                       | Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS                                                         |
-| JDBC connection property   |                                          | Optional setting. DQOps supports using JDBC driver to access Oracle. [JDBC Concepts.](https://docs.oracle.com/en/database/oracle/oracle-database/23/jjdbc/introducing-JDBC.html).                                                         |
+| Oracle connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                         | 
+|----------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name            |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.           |
+| Host                       | host                                     | Oracle host name. Supports also a ${ORACLE_HOST} configuration with a custom environment variable.                                                                                                                                                  |
+| Port                       | port                                     | Oracle port name. The default port is 1521. Supports also a ${ORACLE_PORT} configuration with a custom environment variable.                                                                                                                        |
+| Database                   | database                                 | Oracle database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                      |
+| User name                  | user                                     | Oracle user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                          |
+| Password                   | password                                 | Oracle database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                  |
+| Initialization SQL         | initialization_sql                       | Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS                                                                   |
+| JDBC connection property   |                                          | Optional setting. DQOps supports using JDBC driver to access Oracle. [See the Oracle documentation for more information about using sslMode parameter.](https://docs.oracle.com/en/database/oracle/oracle-database/23/jjdbc/introducing-JDBC.html). |
     
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -46,18 +45,18 @@ For example:
 
 ![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-envvar.jpg)
 
-To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value
+To add optional JDBC connection properties, just type the **JDBC connection property** and the **Value**. The value
 can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
 
 For example:
 
-![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties.jpg)
+![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png)
 
 To remove the property click on the trash icon at the end of the input field.
 
 After filling in the connection settings, click the **Test Connection** button to test the connection.
 
-Click the **Save** connection button when the test is successful otherwise you can check the details of what went wrong.
+Click the **Save** connection button when the test is successful otherwise, you can check the details of what went wrong.
 
 ### **Import metadata using the user interface**
 
@@ -72,8 +71,8 @@ Click the **Save** connection button when the test is successful otherwise you c
 
 
 When new tables are imported, DQOps automatically activates profiling and monitoring checks, such as row count,
-table availability and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m.
-By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks
+table availability, and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m.
+By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks,
 or modify the schedule for newly imported tables.
 
 ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png)
@@ -97,12 +96,13 @@ Database provider type (--provider):
  [ 3] mysql
  [ 4] oracle
  [ 5] postgresql
- [ 6] presto
- [ 7] redshift
- [ 8] snowflake
- [ 9] spark
- [10] sqlserver
- [11] trino
+ [ 6] duckdb
+ [ 7] presto
+ [ 8] redshift
+ [ 9] snowflake
+ [10] spark
+ [11] sqlserver
+ [12] trino
 Please enter one of the [] values: 4
 Oracle host name (--oracle-host)[${ORACLE_HOST}]: localhost
 Oracle port number (--oracle-port)[${ORACLE_port}]: 1521
@@ -171,13 +171,13 @@ spec:
 ```
 
 ### **Reference of all connection parameters**
-The complete documentation of all connection parameters used in the `spec.oracle` node is
-described in the reference of the [OracleParametersSpec](../reference/yaml/ConnectionYaml.md#oracleparametersspec)
-YAML files format reference.
+Complete documentation of all connection parameters used in the `spec.oracle` node is
+described in the reference section of the [OracleParametersSpec](../reference/yaml/ConnectionYaml.md#oracleparametersspec)
+YAML file format.
 
 
 ## Next steps
 
-- We have provided a variety of use cases which use openly available datasets [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
+- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../integrations/webhooks/index.md).
-- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you to calculate separate data quality KPI scores for different groups of rows.
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you calculate separate data quality KPI scores for different groups of rows.

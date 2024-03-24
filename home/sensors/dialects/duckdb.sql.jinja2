@@ -21,22 +21,20 @@
 {% endmacro %}
 
 {%- macro render_target_table() -%}
-{%- if table.file_format.file_paths | length > 0 -%}
-   {{ table_from_files }}
-{%- else -%}
-   {{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
-{%- endif -%}
+    {%- if connection.duckdb.read_mode == 'in_memory' -%}
+        {{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
+    {%- else -%}
+       {{ table_from_files }}
+    {%- endif -%}
 {%- endmacro %}
 
 {%- macro render_referenced_table(referenced_table) -%}
-{%- if referenced_table.file_format.file_paths | length > 0 -%} {# todo: to test it - even not sure if works #}
-   {{ table_from_files }}
-{%- elif referenced_table.find(".") < 0 -%}
-   {{ quote_identifier(macro_schema_name) }}.{{- quote_identifier(referenced_table) -}}
-{%- else -%}
-   {{ referenced_table }}
-{%- endif -%}
-{%- endmacro -%}
+    {%- if connection.duckdb.read_mode == 'in_memory' -%}
+        {{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(referenced_table) }}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+{%- endmacro %}
 
 {%- macro render_target_column(table_alias_prefix = 'analyzed_table') -%}
     {%- if calculated_column_expression != '' -%}

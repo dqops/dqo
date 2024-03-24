@@ -38,9 +38,15 @@ tags:
 - name: "DataSources"
   description: "Rest API controller that operates on data sources that are not yet\
     \ imported, testing connections or retrieving the metadata (schemas and tables)."
+- name: "DefaultColumnCheckPatterns"
+  description: "Operations for managing the configuration of the default column-level\
+    \ checks for columns matching a pattern."
 - name: "Defaults"
   description: "Default settings management for configuring the default data quality\
     \ checks that are configured for all imported tables and columns."
+- name: "DefaultTableCheckPatterns"
+  description: "Operations for managing the configuration of the default table-level\
+    \ checks for tables matching a pattern."
 - name: "Dictionaries"
   description: "Operations for managing data dictionary CSV files in DQOps. Data dictionaries\
     \ can be used in *accepted_values* data quality checks."
@@ -9847,15 +9853,14 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
-  /api/defaults/defaultchecks/dataobservability/monitoring/daily/column:
+  /api/default/checks/column:
     get:
       tags:
-      - "Defaults"
-      summary: "getDefaultDataObservabilityDailyMonitoringColumnChecks"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the daily monitoring (Data Observability and monitoring) checks that are\
-        \ configured for all imported columns on a column level."
-      operationId: "getDefaultDataObservabilityDailyMonitoringColumnChecks"
+      - "DefaultColumnCheckPatterns"
+      summary: "getAllDefaultColumnChecksPatterns"
+      description: "Returns a flat list of all column-level default check patterns\
+        \ configured for this instance. Default checks are applied on columns dynamically."
+      operationId: "getAllDefaultColumnChecksPatterns"
       produces:
       - "application/json"
       parameters: []
@@ -9863,7 +9868,80 @@ paths:
         200:
           description: "OK"
           schema:
-            $ref: "#/definitions/CheckContainerModel"
+            type: "array"
+            items:
+              $ref: "#/definitions/DefaultColumnChecksPatternListModel"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/default/checks/column/{patternName}:
+    get:
+      tags:
+      - "DefaultColumnCheckPatterns"
+      summary: "getDefaultColumnChecksPattern"
+      description: "Returns a default checks pattern definition as a full specification\
+        \ object"
+      operationId: "getDefaultColumnChecksPattern"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Column pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/DefaultColumnChecksPatternModel"
+        404:
+          description: "Pattern name not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    post:
+      tags:
+      - "DefaultColumnCheckPatterns"
+      summary: "createDefaultColumnChecksPattern"
+      description: "Creates (adds) a new default column-level checks pattern configuration\
+        \ by saving a full specification object."
+      operationId: "createDefaultColumnChecksPattern"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model"
+        required: false
+        schema:
+          $ref: "#/definitions/DefaultColumnChecksPatternModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        201:
+          description: "New checks pattern successfully created"
+        400:
+          description: "Bad request, adjust before retrying"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Check pattern with the same name already exists"
         500:
           description: "Internal Server Error"
           schema:
@@ -9872,11 +9950,11 @@ paths:
       - authorization_bearer_api_key: []
     put:
       tags:
-      - "Defaults"
-      summary: "updateDefaultDataObservabilityDailyMonitoringColumnChecks"
-      description: "New configuration of the default daily monitoring (data observability)\
-        \ checks on a column level. These checks will be applied on new columns."
-      operationId: "updateDefaultDataObservabilityDailyMonitoringColumnChecks"
+      - "DefaultColumnCheckPatterns"
+      summary: "updateDefaultColumnChecksPattern"
+      description: "Updates an default column-level checks pattern by saving a full\
+        \ specification object"
+      operationId: "updateDefaultColumnChecksPattern"
       consumes:
       - "application/json"
       produces:
@@ -9884,8 +9962,112 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Model with the changes to be applied to the default configuration\
-          \ of the data observability daily monitoring checks configuration"
+        description: "Default checks pattern model"
+        required: false
+        schema:
+          $ref: "#/definitions/DefaultColumnChecksPatternModel"
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        204:
+          description: "Default column-level checks pattern successfully updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    delete:
+      tags:
+      - "DefaultColumnCheckPatterns"
+      summary: "deleteDefaultColumnChecksPattern"
+      description: "Deletes a default column-level checks pattern"
+      operationId: "deleteDefaultColumnChecksPattern"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        204:
+          description: "Default column-level checks pattern successfully deleted"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/default/checks/column/{patternName}/monitoring/daily:
+    get:
+      tags:
+      - "DefaultColumnCheckPatterns"
+      summary: "getDefaultMonitoringDailyColumnChecksPattern"
+      description: "Returns UI model to show and edit the default configuration of\
+        \ the daily monitoring checks that are configured for a check pattern on a\
+        \ column level."
+      operationId: "getDefaultMonitoringDailyColumnChecksPattern"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "DefaultColumnCheckPatterns"
+      summary: "updateDefaultMonitoringDailyColumnChecksPattern"
+      description: "New configuration of the default daily monitoring checks on a\
+        \ column level. These checks will be applied to columns."
+      operationId: "updateDefaultMonitoringDailyColumnChecksPattern"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Model with the changes to be applied to the data quality daily\
+          \ monitoring checks configuration"
         required: false
         schema:
           $ref: "#/definitions/CheckContainerModel"
@@ -9895,10 +10077,12 @@ paths:
           schema:
             $ref: "#/definitions/MonoVoid"
         204:
-          description: "The default configuration of daily monitoring (daily data\
-            \ observability) checks successfully updated."
+          description: "The default configuration of daily monitoring checks successfully\
+            \ updated."
         400:
           description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
         406:
           description: "Rejected, missing required fields"
         500:
@@ -9907,23 +10091,30 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
-  /api/defaults/defaultchecks/dataobservability/monitoring/daily/table:
+  /api/default/checks/column/{patternName}/monitoring/monthly:
     get:
       tags:
-      - "Defaults"
-      summary: "getDefaultDataObservabilityDailyMonitoringTableChecks"
+      - "DefaultColumnCheckPatterns"
+      summary: "getDefaultMonitoringMonthlyColumnChecksPattern"
       description: "Returns UI model to show and edit the default configuration of\
-        \ the daily monitoring (Data Observability and monitoring) checks that are\
-        \ configured for all imported tables on a table level."
-      operationId: "getDefaultDataObservabilityDailyMonitoringTableChecks"
+        \ the monthly monitoring checks that are configured for a check pattern on\
+        \ a column level."
+      operationId: "getDefaultMonitoringMonthlyColumnChecksPattern"
       produces:
       - "application/json"
-      parameters: []
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
       responses:
         200:
           description: "OK"
           schema:
             $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
         500:
           description: "Internal Server Error"
           schema:
@@ -9932,20 +10123,25 @@ paths:
       - authorization_bearer_api_key: []
     put:
       tags:
-      - "Defaults"
-      summary: "updateDefaultDataObservabilityDailyMonitoringTableChecks"
-      description: "New configuration of the default daily monitoring (data observability)\
-        \ checks on a table level. These checks will be applied on new tables."
-      operationId: "updateDefaultDataObservabilityDailyMonitoringTableChecks"
+      - "DefaultColumnCheckPatterns"
+      summary: "updateDefaultMonitoringMonthlyColumnChecksPattern"
+      description: "New configuration of the default monthly monitoring checks on\
+        \ a column level. These checks will be applied to columns."
+      operationId: "updateDefaultMonitoringMonthlyColumnChecksPattern"
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
       - in: "body"
         name: "body"
-        description: "Model with the changes to be applied to the default configuration\
-          \ of the data observability daily monitoring checks configuration"
+        description: "Model with the changes to be applied to the data quality monthly\
+          \ monitoring checks configuration"
         required: false
         schema:
           $ref: "#/definitions/CheckContainerModel"
@@ -9955,10 +10151,12 @@ paths:
           schema:
             $ref: "#/definitions/MonoVoid"
         204:
-          description: "The default configuration of daily monitoring (daily data\
-            \ observability) checks successfully updated."
+          description: "The default configuration of monthly monitoring checks successfully\
+            \ updated."
         400:
           description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
         406:
           description: "Rejected, missing required fields"
         500:
@@ -9967,23 +10165,30 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
-  /api/defaults/defaultchecks/dataobservability/monitoring/monthly/column:
+  /api/default/checks/column/{patternName}/partitioned/daily:
     get:
       tags:
-      - "Defaults"
-      summary: "getDefaultDataObservabilityMonthlyMonitoringColumnChecks"
+      - "DefaultColumnCheckPatterns"
+      summary: "getDefaultPartitionedDailyColumnChecksPattern"
       description: "Returns UI model to show and edit the default configuration of\
-        \ the monthly monitoring (Data Observability end of month scores) checks that\
-        \ are configured for all imported columns on a column level."
-      operationId: "getDefaultDataObservabilityMonthlyMonitoringColumnChecks"
+        \ the daily partitioned checks that are configured for a check pattern on\
+        \ a column level."
+      operationId: "getDefaultPartitionedDailyColumnChecksPattern"
       produces:
       - "application/json"
-      parameters: []
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
       responses:
         200:
           description: "OK"
           schema:
             $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
         500:
           description: "Internal Server Error"
           schema:
@@ -9992,20 +10197,25 @@ paths:
       - authorization_bearer_api_key: []
     put:
       tags:
-      - "Defaults"
-      summary: "updateDefaultDataObservabilityMonthlyMonitoringColumnChecks"
-      description: "New configuration of the default monthly monitoring checkpoints\
-        \ on a column level. These checks will be applied on new columns."
-      operationId: "updateDefaultDataObservabilityMonthlyMonitoringColumnChecks"
+      - "DefaultColumnCheckPatterns"
+      summary: "updateDefaultPartitionedDailyColumnChecksPattern"
+      description: "New configuration of the default daily partitioned checks on a\
+        \ column level. These checks will be applied to columns."
+      operationId: "updateDefaultPartitionedDailyColumnChecksPattern"
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
       - in: "body"
         name: "body"
-        description: "Model with the changes to be applied to the default configuration\
-          \ of the data observability monthly monitoring checks configuration"
+        description: "Model with the changes to be applied to the data quality daily\
+          \ partitioned checks configuration"
         required: false
         schema:
           $ref: "#/definitions/CheckContainerModel"
@@ -10015,10 +10225,12 @@ paths:
           schema:
             $ref: "#/definitions/MonoVoid"
         204:
-          description: "The default configuration of daily monitoring (daily data\
-            \ observability) checks successfully updated."
+          description: "The default configuration of daily partitioned checks successfully\
+            \ updated."
         400:
           description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
         406:
           description: "Rejected, missing required fields"
         500:
@@ -10027,23 +10239,30 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
-  /api/defaults/defaultchecks/dataobservability/monitoring/monthly/table:
+  /api/default/checks/column/{patternName}/partitioned/monthly:
     get:
       tags:
-      - "Defaults"
-      summary: "getDefaultDataObservabilityMonthlyMonitoringTableChecks"
+      - "DefaultColumnCheckPatterns"
+      summary: "getDefaultPartitionedMonthlyColumnChecksPattern"
       description: "Returns UI model to show and edit the default configuration of\
-        \ the monthly monitoring (Data Observability end of month scores) checks that\
-        \ are configured for all imported tables on a table level."
-      operationId: "getDefaultDataObservabilityMonthlyMonitoringTableChecks"
+        \ the monthly partitioned checks that are configured for a check pattern on\
+        \ a column level."
+      operationId: "getDefaultPartitionedMonthlyColumnChecksPattern"
       produces:
       - "application/json"
-      parameters: []
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
       responses:
         200:
           description: "OK"
           schema:
             $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
         500:
           description: "Internal Server Error"
           schema:
@@ -10052,20 +10271,25 @@ paths:
       - authorization_bearer_api_key: []
     put:
       tags:
-      - "Defaults"
-      summary: "updateDefaultDataObservabilityMonthlyMonitoringTableChecks"
-      description: "New configuration of the default monthly monitoring checkpoints\
-        \ on a table level. These checks will be applied on new tables."
-      operationId: "updateDefaultDataObservabilityMonthlyMonitoringTableChecks"
+      - "DefaultColumnCheckPatterns"
+      summary: "updateDefaultPartitionedMonthlyColumnChecksPattern"
+      description: "New configuration of the default monthly partitioned checks on\
+        \ a column level. These checks will be applied to columns."
+      operationId: "updateDefaultPartitionedMonthlyColumnChecksPattern"
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
       - in: "body"
         name: "body"
-        description: "Model with the changes to be applied to the default configuration\
-          \ of the data observability monthly monitoring checks configuration"
+        description: "Model with the changes to be applied to the data quality monthly\
+          \ partitioned checks configuration"
         required: false
         schema:
           $ref: "#/definitions/CheckContainerModel"
@@ -10075,10 +10299,12 @@ paths:
           schema:
             $ref: "#/definitions/MonoVoid"
         204:
-          description: "The default configuration of daily monitoring (daily data\
-            \ observability) checks successfully updated."
+          description: "The default configuration of monthly partitioned checks successfully\
+            \ updated."
         400:
           description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
         406:
           description: "Rejected, missing required fields"
         500:
@@ -10087,23 +10313,30 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
-  /api/defaults/defaultchecks/profiling/column:
+  /api/default/checks/column/{patternName}/profiling:
     get:
       tags:
-      - "Defaults"
-      summary: "getDefaultProfilingColumnChecks"
+      - "DefaultColumnCheckPatterns"
+      summary: "getDefaultProfilingColumnChecksPattern"
       description: "Returns UI model to show and edit the default configuration of\
-        \ the profiling checks that are configured for all imported column on a column\
+        \ the profiling checks that are configured for a check pattern on a column\
         \ level."
-      operationId: "getDefaultProfilingColumnChecks"
+      operationId: "getDefaultProfilingColumnChecksPattern"
       produces:
       - "application/json"
-      parameters: []
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
       responses:
         200:
           description: "OK"
           schema:
             $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
         500:
           description: "Internal Server Error"
           schema:
@@ -10112,16 +10345,21 @@ paths:
       - authorization_bearer_api_key: []
     put:
       tags:
-      - "Defaults"
-      summary: "updateDefaultProfilingColumnChecks"
+      - "DefaultColumnCheckPatterns"
+      summary: "updateDefaultProfilingColumnChecksPattern"
       description: "New configuration of the default profiling checks on a column\
-        \ level. These checks will be applied to new columns."
-      operationId: "updateDefaultProfilingColumnChecks"
+        \ level. These checks will be applied to columns."
+      operationId: "updateDefaultProfilingColumnChecksPattern"
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
       - in: "body"
         name: "body"
         description: "Model with the changes to be applied to the data quality profiling\
@@ -10139,6 +10377,8 @@ paths:
             \ updated."
         400:
           description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
         406:
           description: "Rejected, missing required fields"
         500:
@@ -10147,23 +10387,69 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
-  /api/defaults/defaultchecks/profiling/table:
+  /api/default/checks/column/{patternName}/target:
     get:
       tags:
-      - "Defaults"
-      summary: "getDefaultProfilingTableChecks"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the profiling checks that are configured for all imported tables on a table\
-        \ level."
-      operationId: "getDefaultProfilingTableChecks"
+      - "DefaultColumnCheckPatterns"
+      summary: "getDefaultColumnChecksPatternTarget"
+      description: "Returns a default checks pattern definition"
+      operationId: "getDefaultColumnChecksPatternTarget"
       produces:
       - "application/json"
-      parameters: []
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Column pattern name"
+        required: true
+        type: "string"
       responses:
         200:
           description: "OK"
           schema:
-            $ref: "#/definitions/CheckContainerModel"
+            $ref: "#/definitions/DefaultColumnChecksPatternListModel"
+        404:
+          description: "Pattern name not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    post:
+      tags:
+      - "DefaultColumnCheckPatterns"
+      summary: "createDefaultColumnChecksPatternTarget"
+      description: "Creates (adds) a new default column-level checks pattern configuration."
+      operationId: "createDefaultColumnChecksPatternTarget"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model with only the target filters"
+        required: false
+        schema:
+          $ref: "#/definitions/DefaultColumnChecksPatternListModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        201:
+          description: "New checks pattern successfully created"
+        400:
+          description: "Bad request, adjust before retrying"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Check pattern with the same name already exists"
         500:
           description: "Internal Server Error"
           schema:
@@ -10172,16 +10458,551 @@ paths:
       - authorization_bearer_api_key: []
     put:
       tags:
-      - "Defaults"
-      summary: "updateDefaultProfilingTableChecks"
-      description: "New configuration of the default profiling checks on a table level.\
-        \ These checks will be applied to new tables."
-      operationId: "updateDefaultProfilingTableChecks"
+      - "DefaultColumnCheckPatterns"
+      summary: "updateDefaultColumnChecksPatternTarget"
+      description: "Updates an default column-level checks pattern, changing only\
+        \ the target object"
+      operationId: "updateDefaultColumnChecksPatternTarget"
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model"
+        required: false
+        schema:
+          $ref: "#/definitions/DefaultColumnChecksPatternListModel"
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        204:
+          description: "Default column-level checks pattern successfully updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/default/checks/table:
+    get:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "getAllDefaultTableChecksPatterns"
+      description: "Returns a flat list of all table-level default check patterns\
+        \ configured for this instance. Default checks are applied on tables dynamically."
+      operationId: "getAllDefaultTableChecksPatterns"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/DefaultTableChecksPatternListModel"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/default/checks/table/{patternName}:
+    get:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "getDefaultTableChecksPattern"
+      description: "Returns a default checks pattern definition as a full specification\
+        \ object"
+      operationId: "getDefaultTableChecksPattern"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Table pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/DefaultTableChecksPatternModel"
+        404:
+          description: "Pattern name not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    post:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "createDefaultTableChecksPattern"
+      description: "Creates (adds) a new default table-level checks pattern configuration\
+        \ by saving a full specification object."
+      operationId: "createDefaultTableChecksPattern"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model"
+        required: false
+        schema:
+          $ref: "#/definitions/DefaultTableChecksPatternModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        201:
+          description: "New checks pattern successfully created"
+        400:
+          description: "Bad request, adjust before retrying"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Check pattern with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "updateDefaultTableChecksPattern"
+      description: "Updates an default table-level checks pattern by saving a full\
+        \ specification object"
+      operationId: "updateDefaultTableChecksPattern"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model"
+        required: false
+        schema:
+          $ref: "#/definitions/DefaultTableChecksPatternModel"
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        204:
+          description: "Default table-level checks pattern successfully updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    delete:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "deleteDefaultTableChecksPattern"
+      description: "Deletes a default table-level checks pattern"
+      operationId: "deleteDefaultTableChecksPattern"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        204:
+          description: "Default table-level checks pattern successfully deleted"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/default/checks/table/{patternName}/monitoring/daily:
+    get:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "getDefaultMonitoringDailyTableChecksPattern"
+      description: "Returns UI model to show and edit the default configuration of\
+        \ the daily monitoring checks that are configured for a check pattern on a\
+        \ table level."
+      operationId: "getDefaultMonitoringDailyTableChecksPattern"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "updateDefaultMonitoringDailyTableChecksPattern"
+      description: "New configuration of the default daily monitoring checks on a\
+        \ table level. These checks will be applied to tables."
+      operationId: "updateDefaultMonitoringDailyTableChecksPattern"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Model with the changes to be applied to the data quality daily\
+          \ monitoring checks configuration"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckContainerModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        204:
+          description: "The default configuration of daily monitoring checks successfully\
+            \ updated."
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/default/checks/table/{patternName}/monitoring/monthly:
+    get:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "getDefaultMonitoringMonthlyTableChecksPattern"
+      description: "Returns UI model to show and edit the default configuration of\
+        \ the monthly monitoring checks that are configured for a check pattern on\
+        \ a table level."
+      operationId: "getDefaultMonitoringMonthlyTableChecksPattern"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "updateDefaultMonitoringMonthlyTableChecksPattern"
+      description: "New configuration of the default monthly monitoring checks on\
+        \ a table level. These checks will be applied to tables."
+      operationId: "updateDefaultMonitoringMonthlyTableChecksPattern"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Model with the changes to be applied to the data quality monthly\
+          \ monitoring checks configuration"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckContainerModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        204:
+          description: "The default configuration of monthly monitoring checks successfully\
+            \ updated."
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/default/checks/table/{patternName}/partitioned/daily:
+    get:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "getDefaultPartitionedDailyTableChecksPattern"
+      description: "Returns UI model to show and edit the default configuration of\
+        \ the daily partitioned checks that are configured for a check pattern on\
+        \ a table level."
+      operationId: "getDefaultPartitionedDailyTableChecksPattern"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "updateDefaultPartitionedDailyTableChecksPattern"
+      description: "New configuration of the default daily partitioned checks on a\
+        \ table level. These checks will be applied to tables."
+      operationId: "updateDefaultPartitionedDailyTableChecksPattern"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Model with the changes to be applied to the data quality daily\
+          \ partitioned checks configuration"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckContainerModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        204:
+          description: "The default configuration of daily partitioned checks successfully\
+            \ updated."
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/default/checks/table/{patternName}/partitioned/monthly:
+    get:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "getDefaultPartitionedMonthlyTableChecksPattern"
+      description: "Returns UI model to show and edit the default configuration of\
+        \ the monthly partitioned checks that are configured for a check pattern on\
+        \ a table level."
+      operationId: "getDefaultPartitionedMonthlyTableChecksPattern"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "updateDefaultPartitionedMonthlyTableChecksPattern"
+      description: "New configuration of the default monthly partitioned checks on\
+        \ a table level. These checks will be applied to tables."
+      operationId: "updateDefaultPartitionedMonthlyTableChecksPattern"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Model with the changes to be applied to the data quality monthly\
+          \ partitioned checks configuration"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckContainerModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        204:
+          description: "The default configuration of monthly partitioned checks successfully\
+            \ updated."
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/default/checks/table/{patternName}/profiling:
+    get:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "getDefaultProfilingTableChecksPattern"
+      description: "Returns UI model to show and edit the default configuration of\
+        \ the profiling checks that are configured for a check pattern on a table\
+        \ level."
+      operationId: "getDefaultProfilingTableChecksPattern"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "updateDefaultProfilingTableChecksPattern"
+      description: "New configuration of the default profiling checks on a table level.\
+        \ These checks will be applied to tables."
+      operationId: "updateDefaultProfilingTableChecksPattern"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
       - in: "body"
         name: "body"
         description: "Model with the changes to be applied to the data quality profiling\
@@ -10199,8 +11020,119 @@ paths:
             \ updated."
         400:
           description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
         406:
           description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/default/checks/table/{patternName}/target:
+    get:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "getDefaultTableChecksPatternTarget"
+      description: "Returns a default checks pattern definition"
+      operationId: "getDefaultTableChecksPatternTarget"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Table pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/DefaultTableChecksPatternListModel"
+        404:
+          description: "Pattern name not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    post:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "createDefaultTableChecksPatternTarget"
+      description: "Creates (adds) a new default table-level checks pattern configuration."
+      operationId: "createDefaultTableChecksPatternTarget"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model with only the target filters"
+        required: false
+        schema:
+          $ref: "#/definitions/DefaultTableChecksPatternListModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        201:
+          description: "New checks pattern successfully created"
+        400:
+          description: "Bad request, adjust before retrying"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Check pattern with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "updateDefaultTableChecksPatternTarget"
+      description: "Updates an default table-level checks pattern, changing only the\
+        \ target object"
+      operationId: "updateDefaultTableChecksPatternTarget"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model"
+        required: false
+        schema:
+          $ref: "#/definitions/DefaultTableChecksPatternListModel"
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        204:
+          description: "Default table-level checks pattern successfully updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Pattern not found"
         500:
           description: "Internal Server Error"
           schema:
@@ -12054,7 +12986,7 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "List of rule definitions"
+        description: "Rule model"
         required: false
         schema:
           $ref: "#/definitions/RuleModel"
@@ -13133,6 +14065,9 @@ definitions:
         type: "string"
         description: "Help text that is shown in the check editor that describes the\
           \ purpose and usage of the check"
+      friendly_name:
+        type: "string"
+        description: "An alternative check's name that is shown on the check editor."
       standard:
         type: "boolean"
         description: "This is a standard data quality check that is always shown on\
@@ -13184,6 +14119,14 @@ definitions:
       help_text:
         type: "string"
         description: "Help text that describes the data quality check."
+      display_name:
+        type: "string"
+        description: "User assigned display name that is shown instead of the original\
+          \ data quality check name."
+      friendly_name:
+        type: "string"
+        description: "An alternative check's name that is shown on the check editor\
+          \ as a hint."
       sensor_parameters:
         type: "array"
         description: "List of fields for editing the sensor parameters."
@@ -13210,6 +14153,11 @@ definitions:
           \ the data quality checks editor screen. Non-standard data quality checks\
           \ (when the value is false) are advanced checks that are shown when the\
           \ user decides to expand the list of checks."
+      default_check:
+        type: "boolean"
+        description: "This is a check that was applied on-the-fly, because it is configured\
+          \ as a default data observability check and can be run, but it is not configured\
+          \ in the table YAML."
       data_grouping_override:
         description: "Data grouping configuration for this check. When a data grouping\
           \ configuration is assigned at a check level, it overrides the data grouping\
@@ -13720,6 +14668,13 @@ definitions:
       dictionaries:
         type: "string"
         description: "The synchronization status of the \"dictionaries\" folder."
+        enum:
+        - "unchanged"
+        - "changed"
+        - "synchronizing"
+      patterns:
+        type: "string"
+        description: "The synchronization status of the \"patterns\" folder."
         enum:
         - "unchanged"
         - "changed"
@@ -16894,6 +17849,36 @@ definitions:
           \ date strings and raises a data quality issue when too many invalid date\
           \ strings are found."
         $ref: "#/definitions/ColumnTextMatchDateFormatPercentCheckSpec"
+  ColumnDefaultChecksPatternSpec:
+    type: "object"
+    properties:
+      priority:
+        type: "integer"
+        format: "int32"
+        description: "The priority of the pattern. Patterns with lower values are\
+          \ applied before patterns with higher priority values."
+      target:
+        description: "The target column filter that are filtering the column, table\
+          \ and connection on which the default checks are applied."
+        $ref: "#/definitions/TargetColumnPatternSpec"
+      profiling_checks:
+        description: "Configuration of data quality profiling checks that are enabled.\
+          \ Pick a check from a category, apply the parameters and rules to enable\
+          \ it."
+        $ref: "#/definitions/ColumnProfilingCheckCategoriesSpec"
+      monitoring_checks:
+        description: "Configuration of table level monitoring checks. Monitoring checks\
+          \ are data quality checks that are evaluated for each period of time (daily,\
+          \ weekly, monthly, etc.). A monitoring check stores only the most recent\
+          \ data quality check result for each period of time."
+        $ref: "#/definitions/ColumnMonitoringCheckCategoriesSpec"
+      partitioned_checks:
+        description: "Configuration of table level date/time partitioned checks. Partitioned\
+          \ data quality checks are evaluated for each partition separately, raising\
+          \ separate alerts at a partition level. The table does not need to be physically\
+          \ partitioned by date, it is possible to run data quality checks for each\
+          \ day or month of data separately."
+        $ref: "#/definitions/ColumnPartitionedCheckCategoriesSpec"
   ColumnDetectedDatatypeInTextCheckSpec:
     type: "object"
     properties:
@@ -20036,7 +21021,7 @@ definitions:
           \ captured, this field returns the file parsing error message and the file\
           \ location."
     description: "Full column model"
-  ColumnMonitoringChecksRootSpec:
+  ColumnMonitoringCheckCategoriesSpec:
     type: "object"
     properties:
       daily:
@@ -22683,7 +23668,7 @@ definitions:
         type: "string"
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
-  ColumnPartitionedChecksRootSpec:
+  ColumnPartitionedCheckCategoriesSpec:
     type: "object"
     properties:
       daily:
@@ -24539,14 +25524,14 @@ definitions:
           \ are data quality checks that are evaluated for each period of time (daily,\
           \ weekly, monthly, etc.). A monitoring stores only the most recent data\
           \ quality check result for each period of time."
-        $ref: "#/definitions/ColumnMonitoringChecksRootSpec"
+        $ref: "#/definitions/ColumnMonitoringCheckCategoriesSpec"
       partitioned_checks:
         description: "Configuration of column level date/time partitioned checks.\
           \ Partitioned data quality checks are evaluated for each partition separately,\
           \ raising separate alerts at a partition level. The table does not need\
           \ to be physically partitioned by date, it is possible to run data quality\
           \ checks for each day or month of data separately."
-        $ref: "#/definitions/ColumnPartitionedChecksRootSpec"
+        $ref: "#/definitions/ColumnPartitionedCheckCategoriesSpec"
       statistics:
         description: "Custom configuration of a column level statistics collector\
           \ (a basic profiler). Enables customization of the statistics collector\
@@ -29125,18 +30110,16 @@ definitions:
       auto_detect:
         type: "boolean"
         description: "Enables auto detection of CSV parameters."
-      columns:
-        type: "object"
-        description: "A struct that specifies the column names and column types contained\
-          \ within the CSV file (e.g., {'col1': 'INTEGER', 'col2': 'VARCHAR'}). Using\
-          \ this option implies that auto detection is not used."
-        additionalProperties:
-          type: "string"
       compression:
         type: "string"
         description: "The compression type for the file. By default this will be detected\
           \ automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv\
           \ will use none). Options are none, gzip, zstd."
+        enum:
+        - "auto"
+        - "none"
+        - "gzip"
+        - "zstd"
       dateformat:
         type: "string"
         description: "Specifies the date format to use when parsing dates."
@@ -29170,10 +30153,18 @@ definitions:
         type: "string"
         description: "Set the new line character(s) in the file. Options are '\\r','\\\
           n', or '\\r\\n'."
+        enum:
+        - "cr"
+        - "lf"
+        - "crlf"
       quote:
         type: "string"
         description: "Specifies the quoting string to be used when a data value is\
           \ quoted."
+      sample_size:
+        type: "integer"
+        format: "int64"
+        description: "The number of sample rows for auto detection of parameters."
       skip:
         type: "integer"
         format: "int64"
@@ -29529,12 +30520,6 @@ definitions:
         type: "string"
         description: "Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN}\
           \ configuration with a custom environment variable."
-      options:
-        type: "string"
-        description: "Databricks connection 'options' initialization parameter. For\
-          \ example setting this to -c statement_timeout=5min would set the statement\
-          \ timeout parameter for this session to 5 minutes. Supports also a ${DATABRICKS_OPTIONS}\
-          \ configuration with a custom environment variable."
       properties:
         type: "object"
         description: "A dictionary of custom JDBC parameters that are added to the\
@@ -29543,6 +30528,51 @@ definitions:
           type: "string"
       database:
         type: "string"
+  DefaultColumnChecksPatternListModel:
+    type: "object"
+    properties:
+      pattern_name:
+        type: "string"
+        description: "Pattern name."
+      priority:
+        type: "integer"
+        format: "int32"
+        description: "The priority of the pattern. Patterns with lower values are\
+          \ applied before patterns with higher priority values."
+      target_column:
+        description: "The filters for the target column."
+        $ref: "#/definitions/TargetColumnPatternSpec"
+      can_edit:
+        type: "boolean"
+        description: "Boolean flag that decides if the current user can update or\
+          \ delete this object."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
+    description: "Default column-level checks pattern list model"
+  DefaultColumnChecksPatternModel:
+    type: "object"
+    properties:
+      pattern_name:
+        type: "string"
+        description: "Pattern name"
+      pattern_spec:
+        description: "The default checks specification."
+        $ref: "#/definitions/ColumnDefaultChecksPatternSpec"
+      can_edit:
+        type: "boolean"
+        description: "Boolean flag that decides if the current user can update or\
+          \ delete this object."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
+    description: "Default column-level checks pattern model"
   DefaultSchedulesSpec:
     type: "object"
     properties:
@@ -29561,6 +30591,51 @@ definitions:
       partitioned_monthly:
         description: "Schedule for running monthly partitioned checks."
         $ref: "#/definitions/MonitoringScheduleSpec"
+  DefaultTableChecksPatternListModel:
+    type: "object"
+    properties:
+      pattern_name:
+        type: "string"
+        description: "Pattern name."
+      priority:
+        type: "integer"
+        format: "int32"
+        description: "The priority of the pattern. Patterns with lower values are\
+          \ applied before patterns with higher priority values."
+      target_table:
+        description: "The filters for the target table."
+        $ref: "#/definitions/TargetTablePatternSpec"
+      can_edit:
+        type: "boolean"
+        description: "Boolean flag that decides if the current user can update or\
+          \ delete this object."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
+    description: "Default table-level checks pattern list model"
+  DefaultTableChecksPatternModel:
+    type: "object"
+    properties:
+      pattern_name:
+        type: "string"
+        description: "Pattern name"
+      pattern_spec:
+        description: "The default checks specification."
+        $ref: "#/definitions/TableDefaultChecksPatternSpec"
+      can_edit:
+        type: "boolean"
+        description: "Boolean flag that decides if the current user can update or\
+          \ delete this object."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
+    description: "Default table-level checks pattern model"
   DeleteStoredDataQueueJobParameters:
     type: "object"
     properties:
@@ -29987,29 +31062,21 @@ definitions:
     properties:
       read_mode:
         type: "string"
-        description: "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
-          \ format to use dynamic substitution."
+        description: "DuckDB read mode."
         enum:
         - "in_memory"
         - "files"
-      source_files_type:
+      files_format_type:
         type: "string"
-        description: "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
-          \ format to use dynamic substitution."
+        description: "Type of source files format for DuckDB."
         enum:
         - "csv"
         - "json"
         - "parquet"
       database:
         type: "string"
-        description: "DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
-          \ format to use dynamic substitution."
-      options:
-        type: "string"
-        description: "DuckDB connection 'options' initialization parameter. For example\
-          \ setting this to -c statement_timeout=5min would set the statement timeout\
-          \ parameter for this session to 5 minutes. Supports also a ${DUCKDB_OPTIONS}\
-          \ configuration with a custom environment variable."
+        description: "DuckDB database name for in-memory read mode. The value can\
+          \ be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
       properties:
         type: "object"
         description: "A dictionary of custom JDBC parameters that are added to the\
@@ -30027,9 +31094,28 @@ definitions:
         $ref: "#/definitions/ParquetFileFormatSpec"
       directories:
         type: "object"
-        description: "Schema to directory mappings."
+        description: "Virtual schema name to directory mappings. The path must be\
+          \ an absolute path."
         additionalProperties:
           type: "string"
+      storage_type:
+        type: "string"
+        description: "The storage type."
+        enum:
+        - "local"
+        - "s3"
+      user:
+        type: "string"
+        description: "DuckDB user name for a remote storage type. The value can be\
+          \ in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+      password:
+        type: "string"
+        description: "DuckDB password for a remote storage type. The value can be\
+          \ in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+      region:
+        type: "string"
+        description: "The region for the storage credentials. The value can be in\
+          \ the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
   Duration:
     type: "object"
     properties:
@@ -30386,16 +31472,26 @@ definitions:
         description: "True when this data quality incident is based on data quality\
           \ issues from profiling checks within the filters applied to search for\
           \ linked data quality issues."
-      hasMonitoringIssues:
+      hasDailyMonitoringIssues:
         type: "boolean"
         description: "True when this data quality incident is based on data quality\
-          \ issues from monitoring checks within the filters applied to search for\
-          \ linked data quality issues."
-      hasPartitionedIssues:
+          \ issues from daily monitoring checks within the filters applied to search\
+          \ for linked data quality issues."
+      hasMonthlyMonitoringIssues:
         type: "boolean"
         description: "True when this data quality incident is based on data quality\
-          \ issues from partitioned checks within the filters applied to search for\
-          \ linked data quality issues."
+          \ issues from monthly monitoring checks within the filters applied to search\
+          \ for linked data quality issues."
+      hasDailyPartitionedIssues:
+        type: "boolean"
+        description: "True when this data quality incident is based on data quality\
+          \ issues from daily partitioned checks within the filters applied to search\
+          \ for linked data quality issues."
+      hasMonthlyPartitionedIssues:
+        type: "boolean"
+        description: "True when this data quality incident is based on data quality\
+          \ issues from monthly partitioned checks within the filters applied to search\
+          \ for linked data quality issues."
       days:
         type: "object"
         description: "A map of the numbers of data quality issues per day, the day\
@@ -30556,22 +31652,20 @@ definitions:
       auto_detect:
         type: "boolean"
         description: "Whether to auto-detect detect the names of the keys and data\
-          \ types of the values automatically"
-      columns:
-        type: "object"
-        description: "A struct that specifies the key names and value types contained\
-          \ within the JSON file (e.g., {key1: 'INTEGER', key2: 'VARCHAR'}). If auto_detect\
-          \ is enabled these will be inferred"
-        additionalProperties:
-          type: "string"
+          \ types of the values automatically."
       compression:
         type: "string"
         description: "The compression type for the file. By default this will be detected\
           \ automatically from the file extension (e.g., t.json.gz will use gzip,\
           \ t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'."
+        enum:
+        - "auto"
+        - "none"
+        - "gzip"
+        - "zstd"
       convert_strings_to_integers:
         type: "boolean"
-        description: "\tWhether strings representing integer values should be converted\
+        description: "Whether strings representing integer values should be converted\
           \ to a numerical type."
       dateformat:
         type: "string"
@@ -30582,7 +31676,7 @@ definitions:
           \ the result."
       format:
         type: "string"
-        description: "\tCan be one of ['auto', 'unstructured', 'newline_delimited',\
+        description: "Json format. Can be one of ['auto', 'unstructured', 'newline_delimited',\
           \ 'array']."
         enum:
         - "auto"
@@ -30591,26 +31685,34 @@ definitions:
         - "array"
       hive_partitioning:
         type: "boolean"
-        description: "\tWhether or not to interpret the path as a hive partitioned\
-          \ path."
+        description: "Whether or not to interpret the path as a hive partitioned path."
       ignore_errors:
         type: "boolean"
         description: "Whether to ignore parse errors (only possible when format is\
           \ 'newline_delimited')."
       maximum_depth:
         type: "integer"
+        format: "int64"
         description: "Maximum nesting depth to which the automatic schema detection\
-          \ detects types. Set to -1 to fully detect nested JSON types"
+          \ detects types. Set to -1 to fully detect nested JSON types."
       maximum_object_size:
         type: "integer"
         format: "int64"
-        description: "\tThe maximum size of a JSON object (in bytes)"
+        description: "The maximum size of a JSON object (in bytes)."
       records:
         type: "string"
-        description: "Can be one of ['auto', 'true', 'false']"
+        description: "Can be one of ['auto', 'true', 'false']."
+        enum:
+        - "auto"
+        - "true"
+        - "false"
+      sample_size:
+        type: "integer"
+        format: "int64"
+        description: "The number of sample rows for auto detection of parameters."
       timestampformat:
         type: "string"
-        description: "\tSpecifies the date format to use when parsing timestamps."
+        description: "Specifies the date format to use when parsing timestamps."
   MaxCountRule0ErrorParametersSpec:
     type: "object"
     properties:
@@ -30834,12 +31936,6 @@ definitions:
         type: "string"
         description: "MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
           \ format to use dynamic substitution."
-      options:
-        type: "string"
-        description: "MySQL connection 'options' initialization parameter. For example\
-          \ setting this to -c statement_timeout=5min would set the statement timeout\
-          \ parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS}\
-          \ configuration with a custom environment variable."
       sslmode:
         type: "string"
         description: "SslMode MySQL connection parameter."
@@ -30909,12 +32005,6 @@ definitions:
         type: "string"
         description: "Oracle database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
           \ format to use dynamic substitution."
-      options:
-        type: "string"
-        description: "Oracle connection 'options' initialization parameter. For example\
-          \ setting this to -c statement_timeout=5min would set the statement timeout\
-          \ parameter for this session to 5 minutes. Supports also a ${ORACLE_OPTIONS}\
-          \ configuration with a custom environment variable."
       initialization_sql:
         type: "string"
         description: "Custom SQL that is executed after connecting to Oracle. This\
@@ -31277,12 +32367,6 @@ definitions:
         type: "string"
         description: "Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
           \ format to use dynamic substitution."
-      options:
-        type: "string"
-        description: "Redshift connection 'options' initialization parameter. For\
-          \ example setting this to -c statement_timeout=5min would set the statement\
-          \ timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS}\
-          \ configuration with a custom environment variable."
       properties:
         type: "object"
         description: "A dictionary of custom JDBC parameters that are added to the\
@@ -31694,6 +32778,9 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can delete data\
           \ (results)."
+      error_message:
+        type: "string"
+        description: "Field for error message."
     description: "Schema model"
   SchemaRemoteModel:
     type: "object"
@@ -32105,12 +33192,6 @@ definitions:
         type: "string"
         description: "Spark database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
           \ format to use dynamic substitution."
-      options:
-        type: "string"
-        description: "Spark connection 'options' initialization parameter. For example\
-          \ setting this to -c statement_timeout=5min would set the statement timeout\
-          \ parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS}\
-          \ configuration with a custom environment variable."
       properties:
         type: "object"
         description: "A dictionary of custom JDBC parameters that are added to the\
@@ -32167,12 +33248,6 @@ definitions:
         type: "string"
         description: "SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
           \ format to use dynamic substitution."
-      options:
-        type: "string"
-        description: "SQL Server connection 'options' initialization parameter. For\
-          \ example setting this to -c statement_timeout=5min would set the statement\
-          \ timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS}\
-          \ configuration with a custom environment variable."
       disable_encryption:
         type: "boolean"
         description: "Disable SSL encryption parameter. The default value is false.\
@@ -32345,6 +33420,9 @@ definitions:
       dictionaries:
         type: "boolean"
         description: "Synchronize the \"dictionaries\" folder."
+      patterns:
+        type: "boolean"
+        description: "Synchronize the \"patterns\" folder."
       dataSensorReadouts:
         type: "boolean"
         description: "Synchronize the \".data/sensor_readouts\" folder."
@@ -32411,6 +33489,7 @@ definitions:
         - "settings"
         - "credentials"
         - "dictionaries"
+        - "patterns"
         - "_indexes"
         - "_local_settings"
       direction:
@@ -33290,6 +34369,13 @@ definitions:
           \ invalid queries in data quality sensors or invalid python rules. When\
           \ an execution error is reported, the configuration of a data quality check\
           \ on a table must be updated."
+      data_quality_kpi:
+        type: "number"
+        format: "double"
+        description: "Data quality KPI score for the table, measured as a percentage\
+          \ of passed data quality checks. DQOps counts data quality issues at a warning\
+          \ severity level as passed checks. The data quality KPI score is a value\
+          \ in the range 0..100."
       checks:
         type: "object"
         description: "The dictionary of statuses for data quality checks. The keys\
@@ -33722,6 +34808,36 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MaxDaysRule7ParametersSpec"
+  TableDefaultChecksPatternSpec:
+    type: "object"
+    properties:
+      priority:
+        type: "integer"
+        format: "int32"
+        description: "The priority of the pattern. Patterns with lower values are\
+          \ applied before patterns with higher priority values."
+      target:
+        description: "The target table filter that are filtering the table and connection\
+          \ on which the default checks are applied."
+        $ref: "#/definitions/TargetTablePatternSpec"
+      profiling_checks:
+        description: "Configuration of data quality profiling checks that are enabled.\
+          \ Pick a check from a category, apply the parameters and rules to enable\
+          \ it."
+        $ref: "#/definitions/TableProfilingCheckCategoriesSpec"
+      monitoring_checks:
+        description: "Configuration of table level monitoring checks. Monitoring checks\
+          \ are data quality checks that are evaluated for each period of time (daily,\
+          \ weekly, monthly, etc.). A monitoring check stores only the most recent\
+          \ data quality check result for each period of time."
+        $ref: "#/definitions/TableMonitoringCheckCategoriesSpec"
+      partitioned_checks:
+        description: "Configuration of table level date/time partitioned checks. Partitioned\
+          \ data quality checks are evaluated for each partition separately, raising\
+          \ separate alerts at a partition level. The table does not need to be physically\
+          \ partitioned by date, it is possible to run data quality checks for each\
+          \ day or month of data separately."
+        $ref: "#/definitions/TablePartitionedCheckCategoriesSpec"
   TableIncidentGroupingSpec:
     type: "object"
     properties:
@@ -33801,11 +34917,11 @@ definitions:
           \ the month. By changing this value, it is possible to store one value per\
           \ day or even store all profiling checks results."
         enum:
-        - "one_per_month"
-        - "one_per_week"
-        - "one_per_day"
-        - "one_per_hour"
-        - "all_results"
+        - "store_the_most_recent_result_per_month"
+        - "store_the_most_recent_result_per_week"
+        - "store_the_most_recent_result_per_day"
+        - "store_the_most_recent_result_per_hour"
+        - "store_all_results_without_date_truncation"
       file_format:
         description: "File format for a file based table, such as a CSV or Parquet\
           \ file."
@@ -33902,7 +35018,7 @@ definitions:
           \ captured, this field returns the file parsing error message and the file\
           \ location."
     description: "Full table model, including all nested objects like columns or checks."
-  TableMonitoringChecksSpec:
+  TableMonitoringCheckCategoriesSpec:
     type: "object"
     properties:
       daily:
@@ -34042,7 +35158,7 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MaxDaysRule7ParametersSpec"
-  TablePartitionedChecksRootSpec:
+  TablePartitionedCheckCategoriesSpec:
     type: "object"
     properties:
       daily:
@@ -34097,11 +35213,11 @@ definitions:
           \ the month. By changing this value, it is possible to store one value per\
           \ day or even store all profiling checks results."
         enum:
-        - "one_per_month"
-        - "one_per_week"
-        - "one_per_day"
-        - "one_per_hour"
-        - "all_results"
+        - "store_the_most_recent_result_per_month"
+        - "store_the_most_recent_result_per_week"
+        - "store_the_most_recent_result_per_day"
+        - "store_the_most_recent_result_per_hour"
+        - "store_all_results_without_date_truncation"
       volume:
         description: "Configuration of volume data quality checks on a table level."
         $ref: "#/definitions/TableVolumeProfilingChecksSpec"
@@ -35110,14 +36226,14 @@ definitions:
           \ are data quality checks that are evaluated for each period of time (daily,\
           \ weekly, monthly, etc.). A monitoring check stores only the most recent\
           \ data quality check result for each period of time."
-        $ref: "#/definitions/TableMonitoringChecksSpec"
+        $ref: "#/definitions/TableMonitoringCheckCategoriesSpec"
       partitioned_checks:
         description: "Configuration of table level date/time partitioned checks. Partitioned\
           \ data quality checks are evaluated for each partition separately, raising\
           \ separate alerts at a partition level. The table does not need to be physically\
           \ partitioned by date, it is possible to run data quality checks for each\
           \ day or month of data separately."
-        $ref: "#/definitions/TablePartitionedChecksRootSpec"
+        $ref: "#/definitions/TablePartitionedCheckCategoriesSpec"
       statistics:
         description: "Configuration of table level data statistics collector (a basic\
           \ profiler). Configures which statistics collectors are enabled and how\
@@ -35843,6 +36959,89 @@ definitions:
       row_count:
         description: "Configuration of the row count profiler."
         $ref: "#/definitions/TableVolumeRowCountStatisticsCollectorSpec"
+  TargetColumnPatternSpec:
+    type: "object"
+    properties:
+      connection:
+        type: "string"
+        description: "The data source connection name filter. Accepts wildcards in\
+          \ the format: *conn, *, conn*."
+      schema:
+        type: "string"
+        description: "The schema name filter. Accepts wildcards in the format: *_prod,\
+          \ *, pub*."
+      table:
+        type: "string"
+        description: "The table name filter. Accepts wildcards in the format: *_customers,\
+          \ *, fact_*."
+      stage:
+        type: "string"
+        description: "The table stage filter. Accepts wildcards in the format: *_landing,\
+          \ *, staging_*."
+      table_priority:
+        type: "integer"
+        format: "int32"
+        description: "The maximum table priority (inclusive) for tables that are covered\
+          \ by the default checks."
+      label:
+        type: "string"
+        description: "The label filter. Accepts wildcards in the format: *_customers,\
+          \ *, fact_*. The label must be present on the connection or table."
+      column:
+        type: "string"
+        description: "The target column name filter. Accepts wildcards in the format:\
+          \ *id, *, c_*."
+      data_type:
+        type: "string"
+        description: "The target column data type filter. Filters by a physical (database\
+          \ specific) data type name imported from the data source. Accepts wildcards\
+          \ in the format: *int, *, big*."
+      data_type_category:
+        type: "string"
+        description: "The filter for a target data type category."
+        enum:
+        - "numeric_integer"
+        - "numeric_decimal"
+        - "numeric_float"
+        - "datetime_timestamp"
+        - "datetime_datetime"
+        - "datetime_date"
+        - "datetime_time"
+        - "text"
+        - "clob"
+        - "json"
+        - "bool"
+        - "binary"
+        - "array"
+        - "other"
+  TargetTablePatternSpec:
+    type: "object"
+    properties:
+      connection:
+        type: "string"
+        description: "The data source connection name filter. Accepts wildcards in\
+          \ the format: *conn, *, conn*."
+      schema:
+        type: "string"
+        description: "The schema name filter. Accepts wildcards in the format: *_prod,\
+          \ *, pub*."
+      table:
+        type: "string"
+        description: "The table name filter. Accepts wildcards in the format: *_customers,\
+          \ *, fact_*."
+      stage:
+        type: "string"
+        description: "The table stage filter. Accepts wildcards in the format: *_landing,\
+          \ *, staging_*."
+      table_priority:
+        type: "integer"
+        format: "int32"
+        description: "The maximum table priority (inclusive) for tables that are covered\
+          \ by the default checks."
+      label:
+        type: "string"
+        description: "The label filter. Accepts wildcards in the format: *_customers,\
+          \ *, fact_*. The label must be present on the connection or table."
   TemporalUnit:
     type: "object"
     properties:

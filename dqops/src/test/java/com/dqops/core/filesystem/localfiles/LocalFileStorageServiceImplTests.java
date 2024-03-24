@@ -67,12 +67,14 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
     @Test
     void listFolders_whenRootFolder_thenReturnsStandardFolders() {
         List<HomeFolderPath> folders = this.sut.listFolders(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), false);
-        Assertions.assertEquals(10, folders.size());
+        Assertions.assertEquals(11, folders.size());
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals("sources")));
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals("rules")));
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals("sensors")));
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals("checks")));
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals("settings")));
+        Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals("patterns")));
+        Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals("dictionaries")));
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals(".data")));
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals(".index")));
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals(".credentials")));

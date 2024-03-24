@@ -51,6 +51,8 @@ logging:
           util: ERROR
     com:
       google: OFF
+      singlestore:
+        jdbc: ERROR
 
 picocli:
   ansi: true

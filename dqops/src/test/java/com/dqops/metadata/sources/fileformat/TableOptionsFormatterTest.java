@@ -1,11 +1,14 @@
 package com.dqops.metadata.sources.fileformat;
 
 import com.dqops.BaseTest;
+import com.dqops.metadata.sources.ColumnSpec;
+import com.dqops.metadata.sources.ColumnSpecMap;
+import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
+import com.dqops.metadata.sources.TableSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 
 @SpringBootTest
@@ -16,7 +19,7 @@ public class TableOptionsFormatterTest extends BaseTest {
         TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("csv_file",
                 List.of("file_one.csv"));
 
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(
@@ -30,7 +33,7 @@ public class TableOptionsFormatterTest extends BaseTest {
         TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("csv_file",
                 List.of("file_one.csv", "file_two.csv"));
 
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(
@@ -46,7 +49,7 @@ public class TableOptionsFormatterTest extends BaseTest {
 
         tableOptionsFormatter.formatValueWhenSet("bool_field", true);
 
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(
@@ -62,7 +65,7 @@ public class TableOptionsFormatterTest extends BaseTest {
 
         tableOptionsFormatter.formatValueWhenSet("long_field", 3L);
 
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(
@@ -78,7 +81,7 @@ public class TableOptionsFormatterTest extends BaseTest {
 
         tableOptionsFormatter.formatValueWhenSet("bool_field", null);
 
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(
@@ -93,7 +96,7 @@ public class TableOptionsFormatterTest extends BaseTest {
 
         tableOptionsFormatter.formatStringWhenSet("string_field", "text value");
 
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(
@@ -108,21 +111,30 @@ public class TableOptionsFormatterTest extends BaseTest {
         TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("csv_file",
                 List.of("file_one.csv"));
 
-        LinkedHashMap<String, String> linkedHashMap = new LinkedHashMap<>();
+        ColumnSpec columnSpec = new ColumnSpec(){{
+            setTypeSnapshot(ColumnTypeSnapshotSpec.fromType("INT"));
+        }};
+        ColumnSpec columnSpec2 = new ColumnSpec(){{
+            setTypeSnapshot(ColumnTypeSnapshotSpec.fromType("STRING"));
+        }};
+        ColumnSpecMap columnSpecMap = new ColumnSpecMap(){{
+            put("col1", columnSpec);
+            put("col2", columnSpec2);
+        }};
+        TableSpec tableSpec = new TableSpec();
+        tableSpec.setColumns(columnSpecMap);
 
-        linkedHashMap.put("NAME", "VARCHAR");
-        linkedHashMap.put("VALUE", "INTEGER");
 
-        tableOptionsFormatter.formatMapWhenSet("columns", linkedHashMap);
+        tableOptionsFormatter.formatColumns("columns", tableSpec);
 
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(
                   'file_one.csv',
                   columns = {
-                    'NAME': 'VARCHAR',
-                    'VALUE': 'INTEGER'
+                    'col1': 'INT',
+                    'col2': 'STRING'
                   }
                 )""",
                 output);
@@ -133,21 +145,29 @@ public class TableOptionsFormatterTest extends BaseTest {
         TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("csv_file",
                 List.of("file_one.csv"));
 
-        LinkedHashMap<String, String> linkedHashMap = new LinkedHashMap<>();
+        ColumnSpec columnSpec = new ColumnSpec(){{
+            setTypeSnapshot(ColumnTypeSnapshotSpec.fromType("zzz"));
+        }};
+        ColumnSpec columnSpec2 = new ColumnSpec(){{
+            setTypeSnapshot(ColumnTypeSnapshotSpec.fromType("aaa"));
+        }};
+        ColumnSpecMap columnSpecMap = new ColumnSpecMap(){{
+            put("z", columnSpec);
+            put("a", columnSpec2);
+        }};
+        TableSpec tableSpec = new TableSpec();
+        tableSpec.setColumns(columnSpecMap);
 
-        linkedHashMap.put("z", "zzz");
-        linkedHashMap.put("a", "aaa");
+        tableOptionsFormatter.formatColumns("columns", tableSpec);
 
-        tableOptionsFormatter.formatMapWhenSet("columns", linkedHashMap);
-
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(
                   'file_one.csv',
                   columns = {
-                    'z': 'zzz',
-                    'a': 'aaa'
+                    'z': 'ZZZ',
+                    'a': 'AAA'
                   }
                 )""",
                 output);

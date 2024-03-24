@@ -424,6 +424,7 @@ from .column_datetime_profiling_checks_spec import ColumnDatetimeProfilingChecks
 from .column_datetime_profiling_checks_spec_custom_checks import (
     ColumnDatetimeProfilingChecksSpecCustomChecks,
 )
+from .column_default_checks_pattern_spec import ColumnDefaultChecksPatternSpec
 from .column_detected_datatype_in_text_check_spec import (
     ColumnDetectedDatatypeInTextCheckSpec,
 )
@@ -565,7 +566,7 @@ from .column_min_anomaly_stationary_check_spec import (
 )
 from .column_min_in_range_check_spec import ColumnMinInRangeCheckSpec
 from .column_model import ColumnModel
-from .column_monitoring_checks_root_spec import ColumnMonitoringChecksRootSpec
+from .column_monitoring_check_categories_spec import ColumnMonitoringCheckCategoriesSpec
 from .column_monthly_monitoring_check_categories_spec import (
     ColumnMonthlyMonitoringCheckCategoriesSpec,
 )
@@ -790,7 +791,9 @@ from .column_numeric_valid_latitude_percent_sensor_parameters_spec import (
 from .column_numeric_valid_longitude_percent_sensor_parameters_spec import (
     ColumnNumericValidLongitudePercentSensorParametersSpec,
 )
-from .column_partitioned_checks_root_spec import ColumnPartitionedChecksRootSpec
+from .column_partitioned_check_categories_spec import (
+    ColumnPartitionedCheckCategoriesSpec,
+)
 from .column_patterns_daily_monitoring_checks_spec import (
     ColumnPatternsDailyMonitoringChecksSpec,
 )
@@ -1306,6 +1309,7 @@ from .comment_spec import CommentSpec
 from .common_column_model import CommonColumnModel
 from .compare_thresholds_model import CompareThresholdsModel
 from .comparison_check_result_model import ComparisonCheckResultModel
+from .compression_type import CompressionType
 from .connection_incident_grouping_spec import ConnectionIncidentGroupingSpec
 from .connection_model import ConnectionModel
 from .connection_spec import ConnectionSpec
@@ -1315,7 +1319,6 @@ from .connection_test_status import ConnectionTestStatus
 from .count_between_rule_parameters_spec import CountBetweenRuleParametersSpec
 from .credential_type import CredentialType
 from .csv_file_format_spec import CsvFileFormatSpec
-from .csv_file_format_spec_columns import CsvFileFormatSpecColumns
 from .custom_check_spec import CustomCheckSpec
 from .custom_rule_parameters_spec import CustomRuleParametersSpec
 from .custom_sensor_parameters_spec import CustomSensorParametersSpec
@@ -1333,10 +1336,17 @@ from .data_grouping_configuration_trimmed_model import (
 )
 from .data_grouping_dimension_source import DataGroupingDimensionSource
 from .data_grouping_dimension_spec import DataGroupingDimensionSpec
+from .data_type_category import DataTypeCategory
 from .databricks_parameters_spec import DatabricksParametersSpec
 from .databricks_parameters_spec_properties import DatabricksParametersSpecProperties
 from .datetime_built_in_date_formats import DatetimeBuiltInDateFormats
+from .default_column_checks_pattern_list_model import (
+    DefaultColumnChecksPatternListModel,
+)
+from .default_column_checks_pattern_model import DefaultColumnChecksPatternModel
 from .default_schedules_spec import DefaultSchedulesSpec
+from .default_table_checks_pattern_list_model import DefaultTableChecksPatternListModel
+from .default_table_checks_pattern_model import DefaultTableChecksPatternModel
 from .delete_stored_data_queue_job_parameters import DeleteStoredDataQueueJobParameters
 from .delete_stored_data_queue_job_result import DeleteStoredDataQueueJobResult
 from .delete_stored_data_result import DeleteStoredDataResult
@@ -1367,11 +1377,12 @@ from .dqo_settings_model_properties_additional_property import (
 )
 from .dqo_user_profile_model import DqoUserProfileModel
 from .dqo_user_role import DqoUserRole
+from .duckdb_files_format_type import DuckdbFilesFormatType
 from .duckdb_parameters_spec import DuckdbParametersSpec
 from .duckdb_parameters_spec_directories import DuckdbParametersSpecDirectories
 from .duckdb_parameters_spec_properties import DuckdbParametersSpecProperties
 from .duckdb_read_mode import DuckdbReadMode
-from .duckdb_source_files_type import DuckdbSourceFilesType
+from .duckdb_storage_type import DuckdbStorageType
 from .duration import Duration
 from .effective_schedule_level_model import EffectiveScheduleLevelModel
 from .effective_schedule_model import EffectiveScheduleModel
@@ -1404,8 +1415,8 @@ from .incident_status import IncidentStatus
 from .incident_webhook_notifications_spec import IncidentWebhookNotificationsSpec
 from .incidents_per_connection_model import IncidentsPerConnectionModel
 from .json_file_format_spec import JsonFileFormatSpec
-from .json_file_format_spec_columns import JsonFileFormatSpecColumns
 from .json_format_type import JsonFormatType
+from .json_records_type import JsonRecordsType
 from .max_count_rule_0_error_parameters_spec import MaxCountRule0ErrorParametersSpec
 from .max_count_rule_0_warning_parameters_spec import MaxCountRule0WarningParametersSpec
 from .max_count_rule_100_parameters_spec import MaxCountRule100ParametersSpec
@@ -1446,6 +1457,7 @@ from .my_sql_ssl_mode import MySqlSslMode
 from .mysql_engine_type import MysqlEngineType
 from .mysql_parameters_spec import MysqlParametersSpec
 from .mysql_parameters_spec_properties import MysqlParametersSpecProperties
+from .new_line_character_type import NewLineCharacterType
 from .optional import Optional
 from .optional_incident_webhook_notifications_spec import (
     OptionalIncidentWebhookNotificationsSpec,
@@ -1463,7 +1475,7 @@ from .postgresql_parameters_spec_properties import PostgresqlParametersSpecPrope
 from .postgresql_ssl_mode import PostgresqlSslMode
 from .presto_parameters_spec import PrestoParametersSpec
 from .presto_parameters_spec_properties import PrestoParametersSpecProperties
-from .profiling_time_period import ProfilingTimePeriod
+from .profiling_time_period_truncation import ProfilingTimePeriodTruncation
 from .provider_sensor_definition_spec import ProviderSensorDefinitionSpec
 from .provider_sensor_definition_spec_parameters import (
     ProviderSensorDefinitionSpecParameters,
@@ -1700,10 +1712,11 @@ from .table_daily_partitioned_check_categories_spec_custom import (
 from .table_data_freshness_check_spec import TableDataFreshnessCheckSpec
 from .table_data_ingestion_delay_check_spec import TableDataIngestionDelayCheckSpec
 from .table_data_staleness_check_spec import TableDataStalenessCheckSpec
+from .table_default_checks_pattern_spec import TableDefaultChecksPatternSpec
 from .table_incident_grouping_spec import TableIncidentGroupingSpec
 from .table_list_model import TableListModel
 from .table_model import TableModel
-from .table_monitoring_checks_spec import TableMonitoringChecksSpec
+from .table_monitoring_check_categories_spec import TableMonitoringCheckCategoriesSpec
 from .table_monthly_monitoring_check_categories_spec import (
     TableMonthlyMonitoringCheckCategoriesSpec,
 )
@@ -1724,7 +1737,7 @@ from .table_monthly_partitioned_check_categories_spec_custom import (
 )
 from .table_owner_spec import TableOwnerSpec
 from .table_partition_reload_lag_check_spec import TablePartitionReloadLagCheckSpec
-from .table_partitioned_checks_root_spec import TablePartitionedChecksRootSpec
+from .table_partitioned_check_categories_spec import TablePartitionedCheckCategoriesSpec
 from .table_partitioning_model import TablePartitioningModel
 from .table_profiling_check_categories_spec import TableProfilingCheckCategoriesSpec
 from .table_profiling_check_categories_spec_comparisons import (
@@ -1884,6 +1897,8 @@ from .table_volume_row_count_statistics_collector_spec import (
     TableVolumeRowCountStatisticsCollectorSpec,
 )
 from .table_volume_statistics_collectors_spec import TableVolumeStatisticsCollectorsSpec
+from .target_column_pattern_spec import TargetColumnPatternSpec
+from .target_table_pattern_spec import TargetTablePatternSpec
 from .temporal_unit import TemporalUnit
 from .text_built_in_date_formats import TextBuiltInDateFormats
 from .time_period_gradient import TimePeriodGradient
@@ -2071,6 +2086,7 @@ __all__ = (
     "ColumnDatetimeProfilingChecksSpec",
     "ColumnDatetimeProfilingChecksSpecCustomChecks",
     "ColumnDateValuesInFuturePercentCheckSpec",
+    "ColumnDefaultChecksPatternSpec",
     "ColumnDetectedDatatypeInTextCheckSpec",
     "ColumnDistinctCountAnomalyDifferencingCheckSpec",
     "ColumnDistinctCountAnomalyStationaryPartitionCheckSpec",
@@ -2132,7 +2148,7 @@ __all__ = (
     "ColumnMinAnomalyStationaryCheckSpec",
     "ColumnMinInRangeCheckSpec",
     "ColumnModel",
-    "ColumnMonitoringChecksRootSpec",
+    "ColumnMonitoringCheckCategoriesSpec",
     "ColumnMonthlyMonitoringCheckCategoriesSpec",
     "ColumnMonthlyMonitoringCheckCategoriesSpecComparisons",
     "ColumnMonthlyMonitoringCheckCategoriesSpecCustom",
@@ -2217,7 +2233,7 @@ __all__ = (
     "ColumnNumericSumSensorParametersSpec",
     "ColumnNumericValidLatitudePercentSensorParametersSpec",
     "ColumnNumericValidLongitudePercentSensorParametersSpec",
-    "ColumnPartitionedChecksRootSpec",
+    "ColumnPartitionedCheckCategoriesSpec",
     "ColumnPatternsDailyMonitoringChecksSpec",
     "ColumnPatternsDailyMonitoringChecksSpecCustomChecks",
     "ColumnPatternsDailyPartitionedChecksSpec",
@@ -2413,6 +2429,7 @@ __all__ = (
     "CommonColumnModel",
     "CompareThresholdsModel",
     "ComparisonCheckResultModel",
+    "CompressionType",
     "ConnectionIncidentGroupingSpec",
     "ConnectionModel",
     "ConnectionSpec",
@@ -2422,7 +2439,6 @@ __all__ = (
     "CountBetweenRuleParametersSpec",
     "CredentialType",
     "CsvFileFormatSpec",
-    "CsvFileFormatSpecColumns",
     "CustomCheckSpec",
     "CustomRuleParametersSpec",
     "CustomSensorParametersSpec",
@@ -2440,8 +2456,13 @@ __all__ = (
     "DataGroupingConfigurationTrimmedModel",
     "DataGroupingDimensionSource",
     "DataGroupingDimensionSpec",
+    "DataTypeCategory",
     "DatetimeBuiltInDateFormats",
+    "DefaultColumnChecksPatternListModel",
+    "DefaultColumnChecksPatternModel",
     "DefaultSchedulesSpec",
+    "DefaultTableChecksPatternListModel",
+    "DefaultTableChecksPatternModel",
     "DeleteStoredDataQueueJobParameters",
     "DeleteStoredDataQueueJobResult",
     "DeleteStoredDataResult",
@@ -2464,11 +2485,12 @@ __all__ = (
     "DqoSettingsModelPropertiesAdditionalProperty",
     "DqoUserProfileModel",
     "DqoUserRole",
+    "DuckdbFilesFormatType",
     "DuckdbParametersSpec",
     "DuckdbParametersSpecDirectories",
     "DuckdbParametersSpecProperties",
     "DuckdbReadMode",
-    "DuckdbSourceFilesType",
+    "DuckdbStorageType",
     "Duration",
     "EffectiveScheduleLevelModel",
     "EffectiveScheduleModel",
@@ -2501,8 +2523,8 @@ __all__ = (
     "IncidentStatus",
     "IncidentWebhookNotificationsSpec",
     "JsonFileFormatSpec",
-    "JsonFileFormatSpecColumns",
     "JsonFormatType",
+    "JsonRecordsType",
     "MaxCountRule0ErrorParametersSpec",
     "MaxCountRule0WarningParametersSpec",
     "MaxCountRule100ParametersSpec",
@@ -2535,6 +2557,7 @@ __all__ = (
     "MysqlParametersSpec",
     "MysqlParametersSpecProperties",
     "MySqlSslMode",
+    "NewLineCharacterType",
     "Optional",
     "OptionalIncidentWebhookNotificationsSpec",
     "OptionalMonitoringScheduleSpec",
@@ -2550,7 +2573,7 @@ __all__ = (
     "PostgresqlSslMode",
     "PrestoParametersSpec",
     "PrestoParametersSpecProperties",
-    "ProfilingTimePeriod",
+    "ProfilingTimePeriodTruncation",
     "ProviderSensorDefinitionSpec",
     "ProviderSensorDefinitionSpecParameters",
     "ProviderSensorListModel",
@@ -2677,10 +2700,11 @@ __all__ = (
     "TableDataFreshnessCheckSpec",
     "TableDataIngestionDelayCheckSpec",
     "TableDataStalenessCheckSpec",
+    "TableDefaultChecksPatternSpec",
     "TableIncidentGroupingSpec",
     "TableListModel",
     "TableModel",
-    "TableMonitoringChecksSpec",
+    "TableMonitoringCheckCategoriesSpec",
     "TableMonthlyMonitoringCheckCategoriesSpec",
     "TableMonthlyMonitoringCheckCategoriesSpecComparisons",
     "TableMonthlyMonitoringCheckCategoriesSpecCustom",
@@ -2688,7 +2712,7 @@ __all__ = (
     "TableMonthlyPartitionedCheckCategoriesSpecComparisons",
     "TableMonthlyPartitionedCheckCategoriesSpecCustom",
     "TableOwnerSpec",
-    "TablePartitionedChecksRootSpec",
+    "TablePartitionedCheckCategoriesSpec",
     "TablePartitioningModel",
     "TablePartitionReloadLagCheckSpec",
     "TableProfilingCheckCategoriesSpec",
@@ -2755,6 +2779,8 @@ __all__ = (
     "TableVolumeRowCountSensorParametersSpec",
     "TableVolumeRowCountStatisticsCollectorSpec",
     "TableVolumeStatisticsCollectorsSpec",
+    "TargetColumnPatternSpec",
+    "TargetTablePatternSpec",
     "TemporalUnit",
     "TextBuiltInDateFormats",
     "TimePeriodGradient",

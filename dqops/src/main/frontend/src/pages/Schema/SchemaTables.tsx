@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { TableListModel } from '../../api';
-import { addFirstLevelTab } from '../../redux/actions/source.actions';
-import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { TableListModel } from '../../api';
 import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { TableApiClient } from '../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 
 type TButtonTabs = {
   label: string;
@@ -54,7 +54,7 @@ export const SchemaTables = () => {
     checkTypes: CheckTypes;
     connection: string;
     schema: string;
-  } = useParams();
+  } = useDecodedParams();
   const dispatch = useDispatch();
   const [tables, setTables] = useState<TableListModel[]>([]);
   const [sortingDir, setSortingDir] = useState<'asc' | 'desc'>('asc');
@@ -113,8 +113,8 @@ export const SchemaTables = () => {
       case CheckTypes.MONITORING:
       case CheckTypes.PARTITIONED:
         return [
-          { label: 'Daily checks', value: 'daily' },
-          { label: 'Daily table status', value: 'table-quality-status-daily' }
+          { label: 'Daily table status', value: 'table-quality-status-daily' },
+          { label: 'Daily checks', value: 'daily' }
         ];
 
       default:
@@ -146,11 +146,11 @@ export const SchemaTables = () => {
         onClick={() => sortTables(key)}
         key={key}
       >
-        <div className="flex">
+        <div className="flex text-sm">
           {label}
-          <div>
-            <SvgIcon name="chevron-up" className="w-3 h-3" />
-            <SvgIcon name="chevron-down" className="w-3 h-3" />
+          <div className="flex flex-col items-center">
+            <SvgIcon name="chevron-up" className="w-3 h-2" />
+            <SvgIcon name="chevron-down" className="w-3 h-2" />
           </div>
         </div>
       </th>
@@ -164,9 +164,9 @@ export const SchemaTables = () => {
       </thead>
       <tbody>
         {tables.map((item, index) => (
-          <tr key={index}>
+          <tr key={index} className="text-sm">
             <Button
-              className="px-4 underline cursor-pointer"
+              className="px-4 underline cursor-pointer text-sm"
               label={item.target?.table_name}
               onClick={() => goToTable(item, buttonTabs[0].value)}
             />
@@ -180,8 +180,8 @@ export const SchemaTables = () => {
                 />
               ) : null}
             </td>
-            <td className="px-4">{item?.stage}</td>
-            <td className="px-4">{item?.filter}</td>
+            <td className="px-4 text-sm">{item?.stage}</td>
+            <td className="px-4 text-sm">{item?.filter}</td>
             {buttonTabs.map((button) => {
               return (
                 <td className="px-4 " key={button.value}>
@@ -189,6 +189,7 @@ export const SchemaTables = () => {
                     variant="text"
                     label={button.label}
                     color="primary"
+                    className="text-sm"
                     onClick={() => goToTable(item, button.value)}
                   />
                 </td>

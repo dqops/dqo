@@ -36,6 +36,7 @@ const DatabricksConnection = ({
         className="mb-4"
         value={databricks?.host}
         onChange={(value) => handleChange({ host: value })}
+        inputClassName={!databricks?.host ? 'border border-red-500' : ''}
       />
       <FieldTypeInput
         data={sharedCredentials}
@@ -79,13 +80,6 @@ const DatabricksConnection = ({
         className="mb-4"
         value={databricks?.access_token}
         onChange={(value) => handleChange({ access_token: value })}
-      />
-      <FieldTypeInput
-        data={sharedCredentials}
-        label="Options"
-        className="mb-4"
-        value={databricks?.options}
-        onChange={(value) => handleChange({ options: value })}
       />
       <JdbcPropertiesView
         properties={databricks?.properties}

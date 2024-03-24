@@ -7,4 +7,5 @@ spec:
   help_text: Detects incomplete columns that contain any null values. Counts the number
     of rows having a null value. Raises a data quality issue when the count of null
     values is above a max_count threshold.
+  friendly_name: incomplete column
   standard: true

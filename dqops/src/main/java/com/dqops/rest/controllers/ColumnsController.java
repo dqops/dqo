@@ -19,12 +19,13 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
-import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import com.dqops.checks.defaults.DefaultObservabilityConfigurationService;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
@@ -53,6 +54,7 @@ import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
+import com.dqops.services.locking.RestApiLockService;
 import com.dqops.services.metadata.ColumnService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
@@ -85,6 +87,8 @@ public class ColumnsController {
     private SpecToModelCheckMappingService specToModelCheckMappingService;
     private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
     private StatisticsDataService statisticsDataService;
+    private DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
+    private RestApiLockService lockService;
 
     /**
      * Creates a columns rest controller.
@@ -94,6 +98,8 @@ public class ColumnsController {
      * @param specToModelCheckMappingService Check mapper to convert the check specification to a model.
      * @param modelToSpecCheckMappingService Check mapper to convert the check model to a check specification.
      * @param statisticsDataService       Statistics data service.
+     * @param defaultObservabilityConfigurationService The service that applies default observability checks.
+     * @param lockService Object lock service.
      */
     @Autowired
     public ColumnsController(ColumnService columnService,
@@ -101,13 +107,17 @@ public class ColumnsController {
                              DqoHomeContextFactory dqoHomeContextFactory,
                              SpecToModelCheckMappingService specToModelCheckMappingService,
                              ModelToSpecCheckMappingService modelToSpecCheckMappingService,
-                             StatisticsDataService statisticsDataService) {
+                             StatisticsDataService statisticsDataService,
+                             DefaultObservabilityConfigurationService defaultObservabilityConfigurationService,
+                             RestApiLockService lockService) {
         this.columnService = columnService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.specToModelCheckMappingService = specToModelCheckMappingService;
         this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
         this.statisticsDataService = statisticsDataService;
+        this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
+        this.lockService = lockService;
     }
 
     /**
@@ -504,7 +514,7 @@ public class ColumnsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/daily", produces = "application/json")
     @ApiOperation(value = "getColumnMonitoringChecksDaily", notes = "Return the configuration of daily column level data quality monitoring on a column",
-            response = ColumnMonitoringChecksRootSpec.class,
+            response = ColumnMonitoringCheckCategoriesSpec.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -527,7 +537,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnMonitoringChecksRootSpec monitoringSpec = columnSpec.getMonitoringChecks();
+        ColumnMonitoringCheckCategoriesSpec monitoringSpec = columnSpec.getMonitoringChecks();
         if (monitoringSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
@@ -546,7 +556,7 @@ public class ColumnsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/monthly", produces = "application/json")
     @ApiOperation(value = "getColumnMonitoringChecksMonthly", notes = "Return the configuration of monthly column level data quality monitoring on a column",
-            response = ColumnMonitoringChecksRootSpec.class,
+            response = ColumnMonitoringCheckCategoriesSpec.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -569,7 +579,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnMonitoringChecksRootSpec monitoringSpec = columnSpec.getMonitoringChecks();
+        ColumnMonitoringCheckCategoriesSpec monitoringSpec = columnSpec.getMonitoringChecks();
         if (monitoringSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
@@ -611,7 +621,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnPartitionedChecksRootSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+        ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
         if (partitionedChecksSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
@@ -654,7 +664,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnPartitionedChecksRootSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+        ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
         if (partitionedChecksSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
@@ -712,7 +722,10 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
@@ -785,7 +798,11 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
             setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -857,7 +874,10 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
@@ -1111,7 +1131,10 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
@@ -1190,7 +1213,11 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
             setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1268,7 +1295,11 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
             setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1328,23 +1359,26 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+            () -> {
+                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                if (tableWrapper == null) {
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpecMap columns = tableSpec.getColumns();
-        ColumnSpec existingColumnSpec = columns.get(columnName);
-        if (existingColumnSpec != null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409
-        }
+                TableSpec tableSpec = tableWrapper.getSpec();
+                ColumnSpecMap columns = tableSpec.getColumns();
+                ColumnSpec existingColumnSpec = columns.get(columnName);
+                if (existingColumnSpec != null) {
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409
+                }
 
-        columns.put(columnName, columnSpec);
-        userHomeContext.flush();
+                columns.put(columnName, columnSpec);
+                userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+            });
     }
 
     /**
@@ -1384,24 +1418,27 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+            () -> {
+                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                if (tableWrapper == null) {
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpecMap columns = tableSpec.getColumns();
-        ColumnSpec existingColumnSpec = columns.get(columnName);
-        if (existingColumnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
-        }
+                TableSpec tableSpec = tableWrapper.getSpec();
+                ColumnSpecMap columns = tableSpec.getColumns();
+                ColumnSpec existingColumnSpec = columns.get(columnName);
+                if (existingColumnSpec == null) {
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
+                }
 
-        // TODO: validate the columnSpec
-        columns.replace(columnName, columnSpec);
-        userHomeContext.flush();
+                // TODO: validate the columnSpec
+                columns.replace(columnName, columnSpec);
+                userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            });
     }
 
     /**
@@ -1454,17 +1491,20 @@ public class ColumnsController {
                     HttpStatus.NOT_ACCEPTABLE); // 406 - wrong values
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        // TODO: validate the columnSpec
-        columnListModel.copyToColumnSpecification(columnSpec);
-        userHomeContext.flush();
+                    // TODO: validate the columnSpec
+                    columnListModel.copyToColumnSpecification(columnSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -1505,16 +1545,19 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        columnSpec.setLabels(labelSetSpec);
-        userHomeContext.flush();
+                    columnSpec.setLabels(labelSetSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -1555,16 +1598,19 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
+                    }
 
-        columnSpec.setComments(commentsListSpec);
-        userHomeContext.flush();
+                    columnSpec.setComments(commentsListSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -1605,16 +1651,19 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        columnSpec.setProfilingChecks(columnCheckCategoriesSpec);
+                    columnSpec.setProfilingChecks(columnCheckCategoriesSpec);
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -1655,29 +1704,32 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-        
-        ColumnMonitoringChecksRootSpec monitoringChecksSpec = columnSpec.getMonitoringChecks();
-        if (monitoringChecksSpec == null) {
-            monitoringChecksSpec = new ColumnMonitoringChecksRootSpec();
-        }
-        
-        if (columnDailyMonitoringSpec != null) {
-            monitoringChecksSpec.setDaily(columnDailyMonitoringSpec);
-            columnSpec.setMonitoringChecks(monitoringChecksSpec);
-        } else if (monitoringChecksSpec.getMonthly() == null) {
-            // If there is no monthly monitoring checks, and it's been requested to delete daily monitoring checks, then delete all.
-            columnSpec.setMonitoringChecks(null);
-        } else {
-            monitoringChecksSpec.setDaily(null);
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    ColumnMonitoringCheckCategoriesSpec monitoringChecksSpec = columnSpec.getMonitoringChecks();
+                    if (monitoringChecksSpec == null) {
+                        monitoringChecksSpec = new ColumnMonitoringCheckCategoriesSpec();
+                    }
+
+                    if (columnDailyMonitoringSpec != null) {
+                        monitoringChecksSpec.setDaily(columnDailyMonitoringSpec);
+                        columnSpec.setMonitoringChecks(monitoringChecksSpec);
+                    } else if (monitoringChecksSpec.getMonthly() == null) {
+                        // If there is no monthly monitoring checks, and it's been requested to delete daily monitoring checks, then delete all.
+                        columnSpec.setMonitoringChecks(null);
+                    } else {
+                        monitoringChecksSpec.setDaily(null);
+                    }
+
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -1718,29 +1770,32 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        ColumnMonitoringChecksRootSpec monitoringChecksSpec = columnSpec.getMonitoringChecks();
-        if (monitoringChecksSpec == null) {
-            monitoringChecksSpec = new ColumnMonitoringChecksRootSpec();
-        }
+                    ColumnMonitoringCheckCategoriesSpec monitoringChecksSpec = columnSpec.getMonitoringChecks();
+                    if (monitoringChecksSpec == null) {
+                        monitoringChecksSpec = new ColumnMonitoringCheckCategoriesSpec();
+                    }
 
-        if (columnMonthlyMonitoringSpec != null) {
-            monitoringChecksSpec.setMonthly(columnMonthlyMonitoringSpec);
-            columnSpec.setMonitoringChecks(monitoringChecksSpec);
-        } else if (monitoringChecksSpec.getDaily() == null) {
-            // If there is no daily monitoring checks, and it's been requested to delete monthly monitoring checks, then delete all.
-            columnSpec.setMonitoringChecks(null);
-        } else {
-            monitoringChecksSpec.setMonthly(null);
-        }
+                    if (columnMonthlyMonitoringSpec != null) {
+                        monitoringChecksSpec.setMonthly(columnMonthlyMonitoringSpec);
+                        columnSpec.setMonitoringChecks(monitoringChecksSpec);
+                    } else if (monitoringChecksSpec.getDaily() == null) {
+                        // If there is no daily monitoring checks, and it's been requested to delete monthly monitoring checks, then delete all.
+                        columnSpec.setMonitoringChecks(null);
+                    } else {
+                        monitoringChecksSpec.setMonthly(null);
+                    }
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -1781,29 +1836,32 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        ColumnPartitionedChecksRootSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
-        if (partitionedChecksSpec == null) {
-            partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
-        }
+                    ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+                    if (partitionedChecksSpec == null) {
+                        partitionedChecksSpec = new ColumnPartitionedCheckCategoriesSpec();
+                    }
 
-        if (columnDailyPartitionedSpec != null) {
-            partitionedChecksSpec.setDaily(columnDailyPartitionedSpec);
-            columnSpec.setPartitionedChecks(partitionedChecksSpec);
-        } else if (partitionedChecksSpec.getMonthly() == null) {
-            // If there is no monthly partitioned checks, and it's been requested to delete daily partitioned checks, then delete all.
-            columnSpec.setPartitionedChecks(null);
-        } else {
-            partitionedChecksSpec.setDaily(null);
-        }
+                    if (columnDailyPartitionedSpec != null) {
+                        partitionedChecksSpec.setDaily(columnDailyPartitionedSpec);
+                        columnSpec.setPartitionedChecks(partitionedChecksSpec);
+                    } else if (partitionedChecksSpec.getMonthly() == null) {
+                        // If there is no monthly partitioned checks, and it's been requested to delete daily partitioned checks, then delete all.
+                        columnSpec.setPartitionedChecks(null);
+                    } else {
+                        partitionedChecksSpec.setDaily(null);
+                    }
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -1844,29 +1902,32 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        ColumnPartitionedChecksRootSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
-        if (partitionedChecksSpec == null) {
-            partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
-        }
+                    ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+                    if (partitionedChecksSpec == null) {
+                        partitionedChecksSpec = new ColumnPartitionedCheckCategoriesSpec();
+                    }
 
-        if (columnMonthlyPartitionedSpec != null) {
-            partitionedChecksSpec.setMonthly(columnMonthlyPartitionedSpec);
-            columnSpec.setPartitionedChecks(partitionedChecksSpec);
-        } else if (partitionedChecksSpec.getMonthly() == null) {
-            // If there is no daily partitioned checks, and it's been requested to delete monthly partitioned checks, then delete all.
-            columnSpec.setPartitionedChecks(null);
-        } else {
-            partitionedChecksSpec.setMonthly(null);
-        }
+                    if (columnMonthlyPartitionedSpec != null) {
+                        partitionedChecksSpec.setMonthly(columnMonthlyPartitionedSpec);
+                        columnSpec.setPartitionedChecks(partitionedChecksSpec);
+                    } else if (partitionedChecksSpec.getMonthly() == null) {
+                        // If there is no daily partitioned checks, and it's been requested to delete monthly partitioned checks, then delete all.
+                        columnSpec.setPartitionedChecks(null);
+                    } else {
+                        partitionedChecksSpec.setMonthly(null);
+                    }
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
 
@@ -1908,31 +1969,34 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+                    TableSpec tableSpec = tableWrapper.getSpec();
+                    ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, true);
+                    AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, true);
 
-        if (checkContainerModel != null) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checksToUpdate, tableSpec);
-            if (!checksToUpdate.isDefault()) {
-                columnSpec.setColumnCheckRootContainer(checksToUpdate);
-            }
-        } else {
-            // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
-        }
+                    if (checkContainerModel != null) {
+                        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checksToUpdate, tableSpec);
+                        if (!checksToUpdate.isDefault()) {
+                            columnSpec.setColumnCheckRootContainer(checksToUpdate);
+                        }
+                    } else {
+                        // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
+                    }
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -1975,31 +2039,34 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+                    TableSpec tableSpec = tableWrapper.getSpec();
+                    ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, true);
+                    AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, true);
 
-        if (checkContainerModel != null) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checksToUpdate, tableSpec);
-            if (!checksToUpdate.isDefault()) {
-                columnSpec.setColumnCheckRootContainer(checksToUpdate);
-            }
-        } else {
-            // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
-        }
+                    if (checkContainerModel != null) {
+                        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checksToUpdate, tableSpec);
+                        if (!checksToUpdate.isDefault()) {
+                            columnSpec.setColumnCheckRootContainer(checksToUpdate);
+                        }
+                    } else {
+                        // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
+                    }
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -2043,31 +2110,34 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+                    TableSpec tableSpec = tableWrapper.getSpec();
+                    ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, true);
+                    AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, true);
 
-        if (allChecksModel != null) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checksToUpdate, tableSpec);
-            if (!checksToUpdate.isDefault()) {
-                columnSpec.setColumnCheckRootContainer(checksToUpdate);
-            }
-        } else {
-            // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
-        }
+                    if (allChecksModel != null) {
+                        this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checksToUpdate, tableSpec);
+                        if (!checksToUpdate.isDefault()) {
+                            columnSpec.setColumnCheckRootContainer(checksToUpdate);
+                        }
+                    } else {
+                        // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
+                    }
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -2096,20 +2166,23 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                    }
 
-        ColumnSpec existingColumnSpec = tableWrapper.getSpec().getColumns().get(columnName);
-        if (existingColumnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
-        }
+                    ColumnSpec existingColumnSpec = tableWrapper.getSpec().getColumns().get(columnName);
+                    if (existingColumnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
+                    }
 
-        PushJobResult<DeleteStoredDataResult> backgroundJob = this.columnService.deleteColumn(
-                connectionName, tableWrapper.getPhysicalTableName(), columnName, principal);
-        return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
+                    PushJobResult<DeleteStoredDataResult> backgroundJob = this.columnService.deleteColumn(
+                            connectionName, tableWrapper.getPhysicalTableName(), columnName, principal);
+                    return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
+                });
     }
 
 

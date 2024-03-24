@@ -704,4 +704,11 @@ public class FolderMetadata implements Cloneable {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "FolderMetadata{" +
+                "relativePath=" + relativePath +
+                '}';
+    }
 }

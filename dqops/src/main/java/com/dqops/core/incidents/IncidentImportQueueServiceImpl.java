@@ -16,6 +16,7 @@
 
 package com.dqops.core.incidents;
 
+import com.dqops.checks.CheckType;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityFactory;
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
@@ -347,10 +348,13 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             IntColumn severityColumn = newCheckResults.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
             InstantColumn executedAtColumn = newCheckResults.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
             LongColumn checkResultIncidentHashColumn = newCheckResults.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME);
-            Selection selectionOfSeverityAlerts = severityColumn.isGreaterThanOrEqualTo(minimumSeverityLevel);
+            TextColumn checkTypeColumn = newCheckResults.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME);
+            Selection selectionOfNotProfilingCheckResults = checkTypeColumn.isNotEqualTo(CheckType.profiling.getDisplayName());
+            Selection selectionOfIssuesAboveMinSeverity = severityColumn.isGreaterThanOrEqualTo(minimumSeverityLevel);
+            Selection selectionOfNewAlerts = selectionOfNotProfilingCheckResults.and(selectionOfIssuesAboveMinSeverity);
             List<Integer> newIncidentsRowIndexes = new ArrayList<>();
 
-            if (selectionOfSeverityAlerts.isEmpty()) {
+            if (selectionOfNewAlerts.isEmpty()) {
                 return null; // no alerts with a severity at the threshold when we create incidents
             }
 
@@ -369,7 +373,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             InstantColumn incidentUntilNewIncidentsColumn = this.allNewIncidentRows.instantColumn(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME);
             TextColumn statusNewIncidentsColumn = this.allNewIncidentRows.textColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
 
-            int[] issuesRowIndexes = selectionOfSeverityAlerts.toArray();
+            int[] issuesRowIndexes = selectionOfNewAlerts.toArray();
             for (int i = 0; i < issuesRowIndexes.length; i++) {
                 int checkResultRowIndex = issuesRowIndexes[i];
                 Integer severity = severityColumn.get(checkResultRowIndex);

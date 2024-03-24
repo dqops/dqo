@@ -1,14 +1,12 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.compression_type import CompressionType
 from ..models.json_format_type import JsonFormatType
+from ..models.json_records_type import JsonRecordsType
 from ..types import UNSET, Unset
-
-if TYPE_CHECKING:
-    from ..models.json_file_format_spec_columns import JsonFileFormatSpecColumns
-
 
 T = TypeVar("T", bound="JsonFileFormatSpec")
 
@@ -18,31 +16,26 @@ class JsonFileFormatSpec:
     """
     Attributes:
         auto_detect (Union[Unset, bool]): Whether to auto-detect detect the names of the keys and data types of the
-            values automatically
-        columns (Union[Unset, JsonFileFormatSpecColumns]): A struct that specifies the key names and value types
-            contained within the JSON file (e.g., {key1: 'INTEGER', key2: 'VARCHAR'}). If auto_detect is enabled these will
-            be inferred
-        compression (Union[Unset, str]): The compression type for the file. By default this will be detected
-            automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are 'none',
-            'gzip', 'zstd', and 'auto'.
-        convert_strings_to_integers (Union[Unset, bool]): 	Whether strings representing integer values should be
+            values automatically.
+        compression (Union[Unset, CompressionType]):
+        convert_strings_to_integers (Union[Unset, bool]): Whether strings representing integer values should be
             converted to a numerical type.
         dateformat (Union[Unset, str]): Specifies the date format to use when parsing dates.
         filename (Union[Unset, bool]): Whether or not an extra filename column should be included in the result.
         format_ (Union[Unset, JsonFormatType]):
-        hive_partitioning (Union[Unset, bool]): 	Whether or not to interpret the path as a hive partitioned path.
+        hive_partitioning (Union[Unset, bool]): Whether or not to interpret the path as a hive partitioned path.
         ignore_errors (Union[Unset, bool]): Whether to ignore parse errors (only possible when format is
             'newline_delimited').
         maximum_depth (Union[Unset, int]): Maximum nesting depth to which the automatic schema detection detects types.
-            Set to -1 to fully detect nested JSON types
-        maximum_object_size (Union[Unset, int]): 	The maximum size of a JSON object (in bytes)
-        records (Union[Unset, str]): Can be one of ['auto', 'true', 'false']
-        timestampformat (Union[Unset, str]): 	Specifies the date format to use when parsing timestamps.
+            Set to -1 to fully detect nested JSON types.
+        maximum_object_size (Union[Unset, int]): The maximum size of a JSON object (in bytes).
+        records (Union[Unset, JsonRecordsType]):
+        sample_size (Union[Unset, int]): The number of sample rows for auto detection of parameters.
+        timestampformat (Union[Unset, str]): Specifies the date format to use when parsing timestamps.
     """
 
     auto_detect: Union[Unset, bool] = UNSET
-    columns: Union[Unset, "JsonFileFormatSpecColumns"] = UNSET
-    compression: Union[Unset, str] = UNSET
+    compression: Union[Unset, CompressionType] = UNSET
     convert_strings_to_integers: Union[Unset, bool] = UNSET
     dateformat: Union[Unset, str] = UNSET
     filename: Union[Unset, bool] = UNSET
@@ -51,17 +44,17 @@ class JsonFileFormatSpec:
     ignore_errors: Union[Unset, bool] = UNSET
     maximum_depth: Union[Unset, int] = UNSET
     maximum_object_size: Union[Unset, int] = UNSET
-    records: Union[Unset, str] = UNSET
+    records: Union[Unset, JsonRecordsType] = UNSET
+    sample_size: Union[Unset, int] = UNSET
     timestampformat: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         auto_detect = self.auto_detect
-        columns: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.columns, Unset):
-            columns = self.columns.to_dict()
+        compression: Union[Unset, str] = UNSET
+        if not isinstance(self.compression, Unset):
+            compression = self.compression.value
 
-        compression = self.compression
         convert_strings_to_integers = self.convert_strings_to_integers
         dateformat = self.dateformat
         filename = self.filename
@@ -73,7 +66,11 @@ class JsonFileFormatSpec:
         ignore_errors = self.ignore_errors
         maximum_depth = self.maximum_depth
         maximum_object_size = self.maximum_object_size
-        records = self.records
+        records: Union[Unset, str] = UNSET
+        if not isinstance(self.records, Unset):
+            records = self.records.value
+
+        sample_size = self.sample_size
         timestampformat = self.timestampformat
 
         field_dict: Dict[str, Any] = {}
@@ -81,8 +78,6 @@ class JsonFileFormatSpec:
         field_dict.update({})
         if auto_detect is not UNSET:
             field_dict["auto_detect"] = auto_detect
-        if columns is not UNSET:
-            field_dict["columns"] = columns
         if compression is not UNSET:
             field_dict["compression"] = compression
         if convert_strings_to_integers is not UNSET:
@@ -103,6 +98,8 @@ class JsonFileFormatSpec:
             field_dict["maximum_object_size"] = maximum_object_size
         if records is not UNSET:
             field_dict["records"] = records
+        if sample_size is not UNSET:
+            field_dict["sample_size"] = sample_size
         if timestampformat is not UNSET:
             field_dict["timestampformat"] = timestampformat
 
@@ -110,19 +107,15 @@ class JsonFileFormatSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.json_file_format_spec_columns import JsonFileFormatSpecColumns
-
         d = src_dict.copy()
         auto_detect = d.pop("auto_detect", UNSET)
 
-        _columns = d.pop("columns", UNSET)
-        columns: Union[Unset, JsonFileFormatSpecColumns]
-        if isinstance(_columns, Unset):
-            columns = UNSET
+        _compression = d.pop("compression", UNSET)
+        compression: Union[Unset, CompressionType]
+        if isinstance(_compression, Unset):
+            compression = UNSET
         else:
-            columns = JsonFileFormatSpecColumns.from_dict(_columns)
-
-        compression = d.pop("compression", UNSET)
+            compression = CompressionType(_compression)
 
         convert_strings_to_integers = d.pop("convert_strings_to_integers", UNSET)
 
@@ -145,13 +138,19 @@ class JsonFileFormatSpec:
 
         maximum_object_size = d.pop("maximum_object_size", UNSET)
 
-        records = d.pop("records", UNSET)
+        _records = d.pop("records", UNSET)
+        records: Union[Unset, JsonRecordsType]
+        if isinstance(_records, Unset):
+            records = UNSET
+        else:
+            records = JsonRecordsType(_records)
+
+        sample_size = d.pop("sample_size", UNSET)
 
         timestampformat = d.pop("timestampformat", UNSET)
 
         json_file_format_spec = cls(
             auto_detect=auto_detect,
-            columns=columns,
             compression=compression,
             convert_strings_to_integers=convert_strings_to_integers,
             dateformat=dateformat,
@@ -162,6 +161,7 @@ class JsonFileFormatSpec:
             maximum_depth=maximum_depth,
             maximum_object_size=maximum_object_size,
             records=records,
+            sample_size=sample_size,
             timestampformat=timestampformat,
         )
 

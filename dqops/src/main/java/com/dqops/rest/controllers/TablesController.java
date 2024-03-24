@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.defaults.DefaultObservabilityConfigurationService;
 import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
@@ -29,6 +30,7 @@ import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.statistics.services.StatisticsDataService;
@@ -60,6 +62,7 @@ import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.check.mapping.models.CheckContainerTypeModel;
 import com.dqops.services.check.models.CheckConfigurationModel;
+import com.dqops.services.locking.RestApiLockService;
 import com.dqops.services.metadata.TableService;
 import com.dqops.statistics.StatisticsCollectorTarget;
 import com.google.common.base.Strings;
@@ -99,6 +102,9 @@ public class TablesController {
     private SpecToModelCheckMappingService specToModelCheckMappingService;
     private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
     private StatisticsDataService statisticsDataService;
+    private DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
+    private RestApiLockService lockService;
+    private JobSchedulerService jobSchedulerService;
 
     /**
      * Creates an instance of a controller by injecting dependencies.
@@ -108,6 +114,9 @@ public class TablesController {
      * @param specToModelCheckMappingService   Check mapper to convert the check specification to a model.
      * @param modelToSpecCheckMappingService   Check mapper to convert the check model to a check specification.
      * @param statisticsDataService            Statistics data service, provides access to the statistics (basic profiling).
+     * @param defaultObservabilityConfigurationService The service that applies the configuration of the default checks to a table.
+     * @param lockService                      Object lock service.
+     * @param jobSchedulerService              Job scheduler service.
      */
     @Autowired
     public TablesController(TableService tableService,
@@ -115,13 +124,19 @@ public class TablesController {
                             DqoHomeContextFactory dqoHomeContextFactory,
                             SpecToModelCheckMappingService specToModelCheckMappingService,
                             ModelToSpecCheckMappingService modelToSpecCheckMappingService,
-                            StatisticsDataService statisticsDataService) {
+                            StatisticsDataService statisticsDataService,
+                            DefaultObservabilityConfigurationService defaultObservabilityConfigurationService,
+                            RestApiLockService lockService,
+                            JobSchedulerService jobSchedulerService) {
         this.tableService = tableService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.specToModelCheckMappingService = specToModelCheckMappingService;
         this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
         this.statisticsDataService = statisticsDataService;
+        this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
+        this.lockService = lockService;
+        this.jobSchedulerService = jobSchedulerService;
     }
 
     /**
@@ -851,7 +866,10 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
+        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
@@ -919,7 +937,11 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
+        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
             setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -986,7 +1008,11 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
+        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
             setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1224,7 +1250,10 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
+        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
@@ -1300,7 +1329,11 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
+        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
             setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1375,7 +1408,11 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
+        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
             setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1912,26 +1949,29 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        TableList tables = connectionWrapper.getTables();
-        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-        }
+                    TableList tables = connectionWrapper.getTables();
+                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                    }
 
-        // TODO: validate the tableSpec
-        tableWrapper.setSpec(tableSpec);
-        userHomeContext.flush();
+                    // TODO: validate the tableSpec
+                    tableWrapper.setSpec(tableSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -1974,27 +2014,30 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        TableList tables = connectionWrapper.getTables();
-        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-        }
+                    TableList tables = connectionWrapper.getTables();
+                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                    }
 
-        // TODO: validate the tableSpec
-        TableSpec tableSpec = tableWrapper.getSpec();
-        tableListModel.copyToTableSpecification(tableSpec);
-        userHomeContext.flush();
+                    // TODO: validate the tableSpec
+                    TableSpec tableSpec = tableWrapper.getSpec();
+                    tableListModel.copyToTableSpecification(tableSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -2037,26 +2080,29 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        TableList tables = connectionWrapper.getTables();
-        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-        }
+                    TableList tables = connectionWrapper.getTables();
+                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                    }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        tablePartitioningModel.copyToTableSpecification(tableSpec);
-        userHomeContext.flush();
+                    TableSpec tableSpec = tableWrapper.getSpec();
+                    tablePartitioningModel.copyToTableSpecification(tableSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -2094,39 +2140,42 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        TableList tables = connectionWrapper.getTables();
-        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-        }
+                    TableList tables = connectionWrapper.getTables();
+                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                    }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (dataGroupingConfigurationSpec != null) {
-            if (!Strings.isNullOrEmpty(tableSpec.getDefaultGroupingName())) {
-                tableSpec.getGroupings().remove(tableSpec.getDefaultGroupingName());
-                tableSpec.getGroupings().put(tableSpec.getDefaultGroupingName(), dataGroupingConfigurationSpec);
-            } else {
-                tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);
-                tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
-            }
-        } else {
-            if (tableSpec.getDefaultGroupingName() != null) {
-                tableSpec.getGroupings().remove(tableSpec.getDefaultGroupingName());
-                tableSpec.setDefaultGroupingName(null);
-            }
-        }
-        userHomeContext.flush();
+                    TableSpec tableSpec = tableWrapper.getSpec();
+                    if (dataGroupingConfigurationSpec != null) {
+                        if (!Strings.isNullOrEmpty(tableSpec.getDefaultGroupingName())) {
+                            tableSpec.getGroupings().remove(tableSpec.getDefaultGroupingName());
+                            tableSpec.getGroupings().put(tableSpec.getDefaultGroupingName(), dataGroupingConfigurationSpec);
+                        } else {
+                            tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);
+                            tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
+                        }
+                    } else {
+                        if (tableSpec.getDefaultGroupingName() != null) {
+                            tableSpec.getGroupings().remove(tableSpec.getDefaultGroupingName());
+                            tableSpec.setDefaultGroupingName(null);
+                        }
+                    }
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -2166,32 +2215,40 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        TableList tables = connectionWrapper.getTables();
-        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-        }
+                    TableList tables = connectionWrapper.getTables();
+                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                    }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        DefaultSchedulesSpec schedules = tableSpec.getSchedulesOverride();
-        if (schedules == null) {
-            schedules = new DefaultSchedulesSpec();
-            tableSpec.setSchedulesOverride(schedules);
-        }
-        schedules.setScheduleForCheckSchedulingGroup(monitoringScheduleSpec, schedulingGroup);
+                    TableSpec tableSpec = tableWrapper.getSpec();
+                    DefaultSchedulesSpec schedules = tableSpec.getSchedulesOverride();
+                    if (schedules == null) {
+                        schedules = new DefaultSchedulesSpec();
+                        tableSpec.setSchedulesOverride(schedules);
+                    }
+                    schedules.setScheduleForCheckSchedulingGroup(monitoringScheduleSpec, schedulingGroup);
 
-        userHomeContext.flush();
+                    boolean scheduleUpdated = tableSpec.isDirty();
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    if (scheduleUpdated && this.jobSchedulerService != null) {
+                        this.jobSchedulerService.triggerMetadataSynchronization();
+                    }
+
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
 
@@ -2230,25 +2287,28 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        TableList tables = connectionWrapper.getTables();
-        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-        }
+                    TableList tables = connectionWrapper.getTables();
+                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                    }
 
-        tableWrapper.getSpec().setIncidentGrouping(null);
-        userHomeContext.flush();
+                    tableWrapper.getSpec().setIncidentGrouping(null);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -2286,26 +2346,29 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        TableList tables = connectionWrapper.getTables();
-        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-        }
+                    TableList tables = connectionWrapper.getTables();
+                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                    }
 
-        // TODO: validate the tableSpec
-        tableWrapper.getSpec().setLabels(labelSetSpec);
-        userHomeContext.flush();
+                    // TODO: validate the tableSpec
+                    tableWrapper.getSpec().setLabels(labelSetSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -2343,26 +2406,29 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        TableList tables = connectionWrapper.getTables();
-        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-        }
+                    TableList tables = connectionWrapper.getTables();
+                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                    }
 
-        // TODO: validate the tableSpec
-        tableWrapper.getSpec().setComments(commentsListSpec);
-        userHomeContext.flush();
+                    // TODO: validate the tableSpec
+                    tableWrapper.getSpec().setComments(commentsListSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     protected <T extends AbstractRootChecksContainerSpec> boolean updateTableGenericChecks(
@@ -2371,27 +2437,30 @@ public class TablesController {
             String connectionName,
             String schemaName,
             String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return false;
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return false;
+                    }
 
-        TableList tables = connectionWrapper.getTables();
-        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return false;
-        }
+                    TableList tables = connectionWrapper.getTables();
+                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                    if (tableWrapper == null) {
+                        return false;
+                    }
 
-        // TODO: validate the tableSpec
-        TableSpec tableSpec = tableWrapper.getSpec();
-        tableSpecUpdater.accept(tableSpec);
-        userHomeContext.flush();
+                    // TODO: validate the tableSpec
+                    TableSpec tableSpec = tableWrapper.getSpec();
+                    tableSpecUpdater.accept(tableSpec);
+                    userHomeContext.flush();
 
-        return true;
+                    return true;
+                });
     }
 
     /**
@@ -2657,36 +2726,39 @@ public class TablesController {
             String schemaName,
             String tableName,
             CheckContainerModel checkContainerModel) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return false;
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return false;
+                    }
 
-        TableList tables = connectionWrapper.getTables();
-        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return false;
-        }
+                    TableList tables = connectionWrapper.getTables();
+                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                    if (tableWrapper == null) {
+                        return false;
+                    }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        T checksToUpdate = tableSpecToRootCheck.apply(tableSpec);
-        if (checksToUpdate == null) {
-            return false;
-        }
+                    TableSpec tableSpec = tableWrapper.getSpec();
+                    T checksToUpdate = tableSpecToRootCheck.apply(tableSpec);
+                    if (checksToUpdate == null) {
+                        return false;
+                    }
 
-        if (checkContainerModel != null) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checksToUpdate, tableSpec);
-            tableSpec.setTableCheckRootContainer(checksToUpdate);
-        } else {
-            // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
-        }
+                    if (checkContainerModel != null) {
+                        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checksToUpdate, tableSpec);
+                        tableSpec.setTableCheckRootContainer(checksToUpdate);
+                    } else {
+                        // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
+                    }
 
-        userHomeContext.flush();
-        return true;
+                    userHomeContext.flush();
+                    return true;
+                });
     }
 
     /**
@@ -2873,24 +2945,27 @@ public class TablesController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        TableList tables = connectionWrapper.getTables();
-        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-        }
+                    TableList tables = connectionWrapper.getTables();
+                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                    }
 
-        PushJobResult<DeleteStoredDataResult> backgroundJob = this.tableService.deleteTable(
-                connectionName, tableWrapper.getPhysicalTableName(), principal);
+                    PushJobResult<DeleteStoredDataResult> backgroundJob = this.tableService.deleteTable(
+                            connectionName, tableWrapper.getPhysicalTableName(), principal);
 
-        return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
+                    return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
+                });
     }
 }

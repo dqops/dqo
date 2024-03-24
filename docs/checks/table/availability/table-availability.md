@@ -241,7 +241,7 @@ spec:
                         *,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                    FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    FROM  AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -800,7 +800,7 @@ spec:
                         *,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                    FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    FROM  AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -1359,7 +1359,7 @@ spec:
                         *,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                    FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    FROM  AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan

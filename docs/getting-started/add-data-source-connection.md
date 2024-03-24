@@ -73,12 +73,11 @@ Now we can import schemas and tables.
 ## Initiate automatic monitoring and review scheduling
 
 Once new tables are imported, DQOps automatically activates [profiling and monitoring checks](../dqo-concepts/definition-of-data-quality-checks/index.md).
-These checks include row count,
-table availability and checks detecting schema changes. They are scheduled to run daily at 12:00 p.m.
+These checks include row count, table availability, and checks detecting schema changes. They are scheduled to run daily at 12:00 p.m.
 
 Upon import, you will receive information at the top of the page, it is called an Advisor.
 If you click on the orange bar, you can open the Advisor.
-Within the Advisor, you can collect basic statistics, run profiling checks or modify the schedule for newly imported tables.
+Within the Advisor, you can collect basic statistics, run profiling checks, or modify the schedule for newly imported tables.
 
 ### Run basic statistics and profiling checks with the Advisor
 

@@ -157,26 +157,29 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
         SynchronizationResult synchronizationResult = this.fileSystemSynchronizationService.synchronize(
                 sourceChangeSet, remoteChangeSet, dqoRoot, userIdentity, synchronizationDirection, apiKey, synchronizationListener);
 
-        TargetTableModifiedPartitions targetTableModifiedPartitions = synchronizationResult.getTargetTableModifiedPartitions();
-        if (forceRefreshNativeTable) {
-            this.dqoCloudWarehouseService.refreshNativeTable(new TargetTableModifiedPartitions(dqoRoot), userIdentity);
-        } else {
-            if (targetTableModifiedPartitions.hasAnyChanges()) {
-                this.dqoCloudWarehouseService.refreshNativeTable(targetTableModifiedPartitions, userIdentity);
+        try {
+            TargetTableModifiedPartitions targetTableModifiedPartitions = synchronizationResult.getTargetTableModifiedPartitions();
+            if (forceRefreshNativeTable) {
+                this.dqoCloudWarehouseService.refreshNativeTable(new TargetTableModifiedPartitions(dqoRoot), userIdentity);
+            } else {
+                if (targetTableModifiedPartitions.hasAnyChanges()) {
+                    this.dqoCloudWarehouseService.refreshNativeTable(targetTableModifiedPartitions, userIdentity);
+                }
             }
         }
+        finally {
+            if (localFileIndexWrapper.getSpec().getFolder() == null ||
+                    !Objects.equals(localFileIndexWrapper.getSpec().getFolder().getHash(), synchronizationResult.getSourceFileIndex().getHash())) {
+                localFileIndexWrapper.getSpec().setFolder(synchronizationResult.getSourceFileIndex());
+            }
 
-        if (localFileIndexWrapper.getSpec().getFolder() == null ||
-                !Objects.equals(localFileIndexWrapper.getSpec().getFolder().getHash(), synchronizationResult.getSourceFileIndex().getHash())) {
-            localFileIndexWrapper.getSpec().setFolder(synchronizationResult.getSourceFileIndex());
+            if (remoteFileIndexWrapper.getSpec().getFolder() == null ||
+                    !Objects.equals(remoteFileIndexWrapper.getSpec().getFolder().getHash(), synchronizationResult.getTargetFileIndex().getHash())) {
+                remoteFileIndexWrapper.getSpec().setFolder(synchronizationResult.getTargetFileIndex());
+            }
+
+            userHomeContext.flush(); // commit the indexes
         }
-
-        if (remoteFileIndexWrapper.getSpec().getFolder() == null ||
-                !Objects.equals(remoteFileIndexWrapper.getSpec().getFolder().getHash(), synchronizationResult.getTargetFileIndex().getHash())) {
-            remoteFileIndexWrapper.getSpec().setFolder(synchronizationResult.getTargetFileIndex());
-        }
-
-        userHomeContext.flush(); // commit the indexes
     }
 
     /**
@@ -199,6 +202,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
         synchronizeFolder(DqoRoot.settings, userIdentity, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.credentials, userIdentity, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.dictionaries, userIdentity, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+        synchronizeFolder(DqoRoot.patterns, userIdentity, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.data_sensor_readouts, userIdentity, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.data_check_results, userIdentity, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.data_errors, userIdentity, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);

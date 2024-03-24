@@ -1,7 +1,6 @@
-import React from 'react';
-import JdbcPropertyItem from './JdbcPropertyItem';
-import { convertArrayToObject, convertObjectToArray } from "../../../../utils/object";
+import React, { useState } from 'react';
 import { SharedCredentialListModel } from '../../../../api';
+import JdbcPropertyItem from './JdbcPropertyItem';
 
 interface IProperties {
   [key: string]: string;
@@ -10,40 +9,68 @@ interface IProperties {
 interface IJdbcPropertiesViewProps {
   properties?: IProperties;
   onChange: (properties: IProperties) => void;
-  sharedCredentials ?: SharedCredentialListModel[];
+  sharedCredentials?: SharedCredentialListModel[];
+}
+function convertObjectToArray(obj: {
+  [key: string]: string;
+}): { [key: string]: string }[] {
+  return Object.entries(obj).map(([key, value]) => ({ [key]: value }));
 }
 
-const JdbcPropertiesView = ({ properties, onChange, sharedCredentials }: IJdbcPropertiesViewProps) => {
-  const entries: [string, string][] = convertObjectToArray(properties).concat([['', '']]);
+function convertArrayToObject(array: { [key: string]: string }[]): {
+  [key: string]: string;
+} {
+  return array.reduce((result, currentObject) => {
+    for (const key in currentObject) {
+      if (Object.prototype.hasOwnProperty.call(currentObject, key)) {
+        result[key] = currentObject[key];
+      }
+    }
+    return result;
+  }, {});
+}
 
-  const onRemove = (key: number) => {
-    onChange(convertArrayToObject(entries.filter((item, index) => index !== key)));
+const JdbcPropertiesView = ({
+  properties = {[''] : ''},
+  onChange,
+  sharedCredentials
+}: IJdbcPropertiesViewProps) => {
+  const [arr, setArr] = useState(convertObjectToArray(properties ?? {}));
+
+  const onChangeArr = (
+    array: {
+      [key: string]: string;
+    }[]
+  ) => {
+    setArr(array);
+    onChange(convertArrayToObject(array));
   };
 
-  const onChangeProperty = (key: number, val: [string, string]) => {
-    onChange(convertArrayToObject(entries.map((item, index) => index === key ? val : item)));
-  };
+  // useEffect(() => {
+  //   if (properties) {
+  //     setArr(convertObjectToArray(properties ?? {}));
+  //   }
+  // }, [firstLevelActiveTab, storageType]);
 
   return (
     <div className="py-4">
       <table className="my-3 w-full">
         <thead>
           <tr>
-            <th className="text-left min-w-40 pr-4 py-2">JDBC connection property</th>
+            <th className="text-left min-w-40 pr-4 py-2">
+              JDBC connection property
+            </th>
             <th className="text-left min-w-40 pr-4 py-2">Value</th>
             <th className="px-8 min-w-40 py-2">Action</th>
           </tr>
         </thead>
         <tbody>
-          {entries.map(([key, value], index) => (
+          {arr.map((_, index) => (
             <JdbcPropertyItem
               key={index}
-              idx={index}
-              name={key}
-              value={value}
-              isLast={index === entries.length - 1}
-              onRemove={onRemove}
-              onChange={onChangeProperty}
+              index={index}
+              properties={arr}
+              onChange={onChangeArr}
               sharedCredentials={sharedCredentials}
             />
           ))}

@@ -93,7 +93,7 @@ DQOps root folders in the dqo use home that may be replicated to a remote file s
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|data_sensor_readouts<br/>data_check_results<br/>data_statistics<br/>data_errors<br/>data_incidents<br/>sources<br/>sensors<br/>rules<br/>checks<br/>settings<br/>credentials<br/>dictionaries<br/>_indexes<br/>_local_settings<br/>|
+|string|data_sensor_readouts<br/>data_check_results<br/>data_statistics<br/>data_errors<br/>data_incidents<br/>sources<br/>sensors<br/>rules<br/>checks<br/>settings<br/>credentials<br/>dictionaries<br/>patterns<br/>_indexes<br/>_local_settings<br/>|
 
 ___
 
@@ -236,6 +236,7 @@ Simple object for starting multiple folder synchronization jobs with the same co
 |<span class="no-wrap-code">`settings`</span>|Synchronize the "settings" folder.|*boolean*|
 |<span class="no-wrap-code">`credentials`</span>|Synchronize the ".credentials" folder.|*boolean*|
 |<span class="no-wrap-code">`dictionaries`</span>|Synchronize the "dictionaries" folder.|*boolean*|
+|<span class="no-wrap-code">`patterns`</span>|Synchronize the "patterns" folder.|*boolean*|
 |<span class="no-wrap-code">`data_sensor_readouts`</span>|Synchronize the ".data/sensor_readouts" folder.|*boolean*|
 |<span class="no-wrap-code">`data_check_results`</span>|Synchronize the ".data/check_results" folder.|*boolean*|
 |<span class="no-wrap-code">`data_statistics`</span>|Synchronize the ".data/statistics" folder.|*boolean*|
@@ -547,6 +548,7 @@ Model that describes the current synchronization status for each folder.
 |<span class="no-wrap-code">[`settings`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the "settings" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
 |<span class="no-wrap-code">[`credentials`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the ".credentials" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
 |<span class="no-wrap-code">[`dictionaries`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the "dictionaries" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
+|<span class="no-wrap-code">[`patterns`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the "patterns" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
 |<span class="no-wrap-code">[`data_sensor_readouts`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the ".data/sensor_readouts" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
 |<span class="no-wrap-code">[`data_check_results`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the ".data/check_results" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
 |<span class="no-wrap-code">[`data_statistics`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the ".data/statistics" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|

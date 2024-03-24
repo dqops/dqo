@@ -1,23 +1,22 @@
+import { IconButton } from '@material-tailwind/react';
+import clsx from 'clsx';
+import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   CheckResultEntryModel,
   CheckResultsListModel
 } from '../../../api';
-import Select from '../../Select';
-import { Table } from '../../Table';
 import { useTree } from '../../../contexts/treeContext';
-import moment from 'moment';
-import SvgIcon from '../../SvgIcon';
-import clsx from 'clsx';
-import { ChartView } from './ChartView';
-import { getCheckResults } from '../../../redux/actions/source.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { CheckTypes } from '../../../shared/routes';
-import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { getCheckResults } from '../../../redux/actions/source.actions';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
-import { IconButton } from '@material-tailwind/react';
-import { getLocalDateInUserTimeZone } from '../../../utils';
+import { CheckTypes } from '../../../shared/routes';
+import { getLocalDateInUserTimeZone, useDecodedParams } from '../../../utils';
+import Select from '../../Select';
+import SvgIcon from '../../SvgIcon';
+import { Table } from '../../Table';
+import { ChartView } from './ChartView';
 
 interface CheckResultsTabProps {
   results: CheckResultsListModel[];
@@ -59,7 +58,7 @@ const CheckResultsTab = ({
     schema: string;
     table: string;
     column: string;
-  } = useParams();
+  } = useDecodedParams();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getSeverityClass = (row: CheckResultEntryModel) => {

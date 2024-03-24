@@ -1,8 +1,8 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import Select from "../../Select";
-import Input from "../../Input";
-import clsx from "clsx";
-import SelectInput from "../../SelectInput";
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import Select from '../../Select';
+import Input from '../../Input';
+import clsx from 'clsx';
+import SelectInput from '../../SelectInput';
 
 interface FieldTypeInputProps {
   className?: string;
@@ -12,20 +12,32 @@ interface FieldTypeInputProps {
   maskingType?: string;
   onChange?: (value: string) => void;
   disabled?: boolean;
-  data?: any
-  credential?: boolean
+  data?: any;
+  credential?: boolean;
+  inputClassName?: string;
 }
 
-const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, disabled, data, credential}: FieldTypeInputProps) => {
+const FieldTypeInput = ({
+  className,
+  label,
+  value,
+  name,
+  maskingType,
+  onChange,
+  disabled,
+  data,
+  credential,
+  inputClassName
+}: FieldTypeInputProps) => {
   const options = [
     {
       label: 'clear text',
-      value: 'text',
+      value: 'text'
     },
     {
       label: '${ENV_VAR}',
-      value: 'env',
-    },
+      value: 'env'
+    }
     // {
     //   label: '${credential://CREDENTIAL}',
     //   value: 'credential'
@@ -35,20 +47,19 @@ const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, 
   const [type, setType] = useState('text');
 
   const onChangeType = (newType: string) => {
-    setType(newType)
+    setType(newType);
 
     if (!onChange) return;
     onChange(encodeValue(text, newType));
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e)
     if (!onChange) return;
 
     setText(e.target.value);
     onChange(encodeValue(e.target.value, type));
   };
-  
+
   const handleSelectChange = (input: string) => {
     if (!onChange) return;
 
@@ -67,16 +78,22 @@ const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, 
   };
 
   useEffect(() => {
-    if (value === undefined){
-      return; 
+    if (value === undefined) {
+      return;
     }
 
     if (value.startsWith('${credential://') && value.endsWith('}')) {
-      const credentialName = value.substring('${credential://'.length, value.length - 1);
+      const credentialName = value.substring(
+        '${credential://'.length,
+        value.length - 1
+      );
       setText(credentialName);
       setType('credential');
     } else if (value.startsWith('${') && value.endsWith('}')) {
-      const environmentVariableName = value.substring('${'.length, value.length - 1);
+      const environmentVariableName = value.substring(
+        '${'.length,
+        value.length - 1
+      );
       setText(environmentVariableName);
       setType('env');
     } else {
@@ -85,33 +102,55 @@ const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, 
     }
   }, [value]);
 
-  const inputType = maskingType === 'password' && type !== 'env'
-  ? 'password'
-  : 'text';
+  const inputType =
+    maskingType === 'password' && type !== 'env' ? 'password' : 'text';
   return (
     <div className={clsx('', className)}>
       <div>{label}</div>
       <div className="flex items-end space-x-3">
         <div className="flex-1 flex space-x-1 items-center">
-          {(type === 'env' || type === 'credential') && <div>{'${'} {type === 'credential' ? 'credential://' : ''}</div>}
+          {(type === 'env' || type === 'credential') && (
+            <div>
+              {'${'} {type === 'credential' ? 'credential://' : ''}
+            </div>
+          )}
           <div className="flex-1">
-           {type === 'credential' ? 
-           <SelectInput 
-           options={Object.values(data).map((x : any) =>({
-            label: x.credential_name,
-            value: x.credential_name
-           }))}
-           value={text} onChange={handleSelectChange} disabled={disabled}/> 
-            :  
-           <Input name={name} value={text} onChange={handleChange} type={inputType} disabled={disabled}/> }
+            {type === 'credential' ? (
+              <SelectInput
+                options={Object.values(data).map((x: any) => ({
+                  label: x.credential_name,
+                  value: x.credential_name
+                }))}
+                value={text}
+                onChange={handleSelectChange}
+                disabled={disabled}
+              />
+            ) : (
+              <Input
+                name={name}
+                value={text}
+                onChange={handleChange}
+                type={inputType}
+                disabled={disabled}
+                className={inputClassName}
+              />
+            )}
           </div>
           {(type === 'env' || type === 'credential') && <div>{'}'}</div>}
         </div>
-        <Select options={[...options, { 
-        label: '${credential://secret_name}',
-        value: 'credential'
-        }]}
-      value={type} onChange={onChangeType} disabled={disabled} placeholder=""/>
+        <Select
+          options={[
+            ...options,
+            {
+              label: '${credential://secret_name}',
+              value: 'credential'
+            }
+          ]}
+          value={type}
+          onChange={onChangeType}
+          disabled={disabled}
+          placeholder=""
+        />
       </div>
     </div>
   );

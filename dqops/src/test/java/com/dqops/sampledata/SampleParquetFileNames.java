@@ -19,6 +19,7 @@ package com.dqops.sampledata;
  * Constants: names of csv file paths with sample data.
  */
 public class SampleParquetFileNames {
+    public static final String folder_path = "files/parquet/";
     public static final String continuous_days_one_row_per_day = "files/parquet/continuous_days_one_row_per_day.parquet";
 
 }

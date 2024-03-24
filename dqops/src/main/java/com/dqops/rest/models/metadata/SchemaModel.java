@@ -90,6 +90,12 @@ public class SchemaModel {
     private boolean canDeleteData;
 
     /**
+     * Field for error message.
+     */
+    @JsonPropertyDescription("Field for error message.")
+    private String errorMessage;
+
+    /**
      * Creates a schema model from connection and schema names.
      * @param connectionName Connection name to store in the model.
      * @param schemaName     Schema name.

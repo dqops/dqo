@@ -112,6 +112,10 @@ public class ColumnColumnExistsSensorRunner extends AbstractSensorRunner {
         SensorExecutionRunParameters sensorRunParameters = sensorPrepareResult.getSensorRunParameters();
         PhysicalTableName physicalTableName = sensorRunParameters.getTable().getPhysicalTableName();
 
+        if (!groupedSensorExecutionResult.isSuccess()) {
+            return new SensorExecutionResult(sensorRunParameters, groupedSensorExecutionResult.getException());
+        }
+
         try {
             TableSpec introspectedTableSpec = groupedSensorExecutionResult.getCapturedMetadataResult();
 
@@ -175,7 +179,8 @@ public class ColumnColumnExistsSensorRunner extends AbstractSensorRunner {
                             new ArrayList<>() {{
                                 add(tableName);
                             }},
-                            connectionWrapper
+                            connectionWrapper,
+                            secretValueLookupContext
                     );
 
                     if (retrievedTableSpecList.size() == 0) {

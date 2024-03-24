@@ -1,46 +1,47 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import TableActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
+import TableActionGroup from './TableActionGroup';
 
+import { useHistory } from 'react-router-dom';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import TableProfilingChecks from '../../../pages/TableProfilingChecks';
 import {
   getTableProfilingChecksModel,
   updateTableProfilingChecksModel
 } from '../../../redux/actions/table.actions';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { useHistory, useParams } from 'react-router-dom';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState,
   getSecondLevelTab
 } from '../../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
-import TableProfilingChecks from '../../../pages/TableProfilingChecks';
 
 import Tabs from '../../Tabs';
 
-import TableStatisticsView from '../../../pages/TableStatisticsView';
 import {
   DataGroupingConfigurationSpec,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel,
   TableStatisticsModel
 } from '../../../api';
+import TableStatisticsView from '../../../pages/TableStatisticsView';
 
+import { AxiosResponse } from 'axios';
 import { setCreatedDataStream } from '../../../redux/actions/definition.actions';
 import { addFirstLevelTab, setActiveFirstLevelUrl } from '../../../redux/actions/source.actions';
+import { IRootState } from '../../../redux/reducers';
 import {
   ColumnApiClient,
   DataGroupingConfigurationsApi,
   JobApiClient,
   TableApiClient
 } from '../../../services/apiClient';
+import { TABLE_LEVEL_TABS } from '../../../shared/constants';
 import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
-import { IRootState } from '../../../redux/reducers';
 import TablePreview from './TablePreview';
 import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
-import { TABLE_LEVEL_TABS } from '../../../shared/constants';
-import { AxiosResponse } from 'axios';
+import { useDecodedParams } from '../../../utils';
 interface LocationState {
   bool: boolean;
   data_stream_name: string;
@@ -59,7 +60,7 @@ const ProfilingView = () => {
     schema: string;
     table: string;
     tab: string;
-  } = useParams();
+  } = useDecodedParams();
 
   const { checksUI, isUpdating, isUpdatedChecksUi, tableBasic } = useSelector(
     getFirstLevelState(checkTypes)

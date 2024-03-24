@@ -1,12 +1,12 @@
+import clsx from 'clsx';
 import React from 'react';
 import {
   DataGroupingDimensionSpec,
   DataGroupingDimensionSpecSourceEnum
 } from '../../api';
 import Input from '../Input';
-import ColumnSelect from './ColumnSelect';
 import RadioButton from '../RadioButton';
-import clsx from 'clsx';
+import ColumnSelect from './ColumnSelect';
 
 interface IDataGroupingDimensionItemProps {
   dataGroupingLevel?: DataGroupingDimensionSpec;
@@ -26,7 +26,7 @@ const DataGroupingDimensionItem = ({
   onClearError
 }: IDataGroupingDimensionItemProps) => {
   return (
-    <div className="mb-4 last:mb-0">
+    <div className="mb-4 last:mb-0 text-sm">
       <div className="flex justify-between items-center space-x-6">
         <div className="text-sm font-semibold flex-1">{`Grouping dimension level ${
           idx + 1

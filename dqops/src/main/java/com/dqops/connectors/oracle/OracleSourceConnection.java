@@ -36,6 +36,7 @@ import tech.tablesaw.columns.Column;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Oracle source connection.
@@ -106,13 +107,10 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
      * Lists tables inside a schema. Views are also returned.
      *
      * @param schemaName Schema name.
-     * @param connectionWrapper Connection wrapper with a list of existing tables.
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName, ConnectionWrapper connectionWrapper) {
-        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
-
+    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT OWNER AS table_schema, TABLE_NAME AS table_name FROM ");
         sqlBuilder.append(getInformationSchemaName());
@@ -143,7 +141,10 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
      * @return List of table specifications with the column list.
      */
     @Override
-    public List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames, ConnectionWrapper connectionWrapper) {
+    public List<TableSpec> retrieveTableMetadata(String schemaName,
+                                                 List<String> tableNames,
+                                                 ConnectionWrapper connectionWrapper,
+                                                 SecretValueLookupContext secretValueLookupContext) {
         assert !Strings.isNullOrEmpty(schemaName);
 
         try {
@@ -386,7 +387,11 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
 
         Properties dataSourceProperties = new Properties();
         if (oracleParametersSpec.getProperties() != null) {
-            dataSourceProperties.putAll(oracleParametersSpec.getProperties());
+            dataSourceProperties.putAll(oracleParametersSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
         String userName = this.getSecretValueProvider().expandValue(oracleParametersSpec.getUser(), secretValueLookupContext);
@@ -394,11 +399,6 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
 
         String password = this.getSecretValueProvider().expandValue(oracleParametersSpec.getPassword(), secretValueLookupContext);
         hikariConfig.setPassword(password);
-
-        String options =  this.getSecretValueProvider().expandValue(oracleParametersSpec.getOptions(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(options)) {
-            dataSourceProperties.put("options", options);
-        }
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;

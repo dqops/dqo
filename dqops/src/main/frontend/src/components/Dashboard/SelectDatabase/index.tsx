@@ -1,8 +1,8 @@
+import clsx from 'clsx';
 import React from 'react';
-import SvgIcon from '../../SvgIcon';
 import { ConnectionModelProviderTypeEnum } from '../../../api';
 import { databaseOptions } from '../../../shared/constants';
-import clsx from 'clsx';
+import SvgIcon from '../../SvgIcon';
 
 interface ISelectDatabaseProps {
   onSelect: (
@@ -32,7 +32,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
                   option.name === 'Spark' && 'w-30'
                 )}
               />
-              <div className="text-xl font-semibold text-gray-700">
+              <div className="text-lg font-semibold text-gray-700">
                 {option.displayName}
               </div>
             </div>

@@ -61,6 +61,12 @@ public class CheckDefinitionModel {
     private String helpText;
 
     /**
+     * An alternative check's name that is shown on the check editor.
+     */
+    @JsonPropertyDescription("An alternative check's name that is shown on the check editor.")
+    private String friendlyName;
+
+    /**
      * This is a standard data quality check that is always shown on the data quality checks editor screen.
      * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
      */
@@ -113,6 +119,7 @@ public class CheckDefinitionModel {
         this.sensorName = checkDefinitionSpec.getSensorName();
         this.ruleName = checkDefinitionSpec.getRuleName();
         this.helpText = checkDefinitionSpec.getHelpText();
+        this.friendlyName = checkDefinitionSpec.getFriendlyName();
         this.yamlParsingError = checkDefinitionSpec.getYamlParsingError();
         this.standard = checkDefinitionSpec.isStandard();
         this.custom = custom;
@@ -142,6 +149,10 @@ public class CheckDefinitionModel {
             return false;
         }
 
+        if (!Objects.equals(checkDefinitionWrapper.getSpec().getFriendlyName(), this.friendlyName)) {
+            return false;
+        }
+
         if (checkDefinitionWrapper.getSpec().isStandard() != this.standard) {
             return false;
         }
@@ -158,6 +169,7 @@ public class CheckDefinitionModel {
         checkDefinitionSpec.setSensorName(this.sensorName);
         checkDefinitionSpec.setRuleName(this.ruleName);
         checkDefinitionSpec.setHelpText(this.helpText);
+        checkDefinitionSpec.setFriendlyName(this.friendlyName);
         checkDefinitionSpec.setStandard(this.standard);
 
         return checkDefinitionSpec;

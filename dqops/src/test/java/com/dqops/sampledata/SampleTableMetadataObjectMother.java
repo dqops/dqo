@@ -265,7 +265,7 @@ public class SampleTableMetadataObjectMother {
 
         fillColumnSpecsInTableSpec(tableSpec, sampleTable, connectionSpec);
 
-        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, null);
+        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, sampleTable);
     }
 
     /**
@@ -300,8 +300,8 @@ public class SampleTableMetadataObjectMother {
         TableSpec tableSpec = new TableSpec();
         FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForMultipleCsvFiles(
                 SampleDataFilesProvider.getCsvFiles(csvFilesFolder).stream()
-                        .map(file -> file.toString()).collect(Collectors.toList()),
-                header
+                        .filter(file -> file.getName().endsWith(".csv"))
+                        .map(file -> file.toString()).collect(Collectors.toList())
         );
         tableSpec.setFileFormat(fileFormatSpec);
         tableSpec.setPhysicalTableName(new PhysicalTableName("a_random_schema_name", "a_random_table_name"));
@@ -312,7 +312,7 @@ public class SampleTableMetadataObjectMother {
 
         fillColumnSpecsInTableSpec(tableSpec, sampleTable, connectionSpec);
 
-        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, null);
+        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, sampleTable);
     }
 
     /**

@@ -15,11 +15,12 @@
  */
 package com.dqops.metadata.search;
 
-import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionList;
@@ -28,7 +29,6 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
-import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapper;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import com.google.common.base.Strings;
@@ -288,18 +288,6 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
     }
 
     /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultObservabilityChecksSpec Default configuration of observability checks.
-     * @param parameter                             Visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(DefaultObservabilityChecksSpec defaultObservabilityChecksSpec, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.SKIP_CHILDREN;  // we don't want to look for checks here, because there are checks.. but only templates, they cannot be run
-    }
-
-    /**
      * Accepts a list of sensor definitions for different providers.
      *
      * @param providerSensorDefinitionList List of sensor definitions per provider.
@@ -420,18 +408,6 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
     }
 
     /**
-     * Accepts a default observability check wrapper instance.
-     *
-     * @param defaultObservabilityCheckWrapper Default observability check wrapper instance.
-     * @param parameter                        Visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(DefaultObservabilityCheckWrapper defaultObservabilityCheckWrapper, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.SKIP_CHILDREN;
-    }
-
-    /**
      * Accepts a data dictionary list.
      *
      * @param dictionaryWrappers Data dictionary list.
@@ -440,6 +416,30 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
      */
     @Override
     public TreeNodeTraversalResult accept(DictionaryListImpl dictionaryWrappers, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of default configuration of table observability checks wrappers.
+     *
+     * @param tableDefaultChecksPatternWrappers Table observability default checks list.
+     * @param parameter                         Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableDefaultChecksPatternList tableDefaultChecksPatternWrappers, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a default configuration of column observability checks wrapper.
+     *
+     * @param columnDefaultChecksPatternWrappers Column observability default checks specification.
+     * @param parameter                          Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ColumnDefaultChecksPatternList columnDefaultChecksPatternWrappers, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 }

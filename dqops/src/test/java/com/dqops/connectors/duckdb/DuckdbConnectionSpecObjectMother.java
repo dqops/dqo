@@ -44,14 +44,36 @@ public class DuckdbConnectionSpecObjectMother {
      * Creates a default connection spec to DuckDB.
      * @return Connection spec to a DuckDB.
      */
-    public static ConnectionSpec createForFiles(DuckdbSourceFilesType duckdbSourceFilesType) {
+    public static ConnectionSpec createForFiles(DuckdbFilesFormatType duckdbFilesFormatType) {
         ConnectionSpec connectionSpec = new ConnectionSpec()
         {{
             setProviderType(ProviderType.duckdb);
             setDuckdb(new DuckdbParametersSpec()
             {{
                 setReadMode(DuckdbReadMode.files);
-                setSourceFilesType(duckdbSourceFilesType);
+                setFilesFormatType(duckdbFilesFormatType);
+            }});
+        }};
+
+        return connectionSpec;
+    }
+
+    /**
+     * Creates a default connection spec to DuckDB with s3 setup.
+     * @return Connection spec to a DuckDB.
+     */
+    public static ConnectionSpec createForFilesOnS3(DuckdbFilesFormatType duckdbFilesFormatType) {
+        ConnectionSpec connectionSpec = new ConnectionSpec()
+        {{
+            setProviderType(ProviderType.duckdb);
+            setDuckdb(new DuckdbParametersSpec()
+            {{
+                setReadMode(DuckdbReadMode.files);
+                setFilesFormatType(duckdbFilesFormatType);
+                setStorageType(DuckdbStorageType.s3);
+                setUser("aws_example_key_id");
+                setPassword("aws_example_secret");
+                setRegion("eu-central-1");
             }});
         }};
 

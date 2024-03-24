@@ -37,6 +37,7 @@ import tech.tablesaw.columns.Column;
 
 import java.sql.Statement;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Spark source connection.
@@ -90,7 +91,11 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
 
         Properties dataSourceProperties = new Properties();
         if (sparkParametersSpec.getProperties() != null) {
-            dataSourceProperties.putAll(sparkParametersSpec.getProperties());
+            dataSourceProperties.putAll(sparkParametersSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
         String userName = this.getSecretValueProvider().expandValue(sparkParametersSpec.getUser(), secretValueLookupContext);
@@ -98,11 +103,6 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
 
         String password = this.getSecretValueProvider().expandValue(sparkParametersSpec.getPassword(), secretValueLookupContext);
         hikariConfig.setPassword(password);
-
-        String options =  this.getSecretValueProvider().expandValue(sparkParametersSpec.getOptions(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(options)) {
-            dataSourceProperties.put("options", options);
-        }
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
@@ -134,11 +134,10 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
      * Lists tables inside a schema. Views are also returned.
      *
      * @param schemaName Schema name.
-     * @param connectionWrapper Connection wrapper with a list of existing connections.
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName, ConnectionWrapper connectionWrapper) {
+    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
 
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SHOW tables FROM ");
@@ -195,7 +194,10 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
      * @return List of table specifications with the column list.
      */
     @Override
-    public List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames, ConnectionWrapper connectionWrapper) {
+    public List<TableSpec> retrieveTableMetadata(String schemaName,
+                                                 List<String> tableNames,
+                                                 ConnectionWrapper connectionWrapper,
+                                                 SecretValueLookupContext secretValueLookupContext) {
         assert !Strings.isNullOrEmpty(schemaName);
 
         try {

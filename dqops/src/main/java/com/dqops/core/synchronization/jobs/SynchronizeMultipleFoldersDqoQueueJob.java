@@ -158,6 +158,11 @@ public class SynchronizeMultipleFoldersDqoQueueJob extends ParentDqoQueueJob<Voi
                     clonedParameters.getDirection(), clonedParameters.isForceRefreshNativeTables()));
         }
 
+        if (clonedParameters.isPatterns()) {
+            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.patterns,
+                    clonedParameters.getDirection(), clonedParameters.isForceRefreshNativeTables()));
+        }
+
         if (clonedParameters.isDataSensorReadouts()) {
             jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.data_sensor_readouts,
                     clonedParameters.getDirection(), clonedParameters.isForceRefreshNativeTables()));

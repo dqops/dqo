@@ -71,6 +71,7 @@ public class CheckDefinitionDefaultSpecUpdateServiceImpl implements CheckDefinit
                 String sensorName = checkModel.getSensorName();
                 String ruleName = checkModel.getRule().getError().getRuleName();
                 String helpText = checkModel.getHelpText();
+                String friendlyName = checkModel.getFriendlyName();
                 boolean isStandard = checkModel.isStandard();
 
                 CheckDefinitionWrapper checkDefinitionWrapper = dqoHomeChecksList.getByObjectName(fullCheckName, true);
@@ -78,6 +79,7 @@ public class CheckDefinitionDefaultSpecUpdateServiceImpl implements CheckDefinit
                     checkDefinitionWrapper.getSpec().setSensorName(sensorName);
                     checkDefinitionWrapper.getSpec().setRuleName(ruleName);
                     checkDefinitionWrapper.getSpec().setHelpText(helpText);
+                    checkDefinitionWrapper.getSpec().setFriendlyName(friendlyName);
                     checkDefinitionWrapper.getSpec().setStandard(isStandard);
                 } else {
                     CheckDefinitionSpec checkDefinitionSpec = new CheckDefinitionSpec(sensorName, ruleName, helpText);

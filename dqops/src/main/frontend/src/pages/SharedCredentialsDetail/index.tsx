@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import DefinitionLayout from '../../components/DefinitionLayout'
-import { SharedCredentialsApi } from '../../services/apiClient'
-import { SharedCredentialListModel } from '../../api'
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { SharedCredentialListModel } from '../../api';
 import Button from '../../components/Button';
+import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/definition.actions';
-import { ROUTES } from '../../shared/routes';
-import SvgIcon from '../../components/SvgIcon';
-import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import { SharedCredentialsApi } from '../../services/apiClient';
+import { ROUTES } from '../../shared/routes';
 import SharedCredentailTable from './SharedCredentailTable';
 
 export default function SharedCredentialsDetail() {
@@ -66,7 +65,7 @@ export default function SharedCredentialsDetail() {
     <>
       {userProfile.can_manage_and_view_shared_credentials === true ? 
           <table className='w-full '>
-            <thead className='border-b w-full border-b-gray-400 relative flex items-center'>
+            <thead className='border-b w-full border-b-gray-400 relative flex items-center text-sm'>
                 <th className="px-6 py-4 text-left block w-100">Credential name</th>
                 <th className="px-6 py-4 text-left block w-100">Credential type</th>
                 <Button label='Add credential'

@@ -15,9 +15,10 @@
  */
 package com.dqops.core.jobqueue.jobs.schema;
 
-import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationService;
 import com.dqops.connectors.*;
-import com.dqops.core.jobqueue.*;
+import com.dqops.core.jobqueue.DqoJobExecutionContext;
+import com.dqops.core.jobqueue.DqoJobType;
+import com.dqops.core.jobqueue.DqoQueueJob;
 import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
@@ -53,18 +54,15 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
     private final UserHomeContextFactory userHomeContextFactory;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final SecretValueProvider secretValueProvider;
-    private final DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
     private ImportSchemaQueueJobParameters importParameters;
 
     @Autowired
     public ImportSchemaQueueJob(UserHomeContextFactory userHomeContextFactory,
                                 ConnectionProviderRegistry connectionProviderRegistry,
-                                SecretValueProvider secretValueProvider,
-                                DefaultObservabilityConfigurationService defaultObservabilityConfigurationService) {
+                                SecretValueProvider secretValueProvider) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.secretValueProvider = secretValueProvider;
-        this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
     }
 
     /**
@@ -171,7 +169,7 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
         try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
-            List<SourceTableModel> tableModels = sourceConnection.listTables(this.importParameters.getSchemaName(), connectionWrapper);
+            List<SourceTableModel> tableModels = sourceConnection.listTables(this.importParameters.getSchemaName(), secretValueLookupContext);
             if (tableModels.size() == 0) {
                 throw new ImportSchemaQueueJobException("No tables found in the data source when importing tables on the " +
                         this.importParameters.getConnectionName() + ", from the " + this.importParameters.getSchemaName() + " schema");
@@ -181,11 +179,9 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
                     .map(tm -> tm.getTableName().getTableName())
                     .collect(Collectors.toList());
 
-            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(this.importParameters.getSchemaName(), tableNames, connectionWrapper);
+            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(this.importParameters.getSchemaName(), tableNames, connectionWrapper, secretValueLookupContext);
             List<TableSpec> filteredSourceTableSpecs = filterTableSpecs(sourceTableSpecs, tableNamePattern);
-            this.defaultObservabilityConfigurationService.applyDefaultChecks(filteredSourceTableSpecs,
-                    connectionProvider.getDialectSettings(expandedConnectionSpec), userHome);
-
+//
             TableList currentTablesColl = connectionWrapper.getTables();
             currentTablesColl.importTables(filteredSourceTableSpecs, connectionSpec.getDefaultGroupingConfiguration());
             userHomeContext.flush();

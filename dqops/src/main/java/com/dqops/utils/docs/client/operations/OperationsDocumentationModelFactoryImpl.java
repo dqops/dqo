@@ -193,7 +193,7 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
             operationsOperationDocumentationModel.setReturnValueField(returnParameterModel);
 
             String sampleReturnValueJson = GeneratorUtility.generateJsonSampleFromTypeModel(returnParameterTypeModel, true);
-            sampleReturnValueJson = sampleReturnValueJson.replace(System.lineSeparator(), "\n\t");
+            sampleReturnValueJson = sampleReturnValueJson.replace(System.lineSeparator(), "\n");
             operationsOperationDocumentationModel.setReturnValueSampleJson(sampleReturnValueJson);
 
             Object sampleReturnValue = GeneratorUtility.generateSampleFromTypeModel(returnParameterTypeModel);

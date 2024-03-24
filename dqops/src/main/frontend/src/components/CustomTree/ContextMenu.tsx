@@ -5,18 +5,26 @@ import {
   PopoverContent,
   PopoverHandler
 } from '@material-tailwind/react';
-import SvgIcon from '../SvgIcon';
-import { CustomTreeNode } from '../../shared/interfaces';
-import { TREE_LEVEL } from '../../shared/enums';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import {
+  CheckSearchFilters,
+  RunChecksParameters,
+  StatisticsCollectorSearchFilters,
+  TimeWindowFilterParameters
+} from '../../api';
 import { useTree } from '../../contexts/treeContext';
-import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
-import { TimeWindowFilterParameters, RunChecksParameters } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
-import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import { TREE_LEVEL } from '../../shared/enums';
+import { CustomTreeNode } from '../../shared/interfaces';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { urlencodeEncoder, useDecodedParams } from '../../utils';
+import SvgIcon from '../SvgIcon';
+import CollectStatisticsDialog from './CollectStatisticsDialog';
+import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
+import RunChecksDialog from './RunChecksDialog';
 import RunChecksPartitionedMenu from './RunChecksPartitionedMenu';
 
 interface ContextMenuProps {
@@ -34,7 +42,7 @@ const ContextMenu = ({
   openAddTableDialog,
   openAddSchemaDialog
 }: ContextMenuProps) => {
-  const { checkTypes }: { checkTypes: any } = useParams();
+  const { checkTypes }: { checkTypes: any } = useDecodedParams();
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const {
@@ -48,6 +56,9 @@ const ContextMenu = ({
   const [open, setOpen] = useState(false);
   const history = useHistory();
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
+  const [runChecksDialogOpened, setRunChecksDialogOpened] = useState(false);
+  const [collectStatisticsDialogOpened, setCollectStatisticsDialogOpened] =
+    useState(false);
   const dispatch = useActionDispatch();
 
   const handleRefresh = () => {
@@ -55,8 +66,12 @@ const ContextMenu = ({
     setOpen(false);
   };
 
-  const handleRunChecks = () => {
-    runChecks(node);
+  const handleRunChecks = (filter?: CheckSearchFilters) => {
+    if (filter) {
+      runChecks({ ...node, run_checks_job_template: filter });
+    } else {
+      runChecks(node);
+    }
     setOpen(false);
   };
 
@@ -65,8 +80,13 @@ const ContextMenu = ({
     setOpen(false);
   };
 
-  const handleCollectStatisticsOnTable = () => {
-    collectStatisticsOnTable(node);
+  const handleCollectStatisticsOnTable = (
+    filter: StatisticsCollectorSearchFilters
+  ) => {
+    collectStatisticsOnTable({
+      ...node,
+      collect_statistics_job_template: filter
+    });
     setOpen(false);
   };
 
@@ -77,9 +97,10 @@ const ContextMenu = ({
   };
 
   const importMetaData = () => {
+    setOpen(false);
     dispatch(
       addFirstLevelTab(checkTypes, {
-        url: ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, node.label),
+        url: ROUTES.CONNECTION_DETAIL(checkTypes, node.label, 'schemas?import_schema=true'),
         value: ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, node.label),
         label: `${node.label}`
       })
@@ -88,12 +109,13 @@ const ContextMenu = ({
       `${ROUTES.CONNECTION_DETAIL(
         checkTypes,
         node.label || '',
-        'schemas'
-      )}?import_schema=true`
+        'schemas?import_schema=true'
+      )}`
     );
   };
 
   const importTables = () => {
+    setOpen(false);
     const [connection, schema] = node.id.toString().split('.');
     const url = ROUTES.SCHEMA_LEVEL_PAGE(
       CheckTypes.SOURCES,
@@ -111,7 +133,7 @@ const ContextMenu = ({
         url,
         value,
         state: {},
-        label: schema
+        label: urlencodeEncoder(schema)
       })
     );
     history.push(url);
@@ -152,42 +174,74 @@ const ContextMenu = ({
         <div onClick={(e) => e.stopPropagation()}>
           {node.level !== TREE_LEVEL.COLUMNS &&
             checkTypes !== 'partitioned' && (
-              <div
-                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-                onClick={
-                  userProfile.can_run_checks === true
-                    ? handleRunChecks
-                    : undefined
-                }
-              >
-                Run checks
-              </div>
+              <>
+                <div
+                  className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                  onClick={() => {
+                    userProfile.can_manage_data_sources
+                      ? setRunChecksDialogOpened(true)
+                      : undefined;
+                  }}
+                >
+                  Run checks
+                </div>
+                <RunChecksDialog
+                  open={runChecksDialogOpened}
+                  onClose={() => {
+                    setRunChecksDialogOpened(false), 
+                    setOpen(false);
+                  }}
+                  onClick={() => {
+                    handleRunChecks();
+                    setOpen(false);
+                    setRunChecksDialogOpened(false);
+                  }}
+                  runChecksJobTemplate={node.run_checks_job_template ?? {}}
+                />
+              </>
             )}
-          {checkTypes === 'partitioned' && 
-          [
-            TREE_LEVEL.DATABASE,
-            TREE_LEVEL.SCHEMA,
-            TREE_LEVEL.TABLE,
-            TREE_LEVEL.COLUMN
-          ].includes(node.level) &&
+          {checkTypes === 'partitioned' &&
+            [
+              TREE_LEVEL.DATABASE,
+              TREE_LEVEL.SCHEMA,
+              TREE_LEVEL.TABLE,
+              TREE_LEVEL.COLUMN
+            ].includes(node.level) && (
               <RunChecksPartitionedMenu onClick={onRunPartitionedChecks} />
-            }
+            )}
           {[
             TREE_LEVEL.DATABASE,
             TREE_LEVEL.SCHEMA,
             TREE_LEVEL.TABLE,
             TREE_LEVEL.COLUMN
           ].includes(node.level) && (
-            <div
-              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={
-                userProfile.can_collect_statistics === true
-                  ? handleCollectStatisticsOnTable
-                  : undefined
-              }
-            >
-              Collect statistics
-            </div>
+            <>
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={() => {
+                  userProfile.can_manage_data_sources
+                    ? setCollectStatisticsDialogOpened(true)
+                    : undefined;
+                }}
+              >
+                Collect statistics
+              </div>
+              <CollectStatisticsDialog
+                open={collectStatisticsDialogOpened}
+                onClose={() => {
+                  setCollectStatisticsDialogOpened(false);
+                  setOpen(false);
+                }}
+                onClick={(filter) => {
+                  handleCollectStatisticsOnTable(filter), 
+                  setCollectStatisticsDialogOpened(false);
+                  setOpen(false);
+                }}
+                collectStatisticsJobTemplate={
+                  node.collect_statistics_job_template ?? {}
+                }
+              />
+            </>
           )}
           {node.level === TREE_LEVEL.DATABASE && (
             <div
@@ -283,7 +337,7 @@ const ContextMenu = ({
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
               onClick={() => {
                 userProfile.can_manage_data_sources === true
-                  ? openAddTableDialog(node)
+                  ? (openAddTableDialog(node), setOpen(false))
                   : undefined;
               }}
             >
@@ -316,11 +370,13 @@ const ContextMenu = ({
                     : undefined;
                 }}
               >
-                Delete data
+                Delete data quality results
               </div>
               <DeleteStoredDataExtendedPopUp
                 open={deleteDataDialogOpened}
-                onClose={() => setDeleteDataDialogOpened(false)}
+                onClose={() => {
+                  setDeleteDataDialogOpened(false), setOpen(false);
+                }}
                 onDelete={(params) => {
                   setDeleteDataDialogOpened(false);
                   deleteStoredData(node, params);
@@ -341,7 +397,7 @@ const ContextMenu = ({
                     : undefined;
                 }}
               >
-                Delete data
+                Delete data quality results
               </div>
               <DeleteStoredDataExtendedPopUp
                 open={deleteDataDialogOpened}
@@ -367,7 +423,7 @@ const ContextMenu = ({
             checkTypes === CheckTypes.SOURCES && (
               <div
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-                onClick={() => reimportTableMetadata(node)}
+                onClick={() => reimportTableMetadata(node, () => setOpen(false))}
               >
                 Reimport metadata
               </div>

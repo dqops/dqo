@@ -70,6 +70,10 @@ public class SampleStringsRegistry {
         return "sample_rule";
     }
 
+    public static String getPatternName() {
+        return "default";
+    }
+
     public static String getFullCheckName() {
         return String.join("/", getTarget(), getCategoryName(), getCheckName());
     }
@@ -224,6 +228,8 @@ public class SampleStringsRegistry {
             return getJobId();
         } else if (parameterNameLower.contains("dictionary_name")) {
             return getDictionaryName();
+        } else if (parameterNameLower.contains("pattern_name")) {
+            return getPatternName();
         }
 
         throw new IllegalArgumentException("No value found fitting the parameter \"" + parameterName + "\".");

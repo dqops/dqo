@@ -27,7 +27,7 @@ public class ParquetPartitioningKeys {
     /**
      * Target object name (schema.table for tables) name.
      */
-    public static final String TARGET = "t";
+    public static final String SCHEMA_TABLE = "t";
 
     /**
      * Month as a date of the first day of the month, for example: m=2022-03-10

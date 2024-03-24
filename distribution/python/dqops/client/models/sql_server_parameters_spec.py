@@ -29,9 +29,6 @@ class SqlServerParametersSpec:
             use dynamic substitution.
         password (Union[Unset, str]): SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
             format to use dynamic substitution.
-        options (Union[Unset, str]): SQL Server connection 'options' initialization parameter. For example setting this
-            to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports
-            also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.
         disable_encryption (Union[Unset, bool]): Disable SSL encryption parameter. The default value is false. You may
             need to disable encryption when SQL Server is started in Docker.
         authentication_mode (Union[Unset, SqlServerAuthenticationMode]):
@@ -44,7 +41,6 @@ class SqlServerParametersSpec:
     database: Union[Unset, str] = UNSET
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
-    options: Union[Unset, str] = UNSET
     disable_encryption: Union[Unset, bool] = UNSET
     authentication_mode: Union[Unset, SqlServerAuthenticationMode] = UNSET
     properties: Union[Unset, "SqlServerParametersSpecProperties"] = UNSET
@@ -56,7 +52,6 @@ class SqlServerParametersSpec:
         database = self.database
         user = self.user
         password = self.password
-        options = self.options
         disable_encryption = self.disable_encryption
         authentication_mode: Union[Unset, str] = UNSET
         if not isinstance(self.authentication_mode, Unset):
@@ -79,8 +74,6 @@ class SqlServerParametersSpec:
             field_dict["user"] = user
         if password is not UNSET:
             field_dict["password"] = password
-        if options is not UNSET:
-            field_dict["options"] = options
         if disable_encryption is not UNSET:
             field_dict["disable_encryption"] = disable_encryption
         if authentication_mode is not UNSET:
@@ -107,8 +100,6 @@ class SqlServerParametersSpec:
 
         password = d.pop("password", UNSET)
 
-        options = d.pop("options", UNSET)
-
         disable_encryption = d.pop("disable_encryption", UNSET)
 
         _authentication_mode = d.pop("authentication_mode", UNSET)
@@ -131,7 +122,6 @@ class SqlServerParametersSpec:
             database=database,
             user=user,
             password=password,
-            options=options,
             disable_encryption=disable_encryption,
             authentication_mode=authentication_mode,
             properties=properties,

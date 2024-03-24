@@ -30,7 +30,8 @@ export const SynchronizeButton = () => {
         dataIncidents: true,
         settings: true,
         credentials: true,
-        dictionaries: true
+        dictionaries: true,
+        patterns: true
       });
       if (res.data) {
         setJobId(res.data.jobId?.jobId);

@@ -1,10 +1,12 @@
 import React from 'react';
 
 import SectionWrapper from '../../SectionWrapper';
-import { SharedCredentialListModel, SnowflakeParametersSpec } from "../../../../api";
-import JdbcPropertiesView from "../JdbcProperties";
-import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
-
+import {
+  SharedCredentialListModel,
+  SnowflakeParametersSpec
+} from '../../../../api';
+import JdbcPropertiesView from '../JdbcProperties';
+import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 
 interface ISnowflakeConnectionProps {
   snowflake?: SnowflakeParametersSpec;
@@ -17,7 +19,6 @@ const SnowflakeConnection = ({
   onChange,
   sharedCredentials
 }: ISnowflakeConnectionProps) => {
-
   const handleChange = (obj: Partial<SnowflakeParametersSpec>) => {
     if (!onChange) return;
 
@@ -34,28 +35,29 @@ const SnowflakeConnection = ({
         className="mb-4"
         value={snowflake?.account}
         onChange={(value) => handleChange({ account: value })}
-        data = {sharedCredentials}
+        data={sharedCredentials}
+        inputClassName={!snowflake?.account ? 'border border-red-500' : ''}
       />
       <FieldTypeInput
         label="Warehouse"
         className="mb-4"
         value={snowflake?.warehouse}
         onChange={(value) => handleChange({ warehouse: value })}
-        data = {sharedCredentials}
+        data={sharedCredentials}
       />
       <FieldTypeInput
         label="Database"
         className="mb-4"
         value={snowflake?.database}
         onChange={(value) => handleChange({ database: value })}
-        data = {sharedCredentials}
+        data={sharedCredentials}
       />
       <FieldTypeInput
         label="User name"
         className="mb-4"
         value={snowflake?.user}
         onChange={(value) => handleChange({ user: value })}
-        data = {sharedCredentials}
+        data={sharedCredentials}
       />
       <FieldTypeInput
         label="Password"
@@ -63,13 +65,13 @@ const SnowflakeConnection = ({
         maskingType="password"
         value={snowflake?.password}
         onChange={(value) => handleChange({ password: value })}
-        data = {sharedCredentials}
+        data={sharedCredentials}
       />
       <FieldTypeInput
         label="Role"
         value={snowflake?.role}
         onChange={(value) => handleChange({ role: value })}
-        data = {sharedCredentials}
+        data={sharedCredentials}
       />
 
       <JdbcPropertiesView

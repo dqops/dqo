@@ -23,6 +23,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.SchedulingRootNode;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -46,7 +47,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, RWarning extends AbstractRuleParametersSpec, RError extends AbstractRuleParametersSpec, RFatal extends AbstractRuleParametersSpec>
-            extends AbstractSpec implements Cloneable {
+            extends AbstractSpec implements Cloneable, SchedulingRootNode {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("parameters", o -> o.getParameters());
@@ -94,6 +95,12 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
             "Use the name of one of data grouping configurations defined on the parent table.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String dataGrouping;
+
+    /**
+     * True when this check was copied from the configuration of the default observability checks and is not stored in the table's YAML file (it is transient).
+     */
+    @JsonIgnore
+    private boolean defaultCheck;
 
     /**
      * Returns the schedule configuration for running the checks automatically.
@@ -230,6 +237,23 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      */
     public void setDataGrouping(String dataGrouping) {
         this.dataGrouping = dataGrouping;
+    }
+
+    /**
+     * Returns true if this check is an observability check that was added as a transient check, because it is configured in the default observability checks.
+     * @return True when it is a default check (not persisted in YAML), false when it is a materialized check that is configured in the table.
+     */
+    public boolean isDefaultCheck() {
+        return defaultCheck;
+    }
+
+    /**
+     * Sets a flag that this check is a default observability check.
+     * @param defaultCheck True when it is a default check.
+     */
+    public void setDefaultCheck(boolean defaultCheck) {
+        this.setDirtyIf(this.defaultCheck != defaultCheck);
+        this.defaultCheck = defaultCheck;
     }
 
     /**
@@ -373,6 +397,15 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
         }
 
         return hierarchyId.get(hierarchyId.size() - 2).toString();
+    }
+
+    /**
+     * Returns an alternative check's friendly name that is shown on the check editor. It is used to show "empty table" name next to profile_row_count check.
+     * @return An alternative name, or null when the check has no alternative name to show.
+     */
+    @JsonIgnore
+    public String getFriendlyName() {
+        return null;
     }
 
     /**

@@ -1,12 +1,11 @@
+import moment from 'moment';
 import React, { useMemo } from 'react';
 import { SensorReadoutsListModel } from '../../../api';
+import { useTree } from '../../../contexts/treeContext';
+import { CheckTypes } from '../../../shared/routes';
+import { getLocalDateInUserTimeZone, useDecodedParams } from '../../../utils';
 import Select from '../../Select';
 import { Table } from '../../Table';
-import { useTree } from '../../../contexts/treeContext';
-import moment from 'moment';
-import { useParams } from 'react-router-dom';
-import { CheckTypes } from '../../../shared/routes';
-import { getLocalDateInUserTimeZone } from '../../../utils';
 
 interface SensorReadoutsTabProps {
   sensorReadouts: SensorReadoutsListModel[];
@@ -27,7 +26,7 @@ const SensorReadoutsTab = ({
     checkTypes
   }: {
     checkTypes: CheckTypes;
-  } = useParams();
+  } = useDecodedParams();
   const { sidebarWidth } = useTree();
 
   const columns = [

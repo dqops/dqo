@@ -6,7 +6,9 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
+import com.dqops.metadata.sources.fileformat.json.JsonRecordsType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -14,9 +16,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldNameConstants;
 
-import java.math.BigInteger;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -33,19 +33,15 @@ public class JsonFileFormatSpec extends AbstractSpec {
         }
     };
 
-    @JsonPropertyDescription("Whether to auto-detect detect the names of the keys and data types of the values automatically")
+    @JsonPropertyDescription("Whether to auto-detect detect the names of the keys and data types of the values automatically.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Boolean autoDetect;
-
-    @JsonPropertyDescription("A struct that specifies the key names and value types contained within the JSON file (e.g., {key1: 'INTEGER', key2: 'VARCHAR'}). If auto_detect is enabled these will be inferred")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Map<String, String> columns;
+    private Boolean autoDetect = true;
 
     @JsonPropertyDescription("The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String compression;
+    private CompressionType compression;
 
-    @JsonPropertyDescription("\tWhether strings representing integer values should be converted to a numerical type.")
+    @JsonPropertyDescription("Whether strings representing integer values should be converted to a numerical type.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean convertStringsToIntegers;
 
@@ -57,11 +53,11 @@ public class JsonFileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean filename;
 
-    @JsonPropertyDescription("\tCan be one of ['auto', 'unstructured', 'newline_delimited', 'array'].")
+    @JsonPropertyDescription("Json format. Can be one of ['auto', 'unstructured', 'newline_delimited', 'array'].")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private JsonFormatType format;
+    private JsonFormatType format = JsonFormatType.auto;
 
-    @JsonPropertyDescription("\tWhether or not to interpret the path as a hive partitioned path.")
+    @JsonPropertyDescription("Whether or not to interpret the path as a hive partitioned path.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean hivePartitioning;
 
@@ -69,19 +65,23 @@ public class JsonFileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean ignoreErrors;
 
-    @JsonPropertyDescription("Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types")
+    @JsonPropertyDescription("Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private BigInteger maximumDepth;
+    private Long maximumDepth;
 
-    @JsonPropertyDescription("\tThe maximum size of a JSON object (in bytes)")
+    @JsonPropertyDescription("The maximum size of a JSON object (in bytes).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Long maximumObjectSize;
 
-    @JsonPropertyDescription("Can be one of ['auto', 'true', 'false']")
+    @JsonPropertyDescription("Can be one of ['auto', 'true', 'false'].")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String records;
+    private JsonRecordsType records;
 
-    @JsonPropertyDescription("\tSpecifies the date format to use when parsing timestamps.")
+    @JsonPropertyDescription("The number of sample rows for auto detection of parameters.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Long sampleSize;
+
+    @JsonPropertyDescription("Specifies the date format to use when parsing timestamps.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String timestampformat;
 
@@ -90,10 +90,10 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @param filePathList The names of files with data.
      * @return The formatted source table with the options.
      */
-    public String buildSourceTableOptionsString(List<String> filePathList){
+    public String buildSourceTableOptionsString(List<String> filePathList, TableSpec tableSpec){
         TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("read_json", filePathList);
         tableOptionsFormatter.formatValueWhenSet(Fields.autoDetect, autoDetect);
-        tableOptionsFormatter.formatMapWhenSet(Fields.columns, columns);
+        tableOptionsFormatter.formatColumns("columns", tableSpec);
         tableOptionsFormatter.formatStringWhenSet(Fields.compression, compression);
         tableOptionsFormatter.formatValueWhenSet(Fields.convertStringsToIntegers, convertStringsToIntegers);
         tableOptionsFormatter.formatStringWhenSet(Fields.dateformat, dateformat);
@@ -104,8 +104,9 @@ public class JsonFileFormatSpec extends AbstractSpec {
         tableOptionsFormatter.formatValueWhenSet(Fields.maximumDepth, maximumDepth);
         tableOptionsFormatter.formatValueWhenSet(Fields.maximumObjectSize, maximumObjectSize);
         tableOptionsFormatter.formatStringWhenSet(Fields.records, records);
+        tableOptionsFormatter.formatValueWhenSet(Fields.sampleSize, sampleSize);
         tableOptionsFormatter.formatStringWhenSet(Fields.timestampformat, timestampformat);
-        return tableOptionsFormatter.toString();
+        return tableOptionsFormatter.build();
     }
 
     /**
@@ -126,27 +127,10 @@ public class JsonFileFormatSpec extends AbstractSpec {
     }
 
     /**
-     * Returns the columns map.
-     * @return Columns map.
-     */
-    public Map<String, String> getColumns() {
-        return columns;
-    }
-
-    /**
-     * Sets the columns map.
-     * @param columns Columns map.
-     */
-    public void setColumns(Map<String, String> columns) {
-        setDirtyIf(!Objects.equals(this.columns, columns));
-        this.columns = columns;
-    }
-
-    /**
      * Returns the compression type for the file. By default this will be detected automatically from the file extension.
      * @return Compression type.
      */
-    public String getCompression() {
+    public CompressionType getCompression() {
         return compression;
     }
 
@@ -154,7 +138,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * Sets the compression type for the file. By default this will be detected automatically from the file extension.
      * @param compression Compression type.
      */
-    public void setCompression(String compression) {
+    public void setCompression(CompressionType compression) {
         setDirtyIf(!Objects.equals(this.compression, compression));
         this.compression = compression;
     }
@@ -266,7 +250,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * Returns a maximum nesting depth to which the automatic schema detection detects types.
      * @return The maximum depth of json to be read.
      */
-    public BigInteger getMaximumDepth() {
+    public Long getMaximumDepth() {
         return maximumDepth;
     }
 
@@ -274,7 +258,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * Sets a maximum nesting depth to which the automatic schema detection detects types.
      * @param maximumDepth The maximum depth of json to be read.
      */
-    public void setMaximumDepth(BigInteger maximumDepth) {
+    public void setMaximumDepth(Long maximumDepth) {
         setDirtyIf(!Objects.equals(this.maximumDepth, maximumDepth));
         this.maximumDepth = maximumDepth;
     }
@@ -296,12 +280,11 @@ public class JsonFileFormatSpec extends AbstractSpec {
         this.maximumObjectSize = maximumObjectSize;
     }
 
-
     /**
      * Returns the records setup. Can be one of ['auto', 'true', 'false']
      * @return Records
      */
-    public String getRecords() {
+    public JsonRecordsType getRecords() {
         return records;
     }
 
@@ -309,11 +292,29 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * Sets the records setup. Can be one of ['auto', 'true', 'false']
      * @param records Records
      */
-    public void setRecords(String records) {
+    public void setRecords(JsonRecordsType records) {
         setDirtyIf(!Objects.equals(this.records, records));
         this.records = records;
     }
 
+    /**
+     * Returns the number of sample rows for auto detection of parameters.
+     *
+     * @return Number of rows for sampling.
+     */
+    public Long getSampleSize() {
+        return sampleSize;
+    }
+
+    /**
+     * Sets the number of sample rows for auto detection of parameters.
+     *
+     * @param sampleSize Number of rows for sampling.
+     */
+    public void setSampleSize(Long sampleSize) {
+        setDirtyIf(!Objects.equals(this.sampleSize, sampleSize));
+        this.sampleSize = sampleSize;
+    }
 
     /**
      * Returns the date format to use when parsing timestamps.
@@ -359,10 +360,8 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @return Cloned, trimmed and expanded table specification.
      */
     public JsonFileFormatSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
-        JsonFileFormatSpec cloned = (JsonFileFormatSpec) this.deepClone();
-        cloned.compression = secretValueProvider.expandValue(cloned.compression, lookupContext);
+        JsonFileFormatSpec cloned = this.deepClone();
         cloned.dateformat = secretValueProvider.expandValue(cloned.dateformat, lookupContext);
-        cloned.records = secretValueProvider.expandValue(cloned.records, lookupContext);
         cloned.timestampformat = secretValueProvider.expandValue(cloned.timestampformat, lookupContext);
         return cloned;
     }

@@ -124,6 +124,31 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*SchemaRemoteModel*](./data_sources.md#schemaremotemodel)|Schema model returned from REST API. Describes a schema on the source database with established connection.|
 
 
+## default_column_check_patterns
+
+|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|------------|---------------------------------|
+|[*DataTypeCategory*](./default_column_check_patterns.md#datatypecategory)|Enumeration of common data type categories of data types. The providers will use this information to answer which of their native data types matches a category. Some sensors (and profilers) cannot operate on some data types.|
+|[*TargetColumnPatternSpec*](./default_column_check_patterns.md#targetcolumnpatternspec)|The configuration of a column pattern to match default column checks. Includes also the pattern for the target table.|
+|[*DefaultColumnChecksPatternListModel*](./default_column_check_patterns.md#defaultcolumncheckspatternlistmodel)|The listing model of column-level default check patterns that is returned by the REST API.|
+|[*ColumnMonitoringCheckCategoriesSpec*](./default_column_check_patterns.md#columnmonitoringcheckcategoriesspec)|Container of column level monitoring, divided by the time window (daily, monthly, etc.)|
+|[*ColumnPartitionedCheckCategoriesSpec*](./default_column_check_patterns.md#columnpartitionedcheckcategoriesspec)|Container of column level partitioned checks, divided by the time window (daily, monthly, etc.)|
+|[*ColumnDefaultChecksPatternSpec*](./default_column_check_patterns.md#columndefaultcheckspatternspec)|The default configuration of column-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on columns.|
+|[*DefaultColumnChecksPatternModel*](./default_column_check_patterns.md#defaultcolumncheckspatternmodel)|Default column-level checks pattern model that is returned by the REST API. Describes a configuration of data quality checks for a named pattern. DQOps applies these checks on columns that match the filter.|
+
+
+## default_table_check_patterns
+
+|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|------------|---------------------------------|
+|[*TargetTablePatternSpec*](./default_table_check_patterns.md#targettablepatternspec)|The configuration of a table pattern to match default table checks.|
+|[*DefaultTableChecksPatternListModel*](./default_table_check_patterns.md#defaulttablecheckspatternlistmodel)|The listing model of table-level default check patterns that is returned by the REST API.|
+|[*TableMonitoringCheckCategoriesSpec*](./default_table_check_patterns.md#tablemonitoringcheckcategoriesspec)|Container of table level monitoring, divided by the time window (daily, monthly, etc.)|
+|[*TablePartitionedCheckCategoriesSpec*](./default_table_check_patterns.md#tablepartitionedcheckcategoriesspec)|Container of table level partitioned checks, divided by the time window (daily, monthly, etc.)|
+|[*TableDefaultChecksPatternSpec*](./default_table_check_patterns.md#tabledefaultcheckspatternspec)|The default configuration of table-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on tables.|
+|[*DefaultTableChecksPatternModel*](./default_table_check_patterns.md#defaulttablecheckspatternmodel)|Default table-level checks pattern model that is returned by the REST API. Describes a configuration of data quality checks for a named pattern. DQOps applies these checks on tables that match the filter.|
+
+
 ## dictionaries
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
@@ -294,7 +319,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*TableDailyMonitoringCheckCategoriesSpec*](./tables.md#tabledailymonitoringcheckcategoriesspec)|Container of table level daily monitoring. Contains categories of daily monitoring.|
 |[*TableComparisonDailyPartitionedChecksSpecMap*](./tables.md#tablecomparisondailypartitionedchecksspecmap)|Container of comparison checks for each defined data comparison. The name of the key in this dictionary must match a name of a table comparison that is defined on the parent table. Contains the daily partitioned comparison checks for each configured reference table.|
 |[*TableDailyPartitionedCheckCategoriesSpec*](./tables.md#tabledailypartitionedcheckcategoriesspec)|Container of table level daily partitioned checks. Contains categories of daily partitioned checks.|
-|[*ProfilingTimePeriod*](./tables.md#profilingtimeperiod)|The time period for profiling checks (millisecond, daily, monthly, weekly, hourly). The default profiling check stores one value per month. When profiling checks is re-executed during the month, the previous profiling checks value is overwritten and only the most recent value is stored.|
+|[*ProfilingTimePeriodTruncation*](./tables.md#profilingtimeperiodtruncation)|The time period for profiling checks (millisecond, daily, monthly, weekly, hourly). The default profiling check stores one value per month. When profiling checks is re-executed during the month, the previous profiling checks value is overwritten and only the most recent value is stored.|
 |[*TableListModel*](./tables.md#tablelistmodel)|Table list model returned by the rest api that is limited only to the basic fields, excluding nested nodes.|
 |[*TableModel*](./tables.md#tablemodel)|Full table model that returns the specification of a single table in the REST Api.|
 |[*TableComparisonMonthlyMonitoringChecksSpecMap*](./tables.md#tablecomparisonmonthlymonitoringchecksspecmap)|Container of comparison checks for each defined data comparison. The name of the key in this dictionary must match a name of a table comparison that is defined on the parent table. Contains the monthly monitoring comparison checks for each configured reference table.|

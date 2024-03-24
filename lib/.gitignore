@@ -34,3 +34,6 @@ build/
 
 ### JDBC local drivers ###
 !jdbc-drivers/.*jar
+
+### DuckDB libraries download location ##
+.duckdb/

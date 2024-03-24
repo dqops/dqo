@@ -21,6 +21,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractColumnComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
 import com.dqops.checks.custom.CustomCheckSpec;
+import com.dqops.checks.defaults.DefaultObservabilityConfigurationService;
 import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ProviderDialectSettings;
@@ -108,6 +109,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
     private final IncidentImportQueueService incidentImportQueueService;
     private final DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties;
     private final UserErrorLogger userErrorLogger;
+    private final DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
 
     /**
      * Creates a data quality check execution service.
@@ -125,6 +127,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param incidentImportQueueService New incident import queue service. Identifies new incidents and sends notifications.
      * @param dqoSensorLimitsConfigurationProperties DQOps sensor limit configuration parameters.
      * @param userErrorLogger Check execution logger.
+     * @param defaultObservabilityConfigurationService Default observability configuration service.
      */
     @Autowired
     public TableCheckExecutionServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
@@ -140,7 +143,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                                           RuleDefinitionFindService ruleDefinitionFindService,
                                           IncidentImportQueueService incidentImportQueueService,
                                           DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties,
-                                          UserErrorLogger userErrorLogger) {
+                                          UserErrorLogger userErrorLogger,
+                                          DefaultObservabilityConfigurationService defaultObservabilityConfigurationService) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
@@ -155,6 +159,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         this.incidentImportQueueService = incidentImportQueueService;
         this.dqoSensorLimitsConfigurationProperties = dqoSensorLimitsConfigurationProperties;
         this.userErrorLogger = userErrorLogger;
+        this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
     }
 
     /**
@@ -183,13 +188,18 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         jobCancellationToken.throwIfCancelled();
         CheckExecutionSummary checkExecutionSummary = new CheckExecutionSummary();
 
-        Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = this.hierarchyNodeTreeSearcher.findChecks(targetTable, checkSearchFilters);
+        TableSpec originalTableSpec = targetTable.getSpec();
+        TableSpec tableSpec = originalTableSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(connectionWrapper.getSpec(), tableSpec, userHome);
+        // TODO: before applying default checks, we could look into the filters, if the run check filters are selective (one column, or one check), we could use
+        // a different variant of applying default checks, or pass the CheckSearchFilters object to the defaultObservabilityConfigurationService
+
+        Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = this.hierarchyNodeTreeSearcher.findChecks(tableSpec, checkSearchFilters);
         if (checks.size() == 0) {
             return checkExecutionSummary; // no checks for this table
         }
         jobCancellationToken.throwIfCancelled();
 
-        TableSpec tableSpec = targetTable.getSpec();
         progressListener.onExecuteChecksOnTableStart(new ExecuteChecksOnTableStartEvent(connectionWrapper, tableSpec, checks));
         String connectionName = connectionWrapper.getName();
         PhysicalTableName physicalTableName = tableSpec.getPhysicalTableName();
@@ -279,7 +289,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         }
 
         List<SensorPrepareResult> allPreparedSensors = this.prepareSensors(
-                checks, executionContext, userHome, userTimeWindowFilters, progressListener,
+                checks, executionContext, userHome, tableSpec, userTimeWindowFilters, progressListener,
                 allErrorsTable, checkExecutionSummary, executionStatistics, jobCancellationToken);
 
         GroupedSensorsCollection groupedSensorsCollection = new GroupedSensorsCollection(this.dqoSensorLimitsConfigurationProperties.getMaxMergedQueries());
@@ -388,7 +398,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         }
 
         List<SensorPrepareResult> allPreparedSensorsOnComparedTable = this.prepareSensors(
-                checks, executionContext, userHome, userTimeWindowFilters, progressListener,
+                checks, executionContext, userHome, tableSpec, userTimeWindowFilters, progressListener,
                 allErrorsTable, checkExecutionSummary, executionStatistics, jobCancellationToken);
 
         GroupedSensorsCollection groupedSensorsCollectionOnComparedTable = new GroupedSensorsCollection(this.dqoSensorLimitsConfigurationProperties.getMaxMergedQueries());
@@ -518,6 +528,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param checks Collection of checks that will be prepared.
      * @param executionContext Execution context - to access sensor definitions.
      * @param userHome User home.
+     * @param targetTableSpec The table specification.
      * @param userTimeWindowFilters Optional user provided time window filters.
      * @param progressListener Progress listener - to report progress.
      * @param allErrorsTable Target table where errors are added when parsing fails.
@@ -529,6 +540,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
     public List<SensorPrepareResult> prepareSensors(Collection<AbstractCheckSpec<?, ?, ?, ?>> checks,
                                                     ExecutionContext executionContext,
                                                     UserHome userHome,
+                                                    TableSpec targetTableSpec,
                                                     TimeWindowFilterParameters userTimeWindowFilters,
                                                     CheckExecutionProgressListener progressListener,
                                                     Table allErrorsTable,
@@ -546,7 +558,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             executionStatistics.incrementExecutedChecksCount(1);
 
             try {
-                SensorExecutionRunParameters sensorRunParameters = createSensorRunParameters(userHome, checkSpec, userTimeWindowFilters);
+                SensorExecutionRunParameters sensorRunParameters = createSensorRunParameters(userHome, targetTableSpec, checkSpec, userTimeWindowFilters);
                 if (!sensorRunParameters.isSuccess()) {
                     this.userErrorLogger.logCheck(sensorRunParameters.toString() + " failed to capture the initial configuration, error: " +
                                     (sensorRunParameters.getSensorConfigurationException() != null ?
@@ -832,24 +844,25 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
     /**
      * Creates a sensor run parameters from the check specification. Retrieves the connection, table, column and sensor parameters.
      * @param userHome User home with the metadata.
+     * @param tableSpec Target table to query.
      * @param checkSpec Check specification.
      * @param userTimeWindowFilters Optional user time window filters, to run the checks for a given time period.
      * @return Sensor run parameters.
      */
     public SensorExecutionRunParameters createSensorRunParameters(UserHome userHome,
+                                                                  TableSpec tableSpec,
                                                                   AbstractCheckSpec<?,?,?,?> checkSpec,
                                                                   TimeWindowFilterParameters userTimeWindowFilters) {
         try {
             HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
             ConnectionWrapper connectionWrapper = userHome.findConnectionFor(checkHierarchyId);
-            TableWrapper tableWrapper = userHome.findTableFor(checkHierarchyId);
-            ColumnSpec columnSpec = userHome.findColumnFor(checkHierarchyId); // may be null
+            String targetColumnName = checkHierarchyId.getColumnName();
+            ColumnSpec columnSpec = targetColumnName != null ? tableSpec.getColumns().get(targetColumnName) : null; // may be null
             ConnectionSpec connectionSpec = connectionWrapper.getSpec();
             ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
             ProviderDialectSettings dialectSettings = connectionProvider.getDialectSettings(connectionSpec);
-            TableSpec tableSpec = tableWrapper.getSpec();
 
-            List<HierarchyNode> nodesOnPath = List.of(checkHierarchyId.getNodesOnPath(userHome));
+            List<HierarchyNode> nodesOnPath = List.of(checkHierarchyId.getNodesOnPath(tableSpec));
             Optional<HierarchyNode> timeSeriesProvider = Lists.reverse(nodesOnPath)
                     .stream()
                     .filter(n -> n instanceof AbstractRootChecksContainerSpec)
@@ -937,7 +950,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
             TableWrapper comparedTableWrapper = userHome.findTableFor(checkHierarchyId);
             ColumnSpec comparedColumnSpec = userHome.findColumnFor(checkHierarchyId); // may be null
-            TableSpec comparedTableSpec = comparedTableWrapper.getSpec();
+            TableSpec comparedTableSpec = comparedTableWrapper.getSpec(); // NOTE: this method does not support default checks, because the createSensorRunParametersToReferenceTable method does not get a cloned TableSpec with applied default checks, but it is ok, no need to apply default comparisons without configuring comparisons
 
             List<HierarchyNode> nodesOnPath = List.of(checkHierarchyId.getNodesOnPath(userHome));
 

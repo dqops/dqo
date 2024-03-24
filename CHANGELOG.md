@@ -1,7 +1,5 @@
-# 1.0.2
-* Changes to the default configuration of the table availability check
-* Use configurable connection pooling when connecting to DQOps Cloud
-* Documentation updates - categories of checks documented.
-* Handling null values in accepted_values checks. 
-* Boolean percentage checks support both the minimum and maximum percentage.
-* Incident details shows the histogram correctly in all cases, also avoiding extra calls to the backend. 
+# 1.1.0
+* Default data quality checks are activated automatically by using table and column search filters, now called as data quality check patterns
+* Support analyzing CSV, JSON and Parquet files directly using DuckDB that is now bundled into DQOps
+* Fixes in supporting dots and other special characters in the table names
+* Incidents are not created for profiling checks, only for monitoring and partitioned checks

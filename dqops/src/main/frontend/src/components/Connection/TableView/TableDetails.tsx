@@ -1,38 +1,35 @@
+import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
-import Input from '../../Input';
-import Checkbox from '../../Checkbox';
-import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
+import {
+  ConnectionModel,
+  ConnectionSpecProviderTypeEnum,
+  DuckdbParametersSpecFilesFormatTypeEnum,
+  FileFormatSpec,
+  TableListModelProfilingChecksResultTruncationEnum
+} from '../../../api';
+import { TConfiguration } from '../../../components/FileFormatConfiguration/TConfiguration';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getTableBasic,
   setUpdatedTableBasic,
   updateTableBasic
 } from '../../../redux/actions/table.actions';
-import { useParams } from 'react-router-dom';
+import { IRootState } from '../../../redux/reducers';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
-import { CheckTypes } from '../../../shared/routes';
-import Select from '../../Select';
-import {
-  ConnectionModel,
-  ConnectionSpecProviderTypeEnum,
-  CsvFileFormatSpec,
-  JsonFileFormatSpec,
-  ParquetFileFormatSpec,
-  FileFormatSpec,
-  TableListModelProfilingChecksResultTruncationEnum,
-  DuckdbParametersSpecSourceFilesTypeEnum
-} from '../../../api';
-import NumberInput from '../../NumberInput';
-import clsx from 'clsx';
-import { IRootState } from '../../../redux/reducers';
-import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
 import { ConnectionApiClient } from '../../../services/apiClient';
-
-type TConfiguration = CsvFileFormatSpec | JsonFileFormatSpec | ParquetFileFormatSpec;
+import { CheckTypes } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
+import Checkbox from '../../Checkbox';
+import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
+import FilePath from '../../FileFormatConfiguration/FilePath';
+import Input from '../../Input';
+import NumberInput from '../../NumberInput';
+import Select from '../../Select';
+import ActionGroup from './TableActionGroup';
 
 const TableDetails = () => {
   const {
@@ -45,30 +42,39 @@ const TableDetails = () => {
     connection: string;
     schema: string;
     table: string;
-  } = useParams();
+  } = useDecodedParams();
   const { tableBasic, isUpdating, isUpdatedTableBasic } = useSelector(
     getFirstLevelState(checkTypes)
   );
-  const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
-  const [paths, setPaths] = useState<Array<string>>(['']);
-  const [fileFormatType, setFileFormatType] = useState<DuckdbParametersSpecSourceFilesTypeEnum>(
+  const format =
     (Object.keys(tableBasic?.file_format ?? {}).find((x) =>
       x.includes('format')
-    ) as DuckdbParametersSpecSourceFilesTypeEnum) ?? DuckdbParametersSpecSourceFilesTypeEnum.csv
-  );
-  const [configuration, setConfiguration] = useState<TConfiguration>(
-    tableBasic?.file_format ?? {}
-  );
+    ) as DuckdbParametersSpecFilesFormatTypeEnum) ??
+    DuckdbParametersSpecFilesFormatTypeEnum.csv;
+
+  const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
+
+  const [fileFormatType, setFileFormatType] =
+    useState<DuckdbParametersSpecFilesFormatTypeEnum>(format);
 
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
-    setConfiguration((prev) => ({
-      ...prev,
-      ...params
-    }));
+    // setConfiguration((prev) => ({
+    //   ...prev,
+    //   ...params
+    // }));
+    handleChange({
+      file_format: {
+        ...tableBasic.file_format,
+        [fileFormatType as keyof FileFormatSpec]: {
+          ...tableBasic.file_format?.[fileFormatType as keyof FileFormatSpec],
+          ...params
+        }
+      }
+    });
   };
 
   const cleanConfiguration = () => {
-    setConfiguration({});
+    // setConfiguration({});
   };
 
   const dispatch = useActionDispatch();
@@ -106,14 +112,7 @@ const TableDetails = () => {
         connection,
         schema,
         table,
-        {
-          ...tableBasic,
-          file_format:
-            {
-              [fileFormatType as keyof FileFormatSpec]: configuration,
-              file_paths: paths.filter((x) => x.length !== 0)
-            } ?? undefined
-        }
+        tableBasic
       )
     );
     await dispatch(
@@ -121,18 +120,53 @@ const TableDetails = () => {
     );
   };
 
-  const onChangePath = (value: string) => {
-    const copiedPaths = [...paths];
-    copiedPaths[paths.length - 1] = value;
-    setPaths(copiedPaths);
+  const onAddPath = () => {
+    handleChange({
+      file_format: {
+        ...tableBasic.file_format,
+        file_paths: [...tableBasic.file_format.file_paths, '']
+      }
+    });
+    // setPaths((prev) => [...prev, '']);
+  };
+  const onChangePath = (value: string, index?: number) => {
+    const copiedPaths = [...(tableBasic.file_format.file_paths as any[])];
+    if (index !== undefined) {
+      copiedPaths[index] = value;
+    } else {
+      copiedPaths[(tableBasic.file_format.file_paths as any[]).length - 1] =
+        value;
+    }
+    handleChange({
+      file_format: {
+        ...tableBasic.file_format,
+        file_paths: copiedPaths
+      }
+    });
+    // setPaths(copiedPaths);
+  };
+  const onDeletePath = (index: number) => {
+    // setPaths((prev) => prev.filter((_, i) => i !== index));
+    handleChange({
+      file_format: {
+        ...tableBasic.file_format,
+        file_paths: (tableBasic.file_format.file_paths as any[]).filter(
+          (_, i) => i !== index
+        )
+      }
+    });
   };
 
-  const onAddPath = () => setPaths((prev) => [...prev, '']);
-
-  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => setFileFormatType(val);
-
-  const onDeletePath = (index: number) =>
-    setPaths((prev) => prev.filter((x, i) => i !== index));
+  const onChangeFile = (val: DuckdbParametersSpecFilesFormatTypeEnum) => {
+    handleChange({
+      file_format: {
+        ...tableBasic.file_format,
+        [fileFormatType]: undefined,
+        [val]: {}
+      }
+    });
+    setFileFormatType(val);
+  };
 
   return (
     <div className="p-4">
@@ -150,115 +184,122 @@ const TableDetails = () => {
             : 'cursor-not-allowed pointer-events-none'
         )}
       >
-        <tbody>
-          <tr>
-            <td className="px-4 py-2">Connection Name</td>
-            <td className="px-4 py-2">{tableBasic?.connection_name}</td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Schema Name</td>
-            <td className="px-4 py-2">{tableBasic?.target?.schema_name}</td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Table Name</td>
-            <td className="px-4 py-2">{tableBasic?.target?.table_name}</td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Disable data quality checks</td>
-            <td className="px-4 py-2">
-              <div className="flex">
-                <Checkbox
-                  onChange={(value) => handleChange({ disabled: value })}
-                  checked={tableBasic?.disabled}
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Filter</td>
-            <td className="px-4 py-2">
-              <textarea
-                className="focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-0 border-gray-300 font-regular text-sm h-26 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none min-w-40 w-full  rounded"
-                value={tableBasic?.filter}
-                onChange={(e) => handleChange({ filter: e.target.value })}
-              ></textarea>
-            </td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Priority</td>
-            <td className="px-4 py-2">
-              <NumberInput
-                value={
-                  tableBasic?.priority !== 0 ? tableBasic?.priority : undefined
-                }
-                onChange={(value) => handleChange({ priority: value })}
-                className="min-w-30 w-1/2"
-                placeholder=""
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Stage</td>
-            <td className="px-4 py-2">
-              <Input
-                value={tableBasic?.stage}
-                onChange={(e) => handleChange({ stage: e.target.value })}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Profiling checks result truncation</td>
-            <td className="px-4 py-2">
-              <Select
-                options={[
-                  { label: '', value: undefined },
-                  ...Object.values(
-                    TableListModelProfilingChecksResultTruncationEnum
-                  ).map((x) => ({
-                    label: x
-                      ?.replaceAll('_', ' ')
-                      .replace(/./, (c) => c.toUpperCase()),
-                    value: x
-                  }))
-                ]}
-                value={
-                  tableBasic?.advanced_profiling_result_truncation ??
-                  TableListModelProfilingChecksResultTruncationEnum.one_per_month
-                }
-                onChange={(selected) =>
-                  handleChange({
-                    advanced_profiling_result_truncation: selected
-                  })
-                }
-                placeholder=""
-                empty={true}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Table Hash</td>
-            <td className="px-4 py-2">{tableBasic?.table_hash}</td>
-          </tr>
-        </tbody>
+        {TableDetailBody({tableBasic, handleChange})}
       </table>
       {connectionModel.provider_type ===
-      ConnectionSpecProviderTypeEnum.duckdb ? (
+        ConnectionSpecProviderTypeEnum.duckdb && (
         <FileFormatConfiguration
-          paths={paths}
-          onAddPath={onAddPath}
-          onChangePath={onChangePath}
           fileFormatType={fileFormatType}
           onChangeFile={onChangeFile}
-          configuration={configuration}
+          configuration={tableBasic?.file_format?.[format]}
           onChangeConfiguration={onChangeConfiguration}
           cleanConfiguration={cleanConfiguration}
-          onDeletePath={onDeletePath}
-        />
-      ) : (
-        <></>
+          freezeFileType={false}
+        >
+          <FilePath
+            paths={tableBasic?.file_format?.file_paths as any[]}
+            onAddPath={onAddPath}
+            onChangePath={onChangePath}
+            onDeletePath={onDeletePath}
+          />
+        </FileFormatConfiguration>
       )}
     </div>
   );
 };
+
+const TableDetailBody = ({tableBasic, handleChange} : {tableBasic: any, handleChange: any}) => {
+  
+  const filter = tableBasic?.filter || '';
+  const priority = tableBasic?.priority || '';
+  const stage = tableBasic?.stage || '';
+  
+  return (        
+  <tbody>
+    <tr>
+      <td className="px-4 py-2">Connection name</td>
+      <td className="px-4 py-2">{tableBasic?.connection_name}</td>
+    </tr>
+    <tr>
+      <td className="px-4 py-2">Schema name</td>
+      <td className="px-4 py-2">{tableBasic?.target?.schema_name}</td>
+    </tr>
+    <tr>
+      <td className="px-4 py-2">Table name</td>
+      <td className="px-4 py-2">{tableBasic?.target?.table_name}</td>
+    </tr>
+    <tr>
+      <td className="px-4 py-2">Disable data quality checks</td>
+      <td className="px-4 py-2">
+        <div className="flex">
+          <Checkbox
+            onChange={(value) => handleChange({ disabled: value })}
+            checked={tableBasic?.disabled}
+          />
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td className="px-4 py-2">Filter</td>
+      <td className="px-4 py-2">
+        <textarea
+          className="focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-0 border-gray-300 font-regular text-sm h-26 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none min-w-40 w-full  rounded"
+          value={filter}
+          onChange={(e) => handleChange({ filter: e.target.value })}
+        ></textarea>
+      </td>
+    </tr>
+    <tr>
+      <td className="px-4 py-2">Priority</td>
+      <td className="px-4 py-2">
+        <NumberInput
+          value={priority}
+          onChange={(value) => handleChange({ priority: value })}
+          className="min-w-30 w-1/2"
+          placeholder=""
+        />
+      </td>
+    </tr>
+    <tr>
+      <td className="px-4 py-2">Stage</td>
+      <td className="px-4 py-2">
+        <Input
+          value={stage}
+          onChange={(e) => handleChange({ stage: e.target.value })}
+        />
+      </td>
+    </tr>
+    <tr>
+      <td className="px-4 py-2">Profiling checks result truncation</td>
+      <td className="px-4 py-2">
+        <Select
+          options={Object.values(
+            TableListModelProfilingChecksResultTruncationEnum
+          ).map((x) => ({
+            label: x
+              ?.replaceAll('_', ' ')
+              .replace(/./, (c) => c.toUpperCase()),
+            value: x
+          }))}
+          value={
+            tableBasic?.profiling_checks_result_truncation ??
+            TableListModelProfilingChecksResultTruncationEnum.store_the_most_recent_result_per_month
+          }
+          onChange={(selected) =>
+            handleChange({
+              profiling_checks_result_truncation: selected
+            })
+          }
+          placeholder=""
+          empty={true}
+        />
+      </td>
+    </tr>
+    <tr>
+      <td className="px-4 py-2">Table hash</td>
+      <td className="px-4 py-2">{tableBasic?.table_hash}</td>
+    </tr>
+  </tbody>)
+}
 
 export default TableDetails;

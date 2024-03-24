@@ -76,4 +76,6 @@ venv/
 
 # duckdb extension binaries
 /home/bin/duckdb
+/home/bin/.duckdb
+/home/bin/v0.10.0
 

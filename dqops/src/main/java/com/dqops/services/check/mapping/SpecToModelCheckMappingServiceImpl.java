@@ -74,7 +74,6 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Service that creates a model from the data quality check specifications,
@@ -480,7 +479,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                     continue;
                 }
 
-                checkModel.setConfigured(checkSpecObjectNullable != null);
+                checkModel.setConfigured(checkSpecObjectNullable != null && !checkFieldValue.isDefaultCheck());
                 categoryModel.getChecks().add(checkModel);
             }
         }
@@ -561,7 +560,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             if (customCheckSpec == null) {
                 customCheckSpec = new CustomCheckSpec();
             } else {
-                checkIsConfigured = true;
+                checkIsConfigured = !customCheckSpec.isDefaultCheck();
             }
 
             CheckModel customCheckModel = createCheckModel(null,
@@ -675,8 +674,12 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         }
         String checkName = checkFieldInfo != null ? checkFieldInfo.getYamlFieldName() : customCheckDefinitionSpec.getCheckName();
         checkModel.setCheckName(checkName);
-        checkModel.setHelpText(checkFieldInfo != null ? checkFieldInfo.getHelpText() : customCheckDefinitionSpec.getHelpText());
+        checkModel.setHelpText(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.getHelpText() :
+                (checkFieldInfo != null ? checkFieldInfo.getHelpText() : customCheckDefinitionSpec.getHelpText()));
+        checkModel.setDisplayName(checkSpec.getDisplayName());
+        checkModel.setFriendlyName(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.getFriendlyName() : checkSpec.getFriendlyName());
         checkModel.setStandard(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.isStandard() : checkSpec.isStandard());
+        checkModel.setDefaultCheck(checkSpec.isDefaultCheck());
 
         if (runChecksCategoryTemplate != null) {
             CheckSearchFilters runOneCheckTemplate = runChecksCategoryTemplate.clone();
@@ -748,8 +751,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                         if (checkType == CheckType.profiling) {
                             if (tableSpec != null && tableSpec.getProfilingChecks() != null) {
                                 if (tableSpec.getProfilingChecks().getResultTruncation() == null ||
-                                        tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriod.one_per_week ||
-                                        tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriod.one_per_month) {
+                                        tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriodTruncation.store_the_most_recent_result_per_week ||
+                                        tableSpec.getProfilingChecks().getResultTruncation() == ProfilingTimePeriodTruncation.store_the_most_recent_result_per_month) {
                                     checkModel.pushError(CheckConfigurationRequirementsError.PROFILING_CHECKS_RESULT_TRUNCATION_TOO_COARSE);
                                 }
                             }

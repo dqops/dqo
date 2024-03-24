@@ -16,6 +16,7 @@
 package com.dqops.execution.checks.scheduled;
 
 import com.dqops.metadata.id.HierarchyId;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TableWrapper;
 
 import java.util.Collection;
@@ -48,13 +49,13 @@ public class ScheduledChecksCollection {
 
     /**
      * Retrieves a table check collection when a table was already added or created and returns a new empty table's check collection.
-     * @param targetTableWrapper Target table wrapper.
+     * @param targetTableSpec Target table specification.
      * @return Collection of scheduled checks within the given table.
      */
-    public ScheduledTableChecksCollection getOrAddTableChecks(TableWrapper targetTableWrapper) {
-        ScheduledTableChecksCollection scheduledTableChecksCollection = this.tablesWithChecks.get(targetTableWrapper.getHierarchyId());
+    public ScheduledTableChecksCollection getOrAddTableChecks(TableSpec targetTableSpec) {
+        ScheduledTableChecksCollection scheduledTableChecksCollection = this.tablesWithChecks.get(targetTableSpec.getHierarchyId());
         if (scheduledTableChecksCollection == null) {
-            scheduledTableChecksCollection = new ScheduledTableChecksCollection(targetTableWrapper);
+            scheduledTableChecksCollection = new ScheduledTableChecksCollection(targetTableSpec);
             addTableChecks(scheduledTableChecksCollection);
         }
 

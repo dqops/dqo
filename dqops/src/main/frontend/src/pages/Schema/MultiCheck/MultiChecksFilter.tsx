@@ -1,12 +1,12 @@
+import { AxiosResponse } from 'axios';
 import React, { useEffect, useState } from 'react';
+import { CheckTemplate } from '../../../api';
 import RadioButton from '../../../components/RadioButton';
 import Select, { Option } from '../../../components/Select';
-import { IFilterTemplate } from '../../../shared/constants';
-import { AxiosResponse } from 'axios';
-import { CheckTemplate } from '../../../api';
 import { SchemaApiClient } from '../../../services/apiClient';
+import { IFilterTemplate } from '../../../shared/constants';
 import { CheckTypes } from '../../../shared/routes';
-import { useParams } from 'react-router-dom';
+import { useDecodedParams } from '../../../utils';
 
 interface IMultiChecksFilter {
   filterParameters: IFilterTemplate;
@@ -25,7 +25,7 @@ export default function MultiChecksFilter({
     connection,
     schema
   }: { checkTypes: CheckTypes; connection: string; schema: string } =
-    useParams();
+    useDecodedParams();
   const [checkCategoryOptions, setCheckCategoryOptions] = useState<Option[]>(
     []
   );

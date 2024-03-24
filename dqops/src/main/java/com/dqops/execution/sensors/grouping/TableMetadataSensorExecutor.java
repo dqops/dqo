@@ -102,7 +102,8 @@ public class TableMetadataSensorExecutor extends AbstractGroupedSensorExecutor {
                             new ArrayList<>() {{
                                 add(tableName);
                             }},
-                            connectionWrapper
+                            connectionWrapper,
+                            secretValueLookupContext
                     );
 
 

@@ -88,7 +88,7 @@ Container of table level daily partitioned checks. Contains categories of daily 
 
 ___
 
-## ProfilingTimePeriod
+## ProfilingTimePeriodTruncation
 The time period for profiling checks (millisecond, daily, monthly, weekly, hourly).
  The default profiling check stores one value per month. When profiling checks is re-executed during the month,
  the previous profiling checks value is overwritten and only the most recent value is stored.
@@ -99,7 +99,7 @@ The time period for profiling checks (millisecond, daily, monthly, weekly, hourl
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|one_per_month<br/>one_per_week<br/>one_per_day<br/>one_per_hour<br/>all_results<br/>|
+|string|store_the_most_recent_result_per_month<br/>store_the_most_recent_result_per_week<br/>store_the_most_recent_result_per_day<br/>store_the_most_recent_result_per_hour<br/>store_all_results_without_date_truncation<br/>|
 
 ___
 
@@ -120,7 +120,7 @@ Table list model returned by the rest api that is limited only to the basic fiel
 |<span class="no-wrap-code">`filter`</span>|SQL WHERE clause added to the sensor queries.|*string*|
 |<span class="no-wrap-code">`priority`</span>|Table priority (1, 2, 3, 4, ...). The tables can be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.|*integer*|
 |<span class="no-wrap-code">[`owner`](../../reference/yaml/TableYaml.md#tableownerspec)</span>|Table owner information like the data steward name or the business application name.|*[TableOwnerSpec](../../reference/yaml/TableYaml.md#tableownerspec)*|
-|<span class="no-wrap-code">[`profiling_checks_result_truncation`](#profilingtimeperiod)</span>|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|*[ProfilingTimePeriod](#profilingtimeperiod)*|
+|<span class="no-wrap-code">[`profiling_checks_result_truncation`](#profilingtimeperiodtruncation)</span>|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|*[ProfilingTimePeriodTruncation](#profilingtimeperiodtruncation)*|
 |<span class="no-wrap-code">[`file_format`](../../reference/yaml/TableYaml.md#fileformatspec)</span>|File format for a file based table, such as a CSV or Parquet file.|*[FileFormatSpec](../../reference/yaml/TableYaml.md#fileformatspec)*|
 |<span class="no-wrap-code">`has_any_configured_checks`</span>|True when the table has any checks configured.|*boolean*|
 |<span class="no-wrap-code">`has_any_configured_profiling_checks`</span>|True when the table has any profiling checks configured.|*boolean*|
@@ -273,7 +273,7 @@ Container of table level checks that are activated on a table level.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`result_truncation`](./tables.md#profilingtimeperiod)</span>|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|*[ProfilingTimePeriod](./tables.md#profilingtimeperiod)*|
+|<span class="no-wrap-code">[`result_truncation`](./tables.md#profilingtimeperiodtruncation)</span>|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|*[ProfilingTimePeriodTruncation](./tables.md#profilingtimeperiodtruncation)*|
 |<span class="no-wrap-code">[`volume`](../../reference/yaml/profiling/table-profiling-checks.md#tablevolumeprofilingchecksspec)</span>|Configuration of volume data quality checks on a table level.|*[TableVolumeProfilingChecksSpec](../../reference/yaml/profiling/table-profiling-checks.md#tablevolumeprofilingchecksspec)*|
 |<span class="no-wrap-code">[`timeliness`](../../reference/yaml/profiling/table-profiling-checks.md#tabletimelinessprofilingchecksspec)</span>|Configuration of timeliness checks on a table level. Timeliness checks detect anomalies like rapid row count changes.|*[TableTimelinessProfilingChecksSpec](../../reference/yaml/profiling/table-profiling-checks.md#tabletimelinessprofilingchecksspec)*|
 |<span class="no-wrap-code">[`accuracy`](../../reference/yaml/profiling/table-profiling-checks.md#tableaccuracyprofilingchecksspec)</span>|Configuration of accuracy checks on a table level. Accuracy checks compare the tested table with another reference table.|*[TableAccuracyProfilingChecksSpec](../../reference/yaml/profiling/table-profiling-checks.md#tableaccuracyprofilingchecksspec)*|

@@ -1,22 +1,22 @@
 import React, { useEffect } from 'react';
-import Input from '../../components/Input';
+import { useSelector } from 'react-redux';
 import Checkbox from '../../components/Checkbox';
+import Input from '../../components/Input';
 import NumberInput from '../../components/NumberInput';
-import ColumnActionGroup from './ColumnActionGroup';
+import TextArea from '../../components/TextArea';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getColumnBasic,
   setUpdatedColumnBasic,
   updateColumnBasic
 } from '../../redux/actions/column.actions';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { useSelector } from 'react-redux';
-import { CheckTypes } from '../../shared/routes';
-import { useParams } from 'react-router-dom';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../redux/selectors';
-import TextArea from '../../components/TextArea';
+import { CheckTypes } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
+import ColumnActionGroup from './ColumnActionGroup';
 
 interface IColumnDetailsProps {
   connectionName: string;
@@ -31,7 +31,7 @@ const TableDetails = ({
   tableName,
   columnName
 }: IColumnDetailsProps) => {
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
@@ -114,7 +114,7 @@ const TableDetails = ({
         isUpdating={isUpdating}
         isUpdated={isUpdatedColumnBasic}
       />
-      <table className="mb-6 w-160">
+      <table className="mb-6 w-160 text-sm">
         <tbody>
           <tr>
             <td className="px-4 py-2">Connection name</td>

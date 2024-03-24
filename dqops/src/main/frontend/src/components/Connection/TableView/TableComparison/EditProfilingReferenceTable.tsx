@@ -1,40 +1,40 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import {
+  CheckContainerModel,
+  CheckSearchFiltersCheckTypeEnum,
+  CompareThresholdsModel,
+  DqoJobHistoryEntryModelStatusEnum,
+  TableComparisonModel,
+  TableComparisonResultsModel
+} from '../../../../api';
+import { useActionDispatch } from '../../../../hooks/useActionDispatch';
+import { setUpdatedChecksModel } from '../../../../redux/actions/table.actions';
+import { IRootState } from '../../../../redux/reducers';
+import { getFirstLevelActiveTab } from '../../../../redux/selectors';
 import {
   ColumnApiClient,
-  TableComparisonResultsApi,
   JobApiClient,
+  TableComparisonResultsApi,
   TableComparisonsApi
 } from '../../../../services/apiClient';
+import { TParameters } from '../../../../shared/constants';
 import { CheckTypes } from '../../../../shared/routes';
-import { useParams } from 'react-router-dom';
-import {
-  CompareThresholdsModel,
-  TableComparisonModel,
-  TableComparisonResultsModel,
-  DqoJobHistoryEntryModelStatusEnum,
-  CheckSearchFiltersCheckTypeEnum,
-  CheckContainerModel
-} from '../../../../api';
 import SectionWrapper from '../../../Dashboard/SectionWrapper';
+import Loader from '../../../Loader';
 import { Option } from '../../../Select';
-import { useActionDispatch } from '../../../../hooks/useActionDispatch';
-import { getFirstLevelActiveTab } from '../../../../redux/selectors';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../../redux/reducers';
-import { setUpdatedChecksModel } from '../../../../redux/actions/table.actions';
+import EditReferenceTable from './EditReferenceTable';
+import SeverityInputBlock from './SeverityInputBlock';
 import {
   EditProfilingReferenceTableProps,
   TSeverityValues,
   checkNames
 } from './TableComparisonConstans';
-import { onUpdate, validate404Status } from './TableComparisonUtils';
 import TableComparisonOverwiewBody from './TableComparisonOverwiewBody';
+import { onUpdate, validate404Status } from './TableComparisonUtils';
 import TableLevelResults from './TableLevelResults';
-import SeverityInputBlock from './SeverityInputBlock';
-import { TParameters } from '../../../../shared/constants';
-import Loader from '../../../Loader';
 import TableRow from './TableLevelRowResults';
-import EditReferenceTable from './EditReferenceTable';
+import { useDecodedParams } from '../../../../utils';
 
 export const EditProfilingReferenceTable = ({
   checkTypes,
@@ -58,7 +58,7 @@ export const EditProfilingReferenceTable = ({
     connection: string;
     schema: string;
     table: string;
-  } = useParams();
+  } = useDecodedParams();
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );

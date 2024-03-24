@@ -40,12 +40,12 @@ http://localhost:8888/api/timezones
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ "sampleString_1", "sampleString_2", "sampleString_3" ]
-    ```
+        ```
+        [ "sampleString_1", "sampleString_2", "sampleString_3" ]
+        ```
     
     
 
@@ -69,15 +69,15 @@ http://localhost:8888/api/timezones
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		'sampleString_1',
-		'sampleString_2',
-		'sampleString_3'
-	]
-    ```
+        ```
+        [
+			'sampleString_1',
+			'sampleString_2',
+			'sampleString_3'
+		]
+        ```
     
     
     
@@ -102,15 +102,15 @@ http://localhost:8888/api/timezones
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		'sampleString_1',
-		'sampleString_2',
-		'sampleString_3'
-	]
-    ```
+        ```
+        [
+			'sampleString_1',
+			'sampleString_2',
+			'sampleString_3'
+		]
+        ```
     
     
     
@@ -138,15 +138,15 @@ http://localhost:8888/api/timezones
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		'sampleString_1',
-		'sampleString_2',
-		'sampleString_3'
-	]
-    ```
+        ```
+        [
+			'sampleString_1',
+			'sampleString_2',
+			'sampleString_3'
+		]
+        ```
     
     
     
@@ -174,15 +174,15 @@ http://localhost:8888/api/timezones
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		'sampleString_1',
-		'sampleString_2',
-		'sampleString_3'
-	]
-    ```
+        ```
+        [
+			'sampleString_1',
+			'sampleString_2',
+			'sampleString_3'
+		]
+        ```
     
     
     

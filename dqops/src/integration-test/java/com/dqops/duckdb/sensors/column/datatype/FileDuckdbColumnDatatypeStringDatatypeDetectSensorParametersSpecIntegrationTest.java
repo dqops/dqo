@@ -18,7 +18,7 @@ package com.dqops.duckdb.sensors.column.datatype;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
-import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.duckdb.BaseDuckdbIntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -47,7 +47,7 @@ public class FileDuckdbColumnDatatypeStringDatatypeDetectSensorParametersSpecInt
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv);
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
         String csvFileName = SampleCsvFileNames.detect_datatype_test;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(csvFileName, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -56,7 +56,6 @@ public class FileDuckdbColumnDatatypeStringDatatypeDetectSensorParametersSpecInt
         this.checkSpec.setParameters(this.sut);
     }
 
-    // todo: tests invalidly generate table name, there is a missing table name
     @Test
     void runSensor_whenSensorExecutedProfilingAndCheckIntDataType_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
@@ -178,6 +177,7 @@ public class FileDuckdbColumnDatatypeStringDatatypeDetectSensorParametersSpecInt
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "mixed7", this.checkSpec, CheckTimeScale.daily, "date");
+        runParameters.getTable().getColumns().get("date").getTypeSnapshot().setColumnType("VARCHAR");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

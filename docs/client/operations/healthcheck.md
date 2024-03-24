@@ -40,12 +40,12 @@ http://localhost:8888/api/ishealthy
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    "sample_string_value"
-    ```
+        ```
+        "sample_string_value"
+        ```
     
     
 
@@ -69,11 +69,11 @@ http://localhost:8888/api/ishealthy
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    'sample_string_value'
-    ```
+        ```
+        'sample_string_value'
+        ```
     
     
     
@@ -98,11 +98,11 @@ http://localhost:8888/api/ishealthy
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    'sample_string_value'
-    ```
+        ```
+        'sample_string_value'
+        ```
     
     
     
@@ -130,11 +130,11 @@ http://localhost:8888/api/ishealthy
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    'sample_string_value'
-    ```
+        ```
+        'sample_string_value'
+        ```
     
     
     
@@ -162,11 +162,11 @@ http://localhost:8888/api/ishealthy
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    'sample_string_value'
-    ```
+        ```
+        'sample_string_value'
+        ```
     
     
     

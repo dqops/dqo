@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { ColumnApiClient, ConnectionApiClient } from '../../services/apiClient';
 
 import SelectInput from '../SelectInput';
+import { useDecodedParams } from '../../utils';
 
 export interface Option {
   label: string;
@@ -42,7 +42,7 @@ const ColumnSelect = ({
     connection,
     schema,
     table
-  }: { connection: string; schema: string; table: string } = useParams();
+  }: { connection: string; schema: string; table: string } = useDecodedParams();
 
   useEffect(() => {
     const fetchData = async () => {

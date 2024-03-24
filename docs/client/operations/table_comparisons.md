@@ -2326,24 +2326,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "table_comparison_configuration_name" : "sample_schema.sample_table",
-	  "reference_connection" : "sample_connection",
-	  "reference_table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "check_type" : "profiling",
-	  "grouping_columns" : [ ],
-	  "can_edit" : true,
-	  "can_run_compare_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
+        ```
+        {
+		  "table_comparison_configuration_name" : "sample_schema.sample_table",
+		  "reference_connection" : "sample_connection",
+		  "reference_table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "check_type" : "profiling",
+		  "grouping_columns" : [ ],
+		  "can_edit" : true,
+		  "can_run_compare_checks" : true,
+		  "can_delete_data" : true
+		}
+        ```
     
     
 
@@ -2371,25 +2371,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonConfigurationModel(
-		table_comparison_configuration_name='sample_schema.sample_table',
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		check_type=CheckType.PROFILING,
-		grouping_columns=[
-		
-		],
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonConfigurationModel(
+			table_comparison_configuration_name='sample_schema.sample_table',
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			check_type=CheckType.PROFILING,
+			grouping_columns=[
+			
+			],
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -2418,25 +2418,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonConfigurationModel(
-		table_comparison_configuration_name='sample_schema.sample_table',
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		check_type=CheckType.PROFILING,
-		grouping_columns=[
-		
-		],
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonConfigurationModel(
+			table_comparison_configuration_name='sample_schema.sample_table',
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			check_type=CheckType.PROFILING,
+			grouping_columns=[
+			
+			],
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -2468,25 +2468,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonConfigurationModel(
-		table_comparison_configuration_name='sample_schema.sample_table',
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		check_type=CheckType.PROFILING,
-		grouping_columns=[
-		
-		],
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonConfigurationModel(
+			table_comparison_configuration_name='sample_schema.sample_table',
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			check_type=CheckType.PROFILING,
+			grouping_columns=[
+			
+			],
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -2518,25 +2518,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonConfigurationModel(
-		table_comparison_configuration_name='sample_schema.sample_table',
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		check_type=CheckType.PROFILING,
-		grouping_columns=[
-		
-		],
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonConfigurationModel(
+			table_comparison_configuration_name='sample_schema.sample_table',
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			check_type=CheckType.PROFILING,
+			grouping_columns=[
+			
+			],
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -2592,48 +2592,48 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "table_comparison_configuration_name" : "sample_schema.sample_table",
-	  "reference_connection" : "sample_connection",
-	  "reference_table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "check_type" : "profiling",
-	  "grouping_columns" : [ ],
-	  "can_edit" : true,
-	  "can_run_compare_checks" : true,
-	  "can_delete_data" : true
-	}, {
-	  "table_comparison_configuration_name" : "sample_schema.sample_table",
-	  "reference_connection" : "sample_connection",
-	  "reference_table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "check_type" : "profiling",
-	  "grouping_columns" : [ ],
-	  "can_edit" : true,
-	  "can_run_compare_checks" : true,
-	  "can_delete_data" : true
-	}, {
-	  "table_comparison_configuration_name" : "sample_schema.sample_table",
-	  "reference_connection" : "sample_connection",
-	  "reference_table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "check_type" : "profiling",
-	  "grouping_columns" : [ ],
-	  "can_edit" : true,
-	  "can_run_compare_checks" : true,
-	  "can_delete_data" : true
-	} ]
-    ```
+        ```
+        [ {
+		  "table_comparison_configuration_name" : "sample_schema.sample_table",
+		  "reference_connection" : "sample_connection",
+		  "reference_table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "check_type" : "profiling",
+		  "grouping_columns" : [ ],
+		  "can_edit" : true,
+		  "can_run_compare_checks" : true,
+		  "can_delete_data" : true
+		}, {
+		  "table_comparison_configuration_name" : "sample_schema.sample_table",
+		  "reference_connection" : "sample_connection",
+		  "reference_table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "check_type" : "profiling",
+		  "grouping_columns" : [ ],
+		  "can_edit" : true,
+		  "can_run_compare_checks" : true,
+		  "can_delete_data" : true
+		}, {
+		  "table_comparison_configuration_name" : "sample_schema.sample_table",
+		  "reference_connection" : "sample_connection",
+		  "reference_table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "check_type" : "profiling",
+		  "grouping_columns" : [ ],
+		  "can_edit" : true,
+		  "can_run_compare_checks" : true,
+		  "can_delete_data" : true
+		} ]
+        ```
     
     
 
@@ -2662,57 +2662,57 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		TableComparisonConfigurationModel(
-			table_comparison_configuration_name='sample_schema.sample_table',
-			reference_connection='sample_connection',
-			reference_table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
+        ```
+        [
+			TableComparisonConfigurationModel(
+				table_comparison_configuration_name='sample_schema.sample_table',
+				reference_connection='sample_connection',
+				reference_table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				check_type=CheckType.PROFILING,
+				grouping_columns=[
+				
+				],
+				can_edit=True,
+				can_run_compare_checks=True,
+				can_delete_data=True
 			),
-			check_type=CheckType.PROFILING,
-			grouping_columns=[
-			
-			],
-			can_edit=True,
-			can_run_compare_checks=True,
-			can_delete_data=True
-		),
-		TableComparisonConfigurationModel(
-			table_comparison_configuration_name='sample_schema.sample_table',
-			reference_connection='sample_connection',
-			reference_table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
+			TableComparisonConfigurationModel(
+				table_comparison_configuration_name='sample_schema.sample_table',
+				reference_connection='sample_connection',
+				reference_table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				check_type=CheckType.PROFILING,
+				grouping_columns=[
+				
+				],
+				can_edit=True,
+				can_run_compare_checks=True,
+				can_delete_data=True
 			),
-			check_type=CheckType.PROFILING,
-			grouping_columns=[
-			
-			],
-			can_edit=True,
-			can_run_compare_checks=True,
-			can_delete_data=True
-		),
-		TableComparisonConfigurationModel(
-			table_comparison_configuration_name='sample_schema.sample_table',
-			reference_connection='sample_connection',
-			reference_table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			check_type=CheckType.PROFILING,
-			grouping_columns=[
-			
-			],
-			can_edit=True,
-			can_run_compare_checks=True,
-			can_delete_data=True
-		)
-	]
-    ```
+			TableComparisonConfigurationModel(
+				table_comparison_configuration_name='sample_schema.sample_table',
+				reference_connection='sample_connection',
+				reference_table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				check_type=CheckType.PROFILING,
+				grouping_columns=[
+				
+				],
+				can_edit=True,
+				can_run_compare_checks=True,
+				can_delete_data=True
+			)
+		]
+        ```
     
     
     
@@ -2742,57 +2742,57 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		TableComparisonConfigurationModel(
-			table_comparison_configuration_name='sample_schema.sample_table',
-			reference_connection='sample_connection',
-			reference_table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
+        ```
+        [
+			TableComparisonConfigurationModel(
+				table_comparison_configuration_name='sample_schema.sample_table',
+				reference_connection='sample_connection',
+				reference_table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				check_type=CheckType.PROFILING,
+				grouping_columns=[
+				
+				],
+				can_edit=True,
+				can_run_compare_checks=True,
+				can_delete_data=True
 			),
-			check_type=CheckType.PROFILING,
-			grouping_columns=[
-			
-			],
-			can_edit=True,
-			can_run_compare_checks=True,
-			can_delete_data=True
-		),
-		TableComparisonConfigurationModel(
-			table_comparison_configuration_name='sample_schema.sample_table',
-			reference_connection='sample_connection',
-			reference_table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
+			TableComparisonConfigurationModel(
+				table_comparison_configuration_name='sample_schema.sample_table',
+				reference_connection='sample_connection',
+				reference_table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				check_type=CheckType.PROFILING,
+				grouping_columns=[
+				
+				],
+				can_edit=True,
+				can_run_compare_checks=True,
+				can_delete_data=True
 			),
-			check_type=CheckType.PROFILING,
-			grouping_columns=[
-			
-			],
-			can_edit=True,
-			can_run_compare_checks=True,
-			can_delete_data=True
-		),
-		TableComparisonConfigurationModel(
-			table_comparison_configuration_name='sample_schema.sample_table',
-			reference_connection='sample_connection',
-			reference_table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			check_type=CheckType.PROFILING,
-			grouping_columns=[
-			
-			],
-			can_edit=True,
-			can_run_compare_checks=True,
-			can_delete_data=True
-		)
-	]
-    ```
+			TableComparisonConfigurationModel(
+				table_comparison_configuration_name='sample_schema.sample_table',
+				reference_connection='sample_connection',
+				reference_table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				check_type=CheckType.PROFILING,
+				grouping_columns=[
+				
+				],
+				can_edit=True,
+				can_run_compare_checks=True,
+				can_delete_data=True
+			)
+		]
+        ```
     
     
     
@@ -2825,57 +2825,57 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		TableComparisonConfigurationModel(
-			table_comparison_configuration_name='sample_schema.sample_table',
-			reference_connection='sample_connection',
-			reference_table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
+        ```
+        [
+			TableComparisonConfigurationModel(
+				table_comparison_configuration_name='sample_schema.sample_table',
+				reference_connection='sample_connection',
+				reference_table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				check_type=CheckType.PROFILING,
+				grouping_columns=[
+				
+				],
+				can_edit=True,
+				can_run_compare_checks=True,
+				can_delete_data=True
 			),
-			check_type=CheckType.PROFILING,
-			grouping_columns=[
-			
-			],
-			can_edit=True,
-			can_run_compare_checks=True,
-			can_delete_data=True
-		),
-		TableComparisonConfigurationModel(
-			table_comparison_configuration_name='sample_schema.sample_table',
-			reference_connection='sample_connection',
-			reference_table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
+			TableComparisonConfigurationModel(
+				table_comparison_configuration_name='sample_schema.sample_table',
+				reference_connection='sample_connection',
+				reference_table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				check_type=CheckType.PROFILING,
+				grouping_columns=[
+				
+				],
+				can_edit=True,
+				can_run_compare_checks=True,
+				can_delete_data=True
 			),
-			check_type=CheckType.PROFILING,
-			grouping_columns=[
-			
-			],
-			can_edit=True,
-			can_run_compare_checks=True,
-			can_delete_data=True
-		),
-		TableComparisonConfigurationModel(
-			table_comparison_configuration_name='sample_schema.sample_table',
-			reference_connection='sample_connection',
-			reference_table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			check_type=CheckType.PROFILING,
-			grouping_columns=[
-			
-			],
-			can_edit=True,
-			can_run_compare_checks=True,
-			can_delete_data=True
-		)
-	]
-    ```
+			TableComparisonConfigurationModel(
+				table_comparison_configuration_name='sample_schema.sample_table',
+				reference_connection='sample_connection',
+				reference_table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				check_type=CheckType.PROFILING,
+				grouping_columns=[
+				
+				],
+				can_edit=True,
+				can_run_compare_checks=True,
+				can_delete_data=True
+			)
+		]
+        ```
     
     
     
@@ -2908,57 +2908,57 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		TableComparisonConfigurationModel(
-			table_comparison_configuration_name='sample_schema.sample_table',
-			reference_connection='sample_connection',
-			reference_table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
+        ```
+        [
+			TableComparisonConfigurationModel(
+				table_comparison_configuration_name='sample_schema.sample_table',
+				reference_connection='sample_connection',
+				reference_table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				check_type=CheckType.PROFILING,
+				grouping_columns=[
+				
+				],
+				can_edit=True,
+				can_run_compare_checks=True,
+				can_delete_data=True
 			),
-			check_type=CheckType.PROFILING,
-			grouping_columns=[
-			
-			],
-			can_edit=True,
-			can_run_compare_checks=True,
-			can_delete_data=True
-		),
-		TableComparisonConfigurationModel(
-			table_comparison_configuration_name='sample_schema.sample_table',
-			reference_connection='sample_connection',
-			reference_table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
+			TableComparisonConfigurationModel(
+				table_comparison_configuration_name='sample_schema.sample_table',
+				reference_connection='sample_connection',
+				reference_table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				check_type=CheckType.PROFILING,
+				grouping_columns=[
+				
+				],
+				can_edit=True,
+				can_run_compare_checks=True,
+				can_delete_data=True
 			),
-			check_type=CheckType.PROFILING,
-			grouping_columns=[
-			
-			],
-			can_edit=True,
-			can_run_compare_checks=True,
-			can_delete_data=True
-		),
-		TableComparisonConfigurationModel(
-			table_comparison_configuration_name='sample_schema.sample_table',
-			reference_connection='sample_connection',
-			reference_table=PhysicalTableName(
-				schema_name='sample_schema',
-				table_name='sample_table'
-			),
-			check_type=CheckType.PROFILING,
-			grouping_columns=[
-			
-			],
-			can_edit=True,
-			can_run_compare_checks=True,
-			can_delete_data=True
-		)
-	]
-    ```
+			TableComparisonConfigurationModel(
+				table_comparison_configuration_name='sample_schema.sample_table',
+				reference_connection='sample_connection',
+				reference_table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				check_type=CheckType.PROFILING,
+				grouping_columns=[
+				
+				],
+				can_edit=True,
+				can_run_compare_checks=True,
+				can_delete_data=True
+			)
+		]
+        ```
     
     
     
@@ -3013,55 +3013,55 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "table_comparison_configuration_name" : "sample_table_comparison",
-	  "compared_connection" : "unknown",
-	  "compared_table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "reference_connection" : "sample_connection",
-	  "reference_table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "grouping_columns" : [ ],
-	  "default_compare_thresholds" : {
-	    "warning_difference_percent" : 0.0,
-	    "error_difference_percent" : 1.0
-	  },
-	  "supports_compare_column_count" : true,
-	  "columns" : [ ],
-	  "compare_table_run_checks_job_template" : {
-	    "connection" : "unknown",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "monitoring",
-	    "timeScale" : "daily",
-	    "checkCategory" : "comparisons",
-	    "tableComparisonName" : "sample_table_comparison"
-	  },
-	  "compare_table_clean_data_job_template" : {
-	    "connection" : "unknown",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : false,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true,
-	    "checkCategory" : "comparisons",
-	    "tableComparisonName" : "sample_table_comparison",
-	    "checkType" : "monitoring",
-	    "timeGradient" : "day"
-	  },
-	  "can_edit" : true,
-	  "can_run_compare_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
+        ```
+        {
+		  "table_comparison_configuration_name" : "sample_table_comparison",
+		  "compared_connection" : "unknown",
+		  "compared_table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "reference_connection" : "sample_connection",
+		  "reference_table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "grouping_columns" : [ ],
+		  "default_compare_thresholds" : {
+		    "warning_difference_percent" : 0.0,
+		    "error_difference_percent" : 1.0
+		  },
+		  "supports_compare_column_count" : true,
+		  "columns" : [ ],
+		  "compare_table_run_checks_job_template" : {
+		    "connection" : "unknown",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "monitoring",
+		    "timeScale" : "daily",
+		    "checkCategory" : "comparisons",
+		    "tableComparisonName" : "sample_table_comparison"
+		  },
+		  "compare_table_clean_data_job_template" : {
+		    "connection" : "unknown",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "deleteErrors" : true,
+		    "deleteStatistics" : false,
+		    "deleteCheckResults" : true,
+		    "deleteSensorReadouts" : true,
+		    "checkCategory" : "comparisons",
+		    "tableComparisonName" : "sample_table_comparison",
+		    "checkType" : "monitoring",
+		    "timeGradient" : "day"
+		  },
+		  "can_edit" : true,
+		  "can_run_compare_checks" : true,
+		  "can_delete_data" : true
+		}
+        ```
     
     
 
@@ -3089,58 +3089,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -3169,58 +3169,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -3252,58 +3252,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -3335,58 +3335,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -3441,55 +3441,55 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "table_comparison_configuration_name" : "sample_table_comparison",
-	  "compared_connection" : "unknown",
-	  "compared_table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "reference_connection" : "sample_connection",
-	  "reference_table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "grouping_columns" : [ ],
-	  "default_compare_thresholds" : {
-	    "warning_difference_percent" : 0.0,
-	    "error_difference_percent" : 1.0
-	  },
-	  "supports_compare_column_count" : true,
-	  "columns" : [ ],
-	  "compare_table_run_checks_job_template" : {
-	    "connection" : "unknown",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "monitoring",
-	    "timeScale" : "daily",
-	    "checkCategory" : "comparisons",
-	    "tableComparisonName" : "sample_table_comparison"
-	  },
-	  "compare_table_clean_data_job_template" : {
-	    "connection" : "unknown",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : false,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true,
-	    "checkCategory" : "comparisons",
-	    "tableComparisonName" : "sample_table_comparison",
-	    "checkType" : "monitoring",
-	    "timeGradient" : "day"
-	  },
-	  "can_edit" : true,
-	  "can_run_compare_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
+        ```
+        {
+		  "table_comparison_configuration_name" : "sample_table_comparison",
+		  "compared_connection" : "unknown",
+		  "compared_table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "reference_connection" : "sample_connection",
+		  "reference_table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "grouping_columns" : [ ],
+		  "default_compare_thresholds" : {
+		    "warning_difference_percent" : 0.0,
+		    "error_difference_percent" : 1.0
+		  },
+		  "supports_compare_column_count" : true,
+		  "columns" : [ ],
+		  "compare_table_run_checks_job_template" : {
+		    "connection" : "unknown",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "monitoring",
+		    "timeScale" : "daily",
+		    "checkCategory" : "comparisons",
+		    "tableComparisonName" : "sample_table_comparison"
+		  },
+		  "compare_table_clean_data_job_template" : {
+		    "connection" : "unknown",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "deleteErrors" : true,
+		    "deleteStatistics" : false,
+		    "deleteCheckResults" : true,
+		    "deleteSensorReadouts" : true,
+		    "checkCategory" : "comparisons",
+		    "tableComparisonName" : "sample_table_comparison",
+		    "checkType" : "monitoring",
+		    "timeGradient" : "day"
+		  },
+		  "can_edit" : true,
+		  "can_run_compare_checks" : true,
+		  "can_delete_data" : true
+		}
+        ```
     
     
 
@@ -3517,58 +3517,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -3597,58 +3597,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -3680,58 +3680,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -3763,58 +3763,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -3869,55 +3869,55 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "table_comparison_configuration_name" : "sample_table_comparison",
-	  "compared_connection" : "unknown",
-	  "compared_table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "reference_connection" : "sample_connection",
-	  "reference_table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "grouping_columns" : [ ],
-	  "default_compare_thresholds" : {
-	    "warning_difference_percent" : 0.0,
-	    "error_difference_percent" : 1.0
-	  },
-	  "supports_compare_column_count" : true,
-	  "columns" : [ ],
-	  "compare_table_run_checks_job_template" : {
-	    "connection" : "unknown",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "monitoring",
-	    "timeScale" : "daily",
-	    "checkCategory" : "comparisons",
-	    "tableComparisonName" : "sample_table_comparison"
-	  },
-	  "compare_table_clean_data_job_template" : {
-	    "connection" : "unknown",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : false,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true,
-	    "checkCategory" : "comparisons",
-	    "tableComparisonName" : "sample_table_comparison",
-	    "checkType" : "monitoring",
-	    "timeGradient" : "day"
-	  },
-	  "can_edit" : true,
-	  "can_run_compare_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
+        ```
+        {
+		  "table_comparison_configuration_name" : "sample_table_comparison",
+		  "compared_connection" : "unknown",
+		  "compared_table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "reference_connection" : "sample_connection",
+		  "reference_table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "grouping_columns" : [ ],
+		  "default_compare_thresholds" : {
+		    "warning_difference_percent" : 0.0,
+		    "error_difference_percent" : 1.0
+		  },
+		  "supports_compare_column_count" : true,
+		  "columns" : [ ],
+		  "compare_table_run_checks_job_template" : {
+		    "connection" : "unknown",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "monitoring",
+		    "timeScale" : "daily",
+		    "checkCategory" : "comparisons",
+		    "tableComparisonName" : "sample_table_comparison"
+		  },
+		  "compare_table_clean_data_job_template" : {
+		    "connection" : "unknown",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "deleteErrors" : true,
+		    "deleteStatistics" : false,
+		    "deleteCheckResults" : true,
+		    "deleteSensorReadouts" : true,
+		    "checkCategory" : "comparisons",
+		    "tableComparisonName" : "sample_table_comparison",
+		    "checkType" : "monitoring",
+		    "timeGradient" : "day"
+		  },
+		  "can_edit" : true,
+		  "can_run_compare_checks" : true,
+		  "can_delete_data" : true
+		}
+        ```
     
     
 
@@ -3945,58 +3945,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -4025,58 +4025,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -4108,58 +4108,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -4191,58 +4191,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -4297,55 +4297,55 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "table_comparison_configuration_name" : "sample_table_comparison",
-	  "compared_connection" : "unknown",
-	  "compared_table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "reference_connection" : "sample_connection",
-	  "reference_table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "grouping_columns" : [ ],
-	  "default_compare_thresholds" : {
-	    "warning_difference_percent" : 0.0,
-	    "error_difference_percent" : 1.0
-	  },
-	  "supports_compare_column_count" : true,
-	  "columns" : [ ],
-	  "compare_table_run_checks_job_template" : {
-	    "connection" : "unknown",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "monitoring",
-	    "timeScale" : "daily",
-	    "checkCategory" : "comparisons",
-	    "tableComparisonName" : "sample_table_comparison"
-	  },
-	  "compare_table_clean_data_job_template" : {
-	    "connection" : "unknown",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : false,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true,
-	    "checkCategory" : "comparisons",
-	    "tableComparisonName" : "sample_table_comparison",
-	    "checkType" : "monitoring",
-	    "timeGradient" : "day"
-	  },
-	  "can_edit" : true,
-	  "can_run_compare_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
+        ```
+        {
+		  "table_comparison_configuration_name" : "sample_table_comparison",
+		  "compared_connection" : "unknown",
+		  "compared_table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "reference_connection" : "sample_connection",
+		  "reference_table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "grouping_columns" : [ ],
+		  "default_compare_thresholds" : {
+		    "warning_difference_percent" : 0.0,
+		    "error_difference_percent" : 1.0
+		  },
+		  "supports_compare_column_count" : true,
+		  "columns" : [ ],
+		  "compare_table_run_checks_job_template" : {
+		    "connection" : "unknown",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "monitoring",
+		    "timeScale" : "daily",
+		    "checkCategory" : "comparisons",
+		    "tableComparisonName" : "sample_table_comparison"
+		  },
+		  "compare_table_clean_data_job_template" : {
+		    "connection" : "unknown",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "deleteErrors" : true,
+		    "deleteStatistics" : false,
+		    "deleteCheckResults" : true,
+		    "deleteSensorReadouts" : true,
+		    "checkCategory" : "comparisons",
+		    "tableComparisonName" : "sample_table_comparison",
+		    "checkType" : "monitoring",
+		    "timeGradient" : "day"
+		  },
+		  "can_edit" : true,
+		  "can_run_compare_checks" : true,
+		  "can_delete_data" : true
+		}
+        ```
     
     
 
@@ -4373,58 +4373,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -4453,58 +4453,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -4536,58 +4536,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -4619,58 +4619,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -4725,55 +4725,55 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "table_comparison_configuration_name" : "sample_table_comparison",
-	  "compared_connection" : "unknown",
-	  "compared_table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "reference_connection" : "sample_connection",
-	  "reference_table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "grouping_columns" : [ ],
-	  "default_compare_thresholds" : {
-	    "warning_difference_percent" : 0.0,
-	    "error_difference_percent" : 1.0
-	  },
-	  "supports_compare_column_count" : true,
-	  "columns" : [ ],
-	  "compare_table_run_checks_job_template" : {
-	    "connection" : "unknown",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "monitoring",
-	    "timeScale" : "daily",
-	    "checkCategory" : "comparisons",
-	    "tableComparisonName" : "sample_table_comparison"
-	  },
-	  "compare_table_clean_data_job_template" : {
-	    "connection" : "unknown",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : false,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true,
-	    "checkCategory" : "comparisons",
-	    "tableComparisonName" : "sample_table_comparison",
-	    "checkType" : "monitoring",
-	    "timeGradient" : "day"
-	  },
-	  "can_edit" : true,
-	  "can_run_compare_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
+        ```
+        {
+		  "table_comparison_configuration_name" : "sample_table_comparison",
+		  "compared_connection" : "unknown",
+		  "compared_table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "reference_connection" : "sample_connection",
+		  "reference_table" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "grouping_columns" : [ ],
+		  "default_compare_thresholds" : {
+		    "warning_difference_percent" : 0.0,
+		    "error_difference_percent" : 1.0
+		  },
+		  "supports_compare_column_count" : true,
+		  "columns" : [ ],
+		  "compare_table_run_checks_job_template" : {
+		    "connection" : "unknown",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "checkType" : "monitoring",
+		    "timeScale" : "daily",
+		    "checkCategory" : "comparisons",
+		    "tableComparisonName" : "sample_table_comparison"
+		  },
+		  "compare_table_clean_data_job_template" : {
+		    "connection" : "unknown",
+		    "fullTableName" : "sample_schema.sample_table",
+		    "deleteErrors" : true,
+		    "deleteStatistics" : false,
+		    "deleteCheckResults" : true,
+		    "deleteSensorReadouts" : true,
+		    "checkCategory" : "comparisons",
+		    "tableComparisonName" : "sample_table_comparison",
+		    "checkType" : "monitoring",
+		    "timeGradient" : "day"
+		  },
+		  "can_edit" : true,
+		  "can_run_compare_checks" : true,
+		  "can_delete_data" : true
+		}
+        ```
     
     
 
@@ -4801,58 +4801,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -4881,58 +4881,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -4964,58 +4964,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     
@@ -5047,58 +5047,58 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    TableComparisonModel(
-		table_comparison_configuration_name='sample_table_comparison',
-		compared_connection='unknown',
-		compared_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		reference_connection='sample_connection',
-		reference_table=PhysicalTableName(
-			schema_name='sample_schema',
-			table_name='sample_table'
-		),
-		grouping_columns=[
-		
-		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
-		supports_compare_column_count=True,
-		columns=[
-		
-		],
-		compare_table_run_checks_job_template=CheckSearchFilters(
-			check_type=CheckType.MONITORING,
-			time_scale=CheckTimeScale.DAILY,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			enabled=True
-		),
-		compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
-			connection='unknown',
-			full_table_name='sample_schema.sample_table',
-			delete_errors=True,
-			delete_statistics=False,
-			delete_check_results=True,
-			delete_sensor_readouts=True,
-			check_category='comparisons',
-			table_comparison_name='sample_table_comparison',
-			check_type='monitoring',
-			time_gradient='day'
-		),
-		can_edit=True,
-		can_run_compare_checks=True,
-		can_delete_data=True
-	)
-    ```
+        ```
+        TableComparisonModel(
+			table_comparison_configuration_name='sample_table_comparison',
+			compared_connection='unknown',
+			compared_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			reference_connection='sample_connection',
+			reference_table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			grouping_columns=[
+			
+			],
+			default_compare_thresholds=CompareThresholdsModel(
+				warning_difference_percent=0.0,
+				error_difference_percent=1.0
+			),
+			supports_compare_column_count=True,
+			columns=[
+			
+			],
+			compare_table_run_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				time_scale=CheckTimeScale.DAILY,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			compare_table_clean_data_job_template=DeleteStoredDataQueueJobParameters(
+				connection='unknown',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=False,
+				delete_check_results=True,
+				delete_sensor_readouts=True,
+				check_category='comparisons',
+				table_comparison_name='sample_table_comparison',
+				check_type='monitoring',
+				time_gradient='day'
+			),
+			can_edit=True,
+			can_run_compare_checks=True,
+			can_delete_data=True
+		)
+        ```
     
     
     

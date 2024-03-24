@@ -1,15 +1,16 @@
+import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { TableComparisonsApi } from '../../../../services/apiClient';
+import { useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import { TableComparisonConfigurationModel } from '../../../../api';
 import { useActionDispatch } from '../../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
-import { CheckTypes, ROUTES } from '../../../../shared/routes';
-import { ProfilingReferenceTableList } from './ProfilingReferenceTableList';
-import qs from 'query-string';
-import { useSelector } from 'react-redux';
 import { IRootState } from '../../../../redux/reducers';
+import { TableComparisonsApi } from '../../../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../../../shared/routes';
+import { useDecodedParams } from '../../../../utils';
 import { EditProfilingReferenceTable } from './EditProfilingReferenceTable';
+import { ProfilingReferenceTableList } from './ProfilingReferenceTableList';
 
 type TableReferenceComparisonsProps = {
   checkTypes: CheckTypes;
@@ -28,7 +29,7 @@ export const TableReferenceComparisons = ({
     connection,
     schema,
     table
-  }: { connection: string; schema: string; table: string } = useParams();
+  }: { connection: string; schema: string; table: string } = useDecodedParams();
   const [references, setReferences] = useState<
     TableComparisonConfigurationModel[]
   >([]);

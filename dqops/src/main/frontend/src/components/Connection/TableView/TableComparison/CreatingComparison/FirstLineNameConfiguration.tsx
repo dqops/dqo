@@ -1,24 +1,24 @@
+import clsx from 'clsx';
 import React, { useState } from 'react';
-import Button from '../../../../Button';
-import SvgIcon from '../../../../SvgIcon';
-import Input from '../../../../Input';
-import { useParams } from 'react-router-dom';
-import {
-  getTableProfilingChecksModel,
-  getTableDailyPartitionedChecks,
-  getTableMonthlyPartitionedChecks,
-  getTableDailyMonitoringChecks,
-  getTableMonthlyMonitoringChecks
-} from '../../../../../redux/actions/table.actions';
-import { CheckTypes } from '../../../../../shared/routes';
-import { TParameters } from '../../../../../shared/constants';
 import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../../../../hooks/useActionDispatch';
+import {
+  getTableDailyMonitoringChecks,
+  getTableDailyPartitionedChecks,
+  getTableMonthlyMonitoringChecks,
+  getTableMonthlyPartitionedChecks,
+  getTableProfilingChecksModel
+} from '../../../../../redux/actions/table.actions';
+import { IRootState } from '../../../../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../../../../redux/selectors';
 import { TableComparisonsApi } from '../../../../../services/apiClient';
+import { TParameters } from '../../../../../shared/constants';
+import { CheckTypes } from '../../../../../shared/routes';
+import Button from '../../../../Button';
+import Input from '../../../../Input';
+import SvgIcon from '../../../../SvgIcon';
 import { getIsButtonEnabled } from '../TableComparisonUtils';
-import clsx from 'clsx';
-import { IRootState } from '../../../../../redux/reducers';
+import { useDecodedParams } from '../../../../../utils';
 
 type TFirstLevelConfiguretion = {
   editConfigurationParameters: TParameters;
@@ -49,7 +49,7 @@ export default function FirstLineNameConfiguration({
     connection: string;
     schema: string;
     table: string;
-  } = useParams();
+  } = useDecodedParams();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [comparisonAlreadyExist, setComparisonAlreadyExist] = useState(false);

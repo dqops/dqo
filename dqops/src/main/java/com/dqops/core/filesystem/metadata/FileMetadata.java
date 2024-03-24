@@ -236,4 +236,11 @@ public class FileMetadata implements Cloneable {
     public int hashCode() {
         return relativePath.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "FileMetadata{" +
+                "relativePath=" + relativePath +
+                '}';
+    }
 }

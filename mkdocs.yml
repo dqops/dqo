@@ -50,9 +50,13 @@ nav:
       - "data-sources/index.md"
       - Athena: "data-sources/athena.md"
       - BigQuery: "data-sources/bigquery.md"
+      - CSV: "data-sources/csv.md"
       - Databricks: "data-sources/databricks.md"
+      - DuckDB: "data-sources/duckdb.md"
+      - JSON: "data-sources/json.md"
       - MySQL: "data-sources/mysql.md"
       - Oracle: "data-sources/oracle.md"
+      - Parquet: "data-sources/parquet.md"
       - PostgreSQL: "data-sources/postgresql.md"
       - Presto: "data-sources/presto.md"
       - Redshift: "data-sources/redshift.md"
@@ -138,6 +142,7 @@ nav:
       - Managing errors: "working-with-dqo/managing-errors.md"
       - Creating custom data quality checks: "working-with-dqo/creating-custom-data-quality-checks.md"
       - Working with DQOps Shell: "working-with-dqo/working-with-dqo-shell.md"
+#      - Working with files: "working-with-dqo/working-with-files.md" // todo: finish the page
   - Integrations:
       - "integrations/index.md"
       - Airflow:
@@ -188,6 +193,8 @@ nav:
       - dashboards: 'client/models/dashboards.md'
       - data_grouping_configurations: 'client/models/data_grouping_configurations.md'
       - data_sources: 'client/models/data_sources.md'
+      - default_column_check_patterns: 'client/models/default_column_check_patterns.md'
+      - default_table_check_patterns: 'client/models/default_table_check_patterns.md'
       - dictionaries: 'client/models/dictionaries.md'
       - environment: 'client/models/environment.md'
       - errors: 'client/models/errors.md'
@@ -213,6 +220,8 @@ nav:
       - dashboards: 'client/operations/dashboards.md'
       - data_grouping_configurations: 'client/operations/data_grouping_configurations.md'
       - data_sources: 'client/operations/data_sources.md'
+      - default_column_check_patterns: 'client/operations/default_column_check_patterns.md'
+      - default_table_check_patterns: 'client/operations/default_table_check_patterns.md'
       - defaults: 'client/operations/defaults.md'
       - dictionaries: 'client/operations/dictionaries.md'
       - environment: 'client/operations/environment.md'
@@ -519,7 +528,8 @@ nav:
       - RuleDefinitionYaml: 'reference/yaml/RuleDefinitionYaml.md'
       - CheckDefinitionYaml: 'reference/yaml/CheckDefinitionYaml.md'
       - DefaultNotificationsYaml: 'reference/yaml/DefaultNotificationsYaml.md'
-      - DefaultObservabilityChecksYaml: 'reference/yaml/DefaultObservabilityChecksYaml.md'
+      - TableDefaultChecksPatternYaml: 'reference/yaml/TableDefaultChecksPatternYaml.md'
+      - ColumnDefaultChecksPatternYaml: 'reference/yaml/ColumnDefaultChecksPatternYaml.md'
       - DefaultSchedulesYaml: 'reference/yaml/DefaultSchedulesYaml.md'
       - LocalSettingsYaml: 'reference/yaml/LocalSettingsYaml.md'
       - IncidentNotificationMessage: 'reference/yaml/IncidentNotificationMessage.md'
@@ -614,12 +624,6 @@ extra:
   analytics:
     provider: google
     property: G-9W3BYMXFK5
-  consent:
-    title: Cookie consent
-    description: >-
-      We use cookies to recognize repeat visits and user preferences, as well
-      as to measure the effectiveness of our documentation and whether users
-      find what they are looking for. With your consent, you help us improve our documentation.
   homepage: https://dqops.com/
   generator: false
   social:

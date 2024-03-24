@@ -6,6 +6,8 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.sources.fileformat.csv.NewLineCharacterType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -14,7 +16,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldNameConstants;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -43,13 +44,9 @@ public class CsvFileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean autoDetect = true;
 
-    @JsonPropertyDescription("A struct that specifies the column names and column types contained within the CSV file (e.g., {'col1': 'INTEGER', 'col2': 'VARCHAR'}). Using this option implies that auto detection is not used.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Map<String, String> columns;
-
     @JsonPropertyDescription("The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String compression;
+    private CompressionType compression;
 
     @JsonPropertyDescription("Specifies the date format to use when parsing dates.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -85,11 +82,15 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     @JsonPropertyDescription("Set the new line character(s) in the file. Options are '\\r','\\n', or '\\r\\n'.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String newLine;
+    private NewLineCharacterType newLine;
 
     @JsonPropertyDescription("Specifies the quoting string to be used when a data value is quoted.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String quote;
+
+    @JsonPropertyDescription("The number of sample rows for auto detection of parameters.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Long sampleSize;
 
     @JsonPropertyDescription("The number of lines at the top of the file to skip.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -105,12 +106,12 @@ public class CsvFileFormatSpec extends AbstractSpec {
      * @param filePathList The names of files with data.
      * @return The formatted source table with the options.
      */
-    public String buildSourceTableOptionsString(List<String> filePathList) {
+    public String buildSourceTableOptionsString(List<String> filePathList, TableSpec tableSpec) {
         TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("read_csv", filePathList);
         tableOptionsFormatter.formatValueWhenSet(Fields.allVarchar, allVarchar);
         tableOptionsFormatter.formatValueWhenSet(Fields.allowQuotedNulls, allowQuotedNulls);
         tableOptionsFormatter.formatValueWhenSet(Fields.autoDetect, autoDetect);
-        tableOptionsFormatter.formatMapWhenSet(Fields.columns, columns);
+        tableOptionsFormatter.formatColumns("columns", tableSpec);
         tableOptionsFormatter.formatStringWhenSet(Fields.compression, compression);
         tableOptionsFormatter.formatStringWhenSet(Fields.dateformat, dateformat);
         tableOptionsFormatter.formatStringWhenSet(Fields.decimalSeparator, decimalSeparator);
@@ -122,9 +123,10 @@ public class CsvFileFormatSpec extends AbstractSpec {
         tableOptionsFormatter.formatValueWhenSet(Fields.ignoreErrors, ignoreErrors);
         tableOptionsFormatter.formatStringWhenSet(Fields.newLine, newLine);
         tableOptionsFormatter.formatStringWhenSet(Fields.quote, quote);
+        tableOptionsFormatter.formatValueWhenSet(Fields.sampleSize, sampleSize);
         tableOptionsFormatter.formatValueWhenSet(Fields.skip, skip);
         tableOptionsFormatter.formatStringWhenSet(Fields.timestampformat, timestampformat);
-        return tableOptionsFormatter.toString();
+        return tableOptionsFormatter.build();
     }
 
     /**
@@ -185,30 +187,11 @@ public class CsvFileFormatSpec extends AbstractSpec {
     }
 
     /**
-     * Returns the columns map.
-     *
-     * @return Columns map.
-     */
-    public Map<String, String> getColumns() {
-        return columns;
-    }
-
-    /**
-     * Sets the columns map.
-     *
-     * @param columns Columns map.
-     */
-    public void setColumns(Map<String, String> columns) {
-        setDirtyIf(!Objects.equals(this.columns, columns));
-        this.columns = columns;
-    }
-
-    /**
      * Returns the compression type for the file. By default this will be detected automatically from the file extension
      *
      * @return Compression type.
      */
-    public String getCompression() {
+    public CompressionType getCompression() {
         return compression;
     }
 
@@ -217,7 +200,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
      *
      * @param compression Compression type.
      */
-    public void setCompression(String compression) {
+    public void setCompression(CompressionType compression) {
         setDirtyIf(!Objects.equals(this.compression, compression));
         this.compression = compression;
     }
@@ -380,7 +363,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
      *
      * @return New line value.
      */
-    public String getNewLine() {
+    public NewLineCharacterType getNewLine() {
         return newLine;
     }
 
@@ -389,7 +372,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
      *
      * @param newLine New line value.
      */
-    public void setNewLine(String newLine) {
+    public void setNewLine(NewLineCharacterType newLine) {
         setDirtyIf(!Objects.equals(this.newLine, newLine));
         this.newLine = newLine;
     }
@@ -411,6 +394,25 @@ public class CsvFileFormatSpec extends AbstractSpec {
     public void setQuote(String quote) {
         setDirtyIf(!Objects.equals(this.quote, quote));
         this.quote = quote;
+    }
+
+    /**
+     * Returns the number of sample rows for auto detection of parameters.
+     *
+     * @return Number of rows for sampling.
+     */
+    public Long getSampleSize() {
+        return sampleSize;
+    }
+
+    /**
+     * Sets the number of sample rows for auto detection of parameters.
+     *
+     * @param sampleSize Number of rows for sampling.
+     */
+    public void setSampleSize(Long sampleSize) {
+        setDirtyIf(!Objects.equals(this.sampleSize, sampleSize));
+        this.sampleSize = sampleSize;
     }
 
     /**
@@ -478,13 +480,11 @@ public class CsvFileFormatSpec extends AbstractSpec {
      * @return Cloned, trimmed and expanded table specification.
      */
     public CsvFileFormatSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
-        CsvFileFormatSpec cloned = (CsvFileFormatSpec) this.deepClone();
-        cloned.compression = secretValueProvider.expandValue(cloned.compression, lookupContext);
+        CsvFileFormatSpec cloned = this.deepClone();
         cloned.dateformat = secretValueProvider.expandValue(cloned.dateformat, lookupContext);
         cloned.decimalSeparator = secretValueProvider.expandValue(cloned.decimalSeparator, lookupContext);
         cloned.delim = secretValueProvider.expandValue(cloned.delim, lookupContext);
         cloned.escape = secretValueProvider.expandValue(cloned.escape, lookupContext);
-        cloned.newLine = secretValueProvider.expandValue(cloned.newLine, lookupContext);
         cloned.quote = secretValueProvider.expandValue(cloned.quote, lookupContext);
         cloned.timestampformat = secretValueProvider.expandValue(cloned.timestampformat, lookupContext);
         return cloned;

@@ -1,17 +1,17 @@
+import clsx from 'clsx';
 import React, { useEffect } from 'react';
-import Button from '../Button';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { IncidentsPerConnectionModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getConnections,
-  addFirstLevelTab
+  addFirstLevelTab,
+  getConnections
 } from '../../redux/actions/incidents.actions';
-import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import SvgIcon from '../SvgIcon';
-import clsx from 'clsx';
-import { IncidentsPerConnectionModel } from '../../api';
 import { ROUTES } from '../../shared/routes';
-import { useHistory } from 'react-router-dom';
+import Button from '../Button';
+import SvgIcon from '../SvgIcon';
 
 const IncidentsTree = () => {
   const dispatch = useActionDispatch();

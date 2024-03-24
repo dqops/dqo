@@ -20,6 +20,8 @@ import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+import java.util.Set;
+
 /**
  * Hierarchy node search filters used to find all check nodes that match exactly a schedule (by a cron expression)
  * or have no schedule at all, so they are just collected.
@@ -30,7 +32,7 @@ public class ScheduledChecksSearchFilters {
 
     private MonitoringScheduleSpec schedule;
 
-    private CheckRunScheduleGroup scheduleGroup;
+    private Set<CheckRunScheduleGroup> schedulingGroups;
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -75,19 +77,19 @@ public class ScheduledChecksSearchFilters {
     }
 
     /**
-     * Returns an optional schedule group (daily, monthly, profiling) to filter check root nodes.
-     * The schedule group can have a null value to return all checks or when the search root object is an abstract check that has an individual schedule.
-     * @return Optional schedule group.
+     * Returns an optional collection of target scheduling groups (monitoring daily, monitoring monthly, profiling, ...) to filter check container nodes.
+     * The schedule groups set can have a null value to return all checks or when the search root object is an abstract check that has an individual schedule.
+     * @return Optional set of target scheduling groups (types of checks).
      */
-    public CheckRunScheduleGroup getScheduleGroup() {
-        return scheduleGroup;
+    public Set<CheckRunScheduleGroup> getSchedulingGroups() {
+        return schedulingGroups;
     }
 
     /**
-     * Sets a filter for a schedule group which identifies the expected type of checks.
-     * @param scheduleGroup Schedule group.
+     * Sets a reference to a collection (set) of target scheduling groups - types of checks to run.
+     * @param schedulingGroups Collection of scheduling groups.
      */
-    public void setScheduleGroup(CheckRunScheduleGroup scheduleGroup) {
-        this.scheduleGroup = scheduleGroup;
+    public void setSchedulingGroups(Set<CheckRunScheduleGroup> schedulingGroups) {
+        this.schedulingGroups = schedulingGroups;
     }
 }

@@ -38,6 +38,7 @@ Schema model that is returned by the REST API. Describes a single unique schema 
 |<span class="no-wrap-code">`can_collect_statistics`</span>|Boolean flag that decides if the current user can collect statistics.|*boolean*|
 |<span class="no-wrap-code">`can_run_checks`</span>|Boolean flag that decides if the current user can run checks.|*boolean*|
 |<span class="no-wrap-code">`can_delete_data`</span>|Boolean flag that decides if the current user can delete data (results).|*boolean*|
+|<span class="no-wrap-code">`error_message`</span>|Field for error message.|*string*|
 
 
 ___

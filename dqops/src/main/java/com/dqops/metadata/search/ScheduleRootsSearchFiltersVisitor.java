@@ -16,11 +16,12 @@
 package com.dqops.metadata.search;
 
 import com.dqops.checks.AbstractCheckSpec;
-import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionList;
@@ -31,7 +32,6 @@ import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
-import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapper;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableSpec;
@@ -68,24 +68,30 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
         assert this.filters.getSchedule() != null;
 
         if (schedules != null) {
+            ScheduleRootResult scheduleRootResult = new ScheduleRootResult(connectionWrapper);
+
             if (Objects.equals(schedules.getProfiling(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.profiling, connectionWrapper));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.profiling);
             }
 
             if (Objects.equals(schedules.getMonitoringDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.monitoring_daily, connectionWrapper));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.monitoring_daily);
             }
 
             if (Objects.equals(schedules.getMonitoringMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.monitoring_monthly, connectionWrapper));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.monitoring_monthly);
             }
 
             if (Objects.equals(schedules.getPartitionedDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.partitioned_daily, connectionWrapper));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.partitioned_daily);
             }
 
             if (Objects.equals(schedules.getPartitionedMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.partitioned_monthly, connectionWrapper));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.partitioned_monthly);
+            }
+
+            if (scheduleRootResult.hasAnySchedulingGroups()) {
+                foundNodes.add(scheduleRootResult);
             }
         }
 
@@ -113,24 +119,30 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
         assert this.filters.getSchedule() != null;
 
         if (schedulesOverride != null) {
+            ScheduleRootResult scheduleRootResult = new ScheduleRootResult(tableSpec);
+
             if (Objects.equals(schedulesOverride.getProfiling(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.profiling, tableSpec));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.profiling);
             }
 
             if (Objects.equals(schedulesOverride.getMonitoringDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.monitoring_daily, tableSpec));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.monitoring_daily);
             }
 
             if (Objects.equals(schedulesOverride.getMonitoringMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.monitoring_monthly, tableSpec));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.monitoring_monthly);
             }
 
             if (Objects.equals(schedulesOverride.getPartitionedDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.partitioned_daily, tableSpec));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.partitioned_daily);
             }
 
             if (Objects.equals(schedulesOverride.getPartitionedMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.partitioned_monthly, tableSpec));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.partitioned_monthly);
+            }
+
+            if (scheduleRootResult.hasAnySchedulingGroups()) {
+                foundNodes.add(scheduleRootResult);
             }
         }
 
@@ -151,23 +163,12 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
 
         if (checkSchedule != null && !checkSchedule.isDefault()) {
             if (Objects.equals(checkSchedule, this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(null, abstractCheckSpec));
+                ScheduleRootResult scheduleRootResult = new ScheduleRootResult(abstractCheckSpec);
+                foundNodes.add(scheduleRootResult);
             }
         }
 
         return TreeNodeTraversalResult.SKIP_CHILDREN; // no need to traverse deeper
-    }
-
-    /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultObservabilityChecksSpec Default configuration of observability checks.
-     * @param parameter                             Visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(DefaultObservabilityChecksSpec defaultObservabilityChecksSpec, FoundResultsCollector<ScheduleRootResult> parameter) {
-        return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 
     /**
@@ -291,18 +292,6 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
     }
 
     /**
-     * Accepts a default observability check wrapper instance.
-     *
-     * @param defaultObservabilityCheckWrapper Default observability check wrapper instance.
-     * @param parameter                        Visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(DefaultObservabilityCheckWrapper defaultObservabilityCheckWrapper, FoundResultsCollector<ScheduleRootResult> parameter) {
-        return TreeNodeTraversalResult.SKIP_CHILDREN;
-    }
-
-    /**
      * Accepts a data dictionary list.
      *
      * @param dictionaryWrappers Data dictionary list.
@@ -311,6 +300,30 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
      */
     @Override
     public TreeNodeTraversalResult accept(DictionaryListImpl dictionaryWrappers, FoundResultsCollector<ScheduleRootResult> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of default configuration of table observability checks wrappers.
+     *
+     * @param tableDefaultChecksPatternWrappers Table observability default checks list.
+     * @param parameter                         Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableDefaultChecksPatternList tableDefaultChecksPatternWrappers, FoundResultsCollector<ScheduleRootResult> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a default configuration of column observability checks wrapper.
+     *
+     * @param columnDefaultChecksPatternWrappers Column observability default checks specification.
+     * @param parameter                          Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ColumnDefaultChecksPatternList columnDefaultChecksPatternWrappers, FoundResultsCollector<ScheduleRootResult> parameter) {
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 }

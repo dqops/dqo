@@ -1,15 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
 import axios, { AxiosResponse } from 'axios';
+import { useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import {
+  CheckListModel,
   CheckSearchFilters,
   ColumnListModel,
   ConnectionModel,
+  RunChecksParameters,
   SchemaModel,
-  TableListModel,
-  CheckListModel,
-  RunChecksParameters
+  TableListModel
 } from '../api';
+import { useActionDispatch } from '../hooks/useActionDispatch';
+import { toggleMenu } from '../redux/actions/job.actions';
+import { addFirstLevelTab } from '../redux/actions/source.actions';
+import { getFirstLevelActiveTab } from '../redux/selectors';
 import {
   ColumnApiClient,
   ConnectionApiClient,
@@ -19,14 +26,9 @@ import {
 } from '../services/apiClient';
 import { TREE_LEVEL } from '../shared/enums';
 import { CustomTreeNode, ITab } from '../shared/interfaces';
-import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
-import { findTreeNode } from '../utils/tree';
 import { CheckTypes, ROUTES } from '../shared/routes';
-import { useHistory, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { addFirstLevelTab } from '../redux/actions/source.actions';
-import { getFirstLevelActiveTab } from '../redux/selectors';
-import { useActionDispatch } from '../hooks/useActionDispatch';
+import { urlencodeDecoder, urlencodeEncoder } from '../utils';
+import { findTreeNode } from '../utils/tree';
 
 const TreeContext = React.createContext({} as any);
 
@@ -107,7 +109,7 @@ function TreeProvider(props: any) {
       const res: AxiosResponse<ConnectionModel[]> =
         await ConnectionApiClient.getAllConnections();
       const mappedConnectionsToTreeData = res.data.map((item) => ({
-        id: item.connection_name ?? '',
+        id: urlencodeDecoder(item.connection_name ?? ''),
         parentId: null,
         label: item.connection_name ?? '',
         items: [],
@@ -144,7 +146,7 @@ function TreeProvider(props: any) {
 
   const addConnection = async (connection: ConnectionModel) => {
     const newNode = {
-      id: connection.connection_name ?? '',
+      id: urlencodeDecoder(connection.connection_name ?? ''),
       parentId: null,
       label: connection.connection_name ?? '',
       items: [],
@@ -233,12 +235,13 @@ function TreeProvider(props: any) {
     );
 
     const items = res.data.map((schema) => ({
-      id: `${node.id}.${schema.schema_name}`,
+      id: `${node.id}.${urlencodeDecoder(schema.schema_name ?? '')}`,
       label: schema.schema_name || '',
       level: TREE_LEVEL.SCHEMA,
       parentId: node.id,
       items: [],
-      tooltip: schema.directory_prefix ?? `${node?.label}.${schema.schema_name}`,
+      tooltip:
+        schema.directory_prefix ?? `${node?.label}.${schema.schema_name}`,
       run_checks_job_template: schema[
         checkTypesToJobTemplateKey[
           checkTypes as keyof typeof checkTypesToJobTemplateKey
@@ -246,7 +249,8 @@ function TreeProvider(props: any) {
       ] as CheckSearchFilters,
       collect_statistics_job_template: schema.collect_statistics_job_template,
       data_clean_job_template: schema.data_clean_job_template,
-      open: false
+      open: false,
+      error_message: schema.error_message
     }));
 
     if (reset) {
@@ -258,7 +262,7 @@ function TreeProvider(props: any) {
 
   const addSchema = async (node: CustomTreeNode, schemaName: string) => {
     const newNode = {
-      id: `${node.id}.${schemaName}`,
+      id: `${node.id}.${urlencodeDecoder(schemaName)}`,
       label: schemaName || '',
       level: TREE_LEVEL.SCHEMA,
       parentId: node.id,
@@ -278,7 +282,7 @@ function TreeProvider(props: any) {
       node.label
     );
     const items = res.data.map((table) => ({
-      id: `${node.id}.${table.target?.table_name}`,
+      id: `${node.id}.${urlencodeDecoder(table.target?.table_name ?? '')}`,
       label: table.target?.table_name || '',
       level: TREE_LEVEL.TABLE,
       parentId: node.id,
@@ -456,11 +460,11 @@ function TreeProvider(props: any) {
   const parseNodeId = (id: TreeNodeId) => {
     const terms = id.toString().split('.');
 
-    const table = terms[2];
-    const schema = terms[1];
-    const connection = terms[0];
-    const column = terms[4];
-
+    const table = urlencodeEncoder(terms[2]);
+    const schema = urlencodeEncoder(terms[1]);
+    const connection = urlencodeEncoder(terms[0]);
+    const column = urlencodeEncoder(terms[4]);
+    
     return { connection, schema, table, column };
   };
 
@@ -474,7 +478,7 @@ function TreeProvider(props: any) {
         table ?? ''
       );
     const items = res.data.map((column) => ({
-      id: `${node.id}.${column.column_name}`,
+      id: `${node.id}.${urlencodeDecoder(column.column_name ?? '')}`,
       label: column.column_name || '',
       level: TREE_LEVEL.COLUMN,
       parentId: node.id,
@@ -634,7 +638,7 @@ function TreeProvider(props: any) {
     const items: CustomTreeNode[] = [];
     checks?.forEach((check) => {
       items.push({
-        id: `${node.id}.${check?.check_category}_${check?.check_name}`,
+        id: `${node.id}.${urlencodeDecoder(check?.check_category ?? '')}_${urlencodeDecoder(check?.check_name ?? '')}`,
         label: check?.check_name || '',
         level: TREE_LEVEL.CHECK,
         parentId: node.id,
@@ -711,7 +715,7 @@ function TreeProvider(props: any) {
   const changeActiveTab = async (node: CustomTreeNode, isNew = false) => {
     if (!node) return;
     const nodeId = node.id.toString();
-    const existTab = tabs.find((item) => item.value === node.id.toString());
+    const existTab = tabs.find((item) => item.value === nodeId);
     if (!existTab) {
       const newTab = {
         label: node.label ?? '',
@@ -747,7 +751,6 @@ function TreeProvider(props: any) {
 
   const removeNode = async (node: CustomTreeNode) => {
     setOpenNodes(openNodes.filter((item) => item.id !== node.id));
-
     const newTreeDataMaps = [
       CheckTypes.MONITORING,
       CheckTypes.SOURCES,
@@ -756,8 +759,8 @@ function TreeProvider(props: any) {
     ].reduce(
       (acc, cur) => ({
         ...acc,
-        [cur]: treeDataMaps[cur].filter(
-          (item) => !item.id.toString().startsWith(node.id.toString())
+        [cur]: treeDataMaps[cur]?.filter(  
+          (item) => !(item.id.toString().startsWith(node.id.toString() + '.') || item.id.toString() === node.id.toString())
         )
       }),
       {}
@@ -780,8 +783,8 @@ function TreeProvider(props: any) {
       ].reduce(
         (acc, cur) => ({
           ...acc,
-          [cur]: (tabMaps[cur] || []).filter(
-            (item) => !item.value.toString().startsWith(node.id.toString())
+          [cur]: (tabMaps[cur] || [])?.filter(
+            (item) => !(item.value.toString().startsWith(node.id.toString() + '.') || item.value.toString() === node.id.toString())
           )
         }),
         {}
@@ -1122,7 +1125,6 @@ function TreeProvider(props: any) {
 
   const switchTab = async (node: CustomTreeNode, checkType: CheckTypes) => {
     if (!node) return;
-
     setSelectedTreeNode(node);
     const defaultConnectionTab =
       checkType === CheckTypes.SOURCES ? 'detail' : 'schemas';
@@ -1186,7 +1188,7 @@ function TreeProvider(props: any) {
         checkType === CheckTypes.MONITORING ||
         checkType === CheckTypes.PARTITIONED
       ) {
-        tab = tab || 'daily';
+        tab = tab || 'table-quality-status-daily';
       } else if (checkType === CheckTypes.PROFILING) {
         tab = tab || 'statistics';
       } else {
@@ -1200,6 +1202,7 @@ function TreeProvider(props: any) {
         node.label,
         tab
       );
+  
 
       if (firstLevelActiveTab === url) {
         return;
@@ -1792,13 +1795,17 @@ function TreeProvider(props: any) {
     setTabMaps(newTabMaps);
   };
 
-  const reimportTableMetadata = async (node: CustomTreeNode) => {
+  const reimportTableMetadata = async (node: CustomTreeNode, closeMenuCallBack?: () => void) => {
     const [connection, schema, table] = node.id.toString().split('.');
     await JobApiClient.importTables(undefined, false, undefined, {
       connectionName: connection,
       schemaName: schema,
       tableNames: [table]
     });
+    dispatch(toggleMenu(true));
+    if (closeMenuCallBack) {
+      closeMenuCallBack()
+    }
   };
 
   axios.interceptors.response.use(undefined, function (error) {
@@ -1808,7 +1815,6 @@ function TreeProvider(props: any) {
     }
 
     if (statusCode === 404) {
-      console.log(error);
       setObjectNotFound(true);
     }
     return Promise.reject(error);
@@ -1870,3 +1876,4 @@ function useTree() {
 }
 
 export { TreeProvider, useTree };
+

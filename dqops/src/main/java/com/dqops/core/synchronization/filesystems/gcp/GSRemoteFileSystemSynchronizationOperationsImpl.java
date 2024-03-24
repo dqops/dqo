@@ -146,7 +146,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
         Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
                 (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
                 relativeFilePath;
-        String urlEncodedFilePathInBucket = FileNameSanitizer.convertEncodedPathToFullyUrlEncodedPath(fullPathToFileInsideBucket)
+        String urlEncodedFilePathInBucket = FileNameSanitizer.convertEncodedLocalPathToFullyUrlEncodedBucketPath(fullPathToFileInsideBucket)
                 .toString().replace('\\', '/');
 
         Mono<FileMetadata> fileMetadataMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
@@ -248,7 +248,16 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
 
             for (Blob blob : blogPage.iterateAll()) {
                 String blobFileName = blob.getName();
-                Path fullBlobFilePathInsideBucket = FileNameSanitizer.convertRawPathToEncodedPath(blobFileName);
+
+                if (blobFileName.indexOf(':') >= 0 || blobFileName.indexOf('\\') >= 0 ||
+                        (blobFileName.startsWith(".data/") && (blobFileName.contains("/c%3D") || blobFileName.contains("/c%253D")))) {
+                    // invalid files
+                    log.warn("Deleting invalid file '" + blobFileName + "' from the bucket" + gsFileSystemRoot.getBucketName());
+                    storage.delete(BlobId.of(gsFileSystemRoot.getBucketName(), blobFileName));
+                    continue;
+                }
+
+                Path fullBlobFilePathInsideBucket = Path.of(blobFileName);
                 Map<String, String> metadata = blob.getMetadata();
                 if (metadata != null && Objects.equals(metadata.get("DQOFileType"), "empty-parquet")) {
                     // ignoring because it is a special empty file to ensure that the schema of an external table could be detected from a parquet file
@@ -432,7 +441,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
         Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
                 (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
                 relativeFilePath;
-        Path urlEncodedPath = FileNameSanitizer.convertEncodedPathToFullyUrlEncodedPath(fullPathToFileInsideBucket);
+        Path urlEncodedPath = FileNameSanitizer.convertEncodedLocalPathToFullyUrlEncodedBucketPath(fullPathToFileInsideBucket);
         String linuxStyleFullFileInBucket = urlEncodedPath.toString().replace('\\', '/');
 
         Mono<FileMetadata> deleteFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
@@ -512,7 +521,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
         Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
                 (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
                 relativeFilePath;
-        Path urlEncodedPath = FileNameSanitizer.convertEncodedPathToFullyUrlEncodedPath(fullPathToFileInsideBucket);
+        Path urlEncodedPath = FileNameSanitizer.convertEncodedLocalPathToFullyUrlEncodedBucketPath(fullPathToFileInsideBucket);
         String linuxStyleFullFileInBucket = urlEncodedPath.toString().replace('\\', '/');
 
         Mono<DownloadFileResponse> downloadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
@@ -566,7 +575,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                         Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
                                 (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
                                 relativeFilePath;
-                        Path urlEncodedPath = FileNameSanitizer.convertEncodedPathToFullyUrlEncodedPath(fullPathToFileInsideBucket);
+                        Path urlEncodedPath = FileNameSanitizer.convertEncodedLocalPathToFullyUrlEncodedBucketPath(fullPathToFileInsideBucket);
                         String linuxStyleFullFileInBucket = urlEncodedPath.toString().replace('\\', '/');
 
                         Path fileName = relativeFilePath.getFileName();

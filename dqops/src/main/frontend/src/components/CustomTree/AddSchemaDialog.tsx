@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
+import React, { useState } from 'react';
+import { useTree } from "../../contexts/treeContext";
+import { CustomTreeNode } from "../../shared/interfaces";
+import { useDecodedParams } from '../../utils';
+import { findTreeNode } from "../../utils/tree";
 import Button from '../Button';
 import Input from '../Input';
-import { CustomTreeNode } from "../../shared/interfaces";
-import { useTree } from "../../contexts/treeContext";
-import { useParams } from "react-router-dom";
-import { findTreeNode } from "../../utils/tree";
 
 interface AddSchemaDialogProps {
   open: boolean;
@@ -20,7 +20,7 @@ const AddSchemaDialog = ({
 }: AddSchemaDialogProps) => {
   const [name, setName] = useState("");
   const { addSchema, treeData } = useTree();
-  const { connection }: { connection: string } = useParams()
+  const { connection }: { connection: string } = useDecodedParams()
 
   const handleSubmit = async () => {
     if (node) {

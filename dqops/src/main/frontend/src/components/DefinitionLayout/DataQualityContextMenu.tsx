@@ -5,7 +5,8 @@ import {
   PopoverContent,
   PopoverHandler
 } from '@material-tailwind/react';
-import SvgIcon from '../SvgIcon';
+import clsx from 'clsx';
+import { useSelector } from 'react-redux';
 import {
   CheckDefinitionListModel,
   CheckDefinitionModel,
@@ -17,15 +18,13 @@ import {
   deleteCheck,
   refreshChecksFolderTree
 } from '../../redux/actions/definition.actions';
-import { ROUTES } from '../../shared/routes';
-import AddFolderDialog from './AddFolderDialog';
-import { ChecksApi } from '../../services/apiClient';
-import CreateCheckDialog from './CreateChecksDialog';
-import clsx from 'clsx';
-import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import { ChecksApi } from '../../services/apiClient';
+import { ROUTES } from '../../shared/routes';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
-import { urlencodeDecoder } from '../../utils';
+import SvgIcon from '../SvgIcon';
+import AddFolderDialog from './AddFolderDialog';
+import CreateCheckDialog from './CreateChecksDialog';
 
 interface RuleContextMenuProps {
   folder?: SensorFolderModel;
@@ -61,7 +60,7 @@ const DataQualityContextMenu = ({
   };
 
   const createCheck = async (fullCheckName: string, body?: CheckDefinitionModel) => {
-    await ChecksApi.createCheck(urlencodeDecoder(fullCheckName), body);
+    await ChecksApi.createCheck(fullCheckName, body);
   };
 
   const openAddNewCheck = () => {
@@ -102,7 +101,7 @@ const DataQualityContextMenu = ({
   };
 
   const deleteChecksFromTree = async () => {
-    await dispatch(deleteCheck(urlencodeDecoder(check?.full_check_name ?? '') ?? '')).then(
+    await dispatch(deleteCheck(check?.full_check_name ?? '')).then(
       () =>dispatch(refreshChecksFolderTree(refreshChecksTreeIndicator ? false : true))
     );
   };

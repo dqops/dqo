@@ -28,7 +28,9 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * Postgresql source connection.
@@ -91,7 +93,11 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
         }
 
         if (postgresqlSpec.getProperties() != null) {
-            dataSourceProperties.putAll(postgresqlSpec.getProperties());
+            dataSourceProperties.putAll(postgresqlSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
         String userName = this.getSecretValueProvider().expandValue(postgresqlSpec.getUser(), secretValueLookupContext);

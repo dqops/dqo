@@ -178,15 +178,15 @@ public class ProviderDialectSettings {
         }
 
         if (StringCheckUtility.containsAny(columnType, "timestamp")) {
-            return DataTypeCategory.datetime_instant;
+            return DataTypeCategory.datetime_timestamp;
         }
 
         if (StringCheckUtility.containsAny(columnType, "varchar", "string", "nvarchar", "char", "nchar", "character")) {
-            return DataTypeCategory.string;
+            return DataTypeCategory.text;
         }
 
         if (StringCheckUtility.containsAny(columnType, "text", "clob", "ntext", "nclob")) {
-            return DataTypeCategory.text;
+            return DataTypeCategory.clob;
         }
 
         if (StringCheckUtility.containsAny(columnType, "varbinary", "binary")) {

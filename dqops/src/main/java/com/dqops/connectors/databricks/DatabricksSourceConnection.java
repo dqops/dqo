@@ -40,6 +40,7 @@ import tech.tablesaw.columns.Column;
 
 import java.sql.Statement;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Databricks source connection.
@@ -93,7 +94,11 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
 
         Properties dataSourceProperties = new Properties();
         if (databricksParametersSpec.getProperties() != null) {
-            dataSourceProperties.putAll(databricksParametersSpec.getProperties());
+            dataSourceProperties.putAll(databricksParametersSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
         String catalog = this.getSecretValueProvider().expandValue(databricksParametersSpec.getCatalog(), secretValueLookupContext);
@@ -116,11 +121,6 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
 
         String password = this.getSecretValueProvider().expandValue(databricksParametersSpec.getPassword(), secretValueLookupContext);
         hikariConfig.setPassword(password);
-
-        String options = this.getSecretValueProvider().expandValue(databricksParametersSpec.getOptions(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(options)) {
-            dataSourceProperties.put("options", options);
-        }
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
@@ -152,11 +152,10 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
      * Lists tables inside a schema. Views are also returned.
      *
      * @param schemaName Schema name.
-     * @param connectionWrapper Connection wrapper with a list of existing tables.
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName, ConnectionWrapper connectionWrapper) {
+    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
 
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SHOW tables FROM ");
@@ -213,7 +212,10 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
      * @return List of table specifications with the column list.
      */
     @Override
-    public List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames, ConnectionWrapper connectionWrapper) {
+    public List<TableSpec> retrieveTableMetadata(String schemaName,
+                                                 List<String> tableNames,
+                                                 ConnectionWrapper connectionWrapper,
+                                                 SecretValueLookupContext secretValueLookupContext) {
         assert !Strings.isNullOrEmpty(schemaName);
 
         try {

@@ -1,8 +1,8 @@
 import React from 'react';
-import ResultBox from './ResultBox';
 import { ComparisonCheckResultModel, TableComparisonModel } from '../../../api';
 import { CheckTypes } from '../../../shared/routes';
-import { useParams } from 'react-router-dom';
+import ResultBox from './ResultBox';
+import { useDecodedParams } from '../../../utils';
 
 interface dataInterface {
   bools: boolean[];
@@ -37,7 +37,7 @@ export default function ResultPanel({
   index,
   bools
 }: dataInterface) {
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const prepareObj = (key: string): ComparisonCheckResultModel => {
     let newKey = '';
 

@@ -368,30 +368,30 @@ http://localhost:8888/api/rules
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    [ {
-	  "rule_name" : "sample_rule",
-	  "full_rule_name" : "sample_target/sample_category/sample_rule",
-	  "custom" : false,
-	  "built_in" : true,
-	  "can_edit" : true
-	}, {
-	  "rule_name" : "sample_rule",
-	  "full_rule_name" : "sample_target/sample_category/sample_rule",
-	  "custom" : false,
-	  "built_in" : true,
-	  "can_edit" : true
-	}, {
-	  "rule_name" : "sample_rule",
-	  "full_rule_name" : "sample_target/sample_category/sample_rule",
-	  "custom" : false,
-	  "built_in" : true,
-	  "can_edit" : true
-	} ]
-    ```
+        ```
+        [ {
+		  "rule_name" : "sample_rule",
+		  "full_rule_name" : "sample_target/sample_category/sample_rule",
+		  "custom" : false,
+		  "built_in" : true,
+		  "can_edit" : true
+		}, {
+		  "rule_name" : "sample_rule",
+		  "full_rule_name" : "sample_target/sample_category/sample_rule",
+		  "custom" : false,
+		  "built_in" : true,
+		  "can_edit" : true
+		}, {
+		  "rule_name" : "sample_rule",
+		  "full_rule_name" : "sample_target/sample_category/sample_rule",
+		  "custom" : false,
+		  "built_in" : true,
+		  "can_edit" : true
+		} ]
+        ```
     
     
 
@@ -415,33 +415,33 @@ http://localhost:8888/api/rules
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		RuleListModel(
-			rule_name='sample_rule',
-			full_rule_name='sample_target/sample_category/sample_rule',
-			custom=False,
-			built_in=True,
-			can_edit=True
-		),
-		RuleListModel(
-			rule_name='sample_rule',
-			full_rule_name='sample_target/sample_category/sample_rule',
-			custom=False,
-			built_in=True,
-			can_edit=True
-		),
-		RuleListModel(
-			rule_name='sample_rule',
-			full_rule_name='sample_target/sample_category/sample_rule',
-			custom=False,
-			built_in=True,
-			can_edit=True
-		)
-	]
-    ```
+        ```
+        [
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			)
+		]
+        ```
     
     
     
@@ -466,33 +466,33 @@ http://localhost:8888/api/rules
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		RuleListModel(
-			rule_name='sample_rule',
-			full_rule_name='sample_target/sample_category/sample_rule',
-			custom=False,
-			built_in=True,
-			can_edit=True
-		),
-		RuleListModel(
-			rule_name='sample_rule',
-			full_rule_name='sample_target/sample_category/sample_rule',
-			custom=False,
-			built_in=True,
-			can_edit=True
-		),
-		RuleListModel(
-			rule_name='sample_rule',
-			full_rule_name='sample_target/sample_category/sample_rule',
-			custom=False,
-			built_in=True,
-			can_edit=True
-		)
-	]
-    ```
+        ```
+        [
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			)
+		]
+        ```
     
     
     
@@ -520,33 +520,33 @@ http://localhost:8888/api/rules
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		RuleListModel(
-			rule_name='sample_rule',
-			full_rule_name='sample_target/sample_category/sample_rule',
-			custom=False,
-			built_in=True,
-			can_edit=True
-		),
-		RuleListModel(
-			rule_name='sample_rule',
-			full_rule_name='sample_target/sample_category/sample_rule',
-			custom=False,
-			built_in=True,
-			can_edit=True
-		),
-		RuleListModel(
-			rule_name='sample_rule',
-			full_rule_name='sample_target/sample_category/sample_rule',
-			custom=False,
-			built_in=True,
-			can_edit=True
-		)
-	]
-    ```
+        ```
+        [
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			)
+		]
+        ```
     
     
     
@@ -574,33 +574,33 @@ http://localhost:8888/api/rules
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    [
-		RuleListModel(
-			rule_name='sample_rule',
-			full_rule_name='sample_target/sample_category/sample_rule',
-			custom=False,
-			built_in=True,
-			can_edit=True
-		),
-		RuleListModel(
-			rule_name='sample_rule',
-			full_rule_name='sample_target/sample_category/sample_rule',
-			custom=False,
-			built_in=True,
-			can_edit=True
-		),
-		RuleListModel(
-			rule_name='sample_rule',
-			full_rule_name='sample_target/sample_category/sample_rule',
-			custom=False,
-			built_in=True,
-			can_edit=True
-		)
-	]
-    ```
+        ```
+        [
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			)
+		]
+        ```
     
     
     
@@ -652,20 +652,20 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "rule_name" : "sample_rule",
-	  "type" : "python",
-	  "java_class_name" : "com.dqops.execution.rules.runners.python.PythonRuleRunner",
-	  "mode" : "current_value",
-	  "custom" : false,
-	  "built_in" : false,
-	  "can_edit" : true
-	}
-    ```
+        ```
+        {
+		  "rule_name" : "sample_rule",
+		  "type" : "python",
+		  "java_class_name" : "com.dqops.execution.rules.runners.python.PythonRuleRunner",
+		  "mode" : "current_value",
+		  "custom" : false,
+		  "built_in" : false,
+		  "can_edit" : true
+		}
+        ```
     
     
 
@@ -690,19 +690,19 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    RuleModel(
-		rule_name='sample_rule',
-		type=RuleRunnerType.PYTHON,
-		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.CURRENT_VALUE,
-		custom=False,
-		built_in=False,
-		can_edit=True
-	)
-    ```
+        ```
+        RuleModel(
+			rule_name='sample_rule',
+			type=RuleRunnerType.PYTHON,
+			java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+			mode=RuleTimeWindowMode.CURRENT_VALUE,
+			custom=False,
+			built_in=False,
+			can_edit=True
+		)
+        ```
     
     
     
@@ -728,19 +728,19 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    RuleModel(
-		rule_name='sample_rule',
-		type=RuleRunnerType.PYTHON,
-		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.CURRENT_VALUE,
-		custom=False,
-		built_in=False,
-		can_edit=True
-	)
-    ```
+        ```
+        RuleModel(
+			rule_name='sample_rule',
+			type=RuleRunnerType.PYTHON,
+			java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+			mode=RuleTimeWindowMode.CURRENT_VALUE,
+			custom=False,
+			built_in=False,
+			can_edit=True
+		)
+        ```
     
     
     
@@ -769,19 +769,19 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    RuleModel(
-		rule_name='sample_rule',
-		type=RuleRunnerType.PYTHON,
-		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.CURRENT_VALUE,
-		custom=False,
-		built_in=False,
-		can_edit=True
-	)
-    ```
+        ```
+        RuleModel(
+			rule_name='sample_rule',
+			type=RuleRunnerType.PYTHON,
+			java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+			mode=RuleTimeWindowMode.CURRENT_VALUE,
+			custom=False,
+			built_in=False,
+			can_edit=True
+		)
+        ```
     
     
     
@@ -810,19 +810,19 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    RuleModel(
-		rule_name='sample_rule',
-		type=RuleRunnerType.PYTHON,
-		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.CURRENT_VALUE,
-		custom=False,
-		built_in=False,
-		can_edit=True
-	)
-    ```
+        ```
+        RuleModel(
+			rule_name='sample_rule',
+			type=RuleRunnerType.PYTHON,
+			java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+			mode=RuleTimeWindowMode.CURRENT_VALUE,
+			custom=False,
+			built_in=False,
+			can_edit=True
+		)
+        ```
     
     
     
@@ -867,63 +867,63 @@ http://localhost:8888/api/definitions/rules
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
     
-    ```js
-    {
-	  "rules" : [ {
-	    "rule_name" : "sample_rule",
-	    "full_rule_name" : "sample_target/sample_category/sample_rule",
-	    "custom" : false,
-	    "built_in" : true,
-	    "can_edit" : true
-	  }, {
-	    "rule_name" : "sample_rule_1",
-	    "full_rule_name" : "sample_target/sample_category/sample_rule_1",
-	    "custom" : false,
-	    "built_in" : true,
-	    "can_edit" : true
-	  }, {
-	    "rule_name" : "sample_rule_2",
-	    "full_rule_name" : "sample_target/sample_category/sample_rule_2",
-	    "custom" : false,
-	    "built_in" : true,
-	    "can_edit" : true
-	  }, {
-	    "rule_name" : "sample_rule_3",
-	    "full_rule_name" : "sample_target/sample_category/sample_rule_3",
-	    "custom" : false,
-	    "built_in" : true,
-	    "can_edit" : true
-	  } ],
-	  "all_rules" : [ {
-	    "rule_name" : "sample_rule",
-	    "full_rule_name" : "sample_target/sample_category/sample_rule",
-	    "custom" : false,
-	    "built_in" : true,
-	    "can_edit" : true
-	  }, {
-	    "rule_name" : "sample_rule_1",
-	    "full_rule_name" : "sample_target/sample_category/sample_rule_1",
-	    "custom" : false,
-	    "built_in" : true,
-	    "can_edit" : true
-	  }, {
-	    "rule_name" : "sample_rule_2",
-	    "full_rule_name" : "sample_target/sample_category/sample_rule_2",
-	    "custom" : false,
-	    "built_in" : true,
-	    "can_edit" : true
-	  }, {
-	    "rule_name" : "sample_rule_3",
-	    "full_rule_name" : "sample_target/sample_category/sample_rule_3",
-	    "custom" : false,
-	    "built_in" : true,
-	    "can_edit" : true
-	  } ]
-	}
-    ```
+        ```
+        {
+		  "rules" : [ {
+		    "rule_name" : "sample_rule",
+		    "full_rule_name" : "sample_target/sample_category/sample_rule",
+		    "custom" : false,
+		    "built_in" : true,
+		    "can_edit" : true
+		  }, {
+		    "rule_name" : "sample_rule_1",
+		    "full_rule_name" : "sample_target/sample_category/sample_rule_1",
+		    "custom" : false,
+		    "built_in" : true,
+		    "can_edit" : true
+		  }, {
+		    "rule_name" : "sample_rule_2",
+		    "full_rule_name" : "sample_target/sample_category/sample_rule_2",
+		    "custom" : false,
+		    "built_in" : true,
+		    "can_edit" : true
+		  }, {
+		    "rule_name" : "sample_rule_3",
+		    "full_rule_name" : "sample_target/sample_category/sample_rule_3",
+		    "custom" : false,
+		    "built_in" : true,
+		    "can_edit" : true
+		  } ],
+		  "all_rules" : [ {
+		    "rule_name" : "sample_rule",
+		    "full_rule_name" : "sample_target/sample_category/sample_rule",
+		    "custom" : false,
+		    "built_in" : true,
+		    "can_edit" : true
+		  }, {
+		    "rule_name" : "sample_rule_1",
+		    "full_rule_name" : "sample_target/sample_category/sample_rule_1",
+		    "custom" : false,
+		    "built_in" : true,
+		    "can_edit" : true
+		  }, {
+		    "rule_name" : "sample_rule_2",
+		    "full_rule_name" : "sample_target/sample_category/sample_rule_2",
+		    "custom" : false,
+		    "built_in" : true,
+		    "can_edit" : true
+		  }, {
+		    "rule_name" : "sample_rule_3",
+		    "full_rule_name" : "sample_target/sample_category/sample_rule_3",
+		    "custom" : false,
+		    "built_in" : true,
+		    "can_edit" : true
+		  } ]
+		}
+        ```
     
     
 
@@ -947,45 +947,45 @@ http://localhost:8888/api/definitions/rules
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    RuleFolderModel(
-		folders={
-		
-		},
-		rules=[
-			RuleListModel(
-				rule_name='sample_rule',
-				full_rule_name='sample_target/sample_category/sample_rule',
-				custom=False,
-				built_in=True,
-				can_edit=True
-			),
-			RuleListModel(
-				rule_name='sample_rule_1',
-				full_rule_name='sample_target/sample_category/sample_rule_1',
-				custom=False,
-				built_in=True,
-				can_edit=True
-			),
-			RuleListModel(
-				rule_name='sample_rule_2',
-				full_rule_name='sample_target/sample_category/sample_rule_2',
-				custom=False,
-				built_in=True,
-				can_edit=True
-			),
-			RuleListModel(
-				rule_name='sample_rule_3',
-				full_rule_name='sample_target/sample_category/sample_rule_3',
-				custom=False,
-				built_in=True,
-				can_edit=True
-			)
-		]
-	)
-    ```
+        ```
+        RuleFolderModel(
+			folders={
+			
+			},
+			rules=[
+				RuleListModel(
+					rule_name='sample_rule',
+					full_rule_name='sample_target/sample_category/sample_rule',
+					custom=False,
+					built_in=True,
+					can_edit=True
+				),
+				RuleListModel(
+					rule_name='sample_rule_1',
+					full_rule_name='sample_target/sample_category/sample_rule_1',
+					custom=False,
+					built_in=True,
+					can_edit=True
+				),
+				RuleListModel(
+					rule_name='sample_rule_2',
+					full_rule_name='sample_target/sample_category/sample_rule_2',
+					custom=False,
+					built_in=True,
+					can_edit=True
+				),
+				RuleListModel(
+					rule_name='sample_rule_3',
+					full_rule_name='sample_target/sample_category/sample_rule_3',
+					custom=False,
+					built_in=True,
+					can_edit=True
+				)
+			]
+		)
+        ```
     
     
     
@@ -1010,45 +1010,45 @@ http://localhost:8888/api/definitions/rules
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    RuleFolderModel(
-		folders={
-		
-		},
-		rules=[
-			RuleListModel(
-				rule_name='sample_rule',
-				full_rule_name='sample_target/sample_category/sample_rule',
-				custom=False,
-				built_in=True,
-				can_edit=True
-			),
-			RuleListModel(
-				rule_name='sample_rule_1',
-				full_rule_name='sample_target/sample_category/sample_rule_1',
-				custom=False,
-				built_in=True,
-				can_edit=True
-			),
-			RuleListModel(
-				rule_name='sample_rule_2',
-				full_rule_name='sample_target/sample_category/sample_rule_2',
-				custom=False,
-				built_in=True,
-				can_edit=True
-			),
-			RuleListModel(
-				rule_name='sample_rule_3',
-				full_rule_name='sample_target/sample_category/sample_rule_3',
-				custom=False,
-				built_in=True,
-				can_edit=True
-			)
-		]
-	)
-    ```
+        ```
+        RuleFolderModel(
+			folders={
+			
+			},
+			rules=[
+				RuleListModel(
+					rule_name='sample_rule',
+					full_rule_name='sample_target/sample_category/sample_rule',
+					custom=False,
+					built_in=True,
+					can_edit=True
+				),
+				RuleListModel(
+					rule_name='sample_rule_1',
+					full_rule_name='sample_target/sample_category/sample_rule_1',
+					custom=False,
+					built_in=True,
+					can_edit=True
+				),
+				RuleListModel(
+					rule_name='sample_rule_2',
+					full_rule_name='sample_target/sample_category/sample_rule_2',
+					custom=False,
+					built_in=True,
+					can_edit=True
+				),
+				RuleListModel(
+					rule_name='sample_rule_3',
+					full_rule_name='sample_target/sample_category/sample_rule_3',
+					custom=False,
+					built_in=True,
+					can_edit=True
+				)
+			]
+		)
+        ```
     
     
     
@@ -1076,45 +1076,45 @@ http://localhost:8888/api/definitions/rules
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    RuleFolderModel(
-		folders={
-		
-		},
-		rules=[
-			RuleListModel(
-				rule_name='sample_rule',
-				full_rule_name='sample_target/sample_category/sample_rule',
-				custom=False,
-				built_in=True,
-				can_edit=True
-			),
-			RuleListModel(
-				rule_name='sample_rule_1',
-				full_rule_name='sample_target/sample_category/sample_rule_1',
-				custom=False,
-				built_in=True,
-				can_edit=True
-			),
-			RuleListModel(
-				rule_name='sample_rule_2',
-				full_rule_name='sample_target/sample_category/sample_rule_2',
-				custom=False,
-				built_in=True,
-				can_edit=True
-			),
-			RuleListModel(
-				rule_name='sample_rule_3',
-				full_rule_name='sample_target/sample_category/sample_rule_3',
-				custom=False,
-				built_in=True,
-				can_edit=True
-			)
-		]
-	)
-    ```
+        ```
+        RuleFolderModel(
+			folders={
+			
+			},
+			rules=[
+				RuleListModel(
+					rule_name='sample_rule',
+					full_rule_name='sample_target/sample_category/sample_rule',
+					custom=False,
+					built_in=True,
+					can_edit=True
+				),
+				RuleListModel(
+					rule_name='sample_rule_1',
+					full_rule_name='sample_target/sample_category/sample_rule_1',
+					custom=False,
+					built_in=True,
+					can_edit=True
+				),
+				RuleListModel(
+					rule_name='sample_rule_2',
+					full_rule_name='sample_target/sample_category/sample_rule_2',
+					custom=False,
+					built_in=True,
+					can_edit=True
+				),
+				RuleListModel(
+					rule_name='sample_rule_3',
+					full_rule_name='sample_target/sample_category/sample_rule_3',
+					custom=False,
+					built_in=True,
+					can_edit=True
+				)
+			]
+		)
+        ```
     
     
     
@@ -1142,45 +1142,45 @@ http://localhost:8888/api/definitions/rules
     ```
 
     
-    **Return value sample**
+    ??? example "Expand to see the returned result"
     
-    ```python
-    RuleFolderModel(
-		folders={
-		
-		},
-		rules=[
-			RuleListModel(
-				rule_name='sample_rule',
-				full_rule_name='sample_target/sample_category/sample_rule',
-				custom=False,
-				built_in=True,
-				can_edit=True
-			),
-			RuleListModel(
-				rule_name='sample_rule_1',
-				full_rule_name='sample_target/sample_category/sample_rule_1',
-				custom=False,
-				built_in=True,
-				can_edit=True
-			),
-			RuleListModel(
-				rule_name='sample_rule_2',
-				full_rule_name='sample_target/sample_category/sample_rule_2',
-				custom=False,
-				built_in=True,
-				can_edit=True
-			),
-			RuleListModel(
-				rule_name='sample_rule_3',
-				full_rule_name='sample_target/sample_category/sample_rule_3',
-				custom=False,
-				built_in=True,
-				can_edit=True
-			)
-		]
-	)
-    ```
+        ```
+        RuleFolderModel(
+			folders={
+			
+			},
+			rules=[
+				RuleListModel(
+					rule_name='sample_rule',
+					full_rule_name='sample_target/sample_category/sample_rule',
+					custom=False,
+					built_in=True,
+					can_edit=True
+				),
+				RuleListModel(
+					rule_name='sample_rule_1',
+					full_rule_name='sample_target/sample_category/sample_rule_1',
+					custom=False,
+					built_in=True,
+					can_edit=True
+				),
+				RuleListModel(
+					rule_name='sample_rule_2',
+					full_rule_name='sample_target/sample_category/sample_rule_2',
+					custom=False,
+					built_in=True,
+					can_edit=True
+				),
+				RuleListModel(
+					rule_name='sample_rule_3',
+					full_rule_name='sample_target/sample_category/sample_rule_3',
+					custom=False,
+					built_in=True,
+					can_edit=True
+				)
+			]
+		)
+        ```
     
     
     
@@ -1214,7 +1214,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of rule definitions|*[RuleModel](../models/rules.md#rulemodel)*| |
+|Rule model|*[RuleModel](../models/rules.md#rulemodel)*| |
 
 
 

@@ -18,17 +18,13 @@ package com.dqops.metadata.id;
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
-import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
-import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
 import com.dqops.checks.custom.CustomCheckSpecMap;
-import com.dqops.checks.defaults.DefaultDailyMonitoringObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultMonthlyMonitoringObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
-import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
-import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
-import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import com.dqops.checks.table.monitoring.TableMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.partitioned.TablePartitionedCheckCategoriesSpec;
 import com.dqops.metadata.comments.CommentSpec;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
@@ -38,6 +34,11 @@ import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpe
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.dashboards.*;
+import com.dqops.metadata.defaultchecks.column.*;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
+import com.dqops.metadata.defaultchecks.table.TargetTablePatternSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapperImpl;
@@ -64,7 +65,6 @@ import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
-import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapper;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.*;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
@@ -453,37 +453,37 @@ public interface HierarchyNodeResultVisitor<P, R> {
 
     /**
      * Accepts a container of table level monitoring checks (daily, monthly, etc.)
-     * @param tableMonitoringChecksSpec Table level monitoring checks container.
+     * @param tableMonitoringCheckCategoriesSpec Table level monitoring checks container.
      * @param parameter                Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(TableMonitoringChecksSpec tableMonitoringChecksSpec, P parameter);
+    R accept(TableMonitoringCheckCategoriesSpec tableMonitoringCheckCategoriesSpec, P parameter);
 
     /**
      * Accepts a container of table level partitioned checks (daily, monthly, etc.)
      *
-     * @param tablePartitionedChecksRootSpec Table level partitioned checks container.
+     * @param tablePartitionedCheckCategoriesSpec Table level partitioned checks container.
      * @param parameter                      Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(TablePartitionedChecksRootSpec tablePartitionedChecksRootSpec, P parameter);
+    R accept(TablePartitionedCheckCategoriesSpec tablePartitionedCheckCategoriesSpec, P parameter);
 
     /**
      * Accepts a container of column level monitoring checks (daily, monthly, etc.)
-     * @param columnMonitoringChecksRootSpec Column level monitoring checks container.
+     * @param columnMonitoringCheckCategoriesSpec Column level monitoring checks container.
      * @param parameter                     Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(ColumnMonitoringChecksRootSpec columnMonitoringChecksRootSpec, P parameter);
+    R accept(ColumnMonitoringCheckCategoriesSpec columnMonitoringCheckCategoriesSpec, P parameter);
 
     /**
      * Accepts a container of column level partitioned checks (daily, monthly, etc.)
      *
-     * @param columnPartitionedChecksRootSpec Column level partitioned checks container.
+     * @param columnPartitionedCheckCategoriesSpec Column level partitioned checks container.
      * @param parameter                       Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(ColumnPartitionedChecksRootSpec columnPartitionedChecksRootSpec, P parameter);
+    R accept(ColumnPartitionedCheckCategoriesSpec columnPartitionedCheckCategoriesSpec, P parameter);
 
     /**
      * Accepts a container of timestamp related columns on a table level.
@@ -691,41 +691,6 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(AbstractComparisonCheckCategorySpecMap<?> abstractComparisonCheckCategorySpecMap, P parameter);
 
     /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultObservabilityChecksSpec Default configuration of observability checks.
-     * @param parameter                             Visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(DefaultObservabilityChecksSpec defaultObservabilityChecksSpec, P parameter);
-
-    /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultProfilingObservabilityCheckSettingsSpec Default configuration of observability checks.
-     * @param parameter                                      Visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(DefaultProfilingObservabilityCheckSettingsSpec defaultProfilingObservabilityCheckSettingsSpec, P parameter);
-
-    /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     * @param defaultDailyMonitoringObservabilityCheckSettingsSpec Default configuration of observability checks.
-     * @param parameter                                           Visitor's parameter.
-     * @return Accept's result.
-     */
-
-    R accept(DefaultDailyMonitoringObservabilityCheckSettingsSpec defaultDailyMonitoringObservabilityCheckSettingsSpec, P parameter);
-
-    /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     * @param defaultMonthlyMonitoringObservabilityCheckSettingsSpec Default configuration of observability checks.
-     * @param parameter                                             Visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(DefaultMonthlyMonitoringObservabilityCheckSettingsSpec defaultMonthlyMonitoringObservabilityCheckSettingsSpec, P parameter);
-
-    /**
      * Accepts a configuration of a pair of column names that are used for joining and grouping.
      *
      * @param tableComparisonGroupingColumnsPairSpec Configuration of a pair of columns used for grouping and joining in table comparison checks.
@@ -766,14 +731,6 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(MonitoringSchedulesWrapper monitoringSchedulesWrapper, P parameter);
-
-    /**
-     * Accepts a default observability check.
-     * @param defaultObservabilityCheckWrapper Default observability check wrapper.
-     * @param parameter Visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(DefaultObservabilityCheckWrapper defaultObservabilityCheckWrapper, P parameter);
 
     /**
      * Accepts a default incident webhook notifications.
@@ -844,4 +801,65 @@ public interface HierarchyNodeResultVisitor<P, R> {
      */
     R accept(FilePathListSpec filePathListSpec, P parameter);
 
+    /**
+     * Accepts a default configuration of column observability checks specification.
+     *
+     * @param columnDefaultChecksPatternSpec Column observability default checks specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    R accept(ColumnDefaultChecksPatternSpec columnDefaultChecksPatternSpec, P parameter);
+
+    /**
+     * Accepts a default configuration of table observability checks specification.
+     *
+     * @param tableDefaultChecksPatternSpec Table observability default checks specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    R accept(TableDefaultChecksPatternSpec tableDefaultChecksPatternSpec, P parameter);
+
+    /**
+     * Accepts a default configuration of table observability checks wrapper.
+     *
+     * @param tableDefaultChecksPatternWrapper Table observability default checks specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    R accept(TableDefaultChecksPatternWrapper tableDefaultChecksPatternWrapper, P parameter);
+
+    /**
+     * Accepts a list of default configuration of table observability checks wrappers.
+     *
+     * @param tableDefaultChecksPatternWrappers Table observability default checks list.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    R accept(TableDefaultChecksPatternList tableDefaultChecksPatternWrappers, P parameter);
+
+    /**
+     * Accepts a default configuration of column observability checks wrapper.
+     *
+     * @param columnDefaultChecksPatternWrapper Column observability default checks specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    R accept(ColumnDefaultChecksPatternWrapper columnDefaultChecksPatternWrapper, P parameter);
+
+    /**
+     * Accepts a default configuration of column observability checks wrapper.
+     *
+     * @param columnDefaultChecksPatternWrappers Column observability default checks specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    R accept(ColumnDefaultChecksPatternList columnDefaultChecksPatternWrappers, P parameter);
+
+    /**
+     * Accept a table filter for a default check pattern.
+     * @param targetTablePatternSpec Table pattern specification.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(TargetTablePatternSpec targetTablePatternSpec, P parameter);
 }

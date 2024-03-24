@@ -1,23 +1,24 @@
+import { isEqual } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { DataSourcesApi } from '../../../services/apiClient';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   DqoJobHistoryEntryModelStatusEnum,
   SchemaRemoteModel
 } from '../../../api';
-import SvgIcon from '../../SvgIcon';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../../redux/actions/source.actions';
+import { IRootState } from '../../../redux/reducers';
+import { DataSourcesApi } from '../../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
 import Button from '../../Button';
 import Loader from '../../Loader';
+import SvgIcon from '../../SvgIcon';
 import ConnectionActionGroup from './ConnectionActionGroup';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
-import { isEqual } from 'lodash';
-import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../../shared/routes';
-import { addFirstLevelTab } from '../../../redux/actions/source.actions';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
 
 const SourceSchemasView = () => {
-  const { connection }: { connection: string } = useParams();
+  const { connection }: { connection: string } = useDecodedParams();
   const [loading, setLoading] = useState(false);
   const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([]);
   const [error, setError] = useState<string>();
@@ -81,7 +82,7 @@ const SourceSchemasView = () => {
   };
 
   return (
-    <div className="py-4 px-8">
+    <div className="py-4 px-8 text-sm">
       <ConnectionActionGroup />
       {loading ? (
         <div className="flex justify-center h-100">
@@ -91,7 +92,7 @@ const SourceSchemasView = () => {
         <table className="w-full">
           <thead>
             <tr>
-              <th className="py-2 pr-4 text-left">Source Schema Name</th>
+              <th className="py-2 pr-4 text-left">Source schema name</th>
               <th className="py-2 px-4 text-left">Import status</th>
               <th />
             </tr>
@@ -109,7 +110,7 @@ const SourceSchemasView = () => {
                     className={
                       item.alreadyImported ? 'text-primary' : 'text-red-700'
                     }
-                    width={30}
+                    width={22}
                     height={22}
                   />
                 </td>

@@ -10,6 +10,7 @@ import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -79,7 +80,11 @@ public class SingleStoreDbSourceConnection {
 
         Properties dataSourceProperties = new Properties();
         if (mysqlParametersSpec.getProperties() != null) {
-            dataSourceProperties.putAll(mysqlParametersSpec.getProperties());
+            dataSourceProperties.putAll(mysqlParametersSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
 
@@ -102,11 +107,6 @@ public class SingleStoreDbSourceConnection {
         Boolean useSsl = singleStoreDbParametersSpec.isUseSsl();
         if (useSsl) {
             dataSourceProperties.put("useSsl", useSsl);
-        }
-
-        String options =  secretValueProvider.expandValue(mysqlParametersSpec.getOptions(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(options)) {
-            dataSourceProperties.put("options", options);
         }
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);

@@ -1,33 +1,29 @@
+import { Tooltip } from '@material-tailwind/react';
+import { AxiosResponse } from 'axios';
+import clsx from 'clsx';
+import { groupBy } from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useRouteMatch } from 'react-router-dom';
+import { ConnectionModel } from '../../../api';
 import {
   checkTypesToJobTemplateKey,
   useTree
 } from '../../../contexts/treeContext';
-import { groupBy } from 'lodash';
-import { TREE_LEVEL } from '../../../shared/enums';
-import SvgIcon from '../../SvgIcon';
-import { CustomTreeNode } from '../../../shared/interfaces';
-import clsx from 'clsx';
-import { Tooltip } from '@material-tailwind/react';
-import ContextMenu from '../../CustomTree/ContextMenu';
-import ConfirmDialog from '../../CustomTree/ConfirmDialog';
-import { CheckTypes, ROUTES } from '../../../shared/routes';
-import { useSelector } from 'react-redux';
-import { getFirstLevelActiveTab } from '../../../redux/selectors';
-import { useParams, useRouteMatch } from 'react-router-dom';
-import { findTreeNode } from '../../../utils/tree';
-import { AxiosResponse } from 'axios';
-import {
-  ConnectionModel,
-  DqoJobHistoryEntryModel,
-  DqoJobHistoryEntryModelJobTypeEnum,
-  DqoJobHistoryEntryModelStatusEnum
-} from '../../../api';
-import { ConnectionApiClient } from '../../../services/apiClient';
-import AddColumnDialog from '../../CustomTree/AddColumnDialog';
-import AddTableDialog from '../../CustomTree/AddTableDialog';
-import AddSchemaDialog from '../../CustomTree/AddSchemaDialog';
 import { IRootState } from '../../../redux/reducers';
+import { getFirstLevelActiveTab } from '../../../redux/selectors';
+import { ConnectionApiClient } from '../../../services/apiClient';
+import { TREE_LEVEL } from '../../../shared/enums';
+import { CustomTreeNode } from '../../../shared/interfaces';
+import { CheckTypes, ROUTES } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
+import { findTreeNode } from '../../../utils/tree';
+import AddColumnDialog from '../../CustomTree/AddColumnDialog';
+import AddSchemaDialog from '../../CustomTree/AddSchemaDialog';
+import AddTableDialog from '../../CustomTree/AddTableDialog';
+import ConfirmDialog from '../../CustomTree/ConfirmDialog';
+import ContextMenu from '../../CustomTree/ContextMenu';
+import SvgIcon from '../../SvgIcon';
 
 const Tree = () => {
   const {
@@ -42,7 +38,7 @@ const Tree = () => {
     refreshNode,
     setTreeData
   } = useTree();
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedNode, setSelectedNode] = useState<CustomTreeNode>();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -51,35 +47,21 @@ const Tree = () => {
   const [addColumnDialogOpen, setAddColumnDialogOpen] = useState(false);
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
-  const { job_dictionary_state } = useSelector(
+  const { job_dictionary_state, advisorJobId } = useSelector(
     (state: IRootState) => state.job || {}
   );
-
   useEffect(() => {
-    const jobs = Object.values(job_dictionary_state).filter(
-      (item) =>
-        item.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_tables
-    );
+    if (advisorJobId && advisorJobId !== 0) {
+      const job = job_dictionary_state[advisorJobId] ?? {};
+      const id = job?.parameters?.importTableParameters?.connectionName ?? '';
 
-    jobs.forEach((job: DqoJobHistoryEntryModel) => {
-      const key = (job?.jobId?.jobId || 0).toString();
-      const str = localStorage.getItem(key);
-      if (
-        str !== DqoJobHistoryEntryModelStatusEnum.finished &&
-        job.status == DqoJobHistoryEntryModelStatusEnum.finished
-      ) {
-        localStorage.setItem(key, DqoJobHistoryEntryModelStatusEnum.finished);
+      const schemaNode = findTreeNode(treeData, id);
 
-        const id = [
-          job.parameters?.importTableParameters?.connectionName,
-          job.parameters?.importTableParameters?.schemaName
-        ].join('.');
-        const schemaNode = findTreeNode(treeData, id);
-
+      if (schemaNode?.open === true) {
         refreshNode(schemaNode, true);
       }
-    });
-  }, [job_dictionary_state]);
+    }
+  }, [advisorJobId, job_dictionary_state[advisorJobId]]);
 
   const handleNodeClick = (node: CustomTreeNode) => {
     switchTab(node, checkTypes);
@@ -343,33 +325,87 @@ const Tree = () => {
     setAddSchemaDialogOpen(false);
     setSelectedNode(undefined);
   };
-
+   
   const renderIcon = (node: CustomTreeNode) => {
     if (
       node.level === TREE_LEVEL.TABLE_INCIDENTS ||
       node.level === TREE_LEVEL.CHECK ||
       (node.level === TREE_LEVEL.COLUMN && checkTypes === CheckTypes.SOURCES)
     ) {
-      return <div className="w-4 min-w-4 shrink-0" />;
+      return <div className="w-4 min-w-4 shrink-0 mr-1" />;
     }
     if (loadingNodes[node.id]) {
       return (
         <SvgIcon
-          className="w-4 min-w-4 cursor-pointer shrink-0 animate-spin"
+          className="w-4 min-w-4 cursor-pointer shrink-0 animate-spin mr-1"
           name="spinner"
         />
       );
     }
     return (
-      <SvgIcon
-        className="w-4 min-w-4 cursor-pointer shrink-0"
-        name={!node.open ? 'arrow-alt-right' : 'arrow-alt-down'}
-        onClick={() => {
-          !(node.parsingYamlError && node.parsingYamlError.length > 0)
-            ? toggleOpenNode(node.id)
-            : undefined;
-        }}
-      />
+      <div
+        className="
+      w-4 min-w-4 cursor-pointer shrink-0 relative mr-1"
+      >
+        <div
+          className="w-7 h-6 min-w-7 min-h-6 absolute top-1.5"
+          style={{ right: '-5px' }}
+          onClick={() => {
+            !(node.parsingYamlError && node.parsingYamlError.length > 0)
+              ? toggleOpenNode(node.id)
+              : undefined;
+          }}
+        >
+          <SvgIcon
+            className="w-4 min-w-4 cursor-pointer shrink-0 absolute right-1"
+            name={!node.open ? 'arrow-alt-right' : 'arrow-alt-down'}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const renderParsingYamlErrorToolTip = (node: CustomTreeNode) => {
+    return (
+      <Tooltip
+        content={node.parsingYamlError}
+        className="max-w-120 z-50"
+        placement="right-start"
+      >
+        <div
+          style={{
+            position: 'absolute',
+            right: '30px',
+            top: '-9px',
+            borderRadius: '3px'
+          }}
+          className="bg-white"
+        >
+          <SvgIcon name="warning" className="w-5 h-5" />
+        </div>
+      </Tooltip>
+    );
+  };
+
+  const renderErrorMessageToolTip = (node: CustomTreeNode) => {
+    return (
+      <Tooltip
+        content={node.error_message}
+        className="max-w-120 z-50"
+        placement="right-start"
+      >
+        <div
+          style={{
+            position: 'absolute',
+            right: '30px',
+            top: '-9px',
+            borderRadius: '3px'
+          }}
+        >
+          <SvgIcon name="warning-generic" className="w-5 h-5 text-yellow-600" />{' '}
+          {/* text-[#e0ca00] */}
+        </div>
+      </Tooltip>
     );
   };
 
@@ -378,8 +414,9 @@ const Tree = () => {
       <div style={{ paddingLeft: deep ? 16 : 0 }}>
         <div
           className={clsx(
-            'px-2 cursor-pointer flex space-x-1 hover:bg-gray-100  mb-0.5',
+            'px-2 cursor-pointer flex  hover:bg-gray-100  mb-0.5',
             activeTab === node.id ? 'bg-gray-100' : '',
+            node.error_message !== undefined ? 'text-[#797500]' : '',
             node.level === TREE_LEVEL.TABLE &&
               checkTypes === CheckTypes.PARTITIONED &&
               node.configured
@@ -416,25 +453,13 @@ const Tree = () => {
                   {node.label}
                 </div>
                 <div className="relative ">
-                  {node.parsingYamlError && node.parsingYamlError.length > 0 ? (
-                    <Tooltip
-                      content={node.parsingYamlError}
-                      className="max-w-120 z-50"
-                      placement="right-start"
-                    >
-                      <div
-                        style={{
-                          position: 'absolute',
-                          right: '30px',
-                          top: '-9px',
-                          borderRadius: '3px'
-                        }}
-                        className="bg-white"
-                      >
-                        <SvgIcon name="warning" className="w-5 h-5" />
-                      </div>
-                    </Tooltip>
-                  ) : null}
+                  {node.parsingYamlError && node.parsingYamlError.length > 0
+                    ? renderParsingYamlErrorToolTip(node)
+                    : null}
+
+                  {node.error_message && node.error_message.length > 0
+                    ? renderErrorMessageToolTip(node)
+                    : null}
                 </div>
                 <ContextMenu
                   node={node}

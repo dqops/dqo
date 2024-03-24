@@ -53,8 +53,16 @@
     "description" : "Rest API controller that operates on data sources that are not yet imported, testing connections or retrieving the metadata (schemas and tables).",
     "extensions" : { }
   }, {
+    "name" : "DefaultColumnCheckPatterns",
+    "description" : "Operations for managing the configuration of the default column-level checks for columns matching a pattern.",
+    "extensions" : { }
+  }, {
     "name" : "Defaults",
     "description" : "Default settings management for configuring the default data quality checks that are configured for all imported tables and columns.",
+    "extensions" : { }
+  }, {
+    "name" : "DefaultTableCheckPatterns",
+    "description" : "Operations for managing the configuration of the default table-level checks for tables matching a pattern.",
     "extensions" : { }
   }, {
     "name" : "Dictionaries",
@@ -15721,12 +15729,222 @@
       },
       "extensions" : { }
     },
-    "api/defaults/defaultchecks/dataobservability/monitoring/daily/column" : {
+    "api/default/checks/column" : {
       "get" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "getDefaultDataObservabilityDailyMonitoringColumnChecks",
-        "description" : "Returns UI model to show and edit the default configuration of the daily monitoring (Data Observability and monitoring) checks that are configured for all imported columns on a column level.",
-        "operationId" : "getDefaultDataObservabilityDailyMonitoringColumnChecks",
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "getAllDefaultColumnChecksPatterns",
+        "description" : "Returns a flat list of all column-level default check patterns configured for this instance. Default checks are applied on columns dynamically.",
+        "operationId" : "getAllDefaultColumnChecksPatterns",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/DefaultColumnChecksPatternListModel",
+                    "extensions" : { },
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
+    "api/default/checks/column/{patternName}" : {
+      "get" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "getDefaultColumnChecksPattern",
+        "description" : "Returns a default checks pattern definition as a full specification object",
+        "operationId" : "getDefaultColumnChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Column pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DefaultColumnChecksPatternModel",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "put" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "updateDefaultColumnChecksPattern",
+        "description" : "Updates an default column-level checks pattern by saving a full specification object",
+        "operationId" : "updateDefaultColumnChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "requestBody" : {
+          "description" : "Default checks pattern model",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DefaultColumnChecksPatternModel",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : false,
+          "extensions" : { }
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Default column-level checks pattern successfully updated",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : {
+          "x-codegen-request-body-name" : "body"
+        }
+      },
+      "post" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "createDefaultColumnChecksPattern",
+        "description" : "Creates (adds) a new default column-level checks pattern configuration by saving a full specification object.",
+        "operationId" : "createDefaultColumnChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "requestBody" : {
+          "description" : "Default checks pattern model",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DefaultColumnChecksPatternModel",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : false,
+          "extensions" : { }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "New checks pattern successfully created",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : {
+          "x-codegen-request-body-name" : "body"
+        }
+      },
+      "delete" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "deleteDefaultColumnChecksPattern",
+        "description" : "Deletes a default column-level checks pattern",
+        "operationId" : "deleteDefaultColumnChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Default column-level checks pattern successfully deleted",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
+    "api/default/checks/column/{patternName}/monitoring/daily" : {
+      "get" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "getDefaultMonitoringDailyColumnChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the daily monitoring checks that are configured for a check pattern on a column level.",
+        "operationId" : "getDefaultMonitoringDailyColumnChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -15748,12 +15966,25 @@
         "extensions" : { }
       },
       "put" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "updateDefaultDataObservabilityDailyMonitoringColumnChecks",
-        "description" : "New configuration of the default daily monitoring (data observability) checks on a column level. These checks will be applied on new columns.",
-        "operationId" : "updateDefaultDataObservabilityDailyMonitoringColumnChecks",
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "updateDefaultMonitoringDailyColumnChecksPattern",
+        "description" : "New configuration of the default daily monitoring checks on a column level. These checks will be applied to columns.",
+        "operationId" : "updateDefaultMonitoringDailyColumnChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
         "requestBody" : {
-          "description" : "Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration",
+          "description" : "Model with the changes to be applied to the data quality daily monitoring checks configuration",
           "content" : {
             "application/json" : {
               "schema" : {
@@ -15768,7 +15999,7 @@
         },
         "responses" : {
           "204" : {
-            "description" : "The default configuration of daily monitoring (daily data observability) checks successfully updated.",
+            "description" : "The default configuration of daily monitoring checks successfully updated.",
             "content" : { },
             "extensions" : { }
           }
@@ -15782,12 +16013,25 @@
       },
       "extensions" : { }
     },
-    "api/defaults/defaultchecks/dataobservability/monitoring/daily/table" : {
+    "api/default/checks/column/{patternName}/monitoring/monthly" : {
       "get" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "getDefaultDataObservabilityDailyMonitoringTableChecks",
-        "description" : "Returns UI model to show and edit the default configuration of the daily monitoring (Data Observability and monitoring) checks that are configured for all imported tables on a table level.",
-        "operationId" : "getDefaultDataObservabilityDailyMonitoringTableChecks",
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "getDefaultMonitoringMonthlyColumnChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the monthly monitoring checks that are configured for a check pattern on a column level.",
+        "operationId" : "getDefaultMonitoringMonthlyColumnChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -15809,12 +16053,25 @@
         "extensions" : { }
       },
       "put" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "updateDefaultDataObservabilityDailyMonitoringTableChecks",
-        "description" : "New configuration of the default daily monitoring (data observability) checks on a table level. These checks will be applied on new tables.",
-        "operationId" : "updateDefaultDataObservabilityDailyMonitoringTableChecks",
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "updateDefaultMonitoringMonthlyColumnChecksPattern",
+        "description" : "New configuration of the default monthly monitoring checks on a column level. These checks will be applied to columns.",
+        "operationId" : "updateDefaultMonitoringMonthlyColumnChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
         "requestBody" : {
-          "description" : "Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration",
+          "description" : "Model with the changes to be applied to the data quality monthly monitoring checks configuration",
           "content" : {
             "application/json" : {
               "schema" : {
@@ -15829,7 +16086,7 @@
         },
         "responses" : {
           "204" : {
-            "description" : "The default configuration of daily monitoring (daily data observability) checks successfully updated.",
+            "description" : "The default configuration of monthly monitoring checks successfully updated.",
             "content" : { },
             "extensions" : { }
           }
@@ -15843,12 +16100,25 @@
       },
       "extensions" : { }
     },
-    "api/defaults/defaultchecks/dataobservability/monitoring/monthly/column" : {
+    "api/default/checks/column/{patternName}/partitioned/daily" : {
       "get" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "getDefaultDataObservabilityMonthlyMonitoringColumnChecks",
-        "description" : "Returns UI model to show and edit the default configuration of the monthly monitoring (Data Observability end of month scores) checks that are configured for all imported columns on a column level.",
-        "operationId" : "getDefaultDataObservabilityMonthlyMonitoringColumnChecks",
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "getDefaultPartitionedDailyColumnChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the daily partitioned checks that are configured for a check pattern on a column level.",
+        "operationId" : "getDefaultPartitionedDailyColumnChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -15870,12 +16140,25 @@
         "extensions" : { }
       },
       "put" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "updateDefaultDataObservabilityMonthlyMonitoringColumnChecks",
-        "description" : "New configuration of the default monthly monitoring checkpoints on a column level. These checks will be applied on new columns.",
-        "operationId" : "updateDefaultDataObservabilityMonthlyMonitoringColumnChecks",
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "updateDefaultPartitionedDailyColumnChecksPattern",
+        "description" : "New configuration of the default daily partitioned checks on a column level. These checks will be applied to columns.",
+        "operationId" : "updateDefaultPartitionedDailyColumnChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
         "requestBody" : {
-          "description" : "Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration",
+          "description" : "Model with the changes to be applied to the data quality daily partitioned checks configuration",
           "content" : {
             "application/json" : {
               "schema" : {
@@ -15890,7 +16173,7 @@
         },
         "responses" : {
           "204" : {
-            "description" : "The default configuration of daily monitoring (daily data observability) checks successfully updated.",
+            "description" : "The default configuration of daily partitioned checks successfully updated.",
             "content" : { },
             "extensions" : { }
           }
@@ -15904,12 +16187,25 @@
       },
       "extensions" : { }
     },
-    "api/defaults/defaultchecks/dataobservability/monitoring/monthly/table" : {
+    "api/default/checks/column/{patternName}/partitioned/monthly" : {
       "get" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "getDefaultDataObservabilityMonthlyMonitoringTableChecks",
-        "description" : "Returns UI model to show and edit the default configuration of the monthly monitoring (Data Observability end of month scores) checks that are configured for all imported tables on a table level.",
-        "operationId" : "getDefaultDataObservabilityMonthlyMonitoringTableChecks",
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "getDefaultPartitionedMonthlyColumnChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the monthly partitioned checks that are configured for a check pattern on a column level.",
+        "operationId" : "getDefaultPartitionedMonthlyColumnChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -15931,12 +16227,25 @@
         "extensions" : { }
       },
       "put" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "updateDefaultDataObservabilityMonthlyMonitoringTableChecks",
-        "description" : "New configuration of the default monthly monitoring checkpoints on a table level. These checks will be applied on new tables.",
-        "operationId" : "updateDefaultDataObservabilityMonthlyMonitoringTableChecks",
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "updateDefaultPartitionedMonthlyColumnChecksPattern",
+        "description" : "New configuration of the default monthly partitioned checks on a column level. These checks will be applied to columns.",
+        "operationId" : "updateDefaultPartitionedMonthlyColumnChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
         "requestBody" : {
-          "description" : "Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration",
+          "description" : "Model with the changes to be applied to the data quality monthly partitioned checks configuration",
           "content" : {
             "application/json" : {
               "schema" : {
@@ -15951,7 +16260,7 @@
         },
         "responses" : {
           "204" : {
-            "description" : "The default configuration of daily monitoring (daily data observability) checks successfully updated.",
+            "description" : "The default configuration of monthly partitioned checks successfully updated.",
             "content" : { },
             "extensions" : { }
           }
@@ -15965,12 +16274,25 @@
       },
       "extensions" : { }
     },
-    "api/defaults/defaultchecks/profiling/column" : {
+    "api/default/checks/column/{patternName}/profiling" : {
       "get" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "getDefaultProfilingColumnChecks",
-        "description" : "Returns UI model to show and edit the default configuration of the profiling checks that are configured for all imported column on a column level.",
-        "operationId" : "getDefaultProfilingColumnChecks",
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "getDefaultProfilingColumnChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the profiling checks that are configured for a check pattern on a column level.",
+        "operationId" : "getDefaultProfilingColumnChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -15992,10 +16314,23 @@
         "extensions" : { }
       },
       "put" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "updateDefaultProfilingColumnChecks",
-        "description" : "New configuration of the default profiling checks on a column level. These checks will be applied to new columns.",
-        "operationId" : "updateDefaultProfilingColumnChecks",
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "updateDefaultProfilingColumnChecksPattern",
+        "description" : "New configuration of the default profiling checks on a column level. These checks will be applied to columns.",
+        "operationId" : "updateDefaultProfilingColumnChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
         "requestBody" : {
           "description" : "Model with the changes to be applied to the data quality profiling checks configuration",
           "content" : {
@@ -16026,12 +16361,355 @@
       },
       "extensions" : { }
     },
-    "api/defaults/defaultchecks/profiling/table" : {
+    "api/default/checks/column/{patternName}/target" : {
       "get" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "getDefaultProfilingTableChecks",
-        "description" : "Returns UI model to show and edit the default configuration of the profiling checks that are configured for all imported tables on a table level.",
-        "operationId" : "getDefaultProfilingTableChecks",
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "getDefaultColumnChecksPatternTarget",
+        "description" : "Returns a default checks pattern definition",
+        "operationId" : "getDefaultColumnChecksPatternTarget",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Column pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DefaultColumnChecksPatternListModel",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "put" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "updateDefaultColumnChecksPatternTarget",
+        "description" : "Updates an default column-level checks pattern, changing only the target object",
+        "operationId" : "updateDefaultColumnChecksPatternTarget",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "requestBody" : {
+          "description" : "Default checks pattern model",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DefaultColumnChecksPatternListModel",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : false,
+          "extensions" : { }
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Default column-level checks pattern successfully updated",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : {
+          "x-codegen-request-body-name" : "body"
+        }
+      },
+      "post" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "createDefaultColumnChecksPatternTarget",
+        "description" : "Creates (adds) a new default column-level checks pattern configuration.",
+        "operationId" : "createDefaultColumnChecksPatternTarget",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "requestBody" : {
+          "description" : "Default checks pattern model with only the target filters",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DefaultColumnChecksPatternListModel",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : false,
+          "extensions" : { }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "New checks pattern successfully created",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : {
+          "x-codegen-request-body-name" : "body"
+        }
+      },
+      "extensions" : { }
+    },
+    "api/default/checks/table" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getAllDefaultTableChecksPatterns",
+        "description" : "Returns a flat list of all table-level default check patterns configured for this instance. Default checks are applied on tables dynamically.",
+        "operationId" : "getAllDefaultTableChecksPatterns",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/DefaultTableChecksPatternListModel",
+                    "extensions" : { },
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
+    "api/default/checks/table/{patternName}" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getDefaultTableChecksPattern",
+        "description" : "Returns a default checks pattern definition as a full specification object",
+        "operationId" : "getDefaultTableChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Table pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DefaultTableChecksPatternModel",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "put" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "updateDefaultTableChecksPattern",
+        "description" : "Updates an default table-level checks pattern by saving a full specification object",
+        "operationId" : "updateDefaultTableChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "requestBody" : {
+          "description" : "Default checks pattern model",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DefaultTableChecksPatternModel",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : false,
+          "extensions" : { }
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Default table-level checks pattern successfully updated",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : {
+          "x-codegen-request-body-name" : "body"
+        }
+      },
+      "post" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "createDefaultTableChecksPattern",
+        "description" : "Creates (adds) a new default table-level checks pattern configuration by saving a full specification object.",
+        "operationId" : "createDefaultTableChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "requestBody" : {
+          "description" : "Default checks pattern model",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DefaultTableChecksPatternModel",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : false,
+          "extensions" : { }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "New checks pattern successfully created",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : {
+          "x-codegen-request-body-name" : "body"
+        }
+      },
+      "delete" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "deleteDefaultTableChecksPattern",
+        "description" : "Deletes a default table-level checks pattern",
+        "operationId" : "deleteDefaultTableChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Default table-level checks pattern successfully deleted",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
+    "api/default/checks/table/{patternName}/monitoring/daily" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getDefaultMonitoringDailyTableChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the daily monitoring checks that are configured for a check pattern on a table level.",
+        "operationId" : "getDefaultMonitoringDailyTableChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -16053,10 +16731,371 @@
         "extensions" : { }
       },
       "put" : {
-        "tags" : [ "Defaults" ],
-        "summary" : "updateDefaultProfilingTableChecks",
-        "description" : "New configuration of the default profiling checks on a table level. These checks will be applied to new tables.",
-        "operationId" : "updateDefaultProfilingTableChecks",
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "updateDefaultMonitoringDailyTableChecksPattern",
+        "description" : "New configuration of the default daily monitoring checks on a table level. These checks will be applied to tables.",
+        "operationId" : "updateDefaultMonitoringDailyTableChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "requestBody" : {
+          "description" : "Model with the changes to be applied to the data quality daily monitoring checks configuration",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CheckContainerModel",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : false,
+          "extensions" : { }
+        },
+        "responses" : {
+          "204" : {
+            "description" : "The default configuration of daily monitoring checks successfully updated.",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : {
+          "x-codegen-request-body-name" : "body"
+        }
+      },
+      "extensions" : { }
+    },
+    "api/default/checks/table/{patternName}/monitoring/monthly" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getDefaultMonitoringMonthlyTableChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the monthly monitoring checks that are configured for a check pattern on a table level.",
+        "operationId" : "getDefaultMonitoringMonthlyTableChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CheckContainerModel",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "put" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "updateDefaultMonitoringMonthlyTableChecksPattern",
+        "description" : "New configuration of the default monthly monitoring checks on a table level. These checks will be applied to tables.",
+        "operationId" : "updateDefaultMonitoringMonthlyTableChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "requestBody" : {
+          "description" : "Model with the changes to be applied to the data quality monthly monitoring checks configuration",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CheckContainerModel",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : false,
+          "extensions" : { }
+        },
+        "responses" : {
+          "204" : {
+            "description" : "The default configuration of monthly monitoring checks successfully updated.",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : {
+          "x-codegen-request-body-name" : "body"
+        }
+      },
+      "extensions" : { }
+    },
+    "api/default/checks/table/{patternName}/partitioned/daily" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getDefaultPartitionedDailyTableChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the daily partitioned checks that are configured for a check pattern on a table level.",
+        "operationId" : "getDefaultPartitionedDailyTableChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CheckContainerModel",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "put" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "updateDefaultPartitionedDailyTableChecksPattern",
+        "description" : "New configuration of the default daily partitioned checks on a table level. These checks will be applied to tables.",
+        "operationId" : "updateDefaultPartitionedDailyTableChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "requestBody" : {
+          "description" : "Model with the changes to be applied to the data quality daily partitioned checks configuration",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CheckContainerModel",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : false,
+          "extensions" : { }
+        },
+        "responses" : {
+          "204" : {
+            "description" : "The default configuration of daily partitioned checks successfully updated.",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : {
+          "x-codegen-request-body-name" : "body"
+        }
+      },
+      "extensions" : { }
+    },
+    "api/default/checks/table/{patternName}/partitioned/monthly" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getDefaultPartitionedMonthlyTableChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the monthly partitioned checks that are configured for a check pattern on a table level.",
+        "operationId" : "getDefaultPartitionedMonthlyTableChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CheckContainerModel",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "put" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "updateDefaultPartitionedMonthlyTableChecksPattern",
+        "description" : "New configuration of the default monthly partitioned checks on a table level. These checks will be applied to tables.",
+        "operationId" : "updateDefaultPartitionedMonthlyTableChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "requestBody" : {
+          "description" : "Model with the changes to be applied to the data quality monthly partitioned checks configuration",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CheckContainerModel",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : false,
+          "extensions" : { }
+        },
+        "responses" : {
+          "204" : {
+            "description" : "The default configuration of monthly partitioned checks successfully updated.",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : {
+          "x-codegen-request-body-name" : "body"
+        }
+      },
+      "extensions" : { }
+    },
+    "api/default/checks/table/{patternName}/profiling" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getDefaultProfilingTableChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the profiling checks that are configured for a check pattern on a table level.",
+        "operationId" : "getDefaultProfilingTableChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CheckContainerModel",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "put" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "updateDefaultProfilingTableChecksPattern",
+        "description" : "New configuration of the default profiling checks on a table level. These checks will be applied to tables.",
+        "operationId" : "updateDefaultProfilingTableChecksPattern",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
         "requestBody" : {
           "description" : "Model with the changes to be applied to the data quality profiling checks configuration",
           "content" : {
@@ -16074,6 +17113,139 @@
         "responses" : {
           "204" : {
             "description" : "The default configuration of profiling checks successfully updated.",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : {
+          "x-codegen-request-body-name" : "body"
+        }
+      },
+      "extensions" : { }
+    },
+    "api/default/checks/table/{patternName}/target" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getDefaultTableChecksPatternTarget",
+        "description" : "Returns a default checks pattern definition",
+        "operationId" : "getDefaultTableChecksPatternTarget",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Table pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DefaultTableChecksPatternListModel",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "put" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "updateDefaultTableChecksPatternTarget",
+        "description" : "Updates an default table-level checks pattern, changing only the target object",
+        "operationId" : "updateDefaultTableChecksPatternTarget",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "requestBody" : {
+          "description" : "Default checks pattern model",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DefaultTableChecksPatternListModel",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : false,
+          "extensions" : { }
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Default table-level checks pattern successfully updated",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : {
+          "x-codegen-request-body-name" : "body"
+        }
+      },
+      "post" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "createDefaultTableChecksPatternTarget",
+        "description" : "Creates (adds) a new default table-level checks pattern configuration.",
+        "operationId" : "createDefaultTableChecksPatternTarget",
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "requestBody" : {
+          "description" : "Default checks pattern model with only the target filters",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DefaultTableChecksPatternListModel",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : false,
+          "extensions" : { }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "New checks pattern successfully created",
             "content" : { },
             "extensions" : { }
           }
@@ -18492,7 +19664,7 @@
           "extensions" : { }
         } ],
         "requestBody" : {
-          "description" : "List of rule definitions",
+          "description" : "Rule model",
           "content" : {
             "application/json" : {
               "schema" : {
@@ -20868,6 +22040,13 @@
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
+          "default_check" : {
+            "type" : "boolean",
+            "description" : "This is a check that was applied on-the-fly, because it is configured as a default data observability check and can be run, but it is not configured in the table YAML.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
           "data_grouping_override" : {
             "$ref" : "#/components/schemas/DataGroupingConfigurationSpec",
             "extensions" : { },
@@ -21052,6 +22231,10 @@
             "standard" : {
               "type" : "boolean",
               "description" : "This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks."
+            },
+            "default_check" : {
+              "type" : "boolean",
+              "description" : "This is a check that was applied on-the-fly, because it is configured as a default data observability check and can be run, but it is not configured in the table YAML."
             },
             "data_grouping_override" : {
               "description" : "Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level. Data grouping is configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning. (2) a static data grouping configuration is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). ",
@@ -22177,6 +23360,10 @@
             "$ref" : "#/components/schemas/FolderSynchronizationStatus",
             "exampleSetFlag" : false
           },
+          "patterns" : {
+            "$ref" : "#/components/schemas/FolderSynchronizationStatus",
+            "exampleSetFlag" : false
+          },
           "data_sensor_readouts" : {
             "$ref" : "#/components/schemas/FolderSynchronizationStatus",
             "exampleSetFlag" : false
@@ -22236,6 +23423,11 @@
             "dictionaries" : {
               "type" : "string",
               "description" : "The synchronization status of the \"dictionaries\" folder.",
+              "enum" : [ "unchanged", "changed", "synchronizing" ]
+            },
+            "patterns" : {
+              "type" : "string",
+              "description" : "The synchronization status of the \"patterns\" folder.",
               "enum" : [ "unchanged", "changed", "synchronizing" ]
             },
             "data_sensor_readouts" : {
@@ -29336,6 +30528,71 @@
               "description" : "Verifies that the values in text columns match one of the predefined date formats, such as an ISO 8601 date. Measures the percentage of valid date strings and raises a data quality issue when too many invalid date strings are found.",
               "$ref" : "#/components/schemas/ColumnTextMatchDateFormatPercentCheckSpec",
               "originalRef" : "#/components/schemas/ColumnTextMatchDateFormatPercentCheckSpec"
+            }
+          }
+        }
+      },
+      "ColumnDefaultChecksPatternSpec" : {
+        "type" : "object",
+        "properties" : {
+          "priority" : {
+            "type" : "integer",
+            "description" : "The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "target" : {
+            "$ref" : "#/components/schemas/TargetColumnPatternSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "profiling_checks" : {
+            "$ref" : "#/components/schemas/ColumnProfilingCheckCategoriesSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "monitoring_checks" : {
+            "$ref" : "#/components/schemas/ColumnMonitoringCheckCategoriesSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "partitioned_checks" : {
+            "$ref" : "#/components/schemas/ColumnPartitionedCheckCategoriesSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          }
+        },
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "priority" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values."
+            },
+            "target" : {
+              "description" : "The target column filter that are filtering the column, table and connection on which the default checks are applied.",
+              "$ref" : "#/components/schemas/TargetColumnPatternSpec",
+              "originalRef" : "#/components/schemas/TargetColumnPatternSpec"
+            },
+            "profiling_checks" : {
+              "description" : "Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.",
+              "$ref" : "#/components/schemas/ColumnProfilingCheckCategoriesSpec",
+              "originalRef" : "#/components/schemas/ColumnProfilingCheckCategoriesSpec"
+            },
+            "monitoring_checks" : {
+              "description" : "Configuration of table level monitoring checks. Monitoring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring check stores only the most recent data quality check result for each period of time.",
+              "$ref" : "#/components/schemas/ColumnMonitoringCheckCategoriesSpec",
+              "originalRef" : "#/components/schemas/ColumnMonitoringCheckCategoriesSpec"
+            },
+            "partitioned_checks" : {
+              "description" : "Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.",
+              "$ref" : "#/components/schemas/ColumnPartitionedCheckCategoriesSpec",
+              "originalRef" : "#/components/schemas/ColumnPartitionedCheckCategoriesSpec"
             }
           }
         }
@@ -36996,7 +38253,7 @@
           "description" : "Full column model"
         }
       },
-      "ColumnMonitoringChecksRootSpec" : {
+      "ColumnMonitoringCheckCategoriesSpec" : {
         "type" : "object",
         "properties" : {
           "daily" : {
@@ -43562,7 +44819,7 @@
           }
         }
       },
-      "ColumnPartitionedChecksRootSpec" : {
+      "ColumnPartitionedCheckCategoriesSpec" : {
         "type" : "object",
         "properties" : {
           "daily" : {
@@ -48204,12 +49461,12 @@
             "exampleSetFlag" : false
           },
           "monitoring_checks" : {
-            "$ref" : "#/components/schemas/ColumnMonitoringChecksRootSpec",
+            "$ref" : "#/components/schemas/ColumnMonitoringCheckCategoriesSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "partitioned_checks" : {
-            "$ref" : "#/components/schemas/ColumnPartitionedChecksRootSpec",
+            "$ref" : "#/components/schemas/ColumnPartitionedCheckCategoriesSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
@@ -48269,13 +49526,13 @@
             },
             "monitoring_checks" : {
               "description" : "Configuration of column level monitoring checks. Monitoring are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring stores only the most recent data quality check result for each period of time.",
-              "$ref" : "#/components/schemas/ColumnMonitoringChecksRootSpec",
-              "originalRef" : "#/components/schemas/ColumnMonitoringChecksRootSpec"
+              "$ref" : "#/components/schemas/ColumnMonitoringCheckCategoriesSpec",
+              "originalRef" : "#/components/schemas/ColumnMonitoringCheckCategoriesSpec"
             },
             "partitioned_checks" : {
               "description" : "Configuration of column level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.",
-              "$ref" : "#/components/schemas/ColumnPartitionedChecksRootSpec",
-              "originalRef" : "#/components/schemas/ColumnPartitionedChecksRootSpec"
+              "$ref" : "#/components/schemas/ColumnPartitionedCheckCategoriesSpec",
+              "originalRef" : "#/components/schemas/ColumnPartitionedCheckCategoriesSpec"
             },
             "statistics" : {
               "description" : "Custom configuration of a column level statistics collector (a basic profiler). Enables customization of the statistics collector settings when the collector is analysing this column.",
@@ -59313,29 +60570,9 @@
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
-          "columns" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "string",
-              "extensions" : { },
-              "exampleSetFlag" : false,
-              "types" : [ "string" ]
-            },
-            "description" : "A struct that specifies the column names and column types contained within the CSV file (e.g., {'col1': 'INTEGER', 'col2': 'VARCHAR'}). Using this option implies that auto detection is not used.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "object" ],
-            "jsonSchema" : {
-              "type" : "object",
-              "description" : "A struct that specifies the column names and column types contained within the CSV file (e.g., {'col1': 'INTEGER', 'col2': 'VARCHAR'}). Using this option implies that auto detection is not used."
-            }
-          },
           "compression" : {
-            "type" : "string",
-            "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
+            "$ref" : "#/components/schemas/CompressionType",
+            "exampleSetFlag" : false
           },
           "dateformat" : {
             "type" : "string",
@@ -59394,11 +60631,8 @@
             "types" : [ "boolean" ]
           },
           "new_line" : {
-            "type" : "string",
-            "description" : "Set the new line character(s) in the file. Options are '\\r','\\n', or '\\r\\n'.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
+            "$ref" : "#/components/schemas/NewLineCharacterType",
+            "exampleSetFlag" : false
           },
           "quote" : {
             "type" : "string",
@@ -59406,6 +60640,14 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
+          },
+          "sample_size" : {
+            "type" : "integer",
+            "description" : "The number of sample rows for auto detection of parameters.",
+            "format" : "int64",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
           },
           "skip" : {
             "type" : "integer",
@@ -59440,16 +60682,10 @@
               "type" : "boolean",
               "description" : "Enables auto detection of CSV parameters."
             },
-            "columns" : {
-              "type" : "object",
-              "description" : "A struct that specifies the column names and column types contained within the CSV file (e.g., {'col1': 'INTEGER', 'col2': 'VARCHAR'}). Using this option implies that auto detection is not used.",
-              "additionalProperties" : {
-                "type" : "string"
-              }
-            },
             "compression" : {
               "type" : "string",
-              "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd."
+              "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd.",
+              "enum" : [ "auto", "none", "gzip", "zstd" ]
             },
             "dateformat" : {
               "type" : "string",
@@ -59485,11 +60721,17 @@
             },
             "new_line" : {
               "type" : "string",
-              "description" : "Set the new line character(s) in the file. Options are '\\r','\\n', or '\\r\\n'."
+              "description" : "Set the new line character(s) in the file. Options are '\\r','\\n', or '\\r\\n'.",
+              "enum" : [ "cr", "lf", "crlf" ]
             },
             "quote" : {
               "type" : "string",
               "description" : "Specifies the quoting string to be used when a data value is quoted."
+            },
+            "sample_size" : {
+              "type" : "integer",
+              "format" : "int64",
+              "description" : "The number of sample rows for auto detection of parameters."
             },
             "skip" : {
               "type" : "integer",
@@ -60438,13 +61680,6 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "options" : {
-            "type" : "string",
-            "description" : "Databricks connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DATABRICKS_OPTIONS} configuration with a custom environment variable.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
           "properties" : {
             "type" : "object",
             "additionalProperties" : {
@@ -60502,10 +61737,6 @@
               "type" : "string",
               "description" : "Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable."
             },
-            "options" : {
-              "type" : "string",
-              "description" : "Databricks connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DATABRICKS_OPTIONS} configuration with a custom environment variable."
-            },
             "properties" : {
               "type" : "object",
               "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
@@ -60517,6 +61748,133 @@
               "type" : "string"
             }
           }
+        }
+      },
+      "DefaultColumnChecksPatternListModel" : {
+        "type" : "object",
+        "properties" : {
+          "pattern_name" : {
+            "type" : "string",
+            "description" : "Pattern name.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "priority" : {
+            "type" : "integer",
+            "description" : "The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "target_column" : {
+            "$ref" : "#/components/schemas/TargetColumnPatternSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "can_edit" : {
+            "type" : "boolean",
+            "description" : "Boolean flag that decides if the current user can update or delete this object.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "description" : "Default column-level checks pattern list model",
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "pattern_name" : {
+              "type" : "string",
+              "description" : "Pattern name."
+            },
+            "priority" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values."
+            },
+            "target_column" : {
+              "description" : "The filters for the target column.",
+              "$ref" : "#/components/schemas/TargetColumnPatternSpec",
+              "originalRef" : "#/components/schemas/TargetColumnPatternSpec"
+            },
+            "can_edit" : {
+              "type" : "boolean",
+              "description" : "Boolean flag that decides if the current user can update or delete this object."
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
+            }
+          },
+          "description" : "Default column-level checks pattern list model"
+        }
+      },
+      "DefaultColumnChecksPatternModel" : {
+        "type" : "object",
+        "properties" : {
+          "pattern_name" : {
+            "type" : "string",
+            "description" : "Pattern name",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "pattern_spec" : {
+            "$ref" : "#/components/schemas/ColumnDefaultChecksPatternSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "can_edit" : {
+            "type" : "boolean",
+            "description" : "Boolean flag that decides if the current user can update or delete this object.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "description" : "Default column-level checks pattern model",
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "pattern_name" : {
+              "type" : "string",
+              "description" : "Pattern name"
+            },
+            "pattern_spec" : {
+              "description" : "The default checks specification.",
+              "$ref" : "#/components/schemas/ColumnDefaultChecksPatternSpec",
+              "originalRef" : "#/components/schemas/ColumnDefaultChecksPatternSpec"
+            },
+            "can_edit" : {
+              "type" : "boolean",
+              "description" : "Boolean flag that decides if the current user can update or delete this object."
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
+            }
+          },
+          "description" : "Default column-level checks pattern model"
         }
       },
       "DefaultSchedulesSpec" : {
@@ -60579,6 +61937,133 @@
               "originalRef" : "#/components/schemas/MonitoringScheduleSpec"
             }
           }
+        }
+      },
+      "DefaultTableChecksPatternListModel" : {
+        "type" : "object",
+        "properties" : {
+          "pattern_name" : {
+            "type" : "string",
+            "description" : "Pattern name.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "priority" : {
+            "type" : "integer",
+            "description" : "The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "target_table" : {
+            "$ref" : "#/components/schemas/TargetTablePatternSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "can_edit" : {
+            "type" : "boolean",
+            "description" : "Boolean flag that decides if the current user can update or delete this object.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "description" : "Default table-level checks pattern list model",
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "pattern_name" : {
+              "type" : "string",
+              "description" : "Pattern name."
+            },
+            "priority" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values."
+            },
+            "target_table" : {
+              "description" : "The filters for the target table.",
+              "$ref" : "#/components/schemas/TargetTablePatternSpec",
+              "originalRef" : "#/components/schemas/TargetTablePatternSpec"
+            },
+            "can_edit" : {
+              "type" : "boolean",
+              "description" : "Boolean flag that decides if the current user can update or delete this object."
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
+            }
+          },
+          "description" : "Default table-level checks pattern list model"
+        }
+      },
+      "DefaultTableChecksPatternModel" : {
+        "type" : "object",
+        "properties" : {
+          "pattern_name" : {
+            "type" : "string",
+            "description" : "Pattern name",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "pattern_spec" : {
+            "$ref" : "#/components/schemas/TableDefaultChecksPatternSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "can_edit" : {
+            "type" : "boolean",
+            "description" : "Boolean flag that decides if the current user can update or delete this object.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "description" : "Default table-level checks pattern model",
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "pattern_name" : {
+              "type" : "string",
+              "description" : "Pattern name"
+            },
+            "pattern_spec" : {
+              "description" : "The default checks specification.",
+              "$ref" : "#/components/schemas/TableDefaultChecksPatternSpec",
+              "originalRef" : "#/components/schemas/TableDefaultChecksPatternSpec"
+            },
+            "can_edit" : {
+              "type" : "boolean",
+              "description" : "Boolean flag that decides if the current user can update or delete this object."
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
+            }
+          },
+          "description" : "Default table-level checks pattern model"
         }
       },
       "DeleteStoredDataQueueJobParameters" : {
@@ -61741,20 +63226,13 @@
             "$ref" : "#/components/schemas/DuckdbReadMode",
             "exampleSetFlag" : false
           },
-          "source_files_type" : {
-            "$ref" : "#/components/schemas/DuckdbSourceFilesType",
+          "files_format_type" : {
+            "$ref" : "#/components/schemas/DuckdbFilesFormatType",
             "exampleSetFlag" : false
           },
           "database" : {
             "type" : "string",
-            "description" : "DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
-          "options" : {
-            "type" : "string",
-            "description" : "DuckDB connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DUCKDB_OPTIONS} configuration with a custom environment variable.",
+            "description" : "DuckDB database name for in-memory read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -61799,14 +63277,39 @@
               "exampleSetFlag" : false,
               "types" : [ "string" ]
             },
-            "description" : "Schema to directory mappings.",
+            "description" : "Virtual schema name to directory mappings. The path must be an absolute path.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "object" ],
             "jsonSchema" : {
               "type" : "object",
-              "description" : "Schema to directory mappings."
+              "description" : "Virtual schema name to directory mappings. The path must be an absolute path."
             }
+          },
+          "storage_type" : {
+            "$ref" : "#/components/schemas/DuckdbStorageType",
+            "exampleSetFlag" : false
+          },
+          "user" : {
+            "type" : "string",
+            "description" : "DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "password" : {
+            "type" : "string",
+            "description" : "DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "region" : {
+            "type" : "string",
+            "description" : "The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
         "exampleSetFlag" : false,
@@ -61816,21 +63319,17 @@
           "properties" : {
             "read_mode" : {
               "type" : "string",
-              "description" : "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+              "description" : "DuckDB read mode.",
               "enum" : [ "in_memory", "files" ]
             },
-            "source_files_type" : {
+            "files_format_type" : {
               "type" : "string",
-              "description" : "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+              "description" : "Type of source files format for DuckDB.",
               "enum" : [ "csv", "json", "parquet" ]
             },
             "database" : {
               "type" : "string",
-              "description" : "DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-            },
-            "options" : {
-              "type" : "string",
-              "description" : "DuckDB connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DUCKDB_OPTIONS} configuration with a custom environment variable."
+              "description" : "DuckDB database name for in-memory read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
             },
             "properties" : {
               "type" : "object",
@@ -61856,10 +63355,27 @@
             },
             "directories" : {
               "type" : "object",
-              "description" : "Schema to directory mappings.",
+              "description" : "Virtual schema name to directory mappings. The path must be an absolute path.",
               "additionalProperties" : {
                 "type" : "string"
               }
+            },
+            "storage_type" : {
+              "type" : "string",
+              "description" : "The storage type.",
+              "enum" : [ "local", "s3" ]
+            },
+            "user" : {
+              "type" : "string",
+              "description" : "DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+            },
+            "password" : {
+              "type" : "string",
+              "description" : "DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+            },
+            "region" : {
+              "type" : "string",
+              "description" : "The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
             }
           }
         }
@@ -62941,16 +64457,30 @@
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
-          "hasMonitoringIssues" : {
+          "hasDailyMonitoringIssues" : {
             "type" : "boolean",
-            "description" : "True when this data quality incident is based on data quality issues from monitoring checks within the filters applied to search for linked data quality issues.",
+            "description" : "True when this data quality incident is based on data quality issues from daily monitoring checks within the filters applied to search for linked data quality issues.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
-          "hasPartitionedIssues" : {
+          "hasMonthlyMonitoringIssues" : {
             "type" : "boolean",
-            "description" : "True when this data quality incident is based on data quality issues from partitioned checks within the filters applied to search for linked data quality issues.",
+            "description" : "True when this data quality incident is based on data quality issues from monthly monitoring checks within the filters applied to search for linked data quality issues.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "hasDailyPartitionedIssues" : {
+            "type" : "boolean",
+            "description" : "True when this data quality incident is based on data quality issues from daily partitioned checks within the filters applied to search for linked data quality issues.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "hasMonthlyPartitionedIssues" : {
+            "type" : "boolean",
+            "description" : "True when this data quality incident is based on data quality issues from monthly partitioned checks within the filters applied to search for linked data quality issues.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
@@ -63017,13 +64547,21 @@
               "type" : "boolean",
               "description" : "True when this data quality incident is based on data quality issues from profiling checks within the filters applied to search for linked data quality issues."
             },
-            "hasMonitoringIssues" : {
+            "hasDailyMonitoringIssues" : {
               "type" : "boolean",
-              "description" : "True when this data quality incident is based on data quality issues from monitoring checks within the filters applied to search for linked data quality issues."
+              "description" : "True when this data quality incident is based on data quality issues from daily monitoring checks within the filters applied to search for linked data quality issues."
             },
-            "hasPartitionedIssues" : {
+            "hasMonthlyMonitoringIssues" : {
               "type" : "boolean",
-              "description" : "True when this data quality incident is based on data quality issues from partitioned checks within the filters applied to search for linked data quality issues."
+              "description" : "True when this data quality incident is based on data quality issues from monthly monitoring checks within the filters applied to search for linked data quality issues."
+            },
+            "hasDailyPartitionedIssues" : {
+              "type" : "boolean",
+              "description" : "True when this data quality incident is based on data quality issues from daily partitioned checks within the filters applied to search for linked data quality issues."
+            },
+            "hasMonthlyPartitionedIssues" : {
+              "type" : "boolean",
+              "description" : "True when this data quality incident is based on data quality issues from monthly partitioned checks within the filters applied to search for linked data quality issues."
             },
             "days" : {
               "type" : "object",
@@ -63410,38 +64948,18 @@
         "properties" : {
           "auto_detect" : {
             "type" : "boolean",
-            "description" : "Whether to auto-detect detect the names of the keys and data types of the values automatically",
+            "description" : "Whether to auto-detect detect the names of the keys and data types of the values automatically.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
-          "columns" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "string",
-              "extensions" : { },
-              "exampleSetFlag" : false,
-              "types" : [ "string" ]
-            },
-            "description" : "A struct that specifies the key names and value types contained within the JSON file (e.g., {key1: 'INTEGER', key2: 'VARCHAR'}). If auto_detect is enabled these will be inferred",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "object" ],
-            "jsonSchema" : {
-              "type" : "object",
-              "description" : "A struct that specifies the key names and value types contained within the JSON file (e.g., {key1: 'INTEGER', key2: 'VARCHAR'}). If auto_detect is enabled these will be inferred"
-            }
-          },
           "compression" : {
-            "type" : "string",
-            "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
+            "$ref" : "#/components/schemas/CompressionType",
+            "exampleSetFlag" : false
           },
           "convert_strings_to_integers" : {
             "type" : "boolean",
-            "description" : "\tWhether strings representing integer values should be converted to a numerical type.",
+            "description" : "Whether strings representing integer values should be converted to a numerical type.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
@@ -63466,7 +64984,7 @@
           },
           "hive_partitioning" : {
             "type" : "boolean",
-            "description" : "\tWhether or not to interpret the path as a hive partitioned path.",
+            "description" : "Whether or not to interpret the path as a hive partitioned path.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
@@ -63480,29 +64998,35 @@
           },
           "maximum_depth" : {
             "type" : "integer",
-            "description" : "Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types",
+            "description" : "Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types.",
+            "format" : "int64",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
           },
           "maximum_object_size" : {
             "type" : "integer",
-            "description" : "\tThe maximum size of a JSON object (in bytes)",
+            "description" : "The maximum size of a JSON object (in bytes).",
             "format" : "int64",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
           },
           "records" : {
-            "type" : "string",
-            "description" : "Can be one of ['auto', 'true', 'false']",
+            "$ref" : "#/components/schemas/JsonRecordsType",
+            "exampleSetFlag" : false
+          },
+          "sample_size" : {
+            "type" : "integer",
+            "description" : "The number of sample rows for auto detection of parameters.",
+            "format" : "int64",
             "extensions" : { },
             "exampleSetFlag" : false,
-            "types" : [ "string" ]
+            "types" : [ "integer" ]
           },
           "timestampformat" : {
             "type" : "string",
-            "description" : "\tSpecifies the date format to use when parsing timestamps.",
+            "description" : "Specifies the date format to use when parsing timestamps.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -63515,22 +65039,16 @@
           "properties" : {
             "auto_detect" : {
               "type" : "boolean",
-              "description" : "Whether to auto-detect detect the names of the keys and data types of the values automatically"
-            },
-            "columns" : {
-              "type" : "object",
-              "description" : "A struct that specifies the key names and value types contained within the JSON file (e.g., {key1: 'INTEGER', key2: 'VARCHAR'}). If auto_detect is enabled these will be inferred",
-              "additionalProperties" : {
-                "type" : "string"
-              }
+              "description" : "Whether to auto-detect detect the names of the keys and data types of the values automatically."
             },
             "compression" : {
               "type" : "string",
-              "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'."
+              "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'.",
+              "enum" : [ "auto", "none", "gzip", "zstd" ]
             },
             "convert_strings_to_integers" : {
               "type" : "boolean",
-              "description" : "\tWhether strings representing integer values should be converted to a numerical type."
+              "description" : "Whether strings representing integer values should be converted to a numerical type."
             },
             "dateformat" : {
               "type" : "string",
@@ -63542,12 +65060,12 @@
             },
             "format" : {
               "type" : "string",
-              "description" : "\tCan be one of ['auto', 'unstructured', 'newline_delimited', 'array'].",
+              "description" : "Json format. Can be one of ['auto', 'unstructured', 'newline_delimited', 'array'].",
               "enum" : [ "auto", "unstructured", "newline_delimited", "array" ]
             },
             "hive_partitioning" : {
               "type" : "boolean",
-              "description" : "\tWhether or not to interpret the path as a hive partitioned path."
+              "description" : "Whether or not to interpret the path as a hive partitioned path."
             },
             "ignore_errors" : {
               "type" : "boolean",
@@ -63555,20 +65073,27 @@
             },
             "maximum_depth" : {
               "type" : "integer",
-              "description" : "Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types"
+              "format" : "int64",
+              "description" : "Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types."
             },
             "maximum_object_size" : {
               "type" : "integer",
               "format" : "int64",
-              "description" : "\tThe maximum size of a JSON object (in bytes)"
+              "description" : "The maximum size of a JSON object (in bytes)."
             },
             "records" : {
               "type" : "string",
-              "description" : "Can be one of ['auto', 'true', 'false']"
+              "description" : "Can be one of ['auto', 'true', 'false'].",
+              "enum" : [ "auto", "true", "false" ]
+            },
+            "sample_size" : {
+              "type" : "integer",
+              "format" : "int64",
+              "description" : "The number of sample rows for auto detection of parameters."
             },
             "timestampformat" : {
               "type" : "string",
-              "description" : "\tSpecifies the date format to use when parsing timestamps."
+              "description" : "Specifies the date format to use when parsing timestamps."
             }
           }
         }
@@ -64227,13 +65752,6 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "options" : {
-            "type" : "string",
-            "description" : "MySQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS} configuration with a custom environment variable.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
           "sslmode" : {
             "$ref" : "#/components/schemas/MySqlSslMode",
             "exampleSetFlag" : false
@@ -64289,10 +65807,6 @@
             "password" : {
               "type" : "string",
               "description" : "MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-            },
-            "options" : {
-              "type" : "string",
-              "description" : "MySQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS} configuration with a custom environment variable."
             },
             "sslmode" : {
               "type" : "string",
@@ -64447,13 +65961,6 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "options" : {
-            "type" : "string",
-            "description" : "Oracle connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${ORACLE_OPTIONS} configuration with a custom environment variable.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
           "initialization_sql" : {
             "type" : "string",
             "description" : "Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS'",
@@ -64503,10 +66010,6 @@
             "password" : {
               "type" : "string",
               "description" : "Oracle database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-            },
-            "options" : {
-              "type" : "string",
-              "description" : "Oracle connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${ORACLE_OPTIONS} configuration with a custom environment variable."
             },
             "initialization_sql" : {
               "type" : "string",
@@ -65361,13 +66864,6 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "options" : {
-            "type" : "string",
-            "description" : "Redshift connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
           "properties" : {
             "type" : "object",
             "additionalProperties" : {
@@ -65410,10 +66906,6 @@
             "password" : {
               "type" : "string",
               "description" : "Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-            },
-            "options" : {
-              "type" : "string",
-              "description" : "Redshift connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable."
             },
             "properties" : {
               "type" : "object",
@@ -66400,6 +67892,13 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
+          },
+          "error_message" : {
+            "type" : "string",
+            "description" : "Field for error message.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
         "description" : "Schema model",
@@ -66470,6 +67969,10 @@
             "can_delete_data" : {
               "type" : "boolean",
               "description" : "Boolean flag that decides if the current user can delete data (results)."
+            },
+            "error_message" : {
+              "type" : "string",
+              "description" : "Field for error message."
             }
           },
           "description" : "Schema model"
@@ -67581,13 +69084,6 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "options" : {
-            "type" : "string",
-            "description" : "Spark connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
           "properties" : {
             "type" : "object",
             "additionalProperties" : {
@@ -67632,10 +69128,6 @@
             "password" : {
               "type" : "string",
               "description" : "Spark database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-            },
-            "options" : {
-              "type" : "string",
-              "description" : "Spark connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable."
             },
             "properties" : {
               "type" : "object",
@@ -67772,13 +69264,6 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "options" : {
-            "type" : "string",
-            "description" : "SQL Server connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
           "disable_encryption" : {
             "type" : "boolean",
             "description" : "Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.",
@@ -67832,10 +69317,6 @@
             "password" : {
               "type" : "string",
               "description" : "SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-            },
-            "options" : {
-              "type" : "string",
-              "description" : "SQL Server connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable."
             },
             "disable_encryption" : {
               "type" : "boolean",
@@ -68191,6 +69672,13 @@
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
+          "patterns" : {
+            "type" : "boolean",
+            "description" : "Synchronize the \"patterns\" folder.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
           "dataSensorReadouts" : {
             "type" : "boolean",
             "description" : "Synchronize the \".data/sensor_readouts\" folder.",
@@ -68279,6 +69767,10 @@
             "dictionaries" : {
               "type" : "boolean",
               "description" : "Synchronize the \"dictionaries\" folder."
+            },
+            "patterns" : {
+              "type" : "boolean",
+              "description" : "Synchronize the \"patterns\" folder."
             },
             "dataSensorReadouts" : {
               "type" : "boolean",
@@ -68386,7 +69878,7 @@
           "properties" : {
             "folder" : {
               "type" : "string",
-              "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "_indexes", "_local_settings" ]
+              "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "patterns", "_indexes", "_local_settings" ]
             },
             "direction" : {
               "type" : "string",
@@ -70464,6 +71956,14 @@
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
           },
+          "data_quality_kpi" : {
+            "type" : "number",
+            "description" : "Data quality KPI score for the table, measured as a percentage of passed data quality checks. DQOps counts data quality issues at a warning severity level as passed checks. The data quality KPI score is a value in the range 0..100.",
+            "format" : "double",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "number" ]
+          },
           "checks" : {
             "type" : "object",
             "additionalProperties" : {
@@ -70559,6 +72059,11 @@
               "type" : "integer",
               "format" : "int32",
               "description" : "The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. When an execution error is reported, the configuration of a data quality check on a table must be updated."
+            },
+            "data_quality_kpi" : {
+              "type" : "number",
+              "format" : "double",
+              "description" : "Data quality KPI score for the table, measured as a percentage of passed data quality checks. DQOps counts data quality issues at a warning severity level as passed checks. The data quality KPI score is a value in the range 0..100."
             },
             "checks" : {
               "type" : "object",
@@ -71614,6 +73119,71 @@
           }
         }
       },
+      "TableDefaultChecksPatternSpec" : {
+        "type" : "object",
+        "properties" : {
+          "priority" : {
+            "type" : "integer",
+            "description" : "The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "target" : {
+            "$ref" : "#/components/schemas/TargetTablePatternSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "profiling_checks" : {
+            "$ref" : "#/components/schemas/TableProfilingCheckCategoriesSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "monitoring_checks" : {
+            "$ref" : "#/components/schemas/TableMonitoringCheckCategoriesSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "partitioned_checks" : {
+            "$ref" : "#/components/schemas/TablePartitionedCheckCategoriesSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          }
+        },
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "priority" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values."
+            },
+            "target" : {
+              "description" : "The target table filter that are filtering the table and connection on which the default checks are applied.",
+              "$ref" : "#/components/schemas/TargetTablePatternSpec",
+              "originalRef" : "#/components/schemas/TargetTablePatternSpec"
+            },
+            "profiling_checks" : {
+              "description" : "Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.",
+              "$ref" : "#/components/schemas/TableProfilingCheckCategoriesSpec",
+              "originalRef" : "#/components/schemas/TableProfilingCheckCategoriesSpec"
+            },
+            "monitoring_checks" : {
+              "description" : "Configuration of table level monitoring checks. Monitoring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring check stores only the most recent data quality check result for each period of time.",
+              "$ref" : "#/components/schemas/TableMonitoringCheckCategoriesSpec",
+              "originalRef" : "#/components/schemas/TableMonitoringCheckCategoriesSpec"
+            },
+            "partitioned_checks" : {
+              "description" : "Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.",
+              "$ref" : "#/components/schemas/TablePartitionedCheckCategoriesSpec",
+              "originalRef" : "#/components/schemas/TablePartitionedCheckCategoriesSpec"
+            }
+          }
+        }
+      },
       "TableIncidentGroupingSpec" : {
         "type" : "object",
         "properties" : {
@@ -71724,7 +73294,7 @@
             "exampleSetFlag" : false
           },
           "profiling_checks_result_truncation" : {
-            "$ref" : "#/components/schemas/ProfilingTimePeriod",
+            "$ref" : "#/components/schemas/ProfilingTimePeriodTruncation",
             "exampleSetFlag" : false
           },
           "file_format" : {
@@ -71878,7 +73448,7 @@
             "profiling_checks_result_truncation" : {
               "type" : "string",
               "description" : "Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.",
-              "enum" : [ "one_per_month", "one_per_week", "one_per_day", "one_per_hour", "all_results" ]
+              "enum" : [ "store_the_most_recent_result_per_month", "store_the_most_recent_result_per_week", "store_the_most_recent_result_per_day", "store_the_most_recent_result_per_hour", "store_all_results_without_date_truncation" ]
             },
             "file_format" : {
               "description" : "File format for a file based table, such as a CSV or Parquet file.",
@@ -72029,7 +73599,7 @@
           "description" : "Full table model, including all nested objects like columns or checks."
         }
       },
-      "TableMonitoringChecksSpec" : {
+      "TableMonitoringCheckCategoriesSpec" : {
         "type" : "object",
         "properties" : {
           "daily" : {
@@ -72453,7 +74023,7 @@
           }
         }
       },
-      "TablePartitionedChecksRootSpec" : {
+      "TablePartitionedCheckCategoriesSpec" : {
         "type" : "object",
         "properties" : {
           "daily" : {
@@ -72571,7 +74141,7 @@
             }
           },
           "result_truncation" : {
-            "$ref" : "#/components/schemas/ProfilingTimePeriod",
+            "$ref" : "#/components/schemas/ProfilingTimePeriodTruncation",
             "exampleSetFlag" : false
           },
           "volume" : {
@@ -72637,7 +74207,7 @@
             "result_truncation" : {
               "type" : "string",
               "description" : "Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.",
-              "enum" : [ "one_per_month", "one_per_week", "one_per_day", "one_per_hour", "all_results" ]
+              "enum" : [ "store_the_most_recent_result_per_month", "store_the_most_recent_result_per_week", "store_the_most_recent_result_per_day", "store_the_most_recent_result_per_hour", "store_all_results_without_date_truncation" ]
             },
             "volume" : {
               "description" : "Configuration of volume data quality checks on a table level.",
@@ -74866,12 +76436,12 @@
             "exampleSetFlag" : false
           },
           "monitoring_checks" : {
-            "$ref" : "#/components/schemas/TableMonitoringChecksSpec",
+            "$ref" : "#/components/schemas/TableMonitoringCheckCategoriesSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "partitioned_checks" : {
-            "$ref" : "#/components/schemas/TablePartitionedChecksRootSpec",
+            "$ref" : "#/components/schemas/TablePartitionedCheckCategoriesSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
@@ -75001,13 +76571,13 @@
             },
             "monitoring_checks" : {
               "description" : "Configuration of table level monitoring checks. Monitoring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring check stores only the most recent data quality check result for each period of time.",
-              "$ref" : "#/components/schemas/TableMonitoringChecksSpec",
-              "originalRef" : "#/components/schemas/TableMonitoringChecksSpec"
+              "$ref" : "#/components/schemas/TableMonitoringCheckCategoriesSpec",
+              "originalRef" : "#/components/schemas/TableMonitoringCheckCategoriesSpec"
             },
             "partitioned_checks" : {
               "description" : "Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.",
-              "$ref" : "#/components/schemas/TablePartitionedChecksRootSpec",
-              "originalRef" : "#/components/schemas/TablePartitionedChecksRootSpec"
+              "$ref" : "#/components/schemas/TablePartitionedCheckCategoriesSpec",
+              "originalRef" : "#/components/schemas/TablePartitionedCheckCategoriesSpec"
             },
             "statistics" : {
               "description" : "Configuration of table level data statistics collector (a basic profiler). Configures which statistics collectors are enabled and how they are configured.",
@@ -76775,6 +78345,197 @@
           }
         }
       },
+      "TargetColumnPatternSpec" : {
+        "type" : "object",
+        "properties" : {
+          "connection" : {
+            "type" : "string",
+            "description" : "The data source connection name filter. Accepts wildcards in the format: *conn, *, conn*.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "schema" : {
+            "type" : "string",
+            "description" : "The schema name filter. Accepts wildcards in the format: *_prod, *, pub*.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "table" : {
+            "type" : "string",
+            "description" : "The table name filter. Accepts wildcards in the format: *_customers, *, fact_*.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "stage" : {
+            "type" : "string",
+            "description" : "The table stage filter. Accepts wildcards in the format: *_landing, *, staging_*.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "table_priority" : {
+            "type" : "integer",
+            "description" : "The maximum table priority (inclusive) for tables that are covered by the default checks.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "label" : {
+            "type" : "string",
+            "description" : "The label filter. Accepts wildcards in the format: *_customers, *, fact_*. The label must be present on the connection or table.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "column" : {
+            "type" : "string",
+            "description" : "The target column name filter. Accepts wildcards in the format: *id, *, c_*.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data_type" : {
+            "type" : "string",
+            "description" : "The target column data type filter. Filters by a physical (database specific) data type name imported from the data source. Accepts wildcards in the format: *int, *, big*.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data_type_category" : {
+            "$ref" : "#/components/schemas/DataTypeCategory",
+            "exampleSetFlag" : false
+          }
+        },
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "connection" : {
+              "type" : "string",
+              "description" : "The data source connection name filter. Accepts wildcards in the format: *conn, *, conn*."
+            },
+            "schema" : {
+              "type" : "string",
+              "description" : "The schema name filter. Accepts wildcards in the format: *_prod, *, pub*."
+            },
+            "table" : {
+              "type" : "string",
+              "description" : "The table name filter. Accepts wildcards in the format: *_customers, *, fact_*."
+            },
+            "stage" : {
+              "type" : "string",
+              "description" : "The table stage filter. Accepts wildcards in the format: *_landing, *, staging_*."
+            },
+            "table_priority" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The maximum table priority (inclusive) for tables that are covered by the default checks."
+            },
+            "label" : {
+              "type" : "string",
+              "description" : "The label filter. Accepts wildcards in the format: *_customers, *, fact_*. The label must be present on the connection or table."
+            },
+            "column" : {
+              "type" : "string",
+              "description" : "The target column name filter. Accepts wildcards in the format: *id, *, c_*."
+            },
+            "data_type" : {
+              "type" : "string",
+              "description" : "The target column data type filter. Filters by a physical (database specific) data type name imported from the data source. Accepts wildcards in the format: *int, *, big*."
+            },
+            "data_type_category" : {
+              "type" : "string",
+              "description" : "The filter for a target data type category.",
+              "enum" : [ "numeric_integer", "numeric_decimal", "numeric_float", "datetime_timestamp", "datetime_datetime", "datetime_date", "datetime_time", "text", "clob", "json", "bool", "binary", "array", "other" ]
+            }
+          }
+        }
+      },
+      "TargetTablePatternSpec" : {
+        "type" : "object",
+        "properties" : {
+          "connection" : {
+            "type" : "string",
+            "description" : "The data source connection name filter. Accepts wildcards in the format: *conn, *, conn*.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "schema" : {
+            "type" : "string",
+            "description" : "The schema name filter. Accepts wildcards in the format: *_prod, *, pub*.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "table" : {
+            "type" : "string",
+            "description" : "The table name filter. Accepts wildcards in the format: *_customers, *, fact_*.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "stage" : {
+            "type" : "string",
+            "description" : "The table stage filter. Accepts wildcards in the format: *_landing, *, staging_*.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "table_priority" : {
+            "type" : "integer",
+            "description" : "The maximum table priority (inclusive) for tables that are covered by the default checks.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "label" : {
+            "type" : "string",
+            "description" : "The label filter. Accepts wildcards in the format: *_customers, *, fact_*. The label must be present on the connection or table.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "connection" : {
+              "type" : "string",
+              "description" : "The data source connection name filter. Accepts wildcards in the format: *conn, *, conn*."
+            },
+            "schema" : {
+              "type" : "string",
+              "description" : "The schema name filter. Accepts wildcards in the format: *_prod, *, pub*."
+            },
+            "table" : {
+              "type" : "string",
+              "description" : "The table name filter. Accepts wildcards in the format: *_customers, *, fact_*."
+            },
+            "stage" : {
+              "type" : "string",
+              "description" : "The table stage filter. Accepts wildcards in the format: *_landing, *, staging_*."
+            },
+            "table_priority" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The maximum table priority (inclusive) for tables that are covered by the default checks."
+            },
+            "label" : {
+              "type" : "string",
+              "description" : "The label filter. Accepts wildcards in the format: *_customers, *, fact_*. The label must be present on the connection or table."
+            }
+          }
+        }
+      },
       "TemporalUnit" : {
         "type" : "object",
         "properties" : {
@@ -77287,6 +79048,16 @@
         "exampleSetFlag" : false,
         "enum" : [ "SUCCESS", "FAILURE", "CONNECTION_ALREADY_EXISTS" ]
       },
+      "CompressionType" : {
+        "type" : "string",
+        "exampleSetFlag" : false,
+        "enum" : [ "auto", "none", "gzip", "zstd" ]
+      },
+      "NewLineCharacterType" : {
+        "type" : "string",
+        "exampleSetFlag" : false,
+        "enum" : [ "cr", "lf", "crlf" ]
+      },
       "DataGroupingDimensionSource" : {
         "type" : "string",
         "exampleSetFlag" : false,
@@ -77312,10 +79083,15 @@
         "exampleSetFlag" : false,
         "enum" : [ "in_memory", "files" ]
       },
-      "DuckdbSourceFilesType" : {
+      "DuckdbFilesFormatType" : {
         "type" : "string",
         "exampleSetFlag" : false,
         "enum" : [ "csv", "json", "parquet" ]
+      },
+      "DuckdbStorageType" : {
+        "type" : "string",
+        "exampleSetFlag" : false,
+        "enum" : [ "local", "s3" ]
       },
       "EffectiveScheduleLevelModel" : {
         "type" : "string",
@@ -77326,6 +79102,11 @@
         "type" : "string",
         "exampleSetFlag" : false,
         "enum" : [ "auto", "unstructured", "newline_delimited", "array" ]
+      },
+      "JsonRecordsType" : {
+        "type" : "string",
+        "exampleSetFlag" : false,
+        "enum" : [ "auto", "true", "false" ]
       },
       "MySqlSslMode" : {
         "type" : "string",
@@ -77405,12 +79186,17 @@
       "DqoRoot" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "_indexes", "_local_settings" ]
+        "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "patterns", "_indexes", "_local_settings" ]
       },
-      "ProfilingTimePeriod" : {
+      "ProfilingTimePeriodTruncation" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "one_per_month", "one_per_week", "one_per_day", "one_per_hour", "all_results" ]
+        "enum" : [ "store_the_most_recent_result_per_month", "store_the_most_recent_result_per_week", "store_the_most_recent_result_per_day", "store_the_most_recent_result_per_hour", "store_all_results_without_date_truncation" ]
+      },
+      "DataTypeCategory" : {
+        "type" : "string",
+        "exampleSetFlag" : false,
+        "enum" : [ "numeric_integer", "numeric_decimal", "numeric_float", "datetime_timestamp", "datetime_datetime", "datetime_date", "datetime_time", "text", "clob", "json", "bool", "binary", "array", "other" ]
       },
       "TrinoEngineType" : {
         "type" : "string",

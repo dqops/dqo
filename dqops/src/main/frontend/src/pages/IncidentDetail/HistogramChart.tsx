@@ -1,19 +1,19 @@
+import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { getFirstLevelIncidentsState } from '../../redux/selectors';
+import { IncidentIssueHistogramModel } from '../../api';
+import SectionWrapper from '../../components/Dashboard/SectionWrapper';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getIncidentsHistograms,
   setIncidentsHistogramFilter
 } from '../../redux/actions/incidents.actions';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { useParams } from 'react-router-dom';
-import { IncidentIssueHistogramModel } from '../../api';
 import {
   IncidentHistogramFilter,
   IncidentIssueFilter
 } from '../../redux/reducers/incidents.reducer';
-import SectionWrapper from '../../components/Dashboard/SectionWrapper';
-import clsx from 'clsx';
+import { getFirstLevelIncidentsState } from '../../redux/selectors';
+import { useDecodedParams } from '../../utils';
 import { BarChart } from './BarChart';
 
 type HistogramChartProps = {
@@ -34,7 +34,7 @@ export const HistogramChart = ({
     year: string;
     month: string;
     id: string;
-  } = useParams();
+  } = useDecodedParams();
   const year = parseInt(strYear, 10);
   const month = parseInt(strMonth, 10);
   const {
@@ -82,14 +82,17 @@ export const HistogramChart = ({
       <div className="col-span-2">
         <BarChart histograms={histograms} />
       </div>
-      <SectionWrapper title="Filter by columns">
+      <SectionWrapper title="Filter by columns" className="text-sm">
         {Object.keys(histograms?.columns || {}).map((column, index) => (
           <div
-            className={clsx('flex gap-2 mb-2 cursor-pointer', {
-              'font-bold text-gray-700': histogramFilter?.column === column,
-              'text-gray-500':
-                histogramFilter?.column && histogramFilter?.column !== column
-            })}
+            className={clsx(
+              'flex gap-2 mb-2 cursor-pointer whitespace-normal break-all',
+              {
+                'font-bold text-gray-700': histogramFilter?.column === column,
+                'text-gray-500':
+                  histogramFilter?.column && histogramFilter?.column !== column
+              }
+            )}
             key={index}
             onClick={() =>
               onChangeFilter({
@@ -105,14 +108,17 @@ export const HistogramChart = ({
           </div>
         ))}
       </SectionWrapper>
-      <SectionWrapper title="Filter by check name">
+      <SectionWrapper title="Filter by check name" className="text-sm">
         {Object.keys(histograms?.checks || {}).map((check, index) => (
           <div
-            className={clsx('flex gap-2 mb-2 cursor-pointer', {
-              'font-bold text-gray-700': histogramFilter?.check === check,
-              'text-gray-500':
-                histogramFilter?.check && histogramFilter?.check !== check
-            })}
+            className={clsx(
+              'flex gap-2 mb-2 cursor-pointer whitespace-normal break-all',
+              {
+                'font-bold text-gray-700': histogramFilter?.check === check,
+                'text-gray-500':
+                  histogramFilter?.check && histogramFilter?.check !== check
+              }
+            )}
             key={index}
             onClick={() =>
               onChangeFilter({

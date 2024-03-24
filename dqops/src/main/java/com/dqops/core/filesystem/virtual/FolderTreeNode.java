@@ -234,6 +234,9 @@ public class FolderTreeNode implements Cloneable {
                 else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.DICTIONARIES)) {
                     return FolderKind.DICTIONARIES;
                 }
+                else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.PATTERNS)) {
+                    return FolderKind.PATTERNS;
+                }
                 return FolderKind.FOREIGN;
             case CHECKS:
             case CHECK_SUBFOLDER:
@@ -254,6 +257,9 @@ public class FolderTreeNode implements Cloneable {
             case DICTIONARIES:
             case DICTIONARIES_SUBFOLDER:
                 return FolderKind.DICTIONARIES_SUBFOLDER;
+            case PATTERNS:
+            case PATTERNS_SUBFOLDER:
+                return FolderKind.PATTERNS_SUBFOLDER;
             default:
                 return FolderKind.UNKNOWN;
         }

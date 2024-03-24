@@ -17,7 +17,7 @@ package com.dqops.duckdb.sensors.table.timeliness;
 
 import com.dqops.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
-import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.duckdb.BaseDuckdbIntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -48,7 +48,7 @@ public class FileDuckdbTableTimelinessDataFreshnessSensorParametersSpecIntegrati
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv);
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
         String csvFileName = SampleCsvFileNames.test_average_delay;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(csvFileName, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -59,7 +59,7 @@ public class FileDuckdbTableTimelinessDataFreshnessSensorParametersSpecIntegrati
 
     @Test
     void runSensor_withUseOfLocalCsvFile_thenReturnsValues() {
-        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1:LOCAL_DATE_TIME");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
                 sampleTableMetadata, this.checkSpec);
@@ -67,7 +67,7 @@ public class FileDuckdbTableTimelinessDataFreshnessSensorParametersSpecIntegrati
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         LocalDateTime ldt = LocalDateTime.now();
-        Duration timeDiff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1:LOCAL_DATE_TIME").max(),ldt);
+        Duration timeDiff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1").max(),ldt);
         double min = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 - 1;
         double max = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 + 1;
 

@@ -20,6 +20,7 @@ class CloudSynchronizationFoldersStatusModel:
         settings (Union[Unset, FolderSynchronizationStatus]):
         credentials (Union[Unset, FolderSynchronizationStatus]):
         dictionaries (Union[Unset, FolderSynchronizationStatus]):
+        patterns (Union[Unset, FolderSynchronizationStatus]):
         data_sensor_readouts (Union[Unset, FolderSynchronizationStatus]):
         data_check_results (Union[Unset, FolderSynchronizationStatus]):
         data_statistics (Union[Unset, FolderSynchronizationStatus]):
@@ -34,6 +35,7 @@ class CloudSynchronizationFoldersStatusModel:
     settings: Union[Unset, FolderSynchronizationStatus] = UNSET
     credentials: Union[Unset, FolderSynchronizationStatus] = UNSET
     dictionaries: Union[Unset, FolderSynchronizationStatus] = UNSET
+    patterns: Union[Unset, FolderSynchronizationStatus] = UNSET
     data_sensor_readouts: Union[Unset, FolderSynchronizationStatus] = UNSET
     data_check_results: Union[Unset, FolderSynchronizationStatus] = UNSET
     data_statistics: Union[Unset, FolderSynchronizationStatus] = UNSET
@@ -69,6 +71,10 @@ class CloudSynchronizationFoldersStatusModel:
         dictionaries: Union[Unset, str] = UNSET
         if not isinstance(self.dictionaries, Unset):
             dictionaries = self.dictionaries.value
+
+        patterns: Union[Unset, str] = UNSET
+        if not isinstance(self.patterns, Unset):
+            patterns = self.patterns.value
 
         data_sensor_readouts: Union[Unset, str] = UNSET
         if not isinstance(self.data_sensor_readouts, Unset):
@@ -107,6 +113,8 @@ class CloudSynchronizationFoldersStatusModel:
             field_dict["credentials"] = credentials
         if dictionaries is not UNSET:
             field_dict["dictionaries"] = dictionaries
+        if patterns is not UNSET:
+            field_dict["patterns"] = patterns
         if data_sensor_readouts is not UNSET:
             field_dict["data_sensor_readouts"] = data_sensor_readouts
         if data_check_results is not UNSET:
@@ -172,6 +180,13 @@ class CloudSynchronizationFoldersStatusModel:
         else:
             dictionaries = FolderSynchronizationStatus(_dictionaries)
 
+        _patterns = d.pop("patterns", UNSET)
+        patterns: Union[Unset, FolderSynchronizationStatus]
+        if isinstance(_patterns, Unset):
+            patterns = UNSET
+        else:
+            patterns = FolderSynchronizationStatus(_patterns)
+
         _data_sensor_readouts = d.pop("data_sensor_readouts", UNSET)
         data_sensor_readouts: Union[Unset, FolderSynchronizationStatus]
         if isinstance(_data_sensor_readouts, Unset):
@@ -215,6 +230,7 @@ class CloudSynchronizationFoldersStatusModel:
             settings=settings,
             credentials=credentials,
             dictionaries=dictionaries,
+            patterns=patterns,
             data_sensor_readouts=data_sensor_readouts,
             data_check_results=data_check_results,
             data_statistics=data_statistics,
