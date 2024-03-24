@@ -20,7 +20,8 @@ interface IScheduleViewProps {
 }
 type TMinutes = { minutes: number; day: number; hour: number };
 
-const defaultMinutes = { minutes: 15, day: 15, hour: 15 };
+const defaultMinutes = { minutes: 15, day: 0, hour: 0 };
+const defaultHourForDaily = 8;
 
 const ScheduleView = ({
   schedule,
@@ -29,7 +30,7 @@ const ScheduleView = ({
 }: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState<TMinutes>(defaultMinutes);
-  const [hour, setHour] = useState(15);
+  const [hour, setHour] = useState(defaultHourForDaily);
   const { table, column }: { table: string; column: string } = useDecodedParams();
 
   const { isCronScheduled, userProfile } = useSelector(
@@ -166,7 +167,7 @@ const ScheduleView = ({
     };
 
     setMinutes(defaultMinutes);
-    setHour(15);
+    setHour(defaultHourForDaily);
     checkCronExpresion();
   }, [schedule]);
 
