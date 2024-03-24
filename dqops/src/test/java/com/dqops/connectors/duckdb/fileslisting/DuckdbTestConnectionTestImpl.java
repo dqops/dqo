@@ -139,6 +139,10 @@ class DuckdbTestConnectionImplTest extends BaseTest {
         SecretValueProviderImpl secretValueProvider = beanFactory.getBean(SecretValueProviderImpl.class);
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
 
+        if (System.getenv("DQOPS_TEST_AWS_ACCESS_KEY_ID") == null) {
+            return; // test credentials not configured, ignoring this test
+        }
+
         this.duckdbParametersSpec.setUser(secretValueProvider.expandValue("${DQOPS_TEST_AWS_ACCESS_KEY_ID}", secretValueLookupContext));
         this.duckdbParametersSpec.setPassword(secretValueProvider.expandValue("${DQOPS_TEST_AWS_SECRET_ACCESS_KEY}", secretValueLookupContext));
         this.duckdbParametersSpec.setRegion(secretValueProvider.expandValue("${DQOPS_TEST_AWS_REGION}", secretValueLookupContext));

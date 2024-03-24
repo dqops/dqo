@@ -77,7 +77,7 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
             ScheduledChecksSearchFilters scheduledChecksSearchFilters = new ScheduledChecksSearchFilters();
             scheduledChecksSearchFilters.setEnabled(true);
             scheduledChecksSearchFilters.setSchedule(schedule);
-            scheduledChecksSearchFilters.setScheduleGroup(scheduleRoot.getScheduleGroup());
+            scheduledChecksSearchFilters.setSchedulingGroups(scheduleRoot.getSchedulingGroups());
             HierarchyNode scheduleRootNode = scheduleRoot.getScheduleRootNode();
 
             if (scheduleRootNode instanceof ConnectionWrapper) {
@@ -130,6 +130,4 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
 
         return scheduledChecksCollection;
     }
-
-
 }
