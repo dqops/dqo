@@ -23,7 +23,7 @@ description: DQOps is an open-source data quality platform for data quality and 
     <span style="font-size: 0.7rem;">
     The approach to managing **data quality** changes throughout the data lifecycle.
     The preferred interface for a data quality platform also changes: 
-    user interface, Python code, REST API, command-line, edit YAML files, run locally, or set up a shared server.
+    user interface, Python code, REST API, command-line, editing YAML files, running locally, or setting up a shared server.
     DQOps supports them all.
     </span>
 
