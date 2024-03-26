@@ -134,7 +134,7 @@ You will be linked to **Data Source** section, **Schedule** tab where you can re
 The scheduling is enabled by default. You can turn it off by clicking the notification icon in the upper right corner and 
 then clicking the **Job scheduler** toggle button.
       
-![Reviewing data source details](https://dqops.com/docs/images/getting-started/reviewing-data-source-section-csv.png)
+![Reviewing data source details](https://dqops.com/docs/images/getting-started/reviewing-data-source-section-csv1.png)
 
 
 ## Explore the connection-level tabs in the Data sources section
