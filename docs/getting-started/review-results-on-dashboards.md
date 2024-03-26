@@ -23,7 +23,7 @@ To access it, go to the **Data Quality Dashboard** section and select the **Prof
 
 Once you are on the **Profiling issues count per check** dashboard, you will be able to review a summary of 
 executed tests (checks) and their results, categorized by type of check. You can filter the data on the dashboard simply 
-by clicking on the filters on top part of the dashboard, as well as clicking on the name of the connection, schema, data group etc.
+by clicking on the filters on top part of the dashboard, as well as clicking on the name of the connection, schema, data group etc. //todo: screen
 
 ![Total issue details dashboard](https://dqops.com/docs/images/getting-started/profiling-issues-count-per-check-dashboard.png)
 
@@ -33,7 +33,7 @@ In the **Results per check** table you can see the results broken down by check 
 ## Review the total number of issues raised by the monitoring checks
 
 To review the issues raised by the monitoring checks, simply select the **Data quality issue count per check** dashboard
-in the **Monitoring** group.
+in the **Monitoring** group. //todo: screen
 
 ![Total issue details dashboard](https://dqops.com/docs/images/getting-started/monitoring-issue-count-per-check-dashboard.png)
 
@@ -53,7 +53,7 @@ Data quality KPIs dashboards review key data metrics per connection,
 To review the summary KPIs of all run checks use the **KPIs scorecard - summary** dashboards.
 
 In the **Profiling** group, select the **Profile data quality KPIs** section and select the
-**Profiling KPIs scorecard - summary** dashboard.
+**Profiling KPIs scorecard - summary** dashboard. //todo: screen
 
 ![KPIs scorecard dashboard](https://dqops.com/docs/images/getting-started/profiling-kpis-scorecard-dashboard2.png)
     
