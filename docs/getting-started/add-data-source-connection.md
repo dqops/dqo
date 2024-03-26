@@ -17,19 +17,17 @@ You can find more information about [navigating the DQOps user interface here](.
 
     Links to some supported data sources are shown below.
 
-    [![CSV](https://dqops.com/docs/images/connections/csv-icon2.png){ class=glightbox-ignored-image }](../data-sources/csv.md)
-    &nbsp; &nbsp; &nbsp; [![Parquet](https://dqops.com/docs/images/connections/parquet-icon2.png){ class=glightbox-ignored-image }](../data-sources/parquet.md)
+    [![Parquet](https://dqops.com/docs/images/connections/parquet-icon2.png){ class=glightbox-ignored-image }](../data-sources/parquet.md)
     &nbsp; &nbsp; &nbsp; [![Athena](https://dqops.com/docs/images/connections/athena2.png){ class=glightbox-ignored-image }](../data-sources/athena.md)
     &nbsp; &nbsp; &nbsp; [![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png){ class=glightbox-ignored-image }](../data-sources/postgresql.md)
+    &nbsp; &nbsp; &nbsp; [![BigQuery](https://dqops.com/docs/images/connections/bigquery.png){ class=glightbox-ignored-image }](../data-sources/bigquery.md)
 
 ## CSV file
 
-To add a connection to a CSV file data source to DQOps you need a CSV file.
+Choose a CSV file you want to analyse. To add a connection to a CSV file data source to DQOps you need one.
 
-We will use data from the Austin Crime file in CSV format. The file contains a sample of [BigQuery public dataset Austin Crime Data](https://console.cloud.google.com/marketplace/details/city-of-austin/austin-crime).
-Instead of using it, you can also work on your CSV file.
-
-The table below presents the fragment of the example CSV file content.
+You can also download a CSV file used in this guide. 
+The table below presents the fragment of it's content.
 
 | unique_key | address                        | census_tract | clearance_date                 | clearance_status | council_district_code | description              | district | latitude | longitude | location | location_description | primary_type | timestamp                      | x_coordinate | y_coordinate | year | zipcode |
 |------------|--------------------------------|--------------|--------------------------------|------------------|-----------------------|--------------------------|----------|----------|-----------|----------|----------------------|--------------|--------------------------------|--------------|--------------|------|---------|  
@@ -39,6 +37,7 @@ The table below presents the fragment of the example CSV file content.
 | 2015331238 | "7928 US HWY 71 W Austin, TX"  |              | 2015-02-12 12:00:00.000000 UTC | Not cleared      |                       | THEFT OF HEAVY EQUIPMENT | UK       |          |           |          | 7928 US HWY 71 W     | Theft        | 2015-02-02 12:00:00.000000 UTC |              |              | 2015 |         |
 | ...        | ...                            | ...          | ...                            | ...              | ...                   | ...                      | ...      | ...      | ...       | ...      | ...                  | ...          | ...                            | ...          | ...          | ...  | ...     |
 
+The file is a sample of Austin Crime file from BigQuery public dataset Austin Crime Data.
 
 ### Downloading the example file
 
@@ -47,21 +46,16 @@ To download the example CSV file, [open the github page](https://github.com/dqop
 
 On the right side you can see the three dots button. When button is clicked the **download** becomes available on the expanded list.
 
-// todo: add screen 
-
+![Adding connection](https://dqops.com/docs/images/getting-started/github-download.png)
+                                       
 Download the file austin_crime.csv and open a download directory containing the file.
 
-!!! info "Default downloads path"
-    
-    On Windows it would be c:\Users\[your_user_name]\Downloads. Use **File explorer** to ensure the place of the file. 
+To separate the downloaded file from other files we will not work with, put the file to a new folder.
+We created the new folder named __demo_files__ directly on a drive in this guide.
 
-    On Mac it would be /Users/[your_user_name]/Downloads. Use **Finder** to ensure the place of the file.
+![Adding connection](https://dqops.com/docs/images/getting-started/file-explorer.png)
 
-To separate the downloaded file from other files we will not work with, create a new folder in the file directory.
-Let's name it demo_files, then move the CSV file there.
-
-Finally, the full file path to the CSV file would be similar to this:
-C:\Users\MyUser\Downloads\demo_files\austin_crime.csv
+See, in our example the file is places in the directory: C:\demo_files\austin_crime.csv
 
 Remember the absolute path to the file because you will use it when configuring the connection.
 
@@ -73,30 +67,24 @@ To navigate to the CSV connection settings:
 
 1. Go to the **Data Sources** section and click **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png) 
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
    
-2. Select **CSV** connection type. // todo: screen
+2. Select **CSV** connection type.
 
-    ![Selecting CSV connection type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-bigquery.png)
+   ![Selecting CSV database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-csv.png)
 
 ### **Fill in the connection settings**
 
 After navigating to the CSV connection settings, you will need to fill in the connection details.
 
-// todo: screen with the configuration 
+Focus on the required fields only. All other fields such as Virtual schema name **leave untouched**.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-bigquery.png)
+![Adding connection](https://dqops.com/docs/images/getting-started/connection-settings-csv-filled1.png)
 
-Focus on the required fields only.
-
-| CSV connection settings  | What to fill on this guide?                               | Description                                                                                                                                                                                                                               | 
-|--------------------------|-----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name          | Let's name it demo_connection                             | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-| Parallel jobs limit      | Leave it empty.                                           | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                              |
-| Files location           | Do not change it, since you use the local file.           | You have the option to import files stored locally or remotely.                                                                                                                                                                           |
-| Virtual schema name      | Leave it named "files"                                    | An alias for the parent directory with data. The virtual schema name is a key of the directories mapping.                                                                                                                                 |
-| Path                     | Fill it with the absolute path to the folder "demo_files" | The path prefix to the parent directory with data. The path must be absolute. The virtual schema name is a value of the directories mapping.                                                                                              |
-| JDBC connection property | Leave it empty.                                           | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                  |
+| CSV connection settings  | Description                                                                                                                                                                                                                               | 
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
+| Path                     | The path prefix to the parent directory with data. The path must be absolute. The virtual schema name is a value of the directories mapping.                                                                                              |
 
 After filling in the connection settings, click the **Test Connection** button to test the connection.
 It will inform you if the path to the CSV file may be incorrect.
@@ -109,13 +97,13 @@ Otherwise, you can check the details of what went wrong.
 When you add a new connection, it will appear in the tree view on the left, and you will be redirected to the Import Metadata screen.
 Now we can import schemas and tables.
 
-1. Import the "files" schema by clicking on the **Import Tables**  // todo: screen
+1. Import the "files" schema by clicking on the **Import Tables**
 
-    ![Importing schemas](https://dqops.com/docs/images/getting-started/importing-schema-austin-crime.png)
+    ![Importing schemas](https://dqops.com/docs/images/getting-started/importing-schema-files.png)
 
-2. There is only one table in the dataset. Import the table by clicking **Import all tables** buttons in the upper right corner.  // todo: screen
+2. Select the file austin_crime.csv marking the checkbox and import by clicking **Import selected tables** button in the upper right corner.
 
-    ![Importing tables](https://dqops.com/docs/images/getting-started/importing-tables-austin-crime.png)
+    ![Importing tables](https://dqops.com/docs/images/getting-started/importing-tables-austin-crime-csv.png)
 
 
 ## Initiate automatic monitoring and review scheduling
@@ -131,22 +119,22 @@ Within the Advisor, you can collect basic statistics, run profiling checks, or m
 
 To Run basic statistics and profiling checks, click on the appropriate buttons on the advisor.
 
-We will evaluate the results from basic statistics and profiling checks at the next step of the Getting started.  // todo: screen
+We will evaluate the results from basic statistics and profiling checks at the next step of the Getting started.
 
-![Running basic statistics and profiling checks](https://dqops.com/docs/images/getting-started/running-basics-statistics-and-profiling-checks.png)
+![Running basic statistics and profiling checks](https://dqops.com/docs/images/getting-started/running-basics-statistics-and-profiling-checks-csv.png)
 
 ### Review scheduling with the Advisor
 
-To review scheduling for profiling and daily monitoring checks, click on the **Review scheduling** button.  // todo: screen
+To review scheduling for profiling and daily monitoring checks, click on the **Review scheduling** button.
 
-![Review scheduling](https://dqops.com/docs/images/getting-started/review-scheduling.png)
+![Review scheduling](https://dqops.com/docs/images/getting-started/review-scheduling-csv.png)
 
 You will be linked to **Data Source** section, **Schedule** tab where you can review scheduling settings for the added connection.
 
 The scheduling is enabled by default. You can turn it off by clicking the notification icon in the upper right corner and 
-then clicking the **Job scheduler** toggle button.  // todo: screen
+then clicking the **Job scheduler** toggle button.
       
-![Reviewing data source details](https://dqops.com/docs/images/getting-started/reviewing-data-source-section2.png)
+![Reviewing data source details](https://dqops.com/docs/images/getting-started/reviewing-data-source-section-csv.png)
 
 
 ## Explore the connection-level tabs in the Data sources section
@@ -174,9 +162,9 @@ At the table level in the **Data sources** section, there are the following tabs
 - **Date and time columns** - allows [configuring event and ingestion timestamp columns for timeliness checks](../working-with-dqo/run-data-quality-checks.md#configure-event-and-ingestion-timestamp-columns-for-timeliness-checks), as well as [date or datetime column for partition checks](../working-with-dqo/run-data-quality-checks.md#configure-date-or-datetime-column-for-partition-checks).
 - **Incident configuration** - allows configuring incidents. [Learn more about incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) that let you keep track of the issues that arise during data quality monitoring.
 
-You can check the details of the imported table by expanding the tree view on the left and selecting the "crime" table.
+You can check the details of the imported table by expanding the tree view on the left and selecting the "austin_crime.csv" table.
 
-![Reviewing table details](https://dqops.com/docs/images/getting-started/reviewing-table-details.png)
+![Reviewing table details](https://dqops.com/docs/images/getting-started/reviewing-table-details-csv.png)
 
 ## Next step
 
