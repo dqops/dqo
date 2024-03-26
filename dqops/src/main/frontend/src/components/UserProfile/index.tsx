@@ -1,20 +1,20 @@
-import { AxiosResponse } from 'axios';
-import React, { useEffect, useState } from 'react';
-import { DqoUserProfileModel } from '../../api';
-import { EnviromentApiClient, UsersApi } from '../../services/apiClient';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { toggleProfile, setLicenseFree, setUserProfile } from '../../redux/actions/job.actions';
 import {
+  IconButton,
   Popover,
-  PopoverHandler,
   PopoverContent,
-  IconButton
+  PopoverHandler
 } from '@material-tailwind/react';
-import SvgIcon from '../SvgIcon';
-import Button from '../Button';
+import { AxiosResponse } from 'axios';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { DqoUserProfileModel } from '../../api';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setLicenseFree, setUserProfile, toggleProfile } from '../../redux/actions/job.actions';
+import { IRootState } from '../../redux/reducers';
+import { EnviromentApiClient, UsersApi } from '../../services/apiClient';
+import Button from '../Button';
+import SvgIcon from '../SvgIcon';
 import TextArea from '../TextArea';
 import ChangePrincipalPasswordDialog from './ChangePrincipalPasswordDialog';
 
@@ -92,7 +92,7 @@ export default function UserProfile({ name, email }: UserProfile) {
           </div>
         </IconButton>
       </PopoverHandler>
-      <PopoverContent className="bg-white h-110 w-70 rounded-md border border-gray-400 flex-col justify-center items-center z-50 text-black">
+      <PopoverContent className="bg-white h-110 w-70 rounded-md border border-gray-400 flex-col justify-center items-center z-50 text-black text-sm">
         <div className="flex justify-between items-center h-12 ">
           <div className="ml-1 flex items-center justify-center gap-x-2">
             {' '}
@@ -186,15 +186,15 @@ export default function UserProfile({ name, email }: UserProfile) {
             href="https://cloud.dqops.com/account"
             target="_blank"
             rel="noreferrer"
-            className="block text-teal-500 text-lg underline mb-3"
+            className="block text-teal-500 text-sm underline mb-3"
           >
             Manage account 
           </a> 
         }
         {userProfile.can_change_own_password === true && 
           <>
-          <div className='text-teal-500 mb-3 text-lg cursor-pointer underline' onClick={() => setOpen(true)}>Change password</div>
-          <div className='text-green-500 pt-2 text-lg'>{passwordChangedMessage}</div>
+          <div className='text-teal-500 mb-3 text-sm cursor-pointer underline' onClick={() => setOpen(true)}>Change password</div>
+          <div className='text-green-500 pt-2 text-sm'>{passwordChangedMessage}</div>
           </>
         }
         </div>
