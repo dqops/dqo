@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.defaults.DefaultObservabilityConfigurationService;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.HierarchyNode;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.*;
@@ -32,7 +33,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Service that finds all checks that should be executed for a given schedule.
@@ -74,10 +77,6 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
                 userHome.getConnections(), scheduleRootsSearchFilters);
 
         for (ScheduleRootResult scheduleRoot : scheduleRoots.getResults()) {
-            ScheduledChecksSearchFilters scheduledChecksSearchFilters = new ScheduledChecksSearchFilters();
-            scheduledChecksSearchFilters.setEnabled(true);
-            scheduledChecksSearchFilters.setSchedule(schedule);
-            scheduledChecksSearchFilters.setScheduleGroup(scheduleRoot.getScheduleGroup());
             HierarchyNode scheduleRootNode = scheduleRoot.getScheduleRootNode();
 
             if (scheduleRootNode instanceof ConnectionWrapper) {
@@ -87,6 +86,37 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
                 for (TableWrapper scheduledTableWrapper : scheduledConnectionWrapper.getTables()) {
                     TableSpec clonedTableSpec = scheduledTableWrapper.getSpec().deepClone();
                     this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(scheduledConnectionWrapper.getSpec(), clonedTableSpec, userHome);
+
+                    Set<CheckRunScheduleGroup> schedulingGroupsForTable = scheduleRoot.getSchedulingGroups();
+                    DefaultSchedulesSpec tableSchedulesOverride = clonedTableSpec.getSchedulesOverride();
+                    if (tableSchedulesOverride != null && !tableSchedulesOverride.isDefault()) {
+                        schedulingGroupsForTable = new HashSet<>(schedulingGroupsForTable);
+
+                        if (tableSchedulesOverride.getScheduleForCheckSchedulingGroup(CheckRunScheduleGroup.profiling) != null) {
+                            schedulingGroupsForTable.remove(CheckRunScheduleGroup.profiling);
+                        }
+
+                        if (tableSchedulesOverride.getScheduleForCheckSchedulingGroup(CheckRunScheduleGroup.monitoring_daily) != null) {
+                            schedulingGroupsForTable.remove(CheckRunScheduleGroup.monitoring_daily);
+                        }
+
+                        if (tableSchedulesOverride.getScheduleForCheckSchedulingGroup(CheckRunScheduleGroup.monitoring_monthly) != null) {
+                            schedulingGroupsForTable.remove(CheckRunScheduleGroup.monitoring_monthly);
+                        }
+
+                        if (tableSchedulesOverride.getScheduleForCheckSchedulingGroup(CheckRunScheduleGroup.partitioned_daily) != null) {
+                            schedulingGroupsForTable.remove(CheckRunScheduleGroup.partitioned_daily);
+                        }
+
+                        if (tableSchedulesOverride.getScheduleForCheckSchedulingGroup(CheckRunScheduleGroup.partitioned_monthly) != null) {
+                            schedulingGroupsForTable.remove(CheckRunScheduleGroup.partitioned_monthly);
+                        }
+                    }
+
+                    ScheduledChecksSearchFilters scheduledChecksSearchFilters = new ScheduledChecksSearchFilters();
+                    scheduledChecksSearchFilters.setEnabled(true);
+                    scheduledChecksSearchFilters.setSchedule(schedule);
+                    scheduledChecksSearchFilters.setSchedulingGroups(schedulingGroupsForTable);
 
                     Collection<AbstractCheckSpec<?,?,?,?>> scheduledChecks = this.hierarchyNodeTreeSearcher.findScheduledChecks(
                             clonedTableSpec, scheduledChecksSearchFilters);
@@ -105,6 +135,11 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
                 ConnectionWrapper connectionWrapper = userHome.findConnectionFor(originalTableSpec.getHierarchyId());
                 TableSpec clonedTableSpec = originalTableSpec.deepClone();
                 this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(connectionWrapper.getSpec(), clonedTableSpec, userHome);
+
+                ScheduledChecksSearchFilters scheduledChecksSearchFilters = new ScheduledChecksSearchFilters();
+                scheduledChecksSearchFilters.setEnabled(true);
+                scheduledChecksSearchFilters.setSchedule(schedule);
+                scheduledChecksSearchFilters.setSchedulingGroups(scheduleRoot.getSchedulingGroups());
 
                 Collection<AbstractCheckSpec<?,?,?,?>> scheduledChecks = this.hierarchyNodeTreeSearcher.findScheduledChecks(
                         clonedTableSpec, scheduledChecksSearchFilters);
@@ -130,6 +165,4 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
 
         return scheduledChecksCollection;
     }
-
-
 }

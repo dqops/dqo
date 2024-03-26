@@ -1,28 +1,29 @@
+import { Tooltip } from '@material-tailwind/react';
+import { AxiosResponse } from 'axios';
+import clsx from 'clsx';
+import { groupBy } from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useRouteMatch } from 'react-router-dom';
+import { ConnectionModel } from '../../../api';
 import {
   checkTypesToJobTemplateKey,
   useTree
 } from '../../../contexts/treeContext';
-import { groupBy } from 'lodash';
-import { TREE_LEVEL } from '../../../shared/enums';
-import SvgIcon from '../../SvgIcon';
-import { CustomTreeNode } from '../../../shared/interfaces';
-import clsx from 'clsx';
-import { Tooltip } from '@material-tailwind/react';
-import ContextMenu from '../../CustomTree/ContextMenu';
-import ConfirmDialog from '../../CustomTree/ConfirmDialog';
-import { CheckTypes, ROUTES } from '../../../shared/routes';
-import { useSelector } from 'react-redux';
-import { getFirstLevelActiveTab } from '../../../redux/selectors';
-import { useParams, useRouteMatch } from 'react-router-dom';
-import { findTreeNode } from '../../../utils/tree';
-import { AxiosResponse } from 'axios';
-import { ConnectionModel } from '../../../api';
-import { ConnectionApiClient } from '../../../services/apiClient';
-import AddColumnDialog from '../../CustomTree/AddColumnDialog';
-import AddTableDialog from '../../CustomTree/AddTableDialog';
-import AddSchemaDialog from '../../CustomTree/AddSchemaDialog';
 import { IRootState } from '../../../redux/reducers';
+import { getFirstLevelActiveTab } from '../../../redux/selectors';
+import { ConnectionApiClient } from '../../../services/apiClient';
+import { TREE_LEVEL } from '../../../shared/enums';
+import { CustomTreeNode } from '../../../shared/interfaces';
+import { CheckTypes, ROUTES } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
+import { findTreeNode } from '../../../utils/tree';
+import AddColumnDialog from '../../CustomTree/AddColumnDialog';
+import AddSchemaDialog from '../../CustomTree/AddSchemaDialog';
+import AddTableDialog from '../../CustomTree/AddTableDialog';
+import ConfirmDialog from '../../CustomTree/ConfirmDialog';
+import ContextMenu from '../../CustomTree/ContextMenu';
+import SvgIcon from '../../SvgIcon';
 
 const Tree = () => {
   const {
@@ -37,7 +38,7 @@ const Tree = () => {
     refreshNode,
     setTreeData
   } = useTree();
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedNode, setSelectedNode] = useState<CustomTreeNode>();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -324,7 +325,7 @@ const Tree = () => {
     setAddSchemaDialogOpen(false);
     setSelectedNode(undefined);
   };
-
+   
   const renderIcon = (node: CustomTreeNode) => {
     if (
       node.level === TREE_LEVEL.TABLE_INCIDENTS ||

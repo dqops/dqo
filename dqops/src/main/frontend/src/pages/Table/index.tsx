@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import MonitoringView from '../../components/Connection/TableView/MonitoringView';
 import PartitionedChecks from '../../components/Connection/TableView/PartitionedChecks';
 import ProfilingView from '../../components/Connection/TableView/ProfilingView';
@@ -22,6 +22,7 @@ import {
   getSecondLevelTab
 } from '../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 
 const initTabs = [
   {
@@ -67,7 +68,7 @@ const TablePage = () => {
     table: string;
     tab: string;
     checkTypes: CheckTypes;
-  } = useParams();
+  } = useDecodedParams();
   const history = useHistory();
   const [tabs, setTabs] = useState(initTabs);
   const {

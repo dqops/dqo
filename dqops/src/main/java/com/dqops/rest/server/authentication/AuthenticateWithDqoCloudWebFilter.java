@@ -308,7 +308,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                 String dqoCloudLoginUrl = this.instanceCloudLoginService.makeDqoLoginUrl(requestUrl);
 
                 if (log.isDebugEnabled()) {
-                    log.debug("Redirecting the user to authenticate with DQOps Cloud federated authentication");
+                    log.debug("Redirecting the user to authenticate with DQOps Cloud federated authentication at " + dqoCloudLoginUrl);
                 }
 
                 exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(303));

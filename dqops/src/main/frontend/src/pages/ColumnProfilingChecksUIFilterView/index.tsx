@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
 import Button from '../../components/Button';
 import DataQualityChecks from '../../components/DataQualityChecks';
@@ -19,6 +18,7 @@ import {
   ColumnApiClient
 } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 
 const ColumnProfilingChecksUIFilterView = () => {
   const {
@@ -37,7 +37,7 @@ const ColumnProfilingChecksUIFilterView = () => {
     column: string;
     category: string;
     checkName: string;
-  } = useParams();
+  } = useDecodedParams();
   const { checksUIFilter, isUpdatedChecksUIFilter, loading } = useSelector(
     getFirstLevelState(checkTypes)
   );

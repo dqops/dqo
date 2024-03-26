@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import CommentsView from '../../components/Connection/CommentsView';
-import ColumnActionGroup from './ColumnActionGroup';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CommentSpec } from '../../api';
+import CommentsView from '../../components/Connection/CommentsView';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getColumnComments,
@@ -10,9 +9,10 @@ import {
   setUpdatedComments,
   updateColumnComments
 } from '../../redux/actions/column.actions';
-import { CheckTypes } from "../../shared/routes";
-import { useParams } from "react-router-dom";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import { CheckTypes } from "../../shared/routes";
+import ColumnActionGroup from './ColumnActionGroup';
+import { useDecodedParams } from '../../utils';
 
 interface IColumnCommentsViewProps {
   connectionName: string;
@@ -27,7 +27,7 @@ const ColumnCommentsView = ({
   tableName,
   columnName
 }: IColumnCommentsViewProps) => {
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const { columnBasic, updatedComments, isUpdating, isUpdatedComments } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [text, setText] = useState('');

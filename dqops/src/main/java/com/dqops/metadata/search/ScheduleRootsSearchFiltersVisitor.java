@@ -68,24 +68,30 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
         assert this.filters.getSchedule() != null;
 
         if (schedules != null) {
+            ScheduleRootResult scheduleRootResult = new ScheduleRootResult(connectionWrapper);
+
             if (Objects.equals(schedules.getProfiling(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.profiling, connectionWrapper));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.profiling);
             }
 
             if (Objects.equals(schedules.getMonitoringDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.monitoring_daily, connectionWrapper));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.monitoring_daily);
             }
 
             if (Objects.equals(schedules.getMonitoringMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.monitoring_monthly, connectionWrapper));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.monitoring_monthly);
             }
 
             if (Objects.equals(schedules.getPartitionedDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.partitioned_daily, connectionWrapper));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.partitioned_daily);
             }
 
             if (Objects.equals(schedules.getPartitionedMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.partitioned_monthly, connectionWrapper));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.partitioned_monthly);
+            }
+
+            if (scheduleRootResult.hasAnySchedulingGroups()) {
+                foundNodes.add(scheduleRootResult);
             }
         }
 
@@ -113,24 +119,30 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
         assert this.filters.getSchedule() != null;
 
         if (schedulesOverride != null) {
+            ScheduleRootResult scheduleRootResult = new ScheduleRootResult(tableSpec);
+
             if (Objects.equals(schedulesOverride.getProfiling(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.profiling, tableSpec));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.profiling);
             }
 
             if (Objects.equals(schedulesOverride.getMonitoringDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.monitoring_daily, tableSpec));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.monitoring_daily);
             }
 
             if (Objects.equals(schedulesOverride.getMonitoringMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.monitoring_monthly, tableSpec));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.monitoring_monthly);
             }
 
             if (Objects.equals(schedulesOverride.getPartitionedDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.partitioned_daily, tableSpec));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.partitioned_daily);
             }
 
             if (Objects.equals(schedulesOverride.getPartitionedMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunScheduleGroup.partitioned_monthly, tableSpec));
+                scheduleRootResult.addSchedulingGroup(CheckRunScheduleGroup.partitioned_monthly);
+            }
+
+            if (scheduleRootResult.hasAnySchedulingGroups()) {
+                foundNodes.add(scheduleRootResult);
             }
         }
 
@@ -151,7 +163,8 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
 
         if (checkSchedule != null && !checkSchedule.isDefault()) {
             if (Objects.equals(checkSchedule, this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(null, abstractCheckSpec));
+                ScheduleRootResult scheduleRootResult = new ScheduleRootResult(abstractCheckSpec);
+                foundNodes.add(scheduleRootResult);
             }
         }
 

@@ -1,28 +1,28 @@
+import clsx from "clsx";
 import React, { useEffect, useState } from "react";
-import Select from "../../Select";
-import { CheckTypes } from "../../../shared/routes";
-import { useParams } from "react-router-dom";
-import { useActionDispatch } from "../../../hooks/useActionDispatch";
 import { useSelector } from "react-redux";
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
-import {
-  getConnectionIncidentGrouping,
-  setUpdateIncidentGroup,
-  updateConnectionIncidentGrouping
-} from "../../../redux/actions/source.actions";
 import {
   ConnectionIncidentGroupingSpec,
   ConnectionIncidentGroupingSpecGroupingLevelEnum,
   ConnectionIncidentGroupingSpecMinimumSeverityEnum, IncidentWebhookNotificationsSpec
 } from "../../../api";
+import { useActionDispatch } from "../../../hooks/useActionDispatch";
+import {
+  getConnectionIncidentGrouping,
+  setUpdateIncidentGroup,
+  updateConnectionIncidentGrouping
+} from "../../../redux/actions/source.actions";
+import { IRootState } from "../../../redux/reducers";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
+import { SettingsApi } from "../../../services/apiClient";
+import { CheckTypes } from "../../../shared/routes";
+import { useDecodedParams } from "../../../utils";
 import Checkbox from "../../Checkbox";
-import NumberInput from "../../NumberInput";
 import SectionWrapper from "../../Dashboard/SectionWrapper";
 import Input from "../../Input";
+import NumberInput from "../../NumberInput";
+import Select from "../../Select";
 import ConnectionActionGroup from "./ConnectionActionGroup";
-import { IRootState } from "../../../redux/reducers";
-import clsx from "clsx";
-import { SettingsApi } from "../../../services/apiClient";
 
 const groupLevelOptions = Object.values(ConnectionIncidentGroupingSpecGroupingLevelEnum).map((item) => ({
   label: item
@@ -41,7 +41,7 @@ export const IncidentsNotificationsView = () => {
   const {  userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
-  const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
+  const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useDecodedParams();
   const dispatch = useActionDispatch();
   const { incidentGrouping, isUpdatedIncidentGroup, isUpdating } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));

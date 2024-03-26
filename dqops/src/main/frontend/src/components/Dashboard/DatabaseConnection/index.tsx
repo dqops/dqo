@@ -13,7 +13,7 @@ import {
   DataSourcesApi,
   SharedCredentialsApi
 } from '../../../services/apiClient';
-import { filterDirectoriesDuckdb } from '../../../utils';
+import { filterPropertiesDirectories } from '../../../utils';
 import Button from '../../Button';
 import Input from '../../Input';
 import Loader from '../../Loader';
@@ -80,9 +80,7 @@ const DatabaseConnection = ({
     setIsSaving(true);
     await ConnectionApiClient.createConnectionBasic(
       database?.connection_name ?? '',
-      database.provider_type === ConnectionModelProviderTypeEnum.duckdb
-        ? filterDirectoriesDuckdb(database)
-        : database
+ filterPropertiesDirectories(database)
     );
     const res = await ConnectionApiClient.getConnectionBasic(
       database.connection_name
@@ -120,9 +118,7 @@ const DatabaseConnection = ({
       testRes = (
         await DataSourcesApi.testConnection(
           true,
-          database.provider_type === ConnectionModelProviderTypeEnum.duckdb
-            ? filterDirectoriesDuckdb(database)
-            : database
+filterPropertiesDirectories(database)
         )
       ).data;
       setIsTesting(false);
@@ -140,6 +136,13 @@ const DatabaseConnection = ({
       ) {
         setMessage(testRes?.errorMessage);
       }
+      else if (
+        testRes?.connectionTestResult ===
+        ConnectionTestModelConnectionTestResultEnum.FAILURE
+      ) {
+        setMessage(testRes?.errorMessage);
+        setShowConfirm(true)
+      }
     }
   };
 
@@ -147,10 +150,7 @@ const DatabaseConnection = ({
     try {
       setIsTesting(true);
       const res = await DataSourcesApi.testConnection(
-        true,
-        database.provider_type === ConnectionModelProviderTypeEnum.duckdb
-          ? filterDirectoriesDuckdb(database)
-          : database
+        true, filterPropertiesDirectories(database)
       );
       setTestResult(res.data);
     } catch (err) {

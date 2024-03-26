@@ -10,6 +10,18 @@ For a full description of how to add a data source connection to other providers
 see [Working with DQOps section](../data-sources/index.md).
 You can find more information about [navigating the DQOps user interface here](../dqo-concepts/dqops-user-interface-overview.md). 
 
+!!! info "How to analyze other data sources"
+
+    Instead of connecting to BigQuery, you can follow the manuals for connecting to other data sources and continue
+    this getting started guide from the [import metadata using the user interface](#import-metadata-using-the-user-interface) step.
+
+    Links to some supported data sources are shown below.
+
+    [![CSV](https://dqops.com/docs/images/connections/csv-icon2.png){ class=glightbox-ignored-image }](../data-sources/csv.md)
+    &nbsp; &nbsp; &nbsp; [![Parquet](https://dqops.com/docs/images/connections/parquet-icon2.png){ class=glightbox-ignored-image }](../data-sources/parquet.md)
+    &nbsp; &nbsp; &nbsp; [![Athena](https://dqops.com/docs/images/connections/athena2.png){ class=glightbox-ignored-image }](../data-sources/athena.md)
+    &nbsp; &nbsp; &nbsp; [![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png){ class=glightbox-ignored-image }](../data-sources/postgresql.md)
+
 ## CSV file
 
 To add a connection to a CSV file data source to DQOps you need a CSV file.

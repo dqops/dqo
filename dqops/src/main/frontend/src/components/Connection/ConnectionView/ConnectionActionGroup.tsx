@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import Button from '../../Button';
-import ConfirmDialog from './ConfirmDialog';
-import { ConnectionApiClient } from '../../../services/apiClient';
-import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from "../../../shared/routes";
-import AddSchemaDialog from "../../CustomTree/AddSchemaDialog";
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { IRootState } from '../../../redux/reducers';
+import { ConnectionApiClient } from '../../../services/apiClient';
+import { CheckTypes, ROUTES } from "../../../shared/routes";
+import { useDecodedParams } from '../../../utils';
+import Button from '../../Button';
+import AddSchemaDialog from "../../CustomTree/AddSchemaDialog";
+import ConfirmDialog from './ConfirmDialog';
 
 interface IConnectionActionGroupProps {
   isDisabled?: boolean;
@@ -23,7 +24,7 @@ const ConnectionActionGroup = ({
   onUpdate,
   onImport
 }: IConnectionActionGroupProps) => {
-  const { connection: connectionName, checkTypes, tab }: { connection: any; checkTypes: any; tab: any } = useParams();
+  const { connection: connectionName, checkTypes, tab }: { connection: any; checkTypes: any; tab: any } = useDecodedParams();
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const [isOpen, setIsOpen] = useState(false);
   const history = useHistory();

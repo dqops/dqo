@@ -1,23 +1,23 @@
+import clsx from 'clsx';
 import React, { useEffect } from 'react';
-import ColumnSelect from '../../DataQualityChecks/ColumnSelect';
-import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getTableTimestamps, setUpdatedTablePartitioning,
   updateTableTimestamps
 } from '../../../redux/actions/table.actions';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { useParams } from "react-router-dom";
-import SectionWrapper from "../../Dashboard/SectionWrapper";
-import NumberInput from "../../NumberInput";
-import Checkbox from "../../Checkbox";
-import { CheckTypes } from "../../../shared/routes";
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
-import clsx from 'clsx';
 import { IRootState } from '../../../redux/reducers';
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
+import { CheckTypes } from "../../../shared/routes";
+import Checkbox from "../../Checkbox";
+import SectionWrapper from "../../Dashboard/SectionWrapper";
+import ColumnSelect from '../../DataQualityChecks/ColumnSelect';
+import NumberInput from "../../NumberInput";
+import ActionGroup from './TableActionGroup';
+import { useDecodedParams } from '../../../utils';
 
 const TimestampsView = () => {
-  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes:CheckTypes, connection: string, schema: string, table: string } = useParams();
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes:CheckTypes, connection: string, schema: string, table: string } = useDecodedParams();
   const { tablePartitioning, updatingTablePartitioning, isUpdatedTablePartitioning } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));

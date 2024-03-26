@@ -1,33 +1,33 @@
+import moment from 'moment/moment';
 import React, { useCallback, useEffect, useState } from 'react';
-import Tabs from '../../Tabs';
+import { useSelector } from 'react-redux';
 import {
-  DqoJobHistoryEntryModelStatusEnum,
   CheckModel,
   DeleteStoredDataQueueJobParameters,
+  DqoJobHistoryEntryModelStatusEnum,
 } from '../../../api';
-import { JobApiClient } from '../../../services/apiClient';
-import CheckResultsTab from './CheckResultsTab';
-import IconButton from '../../IconButton';
-import SvgIcon from '../../SvgIcon';
 import { useTree } from '../../../contexts/treeContext';
-import SensorReadoutsTab from './SensorReadoutsTab';
-import CheckErrorsTab from './CheckErrorsTab';
-import DeleteOnlyDataDialog from '../../CustomTree/DeleteOnlyDataDialog';
-import moment from 'moment/moment';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { CheckTypes } from '../../../shared/routes';
 import {
   getCheckErrors,
   getCheckReadouts,
   getCheckResults,
   setCheckFilters
 } from '../../../redux/actions/source.actions';
-import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
-import { IRootState } from '../../../redux/reducers';
+import { JobApiClient } from '../../../services/apiClient';
+import { CheckTypes } from '../../../shared/routes';
+import DeleteOnlyDataDialog from '../../CustomTree/DeleteOnlyDataDialog';
+import IconButton from '../../IconButton';
+import SvgIcon from '../../SvgIcon';
+import Tabs from '../../Tabs';
+import CheckErrorsTab from './CheckErrorsTab';
+import CheckResultsTab from './CheckResultsTab';
+import SensorReadoutsTab from './SensorReadoutsTab';
 
 const tabs = [
   {
@@ -287,11 +287,11 @@ const CheckDetails = ({
     <div
       className="my-4"
       style={{
-        maxWidth: `calc(100vw - ${sidebarWidth + 85}px`
+        maxWidth: `calc(100vw - ${sidebarWidth + 40}px`
       }}
     >
-      <div className="bg-white px-4 py-6 border border-gray-200 relative">
-        <IconButton
+      <div className="bg-white py-2 border border-gray-200 relative">
+         <IconButton
           className="absolute right-4 top-4 bg-gray-50 hover:bg-gray-100 text-gray-700"
           onClick={onClose}
         >
@@ -310,6 +310,8 @@ const CheckDetails = ({
         )}
 
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        <div className='px-2'>
+
         {activeTab === 'check_results' && (
           <CheckResultsTab
             runCheckType={runCheckType || ''}
@@ -322,8 +324,8 @@ const CheckDetails = ({
             onChangeDataGroup={onChangeDataGroup}
             category={category}
             comparisonName={comparisonName}
-          />
-        )}
+            />
+            )}
         {activeTab === 'sensor_readouts' && (
           <SensorReadoutsTab
             sensorReadouts={sensorReadouts || []}
@@ -340,8 +342,9 @@ const CheckDetails = ({
             month={filters.month}
             onChangeMonth={onChangeMonth}
             onChangeDataGroup={onChangeDataGroup}
-          />
-        )}
+            />
+            )}
+          </div>
 
         <DeleteOnlyDataDialog
           open={deleteDataDialogOpened}
@@ -353,11 +356,11 @@ const CheckDetails = ({
               false,
               undefined,
               {
-              ...(data_clean_job_template || {}),
-              ...params
-            });
-          }}
-        />
+                ...(data_clean_job_template || {}),
+                ...params
+              });
+            }}
+            />
       </div>
     </div>
   );

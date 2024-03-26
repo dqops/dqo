@@ -551,7 +551,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 int firstSectionBeginMarker = i + 1; // +1 because line in documentation is numerating from 1
                 int firstSectionEndMarker = findFirstIndex(
                         indexOfLineWithText(splitYaml, "table_comparisons:"),
-                        indexOfLineWithText(splitYaml, "_checks:"));
+                        indexOfLineWithText(splitYaml, "_checks:"),
+                        indexOfLineWithText(splitYaml, "columns:"));
 
                 checkDocumentationModel.setFirstSectionBeginMarker(firstSectionBeginMarker);
                 checkDocumentationModel.setFirstSectionEndMarker(firstSectionEndMarker);

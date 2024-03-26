@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { SchemaModel } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import { IRootState } from '../../../redux/reducers';
 import { SchemaApiClient } from '../../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
 import Button from '../../Button';
 import ConnectionActionGroup from './ConnectionActionGroup';
 
@@ -14,7 +15,7 @@ const SchemasView = () => {
   const {
     connection,
     checkTypes
-  }: { connection: string; checkTypes: CheckTypes } = useParams();
+  }: { connection: string; checkTypes: CheckTypes } = useDecodedParams();
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const [schemas, setSchemas] = useState<SchemaModel[]>([]);
   const history = useHistory();

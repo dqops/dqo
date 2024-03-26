@@ -37,7 +37,6 @@ export default function RunChecksDialog({
 
   const [filters, setFilters] = useState<CheckSearchFilters>({
     fullTableName: 'schema*.table*',
-    column: 'col*',
     ...runChecksJobTemplate
   });
 
@@ -72,6 +71,7 @@ export default function RunChecksDialog({
               value={filters.connection}
               onChange={(e) => onChangeFilters({ connection: e.target.value })}
               className="mt-2"
+              placeholder="*"
             />
           </div>
           <div className="w-[45%] ml-2">
@@ -82,6 +82,7 @@ export default function RunChecksDialog({
                 onChangeFilters({ fullTableName: e.target.value })
               }
               className="mt-2"
+              placeholder="*"
             />
           </div>
           <div></div>
@@ -93,6 +94,7 @@ export default function RunChecksDialog({
               value={filters.column}
               onChange={(e) => onChangeFilters({ column: e.target.value })}
               className="mt-2"
+              placeholder="*"
             />
           </div>
           <div className="w-1/3 ml-2">
@@ -103,6 +105,7 @@ export default function RunChecksDialog({
                 onChangeFilters({ columnDataType: e.target.value })
               }
               className="mt-2"
+              placeholder="*"
             />
           </div>
           <div className="flex items-center gap-x-2 w-1/3 ml-4">

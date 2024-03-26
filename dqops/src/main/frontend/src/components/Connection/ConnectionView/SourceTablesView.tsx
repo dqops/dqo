@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { RemoteTableListModel } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
@@ -12,6 +11,7 @@ import { IRootState } from '../../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { DataSourcesApi, JobApiClient } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
 import Button from '../../Button';
 import Checkbox from '../../Checkbox';
 import Loader from '../../Loader';
@@ -26,7 +26,7 @@ const SourceTablesView = () => {
     checkTypes: CheckTypes;
     connection: string;
     schema: string;
-  } = useParams();
+  } = useDecodedParams();
   const [loading, setLoading] = useState(false);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
   const [tables, setTables] = useState<RemoteTableListModel[]>([]);

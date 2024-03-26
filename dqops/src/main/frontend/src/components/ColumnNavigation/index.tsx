@@ -1,11 +1,12 @@
-import React, { useMemo, useState } from 'react';
-import { CheckTypes, ROUTES } from '../../shared/routes';
 import clsx from 'clsx';
-import SvgIcon from '../SvgIcon';
-import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import React, { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 import IconButton from '../IconButton';
+import SvgIcon from '../SvgIcon';
 
 type NavigationMenu = {
   label: string;
@@ -54,7 +55,7 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
     column: string;
     tab: string;
     checkTypes: CheckTypes;
-  } = useParams();
+  } = useDecodedParams();
   const history = useHistory();
   const [showNavigation, setShowNavigation] = useState(false)
 

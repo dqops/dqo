@@ -1,10 +1,10 @@
-import React, { useState } from "react";
 import { IconButton, Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react";
-import SvgIcon from "../../SvgIcon";
-import Button from "../../Button";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../../redux/reducers";
+import Button from "../../Button";
+import SvgIcon from "../../SvgIcon";
+import { useDecodedParams } from "../../../utils";
 
 export type CategoryMenuProps = {
   onRunChecks: () => void;
@@ -13,7 +13,7 @@ export type CategoryMenuProps = {
 
 const CategoryMenu = ({ onRunChecks, onDeleteChecks }: CategoryMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { column }: { column: string } = useParams();
+  const { column }: { column: string } = useDecodedParams();
   const { userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );

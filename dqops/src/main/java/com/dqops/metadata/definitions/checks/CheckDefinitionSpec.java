@@ -69,6 +69,9 @@ public class CheckDefinitionSpec extends AbstractSpec implements InvalidYamlStat
     @JsonPropertyDescription("Help text that describes the data quality check.")
     private String helpText;
 
+    @JsonPropertyDescription("An alternative check's name that is shown on the check editor.")
+    private String friendlyName;
+
     @JsonPropertyDescription("This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean standard;
@@ -145,6 +148,23 @@ public class CheckDefinitionSpec extends AbstractSpec implements InvalidYamlStat
     public void setHelpText(String helpText) {
         this.setDirtyIf(!Objects.equals(this.helpText, helpText));
         this.helpText = helpText;
+    }
+
+    /**
+     * Returns the help text that is shown around the real check name on the check editor.
+     * @return Friendly name (optional).
+     */
+    public String getFriendlyName() {
+        return friendlyName;
+    }
+
+    /**
+     * Sets a friendly name of the check that is shown on the check editor.
+     * @param friendlyName Friendly name.
+     */
+    public void setFriendlyName(String friendlyName) {
+        this.setDirtyIf(!Objects.equals(this.friendlyName, friendlyName));
+        this.friendlyName = friendlyName;
     }
 
     /**

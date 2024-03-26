@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import ColumnNavigation from '../../components/ColumnNavigation';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
@@ -12,6 +12,7 @@ import {
   getSecondLevelTab
 } from '../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 import ColumnCommentsView from './ColumnCommentsView';
 import ColumnDetails from './ColumnDetails';
 import ColumnLabelsView from './ColumnLabelsView';
@@ -49,7 +50,7 @@ const ColumnView = () => {
     column: string;
     tab: string;
     checkTypes: CheckTypes;
-  } = useParams();
+  } = useDecodedParams();
   const [tabs, setTabs] = useState(initTabs);
 
   const history = useHistory();

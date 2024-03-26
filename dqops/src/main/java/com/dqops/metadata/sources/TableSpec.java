@@ -38,6 +38,7 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.SchedulingRootNode;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
@@ -64,7 +65,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
+public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder, SchedulingRootNode {
     private static final ChildHierarchyNodeFieldMapImpl<TableSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("timestamp_columns", o -> o.timestampColumns);

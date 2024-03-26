@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { TableListModel } from '../../api';
 import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { TableApiClient } from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 
 type TButtonTabs = {
   label: string;
@@ -54,7 +54,7 @@ export const SchemaTables = () => {
     checkTypes: CheckTypes;
     connection: string;
     schema: string;
-  } = useParams();
+  } = useDecodedParams();
   const dispatch = useDispatch();
   const [tables, setTables] = useState<TableListModel[]>([]);
   const [sortingDir, setSortingDir] = useState<'asc' | 'desc'>('asc');

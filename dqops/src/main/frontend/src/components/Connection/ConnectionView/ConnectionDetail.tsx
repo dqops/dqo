@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import {
   ConnectionModel,
   ConnectionSpecProviderTypeEnum,
@@ -26,6 +25,7 @@ import {
   SharedCredentialsApi
 } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
 import Button from '../../Button';
 import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
 import ConfirmErrorModal from '../../Dashboard/DatabaseConnection/ConfirmErrorModal';
@@ -49,7 +49,7 @@ const ConnectionDetail = () => {
   const {
     connection,
     checkTypes
-  }: { connection: string; checkTypes: CheckTypes } = useParams();
+  }: { connection: string; checkTypes: CheckTypes } = useDecodedParams();
 
   const activeTab = useSelector(getFirstLevelActiveTab(checkTypes));
 

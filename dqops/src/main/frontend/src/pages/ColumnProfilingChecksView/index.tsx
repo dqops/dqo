@@ -1,10 +1,9 @@
 import { isEqual } from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
 import Button from '../../components/Button';
-import ColumnNavigation from '../../components/ColumnNavigation';
+import ColumnNavigation from "../../components/ColumnNavigation";
 import DataQualityChecks from '../../components/DataQualityChecks';
 import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
@@ -12,30 +11,14 @@ import {
   getColumnProfilingChecksModel,
   updateColumnProfilingChecksModel
 } from '../../redux/actions/column.actions';
-import {
-  getFirstLevelActiveTab,
-  getFirstLevelState
-} from '../../redux/selectors';
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { CheckResultOverviewApi } from '../../services/apiClient';
-import { CheckTypes } from '../../shared/routes';
+import { CheckTypes } from "../../shared/routes";
+import { useDecodedParams } from '../../utils';
 
 const ColumnProfilingsView = () => {
-  const {
-    checkTypes,
-    connection: connectionName,
-    schema: schemaName,
-    table: tableName,
-    column: columnName
-  }: {
-    checkTypes: CheckTypes;
-    connection: string;
-    schema: string;
-    table: string;
-    column: string;
-  } = useParams();
-  const { checksUI, isUpdating, loading } = useSelector(
-    getFirstLevelState(checkTypes)
-  );
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useDecodedParams();
+  const { checksUI, isUpdating, loading } = useSelector(getFirstLevelState(checkTypes));
   const [updatedChecksUI, setUpdatedChecksUI] = useState<CheckContainerModel>();
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<

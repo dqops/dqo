@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { MonitoringScheduleSpec } from '../../api';
-import Button from '../../components/Button';
-import ScheduleView from '../../components/ScheduleView';
-import SvgIcon from '../../components/SvgIcon';
-import Tabs from '../../components/Tabs';
-import { SettingsApi } from '../../services/apiClient';
-import { CheckRunMonitoringScheduleGroup } from '../../shared/enums/scheduling.enum';
+import React, { useEffect, useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
+import { MonitoringScheduleSpec } from "../../api";
+import Button from "../../components/Button";
+import ScheduleView from "../../components/ScheduleView";
+import SvgIcon from "../../components/SvgIcon";
+import Tabs from "../../components/Tabs";
+import { SettingsApi } from "../../services/apiClient";
+import { CheckRunMonitoringScheduleGroup } from "../../shared/enums/scheduling.enum";
+import { useDecodedParams } from "../../utils";
 
 const tabs = [
   {
@@ -32,7 +33,7 @@ const tabs = [
 ];
 
 const DefaultSchedulesDetail = () => {
-  const { tab }: { tab: CheckRunMonitoringScheduleGroup } = useParams();
+  const {tab} : {tab : CheckRunMonitoringScheduleGroup} = useDecodedParams()
   const [updatedSchedule, setUpdatedSchedule] = useState<
     MonitoringScheduleSpec | undefined
   >();
@@ -77,7 +78,7 @@ const DefaultSchedulesDetail = () => {
   return (
     <>
       <div className="px-4">
-        <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
+        <div className="flex justify-between px-4 py-3 border-b border-gray-300 mb-2 h-14">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
             <div className="text-lg font-semibold truncate">
@@ -87,7 +88,7 @@ const DefaultSchedulesDetail = () => {
           <Button
             label="Save"
             color="primary"
-            className="pl-14 pr-14"
+            className="w-45"
             onClick={updateDefaultSchedules}
             disabled={!isDefaultUpdated}
           />

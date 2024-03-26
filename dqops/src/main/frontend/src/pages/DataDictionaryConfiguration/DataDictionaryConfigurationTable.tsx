@@ -65,7 +65,9 @@ export default function DataDictionaryConfigurationTable() {
     <tbody>
       {dictionaries?.map((dictionary, index) => (
         <tr key={index} className="flex items-center text-sm">
-          <td className="px-6 py-2 text-left block w-100">
+          <td className="px-6 py-2 text-left block w-100 text-teal-500 cursor-pointer" 
+            onClick={() => updateDataDictionary(dictionary.dictionary_name ?? '') }
+          >
             {dictionary.dictionary_name}
           </td>
           <td className="px-6 py-2 text-left block w-100 italic">

@@ -1,33 +1,32 @@
+import { Tooltip } from '@material-tailwind/react';
+import clsx from 'clsx';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
+  CheckModel,
   CheckResultsOverviewDataModel,
   CheckResultsOverviewDataModelStatusesEnum,
   DqoJobHistoryEntryModelStatusEnum,
-  TimeWindowFilterParameters,
-  CheckModel,
   FieldModel,
   RuleParametersModel,
-  RuleThresholdsModel
+  RuleThresholdsModel,
+  TimeWindowFilterParameters
 } from '../../api';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setCurrentJobId } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
+import { JobApiClient } from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
+import { getLocalDateInUserTimeZone, useDecodedParams } from '../../utils';
+import Checkbox from '../Checkbox';
 import SvgIcon from '../SvgIcon';
+import Switch from '../Switch';
+import CheckDetails from './CheckDetails/CheckDetails';
+import CheckRuleItem from './CheckRuleItem';
 import CheckSettings from './CheckSettings';
 import SensorParameters from './SensorParameters';
-import Switch from '../Switch';
-import clsx from 'clsx';
-import CheckRuleItem from './CheckRuleItem';
-import { JobApiClient } from '../../services/apiClient';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import { Tooltip } from '@material-tailwind/react';
-import moment from 'moment';
-import CheckDetails from './CheckDetails/CheckDetails';
-import { CheckTypes } from '../../shared/routes';
-import { useParams } from 'react-router-dom';
-import Checkbox from '../Checkbox';
-import { setCurrentJobId } from '../../redux/actions/source.actions';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { getFirstLevelActiveTab } from '../../redux/selectors';
-import { getLocalDateInUserTimeZone } from '../../utils';
 
 export interface ITab {
   label: string;
@@ -91,7 +90,7 @@ const CheckListItem = ({
     schema: string;
     table: string;
     column: string;
-  } = useParams();
+  } = useDecodedParams();
   const [jobId, setJobId] = useState<number>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
   const dispatch = useActionDispatch();
@@ -143,7 +142,7 @@ const CheckListItem = ({
     localStorage.setItem(`${checkTypes}_${check.check_name}`, 'false');
   };
 
-  const openCheckSettings = () => {
+  const openCheckSettings = (activeTab?: string) => {
     if (showDetails) {
       closeCheckDetails();
     }
@@ -164,7 +163,11 @@ const CheckListItem = ({
         }
       ];
       setTabs(initTabs);
-      setActiveTab(initTabs[0].value);
+      if (typeof activeTab === 'string') {
+        setActiveTab(activeTab)
+      } else {
+        setActiveTab(initTabs[0].value);
+      }
     }
   };
 
@@ -337,7 +340,7 @@ const CheckListItem = ({
   return (
     <>
       <tr
-        className={clsx(
+        className={clsx(expanded || showDetails ? '' :
           ' border-b border-gray-100',
           !isDisabled ? 'text-gray-700' : 'opacity-75',
           check?.disabled ? 'line-through' : ''
@@ -538,14 +541,20 @@ const CheckListItem = ({
               </div>
             )}
             <div className="text-sm relative">
-              <p>{check.check_name}</p>
+              <p>{check.display_name !== '' ? (check.display_name ?? check.check_name) : check.check_name} {
+                check.friendly_name &&
+                <span className="text-xxs">
+                  ({check.friendly_name })
+                </span>
+              }</p>
               <p className="absolute left-0 top-full text-xxs">
                 {check.quality_dimension}
               </p>
             </div>
           </div>
         </td>
-        <div className='flex justify-center items-center mt-6'>
+        <div className='flex justify-center items-center mt-6 gap-x-6'>
+        {check.comments ? <SvgIcon name='comment' className='w-4 h-4 ' onClick={() => openCheckSettings('comments')}/> : null}
         {check.configuration_requirements_errors && check.configuration_requirements_errors?.length !== 0 ? 
           <Tooltip
                 content={check.configuration_requirements_errors?.map((x) => x)}
@@ -555,6 +564,7 @@ const CheckListItem = ({
                 </div>
           </Tooltip>
         : null }
+          
         </div>
         <td className="py-2 px-4 flex items-end justify-end">
           <div className=" space-x-2">
@@ -633,7 +643,9 @@ const CheckListItem = ({
         </td>
       </tr>
       {expanded && (
-        <tr>
+        <tr className={clsx(
+        ' border-b border-gray-100'
+        )}>
           <td colSpan={6}>
             <CheckSettings
               activeTab={activeTab}
@@ -648,7 +660,9 @@ const CheckListItem = ({
         </tr>
       )}
       {showDetails && (
-        <tr>
+        <tr className={clsx(
+          ' border-b border-gray-100'
+          )}>
           <td colSpan={6}>
             <CheckDetails
               checkTypes={checkTypes}

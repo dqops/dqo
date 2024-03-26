@@ -1,17 +1,19 @@
-import React, { useEffect } from 'react';
-import NotificationMenu from '../NotificationMenu';
-import Logo from '../Logo';
+import { Tooltip, tab } from '@material-tailwind/react';
 import clsx from 'clsx';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import {
   useHistory,
   useLocation,
-  useParams,
   useRouteMatch
 } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import HelpMenu from '../HelpMenu';
-import { useSelector } from 'react-redux';
+import { DqoJobChangeModelStatusEnum } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
+import {
+  setAdvisorJobId,
+  setAdvisorObject,
+  toggleAdvisor
+} from '../../redux/actions/job.actions';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
 import {
@@ -20,16 +22,14 @@ import {
   PageTab,
   TABLE_LEVEL_TABS
 } from '../../shared/constants';
-import { SynchronizeButton } from './SynchronizeButton';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
+import HelpMenu from '../HelpMenu';
+import Logo from '../Logo';
+import NotificationMenu from '../NotificationMenu';
 import UserProfile from '../UserProfile';
 import { HeaderBanner } from './HeaderBanner';
-import {
-  toggleAdvisor,
-  setAdvisorObject,
-  setAdvisorJobId
-} from '../../redux/actions/job.actions';
-import { Tooltip } from '@material-tailwind/react';
-import { DqoJobChangeModelStatusEnum } from '../../api';
+import { SynchronizeButton } from './SynchronizeButton';
 
 const Header = () => {
   const history = useHistory();
@@ -51,7 +51,7 @@ const Header = () => {
     timePartitioned: 'daily' | 'monthly';
     category: string;
     checkName: string;
-  } = useParams();
+  } = useDecodedParams();
 
   const dispatch = useActionDispatch();
   const { tabs, activeTab } = useSelector(

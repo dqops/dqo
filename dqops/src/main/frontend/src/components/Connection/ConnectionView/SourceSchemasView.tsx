@@ -1,7 +1,7 @@
 import { isEqual } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
   DqoJobHistoryEntryModelStatusEnum,
   SchemaRemoteModel
@@ -11,13 +11,14 @@ import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import { IRootState } from '../../../redux/reducers';
 import { DataSourcesApi } from '../../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
 import Button from '../../Button';
 import Loader from '../../Loader';
 import SvgIcon from '../../SvgIcon';
 import ConnectionActionGroup from './ConnectionActionGroup';
 
 const SourceSchemasView = () => {
-  const { connection }: { connection: string } = useParams();
+  const { connection }: { connection: string } = useDecodedParams();
   const [loading, setLoading] = useState(false);
   const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([]);
   const [error, setError] = useState<string>();
@@ -81,7 +82,7 @@ const SourceSchemasView = () => {
   };
 
   return (
-    <div className="py-4 px-8">
+    <div className="py-4 px-8 text-sm">
       <ConnectionActionGroup />
       {loading ? (
         <div className="flex justify-center h-100">

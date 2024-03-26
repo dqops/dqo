@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import {
   ConnectionModel,
   ConnectionSpecProviderTypeEnum,
@@ -23,6 +22,7 @@ import {
 } from '../../../redux/selectors';
 import { ConnectionApiClient } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
 import Checkbox from '../../Checkbox';
 import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
 import FilePath from '../../FileFormatConfiguration/FilePath';
@@ -42,7 +42,7 @@ const TableDetails = () => {
     connection: string;
     schema: string;
     table: string;
-  } = useParams();
+  } = useDecodedParams();
   const { tableBasic, isUpdating, isUpdatedTableBasic } = useSelector(
     getFirstLevelState(checkTypes)
   );
@@ -83,20 +83,14 @@ const TableDetails = () => {
   useEffect(() => {
     dispatch(
       getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table)
-    ).then(() => {
-      // if (tableBasic?.file_format?.[format]) {
-      //   setConfiguration(tableBasic?.file_format[format]);
-      // }
-      // if (tableBasic?.file_format?.file_paths) {
-      //   setPaths([...tableBasic.file_format.file_paths, '']);
-    });
+    );
     const getConnectionBasic = async () => {
       await ConnectionApiClient.getConnectionBasic(connection).then((res) =>
         setConnectionModel(res.data)
       );
     };
     getConnectionBasic();
-  }, [checkTypes, connection, schema, table]);
+  }, [checkTypes, firstLevelActiveTab, connection, schema, table]);
 
   const handleChange = (obj: any) => {
     dispatch(
@@ -190,93 +184,7 @@ const TableDetails = () => {
             : 'cursor-not-allowed pointer-events-none'
         )}
       >
-        <tbody>
-          <tr>
-            <td className="px-4 py-2">Connection name</td>
-            <td className="px-4 py-2">{tableBasic?.connection_name}</td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Schema name</td>
-            <td className="px-4 py-2">{tableBasic?.target?.schema_name}</td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Table name</td>
-            <td className="px-4 py-2">{tableBasic?.target?.table_name}</td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Disable data quality checks</td>
-            <td className="px-4 py-2">
-              <div className="flex">
-                <Checkbox
-                  onChange={(value) => handleChange({ disabled: value })}
-                  checked={tableBasic?.disabled}
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Filter</td>
-            <td className="px-4 py-2">
-              <textarea
-                className="focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-0 border-gray-300 font-regular text-sm h-26 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none min-w-40 w-full  rounded"
-                value={tableBasic?.filter}
-                onChange={(e) => handleChange({ filter: e.target.value })}
-              ></textarea>
-            </td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Priority</td>
-            <td className="px-4 py-2">
-              <NumberInput
-                value={
-                  tableBasic?.priority !== 0 ? tableBasic?.priority : undefined
-                }
-                onChange={(value) => handleChange({ priority: value })}
-                className="min-w-30 w-1/2"
-                placeholder=""
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Stage</td>
-            <td className="px-4 py-2">
-              <Input
-                value={tableBasic?.stage}
-                onChange={(e) => handleChange({ stage: e.target.value })}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Profiling checks result truncation</td>
-            <td className="px-4 py-2">
-              <Select
-                options={Object.values(
-                  TableListModelProfilingChecksResultTruncationEnum
-                ).map((x) => ({
-                  label: x
-                    ?.replaceAll('_', ' ')
-                    .replace(/./, (c) => c.toUpperCase()),
-                  value: x
-                }))}
-                value={
-                  tableBasic?.profiling_checks_result_truncation ??
-                  TableListModelProfilingChecksResultTruncationEnum.store_the_most_recent_result_per_month
-                }
-                onChange={(selected) =>
-                  handleChange({
-                    profiling_checks_result_truncation: selected
-                  })
-                }
-                placeholder=""
-                empty={true}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">Table hash</td>
-            <td className="px-4 py-2">{tableBasic?.table_hash}</td>
-          </tr>
-        </tbody>
+        {TableDetailBody({tableBasic, handleChange})}
       </table>
       {connectionModel.provider_type ===
         ConnectionSpecProviderTypeEnum.duckdb && (
@@ -299,5 +207,99 @@ const TableDetails = () => {
     </div>
   );
 };
+
+const TableDetailBody = ({tableBasic, handleChange} : {tableBasic: any, handleChange: any}) => {
+  
+  const filter = tableBasic?.filter || '';
+  const priority = tableBasic?.priority || '';
+  const stage = tableBasic?.stage || '';
+  
+  return (        
+  <tbody>
+    <tr>
+      <td className="px-4 py-2">Connection name</td>
+      <td className="px-4 py-2">{tableBasic?.connection_name}</td>
+    </tr>
+    <tr>
+      <td className="px-4 py-2">Schema name</td>
+      <td className="px-4 py-2">{tableBasic?.target?.schema_name}</td>
+    </tr>
+    <tr>
+      <td className="px-4 py-2">Table name</td>
+      <td className="px-4 py-2">{tableBasic?.target?.table_name}</td>
+    </tr>
+    <tr>
+      <td className="px-4 py-2">Disable data quality checks</td>
+      <td className="px-4 py-2">
+        <div className="flex">
+          <Checkbox
+            onChange={(value) => handleChange({ disabled: value })}
+            checked={tableBasic?.disabled}
+          />
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td className="px-4 py-2">Filter</td>
+      <td className="px-4 py-2">
+        <textarea
+          className="focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-0 border-gray-300 font-regular text-sm h-26 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none min-w-40 w-full  rounded"
+          value={filter}
+          onChange={(e) => handleChange({ filter: e.target.value })}
+        ></textarea>
+      </td>
+    </tr>
+    <tr>
+      <td className="px-4 py-2">Priority</td>
+      <td className="px-4 py-2">
+        <NumberInput
+          value={priority}
+          onChange={(value) => handleChange({ priority: value })}
+          className="min-w-30 w-1/2"
+          placeholder=""
+        />
+      </td>
+    </tr>
+    <tr>
+      <td className="px-4 py-2">Stage</td>
+      <td className="px-4 py-2">
+        <Input
+          value={stage}
+          onChange={(e) => handleChange({ stage: e.target.value })}
+        />
+      </td>
+    </tr>
+    <tr>
+      <td className="px-4 py-2">Profiling checks result truncation</td>
+      <td className="px-4 py-2">
+        <Select
+          options={Object.values(
+            TableListModelProfilingChecksResultTruncationEnum
+          ).map((x) => ({
+            label: x
+              ?.replaceAll('_', ' ')
+              .replace(/./, (c) => c.toUpperCase()),
+            value: x
+          }))}
+          value={
+            tableBasic?.profiling_checks_result_truncation ??
+            TableListModelProfilingChecksResultTruncationEnum.store_the_most_recent_result_per_month
+          }
+          onChange={(selected) =>
+            handleChange({
+              profiling_checks_result_truncation: selected
+            })
+          }
+          placeholder=""
+          empty={true}
+        />
+      </td>
+    </tr>
+    <tr>
+      <td className="px-4 py-2">Table hash</td>
+      <td className="px-4 py-2">{tableBasic?.table_hash}</td>
+    </tr>
+  </tbody>)
+}
 
 export default TableDetails;

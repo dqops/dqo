@@ -1,18 +1,18 @@
+import moment from 'moment';
 import React, { useEffect } from 'react';
-import TableColumns from '../TableColumnsView/TableColumns';
+import { useSelector } from 'react-redux';
 import {
   DataGroupingConfigurationSpec,
   TableColumnsStatisticsModel,
   TableStatisticsModel
 } from '../../api';
 import Loader from '../../components/Loader';
-import { useSelector } from 'react-redux';
-import { getFirstLevelState } from '../../redux/selectors';
-import { CheckTypes } from '../../shared/routes';
-import { useParams } from 'react-router-dom';
-import moment from 'moment';
-import { formatNumber } from '../../shared/constants';
 import { setCreatedDataStream } from '../../redux/actions/definition.actions';
+import { getFirstLevelState } from '../../redux/selectors';
+import { formatNumber } from '../../shared/constants';
+import { CheckTypes } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
+import TableColumns from '../TableColumnsView/TableColumns';
 
 export default function TableStatisticsView({
   connectionName,
@@ -37,7 +37,7 @@ export default function TableStatisticsView({
   refreshListFunc: () => void;
   rowCount: TableStatisticsModel;
 }) {
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const { loading } = useSelector(getFirstLevelState(checkTypes));
 
   const {
@@ -49,7 +49,7 @@ export default function TableStatisticsView({
     schema: string;
     table: string;
     tab: string;
-  } = useParams();
+  } = useDecodedParams();
   // const fetchRows = async () => {
   //   try {
   //     const res: AxiosResponse<TableStatisticsModel> =

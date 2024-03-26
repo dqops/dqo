@@ -1,6 +1,6 @@
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
   ConnectionModel,
   ConnectionSpecProviderTypeEnum,
@@ -10,6 +10,7 @@ import {
 import { TConfiguration } from '../../components/FileFormatConfiguration/TConfiguration';
 import { useTree } from '../../contexts/treeContext';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setAdvisorJobId } from '../../redux/actions/job.actions';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import {
   ConnectionApiClient,
@@ -18,7 +19,7 @@ import {
 } from '../../services/apiClient';
 import { CustomTreeNode } from '../../shared/interfaces';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { urlencodeDecoder, urlencodeEncoder } from '../../utils';
+import { urlencodeDecoder, useDecodedParams } from '../../utils';
 import Button from '../Button';
 import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
 import FilePath from '../FileFormatConfiguration/FilePath';
@@ -52,7 +53,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   };
 
   const { connection, schema }: { connection: string; schema: string } =
-    useParams();
+    useDecodedParams();
   const dispatch = useActionDispatch();
   const history = useHistory();
 
@@ -63,9 +64,9 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
       setLoading(true);
       if (node) {
         await TableApiClient.createTable(
-          urlencodeEncoder(args[0]),
-          urlencodeEncoder(args[1]),
-          urlencodeEncoder(name),
+          urlencodeDecoder(args[0]),
+          urlencodeDecoder(args[1]),
+          name,
           {
             file_format:
               connectionModel.provider_type ===
@@ -78,17 +79,47 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           }
         ).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
-            connectionName: urlencodeEncoder(args[0]),
-            schemaName: urlencodeEncoder(args[1]),
-            tableNames: [urlencodeEncoder(name)]
-          })
+            connectionName: urlencodeDecoder(args[0]),
+            schemaName: urlencodeDecoder(args[1]),
+            tableNames: [name]
+          }).then((res) => 
+          dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0))
+        )
         );
         refreshNode(node);
+        dispatch(
+          addFirstLevelTab(CheckTypes.SOURCES, {
+            url: ROUTES.TABLE_LEVEL_PAGE(
+              CheckTypes.SOURCES,
+              args[0],
+              args[1],
+              name,
+              'detail'
+            ),
+            value: ROUTES.TABLE_LEVEL_VALUE(
+              CheckTypes.SOURCES,
+              args[0],
+              args[1],
+              name,
+            ),
+            state: {},
+            label: name
+          })
+        );
+        history.push(
+          ROUTES.TABLE_LEVEL_PAGE(
+            CheckTypes.SOURCES,
+            args[0],
+            args[1],
+            name,
+            'detail'
+          )
+        );
       } else {
         await TableApiClient.createTable(
-          urlencodeEncoder(connection),
-          urlencodeEncoder(schema),
-          urlencodeEncoder(name),
+          connection,
+          schema,
+          name,
           {
             file_format:
               connectionModel.provider_type ===
@@ -101,40 +132,42 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           }
         ).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
-            connectionName: urlencodeEncoder(connection),
-            schemaName: urlencodeEncoder(schema),
-            tableNames: [urlencodeEncoder(name)]
+            connectionName: connection,
+            schemaName: schema,
+            tableNames: [name]
+          }).then((res) => 
+            dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0))
+          )
+        );
+        dispatch(
+          addFirstLevelTab(CheckTypes.SOURCES, {
+            url: ROUTES.TABLE_LEVEL_PAGE(
+              CheckTypes.SOURCES,
+              connection,
+              schema,
+              name,
+              'detail'
+            ),
+            value: ROUTES.TABLE_LEVEL_VALUE(
+              CheckTypes.SOURCES,
+              connection,
+              schema,
+              name
+            ),
+            state: {},
+            label: name
           })
         );
-      }
-      dispatch(
-        addFirstLevelTab(CheckTypes.SOURCES, {
-          url: ROUTES.TABLE_LEVEL_PAGE(
-            CheckTypes.SOURCES,
-            urlencodeDecoder(connection),
-            urlencodeDecoder(schema),
-            urlencodeDecoder(name),
-            'detail'
-          ),
-          value: ROUTES.TABLE_LEVEL_VALUE(
+        history.push(
+          ROUTES.TABLE_LEVEL_PAGE(
             CheckTypes.SOURCES,
             connection,
             schema,
-            name
-          ),
-          state: {},
-          label: name
-        })
-      );
-      history.push(
-        ROUTES.TABLE_LEVEL_PAGE(
-          CheckTypes.SOURCES,
-          urlencodeDecoder(connection),
-          urlencodeDecoder(schema),
-          urlencodeDecoder(name),
-          'detail'
-        )
-      );
+            name,
+            'detail'
+          )
+        );
+      }
       cleanState();
       onClose();
     } finally {
@@ -145,7 +178,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   useEffect(() => {
     const getConnectionBasic = async () => {
       await ConnectionApiClient.getConnectionBasic(
-        urlencodeEncoder(args[0])
+        urlencodeDecoder(args[0])
       ).then((res) => setConnectionModel(res.data));
     };
     if (node) {
@@ -181,6 +214,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
               label="Table Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              className={name.length ? '' : 'border border-red-500'}
             />
           </div>
         </div>
@@ -220,6 +254,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           onClick={handleSubmit}
           label="Save"
           loading={loading}
+          disabled={!name.length}
         />
       </DialogFooter>
     </Dialog>

@@ -1,5 +1,6 @@
 import moment from 'moment/moment';
-import { ConnectionModel, TableListModel } from '../api';
+import { useParams } from 'react-router-dom';
+import { ConnectionModel, ConnectionModelProviderTypeEnum, TableListModel } from '../api';
 
 export const getDaysString = (value: string | number) => {
   const daysDiff = moment().diff(moment(value), 'day');
@@ -54,6 +55,9 @@ export const urlencodeEncoder = (url: string | undefined) => {
         case '%5C':
           decodedValue += '\\';
           break;
+        // case '%25':
+        //   decodedValue += '%';
+        //   break;  
         default:
           decodedValue += encodedChar;
           break;
@@ -172,6 +176,16 @@ export function sortByKey(key: string) {
   };
 }
 
+export function useDecodedParams(): any {
+  const parameters: { [key: string]: any } = useParams();
+  const decodedParams: { [key: string]: any } = {};
+
+  Object.entries(parameters).forEach(([key, value]) => {
+    decodedParams[key] = urlencodeEncoder(String(value));
+  });
+
+  return decodedParams;
+}
 export const filterPathsDuckDbTable = (table: TableListModel) => {
   return {
     ...table,
@@ -181,25 +195,35 @@ export const filterPathsDuckDbTable = (table: TableListModel) => {
     }
   };
 }
-export const filterDirectoriesDuckdb = (db: ConnectionModel) => {
-  const directories = { ...db.duckdb?.directories };
-  Object.keys(directories).forEach((key) => {
-    if (!directories[key]) {
-      delete directories[key];
-    }
-  });
-  const properties = { ...db.duckdb?.properties };
+export const filterPropertiesDirectories = (db: ConnectionModel) => {
+  const directories = { ...(db?.[db.provider_type as keyof ConnectionModel] as any)?.directories };
+  const properties = { ...(db?.[db.provider_type as keyof ConnectionModel] as any)?.properties };
   Object.keys(properties).forEach((key) => {
     if (!properties[key]) {
       delete properties[key];
     }
   });
-  return {
-    ...db,
-    duckdb: {
-      ...db.duckdb,
-      directories,
-      properties
+ 
+  if (db.provider_type === ConnectionModelProviderTypeEnum.duckdb) {
+    Object.keys(directories).forEach((key) => {
+      if (!directories[key]) {
+        delete directories[key];
+      }
+    });
+    return {
+      ...db,
+      duckdb: {
+        ...db.duckdb,
+        directories,
+        properties
+    }
+  }
+}
+return {
+  ...db,
+  [db.provider_type as keyof ConnectionModel]: {
+    ...(db?.[db.provider_type as keyof ConnectionModel] as any),
+    properties
     }
   }
 }

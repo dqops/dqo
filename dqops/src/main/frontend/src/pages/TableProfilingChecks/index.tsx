@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
+import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
 import TableActionGroup from '../../components/Connection/TableView/TableActionGroup';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getTableProfilingChecksModel,
-  updateTableProfilingChecksModel,
-  setUpdatedChecksModel
+  setUpdatedChecksModel,
+  updateTableProfilingChecksModel
 } from '../../redux/actions/table.actions';
 import {
-  getFirstLevelState,
-  getFirstLevelActiveTab
+  getFirstLevelActiveTab,
+  getFirstLevelState
 } from '../../redux/selectors';
 import { CheckResultOverviewApi } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
+import { table } from 'console';
 
 const TableProfilingChecks = () => {
   const {
@@ -28,7 +29,7 @@ const TableProfilingChecks = () => {
     connection: string;
     schema: string;
     table: string;
-  } = useParams();
+  } = useDecodedParams();
   const { checksUI, loading, isUpdating, isUpdatedChecksUi, tableBasic } =
     useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();

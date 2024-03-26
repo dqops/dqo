@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { IncidentIssueHistogramModel } from '../../api';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
@@ -14,6 +13,7 @@ import {
   IncidentIssueFilter
 } from '../../redux/reducers/incidents.reducer';
 import { getFirstLevelIncidentsState } from '../../redux/selectors';
+import { useDecodedParams } from '../../utils';
 import { BarChart } from './BarChart';
 
 type HistogramChartProps = {
@@ -34,7 +34,7 @@ export const HistogramChart = ({
     year: string;
     month: string;
     id: string;
-  } = useParams();
+  } = useDecodedParams();
   const year = parseInt(strYear, 10);
   const month = parseInt(strMonth, 10);
   const {

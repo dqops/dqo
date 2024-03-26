@@ -6,7 +6,7 @@ import {
   PopoverHandler
 } from '@material-tailwind/react';
 import { useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
   CheckSearchFilters,
   RunChecksParameters,
@@ -20,7 +20,7 @@ import { IRootState } from '../../redux/reducers';
 import { TREE_LEVEL } from '../../shared/enums';
 import { CustomTreeNode } from '../../shared/interfaces';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { urlencodeEncoder } from '../../utils';
+import { urlencodeEncoder, useDecodedParams } from '../../utils';
 import SvgIcon from '../SvgIcon';
 import CollectStatisticsDialog from './CollectStatisticsDialog';
 import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
@@ -42,7 +42,7 @@ const ContextMenu = ({
   openAddTableDialog,
   openAddSchemaDialog
 }: ContextMenuProps) => {
-  const { checkTypes }: { checkTypes: any } = useParams();
+  const { checkTypes }: { checkTypes: any } = useDecodedParams();
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const {
@@ -97,9 +97,10 @@ const ContextMenu = ({
   };
 
   const importMetaData = () => {
+    setOpen(false);
     dispatch(
       addFirstLevelTab(checkTypes, {
-        url: ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, node.label),
+        url: ROUTES.CONNECTION_DETAIL(checkTypes, node.label, 'schemas?import_schema=true'),
         value: ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, node.label),
         label: `${node.label}`
       })
@@ -108,23 +109,24 @@ const ContextMenu = ({
       `${ROUTES.CONNECTION_DETAIL(
         checkTypes,
         node.label || '',
-        'schemas'
-      )}?import_schema=true`
+        'schemas?import_schema=true'
+      )}`
     );
   };
 
   const importTables = () => {
+    setOpen(false);
     const [connection, schema] = node.id.toString().split('.');
     const url = ROUTES.SCHEMA_LEVEL_PAGE(
       CheckTypes.SOURCES,
-      urlencodeEncoder(connection),
-      urlencodeEncoder(schema) ?? '',
+      connection,
+      schema ?? '',
       'import-tables'
     );
     const value = ROUTES.SCHEMA_LEVEL_VALUE(
       CheckTypes.SOURCES,
-      urlencodeEncoder(connection),
-      urlencodeEncoder(schema) ?? ''
+      connection,
+      schema ?? ''
     );
     dispatch(
       addFirstLevelTab(CheckTypes.SOURCES, {
@@ -335,7 +337,7 @@ const ContextMenu = ({
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
               onClick={() => {
                 userProfile.can_manage_data_sources === true
-                  ? openAddTableDialog(node)
+                  ? (openAddTableDialog(node), setOpen(false))
                   : undefined;
               }}
             >

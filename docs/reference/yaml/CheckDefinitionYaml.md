@@ -50,6 +50,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`sensor_name`</span>|Sensor name. It is a folder name inside the user&#x27;s home &#x27;sensors&#x27; folder or the DQOps Home (DQOps distribution) home/sensors folder. Sample sensor name: table/volume/row_count.|*string*| | | |
 |<span class="no-wrap-code ">`rule_name`</span>|Rule name used for the check. It is a path to a custom rule python module that starts at the user&#x27;s home &#x27;rules&#x27; folder. The path should not end with the .py file extension. Sample rule: myrules/my_custom_rule.|*string*| | | |
 |<span class="no-wrap-code ">`help_text`</span>|Help text that describes the data quality check.|*string*| | | |
+|<span class="no-wrap-code ">`friendly_name`</span>|An alternative check&#x27;s name that is shown on the check editor.|*string*| | | |
 |<span class="no-wrap-code ">`standard`</span>|This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.|*boolean*| | | |
 
 

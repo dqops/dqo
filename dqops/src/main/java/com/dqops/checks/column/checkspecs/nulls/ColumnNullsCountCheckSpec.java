@@ -157,6 +157,17 @@ public class ColumnNullsCountCheckSpec
     }
 
     /**
+     * Returns an alternative check's friendly name that is shown on the check editor. It is used to show "empty table" name next to profile_row_count check.
+     *
+     * @return An alternative name, or null when the check has no alternative name to show.
+     */
+    @Override
+    @JsonIgnore
+    public String getFriendlyName() {
+        return "incomplete column";
+    }
+
+    /**
      * Returns true if this is a standard data quality check that is always shown on the data quality checks editor screen.
      * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
      *

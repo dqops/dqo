@@ -164,14 +164,16 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
             if (this.currentSeverity == null) {
                 this.currentSeverity = columnModel.getCurrentSeverity();
             } else if (columnModel.getCurrentSeverity() != null &&
-                    this.currentSeverity.getSeverity() < columnModel.getCurrentSeverity().getSeverity()) {
+                    this.currentSeverity.getSeverity() < columnModel.getCurrentSeverity().getSeverity() &&
+                    columnModel.getCurrentSeverity().getSeverity() != 4) {
                 this.currentSeverity = columnModel.getCurrentSeverity();
             }
 
             if (this.highestHistoricalSeverity == null) {
                 this.highestHistoricalSeverity = columnModel.getHighestHistoricalSeverity();
             } else if (columnModel.getHighestHistoricalSeverity() != null &&
-                    this.highestHistoricalSeverity.getSeverity() < columnModel.getHighestHistoricalSeverity().getSeverity()) {
+                    this.highestHistoricalSeverity.getSeverity() < columnModel.getHighestHistoricalSeverity().getSeverity() &&
+                    columnModel.getHighestHistoricalSeverity().getSeverity() != 4) {
                 this.highestHistoricalSeverity = columnModel.getHighestHistoricalSeverity();
             }
         }
@@ -180,14 +182,16 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
             if (this.currentSeverity == null) {
                 this.currentSeverity = RuleSeverityLevel.fromCheckSeverity(checkStatusModel.getCurrentSeverity());
             } else if (checkStatusModel.getCurrentSeverity() != null &&
-                    this.currentSeverity.getSeverity() < checkStatusModel.getCurrentSeverity().getSeverity()) {
+                    this.currentSeverity.getSeverity() < checkStatusModel.getCurrentSeverity().getSeverity() &&
+                    checkStatusModel.getCurrentSeverity().getSeverity() != 4) {
                 this.currentSeverity = RuleSeverityLevel.fromCheckSeverity(checkStatusModel.getCurrentSeverity());
             }
 
             if (this.highestHistoricalSeverity == null) {
                 this.highestHistoricalSeverity = checkStatusModel.getHighestHistoricalSeverity();
             } else if (checkStatusModel.getHighestHistoricalSeverity() != null &&
-                    this.highestHistoricalSeverity.getSeverity() < checkStatusModel.getHighestHistoricalSeverity().getSeverity()) {
+                    this.highestHistoricalSeverity.getSeverity() < checkStatusModel.getHighestHistoricalSeverity().getSeverity() &&
+                    checkStatusModel.getHighestHistoricalSeverity().getSeverity() != 4) {
                 this.highestHistoricalSeverity = checkStatusModel.getHighestHistoricalSeverity();
             }
         }

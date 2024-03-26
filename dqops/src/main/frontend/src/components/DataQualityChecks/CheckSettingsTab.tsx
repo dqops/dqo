@@ -1,16 +1,17 @@
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { CheckModel, DataGroupingConfigurationListModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
 import { DataGroupingConfigurationsApi } from '../../services/apiClient';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import Button from '../Button';
+import { CheckTypes, ROUTES } from "../../shared/routes";
+import { useDecodedParams } from '../../utils';
+import Button from "../Button";
 import Checkbox from '../Checkbox';
-import Input from '../Input';
+import Input from "../Input";
 import Select from '../Select';
 import TextArea from '../TextArea';
 
@@ -20,20 +21,10 @@ interface ICheckSettingsTabProps {
   isDefaultEditing?: boolean;
 }
 
-const CheckSettingsTab = ({
-  check,
-  onChange,
-  isDefaultEditing
-}: ICheckSettingsTabProps) => {
-  const {
-    connection,
-    schema,
-    table
-  }: { connection: string; schema: string; table: string } = useParams();
-  const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<
-    DataGroupingConfigurationListModel[]
-  >([]);
-  const history = useHistory();
+const CheckSettingsTab = ({ check, onChange, isDefaultEditing }: ICheckSettingsTabProps) => {
+  const { connection, schema, table }: { connection: string; schema: string; table: string;} = useDecodedParams();
+  const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<DataGroupingConfigurationListModel[]>([]);
+  const history = useHistory()
   const dispatch = useActionDispatch();
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
