@@ -3,8 +3,8 @@ This guide shows how to connect a data source to DQOps, import the metadata, and
 
 ## Overview
 
-After [installation and starting DQOps](installation.md), we describe how to add a connection to [BigQuery public dataset Austin Crime Data](https://console.cloud.google.com/marketplace/details/city-of-austin/austin-crime) 
-using the user interface.
+After [installation and starting DQOps](installation.md), we describe how to add a connection to a CSV file using the user interface.
+We present the example file used in this **guide**.
 
 For a full description of how to add a data source connection to other providers or add connection using the command-line shell,
 see [Working with DQOps section](../data-sources/index.md).
@@ -17,69 +17,92 @@ You can find more information about [navigating the DQOps user interface here](.
 
     Links to some supported data sources are shown below.
 
-    [![CSV](https://dqops.com/docs/images/connections/csv-icon2.png){ class=glightbox-ignored-image }](../data-sources/csv.md)
-    &nbsp; &nbsp; &nbsp; [![Parquet](https://dqops.com/docs/images/connections/parquet-icon2.png){ class=glightbox-ignored-image }](../data-sources/parquet.md)
+    [![Parquet](https://dqops.com/docs/images/connections/parquet-icon2.png){ class=glightbox-ignored-image }](../data-sources/parquet.md)
     &nbsp; &nbsp; &nbsp; [![Athena](https://dqops.com/docs/images/connections/athena2.png){ class=glightbox-ignored-image }](../data-sources/athena.md)
     &nbsp; &nbsp; &nbsp; [![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png){ class=glightbox-ignored-image }](../data-sources/postgresql.md)
+    &nbsp; &nbsp; &nbsp; [![BigQuery](https://dqops.com/docs/images/connections/bigquery.png){ class=glightbox-ignored-image }](../data-sources/bigquery.md)
 
-## Prerequisite credentials
+## CSV file
 
-To add a connection to a BigQuery data source to DQOps you need the following:
+Choose a CSV file you want to analyse. To add a connection to a CSV file data source to DQOps you need one.
 
-- A BiqQuery service account with **BigQuery > BigQuery Job User** permission. [You can create a free trial Google Cloud account here](https://cloud.google.com/free).
-- A service account key in JSON format for JSON key authentication. For details refer to [Create and delete service account keys](https://cloud.google.com/iam/docs/keys-create-delete).
-- A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](../data-sources/bigquery.md#using-google-application-credentials-authentication).
+You can also download a CSV file used in this guide. 
+The table below presents the fragment of it's content.
 
-We have chosen to use BigQuery data source for this getting started guide because public BigQuery datasets are freely available,
-and you can query them within the GCP FREE tier monthly limit.
+| unique_key | address                        | census_tract | clearance_date                 | clearance_status | council_district_code | description              | district | latitude | longitude | location | location_description | primary_type | timestamp                      | x_coordinate | y_coordinate | year | zipcode |
+|------------|--------------------------------|--------------|--------------------------------|------------------|-----------------------|--------------------------|----------|----------|-----------|----------|----------------------|--------------|--------------------------------|--------------|--------------|------|---------|  
+| 2015821204 | "1713 MULLEN DR Austin, TX"    |              | 2015-03-25 12:00:00.000000 UTC | Not cleared      |                       | THEFT                    | UK       |          |           |          | 1713 MULLEN DR       | Theft        | 2015-03-23 12:00:00.000000 UTC |              |              | 2015 |         |   
+| 2015150483 | "Austin, TX"                   |              | 2015-01-27 12:00:00.000000 UTC | Not cleared      |                       | RAPE                     | B        |          |           |          | nan                  | Rape         | 2015-01-15 12:00:00.000000 UTC |              |              | 2015 |         | 
+| 2015331540 | "5510 S IH 35 SVRD Austin, TX" |              | 2015-02-11 12:00:00.000000 UTC | Not cleared      |                       | BURGLARY OF VEHICLE      | UK       |          |           |          | 5510 S IH 35 SVRD    | Theft        | 2015-02-02 12:00:00.000000 UTC |              |              | 2015 |         | 
+| 2015331238 | "7928 US HWY 71 W Austin, TX"  |              | 2015-02-12 12:00:00.000000 UTC | Not cleared      |                       | THEFT OF HEAVY EQUIPMENT | UK       |          |           |          | 7928 US HWY 71 W     | Theft        | 2015-02-02 12:00:00.000000 UTC |              |              | 2015 |         |
+| ...        | ...                            | ...          | ...                            | ...              | ...                   | ...                      | ...      | ...      | ...       | ...      | ...                  | ...          | ...                            | ...          | ...          | ...  | ...     |
 
-## Add BigQuery connection using the user interface
+The file is a sample of Austin Crime file from BigQuery public dataset Austin Crime Data.
+
+### Downloading the example file
+
+To download the example CSV file, [open the github webpage](https://github.com/dqops/dqo/blob/develop/dqops/sampledata/files/csv/austin_crime_sample/austin_crime.csv).
+
+On the right side you can see the three dots button. When button is clicked the **download** becomes available on the expanded list.
+
+![Adding connection](https://dqops.com/docs/images/getting-started/github-download.png)
+                                       
+Download the file austin_crime.csv and open a download directory containing the file.
+
+To separate the downloaded file from other files we will not work with, put the file to a new folder.
+We created the new folder named __demo_files__ directly on a drive in this guide.
+
+![Adding connection](https://dqops.com/docs/images/getting-started/file-explorer.png)
+
+See, in our example the file is places in the directory: C:\demo_files\austin_crime.csv
+
+Remember the absolute path to the file because you will use it when configuring the connection.
+
+## Add CSV connection using the user interface
 
 ### **Navigate to the connection settings**
 
-To navigate to the BigQuery connection settings:
+To navigate to the CSV connection settings:
 
 1. Go to the **Data Sources** section and click **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
    
-2. Select **BiqQuery** database type.
+2. Select **CSV** connection type.
 
-    ![Selecting BigQuery database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-bigquery.png)
+   ![Selecting CSV database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-csv.png)
 
 ### **Fill in the connection settings**
 
-After navigating to the BigQuery connection settings, you will need to fill in the connection details.
+After navigating to the CSV connection settings, you will need to fill in the connection details.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-bigquery.png)
+Focus on the required fields only. All other fields such as Virtual schema name **leave untouched**.
 
-| BigQuery connection settings                                                                               | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | 
-|------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name                                                                                            | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters, hyphens and underscore. For example, "**testconnection**"                                                                                                                                                                                                              |
-| Source GCP project ID                                                                                      | Name of the project that has datasets that will be imported. In our example, it is "**bigquery-public-data**".                                                                                                                                                                                                                                                                                                                                                                                                 |
-| Authentication mode to the Google Cloud                                                                    | Type of authentication mode to the Google Cloud. You can select from the 3 options:<br/>- Google Application Credentials,<br/>- JSON Key Content<br/> - JSON Key Path                                                                                                                                                                                                                                                                                                                                          |
-| GCP project to create BigQuery jobs, where the authenticated principal has bigquery.jobs.create permission | Google Cloud Platform project which will be used to create BigQuery jobs. In this project, the authenticated user must have bigquery.jobs.create permission. You can select from the 3 options:<br/>- Create jobs in source project<br/>- Create jobs in default project from credentials<br/> - Create jobs in selected billing project ID.<br/>Please pick the third option *Create jobs in selected billing project ID*. You will need your own GCP project where you have permission to run BigQuery jobs. |
-| Billing GCP project ID                                                                                     | The ID of the selected billing GCP project. In this project, the authenticated user must have bigquery.jobs.create permission. This field is active when you select the "Create jobs in selected billing project ID" option. <br/> Please fill this field with the name of your own GCP project where you have the right to run BigQuery jobs. Alternatively, it can be your testing project where you are the **owner**.                                                                                      |
-| Quota GCP project ID                                                                                       | The Google Cloud Platform project ID which is used for BigQuery quota. You can leave this field empty.                                                                                                                                                                                                                                                                                                                                                                                                         | 
+![Adding connection](https://dqops.com/docs/images/getting-started/connection-settings-csv-filled1.png)
+
+| CSV connection settings  | Description                                                                                                                                                                                                                               | 
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
+| Path                     | The path prefix to the parent directory with data. The path must be absolute. The virtual schema name is a value of the directories mapping.                                                                                              |
 
 After filling in the connection settings, click the **Test Connection** button to test the connection.
+It will inform you if the path to the CSV file may be incorrect.
 
 Click the **Save** connection button when the test is successful to add a new connection. 
 Otherwise, you can check the details of what went wrong.
-    
 
 ## **Import metadata using the user interface**
 
 When you add a new connection, it will appear in the tree view on the left, and you will be redirected to the Import Metadata screen.
 Now we can import schemas and tables.
 
-1. Import the "austin_crime" schema by clicking on the **Import Tables** button.
+1. Import the "files" schema by clicking on the **Import Tables**
 
-    ![Importing schemas](https://dqops.com/docs/images/getting-started/importing-schema-austin-crime.png)
+    ![Importing schemas](https://dqops.com/docs/images/getting-started/importing-schema-files.png)
 
-2. There is only one table in the dataset. Import the table by clicking **Import all tables** buttons in the upper right corner.
+2. Select the file austin_crime.csv marking the checkbox and import by clicking **Import selected tables** button in the upper right corner.
 
-    ![Importing tables](https://dqops.com/docs/images/getting-started/importing-tables-austin-crime.png)
+    ![Importing tables](https://dqops.com/docs/images/getting-started/importing-tables-austin-crime-csv.png)
 
 
 ## Initiate automatic monitoring and review scheduling
@@ -95,22 +118,22 @@ Within the Advisor, you can collect basic statistics, run profiling checks, or m
 
 To Run basic statistics and profiling checks, click on the appropriate buttons on the advisor.
 
-We will evaluate the results from basic statistics and profiling checks at the next step of the Getting started. 
+We will evaluate the results from basic statistics and profiling checks at the next step of the Getting started.
 
-![Running basic statistics and profiling checks](https://dqops.com/docs/images/getting-started/running-basics-statistics-and-profiling-checks.png)
+![Running basic statistics and profiling checks](https://dqops.com/docs/images/getting-started/running-basics-statistics-and-profiling-checks-csv.png)
 
 ### Review scheduling with the Advisor
 
-To review scheduling for profiling and daily monitoring checks, click on the **Review scheduling** button. 
+To review scheduling for profiling and daily monitoring checks, click on the **Review scheduling** button.
 
-![Review scheduling](https://dqops.com/docs/images/getting-started/review-scheduling.png)
+![Review scheduling](https://dqops.com/docs/images/getting-started/review-scheduling-csv.png)
 
 You will be linked to **Data Source** section, **Schedule** tab where you can review scheduling settings for the added connection.
 
 The scheduling is enabled by default. You can turn it off by clicking the notification icon in the upper right corner and 
-then clicking the **Job scheduler** toggle button. 
+then clicking the **Job scheduler** toggle button.
       
-![Reviewing data source details](https://dqops.com/docs/images/getting-started/reviewing-data-source-section2.png)
+![Reviewing data source details](https://dqops.com/docs/images/getting-started/reviewing-data-source-section-csv1.png)
 
 
 ## Explore the connection-level tabs in the Data sources section
@@ -138,9 +161,9 @@ At the table level in the **Data sources** section, there are the following tabs
 - **Date and time columns** - allows [configuring event and ingestion timestamp columns for timeliness checks](../working-with-dqo/run-data-quality-checks.md#configure-event-and-ingestion-timestamp-columns-for-timeliness-checks), as well as [date or datetime column for partition checks](../working-with-dqo/run-data-quality-checks.md#configure-date-or-datetime-column-for-partition-checks).
 - **Incident configuration** - allows configuring incidents. [Learn more about incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) that let you keep track of the issues that arise during data quality monitoring.
 
-You can check the details of the imported table by expanding the tree view on the left and selecting the "crime" table.
+You can check the details of the imported table by expanding the tree view on the left and selecting the "austin_crime.csv" table.
 
-![Reviewing table details](https://dqops.com/docs/images/getting-started/reviewing-table-details.png)
+![Reviewing table details](https://dqops.com/docs/images/getting-started/reviewing-table-details-csv.png)
 
 ## Next step
 
