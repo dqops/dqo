@@ -17,7 +17,7 @@ In the previous step we have collected basic statistics for imported tables and 
 
 To review the results: 
 
-1. Go to the **Profiling** section. Select the "austin_crime.csv" table on the tree view on the left. The results are displayed under **Basic data statistics** tab. 
+1. Go to the **Profiling** section. Select the **austin_crime.csv** table on the tree view on the left. The results are displayed under **Basic data statistics** tab. 
 
     You can filter the columns by simply clicking on the sorting icon next to any column header.
 
@@ -61,7 +61,7 @@ and severity status.
 
 ### Navigate to the Profiling checks editor
 
-To navigate to the Profiling checks editor, click on **Profiling** section, the "austin_crime.csv" table on the tree view, and **Profiling checks** tab.
+To navigate to the Profiling checks editor, click on **Profiling** section, the **austin_crime.csv** table on the tree view, and **Profiling checks** tab.
 
 ![Profiling checks list](https://dqops.com/docs/images/getting-started/profiling-checks-list3.png)
 
@@ -121,7 +121,7 @@ checks were run.
 
 Now let's run monitoring checks.
 
-1. Go to the **Monitoring Checks** section, and select the "austin_crime.csv" table from the tree view and **Daily** tab. 
+1. Go to the **Monitoring Checks** section, and select the **austin_crime.csv** table from the tree view and **Daily** tab. 
 
     ![Monitoring checks section](https://dqops.com/docs/images/getting-started/monitoring-checks-section3.png)
 

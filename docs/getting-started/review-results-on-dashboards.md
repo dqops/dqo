@@ -28,7 +28,7 @@ by clicking on the filters on top part of the dashboard, as well as clicking on 
 ![Total issue details dashboard](https://dqops.com/docs/images/getting-started/profiling-issues-count-per-check-dashboard2.png)
 
 In our example, we ran 56 profiling checks (2 table checks and 3 checks for each of the 18 columns) and none of them failed.
-In the **Results per check** table you can see the results broken down by check name.
+(A warning is not considered as a failed check.) In the **Results per check** table you can see the results broken down by check name.
 
 ## Review the total number of issues raised by the monitoring checks
 
