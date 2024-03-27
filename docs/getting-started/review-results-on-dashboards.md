@@ -23,9 +23,9 @@ To access it, toggle button **Show advanced dashboards** at the top of the tree 
 
 Once you are on the **Profiling issues count per check** dashboard, you will be able to review a summary of 
 executed tests (checks) and their results, categorized by type of check. You can filter the data on the dashboard simply 
-by clicking on the filters on top part of the dashboard, as well as clicking on the name of the connection, schema, data group etc. //todo: screen
+by clicking on the filters on top part of the dashboard, as well as clicking on the name of the connection, schema, data group etc.
 
-![Total issue details dashboard](https://dqops.com/docs/images/getting-started/profiling-issues-count-per-check-dashboard1.png)
+![Total issue details dashboard](https://dqops.com/docs/images/getting-started/profiling-issues-count-per-check-dashboard2.png)
 
 In our example, we ran 56 profiling checks (2 table checks and 3 checks for each of the 18 columns) and none of them failed.
 In the **Results per check** table you can see the results broken down by check name.
