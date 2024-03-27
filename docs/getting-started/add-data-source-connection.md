@@ -41,8 +41,7 @@ The file is a sample of Austin Crime file from BigQuery public dataset Austin Cr
 
 ### Downloading the example file
 
-To download the example CSV file, [open the github page](https://github.com/dqops/dqo/blob/develop/dqops/sampledata/below_above_value_test.csv).
-//todo: another file -> austin crime sample
+To download the example CSV file, [open the github webpage](https://github.com/dqops/dqo/blob/develop/dqops/sampledata/files/csv/austin_crime_sample/austin_crime.csv).
 
 On the right side you can see the three dots button. When button is clicked the **download** becomes available on the expanded list.
 
