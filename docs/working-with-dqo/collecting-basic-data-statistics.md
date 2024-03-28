@@ -43,7 +43,9 @@ To do so, click on the three-dot icon and select the **Collect statistics** opti
 
 A dialog box will appear where you can modify different options such as connection, schema and table name, and column name.
 There are also additional parameters when you can narrow the selection to the collector category, collector name, sensor
-name, target (table or column), labels, or tags.
+name, target (table or column), labels, or tags. 
+
+You can filter schemas, tables and columns using wildcards (\*). For example, prod_* will return all tables starting with "prod_".
 
 ![Collect statistics dialog box](https://dqops.com/docs/images/working-with-dqo/statistics/collect-statistics-dialog-box.png)
 

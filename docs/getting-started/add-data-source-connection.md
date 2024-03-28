@@ -6,7 +6,7 @@ This guide shows how to connect a data source to DQOps, import the metadata, and
 After [installation and starting DQOps](installation.md), we describe how to import locally stored CSV file using the user interface, 
 initiate automatic monitoring and run basic statistics.
 
-For a full description of how to add a data source connection to other providers or add connection using the command-line shell,
+For a full description of how to add a data source connection to other providers or add connection using the DQOps Shell,
 see [Working with DQOps section](../data-sources/index.md).
 
 You can find more information about [navigating the DQOps user interface here](../dqo-concepts/dqops-user-interface-overview.md). 
@@ -41,7 +41,7 @@ In our example, the path is **C:\demo_files\austin_crime.csv**
 
 ![Adding connection](https://dqops.com/docs/images/getting-started/file-explorer.png)
 
-Below is a table that shows a fragment the data included in the sample CSV file.
+Below is a table that shows a fragment of the data included in the sample CSV file.
 
 | unique_key | address                        | census_tract | clearance_date                 | clearance_status | council_district_code | description              | district | latitude | longitude | location | location_description | primary_type | timestamp                      | x_coordinate | y_coordinate | year | zipcode |
 |------------|--------------------------------|--------------|--------------------------------|------------------|-----------------------|--------------------------|----------|----------|-----------|----------|----------------------|--------------|--------------------------------|--------------|--------------|------|---------|
@@ -70,7 +70,8 @@ To navigate to the CSV connection settings:
 
 After navigating to the CSV connection settings, you will need to fill in the connection details.
 
-To import a CSV file stored locally, we only need to fill in settings described below. You can read about other settings and how to import files from AWS S3 in the [CSV connection documentation](../data-sources/csv.md). 
+To import a CSV file stored locally, we only need to fill in settings described below. 
+You can read about other settings and how to import CSV files from AWS S3 in the [CSV connection documentation](../data-sources/csv.md). 
 
 ![Adding connection](https://dqops.com/docs/images/getting-started/connection-settings-csv-filled1.png)
 
@@ -107,9 +108,18 @@ DQOps will create a table from the **austin_crime.csv** file in the virtual sche
 Once new tables are imported, DQOps automatically activates [profiling and monitoring checks](../dqo-concepts/definition-of-data-quality-checks/index.md).
 These checks include row count, table availability, and checks detecting schema changes. They are scheduled to run daily at 12:00 p.m.
 
-Upon import, you will receive information at the top of the page, it is called an Advisor.
-If you click on the orange bar, you can open the Advisor.
-Within the Advisor, you can collect basic statistics, run profiling checks, or modify the schedule for newly imported tables.
+[**Profiling checks**](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md) are designed to assess
+the initial data quality score of a data source. Profiling checks are also useful for exploring and experimenting with 
+various types of checks and determining the most suitable ones for regular data quality monitoring.
+
+[**Monitoring checks**](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md) are 
+standard checks that monitor the data quality of a table or column. They can also be referred to as **Data Observability** checks.
+These checks capture a single data quality result for the entire table or column. There are two categories
+of monitoring checks: *daily* checks and *monthly* checks.
+
+Upon import, you will receive information at the top of the page, it is called an **Advisor**.
+If you click on the orange bar, you can open the Advisor. Within the Advisor, you can collect basic statistics, 
+run profiling checks, or modify the schedule for newly imported tables.
 
 ### Run basic statistics and profiling checks with the Advisor
 
