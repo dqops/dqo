@@ -292,7 +292,7 @@ const CheckDetails = ({
     >
       <div className="bg-white py-2 border border-gray-200 relative">
          <IconButton
-          className="absolute right-4 top-4 bg-gray-50 hover:bg-gray-100 text-gray-700"
+          className="absolute right-4 top-1.5 bg-gray-50 hover:bg-gray-100 text-gray-700"
           onClick={onClose}
         >
           <SvgIcon name="close" />
@@ -302,14 +302,15 @@ const CheckDetails = ({
           !!sensorErrors.length ||
           !!sensorReadouts.length) && (
           <IconButton
-            className="absolute right-16 top-4 bg-gray-50 hover:bg-gray-100 text-gray-700"
+            className="absolute right-16 top-1.5 bg-gray-50 hover:bg-gray-100 text-gray-700"
             onClick={openDeleteDialog}
           >
             <SvgIcon name="delete" className="w-5" />
           </IconButton>
         )}
-
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        <div className="border-b border-gray-300 px-0">
+           <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        </div>
         <div className='px-2'>
 
         {activeTab === 'check_results' && (
