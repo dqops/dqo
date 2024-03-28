@@ -97,7 +97,9 @@ export default function UserProfile({ name, email }: UserProfile) {
           <div className="ml-1 flex items-center justify-center gap-x-2">
             {' '}
             <div className="font-bold">User:</div>
-            {userProfile?.user ? userProfile.user : '-'}{' '}
+            <div className='break-all'>
+               {userProfile?.user ? userProfile.user : '-'}{' '} 
+            </div>
           </div>
         </div>
         <div className="h-15">
