@@ -1,4 +1,4 @@
-{% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+{% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
 {% macro make_text_constant(string) -%}
     {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
 {%- endmacro %}
