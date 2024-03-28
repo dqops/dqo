@@ -26,7 +26,7 @@ You can find more information about [navigating the DQOps user interface here](.
 
 ### Download the sample CSV file
 
-In the example, we will use a sample CSV file named **austin_crime.csv**. This file contains a fragment of the [BigQuery public dataset Austin Crime Data](https://console.cloud.google.com/marketplace/details/city-of-austin/austin-crime),
+In the example, we will use a sample CSV file named **austin_crime.csv**. This file contains a fragment of the [public dataset Austin Crime Data](https://console.cloud.google.com/marketplace/details/city-of-austin/austin-crime),
 but feel free to use your own CSV file if you prefer. 
 
 To download the sample CSV file, [open the GitHub webpage](https://github.com/dqops/dqo/blob/develop/dqops/sampledata/files/csv/austin_crime_sample/austin_crime.csv),

@@ -2,7 +2,7 @@
 This guide provides a quick tutorial on how to get started with DQOps using the web interface. You will add a data source, analyze it, and review the data quality results. 
 
 ## Sample data
-In the example, we will import a CSV file with a sample [BigQuery public dataset Austin Crime Data](https://console.cloud.google.com/marketplace/details/city-of-austin/austin-crime). 
+In the example, we will import a CSV file with a sample [public dataset Austin Crime Data](https://console.cloud.google.com/marketplace/details/city-of-austin/austin-crime). 
 
 Next, we will run and review [basic statistics](../working-with-dqo/collecting-basic-data-statistics.md), 
 and automatically added profiling and monitoring [data quality checks](../dqo-concepts/definition-of-data-quality-checks/index.md). 

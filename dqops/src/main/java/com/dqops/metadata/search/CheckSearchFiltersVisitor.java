@@ -320,6 +320,14 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             }
         }
 
+        String qualityDimensionFilter = this.filters.getQualityDimension();
+        if (!Strings.isNullOrEmpty(qualityDimensionFilter)) {
+            String qualityDimension = abstractCheckSpec.getQualityDimension();
+            if (!StringPatternComparer.matchSearchPattern(qualityDimension, qualityDimensionFilter)) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+
         String sensorNameFilter = this.filters.getSensorName();
         if (!Strings.isNullOrEmpty(sensorNameFilter)) {
             if (sensorParameters == null) {

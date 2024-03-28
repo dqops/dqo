@@ -17165,6 +17165,10 @@
           "type" : "string",
           "description" : "The target check category, for example: *nulls*, *volume*, *anomaly*."
         },
+        "qualityDimension" : {
+          "type" : "string",
+          "description" : "The target data quality dimension, for example: *Completeness*, *Accuracy*, *Consistency*, *Timeliness*, *Availability*."
+        },
         "tableComparisonName" : {
           "type" : "string",
           "description" : "The name of a configured table comparison. When the table comparison is provided, DQOps will only perform table comparison checks that compare data between tables."
