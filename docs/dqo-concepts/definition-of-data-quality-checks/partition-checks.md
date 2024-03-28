@@ -126,7 +126,7 @@ When you navigate to the **Partition checks** section and choose a table or colu
 partitioning column, a red warning message will appear above the Check editor saying **Partition checks will not be run, please configure the date or
 datetime column**. Furthermore, this column will be highlighted in orange in the tree view on the left side of the screen.
 
-![Not configured data partitioning column warning](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/not-configured-date-partitioning-column-warning.png)
+![Not configured data partitioning column warning](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/not-configured-date-partitioning-column-warning2.png)
 
 To enable the time partition check, set a column that contains the date, datetime, or timestamp.
 
@@ -134,10 +134,10 @@ To enable the time partition check, set a column that contains the date, datetim
 
 2.  Select the table of interest from the tree view.
 
-3.  Select the **Data and time columns** tab and select a column from the drop-down list in the "Date or datetime column
+3.  Select the **Data and time columns** tab and in the **Partition checks** section, select a column from the drop-down list in the "Date or datetime column
     name used for date/time partitioning used in partition checks" input field.
 
-    ![Partitioning column configuration](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/date-or-datetime-column-configuration-for-partion-checks.png)
+    ![Partitioning column configuration](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/date-or-datetime-column-configuration-for-partion-checks2.png)
 
     You can also get to this screen by clicking the **Configure the date partitioning column** button located on the screen with a list of partition checks.
 

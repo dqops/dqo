@@ -34,7 +34,7 @@ data quality checks.
 For example, to review the summary KPIs of all executed monitoring checks you can use the **KPIs scorecard - summary** dashboard.
 You can find it in the **Monitoring** group, **Data quality KPIs** subgroup.
 
-![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards2.png)
+![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards3.png)
 
 When you hover over the name of the dashboard in the tree view, thumbnails are displayed to help you identify the
 type of dashboard.
@@ -51,7 +51,7 @@ displaying only basic dashboards or both basic and more advanced dashboards.
 
 ### **Filtering**
 
-On each dashboard, data can be filtered. You can filter data by clicking on the dropdown buttons located on the dark grey top part
+On each dashboard, data can be filtered. You can filter data by clicking on the dropdown buttons located on the dark gray top part
 of the dashboard, or clicking on the elements in the tables such as the Connection, Schema, Dimension, Data group, etc.
 Some dashboards have additional filtering options such as checks boxes or input fields.
 
@@ -118,7 +118,7 @@ These dashboards allow filtering data by:
  
 **Current table status** dashboard is a representative of this group.
 
-![Current table status](https://dqops.com/docs/images/concepts/data-quality-dashboards/current-table-status.png)
+![Current table status](https://dqops.com/docs/images/concepts/data-quality-dashboards/current-table-status3.png)
 
 
 ### **Highest issue severity per day**
@@ -257,7 +257,7 @@ This dashboard allows filtering data by:
 * issue severity.
 
 
-![Current completeness issues on columns](https://dqops.com/docs/images/concepts/data-quality-dashboards/current-completeness-issues-on-columns.png)
+![Current completeness issues on columns](https://dqops.com/docs/images/concepts/data-quality-dashboards/current-completeness-issues-on-columns2.png)
 
 
 **Timeliness** dimensions has specialized dashboards for evaluating:
@@ -368,7 +368,7 @@ This dashboard allows filtering data by:
 * severity
 * table.
 
-![Schema changes - summary of changes in columns](https://dqops.com/docs/images/concepts/data-quality-dashboards/schema-changes-summary-of-changes-in-columns.png)
+![Schema changes - summary of changes in columns](https://dqops.com/docs/images/concepts/data-quality-dashboards/schema-changes-summary-of-changes-in-columns2.png)
 
 ## DQOps usage
 

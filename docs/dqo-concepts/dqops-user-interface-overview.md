@@ -5,7 +5,7 @@ This guide introduces the concept of DQOps user interface, how the screen is org
 
 The DQOps web interface is divided into three main areas.
 
-![The DQOps user interface overview](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/user-interface-overview2.png)
+![The DQOps user interface overview](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/user-interface-overview3.png)
 
 1. The [navigation bar](#navigation-bar) has links to the main DQOps data quality monitoring sections and provides access to the main settings and other functions.
 2. The [tree view](#tree-view) displays all the data sources available in your workspace or a list of dashboards depending on the section chosen in the navigation bar. 
@@ -123,22 +123,57 @@ If the tab's content no longer exists, a pop-up notification will appear and the
 
 ![Closing tab](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tab-will-closed.png)
 
-### **Check editor**
+### **Main workspace tabs**
 
-Below we explain the main elements of the workspace in the **Profiling**, **Monitoring Checks** and **Partition Checks** sections.
+Below we explain the main tabs of the workspace in the **Profiling**, **Monitoring Checks** and **Partition Checks** sections.
 
-![Check editor](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-check-editor.png)
-
-
-The top section of this workspace contains quick links that allow you to switch between different sections 
+The top section of workspace at the table and column level, contains quick links that allow you to switch between different sections 
 while keeping the same level in the tree. The quick links section is hidden by default and can be expanded by clicking on the **<** arrow.
 For instance, if you are in the monitoring section on a table and click the 
 **Partition checks >** link, you will be directed to the Partition check section on the same table. Linking works the 
 same when you are on the column level.
 
-Below the quick links, there are tabs that allow you to access the **Check editor** located in the **Profiling checks** tab
-(only in Profiling section) or **Daily checks** and **Monthly checks**, review **Table quality status**, access the screen
-for setting **Comparisons**, view **Basic data statistics** (only in Profiling section), or **Preview tables** (only in Profiling section).
+Below the quick links are tabs that vary in different sections.
+
+In the **Profiling** section you can access:
+
+![Main workspace tabs - Profiling](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-profiling.png)
+
+- **Basic data statistics** that allows you to [collect basic statistics](../working-with-dqo/collecting-basic-data-statistics.md) about data sources during the data profiling stage.
+- **Table preview** that provides a summary preview of the table. 
+- **Table quality status** provides a summary of the results of the executed profiling checks.
+- **Profiling checks** that gives access to the Check editor.
+- **Table comparison** that enables you to [identify differences between two tables](../working-with-dqo/compare-tables-between-data-sources.md).
+
+In the **Monitoring Checks** section you can access
+
+![Main workspace tabs - Monitoring](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-monitoring.png)
+
+
+- **Table quality status (daily checks)** provides a summary of the results of the executed daily monitoring checks.
+- **Daily checks** that gives access to the Check editor for daily checks.
+- **Table quality status (monthly checks)** provides a summary of the results of the executed monthly monitoring checks.
+- **Monthly checks** that gives access to the Check editor for monthly checks.
+- **Daily comparisons** that enables you to [identify differences between two tables using daily checks](../working-with-dqo/compare-tables-between-data-sources.md).
+- **Monthly comparisons** that enables you to [identify differences between two tables using monthly checks](../working-with-dqo/compare-tables-between-data-sources.md).
+  
+In the **Partition Checks** section you can access
+
+![Main workspace tabs - Partition](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-partition.png)
+
+- **Table quality status (daily checks)** provides a summary of the results of the executed daily partition checks.
+- **Daily checks** that gives access to the Check editor for daily checks.
+- **Table quality status (monthly checks)** provides a summary of the results of the executed monthly partition checks.
+- **Monthly checks** that gives access to the Check editor for monthly checks.
+- **Daily comparisons** that enables you to [identify differences between two tables using daily partition checks](../working-with-dqo/compare-tables-between-data-sources.md).
+- **Monthly comparisons** that enables you to [identify differences between two tables using monthly partition checks](../working-with-dqo/compare-tables-between-data-sources.md).
+
+
+### **Check editor**
+
+The Check editor screen allows you to work with checks.
+
+![Main workspace tabs](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-check-editor3.png)
 
 Under tabs selection, there is information about the set schedule configuration. Also, in the **Partition Checks** 
 section, there is additional information about the date partitioning column.
@@ -156,7 +191,8 @@ dimension category to which this check was categorized.
 
 The buttons and icons allow you to:
 
-- Activate and deactivate checks by using the Switch button 
+- Activate and deactivate checks by using the toggle button. The toggle button next to the name of the activated default checks will have a light green color. If the check has
+    been activated manually, the toggle button will have a darker green color. Learn more about [monitoring data quality with default check here](../working-with-dqo/daily-monitoring-of-data-quality.md). 
 - Disable checks by using the Disable button
 - Access check **Settings** where you can set Custom data groupings, modify inclusion/exclusion of check in KPI and SLA, modify the name of the Data Quality Dimension, add SQL WHERE condition, modify scheduling settings, or add Labels.
 

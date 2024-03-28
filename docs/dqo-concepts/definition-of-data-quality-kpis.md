@@ -166,7 +166,7 @@ If the orphaned results of failed data quality checks are not removed, they will
 
 The profiling KPI scorecard dashboard is shown below. The dashboard can be found in the Data Quality Dashboards -> Profiling -> Profiling data quality KPIs section.
 
-![Data quality profiling initial KPI scorecard](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards.png){ loading=lazy }
+![Data quality profiling initial KPI scorecard](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards3.png){ loading=lazy }
 
 Once the data profiling is complete, it will be clear which data quality issues are real issues, and which failed profiling checks
 should not be measured, since some columns may be incomplete. The selected list of profiling checks should be activated
@@ -213,7 +213,7 @@ The data quality improvement process is a continuous loop between
 The following screenshot shows one of data quality KPI dashboards with drill-down options for locating the type of the data quality issue.
 This dashboard can be found in the Data Quality Dashboards -> Monitoring -> Data quality KPIs section.
 
-![Data quality KPI per table dashboard](https://dqops.com/docs/images/concepts/data-quality-kpis/data_quality_monitoring_kpi_per_source_min.png){ loading=lazy }
+![Data quality KPI per table dashboard](https://dqops.com/docs/images/concepts/data-quality-kpis/kpi-per-table-summary-dashboard.png){ loading=lazy }
 
 ## Data contracts
 

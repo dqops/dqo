@@ -32,14 +32,8 @@ and data quality incident is described below.
 ## Incident workflow
 The data quality incident management workflow is shown on the following diagram.
 
-``` mermaid
-graph LR
-  S[New data quality<br/>incident identified] --> |New incident created| O(Open);
-  O --> |Assigned to be fixed by<br/> the 3rd level support| A(Acknowledged);
-  O --> |False alarm, mute| M(Muted);
-  A --> |Incident solved| R(Resolved);
-  A --> |Not an issue,<br/>do not raise it again| M(Muted);
-```
+![Incident workflow](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-workflow.png)
+
 
 The following statuses are used in the data quality incident workflow.
 
