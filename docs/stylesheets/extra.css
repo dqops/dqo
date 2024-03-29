@@ -71,3 +71,11 @@ p:has(span.center-content) {
 .ebook-image-home {
   padding-top: 40px;
 }
+.md-banner__inner {
+  margin: 0;
+  padding: 0;
+}
+.md-grid {
+  max-width: unset;
+  width: unset;
+}
