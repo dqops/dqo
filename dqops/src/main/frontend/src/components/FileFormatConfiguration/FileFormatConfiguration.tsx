@@ -1,7 +1,7 @@
 import React from 'react';
 import { DuckdbParametersSpecFilesFormatTypeEnum } from '../../api';
 import SectionWrapper from '../Dashboard/SectionWrapper';
-import SelectInput from '../SelectInput';
+import Select from '../Select';
 import CsvFormatConfiguration from './FormatsConfiguration/CsvFormatConfiguration';
 import JsonFormatConfiguration from './FormatsConfiguration/JsonFormatConfiguration';
 import ParquetFormatConfiguration from './FormatsConfiguration/ParquetFormatConfiguration';
@@ -79,7 +79,7 @@ export default function FileFormatConfiguration({
         {!freezeFileType && (
           <div className="flex items-center gap-x-5 text-sm">
             <div>File format</div>
-            <SelectInput
+            <Select
               options={sourceFilesTypeOptions}
               onChange={(value) => {
                 onChangeFile(value);
