@@ -15,7 +15,6 @@
  */
 package com.dqops.oracle.sensors.column.pii;
 
-import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.pii.ColumnPiiContainsUsaPhonePercentCheckSpec;
 import com.dqops.connectors.ProviderType;
