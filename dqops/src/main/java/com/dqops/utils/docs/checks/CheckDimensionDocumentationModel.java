@@ -36,6 +36,11 @@ public class CheckDimensionDocumentationModel {
     private String qualityDimension;
 
     /**
+     * The name of the data quality dimension from the primary check class, but in lower case.
+     */
+    private String qualityDimensionLowercase;
+
+    /**
      * List of checks, grouped by similar checks.
      */
     private List<SimilarChecksDocumentationModel> checkGroups = new ArrayList<>();

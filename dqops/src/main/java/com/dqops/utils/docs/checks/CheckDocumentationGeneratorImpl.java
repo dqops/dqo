@@ -56,6 +56,7 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
                     checkDimensionDocumentationModel = new CheckDimensionDocumentationModel();
                     checkDimensionDocumentationModel.setTarget(checkCategoryDocumentationModel.getTarget());
                     checkDimensionDocumentationModel.setQualityDimension(similarChecksDocumentationModel.getQualityDimension());
+                    checkDimensionDocumentationModel.setQualityDimensionLowercase(similarChecksDocumentationModel.getQualityDimension().toLowerCase(Locale.ROOT));
                     targetMap.put(similarChecksDocumentationModel.getQualityDimension(), checkDimensionDocumentationModel);
                 }
 
