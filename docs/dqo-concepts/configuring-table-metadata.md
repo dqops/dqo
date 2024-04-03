@@ -1,4 +1,7 @@
-# Configuring table metadata
+---
+title: How to configure table metadata for data quality monitoring
+---
+# How to configure table metadata for data quality monitoring
 Read this guide to understand how DQOps stores the metadata of monitored tables and columns. Learn how to set the configuration for tables, such as filtering.
 
 ## Overview

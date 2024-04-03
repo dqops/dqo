@@ -1,4 +1,7 @@
-# Working with Command-Line Interface
+---
+title: Working with DQOps command-line interface
+---
+# Working with DQOps command-line interface
 Read this guide to understand the concept of DQOps command line interface.
 
 ## Overview

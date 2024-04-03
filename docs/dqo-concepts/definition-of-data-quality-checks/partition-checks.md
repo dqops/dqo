@@ -1,3 +1,6 @@
+---
+title: Partitioned data quality checks
+---
 # Partitioned data quality checks
 Read this guide to understand how data quality checks in DQOps are applied to analyzing partitioned data, or time-based data such as financial records.
 

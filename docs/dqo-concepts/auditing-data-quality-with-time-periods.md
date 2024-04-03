@@ -1,4 +1,7 @@
-# Auditing data quality with time periods
+---
+title: Auditing data quality with time periods for partitioned or financial data
+---
+# Auditing data quality with time periods for partitioned or financial data
 Read this guide to learn how DQOps captures the database local time when running data quality checks, to enable auditing data quality results.
 
 ## Tested time periods
