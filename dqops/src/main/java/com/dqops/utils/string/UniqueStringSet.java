@@ -23,7 +23,7 @@ import java.util.HashMap;
  * Maintains a dictionary of strings that were already seen. Returns an earlier instance of the same string.
  */
 public class UniqueStringSet {
-    private final HashMap<String, String> uniqueStrings = new HashMap<>();
+    private final HashMap<String, String> uniqueStrings = new HashMap<>();  // we can use a regular has map here (not a linked hash map)
 
     /**
      * Deduplicates a string. Returns the same string if it is the first instance of a string object.

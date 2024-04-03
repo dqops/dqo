@@ -19,7 +19,7 @@ import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.ICommand;
 import com.dqops.cli.commands.RuleFileExtension;
-import com.dqops.cli.commands.rule.impl.RuleService;
+import com.dqops.cli.commands.rule.impl.RuleCliService;
 import com.dqops.cli.completion.completers.RuleExtensionCompleter;
 import com.dqops.cli.completion.completers.RuleNameCompleter;
 import com.dqops.cli.terminal.TerminalReader;
@@ -38,7 +38,7 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "edit", header = "Edit rule that matches a given condition", description = "This command can be used to update the rule. It is important to use caution when using this command, as it can impact the execution of data quality checks.")
 public class RuleEditCliCommand extends BaseCommand implements ICommand {
-	private RuleService ruleService;
+	private RuleCliService ruleCliService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 
@@ -46,8 +46,8 @@ public class RuleEditCliCommand extends BaseCommand implements ICommand {
 	}
 
 	@Autowired
-	public RuleEditCliCommand(RuleService ruleService, TerminalReader terminalReader, TerminalWriter terminalWriter) {
-		this.ruleService = ruleService;
+	public RuleEditCliCommand(RuleCliService ruleCliService, TerminalReader terminalReader, TerminalWriter terminalWriter) {
+		this.ruleCliService = ruleCliService;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 	}
@@ -74,7 +74,7 @@ public class RuleEditCliCommand extends BaseCommand implements ICommand {
 			this.name = this.terminalReader.prompt("Rule name (--rule)", null, false);
 		}
 
-		CliOperationStatus cliOperationStatus = this.ruleService.editTemplate(name, ext);
+		CliOperationStatus cliOperationStatus = this.ruleCliService.editTemplate(name, ext);
 
 		if (cliOperationStatus.isSuccess()) {
 			return 0;

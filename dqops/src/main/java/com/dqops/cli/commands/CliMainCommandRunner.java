@@ -18,6 +18,7 @@ package com.dqops.cli.commands;
 import com.dqops.cli.ApplicationShutdownManager;
 import com.dqops.cli.CliExitCodeGenerator;
 import com.dqops.cli.CliInitializer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -29,7 +30,14 @@ import picocli.CommandLine;
  */
 @Profile("!test & cli")
 @Component
+@Slf4j
 public class CliMainCommandRunner implements CommandLineRunner {
+    /**
+     * Special exit code returned only by the {@link com.dqops.cli.commands.run.RunCliCommand} command
+     * to indicate that the application should continue working, even after the command finished because we are simply not able to wait for the exit.
+     */
+    public static final int DO_NOT_EXIT_AFTER_COMMAND_FINISHED_EXIT_CODE = Integer.MIN_VALUE + 99;
+
     private final CliExitCodeGenerator cliExitCodeGenerator;
     private CliInitializer cliInitializer;
     private ApplicationShutdownManager applicationShutdownManager;
@@ -57,10 +65,13 @@ public class CliMainCommandRunner implements CommandLineRunner {
 
         try {
             int errorCode = commandLine.execute(args);
-			this.cliExitCodeGenerator.setExitCode(errorCode);
-            this.applicationShutdownManager.initiateShutdown(errorCode); // to stop the web server
+            if (errorCode != DO_NOT_EXIT_AFTER_COMMAND_FINISHED_EXIT_CODE) {
+                this.cliExitCodeGenerator.setExitCode(errorCode);
+                this.applicationShutdownManager.initiateShutdown(errorCode); // to stop the web server
+            }
         }
         catch (Exception ex) {
+            log.error("Application shutdown failed: " + ex.getMessage(), ex);
 			this.cliExitCodeGenerator.setExitCode(1);
         }
     }

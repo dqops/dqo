@@ -16,12 +16,14 @@
 package com.dqops.services.remote.tables;
 
 import com.dqops.connectors.*;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rest.models.remote.TableRemoteBasicModel;
+import com.dqops.rest.models.remote.RemoteTableListModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -54,10 +56,11 @@ public class SourceTablesServiceImpl implements SourceTablesService {
      *
      * @param connectionName Connection name. Required import.
      * @param schemaName     Schema name.
+     * @param principal      Calling user principal.
      * @return Table list acquired remotely.
      */
-    public List<TableRemoteBasicModel> showTablesOnRemoteSchema(String connectionName, String schemaName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+    public List<RemoteTableListModel> showTablesOnRemoteSchema(String connectionName, String schemaName, DqoUserPrincipal principal) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -73,16 +76,17 @@ public class SourceTablesServiceImpl implements SourceTablesService {
                 .collect(Collectors.toSet());
 
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
+        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
 
-        List<TableRemoteBasicModel> tableRemoteBasicModels;
+        List<RemoteTableListModel> remoteTableListModels;
 
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
-        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true)) {
-            List<SourceTableModel> sourceTableModels = sourceConnection.listTables(schemaName);
-            tableRemoteBasicModels = sourceTableModels.stream()
-                    .map(sourceTableModel -> new TableRemoteBasicModel(){{
+        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
+            List<SourceTableModel> sourceTableModels = sourceConnection.listTables(schemaName, secretValueLookupContext);
+            remoteTableListModels = sourceTableModels.stream()
+                    .map(sourceTableModel -> new RemoteTableListModel(){{
                         setConnectionName(connectionName);
                         setSchemaName(sourceTableModel.getSchemaName());
                         setAlreadyImported(importedTableNames.contains(sourceTableModel.getTableName().getTableName()));
@@ -93,6 +97,6 @@ public class SourceTablesServiceImpl implements SourceTablesService {
             throw new SourceTablesServiceException("Source database connection error: " + e.getMessage(), e);
         }
 
-        return tableRemoteBasicModels;
+        return remoteTableListModels;
     }
 }

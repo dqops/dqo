@@ -40,6 +40,11 @@ public final class BuiltInFolderNames {
     public static final String CHECKS = "checks";
 
     /**
+     * Folder where configuration files that could be synchronized to the cloud are stored.
+     */
+    public static final String SETTINGS = "settings";
+
+    /**
      * Local data folder.
      */
     public static final String DATA = ".data";
@@ -75,12 +80,28 @@ public final class BuiltInFolderNames {
     public static final String INDEX = ".index";
 
     /**
-     * Credentials folder to store local credentials that are not stored in the repository.
+     * Credentials folder to store local credentials that are not stored in the repository, but are synchronized to DQOps cloud.
      */
     public static final String CREDENTIALS = ".credentials";
+
+    /**
+     * Data dictionaries folder to store dictionary CSV files used in some checks.
+     */
+    public static final String DICTIONARIES = "dictionaries";
+
+    /**
+     * Folder with the configuration of default check patterns.
+     */
+    public static final String PATTERNS = "patterns";
 
     /**
      * Local log folder inside the user home that stores logs.
      */
     public static final String LOGS = ".logs";
+
+    /**
+     * The folder with additional data domains. Each data domain is a subfolder under the "domains" folder,
+     * which is a new DQOps user home folder, but without nested data domains.
+     */
+    public static final String DATA_DOMAINS = "domains";
 }

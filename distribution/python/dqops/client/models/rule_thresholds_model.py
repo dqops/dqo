@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="RuleThresholdsModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class RuleThresholdsModel:
     """Model that returns the form definition and the form data to edit a single rule with all three threshold levels (low,
     medium, high).
@@ -28,7 +29,7 @@ class RuleThresholdsModel:
     error: Union[Unset, "RuleParametersModel"] = UNSET
     warning: Union[Unset, "RuleParametersModel"] = UNSET
     fatal: Union[Unset, "RuleParametersModel"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         error: Union[Unset, Dict[str, Any]] = UNSET

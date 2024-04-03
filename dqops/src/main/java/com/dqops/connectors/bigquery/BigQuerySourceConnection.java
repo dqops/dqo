@@ -17,11 +17,9 @@ package com.dqops.connectors.bigquery;
 
 import com.dqops.connectors.*;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
-import com.dqops.metadata.sources.ColumnSpec;
-import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
-import com.dqops.metadata.sources.PhysicalTableName;
-import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.sources.*;
 import com.google.api.gax.paging.Page;
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.Dataset;
@@ -34,10 +32,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Row;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Big query connection.
@@ -76,10 +71,11 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
 
     /**
      * Opens a connection before it can be used for executing any statements.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      */
     @Override
-    public void open() {
-        this.bigQueryService = this.bigQueryConnectionPool.getBigQueryService(this.getConnectionSpec());
+    public void open(SecretValueLookupContext secretValueLookupContext) {
+        this.bigQueryService = this.bigQueryConnectionPool.getBigQueryService(this.getConnectionSpec(), secretValueLookupContext);
    }
 
     /**
@@ -137,7 +133,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
                 datasetPage = bigQueryClient.listDatasets(projectId, BigQuery.DatasetListOption.all());
             }
 
-            for( Dataset dataset : datasetPage.iterateAll() ) {
+            for (Dataset dataset : datasetPage.iterateAll() ) {
                 DatasetId datasetId = dataset.getDatasetId();
                 if (datasetId.getDataset().startsWith("_")) {
                     continue; // hidden datasets (https://cloud.google.com/bigquery/docs/datasets#create-dataset)
@@ -152,7 +148,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
             return schemas;
         }
         catch (Exception ex) {
-            throw new ConnectionQueryException(ex);
+            throw new ConnectionQueryException(ex.getMessage(), ex);
         }
     }
 
@@ -163,7 +159,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName) {
+    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
         try {
             List<SourceTableModel> tables = new ArrayList<>();
             String projectId = this.getConnectionSpec().getBigquery().getSourceProjectId();
@@ -179,7 +175,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
                 tablePages = bigQueryClient.listTables(dataSetId, BigQuery.TableListOption.pageSize(1000));
             }
 
-            for( Table table : tablePages.iterateAll()) {
+            for (Table table : tablePages.iterateAll()) {
                 SourceTableModel sourceTableModel = new SourceTableModel();
                 String datasetName = table.getTableId().getDataset();
                 PhysicalTableName physicalTableName = new PhysicalTableName(datasetName, table.getTableId().getTable());
@@ -192,7 +188,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
             return tables;
         }
         catch (Exception ex) {
-            throw new ConnectionQueryException(ex);
+            throw new ConnectionQueryException(ex.getMessage(), ex);
         }
     }
 
@@ -204,14 +200,17 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
      * @return List of table specifications with the column list.
      */
     @Override
-    public List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames) {
+    public List<TableSpec> retrieveTableMetadata(String schemaName,
+                                                 List<String> tableNames,
+                                                 ConnectionWrapper connectionWrapper,
+                                                 SecretValueLookupContext secretValueLookupContext) {
         assert !Strings.isNullOrEmpty(schemaName);
 
         try {
             List<TableSpec> tableSpecs = new ArrayList<>();
             String sql = buildListColumnsSql(schemaName, tableNames);
             tech.tablesaw.api.Table tableResult = this.bigQuerySqlRunner.executeQuery(this, sql, null, false);
-            HashMap<String, TableSpec> tablesByTableName = new HashMap<>();
+            HashMap<String, TableSpec> tablesByTableName = new LinkedHashMap<>();
 
             for (Row colRow : tableResult) {
                 String physicalTableName = colRow.getString("table_name");

@@ -1,14 +1,14 @@
+import moment from 'moment';
 import React, { useMemo } from 'react';
-import { SensorReadoutsDetailedDataModel } from '../../../api';
+import { SensorReadoutsListModel } from '../../../api';
+import { useTree } from '../../../contexts/treeContext';
+import { CheckTypes } from '../../../shared/routes';
+import { getLocalDateInUserTimeZone, useDecodedParams } from '../../../utils';
 import Select from '../../Select';
 import { Table } from '../../Table';
-import { useTree } from '../../../contexts/treeContext';
-import moment from 'moment';
-import { useParams } from 'react-router-dom';
-import { CheckTypes } from '../../../shared/routes';
 
 interface SensorReadoutsTabProps {
-  sensorReadouts: SensorReadoutsDetailedDataModel[];
+  sensorReadouts: SensorReadoutsListModel[];
   dataGroup?: string;
   onChangeDataGroup: (name: string) => void;
   month?: string;
@@ -26,7 +26,7 @@ const SensorReadoutsTab = ({
     checkTypes
   }: {
     checkTypes: CheckTypes;
-  } = useParams();
+  } = useDecodedParams();
   const { sidebarWidth } = useTree();
 
   const columns = [
@@ -48,6 +48,11 @@ const SensorReadoutsTab = ({
     {
       label: 'Time Period',
       value: 'timePeriod',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
+    },
+    {
+      label: 'Executed At',
+      value: 'executedAt',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
     },
     {
@@ -97,7 +102,7 @@ const SensorReadoutsTab = ({
     >
       <div className="flex space-x-8 items-center">
         <div className="flex space-x-4 items-center">
-          <div className="text-sm">Data group</div>
+          <div className="text-sm">Data group (time series)</div>
           <Select
             value={ dataGroup || sensorReadouts[0]?.dataGroup}
             options={
@@ -119,14 +124,17 @@ const SensorReadoutsTab = ({
         </div>
       </div>
       {sensorReadouts.length === 0 && (
-        <div className="text-gray-700 mt-5">No Data</div>
+        <div className="text-gray-700 mt-5 text-sm">No Data</div>
       )}
       {sensorReadouts.map((result, index) => (
         <div key={index}>
           <Table
             className="mt-4 w-full"
             columns={columns}
-            data={result.singleSensorReadouts || []}
+            data={result.sensorReadoutEntries?.map((item) => ({
+              ...item,
+              executedAt: moment(getLocalDateInUserTimeZone(new Date(String(item.executedAt)))).format('YYYY-MM-DD HH:mm:ss')
+            })) || []}
           />
         </div>
       ))}

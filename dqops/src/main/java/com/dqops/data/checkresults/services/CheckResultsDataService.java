@@ -18,7 +18,10 @@ package com.dqops.data.checkresults.services;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.services.models.*;
+import com.dqops.data.checkresults.services.models.currentstatus.TableCurrentDataQualityStatusFilterParameters;
+import com.dqops.data.checkresults.services.models.currentstatus.TableCurrentDataQualityStatusModel;
 import com.dqops.metadata.sources.PhysicalTableName;
 
 import java.time.Instant;
@@ -37,35 +40,41 @@ public interface CheckResultsDataService {
      *
      * @param rootChecksContainerSpec Root checks container.
      * @param loadParameters          Load parameters.
+     * @param userDomainIdentity      User identity with the data domain.
      * @return Overview of the check's recent results.
      */
     CheckResultsOverviewDataModel[] readMostRecentCheckStatuses(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                                CheckResultsOverviewParameters loadParameters);
+                                                                CheckResultsOverviewParameters loadParameters,
+                                                                UserDomainIdentity userDomainIdentity);
 
     /**
      * Read the results of the most recent table comparison.
      * @param connectionName The connection name of the compared table.
      * @param physicalTableName Physical table name (schema and table) of the compared table.
      * @param checkType Check type.
-     * @param timeScale Optional check scale (daily, monthly) for recurring and partitioned checks.
+     * @param timeScale Optional check scale (daily, monthly) for monitoring and partitioned checks.
      * @param tableComparisonConfigurationName Table comparison configuration name.
+     * @param userDomainIdentity User identity with the data domain.
      * @return Returns the summary information about the table comparison.
      */
     TableComparisonResultsModel readMostRecentTableComparisonResults(String connectionName,
                                                                      PhysicalTableName physicalTableName,
                                                                      CheckType checkType,
                                                                      CheckTimeScale timeScale,
-                                                                     String tableComparisonConfigurationName);
+                                                                     String tableComparisonConfigurationName,
+                                                                     UserDomainIdentity userDomainIdentity);
 
     /**
      * Retrieves complete model of the results of check executions for the given root checks container (group of checks).
      *
      * @param rootChecksContainerSpec Root checks container.
      * @param loadParameters          Load parameters.
+     * @param userDomainIdentity      User identity with the data domain.
      * @return Complete model of the check results.
      */
-    CheckResultsDetailedDataModel[] readCheckStatusesDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                              CheckResultsDetailedFilterParameters loadParameters);
+    CheckResultsListModel[] readCheckStatusesDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
+                                                      CheckResultsDetailedFilterParameters loadParameters,
+                                                      UserDomainIdentity userDomainIdentity);
 
     /**
      * Loads the results of failed data quality checks that are attached to the given incident, identified by the incident hash, first seen and incident until timestamps.
@@ -77,15 +86,17 @@ public interface CheckResultsDataService {
      * @param incidentUntil The timestamp when the incident was closed or expired, returns check results up to this timestamp.
      * @param minSeverity Minimum check issue severity that is returned.
      * @param filterParameters Filter parameters.
+     * @param userDomainIdentity User identity with the data domain.
      * @return An array of matching check results.
      */
-    CheckResultDetailedSingleModel[] loadCheckResultsRelatedToIncident(String connectionName,
-                                                                       PhysicalTableName physicalTableName,
-                                                                       long incidentHash,
-                                                                       Instant firstSeen,
-                                                                       Instant incidentUntil,
-                                                                       int minSeverity,
-                                                                       CheckResultListFilterParameters filterParameters);
+    CheckResultEntryModel[] loadCheckResultsRelatedToIncident(String connectionName,
+                                                              PhysicalTableName physicalTableName,
+                                                              long incidentHash,
+                                                              Instant firstSeen,
+                                                              Instant incidentUntil,
+                                                              int minSeverity,
+                                                              CheckResultListFilterParameters filterParameters,
+                                                              UserDomainIdentity userDomainIdentity);
 
     /**
      * Builds a histogram of data quality issues for an incident. The histogram returns daily counts of data quality issues,
@@ -99,6 +110,7 @@ public interface CheckResultsDataService {
      * @param incidentUntil     The timestamp when the incident was closed or expired, returns check results up to this timestamp.
      * @param minSeverity       Minimum check issue severity that is returned.
      * @param filterParameters  Optional filter to limit the issues included in the histogram.
+     * @param userDomainIdentity User identity with the data domain.
      * @return Daily histogram of failed data quality checks.
      */
     IncidentIssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
@@ -107,21 +119,17 @@ public interface CheckResultsDataService {
                                                                      Instant firstSeen,
                                                                      Instant incidentUntil,
                                                                      int minSeverity,
-                                                                     IncidentHistogramFilterParameters filterParameters);
+                                                                     IncidentHistogramFilterParameters filterParameters,
+                                                                     UserDomainIdentity userDomainIdentity);
 
     /**
      * Analyzes the table to find the status of the most recent data quality check for each time series
      * and asses the most current status.
-     * @param connectionName Connection name.
-     * @param physicalTableName Physical table name.
-     * @param lastMonths The number of recent months to load the data. 1 means the current month and 1 last month.
-     * @param checkType Check type (optional filter).
-     * @param checkTimeScale Check time scale (optional filter).
+     * @param tableCurrentDataQualityStatusFilterParameters Filter parameters container.
+     * @param userDomainIdentity User identity with the data domain.
      * @return The table status.
      */
-    TableDataQualityStatusModel analyzeTableMostRecentQualityStatus(String connectionName,
-                                                                    PhysicalTableName physicalTableName,
-                                                                    int lastMonths,
-                                                                    CheckType checkType,
-                                                                    CheckTimeScale checkTimeScale);
+    TableCurrentDataQualityStatusModel analyzeTableMostRecentQualityStatus(
+            TableCurrentDataQualityStatusFilterParameters tableCurrentDataQualityStatusFilterParameters,
+            UserDomainIdentity userDomainIdentity);
 }

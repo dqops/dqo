@@ -34,12 +34,13 @@ export interface SelectProps {
   addLabel?: string;
   prefix?: string;
   empty?: boolean;
+  disableIcon?: boolean;
 }
 
 const Select = ({
   label,
   options = [],
-  placeholder = 'Select Option',
+  placeholder = 'Select option',
   value,
   onChange,
   className,
@@ -51,7 +52,8 @@ const Select = ({
   onAdd,
   addLabel,
   prefix,
-  empty
+  empty,
+  disableIcon
 }: SelectProps) => {
   const [menuWidth, setMenuWidth] = useState(0);
   const ref = useRef<HTMLButtonElement>(null);
@@ -75,7 +77,7 @@ const Select = ({
         <div className="flex space-x-1">
           <div
             className={clsx(
-              'block text-sm font-regular text-gray-700 mb-1',
+              'block font-regular text-gray-700 mb-1',
               error ? 'text-red-500' : ''
             )}
           >
@@ -114,10 +116,11 @@ const Select = ({
             ) : (
               placeholder
             )}
-            <SvgIcon
-              name="chevron-down"
-              className="absolute transform top-1/2 -translate-y-2/4 right-2 w-4"
-            />
+            {disableIcon === true ? (
+              <></>
+            ) : (
+              <SvgIcon name="chevron-down" className="absolute right-2 w-4" />
+            )}
           </div>
         </MenuHandler>
         {!disabled && (
@@ -126,18 +129,19 @@ const Select = ({
               'z-50 min-w-40 bg-gray-50 !p-0 max-h-81 overflow-auto',
               menuClassName
             )}
+            style={{ zIndex: '200' }}
           >
             {options.map((option, index) => (
               <MenuItem
                 data-testid="select-option"
                 key={index}
-                className="py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm"
+                className="h-8 py-2 px-4 z-50 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm"
                 onClick={() => handleClick(option)}
-                style={{ minWidth: menuWidth }}
+                style={{ minWidth: menuWidth, zIndex: '100' }}
               >
                 <div
                   className={clsx(
-                    'flex gap-2 items-center',
+                    'flex gap-2 items-center z-50',
                     empty ? 'h-5' : ''
                   )}
                 >

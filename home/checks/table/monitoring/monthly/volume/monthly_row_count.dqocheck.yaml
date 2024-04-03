@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: table/volume/row_count
+  rule_name: comparison/min_count
+  help_text: "Verifies that the tested table has at least a minimum accepted number\
+    \ of rows. The default configuration of the warning, error and fatal severity\
+    \ rules verifies a minimum row count of one row, which ensures that the table\
+    \ is not empty. Stores the most recent captured row count value for each month\
+    \ when the row count was evaluated."
+  friendly_name: empty or too small table
+  standard: true

@@ -16,10 +16,15 @@
 package com.dqops.checks.column.partitioned.bool;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.bool.ColumnFalsePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.bool.ColumnTruePercentCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -39,14 +44,13 @@ public class ColumnBoolMonthlyPartitionedChecksSpec extends AbstractCheckCategor
         {
             put("monthly_partition_true_percent", o -> o.monthlyPartitionTruePercent);
             put("monthly_partition_false_percent", o -> o.monthlyPartitionFalsePercent);
-
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Measures the percentage of **true** values in a boolean column and verifies that it is within the accepted range. Stores a separate data quality check result for each monthly partition.")
     private ColumnTruePercentCheckSpec monthlyPartitionTruePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Measures the percentage of **false** values in a boolean column and verifies that it is within the accepted range. Stores a separate data quality check result for each monthly partition.")
     private ColumnFalsePercentCheckSpec monthlyPartitionFalsePercent;
 
     /**
@@ -93,5 +97,49 @@ public class ColumnBoolMonthlyPartitionedChecksSpec extends AbstractCheckCategor
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Gets the check target appropriate for all checks in this category.
+     *
+     * @return Corresponding check target.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return CheckTarget.column;
+    }
+
+    /**
+     * Gets the check type appropriate for all checks in this category.
+     *
+     * @return Corresponding check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.partitioned;
+    }
+
+    /**
+     * Gets the check timescale appropriate for all checks in this category.
+     *
+     * @return Corresponding check timescale.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return CheckTimeScale.monthly;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.BOOLEAN;
     }
 }

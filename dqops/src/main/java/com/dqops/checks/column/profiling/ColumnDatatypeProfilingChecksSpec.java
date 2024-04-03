@@ -16,10 +16,15 @@
 package com.dqops.checks.column.profiling;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
-import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDateMatchFormatPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDetectedDatatypeInTextCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -37,51 +42,50 @@ import java.util.Objects;
 public class ColumnDatatypeProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatatypeProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("profile_date_match_format_percent", o -> o.profileDateMatchFormatPercent);
-            put("profile_string_datatype_changed", o -> o.profileStringDatatypeChanged);
+            put("profile_detected_datatype_in_text", o -> o.profileDetectedDatatypeInText);
+            put("profile_detected_datatype_in_text_changed", o -> o.profileDetectedDatatypeInTextChanged);
         }
     };
+    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type.")
+    private ColumnDetectedDatatypeInTextCheckSpec profileDetectedDatatypeInText;
 
-    @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a column does not exceed the minimum accepted percentage.")
-    private ColumnDatatypeDateMatchFormatPercentCheckSpec profileDateMatchFormatPercent;
-
-    @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.")
-    private ColumnDatatypeStringDatatypeChangedCheckSpec profileStringDatatypeChanged;
+    @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.")
+    private ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec profileDetectedDatatypeInTextChanged;
 
     /**
-     * Returns a date match format percentage check.
-     * @return Maximum date match format percentage check.
+     * Returns a count of expected values in datatype detected check.
+     * @return Datatype detected check.
      */
-    public ColumnDatatypeDateMatchFormatPercentCheckSpec getProfileDateMatchFormatPercent() {
-        return profileDateMatchFormatPercent;
+    public ColumnDetectedDatatypeInTextCheckSpec getProfileDetectedDatatypeInText() {
+        return profileDetectedDatatypeInText;
     }
 
     /**
-     * Sets a new definition of a date match format percentage check.
-     * @param profileDateMatchFormatPercent Date match format percentage check.
+     * Sets a new definition of a datatype detected check.
+     * @param profileDetectedDatatypeInText Datatype detected check.
      */
-    public void setProfileDateMatchFormatPercent(ColumnDatatypeDateMatchFormatPercentCheckSpec profileDateMatchFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileDateMatchFormatPercent, profileDateMatchFormatPercent));
-        this.profileDateMatchFormatPercent = profileDateMatchFormatPercent;
-        propagateHierarchyIdToField(profileDateMatchFormatPercent, "profile_date_match_format_percent");
+    public void setProfileDetectedDatatypeInText(ColumnDetectedDatatypeInTextCheckSpec profileDetectedDatatypeInText) {
+        this.setDirtyIf(!Objects.equals(this.profileDetectedDatatypeInText, profileDetectedDatatypeInText));
+        this.profileDetectedDatatypeInText = profileDetectedDatatypeInText;
+        propagateHierarchyIdToField(profileDetectedDatatypeInText, "profile_detected_datatype_in_text");
     }
 
     /**
      * Returns a count of expected values in datatype changed check.
      * @return Datatype changed check.
      */
-    public ColumnDatatypeStringDatatypeChangedCheckSpec getProfileStringDatatypeChanged() {
-        return profileStringDatatypeChanged;
+    public ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec getProfileDetectedDatatypeInTextChanged() {
+        return profileDetectedDatatypeInTextChanged;
     }
 
     /**
      * Sets a new definition of a datatype changed check.
-     * @param profileStringDatatypeChanged Datatype changed check.
+     * @param profileDetectedDatatypeInTextChanged Datatype changed check.
      */
-    public void setProfileStringDatatypeChanged(ColumnDatatypeStringDatatypeChangedCheckSpec profileStringDatatypeChanged) {
-        this.setDirtyIf(!Objects.equals(this.profileStringDatatypeChanged, profileStringDatatypeChanged));
-        this.profileStringDatatypeChanged = profileStringDatatypeChanged;
-        propagateHierarchyIdToField(profileStringDatatypeChanged, "profile_string_datatype_changed");
+    public void setProfileDetectedDatatypeInTextChanged(ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec profileDetectedDatatypeInTextChanged) {
+        this.setDirtyIf(!Objects.equals(this.profileDetectedDatatypeInTextChanged, profileDetectedDatatypeInTextChanged));
+        this.profileDetectedDatatypeInTextChanged = profileDetectedDatatypeInTextChanged;
+        propagateHierarchyIdToField(profileDetectedDatatypeInTextChanged, "profile_detected_datatype_in_text_changed");
     }
 
     /**
@@ -100,5 +104,49 @@ public class ColumnDatatypeProfilingChecksSpec extends AbstractCheckCategorySpec
     @Override
     public ColumnDatatypeProfilingChecksSpec deepClone() {
         return (ColumnDatatypeProfilingChecksSpec)super.deepClone();
+    }
+
+    /**
+     * Gets the check target appropriate for all checks in this category.
+     *
+     * @return Corresponding check target.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return CheckTarget.column;
+    }
+
+    /**
+     * Gets the check type appropriate for all checks in this category.
+     *
+     * @return Corresponding check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.profiling;
+    }
+
+    /**
+     * Gets the check timescale appropriate for all checks in this category.
+     *
+     * @return Corresponding check timescale.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return null;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.STRING;
     }
 }

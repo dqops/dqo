@@ -15,6 +15,7 @@
  */
 package com.dqops.core.synchronization.filesystems.local;
 
+import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.FileSystemSynchronizationRoot;
 
 import java.nio.file.Path;
@@ -27,9 +28,10 @@ public class UserHomeFileSystemSynchronizationRoot extends FileSystemSynchroniza
      * Creates a root file system.
      *
      * @param rootPath Absolute path to a local file system.
+     * @param rootType Root folder type.
      */
-    public UserHomeFileSystemSynchronizationRoot(Path rootPath) {
-        super(rootPath.toAbsolutePath().normalize());
+    public UserHomeFileSystemSynchronizationRoot(Path rootPath, DqoRoot rootType) {
+        super(rootPath.toAbsolutePath().normalize(), rootType);
         assert rootPath != null && rootPath.isAbsolute();
     }
 }

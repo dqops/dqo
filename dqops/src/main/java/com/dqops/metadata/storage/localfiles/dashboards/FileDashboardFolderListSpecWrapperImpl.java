@@ -55,7 +55,7 @@ public class FileDashboardFolderListSpecWrapperImpl extends DashboardFolderListS
     @Override
     public DashboardsFolderListSpec getSpec() {
         DashboardsFolderListSpec spec = super.getSpec();
-        if (spec == null) {
+        if (spec == null && this.getStatus() == InstanceStatus.LOAD_IN_PROGRESS) {
             FileTreeNode fileNode = this.dashboardsFolderNode.getChildFileByFileName(SpecFileNames.DASHBOARDS_SPEC_FILE_NAME_YAML);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
@@ -70,7 +70,7 @@ public class FileDashboardFolderListSpecWrapperImpl extends DashboardFolderListS
                     }
 
                     deserializedSpec.setFileLastModified(fileContent.getLastModified());
-                    if (deserialized.getKind() != SpecificationKind.DASHBOARDS) {
+                    if (deserialized.getKind() != SpecificationKind.dashboards) {
                         throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
                     fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
@@ -81,6 +81,8 @@ public class FileDashboardFolderListSpecWrapperImpl extends DashboardFolderListS
                 deserializedSpec.clearDirty(true);
                 this.clearDirty(false);
                 return deserializedSpec;
+            } else {
+                this.setSpec(null);
             }
         }
         return spec;
@@ -92,8 +94,12 @@ public class FileDashboardFolderListSpecWrapperImpl extends DashboardFolderListS
      */
     @Override
     public void flush() {
-        if (this.getStatus() == InstanceStatus.DELETED) {
+        if (this.getStatus() == InstanceStatus.DELETED || this.getStatus() == InstanceStatus.NOT_TOUCHED) {
             return; // do nothing
+        }
+
+        if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() == null) {
+            return; // nothing to do, the instance is empty (no file)
         }
 
         if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() != null && super.getSpec().isDirty() ) {
@@ -110,6 +116,8 @@ public class FileDashboardFolderListSpecWrapperImpl extends DashboardFolderListS
             case ADDED:
                 this.dashboardsFolderNode.addChildFile(fileNameWithExt, newFileContent);
                 this.getSpec().clearDirty(true);
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.dashboardsFolderNode.getChildFileByFileName(fileNameWithExt);
                 if (modifiedFileNode != null) {
@@ -120,6 +128,7 @@ public class FileDashboardFolderListSpecWrapperImpl extends DashboardFolderListS
                 }
                 this.getSpec().clearDirty(true);
                 break;
+
             case TO_BE_DELETED:
                 this.dashboardsFolderNode.deleteChildFile(fileNameWithExt);
                 break;

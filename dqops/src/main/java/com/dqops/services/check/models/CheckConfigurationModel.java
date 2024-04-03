@@ -73,15 +73,15 @@ public class CheckConfigurationModel {
     private CheckTarget checkTarget;
 
     /**
-     * Check type (profiling, recurring, partitioned).
+     * Check type (profiling, monitoring, partitioned).
      */
-    @JsonPropertyDescription("Check type (profiling, recurring, partitioned).")
+    @JsonPropertyDescription("Check type (profiling, monitoring, partitioned).")
     private CheckType checkType;
 
     /**
-     * Check timescale (for recurring and partitioned checks).
+     * Check timescale (for monitoring and partitioned checks).
      */
-    @JsonPropertyDescription("Category to which this check belongs.")
+    @JsonPropertyDescription("Check timescale (for monitoring and partitioned checks).")
     private CheckTimeScale checkTimeScale;
 
     /**

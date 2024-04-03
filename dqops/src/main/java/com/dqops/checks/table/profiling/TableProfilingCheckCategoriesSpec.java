@@ -16,13 +16,13 @@
 package com.dqops.checks.table.profiling;
 
 import com.dqops.checks.*;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
-import com.dqops.metadata.timeseries.TimePeriodGradient;
-import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
+import com.dqops.metadata.timeseries.TimeSeriesMode;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -46,17 +46,17 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
             put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
             put("accuracy", o -> o.accuracy);
-            put("sql", o -> o.sql);
+            put("custom_sql", o -> o.customSql);
             put("availability", o -> o.availability);
             put("schema", o -> o.schema);
             put("comparisons", o -> o.comparisons);
         }
     };
 
-    @JsonPropertyDescription("Defines how many advanced profiling results are stored for the table monthly. By default, DQO will use the 'one_per_month' configuration and store only the most recent " +
-         "advanced profiling result executed during the month. By changing this value, it is possible to store one value per day or even store all advanced profiling results.")
+    @JsonPropertyDescription("Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent " +
+         "profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private ProfilingTimePeriod resultTruncation;
+    private ProfilingTimePeriodTruncation resultTruncation;
 
     @JsonPropertyDescription("Configuration of volume data quality checks on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -76,7 +76,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     @JsonPropertyDescription("Configuration of data quality checks that are evaluating custom SQL conditions and aggregated expressions.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlProfilingChecksSpec sql;
+    private TableCustomSqlProfilingChecksSpec customSql;
 
     @JsonPropertyDescription("Configuration of the table availability data quality checks on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -97,7 +97,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      * Returns the result truncation configuration.
      * @return Result truncation policy.
      */
-    public ProfilingTimePeriod getResultTruncation() {
+    public ProfilingTimePeriodTruncation getResultTruncation() {
         return resultTruncation;
     }
 
@@ -105,7 +105,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      * Sets the result truncation configuration.
      * @param resultTruncation New result truncation configuration.
      */
-    public void setResultTruncation(ProfilingTimePeriod resultTruncation) {
+    public void setResultTruncation(ProfilingTimePeriodTruncation resultTruncation) {
         this.setDirtyIf(!Objects.equals(this.resultTruncation, resultTruncation));
         this.resultTruncation = resultTruncation;
     }
@@ -168,18 +168,18 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      * Returns a container of custom sql checks.
      * @return Custom sql checks.
      */
-    public TableSqlProfilingChecksSpec getSql() {
-        return sql;
+    public TableCustomSqlProfilingChecksSpec getCustomSql() {
+        return customSql;
     }
 
     /**
      * Sets a reference to a custom sql checks container.
-     * @param sql Custom sql checks.
+     * @param customSql Custom sql checks.
      */
-    public void setSql(TableSqlProfilingChecksSpec sql) {
-        this.setDirtyIf(!Objects.equals(this.sql, sql));
-        this.sql = sql;
-        this.propagateHierarchyIdToField(sql, "sql");
+    public void setCustomSql(TableCustomSqlProfilingChecksSpec customSql) {
+        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
+        this.customSql = customSql;
+        this.propagateHierarchyIdToField(customSql, "custom_sql");
     }
 
     /**
@@ -255,17 +255,17 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      */
     @Override
     public TimeSeriesConfigurationSpec getTimeSeriesConfiguration(TableSpec tableSpec) {
-        ProfilingTimePeriod profilingTimePeriod = this.resultTruncation != null ? this.resultTruncation : ProfilingTimePeriod.one_per_month;
+        ProfilingTimePeriodTruncation profilingTimePeriodTruncation = this.resultTruncation != null ? this.resultTruncation : ProfilingTimePeriodTruncation.store_the_most_recent_result_per_month;
 
         return new TimeSeriesConfigurationSpec()
         {{
             setMode(TimeSeriesMode.current_time);
-            setTimeGradient(profilingTimePeriod.toTimePeriodGradient());
+            setTimeGradient(profilingTimePeriodTruncation.toTimePeriodGradient());
         }};
     }
 
     /**
-     * Returns the type of checks (profiling, recurring, partitioned).
+     * Returns the type of checks (profiling, monitoring, partitioned).
      *
      * @return Check type.
      */
@@ -276,7 +276,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     }
 
     /**
-     * Returns the time range for recurring and partitioned checks (daily, monthly, etc.).
+     * Returns the time range for monitoring and partitioned checks (daily, monthly, etc.).
      * Profiling checks do not have a time range and return null.
      *
      * @return Time range (daily, monthly, ...).
@@ -301,11 +301,21 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     /**
      * Returns the name of the cron expression that is used to schedule checks in this check root object.
      *
-     * @return Recurring schedule group (named schedule) that is used to schedule the checks in this root.
+     * @return Monitoring schedule group (named schedule) that is used to schedule the checks in this root.
      */
     @Override
     @JsonIgnore
-    public CheckRunRecurringScheduleGroup getSchedulingGroup() {
-        return CheckRunRecurringScheduleGroup.profiling;
+    public CheckRunScheduleGroup getSchedulingGroup() {
+        return CheckRunScheduleGroup.profiling;
+    }
+
+    public static class TableProfilingCheckCategoriesSpecSampleFactory implements SampleValueFactory<TableProfilingCheckCategoriesSpec> {
+        @Override
+        public TableProfilingCheckCategoriesSpec createSample() {
+            return new TableProfilingCheckCategoriesSpec() {{
+                setVolume(new TableVolumeProfilingChecksSpec.TableVolumeProfilingChecksSpecSampleFactory().createSample());
+                setComparisons(null);
+            }};
+        }
     }
 }

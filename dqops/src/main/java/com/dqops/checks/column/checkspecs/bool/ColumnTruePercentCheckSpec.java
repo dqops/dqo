@@ -19,11 +19,13 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.rules.comparison.BetweenPercentRuleParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule95ParametersSpec;
-import com.dqops.rules.comparison.MinPercentRule99ParametersSpec;
-import com.dqops.rules.comparison.MinPercentRule100ParametersSpec;
+import com.dqops.rules.comparison.MinPercentRule100ErrorParametersSpec;
+import com.dqops.rules.comparison.MinPercentRule100WarningParametersSpec;
 import com.dqops.sensors.column.bool.ColumnBoolTruePercentSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -34,13 +36,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are at least percentage of rows with a true value in a monitored column.
+ * This check measures the percentage of **true** values in a boolean column. It raises a data quality issue when the measured percentage is outside the accepted range.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnTruePercentCheckSpec
-        extends AbstractCheckSpec<ColumnBoolTruePercentSensorParametersSpec, MinPercentRule100ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+        extends AbstractCheckSpec<ColumnBoolTruePercentSensorParametersSpec, BetweenPercentRuleParametersSpec, BetweenPercentRuleParametersSpec, BetweenPercentRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnTruePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,17 +56,17 @@ public class ColumnTruePercentCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule100ParametersSpec warning;
+    private BetweenPercentRuleParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set percentage of true value in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule99ParametersSpec error;
+    private BetweenPercentRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule95ParametersSpec fatal;
+    private BetweenPercentRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -91,7 +93,7 @@ public class ColumnTruePercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinPercentRule100ParametersSpec getWarning() {
+    public BetweenPercentRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -99,7 +101,7 @@ public class ColumnTruePercentCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinPercentRule100ParametersSpec warning) {
+    public void setWarning(BetweenPercentRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -111,7 +113,7 @@ public class ColumnTruePercentCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinPercentRule99ParametersSpec getError() {
+    public BetweenPercentRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -119,7 +121,7 @@ public class ColumnTruePercentCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinPercentRule99ParametersSpec error) {
+    public void setError(BetweenPercentRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -131,7 +133,7 @@ public class ColumnTruePercentCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinPercentRule95ParametersSpec getFatal() {
+    public BetweenPercentRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -139,7 +141,7 @@ public class ColumnTruePercentCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinPercentRule95ParametersSpec fatal) {
+    public void setFatal(BetweenPercentRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -153,6 +155,18 @@ public class ColumnTruePercentCheckSpec
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns true if this is a standard data quality check that is always shown on the data quality checks editor screen.
+     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
+     *
+     * @return True when it is a standard check, false when it is an advanced check. The default value is 'false' (all checks are non-standard, advanced checks).
+     */
+    @Override
+    @JsonIgnore
+    public boolean isStandard() {
+        return true;
     }
 
     /**

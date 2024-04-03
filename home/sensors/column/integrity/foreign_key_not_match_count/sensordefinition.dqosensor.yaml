@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/SensorDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: sensor
 spec:
@@ -9,13 +9,11 @@ spec:
       \ to. In order to define the name of the table, user should write correct name\
       \ as a String."
     data_type: string
-    sample_values:
-    - dim_customer
+    required: true
   - field_name: foreign_column
     display_name: foreign_column
     help_text: "This field can be used to define the name of the column to be compared\
       \ to. In order to define the name of the column, user should write correct name\
       \ as a String."
     data_type: string
-    sample_values:
-    - customer_id
+    required: true

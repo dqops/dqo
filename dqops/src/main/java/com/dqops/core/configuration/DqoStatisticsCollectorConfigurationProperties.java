@@ -16,6 +16,7 @@
 package com.dqops.core.configuration;
 
 import lombok.EqualsAndHashCode;
+import org.slf4j.event.Level;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 

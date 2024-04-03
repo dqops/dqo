@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: check
 spec:
@@ -8,3 +8,4 @@ spec:
     \ of the monitored table, counts the number of columns and compares it the last\
     \ known column count that was captured when this data quality check was executed\
     \ the last time."
+  standard: true

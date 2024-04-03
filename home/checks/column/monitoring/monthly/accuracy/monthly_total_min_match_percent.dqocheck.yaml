@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/accuracy/total_min_match_percent
+  rule_name: comparison/diff_percent
+  help_text: Verifies that the percentage of difference in total min of a column in
+    a table and total min of a column of another table does not exceed the set number.
+    Stores the most recent check result for each month when the data quality check
+    was evaluated.
+  standard: true

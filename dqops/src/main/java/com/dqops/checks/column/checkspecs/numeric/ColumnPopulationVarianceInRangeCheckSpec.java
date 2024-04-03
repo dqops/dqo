@@ -32,7 +32,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the population variance is in a set range in a monitored column.
+ * This check calculates a population variance of numeric values. It verifies that the population variance is within the range of accepted values
+ * and raises a data quality issue when it is not within a valid range.o
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

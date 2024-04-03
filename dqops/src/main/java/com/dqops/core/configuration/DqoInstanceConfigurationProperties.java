@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 public class DqoInstanceConfigurationProperties implements Cloneable {
     private String signatureKey;
     private String returnBaseUrl;
+    private boolean validateReturnBaseUrl = false;
     private int authenticationTokenExpirationMinutes = 24 * 60 * 7; // 7 days
 
     /**
@@ -47,9 +48,9 @@ public class DqoInstanceConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Returns the return base url for this DQO instance. It is the base url where the /login page on the DQO Cloud will return after authenticating.
-     * This parameter could be modified if Spring Boot does not manage host name, port or protocol because an additional reverse proxy or a load balancer is working as a proxy.
-     * @return Base url for the return address, the default value that DQO uses internally is "http://localhost:8888/"
+     * Returns the return base url for this DQOps instance. It is the base url where the /login page on the DQOps Cloud will return after authenticating.
+     * This parameter can be modified if Spring Boot does not manage host name, port or protocol because an additional reverse proxy or a load balancer is working as a proxy.
+     * @return Base url for the return address, the default value that DQOps uses internally is "http://localhost:8888/"
      */
     public String getReturnBaseUrl() {
         return returnBaseUrl;
@@ -77,6 +78,22 @@ public class DqoInstanceConfigurationProperties implements Cloneable {
      */
     public void setAuthenticationTokenExpirationMinutes(int authenticationTokenExpirationMinutes) {
         this.authenticationTokenExpirationMinutes = authenticationTokenExpirationMinutes;
+    }
+
+    /**
+     * True when the server checks the return base url and will return an error if the base url is invalid.
+     * @return True when validating the base return url.
+     */
+    public boolean isValidateReturnBaseUrl() {
+        return validateReturnBaseUrl;
+    }
+
+    /**
+     * Sets the configuration to validate the return base url.
+     * @param validateReturnBaseUrl True when the return base url is validated.
+     */
+    public void setValidateReturnBaseUrl(boolean validateReturnBaseUrl) {
+        this.validateReturnBaseUrl = validateReturnBaseUrl;
     }
 
     /**

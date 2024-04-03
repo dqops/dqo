@@ -17,8 +17,10 @@ package com.dqops.metadata.fields;
 
 import com.dqops.metadata.basespecs.AbstractDirtyTrackingSpecList;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * List of parameter definitions - the parameters for custom sensors or custom rules.
@@ -58,5 +60,21 @@ public class ParameterDefinitionsListSpec extends AbstractDirtyTrackingSpecList<
 
         cloned.clearDirty(false);
         return cloned;
+    }
+
+    public static class ParameterDefinitionsListSpecSampleFactory implements SampleValueFactory<ParameterDefinitionsListSpec> {
+        @Override
+        public ParameterDefinitionsListSpec createSample() {
+            return new ParameterDefinitionsListSpec(List.of(
+                    new ParameterDefinitionSpec() {{
+                        setFieldName("sample_string_param");
+                        setDataType(ParameterDataType.string_type);
+                    }},
+                    new ParameterDefinitionSpec() {{
+                        setFieldName("sample_double_param");
+                        setDataType(ParameterDataType.double_type);
+                    }}
+            ));
+        }
     }
 }

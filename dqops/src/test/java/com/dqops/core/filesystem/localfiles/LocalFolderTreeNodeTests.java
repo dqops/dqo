@@ -66,14 +66,14 @@ public class LocalFolderTreeNodeTests extends BaseTest {
     @Test
     void getSubFolders_whenCalledOnNewDirectory_thenReturnsLoadedFolders() {
         Assertions.assertNotNull(this.sut.getSubFolders());
-        Assertions.assertEquals(7, this.sut.getSubFolders().size());
+        Assertions.assertEquals(11, this.sut.getSubFolders().size());
     }
 
     @Test
     void loadChildFilesAndFolders_whenDefaultFilesAndFoldersPresent_thenReturnsThoseFiles() {
 		this.sut.loadChildFilesAndFolders();
         Assertions.assertEquals(3, this.sut.getFiles().size());
-        Assertions.assertEquals(7, this.sut.getSubFolders().size());
+        Assertions.assertEquals(11, this.sut.getSubFolders().size());
         Assertions.assertNotNull(this.sut.getChildFileByFileName(".gitignore"));
     }
 
@@ -108,11 +108,11 @@ public class LocalFolderTreeNodeTests extends BaseTest {
         this.sut.flush();
         sut.deleteChildFile("newfile.txt");
         sut.setDeleteOnFlush(true);
-        Assertions.assertTrue(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath()));
+        Assertions.assertTrue(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath(), true));
 
         this.sut.flush();
 
-        Assertions.assertFalse(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath()));
+        Assertions.assertFalse(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath(), true));
     }
 
     @Test
@@ -123,14 +123,14 @@ public class LocalFolderTreeNodeTests extends BaseTest {
         Assertions.assertNotNull(sut.getChildFolder("subfolder"));
         subfolder.deleteChildFile("newfile.txt");
         subfolder.setDeleteOnFlush(true);
-        Assertions.assertTrue(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath()));
+        Assertions.assertTrue(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath(), true));
         Assertions.assertSame(subfolder, sut.getChildFolder("subfolder"));
-        Assertions.assertEquals(8, sut.getSubFolders().size());
+        Assertions.assertEquals(12, sut.getSubFolders().size());
 
 		sut.flush();
 
-        Assertions.assertFalse(this.sut.getContext().getStorageService().folderExists(subfolder.getFolderPath()));
-        Assertions.assertTrue(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath()));
-        Assertions.assertEquals(7, sut.getSubFolders().size());
+        Assertions.assertFalse(this.sut.getContext().getStorageService().folderExists(subfolder.getFolderPath(), true));
+        Assertions.assertTrue(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath(), true));
+        Assertions.assertEquals(11, sut.getSubFolders().size());
     }
 }

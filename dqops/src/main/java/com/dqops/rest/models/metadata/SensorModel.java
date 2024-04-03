@@ -18,6 +18,8 @@ package com.dqops.rest.models.metadata;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionList;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapper;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -35,9 +37,8 @@ import java.util.Objects;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "SensorModel", description = "Sensor model.")
+@ApiModel(value = "SensorModel", description = "Sensor model that describes the configuration of a single built-in or custom sensor.")
 public class SensorModel {
-
     @JsonPropertyDescription("Full sensor name.")
     private String fullSensorName;
 
@@ -50,8 +51,22 @@ public class SensorModel {
     @JsonPropertyDescription("Whether the sensor is a User Home sensor")
     private boolean custom;
 
-    @JsonPropertyDescription("This is a DQO built-in sensor, whose parameters cannot be changed.")
-    public boolean builtIn;
+    @JsonPropertyDescription("This is a DQOps built-in sensor, whose parameters cannot be changed.")
+    private boolean builtIn;
+
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
+
+    /**
+     * Optional parsing error that was captured when parsing the YAML file.
+     * This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.
+     */
+    @JsonPropertyDescription("Optional parsing error that was captured when parsing the YAML file. " +
+            "This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.")
+    private String yamlParsingError;
 
     public SensorModel() {
     }
@@ -96,7 +111,7 @@ public class SensorModel {
             return false;
         }
 
-        if(!equalsProviderSensorsList(sensorDefinitionWrapper.getProviderSensors())){
+        if (!equalsProviderSensorsList(sensorDefinitionWrapper.getProviderSensors())){
             return false;
         }
 
@@ -119,5 +134,16 @@ public class SensorModel {
                             .orElse(null);
                     return providerSensorModel != null && providerSensorModel.equalsProviderSensorDqo(sensor);
                 });
+    }
+
+    public static class SensorModelSampleFactory implements SampleValueFactory<SensorModel> {
+        @Override
+        public SensorModel createSample() {
+            return new SensorModel() {{
+                setFullSensorName(SampleStringsRegistry.getFullSensorName());
+                setSensorDefinitionSpec(new SensorDefinitionSpec.SensorDefinitionSpecSampleFactory().createSample());
+                setCanEdit(true);
+            }};
+        }
     }
 }

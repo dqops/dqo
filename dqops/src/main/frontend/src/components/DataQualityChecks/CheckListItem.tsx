@@ -1,31 +1,32 @@
+import { Tooltip } from '@material-tailwind/react';
+import clsx from 'clsx';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
+  CheckModel,
   CheckResultsOverviewDataModel,
   CheckResultsOverviewDataModelStatusesEnum,
   DqoJobHistoryEntryModelStatusEnum,
-  TimeWindowFilterParameters,
-  CheckModel,
   FieldModel,
-  RuleParametersModel
+  RuleParametersModel,
+  RuleThresholdsModel,
+  TimeWindowFilterParameters
 } from '../../api';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setCurrentJobId } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
+import { JobApiClient } from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
+import { getLocalDateInUserTimeZone, useDecodedParams } from '../../utils';
+import Checkbox from '../Checkbox';
 import SvgIcon from '../SvgIcon';
+import Switch from '../Switch';
+import CheckDetails from './CheckDetails/CheckDetails';
+import CheckRuleItem from './CheckRuleItem';
 import CheckSettings from './CheckSettings';
 import SensorParameters from './SensorParameters';
-import Switch from '../Switch';
-import clsx from 'clsx';
-import CheckRuleItem from './CheckRuleItem';
-import { JobApiClient } from '../../services/apiClient';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import { Tooltip } from '@material-tailwind/react';
-import moment from 'moment';
-import CheckDetails from './CheckDetails/CheckDetails';
-import { CheckTypes } from '../../shared/routes';
-import { useParams } from 'react-router-dom';
-import Checkbox from '../Checkbox';
-import { setCurrentJobId } from '../../redux/actions/source.actions';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { getFirstLevelActiveTab } from '../../redux/selectors';
 
 export interface ITab {
   label: string;
@@ -46,8 +47,14 @@ interface ICheckListItemProps {
   changeCopyUI: (checked: boolean) => void;
   checkedCopyUI?: boolean;
   comparisonName?: string;
+  isDefaultEditing?: boolean;
+  canUserRunChecks?: boolean;
+  isAlreadyDeleted ?: boolean
 }
 
+interface IRefetchResultsProps {
+  fetchCheckResults : () => void
+}
 const CheckListItem = ({
   mode,
   check,
@@ -59,12 +66,15 @@ const CheckListItem = ({
   changeCopyUI,
   checkedCopyUI,
   category,
-  comparisonName
+  comparisonName,
+  isDefaultEditing,
+  canUserRunChecks,
+  isAlreadyDeleted
 }: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
-  const [activeTab, setActiveTab] = useState('data-streams');
+  const [activeTab, setActiveTab] = useState('check-settings');
   const [tabs, setTabs] = useState<ITab[]>([]);
-  const { job_dictionary_state } = useSelector(
+  const { job_dictionary_state, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
   const [showDetails, setShowDetails] = useState(false);
@@ -80,7 +90,7 @@ const CheckListItem = ({
     schema: string;
     table: string;
     column: string;
-  } = useParams();
+  } = useDecodedParams();
   const [jobId, setJobId] = useState<number>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
   const dispatch = useActionDispatch();
@@ -89,6 +99,11 @@ const CheckListItem = ({
     'error' | 'warning' | 'fatal' | ''
   >('');
 
+  const [refreshCheckObject, setRefreshCheckObject] = useState<IRefetchResultsProps | undefined>()
+
+  const onChangeRefrshCheckObject = (obj: IRefetchResultsProps) => {
+    setRefreshCheckObject(obj)
+  }
   useEffect(() => {
     const localState = localStorage.getItem(
       `${checkTypes}_${check.check_name}`
@@ -127,7 +142,7 @@ const CheckListItem = ({
     localStorage.setItem(`${checkTypes}_${check.check_name}`, 'false');
   };
 
-  const openCheckSettings = () => {
+  const openCheckSettings = (activeTab?: string) => {
     if (showDetails) {
       closeCheckDetails();
     }
@@ -138,14 +153,6 @@ const CheckListItem = ({
           label: 'Check Settings',
           value: 'check-settings'
         },
-        ...(check?.supports_grouping
-          ? [
-              {
-                label: 'Grouping configuration override',
-                value: 'data-streams'
-              }
-            ]
-          : []),
         {
           label: 'Schedule override',
           value: 'schedule'
@@ -156,7 +163,11 @@ const CheckListItem = ({
         }
       ];
       setTabs(initTabs);
-      setActiveTab(initTabs[0].value);
+      if (typeof activeTab === 'string') {
+        setActiveTab(activeTab)
+      } else {
+        setActiveTab(initTabs[0].value);
+      }
     }
   };
 
@@ -171,42 +182,53 @@ const CheckListItem = ({
     if (!configured) {
       closeExpand();
     }
+
+    let newRuleConfiguration : RuleThresholdsModel | undefined = configured ? {
+        ...check.rule
+    } : {};
+    
+    if (!check?.rule?.warning?.configured &&
+        !check?.rule?.error?.configured && 
+        !check?.rule?.fatal?.configured) {
+      newRuleConfiguration = {
+        ...newRuleConfiguration,
+        error: {
+          ...check.rule?.error,
+          configured: true
+        }
+      };
+    }
+
     handleChange({
       configured,
       disabled: configured ? check?.disabled : null,
       ...(configured
         ? {
-            rule: {
-              ...check.rule,
-              error: {
-                ...check.rule?.error,
-                configured: true
-              }
-            }
+            rule: newRuleConfiguration
           }
         : {})
     });
   };
 
   const onRunCheck = async () => {
-    if (!check.configured || check?.disabled) {
+    if (!(check?.default_check || check.configured) || check?.disabled) {
       return;
     }
     await onUpdate();
-    const res = await JobApiClient.runChecks(false, undefined, {
-      checkSearchFilters: check?.run_checks_job_template,
+    const res = await JobApiClient.runChecks(undefined, false, undefined, {
+      check_search_filters: check?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
-        ? { timeWindowFilter }
+        ? { time_window_filter: timeWindowFilter }
         : {})
     });
     dispatch(
       setCurrentJobId(
         checkTypes,
         firstLevelActiveTab,
-        (res.data as any)?.jobId?.jobId
+        res.data?.jobId?.jobId ?? 0
       )
     );
-    setJobId((res.data as any)?.jobId?.jobId);
+    setJobId(res.data?.jobId?.jobId);
   };
 
   const isDisabled = !check?.configured || check?.disabled;
@@ -230,7 +252,7 @@ const CheckListItem = ({
 
   useEffect(() => {
     if (
-      job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+      job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
       job?.status === DqoJobHistoryEntryModelStatusEnum.failed
     ) {
       getCheckOverview();
@@ -264,22 +286,10 @@ const CheckListItem = ({
       `${checkTypes}_${check.check_name}_details`,
       newValue.toString()
     );
+    if(refreshCheckObject) {
+      refreshCheckObject.fetchCheckResults()
+    }
     setShowDetails(newValue);
-  };
-  const getLocalDateInUserTimeZone = (date: Date): string => {
-    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-      timeZone: userTimeZone
-    };
-
-    return date.toLocaleString('en-US', options);
   };
 
   useEffect(() => {
@@ -330,7 +340,7 @@ const CheckListItem = ({
   return (
     <>
       <tr
-        className={clsx(
+        className={clsx(expanded || showDetails ? '' :
           ' border-b border-gray-100',
           !isDisabled ? 'text-gray-700' : 'opacity-75',
           check?.disabled ? 'line-through' : ''
@@ -338,7 +348,8 @@ const CheckListItem = ({
       >
         <td className="py-2 pl-4 pr-4 min-w-120 max-w-120">
           <div className="flex space-x-1 items-center">
-            {mode ? (
+
+            {isAlreadyDeleted !== true && (mode ? (
               <div className="w-5 h-5 block items-center">
                 {check?.configured && (
                   <Checkbox checked={checkedCopyUI} onChange={changeCopyUI} />
@@ -348,15 +359,17 @@ const CheckListItem = ({
               <div>
                 <Switch
                   checked={!!check?.configured}
+                  checkedByDefault={!!check?.default_check}
                   onChange={onChangeConfigured}
                 />
               </div>
-            )}
+            ))}
+            {isAlreadyDeleted !== true &&
             <Tooltip
               content={!check?.disabled ? 'Enabled' : 'Disabled'}
               className="max-w-80 py-4 px-4 bg-gray-800"
             >
-              <div>
+              <div className={clsx(userProfile.can_manage_data_sources===false ? "cursor-not-allowed pointer-events-none" : ""  )}>
                 <SvgIcon
                   name={!check?.disabled ? 'stop' : 'disable'}
                   className={clsx(
@@ -370,6 +383,8 @@ const CheckListItem = ({
                 />
               </div>
             </Tooltip>
+            }
+            {isAlreadyDeleted !== true &&
             <Tooltip
               content="Settings"
               className="max-w-80 py-4 px-4 bg-gray-800"
@@ -382,6 +397,8 @@ const CheckListItem = ({
                 />
               </div>
             </Tooltip>
+            }
+            {isAlreadyDeleted !== true &&
             <Tooltip
               content={
                 check?.schedule_override?.disabled
@@ -396,7 +413,7 @@ const CheckListItem = ({
                     check?.schedule_override?.disabled ? 'clock-off' : 'clock'
                   }
                   className={clsx(
-                    'w-5 h-5 cursor-pointer',
+                    'w-[18px] h-[18px] cursor-pointer',
                     check?.schedule_override ? 'text-gray-700' : 'font-bold',
                     check?.schedule_override?.disabled ? 'line-through' : ''
                   )}
@@ -404,22 +421,24 @@ const CheckListItem = ({
                 />
               </div>
             </Tooltip>
+            }
             {(!job ||
-              job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
-              job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
-              <Tooltip
-                content="Run Check"
-                className="max-w-80 py-4 px-4 bg-gray-800"
-              >
-                <div>
-                  <SvgIcon
-                    name="play"
-                    className="text-primary h-5 cursor-pointer"
-                    onClick={onRunCheck}
-                  />
-                </div>
-              </Tooltip>
-            )}
+              job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
+              job?.status === DqoJobHistoryEntryModelStatusEnum.failed) &&
+              isDefaultEditing !== true && isAlreadyDeleted !== true && (
+                <Tooltip
+                  content="Run check"
+                  className="max-w-80 py-4 px-4 bg-gray-800"
+                >
+                  <div>
+                    <SvgIcon
+                      name="play"
+                      className={clsx("h-[18px]", canUserRunChecks === false ? "text-gray-500 cursor-not-allowed" :  "text-primary cursor-pointer")}
+                      onClick={canUserRunChecks!==false && (check?.configured || check?.default_check) ? onRunCheck : undefined}
+                    />
+                  </div>
+                </Tooltip>
+              )}
             {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
               <Tooltip
                 content="Waiting"
@@ -428,7 +447,7 @@ const CheckListItem = ({
                 <div>
                   <SvgIcon
                     name="hourglass"
-                    className="text-gray-700 h-5 cursor-pointer"
+                    className="text-gray-700 h-4 w-[18px] cursor-pointer"
                   />
                 </div>
               </Tooltip>
@@ -442,23 +461,26 @@ const CheckListItem = ({
                 <div>
                   <SvgIcon
                     name="hourglass"
-                    className="text-gray-700 h-5 cursor-pointer"
+                    className="text-gray-700 h-4 w-[18px] cursor-pointer"
                   />
                 </div>
               </Tooltip>
             )}
-            <Tooltip
-              content="Results"
-              className="max-w-80 py-4 px-4 bg-gray-800"
-            >
-              <div className="w-5 h-5">
-                <SvgIcon
-                  name="rectangle-list"
-                  className="text-gray-700 h-5 cursor-pointer"
-                  onClick={toggleCheckDetails}
-                />
-              </div>
-            </Tooltip>
+            {isDefaultEditing !== true && (
+              <Tooltip
+                content="Results"
+                className="max-w-80 py-4 px-4 bg-gray-800"
+              > 
+                <div className={clsx("w-5 h-5", isAlreadyDeleted === true ? "pl-[129px] pr-11" : "")}>
+                  <SvgIcon
+                    name="rectangle-list"
+                    className="text-gray-700 h-5 cursor-pointer"
+                    onClick={toggleCheckDetails}
+                  />
+                </div>
+              </Tooltip>
+            )}
+            {isAlreadyDeleted !== true &&
             <Tooltip
               content={check.help_text}
               className="max-w-80 py-4 px-4 bg-gray-800"
@@ -470,7 +492,7 @@ const CheckListItem = ({
                 />
               </div>
             </Tooltip>
-
+            }
             {checkResult && (
               <div className="flex space-x-1">
                 {checkResult?.statuses?.map((status, index) => (
@@ -519,13 +541,31 @@ const CheckListItem = ({
               </div>
             )}
             <div className="text-sm relative">
-              <p>{check.check_name}</p>
+              <p>{check.display_name !== '' ? (check.display_name ?? check.check_name) : check.check_name} {
+                check.friendly_name &&
+                <span className="text-xxs">
+                  ({check.friendly_name })
+                </span>
+              }</p>
               <p className="absolute left-0 top-full text-xxs">
                 {check.quality_dimension}
               </p>
             </div>
           </div>
         </td>
+        <div className='flex justify-center items-center mt-6 gap-x-6'>
+        {check.comments ? <SvgIcon name='comment' className='w-4 h-4 ' onClick={() => openCheckSettings('comments')}/> : null}
+        {check.configuration_requirements_errors && check.configuration_requirements_errors?.length !== 0 ? 
+          <Tooltip
+                content={check.configuration_requirements_errors?.map((x) => x)}
+                className='pr-6 max-w-80 py-4 px-4 bg-gray-800'>
+                <div>
+                  <SvgIcon name='warning' className='w-5 h-5'/>
+                </div>
+          </Tooltip>
+        : null }
+          
+        </div>
         <td className="py-2 px-4 flex items-end justify-end">
           <div className=" space-x-2">
             <div className="text-gray-700 text-sm w-full ">
@@ -540,7 +580,8 @@ const CheckListItem = ({
             </div>
           </div>
         </td>
-        <td className="py-2 px-4 bg-yellow-100">
+        <td className="py-2 px-4 bg-yellow-100 relative">
+        {isAlreadyDeleted !== true &&
           <CheckRuleItem
             disabled={isDisabled}
             parameters={check?.rule?.warning}
@@ -557,8 +598,11 @@ const CheckListItem = ({
             changeEnabled={changeEnabled}
             configuredType={enabledType}
           />
+        }
+          <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
         </td>
         <td className="py-2 px-4 bg-orange-100">
+          {isAlreadyDeleted !== true &&
           <CheckRuleItem
             disabled={isDisabled}
             parameters={check?.rule?.error}
@@ -575,8 +619,10 @@ const CheckListItem = ({
             changeEnabled={changeEnabled}
             configuredType={enabledType}
           />
+        }
         </td>
-        <td className="py-2 px-4 bg-red-100">
+        <td className="py-2 px-4 bg-red-100 h-18">
+        {isAlreadyDeleted !== true &&
           <CheckRuleItem
             disabled={isDisabled}
             parameters={check?.rule?.fatal}
@@ -593,10 +639,13 @@ const CheckListItem = ({
             changeEnabled={changeEnabled}
             configuredType={enabledType}
           />
+        }
         </td>
       </tr>
       {expanded && (
-        <tr>
+        <tr className={clsx(
+        ' border-b border-gray-100'
+        )}>
           <td colSpan={6}>
             <CheckSettings
               activeTab={activeTab}
@@ -605,12 +654,15 @@ const CheckListItem = ({
               onClose={closeExpand}
               onChange={onChange}
               check={check}
+              isDefaultEditing={isDefaultEditing}
             />
           </td>
         </tr>
       )}
       {showDetails && (
-        <tr>
+        <tr className={clsx(
+          ' border-b border-gray-100'
+          )}>
           <td colSpan={6}>
             <CheckDetails
               checkTypes={checkTypes}
@@ -626,6 +678,7 @@ const CheckListItem = ({
               category={category}
               comparisonName={comparisonName}
               data_clean_job_template={check.data_clean_job_template}
+              onChangeRefreshCheckObject={onChangeRefrshCheckObject}
             />
           </td>
         </tr>

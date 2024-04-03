@@ -25,7 +25,7 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
   };
 
   const renderStatus = () => {
-    if (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
+    if (job.status === DqoJobHistoryEntryModelStatusEnum.finished) {
       return <SvgIcon name="success" className="w-4 h-4 text-primary" />;
     }
     if (job.status === DqoJobHistoryEntryModelStatusEnum.waiting) {
@@ -42,16 +42,21 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
     }
   };
   const cancelJob = async (jobId: number) => {
-    await JobApiClient.cancelJob(jobId);
+    await JobApiClient.cancelJob(jobId.toString());
   };
+
+  if (!job.jobType) return null;
 
   return (
     <Accordion open={open}>
       <AccordionHeader onClick={() => setOpen(!open)}>
         <div className="flex flex-wrap justify-between items-center text-sm w-full text-gray-700">
           <div className="flex flex-wrap space-x-1 items-center">
-            <div className="px-2">{job.jobType} </div>
-            {renderStatus()}
+            <div className="px-2">
+              {job.jobType
+                .replace(/_/g, ' ')
+                .replace(/./, (c) => c.toUpperCase())}
+            </div>
           </div>
           <div className="flex items-center gap-x-2">
             {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
@@ -67,6 +72,7 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
             )}
             <div className="group relative">
               <div className="flex items-center gap-x-2">
+                {renderStatus()}
                 {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
               </div>
             </div>
@@ -86,8 +92,9 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                 {job.errorMessage &&
                   job.errorMessage.includes('dqocloud.accesskey') && (
                     <span className="px-2 text-red-500">
-                      (Cloud DQO Api Key is invalid or outdated, please run{' '}
-                      {"'"}cloud login{"'"} from DQO shell)
+                      (Cloud DQOps Api Key is invalid. Your trial period has
+                      expired or a new version of DQOps was released. Please run{' '}
+                      {"'"}cloud login{"'"} from DQOps shell)
                     </span>
                   )}
               </td>
@@ -99,9 +106,9 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
               </td>
             </tr>
 
-            {job?.parameters?.runChecksParameters?.checkSearchFilters &&
+            {job?.parameters?.runChecksParameters?.check_search_filters &&
               Object.entries(
-                job?.parameters?.runChecksParameters?.checkSearchFilters
+                job?.parameters?.runChecksParameters?.check_search_filters
               ).map(([key, value], index) => (
                 <tr key={index}>
                   <td className="px-2">{key}</td>
@@ -111,13 +118,13 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
             {job?.parameters?.importSchemaParameters && (
               <>
                 <tr>
-                  <td className="px-2">Connection Name</td>
+                  <td className="px-2">Connection name</td>
                   <td className="px-2">
                     {job?.parameters?.importSchemaParameters?.connectionName}
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-2">Schema Name</td>
+                  <td className="px-2">Schema name</td>
                   <td className="px-2">
                     {job?.parameters?.importSchemaParameters?.schemaName}
                   </td>
@@ -153,10 +160,10 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
               </>
             )}
             {job?.parameters?.collectStatisticsParameters
-              ?.statisticsCollectorSearchFilters &&
+              ?.statistics_collector_search_filters &&
               Object.entries(
                 job?.parameters?.collectStatisticsParameters
-                  ?.statisticsCollectorSearchFilters
+                  ?.statistics_collector_search_filters
               ).map(([key, value], index) => (
                 <tr key={index}>
                   <td className="px-2">{key}</td>
@@ -166,13 +173,13 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
             {job?.parameters?.importTableParameters && (
               <>
                 <tr>
-                  <td className="px-2">Connection Name</td>
+                  <td className="px-2">Connection name</td>
                   <td className="px-2">
                     {job?.parameters?.importTableParameters?.connectionName}
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-2">Schema Name</td>
+                  <td className="px-2">Schema name</td>
                   <td className="px-2">
                     {job?.parameters?.importTableParameters?.schemaName}
                   </td>

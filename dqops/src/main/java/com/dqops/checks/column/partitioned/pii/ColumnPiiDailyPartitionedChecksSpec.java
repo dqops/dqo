@@ -16,9 +16,14 @@
 package com.dqops.checks.column.partitioned.pii;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.pii.*;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -36,66 +41,28 @@ import java.util.Objects;
 public class ColumnPiiDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_valid_usa_phone_percent", o -> o.dailyPartitionValidUsaPhonePercent);
             put("daily_partition_contains_usa_phone_percent", o -> o.dailyPartitionContainsUsaPhonePercent);
-            put("daily_partition_valid_usa_zipcode_percent", o -> o.dailyPartitionValidUsaZipcodePercent);
-            put("daily_partition_contains_usa_zipcode_percent", o -> o.dailyPartitionContainsUsaZipcodePercent);
-            put("daily_partition_valid_email_percent", o -> o.dailyPartitionValidEmailPercent);
             put("daily_partition_contains_email_percent", o -> o.dailyPartitionContainsEmailPercent);
-            put("daily_partition_valid_ip4_address_percent", o -> o.dailyPartitionValidIp4AddressPercent);
+            put("daily_partition_contains_usa_zipcode_percent", o -> o.dailyPartitionContainsUsaZipcodePercent);
             put("daily_partition_contains_ip4_percent", o -> o.dailyPartitionContainsIp4Percent);
-            put("daily_partition_valid_ip6_address_percent", o -> o.dailyPartitionValidIp6AddressPercent);
             put("daily_partition_contains_ip6_percent", o -> o.dailyPartitionContainsIp6Percent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of valid USA phone values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnPiiValidUsaPhonePercentCheckSpec dailyPartitionValidUsaPhonePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Detects USA phone numbers in text columns. Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnPiiContainsUsaPhonePercentCheckSpec dailyPartitionContainsUsaPhonePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid USA zip code values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnPiiValidUsaZipcodePercentCheckSpec dailyPartitionValidUsaZipcodePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnPiiContainsUsaZipcodePercentCheckSpec dailyPartitionContainsUsaZipcodePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid emails values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnPiiValidEmailPercentCheckSpec dailyPartitionValidEmailPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Detects emails in text columns. Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnPiiContainsEmailPercentCheckSpec dailyPartitionContainsEmailPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid IP4 address values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnPiiValidIp4AddressPercentCheckSpec dailyPartitionValidIp4AddressPercent;
+    @JsonPropertyDescription("Detects USA zip codes in text columns. Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.")
+    private ColumnPiiContainsUsaZipcodePercentCheckSpec dailyPartitionContainsUsaZipcodePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Detects IP4 addresses in text columns. Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnPiiContainsIp4PercentCheckSpec dailyPartitionContainsIp4Percent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid IP6 address values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnPiiValidIp6AddressPercentCheckSpec dailyPartitionValidIp6AddressPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Detects IP6 addresses in text columns. Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnPiiContainsIp6PercentCheckSpec dailyPartitionContainsIp6Percent;
-
-    /**
-     * Returns a minimum valid USA phone percent check.
-     * @return Minimum valid USA phone percent  check.
-     */
-    public ColumnPiiValidUsaPhonePercentCheckSpec getDailyPartitionValidUsaPhonePercent() {
-        return dailyPartitionValidUsaPhonePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid USA phone percent check.
-     * @param dailyPartitionValidUsaPhonePercent Minimum valid USA phone percent check.
-     */
-    public void setDailyPartitionValidUsaPhonePercent(ColumnPiiValidUsaPhonePercentCheckSpec dailyPartitionValidUsaPhonePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionValidUsaPhonePercent, dailyPartitionValidUsaPhonePercent));
-        this.dailyPartitionValidUsaPhonePercent = dailyPartitionValidUsaPhonePercent;
-        propagateHierarchyIdToField(dailyPartitionValidUsaPhonePercent, "daily_partition_valid_usa_phone_percent");
-    }
 
     /**
      * Returns contains USA phone number percentage check.
@@ -113,60 +80,6 @@ public class ColumnPiiDailyPartitionedChecksSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.dailyPartitionContainsUsaPhonePercent, dailyPartitionContainsUsaPhonePercent));
         this.dailyPartitionContainsUsaPhonePercent = dailyPartitionContainsUsaPhonePercent;
         propagateHierarchyIdToField(dailyPartitionContainsUsaPhonePercent, "daily_partition_contains_usa_phone_percent");
-    }
-
-    /**
-     * Returns a minimum valid usa zip code percent check.
-     * @return Minimum valid usa zip code percent  check.
-     */
-    public ColumnPiiValidUsaZipcodePercentCheckSpec getDailyPartitionValidUsaZipcodePercent() {
-        return dailyPartitionValidUsaZipcodePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid usa zip code percent check.
-     * @param dailyPartitionValidUsaZipcodePercent Minimum valid usa zip code percent check.
-     */
-    public void setDailyPartitionValidUsaZipcodePercent(ColumnPiiValidUsaZipcodePercentCheckSpec dailyPartitionValidUsaZipcodePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionValidUsaZipcodePercent, dailyPartitionValidUsaZipcodePercent));
-        this.dailyPartitionValidUsaZipcodePercent = dailyPartitionValidUsaZipcodePercent;
-        propagateHierarchyIdToField(dailyPartitionValidUsaZipcodePercent, "daily_partition_valid_usa_zipcode_percent");
-    }
-
-    /**
-     * Returns a maximum rows that contains USA zip code percentage check.
-     * @return Maximum rows that contains USA zip code percentage check.
-     */
-    public ColumnPiiContainsUsaZipcodePercentCheckSpec getDailyPartitionContainsUsaZipcodePercent() {
-        return dailyPartitionContainsUsaZipcodePercent;
-    }
-
-    /**
-     * Sets a new definition of a maximum rows that contains USA zip code percentage check.
-     * @param dailyPartitionContainsUsaZipcodePercent Maximum rows that contains USA zip code percentage check.
-     */
-    public void setDailyPartitionContainsUsaZipcodePercent(ColumnPiiContainsUsaZipcodePercentCheckSpec dailyPartitionContainsUsaZipcodePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionContainsUsaZipcodePercent, dailyPartitionContainsUsaZipcodePercent));
-        this.dailyPartitionContainsUsaZipcodePercent = dailyPartitionContainsUsaZipcodePercent;
-        propagateHierarchyIdToField(dailyPartitionContainsUsaZipcodePercent, "daily_partition_contains_usa_zipcode_percent");
-    }
-
-    /**
-     * Returns a minimum valid email percent check.
-     * @return Minimum valid email percent check.
-     */
-    public ColumnPiiValidEmailPercentCheckSpec getDailyPartitionValidEmailPercent() {
-        return dailyPartitionValidEmailPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid email percent check.
-     * @param dailyPartitionValidEmailPercent Minimum valid email percent check.
-     */
-    public void setDailyPartitionValidEmailPercent(ColumnPiiValidEmailPercentCheckSpec dailyPartitionValidEmailPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionValidEmailPercent, dailyPartitionValidEmailPercent));
-        this.dailyPartitionValidEmailPercent = dailyPartitionValidEmailPercent;
-        propagateHierarchyIdToField(dailyPartitionValidEmailPercent, "daily_partition_valid_email_percent");
     }
 
     /**
@@ -188,21 +101,21 @@ public class ColumnPiiDailyPartitionedChecksSpec extends AbstractCheckCategorySp
     }
 
     /**
-     * Returns a minimum valid IP4 address percent check.
-     * @return Minimum valid IP4 address percent check.
+     * Returns a maximum rows that contains USA zip code percentage check.
+     * @return Maximum rows that contains USA zip code percentage check.
      */
-    public ColumnPiiValidIp4AddressPercentCheckSpec getDailyPartitionValidIp4AddressPercent() {
-        return dailyPartitionValidIp4AddressPercent;
+    public ColumnPiiContainsUsaZipcodePercentCheckSpec getDailyPartitionContainsUsaZipcodePercent() {
+        return dailyPartitionContainsUsaZipcodePercent;
     }
 
     /**
-     * Sets a new definition of a minimum valid IP4 address percent check.
-     * @param dailyPartitionValidIp4AddressPercent Minimum valid IP4 address percent check.
+     * Sets a new definition of a maximum rows that contains USA zip code percentage check.
+     * @param dailyPartitionContainsUsaZipcodePercent Maximum rows that contains USA zip code percentage check.
      */
-    public void setDailyPartitionValidIp4AddressPercent(ColumnPiiValidIp4AddressPercentCheckSpec dailyPartitionValidIp4AddressPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionValidIp4AddressPercent, dailyPartitionValidIp4AddressPercent));
-        this.dailyPartitionValidIp4AddressPercent = dailyPartitionValidIp4AddressPercent;
-        propagateHierarchyIdToField(dailyPartitionValidIp4AddressPercent, "daily_partition_valid_ip4_address_percent");
+    public void setDailyPartitionContainsUsaZipcodePercent(ColumnPiiContainsUsaZipcodePercentCheckSpec dailyPartitionContainsUsaZipcodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionContainsUsaZipcodePercent, dailyPartitionContainsUsaZipcodePercent));
+        this.dailyPartitionContainsUsaZipcodePercent = dailyPartitionContainsUsaZipcodePercent;
+        propagateHierarchyIdToField(dailyPartitionContainsUsaZipcodePercent, "daily_partition_contains_usa_zipcode_percent");
     }
 
     /**
@@ -221,24 +134,6 @@ public class ColumnPiiDailyPartitionedChecksSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.dailyPartitionContainsIp4Percent, dailyPartitionContainsIp4Percent));
         this.dailyPartitionContainsIp4Percent = dailyPartitionContainsIp4Percent;
         propagateHierarchyIdToField(dailyPartitionContainsIp4Percent, "daily_partition_contains_ip4_percent");
-    }
-
-    /**
-     * Returns a minimum valid IP6 address percent check.
-     * @return Minimum valid IP6 address percent check.
-     */
-    public ColumnPiiValidIp6AddressPercentCheckSpec getDailyPartitionValidIp6AddressPercent() {
-        return dailyPartitionValidIp6AddressPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid IP6 address percent check.
-     * @param dailyPartitionValidIp6AddressPercent Minimum valid IP6 address percent check.
-     */
-    public void setDailyPartitionValidIp6AddressPercent(ColumnPiiValidIp6AddressPercentCheckSpec dailyPartitionValidIp6AddressPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionValidIp6AddressPercent, dailyPartitionValidIp6AddressPercent));
-        this.dailyPartitionValidIp6AddressPercent = dailyPartitionValidIp6AddressPercent;
-        propagateHierarchyIdToField(dailyPartitionValidIp6AddressPercent, "daily_partition_valid_ip6_address_percent");
     }
 
     /**
@@ -267,5 +162,49 @@ public class ColumnPiiDailyPartitionedChecksSpec extends AbstractCheckCategorySp
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Gets the check target appropriate for all checks in this category.
+     *
+     * @return Corresponding check target.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return CheckTarget.column;
+    }
+
+    /**
+     * Gets the check type appropriate for all checks in this category.
+     *
+     * @return Corresponding check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.partitioned;
+    }
+
+    /**
+     * Gets the check timescale appropriate for all checks in this category.
+     *
+     * @return Corresponding check timescale.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return CheckTimeScale.daily;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.STRING;
     }
 }

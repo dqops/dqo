@@ -61,8 +61,8 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "length_int", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersRecurring(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(this.sampleTableMetadata, "length_int", this.checkSpec, timeScale);
+    private SensorExecutionRunParameters getRunParametersMonitoring(CheckTimeScale timeScale) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(this.sampleTableMetadata, "length_int", this.checkSpec, timeScale);
     }
 
     private SensorExecutionRunParameters getRunParametersPartitioned(CheckTimeScale timeScale, String timeSeriesColumn) {
@@ -70,7 +70,7 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
     }
 
     private String getTableColumnName(SensorExecutionRunParameters runParameters) {
-        return String.format("analyzed_table.`%s`", runParameters.getColumn().getColumnName());
+        return String.format("analyzed_table.`%1$s`", runParameters.getColumn().getColumnName());
     }
 
     private String getSubstitutedFilter(String tableName) {
@@ -100,16 +100,16 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s < 0 THEN 1
+                            WHEN %1$s < 0 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -134,18 +134,18 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s < 0 THEN 1
+                            WHEN %1$s < 0 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -159,25 +159,25 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
     }
 
     @Test
-    void renderSensor_whenRecurringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
+    void renderSensor_whenMonitoringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s < 0 THEN 1
+                            WHEN %1$s < 0 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -198,18 +198,18 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s < 0 THEN 1
+                            WHEN %1$s < 0 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
@@ -237,17 +237,17 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s < 0 THEN 1
+                            WHEN %1$s < 0 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -261,8 +261,8 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
     }
 
     @Test
-    void renderSensor_whenRecurringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
+    void renderSensor_whenMonitoringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
@@ -271,19 +271,19 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s < 0 THEN 1
+                            WHEN %1$s < 0 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY grouping_level_1, time_period, time_period_utc
             ORDER BY grouping_level_1, time_period, time_period_utc""";
 
@@ -307,19 +307,19 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s < 0 THEN 1
+                            WHEN %1$s < 0 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, time_period, time_period_utc
@@ -353,21 +353,21 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s < 0 THEN 1
+                            WHEN %1$s < 0 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
                 analyzed_table.`length_string` AS grouping_level_3,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
@@ -381,8 +381,8 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
     }
 
     @Test
-    void renderSensor_whenRecurringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
+    void renderSensor_whenMonitoringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
@@ -393,21 +393,21 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s < 0 THEN 1
+                            WHEN %1$s < 0 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
                 analyzed_table.`length_string` AS grouping_level_3,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
@@ -433,21 +433,21 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s < 0 THEN 1
+                            WHEN %1$s < 0 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
                 analyzed_table.`length_string` AS grouping_level_3,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc

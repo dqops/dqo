@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: sensor
+spec:
+  fields:
+  - field_name: min_value
+    display_name: min_value
+    help_text: Minimum value for the range.
+    data_type: double
+  - field_name: max_value
+    display_name: max_value
+    help_text: Maximum value for the range.
+    data_type: double

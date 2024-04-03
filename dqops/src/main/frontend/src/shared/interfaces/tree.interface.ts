@@ -1,5 +1,5 @@
 ///
-/// Copyright © 2021 DQOps (support@dqops.com)
+/// Copyright © 2024 DQOps (support@dqops.com)
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
@@ -29,6 +29,8 @@ export interface CustomTreeNode extends TreeNode {
   data_clean_job_template?: DeleteStoredDataQueueJobParameters;
   open?: boolean;
   category?: string;
+  error_message?: string;
 
   configured?: boolean;
+  parsingYamlError?: string; 
 }

@@ -74,6 +74,8 @@ public class SensorReadoutsNormalizedResult {
     private final TextColumn createdByColumn;
     private final TextColumn updatedByColumn;
 
+    private final IntColumn severityColumn;
+
     /**
      * Creates a sensor result dataset, extracting key columns.
      * WARNING: this method has an intended side result - it adds missing columns to the table.
@@ -135,6 +137,10 @@ public class SensorReadoutsNormalizedResult {
         this.updatedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, SensorReadoutsColumnNames.UPDATED_AT_COLUMN_NAME, addColumWhenMissing);
         this.createdByColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CREATED_BY_COLUMN_NAME, addColumWhenMissing);
         this.updatedByColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.UPDATED_BY_COLUMN_NAME, addColumWhenMissing);
+
+        // this is a special condition, we are storing a severity column only when receiving results from custom data quality checks using custom queries
+        // that return a 'severity' column, to bypass calling the rules
+        this.severityColumn = TableColumnUtility.getOrAddIntColumn(table, CheckResultsColumnNames.SEVERITY_COLUMN_NAME, false);
     }
 
     /**
@@ -371,7 +377,7 @@ public class SensorReadoutsNormalizedResult {
     }
 
     /**
-     * Returns a tablesaw column that stores the column name. The column with "column names" may contain nulls when checks are defined on a whole table level.
+     * Returns a tablesaw column that stores the column name. The column with "column names" may contain nulls when checks are defined for the entire table level.
      * @return Column name tablesaw column.
      */
     public TextColumn getColumnNameColumn() {
@@ -379,7 +385,7 @@ public class SensorReadoutsNormalizedResult {
     }
 
     /**
-     * Returns a tablesaw column that stores the column name pattern. The column with "column names" may contain nulls when checks are defined on a whole table level.
+     * Returns a tablesaw column that stores the column name pattern. The column with "column names" may contain nulls when checks are defined for the entire table level.
      * @return Column name pattern tablesaw column.
      */
     public TextColumn getColumnNamePatternColumn() {
@@ -411,7 +417,7 @@ public class SensorReadoutsNormalizedResult {
     }
 
     /**
-     * Returns a column that stores the check type (profiling, recurring, partitioned).
+     * Returns a column that stores the check type (profiling, monitoring, partitioned).
      * @return Check type column.
      */
     public TextColumn getCheckTypeColumn() {
@@ -504,5 +510,13 @@ public class SensorReadoutsNormalizedResult {
      */
     public TextColumn getUpdatedByColumn() {
         return updatedByColumn;
+    }
+
+    /**
+     * Returns an optional column with the severity status imported from custom checks that want to bypass calling rules.
+     * @return Severity rule.
+     */
+    public IntColumn getSeverityColumn() {
+        return severityColumn;
     }
 }

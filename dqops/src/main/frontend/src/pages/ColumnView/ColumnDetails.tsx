@@ -1,18 +1,22 @@
 import React, { useEffect } from 'react';
-import Input from '../../components/Input';
+import { useSelector } from 'react-redux';
 import Checkbox from '../../components/Checkbox';
+import Input from '../../components/Input';
 import NumberInput from '../../components/NumberInput';
-import ColumnActionGroup from './ColumnActionGroup';
+import TextArea from '../../components/TextArea';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getColumnBasic,
   setUpdatedColumnBasic,
   updateColumnBasic
 } from '../../redux/actions/column.actions';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { useSelector } from 'react-redux';
-import { CheckTypes } from "../../shared/routes";
-import { useParams } from "react-router-dom";
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../redux/selectors';
+import { CheckTypes } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
+import ColumnActionGroup from './ColumnActionGroup';
 
 interface IColumnDetailsProps {
   connectionName: string;
@@ -27,11 +31,13 @@ const TableDetails = ({
   tableName,
   columnName
 }: IColumnDetailsProps) => {
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
-  const { columnBasic, isUpdating, isUpdatedColumnBasic } = useSelector(getFirstLevelState(checkTypes));
+  const { columnBasic, isUpdating, isUpdatedColumnBasic } = useSelector(
+    getFirstLevelState(checkTypes)
+  );
 
   const handleChange = (obj: any) => {
     dispatch(
@@ -56,9 +62,23 @@ const TableDetails = ({
 
   useEffect(() => {
     dispatch(
-      getColumnBasic(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
+      getColumnBasic(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName,
+        columnName
+      )
     );
-  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, columnName, tableName]);
+  }, [
+    checkTypes,
+    firstLevelActiveTab,
+    connectionName,
+    schemaName,
+    columnName,
+    tableName
+  ]);
 
   const onUpdate = async () => {
     if (!columnBasic) {
@@ -75,7 +95,16 @@ const TableDetails = ({
         columnBasic
       )
     );
-    dispatch(getColumnBasic(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName));
+    dispatch(
+      getColumnBasic(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName,
+        columnName
+      )
+    );
   };
 
   return (
@@ -85,26 +114,26 @@ const TableDetails = ({
         isUpdating={isUpdating}
         isUpdated={isUpdatedColumnBasic}
       />
-      <table className="mb-6 w-160">
+      <table className="mb-6 w-160 text-sm">
         <tbody>
           <tr>
-            <td className="px-4 py-2">Connection Name</td>
+            <td className="px-4 py-2">Connection name</td>
             <td className="px-4 py-2">{columnBasic?.connection_name}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Schema Name</td>
+            <td className="px-4 py-2">Schema name</td>
             <td className="px-4 py-2">{columnBasic?.table?.schema_name}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Table Name</td>
+            <td className="px-4 py-2">Table name</td>
             <td className="px-4 py-2">{columnBasic?.table?.table_name}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Column Name</td>
+            <td className="px-4 py-2">Column name</td>
             <td className="px-4 py-2">{columnBasic?.column_name}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Disable Data Quality Checks</td>
+            <td className="px-4 py-2">Disable data quality checks</td>
             <td className="px-4 py-2">
               <div className="flex">
                 <Checkbox
@@ -115,18 +144,22 @@ const TableDetails = ({
             </td>
           </tr>
           <tr>
-            <td className="px-4 py-2">SQL Expression for a Calculated Column, use an {'{'}alias{'}'}. token to reference the table</td>
             <td className="px-4 py-2">
-              <Input
-                value={columnBasic?.sql_expression}
+              SQL expression for a calculated column (use an {'{'}alias{'}.'}{' '}
+              token to reference the table)
+            </td>
+            <td className="px-4 py-2">
+              <TextArea
+                value={columnBasic?.sql_expression ?? ''}
                 onChange={(e) =>
-                  handleSnapTypeChange({ sql_expression: e.target.value })
+                  handleChange({ sql_expression: e.target.value })
                 }
+                className="min-h-25"
               />
             </td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Column Type</td>
+            <td className="px-4 py-2">Column data type</td>
             <td className="px-4 py-2">
               <Input
                 value={columnBasic?.type_snapshot?.column_type}

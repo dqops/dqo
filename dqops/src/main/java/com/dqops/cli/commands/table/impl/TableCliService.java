@@ -17,6 +17,7 @@ package com.dqops.cli.commands.table.impl;
 
 import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.TabularOutputFormat;
+import com.dqops.core.principal.DqoUserPrincipal;
 import tech.tablesaw.api.Table;
 
 /**

@@ -1,27 +1,28 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import ConnectionLayout from '../../components/ConnectionLayout';
-import SvgIcon from '../../components/SvgIcon';
-import Tabs from '../../components/Tabs';
-import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useSelector } from 'react-redux';
-import TableDetails from '../../components/Connection/TableView/TableDetails';
-import ScheduleDetail from '../../components/Connection/TableView/ScheduleDetail';
-import ProfilingView from '../../components/Connection/TableView/ProfilingView';
-import RecurringView from '../../components/Connection/TableView/RecurringView';
+import { useHistory } from 'react-router-dom';
+import MonitoringView from '../../components/Connection/TableView/MonitoringView';
 import PartitionedChecks from '../../components/Connection/TableView/PartitionedChecks';
+import ProfilingView from '../../components/Connection/TableView/ProfilingView';
+import ScheduleDetail from '../../components/Connection/TableView/ScheduleDetail';
 import TableCommentView from '../../components/Connection/TableView/TableCommentView';
-import TableLabelsView from '../../components/Connection/TableView/TableLabelsView';
 import TableDataGroupingConfiguration from '../../components/Connection/TableView/TableDataGroupingConfigurations';
+import TableDetails from '../../components/Connection/TableView/TableDetails';
+import TableIncidentsNotificationsView from '../../components/Connection/TableView/TableIncidentsNotificationsView';
+import TableLabelsView from '../../components/Connection/TableView/TableLabelsView';
 import TimestampsView from '../../components/Connection/TableView/TimestampsView';
+import SvgIcon from '../../components/SvgIcon';
+import TableNavigation from '../../components/TableNavigation';
+import Tabs from '../../components/Tabs';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 import {
   getFirstLevelActiveTab,
-  getFirstLevelState
+  getFirstLevelState,
+  getSecondLevelTab
 } from '../../redux/selectors';
-import TableNavigation from '../../components/TableNavigation';
-import TableIncidentsNotificationsView from '../../components/Connection/TableView/TableIncidentsNotificationsView';
-import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 
 const initTabs = [
   {
@@ -41,15 +42,15 @@ const initTabs = [
     value: 'labels'
   },
   {
-    label: 'Data Groupings',
-    value: 'data-streams'
+    label: 'Data groupings',
+    value: 'data-groupings'
   },
   {
     label: 'Date and time columns',
     value: 'timestamps'
   },
   {
-    label: 'Incident Configuration',
+    label: 'Incident configuration',
     value: 'incident_configuration'
   }
 ];
@@ -59,7 +60,7 @@ const TablePage = () => {
     connection,
     schema,
     table,
-    tab: activeTab,
+    tab,
     checkTypes
   }: {
     connection: string;
@@ -67,7 +68,7 @@ const TablePage = () => {
     table: string;
     tab: string;
     checkTypes: CheckTypes;
-  } = useParams();
+  } = useDecodedParams();
   const history = useHistory();
   const [tabs, setTabs] = useState(initTabs);
   const {
@@ -75,8 +76,8 @@ const TablePage = () => {
     isUpdatedComments,
     isUpdatedLabels,
     isUpdatedChecksUi,
-    isUpdatedDailyRecurring,
-    isUpdatedMonthlyRecurring,
+    isUpdatedDailyMonitoring,
+    isUpdatedMonthlyMonitoring,
     isUpdatedDailyPartitionedChecks,
     isUpdatedMonthlyPartitionedChecks,
     isUpdatedSchedule,
@@ -84,9 +85,10 @@ const TablePage = () => {
   } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const dispatch = useActionDispatch();
+  const activeTab = getSecondLevelTab(checkTypes, tab);
 
-  const isRecurringOnly = useMemo(
-    () => checkTypes === CheckTypes.RECURRING,
+  const isMonitoringOnly = useMemo(
+    () => checkTypes === CheckTypes.MONITORING,
     [checkTypes]
   );
   const isPartitionChecksOnly = useMemo(
@@ -98,8 +100,8 @@ const TablePage = () => {
     [checkTypes]
   );
   const showAllSubTabs = useMemo(
-    () => !isRecurringOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,
-    [isRecurringOnly, isPartitionChecksOnly, isProfilingChecksOnly]
+    () => !isMonitoringOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,
+    [isMonitoringOnly, isPartitionChecksOnly, isProfilingChecksOnly]
   );
 
   const onChangeTab = (tab: string) => {
@@ -139,7 +141,7 @@ const TablePage = () => {
   useEffect(() => {
     setTabs(
       tabs.map((item) =>
-        item.value === 'data-streams'
+        item.value === 'data-groupings'
           ? { ...item, isUpdated: isUpdatedDataGroupingConfiguration }
           : item
       )
@@ -177,15 +179,15 @@ const TablePage = () => {
   useEffect(() => {
     setTabs(
       tabs.map((item) =>
-        item.value === 'recurring'
+        item.value === 'monitoring'
           ? {
               ...item,
-              isUpdated: isUpdatedDailyRecurring || isUpdatedMonthlyRecurring
+              isUpdated: isUpdatedDailyMonitoring || isUpdatedMonthlyMonitoring
             }
           : item
       )
     );
-  }, [isUpdatedDailyRecurring, isUpdatedMonthlyRecurring]);
+  }, [isUpdatedDailyMonitoring, isUpdatedMonthlyMonitoring]);
 
   useEffect(() => {
     setTabs(
@@ -204,13 +206,13 @@ const TablePage = () => {
 
   const description = useMemo(() => {
     if (isProfilingChecksOnly) {
-      return 'Advanced profiling for ';
+      return 'Profiling checks for ';
     }
-    if (isRecurringOnly) {
+    if (isMonitoringOnly) {
       if (activeTab === 'monthly') {
-        return 'Monthly recurring checks for ';
+        return 'Monthly monitoring checks for ';
       } else {
-        return 'Daily recurring checks for ';
+        return 'Daily monitoring checks for ';
       }
     }
     if (isPartitionChecksOnly) {
@@ -227,23 +229,23 @@ const TablePage = () => {
     return '';
   }, [
     isProfilingChecksOnly,
-    isRecurringOnly,
+    isMonitoringOnly,
     isPartitionChecksOnly,
     activeTab
   ]);
 
   return (
-    <ConnectionLayout>
-      <div className="relative h-full flex flex-col">
+    <>
+      <div className="relative h-full min-h-full flex flex-col">
         <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 items-center flex-shrink-0 pr-[340px]">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="table" className="w-5 h-5 shrink-0" />
-            <div className="text-xl font-semibold truncate">{`${description}${connection}.${schema}.${table}`}</div>
+            <div className="text-lg font-semibold truncate">{`${description}${connection}.${schema}.${table}`}</div>
           </div>
         </div>
         <TableNavigation />
         {isProfilingChecksOnly && <ProfilingView />}
-        {isRecurringOnly && <RecurringView />}
+        {isMonitoringOnly && <MonitoringView />}
         {isPartitionChecksOnly && <PartitionedChecks />}
         {showAllSubTabs && (
           <>
@@ -255,7 +257,7 @@ const TablePage = () => {
             <div>{activeTab === 'comments' && <TableCommentView />}</div>
             <div>{activeTab === 'labels' && <TableLabelsView />}</div>
             <div>
-              {activeTab === 'data-streams' && (
+              {activeTab === 'data-groupings' && (
                 <TableDataGroupingConfiguration />
               )}
             </div>
@@ -269,7 +271,7 @@ const TablePage = () => {
           </>
         )}
       </div>
-    </ConnectionLayout>
+    </>
   );
 };
 

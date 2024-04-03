@@ -17,12 +17,20 @@ package com.dqops.metadata.storage.localfiles.userhome;
 
 import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.storage.localfiles.checkdefinitions.FileCheckDefinitionListImpl;
+import com.dqops.metadata.storage.localfiles.columndefaultpatterns.FileColumnDefaultChecksPatternListImpl;
+import com.dqops.metadata.storage.localfiles.credentials.FileSharedCredentialListImpl;
+import com.dqops.metadata.storage.localfiles.dashboards.FileDashboardFolderListSpecWrapperImpl;
+import com.dqops.metadata.storage.localfiles.dictionaries.FileDictionaryListImpl;
 import com.dqops.metadata.storage.localfiles.fileindices.FileFileIndexListImpl;
+import com.dqops.metadata.storage.localfiles.defaultschedules.FileMonitoringSchedulesWrapperImpl;
 import com.dqops.metadata.storage.localfiles.ruledefinitions.FileRuleDefinitionListImpl;
 import com.dqops.metadata.storage.localfiles.sensordefinitions.FileSensorDefinitionListImpl;
 import com.dqops.metadata.storage.localfiles.settings.FileSettingsWrapperImpl;
 import com.dqops.metadata.storage.localfiles.sources.FileConnectionListImpl;
+import com.dqops.metadata.storage.localfiles.defaultnotifications.FileDefaultIncidentWebhookNotificationsWrapperImpl;
+import com.dqops.metadata.storage.localfiles.tabledefaultpatterns.FileTableDefaultChecksPatternListImpl;
 import com.dqops.metadata.userhome.UserHomeImpl;
 import com.dqops.utils.serialization.JsonSerializer;
 import com.dqops.utils.serialization.YamlSerializer;
@@ -39,22 +47,37 @@ public class FileUserHomeImpl extends UserHomeImpl {
 
     /**
      * Creates a file based user home implementation.
+     * @param userIdentity Calling user identity that specifies the data domain.
      * @param sources Sources list.
      * @param sensors Custom sensor list.
      * @param rules Custom rules list.
      * @param checks Custom checks list.
      * @param settings Settings.
+     * @param credentials Credentials.
+     * @param dictionaries Data dictionaries.
      * @param fileIndices File indices list.
+     * @param dashboards Custom dashboards.
+     * @param tableDefaultChecksPattern Default table check patterns.
+     * @param columnDefaultChecksPattern Default column check patterns.
      * @param userHomeContext User home context.
      */
-    public FileUserHomeImpl(FileConnectionListImpl sources,
+    public FileUserHomeImpl(UserDomainIdentity userIdentity,
+                            FileConnectionListImpl sources,
                             FileSensorDefinitionListImpl sensors,
                             FileRuleDefinitionListImpl rules,
                             FileCheckDefinitionListImpl checks,
                             FileSettingsWrapperImpl settings,
+                            FileSharedCredentialListImpl credentials,
+                            FileDictionaryListImpl dictionaries,
                             FileFileIndexListImpl fileIndices,
+                            FileDashboardFolderListSpecWrapperImpl dashboards,
+                            FileMonitoringSchedulesWrapperImpl monitoringSchedules,
+                            FileTableDefaultChecksPatternListImpl tableDefaultChecksPattern,
+                            FileColumnDefaultChecksPatternListImpl columnDefaultChecksPattern,
+                            FileDefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks,
                             UserHomeContext userHomeContext) {
-        super(sources, sensors, rules, checks, settings, fileIndices);
+        super(userIdentity, sources, sensors, rules, checks, settings, credentials, dictionaries, fileIndices, dashboards,
+                monitoringSchedules, tableDefaultChecksPattern, columnDefaultChecksPattern, notificationWebhooks);
         this.userHomeContext = userHomeContext;
 		this.homeFolder = userHomeContext.getHomeRoot(); // just a convenience
     }
@@ -72,14 +95,30 @@ public class FileUserHomeImpl extends UserHomeImpl {
         FolderTreeNode rulesFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.RULES);
         FolderTreeNode checksFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.CHECKS);
         FolderTreeNode indexFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.INDEX);
-        FolderTreeNode settingsFolder = userHomeContext.getHomeRoot();
+        FolderTreeNode settingsFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.SETTINGS);
+        FolderTreeNode credentialsFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.CREDENTIALS);
+        FolderTreeNode dictionariesFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.DICTIONARIES);
+        FolderTreeNode patternsFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.PATTERNS);
+        FolderTreeNode localSettingsFolder = userHomeContext.getHomeRoot();
+
         FileConnectionListImpl dataSources = new FileConnectionListImpl(sourcesFolder, yamlSerializer);
         FileSensorDefinitionListImpl sensors = new FileSensorDefinitionListImpl(sensorsFolder, yamlSerializer);
         FileRuleDefinitionListImpl rules = new FileRuleDefinitionListImpl(rulesFolder, yamlSerializer);
         FileCheckDefinitionListImpl checks = new FileCheckDefinitionListImpl(checksFolder, yamlSerializer);
-        FileSettingsWrapperImpl settings = new FileSettingsWrapperImpl(settingsFolder, yamlSerializer);
+        FileSettingsWrapperImpl settings = new FileSettingsWrapperImpl(localSettingsFolder, yamlSerializer);
+        FileSharedCredentialListImpl credentials = new FileSharedCredentialListImpl(credentialsFolder);
+        FileDictionaryListImpl dictionaries = new FileDictionaryListImpl(dictionariesFolder);
         FileFileIndexListImpl fileIndices = new FileFileIndexListImpl(indexFolder, jsonSerializer);
-        return new FileUserHomeImpl(dataSources, sensors, rules, checks, settings, fileIndices, userHomeContext);
+        FileDashboardFolderListSpecWrapperImpl dashboards = new FileDashboardFolderListSpecWrapperImpl(settingsFolder, yamlSerializer);
+        FileMonitoringSchedulesWrapperImpl monitoringSchedules = new FileMonitoringSchedulesWrapperImpl(settingsFolder, yamlSerializer);
+        FileTableDefaultChecksPatternListImpl tableDefaultChecksPatterns = new FileTableDefaultChecksPatternListImpl(patternsFolder, yamlSerializer);
+        FileColumnDefaultChecksPatternListImpl columnDefaultChecksPatterns = new FileColumnDefaultChecksPatternListImpl(patternsFolder, yamlSerializer);
+        FileDefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks = new FileDefaultIncidentWebhookNotificationsWrapperImpl(settingsFolder, yamlSerializer);
+
+        return new FileUserHomeImpl(userHomeContext.getUserIdentity(), dataSources,
+                sensors, rules, checks, settings, credentials, dictionaries, fileIndices, dashboards,
+                monitoringSchedules, tableDefaultChecksPatterns, columnDefaultChecksPatterns,
+                notificationWebhooks, userHomeContext);
     }
 
     /**

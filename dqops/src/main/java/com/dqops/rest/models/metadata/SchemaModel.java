@@ -41,14 +41,17 @@ public class SchemaModel {
     @JsonPropertyDescription("Schema name.")
     private String schemaName;
 
+    @JsonPropertyDescription("Directory prefix.")
+    private String directoryPrefix;
+
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this schema.")
     private CheckSearchFilters runChecksJobTemplate;
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run profiling checks within this schema.")
     private CheckSearchFilters runProfilingChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run recurring checks within this schema.")
-    private CheckSearchFilters runRecurringChecksJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run monitoring checks within this schema.")
+    private CheckSearchFilters runMonitoringChecksJobTemplate;
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run partition partitioned checks within this schema.")
     private CheckSearchFilters runPartitionChecksJobTemplate;
@@ -63,47 +66,89 @@ public class SchemaModel {
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
     /**
+     * Boolean flag that decides if the current user can update or delete the schema.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete the schema.")
+    private boolean canEdit;
+
+    /**
+     * Boolean flag that decides if the current user can collect statistics.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can collect statistics.")
+    private boolean canCollectStatistics;
+
+    /**
+     * Boolean flag that decides if the current user can run checks.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can run checks.")
+    private boolean canRunChecks;
+
+    /**
+     * Boolean flag that decides if the current user can delete data (results).
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
+    private boolean canDeleteData;
+
+    /**
+     * Field for error message.
+     */
+    @JsonPropertyDescription("Field for error message.")
+    private String errorMessage;
+
+    /**
      * Creates a schema model from connection and schema names.
      * @param connectionName Connection name to store in the model.
      * @param schemaName     Schema name.
+     * @param isEditor       The current user has the editor permission.
+     * @param isOperator     The current user has the operator permission.
      * @return Schema model.
      */
-    public static SchemaModel fromSchemaNameStrings(String connectionName, String schemaName) {
+    public static SchemaModel fromSchemaNameStrings(
+            String connectionName,
+            String schemaName,
+            String directoryPrefix,
+            boolean isEditor,
+            boolean isOperator) {
         return new SchemaModel()
         {{
             setConnectionName(connectionName);
             setSchemaName(schemaName);
+            setDirectoryPrefix(directoryPrefix);
+            setCanEdit(isEditor);
+            setCanRunChecks(isOperator);
+            setCanCollectStatistics(isOperator);
+            setCanDeleteData(isOperator);
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(schemaName + ".*");
+                setConnection(connectionName);
+                setFullTableName(schemaName + ".*");
                 setEnabled(true);
             }});
             setRunProfilingChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(schemaName + ".*");
+                setConnection(connectionName);
+                setFullTableName(schemaName + ".*");
                 setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
-            setRunRecurringChecksJobTemplate(new CheckSearchFilters()
+            setRunMonitoringChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(schemaName + ".*");
-                setCheckType(CheckType.recurring);
+                setConnection(connectionName);
+                setFullTableName(schemaName + ".*");
+                setCheckType(CheckType.monitoring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(schemaName + ".*");
+                setConnection(connectionName);
+                setFullTableName(schemaName + ".*");
                 setCheckType(CheckType.partitioned);
                 setEnabled(true);
             }});
             setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(schemaName + ".*");
+                setConnection(connectionName);
+                setFullTableName(schemaName + ".*");
                 setEnabled(true);
             }});
             setImportTableJobParameters(new ImportTablesQueueJobParameters()
@@ -113,8 +158,8 @@ public class SchemaModel {
             }});
             setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(schemaName + ".*");
+                setConnection(connectionName);
+                setFullTableName(schemaName + ".*");
 
                 setDateStart(null);
                 setDateEnd(null);

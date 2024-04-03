@@ -19,7 +19,10 @@ import com.dqops.core.filesystem.cache.LocalFileSystemCache;
 import com.dqops.core.filesystem.metadata.FileMetadata;
 import com.dqops.core.filesystem.metadata.FolderMetadata;
 import com.dqops.core.synchronization.contract.*;
+import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileContent;
+import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
 import com.dqops.utils.exceptions.CloseableHelper;
+import com.dqops.utils.io.TextFiles;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.io.BaseEncoding;
@@ -141,6 +144,33 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
                             .forEach(childPath -> {
                                 Path childRelativePath = rootFileSystemPath.relativize(childPath);
                                 String fileName = childPath.getFileName().toString();
+
+                                if (fileSystemRoot.getRootType() == DqoRoot.credentials) {
+                                    String childRelativePathString = childRelativePath.toString();
+                                    if (Objects.equals(childRelativePathString, DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME)) {
+                                        if (Objects.equals(TextFiles.readString(childPath), DefaultCloudCredentialFileContent.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_INITIAL_CONTENT)) {
+                                            return; // do not upload default files
+                                        }
+                                    }
+
+                                    if (Objects.equals(childRelativePathString, DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME)) {
+                                        if (Objects.equals(TextFiles.readString(childPath), DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT)) {
+                                            return; // do not upload default files
+                                        }
+                                    }
+
+                                    if (Objects.equals(childRelativePathString, DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME)) {
+                                        if (Objects.equals(TextFiles.readString(childPath), DefaultCloudCredentialFileContent.AWS_DEFAULT_CONFIG_INITIAL_CONTENT)) {
+                                            return; // do not upload default files
+                                        }
+                                    }
+
+                                    if (Objects.equals(childRelativePathString, DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME)) {
+                                        if (Objects.equals(TextFiles.readString(childPath), DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT)) {
+                                            return; // do not upload default files
+                                        }
+                                    }
+                                }
 
                                 if (Files.isDirectory(childPath)) {
                                     if (Objects.equals("__pycache__", fileName)) {

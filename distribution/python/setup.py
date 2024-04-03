@@ -41,7 +41,7 @@ DQO_REPO_HOME = os.path.abspath("../../")
 try:
     exec(open('dqops/version.py').read())
 except IOError:
-    print("Failed to load DQOps version file for packaging. You must be in dqops' distribution/python dir.",
+    print("Failed to load DQOps version file for packaging. You must be in DQOps distribution/python dir.",
           file=sys.stderr)
     sys.exit(-1)
 
@@ -56,9 +56,9 @@ except IOError:
 
 # Provide guidance about how to use setup.py
 incorrect_invocation_message = """
-If you are installing DQO from https://github.com/dqops/dqo source, you must first build DQO.
+If you are installing DQOps from https://github.com/dqops/dqo source, you must first build DQOps.
 
-    To build DQO with maven, go to the https://github.com/dqops/dqo root folder and run run:
+    To build DQOps with maven, go to the https://github.com/dqops/dqo root folder and run run:
       ./mvnw -DskipTests clean package"""
 
 # Figure out where the distribution file is present
@@ -106,10 +106,10 @@ try:
     setup(
         name='dqops',
         version=PIP_VERSION,
-        description='DQO Data Quality Operations Center',
+        description='DQOps Data Quality Operations Center',
         long_description=long_description,
         long_description_content_type="text/markdown",
-        author='DQO Developers',
+        author='DQOps Developers',
         author_email='support@dqops.com',
         url='https://github.com/dqops/dqo/tree/master/distribution/python',
         packages=find_packages(),
@@ -118,8 +118,9 @@ try:
             'dqops': ['py.typed']
         },
         license='http://www.apache.org/licenses/LICENSE-2.0',
-        install_requires=['install-jdk>=1.0.4',
-                          'httpx>=0.15.4,<0.25.0',
+        install_requires=['install-jdk>=1.1.0',
+                          'httpx>=0.20.0,<0.26.0',
+                          'h2>=4.0.0',
                           'attrs>=21.3.0',
                           'python-dateutil>=2.8.2',
                           'numpy>=1.24.3',
@@ -138,7 +139,7 @@ try:
             'Programming Language :: Python :: 3.11',
             'Programming Language :: Python :: 3.12',
             'Environment :: Console',
-#            'Framework :: Apache Airflow :: Provider',
+            'Framework :: Apache Airflow :: Provider',
             'Intended Audience :: Developers',
             'Operating System :: Microsoft :: Windows',
             'Operating System :: MacOS',

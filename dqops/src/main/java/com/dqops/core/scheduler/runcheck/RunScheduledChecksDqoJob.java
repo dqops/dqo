@@ -21,6 +21,8 @@ import com.dqops.core.jobqueue.DqoJobType;
 import com.dqops.core.jobqueue.ParentDqoQueueJob;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
@@ -29,14 +31,14 @@ import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * DQO job that runs all scheduled checks for one CRON schedule within the job scheduler (quartz).
+ * DQOps job that runs all scheduled checks for one CRON schedule within the job scheduler (quartz).
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -46,7 +48,7 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
     private ExecutionContextFactory executionContextFactory;
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
     private TerminalTableWritter terminalTableWritter;
-    private RecurringScheduleSpec cronSchedule;
+    private MonitoringScheduleSpec cronSchedule;
 
     /**
      * Creates a dqo job that runs checks scheduled for one cron expression.
@@ -73,7 +75,7 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
      * Cron schedule (cron expression and time zone) that is executed.
      * @return Cron schedule.
      */
-    public RecurringScheduleSpec getCronSchedule() {
+    public MonitoringScheduleSpec getCronSchedule() {
         return cronSchedule;
     }
 
@@ -81,7 +83,7 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
      * Sets the cron schedule that is triggered and whose checks are executed.
      * @param cronSchedule Cron schedule.
      */
-    public void setCronSchedule(RecurringScheduleSpec cronSchedule) {
+    public void setCronSchedule(MonitoringScheduleSpec cronSchedule) {
         this.cronSchedule = cronSchedule;
     }
 
@@ -93,15 +95,19 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
      */
     @Override
     public CheckExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
+        this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
         CheckRunReportingMode checkRunReportingMode = this.jobSchedulerService.getCheckRunReportingMode();
 
-        ExecutionContext executionContext = this.executionContextFactory.create();
+        UserDomainIdentity userDomainIdentity = this.getPrincipal().getDataDomainIdentity();
+        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
 
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
                 checkRunReportingMode, true);
         CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecksForSchedule(
                 executionContext, this.cronSchedule, progressListener, jobExecutionContext.getJobId(),
-                jobExecutionContext.getCancellationToken());
+                jobExecutionContext.getCancellationToken(),
+                this.getPrincipal());
 
         return checkExecutionSummary;
     }
@@ -113,7 +119,7 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.RUN_SCHEDULED_CHECKS_CRON;
+        return DqoJobType.run_scheduled_checks_cron;
     }
 
     /**

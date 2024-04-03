@@ -15,6 +15,7 @@
  */
 package com.dqops.data.readouts.normalization;
 
+import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -28,7 +29,6 @@ import com.google.common.base.Strings;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.primitives.Doubles;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
@@ -38,12 +38,10 @@ import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Service that parses datasets with results returned by a sensor query.
- * Detects column types (data stream level columns), describes the metadata of the result. Also fixes missing information, adds a data_stream_hash column with a hash of all data stream levels.
+ * Detects column types (data group level columns), describes the metadata of the result. Also fixes missing information, adds a data_group_hash column with a hash of all data grouping levels.
  */
 @Service
 public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNormalizationService {
@@ -76,15 +74,16 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
 
         ZoneId defaultTimeZone = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
         Table normalizedResults = Table.create("sensor_results_normalized");
+
         Column<?> actualValueColumn = TableColumnUtility.findColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
-        if (actualValueColumn == null && sensorExecutionResult.isSuccess()) {
-            throw new SensorResultNormalizeException(resultsTable,
-                    "Missing '" + SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME + "' column, the sensor query must return this column");
+        if (actualValueColumn != null) {
+            DoubleColumn normalizedActualValueColumn = actualValueColumn != null ?
+                    makeNormalizedDoubleColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME) :
+                    DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, resultsRowCount);
+            normalizedResults.addColumns(normalizedActualValueColumn);
+        } else {
+            normalizedResults.addColumns(DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, resultsRowCount));
         }
-        DoubleColumn normalizedActualValueColumn = actualValueColumn != null ?
-                makeNormalizedDoubleColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME) :
-                DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, resultsRowCount);
-        normalizedResults.addColumns(normalizedActualValueColumn);
 
         if (resultsTable.containsColumn(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME)) {
             DoubleColumn normalizedExpectedValueColumn = makeNormalizedDoubleColumn(resultsTable, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
@@ -128,6 +127,14 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
             dataStreamMappingNameColumn.setMissingTo(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
         }
         normalizedResults.addColumns(dataStreamMappingNameColumn);
+
+        if (resultsTable.containsColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME)) {
+            // optional column to import external check results, bypassing rule evaluation
+            IntColumn normalizedSeverityValueColumn = makeNormalizedIntColumn(resultsTable, CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+            normalizedResults.addColumns(normalizedSeverityValueColumn);
+        } else {
+            normalizedResults.addColumns(IntColumn.create(CheckResultsColumnNames.SEVERITY_COLUMN_NAME, resultsRowCount));
+        }
 
         // sort the columns to make any continuous time series value extraction faster
         String[] sortableColumnNames = Arrays.stream(dataStreamLevelColumns)
@@ -275,7 +282,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         sortedNormalizedTable.addColumns(updatedByColumn);
 
         DateTimeColumn sortedTimePeriodColumn = (DateTimeColumn) sortedNormalizedTable.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
-        TextColumn idColumn = this.commonNormalizationService.createRowIdColumnAndUpdateIndexes(sortedDataStreamHashColumn, sortedTimePeriodColumn, checkHash, tableHash,
+        TextColumn idColumn = this.commonNormalizationService.createRowIdColumn(sortedDataStreamHashColumn, sortedTimePeriodColumn, checkHash, tableHash,
                 columnHash != null ? columnHash.longValue() : 0L, resultsRowCount);
         sortedNormalizedTable.insertColumn(0, idColumn);
 
@@ -337,7 +344,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
             DoubleColumn parsedValues = DoubleColumn.create(columnName, resultsTable.rowCount());
             for (int i = 0; i < stringColumn.size(); i++) {
                 String stringValue = stringColumn.get(i);
-                if (stringValue != null) {
+                if (!Strings.isNullOrEmpty(stringValue)) {
                     Double parsedDoubleValue = Doubles.tryParse(stringValue);
                     if (parsedDoubleValue != null) {
                         parsedValues.set(i, parsedDoubleValue);
@@ -374,11 +381,101 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
     }
 
     /**
+     * Extracts a given column name from the resultsTable and returns a cloned IntColumn. Converts wrong data types.
+     * @param resultsTable Result table to extract.
+     * @param columnName Column name.
+     * @return Requested value column, cloned and converted to an inteer column.
+     */
+    public IntColumn makeNormalizedIntColumn(Table resultsTable, String columnName) {
+        Column<?> currentColumn = TableColumnUtility.findColumn(resultsTable, columnName);
+
+        if (currentColumn instanceof IntColumn) {
+            return ((IntColumn)currentColumn).copy();
+        }
+
+        if (currentColumn instanceof DoubleColumn) {
+            return ((DoubleColumn)currentColumn).asIntColumn();
+        }
+
+        if (currentColumn instanceof LongColumn) {
+            return ((LongColumn)currentColumn).asIntColumn();
+        }
+
+        if (currentColumn instanceof FloatColumn) {
+            return ((FloatColumn)currentColumn).asIntColumn();
+        }
+
+        if (currentColumn instanceof ShortColumn) {
+            return ((ShortColumn)currentColumn).asIntColumn();
+        }
+
+        if (currentColumn instanceof BooleanColumn) {
+            return ((BooleanColumn)currentColumn).asDoubleColumn().asIntColumn();
+        }
+
+        if (currentColumn instanceof DateColumn) {
+            return ((DateColumn)currentColumn).asDoubleColumn().asIntColumn();
+        }
+
+        if (currentColumn instanceof DateTimeColumn) {
+            return ((DateTimeColumn)currentColumn).asDoubleColumn().asIntColumn();
+        }
+
+        if (currentColumn instanceof InstantColumn) {
+            return ((InstantColumn)currentColumn).asDoubleColumn().asIntColumn();
+        }
+
+        if (currentColumn instanceof TimeColumn) {
+            return ((TimeColumn)currentColumn).asDoubleColumn().asIntColumn();
+        }
+
+        if (currentColumn instanceof StringColumn) {
+            StringColumn stringColumn = (StringColumn) currentColumn;
+            IntColumn parsedValues = IntColumn.create(columnName, resultsTable.rowCount());
+            for (int i = 0; i < stringColumn.size(); i++) {
+                String stringValue = stringColumn.get(i);
+                if (!Strings.isNullOrEmpty(stringValue)) {
+                    Double parsedDoubleValue = Doubles.tryParse(stringValue);
+                    if (parsedDoubleValue != null) {
+                        parsedValues.set(i, parsedDoubleValue.intValue());
+                    } else {
+                        HashCode hashCode = Hashing.farmHashFingerprint64().hashString(stringValue, StandardCharsets.UTF_8);
+                        long hashFitInDoubleExponent = Math.abs(hashCode.asLong()) & ((1L << 52) - 1L); // because we are storing the results of data quality checks in a IEEE 754 double-precision floating-point value and we need exact match, we need to return only as many bits as the fraction part (52 bits) can fit in a Double value, without any unwanted truncations
+                        parsedValues.set(i, (int)hashFitInDoubleExponent);
+                    }
+                }
+            }
+
+            return parsedValues;
+        }
+
+        if (currentColumn instanceof TextColumn) {
+            TextColumn stringColumn = (TextColumn) currentColumn;
+            IntColumn parsedValues = IntColumn.create(columnName, resultsTable.rowCount());
+            for (int i = 0; i < stringColumn.size(); i++) {
+                String stringValue = stringColumn.get(i);
+                Double parsedDoubleValue = Doubles.tryParse(stringValue);
+                if (parsedDoubleValue != null) {
+                    parsedValues.set(i, parsedDoubleValue.intValue());
+                } else {
+                    HashCode hashCode = Hashing.farmHashFingerprint64().hashString(stringValue, StandardCharsets.UTF_8);
+                    long hashFitInDoubleExponent = Math.abs(hashCode.asLong()) & ((1L << 52) - 1L); // because we are storing the results of data quality checks in a IEEE 754 double-precision floating-point value and we need exact match, we need to return only as many bits as the fraction part (52 bits) can fit in a Double value, without any unwanted truncations
+                    parsedValues.set(i, (int)hashFitInDoubleExponent);
+                }
+            }
+
+            return parsedValues;
+        }
+
+        throw new SensorResultNormalizeException(resultsTable, "Cannot detect an " + columnName + " column data type, it should be a double column");
+    }
+
+    /**
      * Extracts a time_period column from the results. Creates a new time_period with the time of now if the time_period column was missing.
      * The values in the time period column are converted to a date time column (without a time zone). Instant columns (based on an UTC timezone) are converted to the timezone of question.
      * Any values that are not aligned at the beginning of the time series gradient (week, day, month, etc.) are truncated to the beginning of the period.
      * @param resultsTable Result table to extract the time_period column.
-     * @param defaultTimeZone Default DQO time zone, used to create a time period value if the time period was not received from a sensor result.
+     * @param defaultTimeZone Default DQOps time zone, used to create a time period value if the time period was not received from a sensor result.
      * @param timePeriodGradient Time series gradient (for truncation).
      * @return A copy of a time_period column that is truncated, normalized to a datetime without the time zone.
      */
@@ -527,7 +624,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
      * Makes a normalized time_period_utc column. Converts non Instant (UTC date) to UTC date. Tries to convert the time period column.
      * @param resultsTable Result table to find the column.
      * @param timePeriodColumn Time period column used to convert the dates.
-     * @param defaultTimeZone Default DQO time zone.
+     * @param defaultTimeZone Default DQOps time zone.
      * @return Instant column with the time_period_utc time periods.
      */
     public InstantColumn makeNormalizedTimePeriodUtcColumn(Table resultsTable, DateTimeColumn timePeriodColumn, ZoneId defaultTimeZone) {
@@ -535,7 +632,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         if (currentColumn == null || !(currentColumn instanceof InstantColumn)) {
             InstantColumn newTimePeriodUtcColumn = InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, resultsTable.rowCount());
 
-            // missing time_period_utc column or invalid type, we will convert it from the time_period, using the default DQO server time zone
+            // missing time_period_utc column or invalid type, we will convert it from the time_period, using the default DQOps server time zone
             for (int i = 0; i < timePeriodColumn.size(); i++) {
                 LocalDateTime timePeriodLocalValue = timePeriodColumn.get(i);
                 Instant timePeriodUtc = timePeriodLocalValue.toInstant(defaultTimeZone.getRules().getOffset(timePeriodLocalValue));

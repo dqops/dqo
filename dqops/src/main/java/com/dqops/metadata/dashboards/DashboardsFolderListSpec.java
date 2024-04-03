@@ -18,9 +18,11 @@ package com.dqops.metadata.dashboards;
 import com.dqops.metadata.basespecs.AbstractDirtyTrackingSpecList;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Objects;
@@ -28,9 +30,33 @@ import java.util.Objects;
 /**
  * List of dashboard folders.
  */
-public class DashboardsFolderListSpec extends AbstractDirtyTrackingSpecList<DashboardsFolderSpec> implements Cloneable {
+public class DashboardsFolderListSpec extends AbstractDirtyTrackingSpecList<DashboardsFolderSpec> implements Cloneable, InvalidYamlStatusHolder {
     @JsonIgnore
     private Instant fileLastModified;
+
+    @JsonIgnore
+    private String yamlParsingError;
+
+    /**
+     * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
+     *
+     * @param yamlParsingError YAML parsing error.
+     */
+    @Override
+    public void setYamlParsingError(String yamlParsingError) {
+        this.yamlParsingError = yamlParsingError;
+    }
+
+    /**
+     * Returns the YAML parsing error that was captured.
+     *
+     * @return YAML parsing error.
+     */
+    @Override
+    public String getYamlParsingError() {
+        return this.yamlParsingError;
+    }
+
 
     /**
      * Returns the last modification date of the dashboard list file.
@@ -68,7 +94,7 @@ public class DashboardsFolderListSpec extends AbstractDirtyTrackingSpecList<Dash
         DashboardsFolderListSpec cloned = new DashboardsFolderListSpec();
         cloned.setFileLastModified(this.fileLastModified);
         if (this.getHierarchyId() != null) {
-            cloned.setHierarchyId(cloned.getHierarchyId().clone());
+            cloned.setHierarchyId(this.getHierarchyId().clone());
         }
 
         for (DashboardsFolderSpec folderSpec : this) {
@@ -171,5 +197,73 @@ public class DashboardsFolderListSpec extends AbstractDirtyTrackingSpecList<Dash
         for (DashboardsFolderSpec folderSpec : this) {
             folderSpec.sort();
         }
+    }
+
+    /**
+     * Creates a smart copy of the dashboard tree, merging the list of dashboards with <code>otherFolderList</code> that
+     * contains user defined dashboards.
+     * @param otherFolderList Other list of dashboards (user defined dashboards) to merge.
+     * @return Creates the same object instance when the <code>otherFolderList</code> has no other dashboard folders or a new instance that contains a copy of dashboards.
+     */
+    public DashboardsFolderListSpec merge(DashboardsFolderListSpec otherFolderList) {
+        if (otherFolderList == null || otherFolderList.size() == 0) {
+            return this;
+        }
+
+        DashboardsFolderListSpec cloned = new DashboardsFolderListSpec();
+        if (this.fileLastModified != null && otherFolderList.fileLastModified != null) {
+            cloned.setFileLastModified(this.fileLastModified.isAfter(otherFolderList.fileLastModified) ? this.fileLastModified : otherFolderList.fileLastModified);
+        } else {
+            cloned.setFileLastModified(this.fileLastModified);
+        }
+
+        if (this.getHierarchyId() != null) {
+            cloned.setHierarchyId(this.getHierarchyId());
+        }
+
+        for (DashboardsFolderSpec folderSpec : this) {
+            DashboardsFolderSpec otherFolder = otherFolderList.getFolderByName(folderSpec.getFolderName());
+            if (otherFolder != null) {
+                DashboardsFolderSpec mergedFolder = folderSpec.merge(otherFolder);
+                cloned.add(mergedFolder);
+            } else {
+                cloned.add(folderSpec);
+            }
+        }
+
+        for (DashboardsFolderSpec otherFolder : otherFolderList) {
+            if (cloned.getFolderByName(otherFolder.getFolderName()) != null) {
+                continue; // folder already merged
+            }
+
+            cloned.add(otherFolder);
+        }
+
+        return cloned;
+    }
+
+    /**
+     * Retrieves a dashboard, traversing through the folders.
+     * @param dashboardName Dashboard name to find.
+     * @param folders Array of folders to traverse.
+     * @return The dashboard specification or null when a folder is missing or the dashboard was not found.
+     */
+    public DashboardSpec getDashboard(String dashboardName, String... folders) {
+        if (folders == null || folders.length == 0 || folders[0] == null) {
+            return null;
+        }
+
+        DashboardsFolderSpec firstFolder = this.getFolderByName(folders[0]);
+        if (firstFolder == null) {
+            return null;
+        }
+
+
+        if (folders.length == 1) {
+            return firstFolder.getDashboards().getDashboardByName(dashboardName);
+        }
+
+        String[] nestedFolder = Arrays.copyOfRange(folders, 1, folders.length);
+        return firstFolder.getFolders().getDashboard(dashboardName, nestedFolder);
     }
 }

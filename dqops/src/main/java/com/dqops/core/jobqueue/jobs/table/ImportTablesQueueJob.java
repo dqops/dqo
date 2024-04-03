@@ -15,17 +15,21 @@
  */
 package com.dqops.core.jobqueue.jobs.table;
 
-import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationService;
 import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.SourceConnection;
-import com.dqops.core.jobqueue.*;
+import com.dqops.core.jobqueue.DqoJobExecutionContext;
+import com.dqops.core.jobqueue.DqoJobType;
+import com.dqops.core.jobqueue.DqoQueueJob;
 import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -35,31 +39,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import tech.tablesaw.api.*;
+import tech.tablesaw.api.IntColumn;
+import tech.tablesaw.api.Row;
+import tech.tablesaw.api.Table;
+import tech.tablesaw.api.TextColumn;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Queue job that imports a single table from a source connection.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesQueueJobResult> {
+public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesResult> {
     private final UserHomeContextFactory userHomeContextFactory;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final SecretValueProvider secretValueProvider;
-    private final DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
     private ImportTablesQueueJobParameters importParameters;
 
     @Autowired
     public ImportTablesQueueJob(UserHomeContextFactory userHomeContextFactory,
                                 ConnectionProviderRegistry connectionProviderRegistry,
-                                SecretValueProvider secretValueProvider,
-                                DefaultObservabilityConfigurationService defaultObservabilityConfigurationService) {
+                                SecretValueProvider secretValueProvider) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.secretValueProvider = secretValueProvider;
-        this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
     }
 
     /**
@@ -106,8 +111,11 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesQueueJobResult
      * @return Optional result value that could be returned by the job.
      */
     @Override
-    public ImportTablesQueueJobResult onExecute(DqoJobExecutionContext jobExecutionContext) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+    public ImportTablesResult onExecute(DqoJobExecutionContext jobExecutionContext) {
+        this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+
+        UserDomainIdentity userIdentity = this.getPrincipal().getDataDomainIdentity();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();
 
@@ -117,26 +125,30 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesQueueJobResult
         }
 
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
+        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
 
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
-        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true)) {
-            // TODO: Separate jobs for each table.
+        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
             List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(
                     this.importParameters.getSchemaName(),
-                    this.importParameters.getTableNames());
+                    this.importParameters.getTableNames(),
+                    connectionWrapper,
+                    secretValueLookupContext);
 
-            this.defaultObservabilityConfigurationService.applyDefaultChecks(sourceTableSpecs,
-                    connectionProvider.getDialectSettings(expandedConnectionSpec), userHome);
+            List<TableSpec> importedTablesSpecs = sourceTableSpecs
+                    .stream()
+                    .map(tableSpec -> tableSpec.deepClone())
+                    .collect(Collectors.toList());
 
             TableList currentTablesColl = connectionWrapper.getTables();
-            currentTablesColl.importTables(sourceTableSpecs, connectionSpec.getDefaultGroupingConfiguration());
+            currentTablesColl.importTables(importedTablesSpecs, connectionSpec.getDefaultGroupingConfiguration());
             userHomeContext.flush();
 
-            Table resultTable = createDatasetTableFromTableSpecs(sourceTableSpecs);
+            Table resultTable = createDatasetTableFromTableSpecs(importedTablesSpecs);
 
-            return new ImportTablesQueueJobResult(resultTable);
+            return new ImportTablesResult(resultTable, sourceTableSpecs);
         }
     }
 
@@ -147,7 +159,7 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesQueueJobResult
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.IMPORT_TABLES;
+        return DqoJobType.import_tables;
     }
 
     /**

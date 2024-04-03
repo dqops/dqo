@@ -22,6 +22,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.nio.file.Path;
+
 @SpringBootTest
 public class LocalDqoHomeFileStorageServiceImplTests extends BaseTest {
     private LocalDqoHomeFileStorageServiceImpl sut;
@@ -33,7 +35,7 @@ public class LocalDqoHomeFileStorageServiceImplTests extends BaseTest {
 
     @Test
     void getHome_whenDefaultDqoHomeStorageServiceCreated_thenReturnsDQO_HOME() {
-        String dqo_home = System.getenv("DQO_HOME").replace('\\', '/');
+        String dqo_home = Path.of(System.getenv("DQO_HOME")).toAbsolutePath().normalize().toString().replace('\\', '/');
         Assertions.assertEquals(dqo_home, this.sut.getHomeRootDirectory().replace('\\', '/'));
     }
 }

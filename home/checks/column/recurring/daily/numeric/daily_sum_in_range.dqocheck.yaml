@@ -1,9 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/numeric/sum
-  rule_name: comparison/between_floats
-  help_text: Verifies that the sum of all values in a column is not outside the set
-    range. Stores the most recent captured value for each day when the data quality
-    check was evaluated.

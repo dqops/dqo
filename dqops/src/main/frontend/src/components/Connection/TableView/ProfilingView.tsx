@@ -1,98 +1,122 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
-import TableActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
+import TableActionGroup from './TableActionGroup';
 
+import { useHistory } from 'react-router-dom';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import TableProfilingChecks from '../../../pages/TableProfilingChecks';
 import {
   getTableProfilingChecksModel,
   updateTableProfilingChecksModel
 } from '../../../redux/actions/table.actions';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { useHistory, useParams } from 'react-router-dom';
 import {
   getFirstLevelActiveTab,
-  getFirstLevelState
+  getFirstLevelState,
+  getSecondLevelTab
 } from '../../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
-import TableAdvancedProfiling from '../../../pages/TableAdvencedProfiling';
 
 import Tabs from '../../Tabs';
 
-import TableStatisticsView from '../../../pages/TableStatisticsView';
 import {
   DataGroupingConfigurationSpec,
-  TableColumnsStatisticsModel
+  DqoJobHistoryEntryModelStatusEnum,
+  TableColumnsStatisticsModel,
+  TableStatisticsModel
 } from '../../../api';
+import TableStatisticsView from '../../../pages/TableStatisticsView';
 
-import { setCreatedDataStream } from '../../../redux/actions/rule.actions';
-import { addFirstLevelTab } from '../../../redux/actions/source.actions';
+import { AxiosResponse } from 'axios';
+import { setCreatedDataStream } from '../../../redux/actions/definition.actions';
+import { addFirstLevelTab, setActiveFirstLevelUrl } from '../../../redux/actions/source.actions';
+import { IRootState } from '../../../redux/reducers';
 import {
   ColumnApiClient,
-  DataGroupingConfigurationsApi
+  DataGroupingConfigurationsApi,
+  JobApiClient,
+  TableApiClient
 } from '../../../services/apiClient';
-import { TableReferenceComparisons } from './TableReferenceComparisons';
-import { AxiosResponse } from 'axios';
+import { TABLE_LEVEL_TABS } from '../../../shared/constants';
+import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
+import TablePreview from './TablePreview';
+import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
+import { useDecodedParams } from '../../../utils';
 interface LocationState {
   bool: boolean;
   data_stream_name: string;
   spec: DataGroupingConfigurationSpec;
 }
-
-const tabs = [
-  {
-    label: 'Basic data statistics',
-    value: 'statistics'
-  },
-  {
-    label: 'Advanced Profiling',
-    value: 'advanced'
-  },
-  {
-    label: 'Table Comparisons',
-    value: 'reference-comparisons'
-  }
-];
-
 const ProfilingView = () => {
   const {
     checkTypes,
     connection: connectionName,
     schema: schemaName,
-    table: tableName
+    table: tableName,
+    tab
   }: {
     checkTypes: CheckTypes;
     connection: string;
     schema: string;
     table: string;
-  } = useParams();
+    tab: string;
+  } = useDecodedParams();
+
   const { checksUI, isUpdating, isUpdatedChecksUi, tableBasic } = useSelector(
     getFirstLevelState(checkTypes)
   );
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const [activeTab, setActiveTab] = useState('statistics');
+  const activeTab = getSecondLevelTab(checkTypes, tab);
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
+
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
   const [selected, setSelected] = useState<number>(0);
   const history = useHistory();
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
+  const [selectedColumns, setSelectedColumns] = useState<Array<string>>();
+  const [jobId, setJobId] = useState<number>();
+  const [rowCount, setRowCount] = useState<TableStatisticsModel>();
+
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
+
   const fetchColumns = async () => {
     try {
-      const res: AxiosResponse<TableColumnsStatisticsModel> =
-        await ColumnApiClient.getColumnsStatistics(
+      await ColumnApiClient.getColumnsStatistics(
+        connectionName,
+        schemaName,
+        tableName
+      ).then((res) => setStatistics(res.data));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const onChangeSelectedColumns = (columns: string[]): void => {
+    setSelectedColumns(columns);
+  };
+
+  const fetchRows = async () => {
+    try {
+      const res: AxiosResponse<TableStatisticsModel> =
+        await TableApiClient.getTableStatistics(
           connectionName,
           schemaName,
           tableName
         );
-      setStatistics(res.data);
+      setRowCount(res.data);
     } catch (err) {
       console.error(err);
     }
   };
 
   useEffect(() => {
-    if (activeTab === 'statistics') {
+    if (activeTab === 'statistics' || activeTab === 'preview') {
       fetchColumns();
+      fetchRows();
     }
   }, [connectionName, schemaName, tableName, activeTab]);
 
@@ -140,6 +164,7 @@ const ProfilingView = () => {
       )
     );
   };
+
   const updateData2 = (nameOfDS: string): void => {
     setNameOfDataStream(nameOfDS);
   };
@@ -203,6 +228,13 @@ const ProfilingView = () => {
   };
 
   const onChangeTab = (tab: string) => {
+    dispatch(
+      setActiveFirstLevelUrl(
+        checkTypes,
+        firstLevelActiveTab,
+        ROUTES.TABLE_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, tab)
+      )
+    );
     history.push(
       ROUTES.TABLE_LEVEL_PAGE(
         checkTypes,
@@ -212,23 +244,48 @@ const ProfilingView = () => {
         tab
       )
     );
-    setActiveTab(tab);
   };
+
+  const collectStatistics = async () => {
+      await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
+        ...statistics?.collect_column_statistics_job_template,
+        columnNames: selectedColumns
+      }).then((res) => setJobId(res.data.jobId?.jobId));
+  };
+ 
+  const filteredCollectStatisticsJobs = useMemo(() => {
+    return (job && (
+      job.status === DqoJobHistoryEntryModelStatusEnum.running ||
+      job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+      job.status === DqoJobHistoryEntryModelStatusEnum.waiting ))
+    }, [job])
+
+    
+  useEffect(() => {
+    if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.finished) {
+      fetchRows();
+      fetchColumns();
+    }
+  }, [job]);
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">
+      <div className="border-b border-gray-300">
+        <Tabs tabs={TABLE_LEVEL_TABS[CheckTypes.PROFILING]} activeTab={activeTab} onChange={onChangeTab} />
+      </div>
       {activeTab === 'statistics' && (
         <TableActionGroup
           shouldDelete={false}
           onUpdate={onUpdate}
           isUpdated={isUpdatedChecksUi}
           isUpdating={isUpdating}
-          collectStatistic={true}
           addSaveButton={false}
           createDataStream={selected > 0 && selected <= 9 && true}
           createDataStreamFunc={postDataStream}
           maxToCreateDataStream={selected > 9 && true}
-          statistics={statistics}
+          collectStatistics = {collectStatistics}
+          selectedColumns={selectedColumns && selectedColumns?.length > 0}
+          collectStatisticsSpinner={filteredCollectStatisticsJobs}
         />
       )}
       {activeTab === 'advanced' && (
@@ -239,7 +296,6 @@ const ProfilingView = () => {
           isUpdating={isUpdating}
         />
       )}
-      <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       {activeTab === 'statistics' && (
         <TableStatisticsView
           connectionName={connectionName}
@@ -249,14 +305,21 @@ const ProfilingView = () => {
           setLevelsData2={setLevelsData2}
           setNumberOfSelected2={setNumberOfSelected2}
           statistics={statistics}
+          onChangeSelectedColumns={onChangeSelectedColumns}
+          refreshListFunc={fetchColumns}
+          rowCount={rowCount ?? {}}
         />
       )}
-      {activeTab === 'advanced' && <TableAdvancedProfiling />}
-      {activeTab === 'reference-comparisons' && (
+      {activeTab === 'preview' && (
+        <TablePreview statistics={statistics ?? {}} />
+      )}
+      {activeTab === 'table-quality-status' && <TableQualityStatus />}
+      {activeTab === 'advanced' && <TableProfilingChecks />}
+      {activeTab === 'table-comparisons' && (
         <TableReferenceComparisons
           checkTypes={checkTypes}
           checksUI={checksUI}
-          fetchChecks={onUpdate}
+          onUpdateChecks={onUpdate}
         />
       )}
     </div>

@@ -1,29 +1,35 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="DqoQueueJobId")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class DqoQueueJobId:
     """Identifies a single job that was pushed to the job queue.
 
     Attributes:
         job_id (Union[Unset, int]): Job id.
+        job_business_key (Union[Unset, str]): Optional job business key that was assigned to the job. A business key is
+            an alternative user assigned unique job identifier used to find the status of a job finding it by the business
+            key.
         parent_job_id (Union[Unset, DqoQueueJobId]): Identifies a single job that was pushed to the job queue.
         created_at (Union[Unset, int]): The timestamp when the job was created.
     """
 
     job_id: Union[Unset, int] = UNSET
+    job_business_key: Union[Unset, str] = UNSET
     parent_job_id: Union[Unset, "DqoQueueJobId"] = UNSET
     created_at: Union[Unset, int] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         job_id = self.job_id
+        job_business_key = self.job_business_key
         parent_job_id: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.parent_job_id, Unset):
             parent_job_id = self.parent_job_id.to_dict()
@@ -35,6 +41,8 @@ class DqoQueueJobId:
         field_dict.update({})
         if job_id is not UNSET:
             field_dict["jobId"] = job_id
+        if job_business_key is not UNSET:
+            field_dict["jobBusinessKey"] = job_business_key
         if parent_job_id is not UNSET:
             field_dict["parentJobId"] = parent_job_id
         if created_at is not UNSET:
@@ -47,6 +55,8 @@ class DqoQueueJobId:
         d = src_dict.copy()
         job_id = d.pop("jobId", UNSET)
 
+        job_business_key = d.pop("jobBusinessKey", UNSET)
+
         _parent_job_id = d.pop("parentJobId", UNSET)
         parent_job_id: Union[Unset, DqoQueueJobId]
         if isinstance(_parent_job_id, Unset):
@@ -58,6 +68,7 @@ class DqoQueueJobId:
 
         dqo_queue_job_id = cls(
             job_id=job_id,
+            job_business_key=job_business_key,
             parent_job_id=parent_job_id,
             created_at=created_at,
         )

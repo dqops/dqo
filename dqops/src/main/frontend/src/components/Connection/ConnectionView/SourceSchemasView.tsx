@@ -1,49 +1,33 @@
+import { isEqual } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { DataSourcesApi } from '../../../services/apiClient';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   DqoJobHistoryEntryModelStatusEnum,
   SchemaRemoteModel
 } from '../../../api';
-import SvgIcon from '../../SvgIcon';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../../redux/actions/source.actions';
+import { IRootState } from '../../../redux/reducers';
+import { DataSourcesApi } from '../../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
 import Button from '../../Button';
 import Loader from '../../Loader';
+import SvgIcon from '../../SvgIcon';
 import ConnectionActionGroup from './ConnectionActionGroup';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
-import { isEqual } from 'lodash';
-import SourceTablesView from './SourceTablesView';
-import { useParams } from 'react-router-dom';
 
-interface SourceSchemasViewProps {
-  defaultSchema?: string;
-}
-
-const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
-  const { connection }: { connection: string } = useParams();
+const SourceSchemasView = () => {
+  const { connection }: { connection: string } = useDecodedParams();
   const [loading, setLoading] = useState(false);
-  const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([
-    {
-      connectionName: 'bgTest',
-      schemaName: 'test',
-      alreadyImported: false,
-      importTableJobParameters: {
-        connectionName: 'bgTest',
-        schemaName: 'test',
-        tableNames: ['table 1', 'table 2', 'table 3']
-      }
-    }
-  ]);
+  const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([]);
+  const [error, setError] = useState<string>();
 
-  const [selectedSchema, setSelectedSchema] = useState<string>();
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
-
-  useEffect(() => {
-    if (defaultSchema) {
-      setSelectedSchema(defaultSchema);
-    }
-  }, [defaultSchema]);
+  const history = useHistory();
+  const dispatch = useActionDispatch();
 
   useEffect(() => {
     setLoading(true);
@@ -51,13 +35,35 @@ const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
       .then((res) => {
         setSchemas(res.data);
       })
+      .catch((err) => {
+        setError(err.message);
+      })
       .finally(() => {
         setLoading(false);
       });
   }, [connection]);
 
   const onImportTables = (schema: SchemaRemoteModel) => {
-    setSelectedSchema(schema.schemaName);
+    const url = ROUTES.SCHEMA_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      connection,
+      schema.schemaName ?? '',
+      'import-tables'
+    );
+    const value = ROUTES.SCHEMA_LEVEL_VALUE(
+      CheckTypes.SOURCES,
+      connection,
+      schema.schemaName ?? ''
+    );
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value,
+        state: {},
+        label: schema.schemaName
+      })
+    );
+    history.push(url);
   };
 
   const isExist = (schema: SchemaRemoteModel) => {
@@ -75,18 +81,8 @@ const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
     );
   };
 
-  if (selectedSchema) {
-    return (
-      <SourceTablesView
-        connectionName={connection}
-        schemaName={selectedSchema ?? ''}
-        onBack={() => setSelectedSchema(undefined)}
-      />
-    );
-  }
-
   return (
-    <div className="py-4 px-8">
+    <div className="py-4 px-8 text-sm">
       <ConnectionActionGroup />
       {loading ? (
         <div className="flex justify-center h-100">
@@ -96,8 +92,8 @@ const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
         <table className="w-full">
           <thead>
             <tr>
-              <th className="py-2 pr-4 text-left">Source Schema Name</th>
-              <th className="py-2 px-4 text-left">Is already imported</th>
+              <th className="py-2 pr-4 text-left">Source schema name</th>
+              <th className="py-2 px-4 text-left">Import status</th>
               <th />
             </tr>
           </thead>
@@ -114,7 +110,7 @@ const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
                     className={
                       item.alreadyImported ? 'text-primary' : 'text-red-700'
                     }
-                    width={30}
+                    width={22}
                     height={22}
                   />
                 </td>
@@ -129,6 +125,7 @@ const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
                 </td>
               </tr>
             ))}
+            {error ? <div className="text-red-500">{error}</div> : null}
           </tbody>
         </table>
       )}

@@ -1,48 +1,51 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import Tabs from '../../Tabs';
-import {
-  DqoJobHistoryEntryModelStatusEnum,
-  CheckModel,
-  DeleteStoredDataQueueJobParameters
-} from '../../../api';
-import { JobApiClient } from '../../../services/apiClient';
-import CheckResultsTab from './CheckResultsTab';
-import IconButton from '../../IconButton';
-import SvgIcon from '../../SvgIcon';
-import { useTree } from '../../../contexts/treeContext';
-import SensorReadoutsTab from './SensorReadoutsTab';
-import CheckErrorsTab from './CheckErrorsTab';
-import DeleteOnlyDataDialog from '../../CustomTree/DeleteOnlyDataDialog';
 import moment from 'moment/moment';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import {
+  CheckModel,
+  DeleteStoredDataQueueJobParameters,
+  DqoJobHistoryEntryModelStatusEnum,
+} from '../../../api';
+import { useTree } from '../../../contexts/treeContext';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { CheckTypes } from '../../../shared/routes';
 import {
   getCheckErrors,
   getCheckReadouts,
   getCheckResults,
   setCheckFilters
 } from '../../../redux/actions/source.actions';
-import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
-import { IRootState } from '../../../redux/reducers';
+import { JobApiClient } from '../../../services/apiClient';
+import { CheckTypes } from '../../../shared/routes';
+import DeleteOnlyDataDialog from '../../CustomTree/DeleteOnlyDataDialog';
+import IconButton from '../../IconButton';
+import SvgIcon from '../../SvgIcon';
+import Tabs from '../../Tabs';
+import CheckErrorsTab from './CheckErrorsTab';
+import CheckResultsTab from './CheckResultsTab';
+import SensorReadoutsTab from './SensorReadoutsTab';
 
 const tabs = [
   {
-    label: 'Check Results',
+    label: 'Check results',
     value: 'check_results'
   },
   {
-    label: 'Sensor Readouts',
+    label: 'Sensor readouts',
     value: 'sensor_readouts'
   },
   {
-    label: 'Execution Errors',
+    label: 'Execution errors',
     value: 'execution_errors'
   }
 ];
+interface IRefetchResultsProps {
+  fetchCheckResults : () => void
+}
 
 interface CheckDetailsProps {
   checkTypes: CheckTypes;
@@ -59,6 +62,7 @@ interface CheckDetailsProps {
   defaultFilters?: any;
   category?: string;
   comparisonName?: string;
+  onChangeRefreshCheckObject?: (obj: IRefetchResultsProps) => void
 }
 //deleted dataGroup from here
 const CheckDetails = ({
@@ -74,7 +78,8 @@ const CheckDetails = ({
   onClose,
   defaultFilters,
   category,
-  comparisonName
+  comparisonName,
+  onChangeRefreshCheckObject
 }: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
@@ -89,18 +94,23 @@ const CheckDetails = ({
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
+
   const currentJob = currentJobId
     ? job_dictionary_state[currentJobId]
     : undefined;
+  
+  const checkNameWithComparisonName = comparisonName 
+   ? (checkName + "/" + comparisonName)
+   : checkName   
 
-  const checkResults = resultsData ? resultsData[checkName ?? ''] || [] : [];
+  const checkResults = resultsData ? resultsData[checkNameWithComparisonName ?? ''] || [] : [];
   const sensorReadouts = readoutsData
-    ? readoutsData[checkName ?? ''] || []
+    ? readoutsData[checkNameWithComparisonName ?? ''] || []
     : [];
-  const sensorErrors = errorsData ? errorsData[checkName ?? ''] || [] : [];
+  const sensorErrors = errorsData ? errorsData[checkNameWithComparisonName ?? ''] || [] : [];
   const filters =
-    filtersData && filtersData[checkName ?? '']
-      ? filtersData[checkName ?? '']
+    filtersData && filtersData[checkNameWithComparisonName ?? '']
+      ? filtersData[checkNameWithComparisonName ?? '']
       : defaultFilters || {
           month: "Last 3 months"
         };
@@ -218,26 +228,8 @@ const CheckDetails = ({
   );
 
   useEffect(() => {
-    if (!sensorErrors?.length) {
-      fetchCheckErrors(filters.month, filters.dataGroup);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!sensorReadouts?.length) {
-      fetchCheckReadouts(filters.month, filters.dataGroup);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!checkResults?.length) {
-      fetchCheckResults(filters.month, filters.dataGroup);
-    }
-  }, []);
-
-  useEffect(() => {
     if (
-      currentJob?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+      currentJob?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
       currentJob?.status === DqoJobHistoryEntryModelStatusEnum.failed
     ) {
       refetch(filters.month, filters.dataGroup);
@@ -250,7 +242,7 @@ const CheckDetails = ({
 
   const onChangeDataGroup = (value: string) => {
     dispatch(
-      setCheckFilters(checkTypes, firstLevelActiveTab, checkName ?? '', {
+      setCheckFilters(checkTypes, firstLevelActiveTab, checkNameWithComparisonName ?? '', {
         ...filters,
         onChangeDataGroup: value
       })
@@ -260,7 +252,7 @@ const CheckDetails = ({
 
   const onChangeMonth = (value: string) => {
     dispatch(
-      setCheckFilters(checkTypes, firstLevelActiveTab, checkName ?? '', {
+      setCheckFilters(checkTypes, firstLevelActiveTab, checkNameWithComparisonName ?? '', {
         ...filters,
         month: value
       })
@@ -274,18 +266,33 @@ const CheckDetails = ({
     fetchCheckReadouts(month, name);
   };
 
-  console.log(filters)
+  useEffect(() => {
+    if(onChangeRefreshCheckObject) {
+      onChangeRefreshCheckObject({fetchCheckResults: () => fetchCheckResults(filters.month, filters.dataGroup)})
+    }
+  }, [fetchCheckResults])
+
+  useEffect(() => {
+    if(activeTab === 'check_results') {
+      fetchCheckResults(filters.month, filters.dataGroup)
+    } else if(activeTab === 'sensor_readouts') {
+      fetchCheckReadouts(filters.month, filters.dataGroup)
+    } else if(activeTab === 'execution_errors') {
+      fetchCheckErrors(filters.month, filters.dataGroup)
+    }
+
+  }, [activeTab])
 
   return (
     <div
       className="my-4"
       style={{
-        maxWidth: `calc(100vw - ${sidebarWidth + 85}px`
+        maxWidth: `calc(100vw - ${sidebarWidth + 40}px`
       }}
     >
-      <div className="bg-white px-4 py-6 border border-gray-200 relative">
-        <IconButton
-          className="absolute right-4 top-4 bg-gray-50 hover:bg-gray-100 text-gray-700"
+      <div className="bg-white py-2 border border-gray-200 relative">
+         <IconButton
+          className="absolute right-4 top-1.5 bg-gray-50 hover:bg-gray-100 text-gray-700"
           onClick={onClose}
         >
           <SvgIcon name="close" />
@@ -295,14 +302,17 @@ const CheckDetails = ({
           !!sensorErrors.length ||
           !!sensorReadouts.length) && (
           <IconButton
-            className="absolute right-16 top-4 bg-gray-50 hover:bg-gray-100 text-gray-700"
+            className="absolute right-16 top-1.5 bg-gray-50 hover:bg-gray-100 text-gray-700"
             onClick={openDeleteDialog}
           >
             <SvgIcon name="delete" className="w-5" />
           </IconButton>
         )}
+        <div className="border-b border-gray-300 px-0">
+           <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        </div>
+        <div className='px-2'>
 
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         {activeTab === 'check_results' && (
           <CheckResultsTab
             runCheckType={runCheckType || ''}
@@ -315,8 +325,8 @@ const CheckDetails = ({
             onChangeDataGroup={onChangeDataGroup}
             category={category}
             comparisonName={comparisonName}
-          />
-        )}
+            />
+            )}
         {activeTab === 'sensor_readouts' && (
           <SensorReadoutsTab
             sensorReadouts={sensorReadouts || []}
@@ -333,20 +343,25 @@ const CheckDetails = ({
             month={filters.month}
             onChangeMonth={onChangeMonth}
             onChangeDataGroup={onChangeDataGroup}
-          />
-        )}
+            />
+            )}
+          </div>
 
         <DeleteOnlyDataDialog
           open={deleteDataDialogOpened}
           onClose={() => setDeleteDataDialogOpened(false)}
           onDelete={(params) => {
             setDeleteDataDialogOpened(false);
-            JobApiClient.deleteStoredData({
-              ...(data_clean_job_template || {}),
-              ...params
-            });
-          }}
-        />
+            JobApiClient.deleteStoredData(
+              undefined,
+              false,
+              undefined,
+              {
+                ...(data_clean_job_template || {}),
+                ...params
+              });
+            }}
+            />
       </div>
     </div>
   );

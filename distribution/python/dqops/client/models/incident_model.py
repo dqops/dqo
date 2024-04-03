@@ -1,14 +1,15 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.incident_model_status import IncidentModelStatus
+from ..models.incident_status import IncidentStatus
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="IncidentModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class IncidentModel:
     """
     Attributes:
@@ -42,7 +43,7 @@ class IncidentModel:
         failed_checks_count (Union[Unset, int]): The total number of failed data quality checks that were seen when the
             incident was raised for the first time.
         issue_url (Union[Unset, str]): The link (url) to a ticket in an external system that is tracking this incident.
-        status (Union[Unset, IncidentModelStatus]): Incident status.
+        status (Union[Unset, IncidentStatus]):
     """
 
     incident_id: Union[Unset, str] = UNSET
@@ -65,8 +66,8 @@ class IncidentModel:
     minimum_severity: Union[Unset, int] = UNSET
     failed_checks_count: Union[Unset, int] = UNSET
     issue_url: Union[Unset, str] = UNSET
-    status: Union[Unset, IncidentModelStatus] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    status: Union[Unset, IncidentStatus] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         incident_id = self.incident_id
@@ -185,11 +186,11 @@ class IncidentModel:
         issue_url = d.pop("issueUrl", UNSET)
 
         _status = d.pop("status", UNSET)
-        status: Union[Unset, IncidentModelStatus]
+        status: Union[Unset, IncidentStatus]
         if isinstance(_status, Unset):
             status = UNSET
         else:
-            status = IncidentModelStatus(_status)
+            status = IncidentStatus(_status)
 
         incident_model = cls(
             incident_id=incident_id,

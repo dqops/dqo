@@ -19,11 +19,12 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.services.check.matching.SimilarCheckModel;
-import com.dqops.services.check.matching.SimilarCheckSensorRuleKey;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,6 +33,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,7 @@ import java.util.stream.Collectors;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "CheckModel", description = "Model that returns the form definition and the form data to edit a single data quality check.")
+@NoArgsConstructor
 public class CheckModel implements Cloneable {
     /**
      * Data quality check name that is used in YAML file. Identifies the data quality check.
@@ -58,15 +61,27 @@ public class CheckModel implements Cloneable {
     private String helpText;
 
     /**
+     * User assigned display name that is shown instead of the original data quality check name.
+     */
+    @JsonPropertyDescription("User assigned display name that is shown instead of the original data quality check name.")
+    private String displayName;
+
+    /**
+     * An alternative check's name that is shown on the check editor as a hint.
+     */
+    @JsonPropertyDescription("An alternative check's name that is shown on the check editor as a hint.")
+    private String friendlyName;
+
+    /**
      * List of fields for editing the sensor parameters.
      */
     @JsonPropertyDescription("List of fields for editing the sensor parameters.")
     private List<FieldModel> sensorParameters = new ArrayList<>();
 
     /**
-     * Full sensor name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality sensor.
+     * Full sensor name. This field is for information purposes and can be used to create additional custom checks that reuse the same data quality sensor.
      */
-    @JsonPropertyDescription("Full sensor name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality sensor.")
+    @JsonPropertyDescription("Full sensor name. This field is for information purposes and can be used to create additional custom checks that reuse the same data quality sensor.")
     private String sensorName;
 
     /**
@@ -87,6 +102,7 @@ public class CheckModel implements Cloneable {
     @JsonIgnore
     private AbstractCheckSpec<?, ?, ?, ?> checkSpec;
 
+
     /**
      * Threshold (alerting) rules defined for a check.
      */
@@ -98,6 +114,21 @@ public class CheckModel implements Cloneable {
      */
     @JsonPropertyDescription("The data quality check supports a custom data grouping configuration.")
     private boolean supportsGrouping;
+
+    /**
+     * This is a standard data quality check that is always shown on the data quality checks editor screen.
+     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
+     */
+    @JsonPropertyDescription("This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean standard;
+
+    /**
+     * This is a check that was applied on-the-fly, because it is configured as a default data observability check and can be run, but it is not configured in the table YAML.
+     */
+    @JsonPropertyDescription("This is a check that was applied on-the-fly, because it is configured as a default data observability check and can be run, but it is not configured in the table YAML.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean defaultCheck;
 
     /**
      * Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level.
@@ -115,7 +146,7 @@ public class CheckModel implements Cloneable {
      * Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.
      */
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
-    private RecurringScheduleSpec scheduleOverride;
+    private MonitoringScheduleSpec scheduleOverride;
 
     /**
      * Model of configured schedule enabled on the check level.
@@ -150,7 +181,7 @@ public class CheckModel implements Cloneable {
     /**
      * Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.
      */
-    @JsonPropertyDescription("Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.")
+    @JsonPropertyDescription("Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset.")
     private boolean includeInSla;
 
     /**
@@ -190,26 +221,42 @@ public class CheckModel implements Cloneable {
     private CheckTargetModel checkTarget;
 
     /**
-     * List of configuration errors that must be fixed before the data quality check could be executed.
+     * List of configuration errors that must be fixed before the data quality check can be executed.
      */
-    @JsonPropertyDescription("List of configuration errors that must be fixed before the data quality check could be executed.")
-    private List<CheckConfigurationRequirementsError> configurationRequirementsErrors;
+    @JsonPropertyDescription("List of configuration errors that must be fixed before the data quality check can be executed.")
+    private List<String> configurationRequirementsErrors;
 
     /**
      * List of similar checks in other check types or in other time scales.
      */
     @JsonPropertyDescription("List of similar checks in other check types or in other time scales.")
     private List<SimilarCheckModel> similarChecks;
+
     /**
-     * Create a matching key with the sensor name and rule names. Used to match similar checks that are based on the same sensor and rules.
-     * @return Check sensor rule key.
+     * Boolean flag that decides if the current user can edit the check.
      */
-    public SimilarCheckSensorRuleKey createSimilarCheckMatchKey() {
-        return new SimilarCheckSensorRuleKey(
-                this.sensorName,
-                this.rule.getWarning() != null ? this.rule.getWarning().getRuleName() : null,
-                this.rule.getError() != null ? this.rule.getError().getRuleName() : null,
-                this.rule.getFatal() != null ? this.rule.getFatal().getRuleName() : null);
+    @JsonPropertyDescription("Boolean flag that decides if the current user can edit the check.")
+    private boolean canEdit;
+
+    /**
+     * Boolean flag that decides if the current user can run checks.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can run checks.")
+    private boolean canRunChecks;
+
+    /**
+     * Boolean flag that decides if the current user can delete data (results).
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
+    private boolean canDeleteData;
+
+    /**
+     * Returns the check hash code that identifies the check instance.
+     * @return Check hash or null.
+     */
+    @JsonPropertyDescription("The check hash code that identifies the check instance.")
+    public Long getCheckHash() {
+        return this.checkSpec != null && this.checkSpec.getHierarchyId() != null ? this.checkSpec.getHierarchyId().hashCode64() : null;
     }
 
     /**
@@ -278,10 +325,24 @@ public class CheckModel implements Cloneable {
      * Adds a configuration error to the list of errors.
      * @param configurationRequirementsError Configuration requirement error.
      */
-    public void pushError(CheckConfigurationRequirementsError configurationRequirementsError) {
+    public void pushError(String configurationRequirementsError) {
         if (this.configurationRequirementsErrors == null) {
             this.configurationRequirementsErrors = new ArrayList<>();
         }
         this.configurationRequirementsErrors.add(configurationRequirementsError);
+    }
+
+    public static class CheckModelSampleFactory implements SampleValueFactory<CheckModel> {
+        @Override
+        public CheckModel createSample() {
+            CheckModel checkModel = new CheckModel() {{
+                setCheckName(SampleStringsRegistry.getCheckName());
+                setHelpText(SampleStringsRegistry.getHelpText());
+                setSensorName(SampleStringsRegistry.getFullSensorName());
+                setQualityDimension(SampleStringsRegistry.getQualityDimension());
+            }};
+            checkModel.applySampleValues();
+            return checkModel;
+        }
     }
 }

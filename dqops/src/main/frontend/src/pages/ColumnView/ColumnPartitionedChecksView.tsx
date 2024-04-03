@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Tabs from '../../components/Tabs';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
 import DataQualityChecks from '../../components/DataQualityChecks';
+import Tabs from '../../components/Tabs';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getColumnDailyPartitionedChecks,
@@ -10,13 +13,16 @@ import {
   updateColumnDailyPartitionedChecks,
   updateColumnMonthlyPartitionedChecks
 } from '../../redux/actions/column.actions';
-import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
+import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState,
+  getSecondLevelTab
+} from '../../redux/selectors';
+import { CheckResultOverviewApi } from '../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 import ColumnActionGroup from './ColumnActionGroup';
-import { CheckResultOverviewApi } from "../../services/apiClient";
-import { useHistory, useParams } from "react-router-dom";
-import { CheckTypes, ROUTES } from "../../shared/routes";
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 
 const initTabs = [
   {
@@ -30,12 +36,27 @@ const initTabs = [
 ];
 
 const ColumnPartitionedChecksView = () => {
-  const { connection, schema, table, column, tab, checkTypes }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string, tab: 'daily' | 'monthly' } = useParams();
+  const {
+    connection,
+    schema,
+    table,
+    column,
+    tab,
+    checkTypes
+  }: {
+    checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
+    table: string;
+    column: string;
+    tab: 'daily' | 'monthly';
+  } = useDecodedParams();
   const [tabs, setTabs] = useState(initTabs);
 
   const dispatch = useActionDispatch();
   const history = useHistory();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const activeTab = getSecondLevelTab(checkTypes, tab);
 
   const {
     dailyPartitionedChecks,
@@ -46,10 +67,18 @@ const ColumnPartitionedChecksView = () => {
     isUpdating
   } = useSelector(getFirstLevelState(checkTypes));
 
-  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const [checkResultsOverview, setCheckResultsOverview] = useState<
+    CheckResultsOverviewDataModel[]
+  >([]);
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnPartitionedChecksOverview(connection, schema, table, column, tab).then((res) => {
+    CheckResultOverviewApi.getColumnPartitionedChecksOverview(
+      connection,
+      schema,
+      table,
+      column,
+      tab
+    ).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
@@ -132,11 +161,15 @@ const ColumnPartitionedChecksView = () => {
   };
 
   const onDailyPartitionedChecksChange = (ui: CheckContainerModel) => {
-    dispatch(setUpdatedDailyPartitionedChecks(checkTypes, firstLevelActiveTab, ui));
+    dispatch(
+      setUpdatedDailyPartitionedChecks(checkTypes, firstLevelActiveTab, ui)
+    );
   };
 
   const onMonthlyPartitionedChecksChange = (ui: CheckContainerModel) => {
-    dispatch(setUpdatedMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, ui));
+    dispatch(
+      setUpdatedMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, ui)
+    );
   };
 
   useEffect(() => {
@@ -159,18 +192,36 @@ const ColumnPartitionedChecksView = () => {
     );
   }, [isUpdatedMonthlyPartitionedChecks]);
 
-  useEffect(() => {
-    if (tab !== 'daily' && tab !== 'monthly') {
-      history.push(ROUTES.COLUMN_LEVEL_PAGE(checkTypes, connection, schema, table, column, 'daily'));
-    }
-  }, [tab]);
-
   const onChangeTab = (tab: string) => {
-    history.push(ROUTES.COLUMN_LEVEL_PAGE(checkTypes, connection, schema, table, column, tab));
+    dispatch(
+      setActiveFirstLevelUrl(
+        checkTypes,
+        firstLevelActiveTab,
+        ROUTES.COLUMN_LEVEL_PAGE(
+          checkTypes,
+          connection,
+          schema,
+          table,
+          column,
+          tab
+        )
+      )
+    );
+
+    history.push(
+      ROUTES.COLUMN_LEVEL_PAGE(
+        checkTypes,
+        connection,
+        schema,
+        table,
+        column,
+        tab
+      )
+    );
   };
 
   return (
-    <div className="py-2">
+    <div>
       <ColumnActionGroup
         shouldDelete={false}
         onUpdate={onUpdate}
@@ -180,7 +231,7 @@ const ColumnPartitionedChecksView = () => {
         isUpdating={isUpdating}
       />
       <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
+        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
       <div>
         {tab === 'daily' && (
@@ -188,7 +239,6 @@ const ColumnPartitionedChecksView = () => {
             onUpdate={onUpdate}
             checksUI={dailyPartitionedChecks}
             onChange={onDailyPartitionedChecksChange}
-            className="max-h-table"
             checkResultsOverview={checkResultsOverview}
             getCheckOverview={getCheckOverview}
             loading={loading}
@@ -199,7 +249,6 @@ const ColumnPartitionedChecksView = () => {
             onUpdate={onUpdate}
             checksUI={monthlyPartitionedChecks}
             onChange={onMonthlyPartitionedChecksChange}
-            className="max-h-table"
             checkResultsOverview={checkResultsOverview}
             getCheckOverview={getCheckOverview}
             loading={loading}

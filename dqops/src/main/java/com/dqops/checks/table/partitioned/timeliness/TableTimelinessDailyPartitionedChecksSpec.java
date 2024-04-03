@@ -16,13 +16,18 @@
 package com.dqops.checks.table.partitioned.timeliness;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
 import com.dqops.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
 import com.dqops.checks.table.checkspecs.timeliness.TableDataStalenessCheckSpec;
 import com.dqops.checks.table.checkspecs.timeliness.TablePartitionReloadLagCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -41,68 +46,21 @@ import java.util.Objects;
 public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-           put("daily_partition_data_freshness", o -> o.dailyPartitionDataFreshness);
-           put("daily_partition_data_staleness", o -> o.dailyPartitionDataStaleness);
            put("daily_partition_data_ingestion_delay", o -> o.dailyPartitionDataIngestionDelay);
            put("daily_partition_reload_lag", o -> o.dailyPartitionReloadLag);
         }
     };
-
-    @JsonPropertyDescription("Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDataFreshnessCheckSpec dailyPartitionDataFreshness;
-
-    @JsonPropertyDescription("Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDataStalenessCheckSpec dailyPartitionDataStaleness;
 
     @JsonPropertyDescription("Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableDataIngestionDelayCheckSpec dailyPartitionDataIngestionDelay;
 
-    @JsonPropertyDescription("Daily partitioned check calculating the longest time a row waited to be load")
+    @JsonPropertyDescription("Daily partitioned check calculating the longest time a row waited to be loaded, it is the maximum difference in days between the ingestion timestamp and the event timestamp column on any row in the monitored partition")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TablePartitionReloadLagCheckSpec dailyPartitionReloadLag;
 
-    /**
-     * Returns the number of days since the most recent event check configuration.
-     * @return The number of days since the most recent event check configuration.
-     */
-    public TableDataFreshnessCheckSpec getDailyPartitionDataFreshness() {
-        return dailyPartitionDataFreshness;
-    }
-
-    /**
-     * Sets the number of days since the most recent event.
-     * @param dailyPartitionDataFreshness New days since the most recent event check.
-     */
-    public void setDailyPartitionDataFreshness(TableDataFreshnessCheckSpec dailyPartitionDataFreshness) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionDataFreshness, dailyPartitionDataFreshness));
-        this.dailyPartitionDataFreshness = dailyPartitionDataFreshness;
-        this.propagateHierarchyIdToField(dailyPartitionDataFreshness, "daily_partition_data_freshness");
-    }
-
-    /**
-     * Returns a number of days since the last data ingestion check configuration.
-     * @return A number of days since the last data ingestion check configuration..
-     */
-    public TableDataStalenessCheckSpec getDailyPartitionDataStaleness() {
-        return dailyPartitionDataStaleness;
-    }
-
-    /**
-     * Sets a number of days since the last data ingestion check configuration.
-     * @param dailyPartitionDataStaleness A number of days since the last data ingestion check configuration.
-     */
-    public void setDailyPartitionDataStaleness(TableDataStalenessCheckSpec dailyPartitionDataStaleness) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionDataStaleness, dailyPartitionDataStaleness));
-        this.dailyPartitionDataStaleness = dailyPartitionDataStaleness;
-        this.propagateHierarchyIdToField(dailyPartitionDataStaleness, "daily_partition_data_staleness");
-    }
 
     /**
      * Returns a data ingestion delay check configuration.
@@ -148,5 +106,49 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Gets the check target appropriate for all checks in this category.
+     *
+     * @return Corresponding check target.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return CheckTarget.table;
+    }
+
+    /**
+     * Gets the check type appropriate for all checks in this category.
+     *
+     * @return Corresponding check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.partitioned;
+    }
+
+    /**
+     * Gets the check timescale appropriate for all checks in this category.
+     *
+     * @return Corresponding check timescale.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return CheckTimeScale.daily;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.ANY;
     }
 }

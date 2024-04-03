@@ -42,7 +42,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnPiiContainsEmailPercentSensorParametersSpec sut;
-    private final String sensorRegex = "r\"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}\"";
+    private final String sensorRegex = "r\"(^|[ \\t.,:;\\\"'`|\\n\\r])[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}([ \\t.,:;\\\"'`|\\n\\r]|$)\"";
     private UserHomeContext userHomeContext;
     private ColumnPiiContainsEmailPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
@@ -62,8 +62,8 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "email", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersRecurring(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(this.sampleTableMetadata, "email", this.checkSpec, timeScale);
+    private SensorExecutionRunParameters getRunParametersMonitoring(CheckTimeScale timeScale) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(this.sampleTableMetadata, "email", this.checkSpec, timeScale);
     }
 
     private SensorExecutionRunParameters getRunParametersPartitioned(CheckTimeScale timeScale, String timeSeriesColumn) {
@@ -71,7 +71,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
     }
 
     private String getTableColumnName(SensorExecutionRunParameters runParameters) {
-        return String.format("analyzed_table.`%s`", runParameters.getColumn().getColumnName());
+        return String.format("analyzed_table.`%1$s`", runParameters.getColumn().getColumnName());
     }
 
     private String getSubstitutedFilter(String tableName) {
@@ -101,17 +101,17 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -137,19 +137,19 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -164,26 +164,26 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
     }
 
     @Test
-    void renderSensor_whenRecurringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
+    void renderSensor_whenMonitoringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -205,19 +205,19 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
@@ -246,18 +246,18 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`length_int` AS grouping_level_1
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -272,8 +272,8 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
     }
 
     @Test
-    void renderSensor_whenRecurringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
+    void renderSensor_whenMonitoringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("length_int")));
@@ -282,20 +282,20 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`length_int` AS grouping_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
             GROUP BY grouping_level_1, time_period, time_period_utc
             ORDER BY grouping_level_1, time_period, time_period_utc""";
 
@@ -320,20 +320,20 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`length_int` AS grouping_level_1,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, time_period, time_period_utc
@@ -368,22 +368,22 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
                 analyzed_table.`length_int` AS grouping_level_3,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
@@ -398,8 +398,8 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
     }
 
     @Test
-    void renderSensor_whenRecurringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
+    void renderSensor_whenMonitoringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
@@ -410,22 +410,22 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
                 analyzed_table.`length_int` AS grouping_level_3,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
@@ -452,22 +452,22 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
                 analyzed_table.`length_int` AS grouping_level_3,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc

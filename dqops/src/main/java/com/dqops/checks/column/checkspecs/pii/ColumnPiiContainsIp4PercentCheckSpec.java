@@ -19,9 +19,9 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.comparison.MinPercentRule95ParametersSpec;
-import com.dqops.rules.comparison.MinPercentRule99ParametersSpec;
-import com.dqops.rules.comparison.MinPercentRule100ParametersSpec;
+import com.dqops.rules.comparison.MaxPercentRule0WarningParametersSpec;
+import com.dqops.rules.comparison.MaxPercentRule0ErrorParametersSpec;
+import com.dqops.rules.comparison.MaxPercentRule5ParametersSpec;
 import com.dqops.sensors.column.pii.ColumnPiiContainsIp4PercentSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -34,13 +34,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column check that calculates the percentage of rows that contains valid IP4 address values in a column.
+ * This check detects IP4 addresses inside text columns. It measures the percentage of columns containing an IP4 address and raises a data quality issue when too many rows contain IP4 addresses.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnPiiContainsIp4PercentCheckSpec
-        extends AbstractCheckSpec<ColumnPiiContainsIp4PercentSensorParametersSpec, MinPercentRule100ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+        extends AbstractCheckSpec<ColumnPiiContainsIp4PercentSensorParametersSpec, MaxPercentRule0WarningParametersSpec, MaxPercentRule0ErrorParametersSpec, MaxPercentRule5ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiContainsIp4PercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,17 +54,17 @@ public class ColumnPiiContainsIp4PercentCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule100ParametersSpec warning;
+    private MaxPercentRule0WarningParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows that contains IP4 values in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule99ParametersSpec error;
+    private MaxPercentRule0ErrorParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule95ParametersSpec fatal;
+    private MaxPercentRule5ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -91,7 +91,7 @@ public class ColumnPiiContainsIp4PercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinPercentRule100ParametersSpec getWarning() {
+    public MaxPercentRule0WarningParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -99,7 +99,7 @@ public class ColumnPiiContainsIp4PercentCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinPercentRule100ParametersSpec warning) {
+    public void setWarning(MaxPercentRule0WarningParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -111,7 +111,7 @@ public class ColumnPiiContainsIp4PercentCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinPercentRule99ParametersSpec getError() {
+    public MaxPercentRule0ErrorParametersSpec getError() {
         return this.error;
     }
 
@@ -119,7 +119,7 @@ public class ColumnPiiContainsIp4PercentCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinPercentRule99ParametersSpec error) {
+    public void setError(MaxPercentRule0ErrorParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -131,7 +131,7 @@ public class ColumnPiiContainsIp4PercentCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinPercentRule95ParametersSpec getFatal() {
+    public MaxPercentRule5ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -139,7 +139,7 @@ public class ColumnPiiContainsIp4PercentCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinPercentRule95ParametersSpec fatal) {
+    public void setFatal(MaxPercentRule5ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

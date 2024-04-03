@@ -16,12 +16,17 @@
 
 package com.dqops.metadata.incidents;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.serialization.InvalidYamlStatusHolder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -40,7 +45,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class IncidentWebhookNotificationsSpec  extends AbstractSpec implements Cloneable {
+public class IncidentWebhookNotificationsSpec extends AbstractSpec implements Cloneable, InvalidYamlStatusHolder {
     private static final ChildHierarchyNodeFieldMapImpl<IncidentWebhookNotificationsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -57,6 +62,29 @@ public class IncidentWebhookNotificationsSpec  extends AbstractSpec implements C
 
     @JsonPropertyDescription("Webhook URL where the notification messages describing muted messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.")
     private String incidentMutedWebhookUrl;
+
+    @JsonIgnore
+    private String yamlParsingError;
+
+    /**
+     * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
+     *
+     * @param yamlParsingError YAML parsing error.
+     */
+    @Override
+    public void setYamlParsingError(String yamlParsingError) {
+        this.yamlParsingError = yamlParsingError;
+    }
+
+    /**
+     * Returns the YAML parsing error that was captured.
+     *
+     * @return YAML parsing error.
+     */
+    @Override
+    public String getYamlParsingError() {
+        return this.yamlParsingError;
+    }
 
     /**
      * Returns the URL where notifications of new incidents are pushed using a HTTP POST request.
@@ -183,14 +211,54 @@ public class IncidentWebhookNotificationsSpec  extends AbstractSpec implements C
     /**
      * Creates a cloned and expanded version of the objects. All parameters are changed to the values expanded from variables like ${ENV_VAR}.
      * @param secretValueProvider Secret value provider.
+     * @param lookupContext Secret lookup context.
      * @return Cloned and expanded copy of the object.
      */
-    public IncidentWebhookNotificationsSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public IncidentWebhookNotificationsSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         IncidentWebhookNotificationsSpec cloned = this.deepClone();
-        cloned.incidentOpenedWebhookUrl = secretValueProvider.expandValue(cloned.incidentOpenedWebhookUrl);
-        cloned.incidentAcknowledgedWebhookUrl = secretValueProvider.expandValue(cloned.incidentAcknowledgedWebhookUrl);
-        cloned.incidentResolvedWebhookUrl = secretValueProvider.expandValue(cloned.incidentResolvedWebhookUrl);
-        cloned.incidentMutedWebhookUrl = secretValueProvider.expandValue(cloned.incidentMutedWebhookUrl);
+        cloned.incidentOpenedWebhookUrl = secretValueProvider.expandValue(cloned.incidentOpenedWebhookUrl, lookupContext);
+        cloned.incidentAcknowledgedWebhookUrl = secretValueProvider.expandValue(cloned.incidentAcknowledgedWebhookUrl, lookupContext);
+        cloned.incidentResolvedWebhookUrl = secretValueProvider.expandValue(cloned.incidentResolvedWebhookUrl, lookupContext);
+        cloned.incidentMutedWebhookUrl = secretValueProvider.expandValue(cloned.incidentMutedWebhookUrl, lookupContext);
         return cloned;
+    }
+
+    /**
+     * Combines the notification webhooks spec with the default webhooks. If the incident status' webhook is null, the corresponding value from default is set.
+     * @param defaultWebhooks Default incident webhook notification spec
+     * @return Combined IncidentWebhookNotificationsSpec object with default webhooks.
+     */
+    public IncidentWebhookNotificationsSpec combineWithDefaults(IncidentWebhookNotificationsSpec defaultWebhooks){
+        IncidentWebhookNotificationsSpec clonedWebhooks = this.deepClone();
+
+        if(clonedWebhooks.getIncidentOpenedWebhookUrl() == null){
+            clonedWebhooks.setIncidentOpenedWebhookUrl(defaultWebhooks.getIncidentOpenedWebhookUrl());
+        }
+
+        if(clonedWebhooks.getIncidentAcknowledgedWebhookUrl() == null){
+            clonedWebhooks.setIncidentAcknowledgedWebhookUrl(defaultWebhooks.getIncidentAcknowledgedWebhookUrl());
+        }
+
+        if(clonedWebhooks.getIncidentResolvedWebhookUrl() == null){
+            clonedWebhooks.setIncidentResolvedWebhookUrl(defaultWebhooks.getIncidentResolvedWebhookUrl());
+        }
+
+        if(clonedWebhooks.getIncidentMutedWebhookUrl() == null){
+            clonedWebhooks.setIncidentMutedWebhookUrl(defaultWebhooks.getIncidentMutedWebhookUrl());
+        }
+
+        return clonedWebhooks;
+    }
+
+    public static class IncidentWebhookNotificationsSpecSampleFactory implements SampleValueFactory<IncidentWebhookNotificationsSpec> {
+        @Override
+        public IncidentWebhookNotificationsSpec createSample() {
+            return new IncidentWebhookNotificationsSpec() {{
+                setIncidentOpenedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/opened");
+                setIncidentAcknowledgedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/acknowledged");
+                setIncidentResolvedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/resolved");
+                setIncidentMutedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/muted");
+            }};
+        }
     }
 }

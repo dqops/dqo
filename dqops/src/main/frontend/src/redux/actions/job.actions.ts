@@ -1,5 +1,5 @@
 ///
-/// Copyright © 2021 DQOps (support@dqops.com)
+/// Copyright © 2024 DQOps (support@dqops.com)
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
@@ -22,9 +22,11 @@ import { AxiosResponse } from 'axios';
 import {
   DqoJobQueueIncrementalSnapshotModel,
   DqoJobQueueInitialSnapshotModel,
+  DqoUserProfileModel,
   ImportTablesQueueJobParameters
 } from '../../api';
 import { JOB_CHANGES_RETRY_INTERVAL } from '../../shared/config';
+import { IError } from '../../contexts/errrorContext';
 
 export const getJobsRequest = () => ({
   type: JOB_ACTION.GET_JOBS
@@ -78,6 +80,7 @@ export const getJobsChanges =
     JobApiClient.getJobChangesSince(sequenceNumber)
       .then((res: AxiosResponse<DqoJobQueueIncrementalSnapshotModel>) => {
         dispatch(getJobsChangesSuccess(res.data));
+        dispatch(setIsErrorModalOpen(false))
       })
       .catch((err) => {
         console.error(err);
@@ -130,4 +133,19 @@ export const setCronScheduler = (isCronScheduled: boolean) => ({
 export const setLicenseFree = (isLicenseFree: boolean) => ({
   type: JOB_ACTION.SET_IS_LICENSE_FREE,
   isLicenseFree
+});
+
+export const setUserProfile = (userProfile : DqoUserProfileModel) => ({
+  type: JOB_ACTION.SET_USER_PROFILE,
+  userProfile
+});
+
+export const setError = (error: IError) => ({
+  type: JOB_ACTION.SET_ERRORS,
+  error
+});
+
+export const setIsErrorModalOpen = (isErrorModalOpen: boolean) => ({
+  type: JOB_ACTION.SET_IS_ERROR_MODAL_OPEN,
+  isErrorModalOpen
 });

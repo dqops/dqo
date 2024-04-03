@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -9,53 +10,53 @@ if TYPE_CHECKING:
         ColumnNumericExpectedNumbersInUseCountSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.max_missing_rule_0_parameters_spec import (
-        MaxMissingRule0ParametersSpec,
+    from ..models.max_missing_rule_0_error_parameters_spec import (
+        MaxMissingRule0ErrorParametersSpec,
     )
-    from ..models.max_missing_rule_1_parameters_spec import (
-        MaxMissingRule1ParametersSpec,
+    from ..models.max_missing_rule_0_warning_parameters_spec import (
+        MaxMissingRule0WarningParametersSpec,
     )
     from ..models.max_missing_rule_2_parameters_spec import (
         MaxMissingRule2ParametersSpec,
     )
-    from ..models.recurring_schedule_spec import RecurringScheduleSpec
+    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
 
 T = TypeVar("T", bound="ColumnExpectedNumbersInUseCountCheckSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnExpectedNumbersInUseCountCheckSpec:
     """
     Attributes:
-        schedule_override (Union[Unset, RecurringScheduleSpec]):
+        schedule_override (Union[Unset, MonitoringScheduleSpec]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
             deserialization will remove non tracked comments).
-        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and recurrings
+        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and monitorings
             are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules
             should be preserved in the configuration.
         exclude_from_kpi (Union[Unset, bool]): Data quality check results (alerts) are included in the data quality KPI
             calculation by default. Set this field to true in order to exclude this data quality check from the data quality
             KPI calculation.
-        include_in_sla (Union[Unset, bool]): Marks the data quality check as part of a data quality SLA. The data
-            quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract
-            for the dataset.
+        include_in_sla (Union[Unset, bool]): Marks the data quality check as part of a data quality SLA (Data Contract).
+            The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data
+            Contract for the dataset.
         quality_dimension (Union[Unset, str]): Configures a custom data quality dimension name that is different than
             the built-in dimensions (Timeliness, Validity, etc.).
-        display_name (Union[Unset, str]): Data quality check display name that could be assigned to the check, otherwise
+        display_name (Union[Unset, str]): Data quality check display name that can be assigned to the check, otherwise
             the check_display_name stored in the parquet result files is the check_name.
         data_grouping (Union[Unset, str]): Data grouping configuration name that should be applied to this data quality
             check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnNumericExpectedNumbersInUseCountSensorParametersSpec]):
-        warning (Union[Unset, MaxMissingRule0ParametersSpec]):
-        error (Union[Unset, MaxMissingRule1ParametersSpec]):
+        warning (Union[Unset, MaxMissingRule0WarningParametersSpec]):
+        error (Union[Unset, MaxMissingRule0ErrorParametersSpec]):
         fatal (Union[Unset, MaxMissingRule2ParametersSpec]):
     """
 
-    schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
+    schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     disabled: Union[Unset, bool] = UNSET
     exclude_from_kpi: Union[Unset, bool] = UNSET
@@ -66,10 +67,10 @@ class ColumnExpectedNumbersInUseCountCheckSpec:
     parameters: Union[
         Unset, "ColumnNumericExpectedNumbersInUseCountSensorParametersSpec"
     ] = UNSET
-    warning: Union[Unset, "MaxMissingRule0ParametersSpec"] = UNSET
-    error: Union[Unset, "MaxMissingRule1ParametersSpec"] = UNSET
+    warning: Union[Unset, "MaxMissingRule0WarningParametersSpec"] = UNSET
+    error: Union[Unset, "MaxMissingRule0ErrorParametersSpec"] = UNSET
     fatal: Union[Unset, "MaxMissingRule2ParametersSpec"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         schedule_override: Union[Unset, Dict[str, Any]] = UNSET
@@ -142,24 +143,24 @@ class ColumnExpectedNumbersInUseCountCheckSpec:
             ColumnNumericExpectedNumbersInUseCountSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.max_missing_rule_0_parameters_spec import (
-            MaxMissingRule0ParametersSpec,
+        from ..models.max_missing_rule_0_error_parameters_spec import (
+            MaxMissingRule0ErrorParametersSpec,
         )
-        from ..models.max_missing_rule_1_parameters_spec import (
-            MaxMissingRule1ParametersSpec,
+        from ..models.max_missing_rule_0_warning_parameters_spec import (
+            MaxMissingRule0WarningParametersSpec,
         )
         from ..models.max_missing_rule_2_parameters_spec import (
             MaxMissingRule2ParametersSpec,
         )
-        from ..models.recurring_schedule_spec import RecurringScheduleSpec
+        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
-        schedule_override: Union[Unset, RecurringScheduleSpec]
+        schedule_override: Union[Unset, MonitoringScheduleSpec]
         if isinstance(_schedule_override, Unset):
             schedule_override = UNSET
         else:
-            schedule_override = RecurringScheduleSpec.from_dict(_schedule_override)
+            schedule_override = MonitoringScheduleSpec.from_dict(_schedule_override)
 
         comments = []
         _comments = d.pop("comments", UNSET)
@@ -194,18 +195,18 @@ class ColumnExpectedNumbersInUseCountCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MaxMissingRule0ParametersSpec]
+        warning: Union[Unset, MaxMissingRule0WarningParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MaxMissingRule0ParametersSpec.from_dict(_warning)
+            warning = MaxMissingRule0WarningParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MaxMissingRule1ParametersSpec]
+        error: Union[Unset, MaxMissingRule0ErrorParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MaxMissingRule1ParametersSpec.from_dict(_error)
+            error = MaxMissingRule0ErrorParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
         fatal: Union[Unset, MaxMissingRule2ParametersSpec]

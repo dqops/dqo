@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: sensor
+spec:
+  fields:
+  - field_name: expected_values
+    display_name: expected_values
+    help_text: List of expected string values that should be found in the tested column.
+    data_type: string_list
+    required: true

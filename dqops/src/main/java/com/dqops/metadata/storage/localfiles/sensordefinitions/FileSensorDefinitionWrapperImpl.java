@@ -49,7 +49,6 @@ public class FileSensorDefinitionWrapperImpl extends SensorDefinitionWrapperImpl
         this.sensorFolderNode = sensorFolderNode;
         this.yamlSerializer = yamlSerializer;
 		this.setProviderSensors(new FileProviderSensorDefinitionListImpl(sensorFolderNode, yamlSerializer));
-		this.setStatus(InstanceStatus.UNCHANGED);
     }
 
     /**
@@ -84,7 +83,7 @@ public class FileSensorDefinitionWrapperImpl extends SensorDefinitionWrapperImpl
                 if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
                     throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
                 }
-                if (deserialized.getKind() != SpecificationKind.SENSOR) {
+                if (deserialized.getKind() != SpecificationKind.sensor) {
                     throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                 }
 
@@ -105,11 +104,17 @@ public class FileSensorDefinitionWrapperImpl extends SensorDefinitionWrapperImpl
      */
     @Override
     public void flush() {
-        if (this.getStatus() == InstanceStatus.DELETED) {
+        this.getProviderSensors().flush(); // the first call to flush, maybe all provider checks are deleted and the check is deleted right after
+
+        this.clearDirty(false);
+
+        if (this.getStatus() == InstanceStatus.DELETED || this.getStatus() == InstanceStatus.NOT_TOUCHED) {
             return; // do nothing
         }
 
-		this.getProviderSensors().flush(); // the first call to flush, maybe all provider checks are deleted and the check is deleted right after
+        if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() == null) {
+            return; // nothing to do, the instance is empty (no file)
+        }
 
         if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() != null && super.getSpec().isDirty() ) {
             super.getSpec().clearDirty(true);
@@ -124,11 +129,14 @@ public class FileSensorDefinitionWrapperImpl extends SensorDefinitionWrapperImpl
             case ADDED:
 				this.sensorFolderNode.addChildFile(SpecFileNames.SENSOR_SPEC_FILE_NAME_YAML, newFileContent);
 				this.getSpec().clearDirty(true);
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.sensorFolderNode.getChildFileByFileName(SpecFileNames.SENSOR_SPEC_FILE_NAME_YAML);
                 modifiedFileNode.changeContent(newFileContent);
 				this.getSpec().clearDirty(true);
                 break;
+
             case TO_BE_DELETED:
 				this.sensorFolderNode.deleteChildFile(SpecFileNames.SENSOR_SPEC_FILE_NAME_YAML);
 				this.sensorFolderNode.setDeleteOnFlush(true); // will remove the whole folder for the source

@@ -1,9 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: table/availability/table_availability
-  rule_name: comparison/max_failures
-  help_text: Verifies availability on table in database using simple row count. Stores
-    the most recent table availability status for each month when the data quality
-    check was evaluated.

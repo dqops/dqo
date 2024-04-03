@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -11,22 +12,26 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="DashboardsFolderSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class DashboardsFolderSpec:
     """
     Attributes:
         folder_name (Union[Unset, str]): Folder name
+        standard (Union[Unset, bool]): Always shows this schema tree node because it contains standard dashboards. Set
+            the value to false to show this folder only when advanced dashboards are enabled.
         dashboards (Union[Unset, List['DashboardSpec']]): List of data quality dashboard at this level.
         folders (Union[Unset, List['DashboardsFolderSpec']]): List of data quality dashboard folders at this level.
     """
 
     folder_name: Union[Unset, str] = UNSET
+    standard: Union[Unset, bool] = UNSET
     dashboards: Union[Unset, List["DashboardSpec"]] = UNSET
     folders: Union[Unset, List["DashboardsFolderSpec"]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         folder_name = self.folder_name
+        standard = self.standard
         dashboards: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.dashboards, Unset):
             dashboards = []
@@ -48,6 +53,8 @@ class DashboardsFolderSpec:
         field_dict.update({})
         if folder_name is not UNSET:
             field_dict["folder_name"] = folder_name
+        if standard is not UNSET:
+            field_dict["standard"] = standard
         if dashboards is not UNSET:
             field_dict["dashboards"] = dashboards
         if folders is not UNSET:
@@ -61,6 +68,8 @@ class DashboardsFolderSpec:
 
         d = src_dict.copy()
         folder_name = d.pop("folder_name", UNSET)
+
+        standard = d.pop("standard", UNSET)
 
         dashboards = []
         _dashboards = d.pop("dashboards", UNSET)
@@ -78,6 +87,7 @@ class DashboardsFolderSpec:
 
         dashboards_folder_spec = cls(
             folder_name=folder_name,
+            standard=standard,
             dashboards=dashboards,
             folders=folders,
         )

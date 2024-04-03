@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/whitespace/empty_text_percent
+  rule_name: comparison/max_percent
+  help_text: "Detects empty texts (not null, zero-length texts) and measures their\
+    \ percentage in the column. This check verifies that the rate of empty strings\
+    \ in a column does not exceed the maximum accepted percentage. This check verifies\
+    \ that the rate of empty strings in a column does not exceed the maximum accepted\
+    \ percentage."

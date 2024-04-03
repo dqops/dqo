@@ -18,14 +18,28 @@ package com.dqops.metadata.storage.localfiles.sources;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.reflection.DefaultFieldValue;
+import com.dqops.utils.serialization.InvalidYamlStatusHolder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
  * Connection definition for a data source connection that is covered by data quality checks.
  */
-public class ConnectionYaml {
+public class ConnectionYaml implements InvalidYamlStatusHolder {
+    @JsonPropertyDescription("DQOps YAML schema version")
+    @DefaultFieldValue(ApiVersion.CURRENT_API_VERSION)
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
-    private SpecificationKind kind = SpecificationKind.SOURCE;
+
+    @JsonPropertyDescription("File type")
+    @DefaultFieldValue("source")
+    private SpecificationKind kind = SpecificationKind.source;
+
+    @JsonPropertyDescription("Connection specification object with the connection parameters to the data source")
     private ConnectionSpec spec = new ConnectionSpec();
+
+    @JsonIgnore
+    private String yamlParsingError;
 
     public ConnectionYaml() {
     }
@@ -80,5 +94,28 @@ public class ConnectionYaml {
      */
     public void setSpec(ConnectionSpec spec) {
         this.spec = spec;
+    }
+
+    /**
+     * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
+     *
+     * @param yamlParsingError YAML parsing error.
+     */
+    @Override
+    public void setYamlParsingError(String yamlParsingError) {
+        if (this.spec != null) {
+            this.spec.setYamlParsingError(yamlParsingError);
+        }
+        this.yamlParsingError = yamlParsingError;
+    }
+
+    /**
+     * Returns the YAML parsing error that was captured.
+     *
+     * @return YAML parsing error.
+     */
+    @Override
+    public String getYamlParsingError() {
+        return this.yamlParsingError;
     }
 }

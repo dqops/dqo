@@ -1,0 +1,21 @@
+# {{header}}
+
+**{{helpText}}**
+
+{{#each sensorTargets}}
+{{#if (gt sensorTargets.length 1)}}
+## {{capitalizeFirst this}} sensors{{/if}}
+
+{{#each sensors}}
+{{#if (eq target ../this)}}
+### **{{category}}**
+
+| Sensor name | Description |
+|-------------|-------------|
+{{#each collectedSensors}}|[*{{sensorName}}*](/docs/reference/sensors/{{target}}/{{category}}-{{target}}-sensors.md#{{replace sensorName "_" "-"}})|{{single-line sensorParametersJavaDoc}}|
+{{/each}}
+{{else}}
+{{/if}}
+{{/each}}
+
+{{/each}}

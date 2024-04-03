@@ -1,0 +1,69 @@
+# DQOps REST API {{superiorClassSimpleName}} operations
+{{superiorDescription}}
+
+{{#each operationObjects}}
+___
+## {{operationPythonName}}
+{{operationDescription}}
+
+Follow the [link]({{clientSourceUrl}}) to see the source code on GitHub.
+
+
+**{{apiCallMethod}}**
+```
+{{apiCallUrl}}
+```
+{{#if returnValueField}}
+**Return value**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+{{#with returnValueField}}|<span class="no-wrap-code">{{{render-type typeModel yamlFieldName}}}</span>|{{helpText}}|*{{render-type typeModel}}*|
+{{/with}}
+{{/if}}
+
+{{#if parametersFields}}
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+{{#each parametersFields}}|<span class="no-wrap-code">{{{render-type typeModel yamlFieldName}}}</span>|{{helpText}}|*{{render-type typeModel}}*|{{checkmark required}}|
+{{/each}}
+{{/if}}
+
+{{#if requestBodyField}}
+**Request body**
+
+|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------------------------|-----------|-----------------|
+{{#with requestBodyField}}|{{helpText}}|*{{render-type typeModel}}*|{{checkmark required}}|
+{{/with}}
+{{/if}}
+
+{{#if usageExamples}}
+**Usage examples**
+{{#each usageExamples}}
+
+=== "{{{executionMethod.navbarHeader}}}"
+    **Execution**
+
+    ```{{{executionMethod.codeFormatting}}}
+    {{{renderedExample}}}
+    ```
+
+    {{#if (or returnValueSampleJson returnValueSamplePython)}}
+    ??? example "Expand to see the returned result"
+    {{#if (eq executionMethod.codeFormatting "python")}}
+        ```
+        {{{indent returnValueSamplePython 2}}}
+        ```
+    {{/if}}
+    {{#if (eq executionMethod.codeFormatting "bash")}}
+        ```
+        {{{indent returnValueSampleJson 2}}}
+        ```
+    {{/if}}
+    {{/if}}
+{{/each}}
+{{/if}}
+{{/each}}

@@ -1,23 +1,49 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { getFirstLevelIncidentsState } from "../../redux/selectors";
-import { getIncidentsHistograms, setIncidentsHistogramFilter } from "../../redux/actions/incidents.actions";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { useParams } from "react-router-dom";
-import { IncidentIssueHistogramModel } from "../../api";
-import { IncidentHistogramFilter, IncidentIssueFilter } from "../../redux/reducers/incidents.reducer";
-import SectionWrapper from "../../components/Dashboard/SectionWrapper";
-import clsx from "clsx";
-import { BarChart } from "./BarChart";
+import clsx from 'clsx';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { IncidentIssueHistogramModel } from '../../api';
+import SectionWrapper from '../../components/Dashboard/SectionWrapper';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import {
+  getIncidentsHistograms,
+  setIncidentsHistogramFilter
+} from '../../redux/actions/incidents.actions';
+import {
+  IncidentHistogramFilter,
+  IncidentIssueFilter
+} from '../../redux/reducers/incidents.reducer';
+import { getFirstLevelIncidentsState } from '../../redux/selectors';
+import { useDecodedParams } from '../../utils';
+import { BarChart } from './BarChart';
 
 type HistogramChartProps = {
   onChangeFilter: (obj: Partial<IncidentIssueFilter>) => void;
-}
-export const HistogramChart = ({ onChangeFilter: changeIssueFilter }: HistogramChartProps) => {
-  const { connection, year: strYear, month: strMonth, id: incidentId }: { connection: string, year: string, month: string, id: string } = useParams();
+  days: number;
+};
+export const HistogramChart = ({
+  onChangeFilter: changeIssueFilter,
+  days
+}: HistogramChartProps) => {
+  const {
+    connection,
+    year: strYear,
+    month: strMonth,
+    id: incidentId
+  }: {
+    connection: string;
+    year: string;
+    month: string;
+    id: string;
+  } = useDecodedParams();
   const year = parseInt(strYear, 10);
   const month = parseInt(strMonth, 10);
-  const { histograms, histogramFilter }: { histograms: IncidentIssueHistogramModel, histogramFilter: IncidentHistogramFilter } = useSelector(getFirstLevelIncidentsState);
+  const {
+    histograms,
+    histogramFilter
+  }: {
+    histograms: IncidentIssueHistogramModel;
+    histogramFilter: IncidentHistogramFilter;
+  } = useSelector(getFirstLevelIncidentsState);
   const dispatch = useActionDispatch();
 
   useEffect(() => {
@@ -26,10 +52,11 @@ export const HistogramChart = ({ onChangeFilter: changeIssueFilter }: HistogramC
         connection,
         year,
         month,
-        incidentId
+        incidentId,
+        days
       })
     );
-  }, [connection, year, month, incidentId])
+  }, [connection, year, month, incidentId, days]);
 
   useEffect(() => {
     if (!histogramFilter) return;
@@ -41,13 +68,13 @@ export const HistogramChart = ({ onChangeFilter: changeIssueFilter }: HistogramC
     dispatch(
       setIncidentsHistogramFilter({
         ...histogramFilter,
-        ...obj,
+        ...obj
       })
     );
     changeIssueFilter({
       ...obj,
       page: 1
-    })
+    });
   };
 
   return (
@@ -55,33 +82,49 @@ export const HistogramChart = ({ onChangeFilter: changeIssueFilter }: HistogramC
       <div className="col-span-2">
         <BarChart histograms={histograms} />
       </div>
-      <SectionWrapper title="Filter by columns">
+      <SectionWrapper title="Filter by columns" className="text-sm">
         {Object.keys(histograms?.columns || {}).map((column, index) => (
           <div
-            className={clsx("flex gap-2 mb-2 cursor-pointer", {
-              'font-bold text-gray-700': histogramFilter.column === column,
-              'text-gray-500': histogramFilter.column && histogramFilter.column !== column,
-            })}
+            className={clsx(
+              'flex gap-2 mb-2 cursor-pointer whitespace-normal break-all',
+              {
+                'font-bold text-gray-700': histogramFilter?.column === column,
+                'text-gray-500':
+                  histogramFilter?.column && histogramFilter?.column !== column
+              }
+            )}
             key={index}
-            onClick={() => onChangeFilter({
-              column: histogramFilter.column === column ? '' : column
-            })}
+            onClick={() =>
+              onChangeFilter({
+                column: histogramFilter?.column === column ? '' : column
+              })
+            }
           >
-            <span>{column}</span>({histograms?.columns?.[column]})
+            <span>
+              {column.length === 0 ? '(no column name)' : ''}
+              {column}
+            </span>
+            ({histograms?.columns?.[column]})
           </div>
         ))}
       </SectionWrapper>
-      <SectionWrapper title="Filter by check name">
+      <SectionWrapper title="Filter by check name" className="text-sm">
         {Object.keys(histograms?.checks || {}).map((check, index) => (
           <div
-            className={clsx("flex gap-2 mb-2 cursor-pointer", {
-              'font-bold text-gray-700': histogramFilter.check === check,
-              'text-gray-500': histogramFilter.check && histogramFilter.check !== check,
-            })}
+            className={clsx(
+              'flex gap-2 mb-2 cursor-pointer whitespace-normal break-all',
+              {
+                'font-bold text-gray-700': histogramFilter?.check === check,
+                'text-gray-500':
+                  histogramFilter?.check && histogramFilter?.check !== check
+              }
+            )}
             key={index}
-            onClick={() => onChangeFilter({
-              check: histogramFilter.check === check ? '' : check
-            })}
+            onClick={() =>
+              onChangeFilter({
+                check: histogramFilter?.check === check ? '' : check
+              })
+            }
           >
             <span>{check}</span>({histograms?.checks?.[check]})
           </div>

@@ -1,11 +1,14 @@
+import clsx from 'clsx';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import {
   DataGroupingConfigurationSpec,
   DataGroupingDimensionSpec
 } from '../../../api';
+import { IRootState } from '../../../redux/reducers';
 import DataGroupingDimensionItem from '../../DataQualityChecks/DataGroupingDimensionItem';
 import { Errors } from '../TableView/DataGroupingConfigurationEditView';
-import { useParams } from 'react-router-dom';
+import { useDecodedParams } from '../../../utils';
 
 interface IDataGroupingConfigurationViewProps {
   dataGroupingConfiguration?: DataGroupingConfigurationSpec;
@@ -18,10 +21,12 @@ const DataGroupingConfigurationView = ({
   dataGroupingConfiguration,
   onChange,
   errors,
-  onClearError
+  onClearError,
 }: IDataGroupingConfigurationViewProps) => {
-  const { table }: { table: string } = useParams();
-
+  const { table }: { table: string } = useDecodedParams();
+  const {  userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const getDataGroupingDimensionLevel = (index: number) => {
     if (index === 0) return dataGroupingConfiguration?.level_1;
     if (index === 1) return dataGroupingConfiguration?.level_2;
@@ -45,7 +50,7 @@ const DataGroupingConfigurationView = ({
   };
 
   return (
-    <div className="py-4 px-4 text-sm">
+    <div className={clsx("py-4 px-4 text-sm", userProfile.can_manage_data_sources === true ? "" : "pointer-events-none cursor-not-allowed"  )}>
       {Array(9)
         .fill(0)
         .map((item, index) => (

@@ -42,8 +42,8 @@ public enum DqoJobStatus {
     /**
      * The job has finished successfully.
      */
-    @JsonProperty("succeeded")
-    succeeded,
+    @JsonProperty("finished")
+    finished,
 
     /**
      * The job has failed with an execution error.

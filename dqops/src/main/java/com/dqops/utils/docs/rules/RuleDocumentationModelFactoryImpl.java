@@ -45,7 +45,7 @@ public class RuleDocumentationModelFactoryImpl implements RuleDocumentationModel
     /**
      * Creates a rule documentation model factory.
      * @param projectRoot Project root path.
-     * @param dqoHomeContext DQO User home context.
+     * @param dqoHomeContext DQOps User home context.
      * @param specToModelCheckMappingService Specification to the model factory, used to get documentation of the rule parameters.
      */
     public RuleDocumentationModelFactoryImpl(Path projectRoot,
@@ -90,6 +90,10 @@ public class RuleDocumentationModelFactoryImpl implements RuleDocumentationModel
         documentationModel.setRuleExample(loadRuleExample(ruleParts[0], ruleParts[1]));
 
         documentationModel.setDefinition(ruleDefinitionWrapper);
+        documentationModel.setPythonSourceCode(ruleDefinitionWrapper.getRulePythonModuleContent().getTextContent().replace("\n", "\n    "));
+        if (ruleDefinitionWrapper.getSpec().getFields() != null && !ruleDefinitionWrapper.getSpec().getFields().isEmpty()) {
+            documentationModel.setFirstRuleParameterName(ruleDefinitionWrapper.getSpec().getFields().get(0).getFieldName());
+        }
 
         List<FieldModel> fieldsForRuleParameters = this.specToModelCheckMappingService.createFieldsForRuleParameters(ruleParametersSpec);
         ParameterDefinitionsListSpec fieldDefinitionsList = new ParameterDefinitionsListSpec();
@@ -111,7 +115,7 @@ public class RuleDocumentationModelFactoryImpl implements RuleDocumentationModel
 
         try {
             List<String> read = Files.readAllLines(path);
-            return String.join("\n", read);
+            return String.join("\n    ", read);
         } catch (IOException e) {
             System.err.println("Cannot load rule example from file: " + path + ", error: " + e.getMessage() + ", " + e);
             return null;

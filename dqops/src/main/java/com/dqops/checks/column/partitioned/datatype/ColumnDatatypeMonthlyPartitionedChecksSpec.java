@@ -16,10 +16,15 @@
 package com.dqops.checks.column.partitioned.datatype;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
-import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDateMatchFormatPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDetectedDatatypeInTextCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -37,51 +42,51 @@ import java.util.Objects;
 public class ColumnDatatypeMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatatypeMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_partition_date_match_format_percent", o -> o.monthlyPartitionDateMatchFormatPercent);
-            put("monthly_partition_string_datatype_changed", o -> o.monthlyPartitionStringDatatypeChanged);
+            put("monthly_partition_detected_datatype_in_text", o -> o.monthlyPartitionDetectedDatatypeInText);
+            put("monthly_partition_detected_datatype_in_text_changed", o -> o.monthlyPartitionDetectedDatatypeInTextChanged);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnDatatypeDateMatchFormatPercentCheckSpec monthlyPartitionDateMatchFormatPercent;
+    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each monthly partition.")
+    private ColumnDetectedDatatypeInTextCheckSpec monthlyPartitionDetectedDatatypeInText;
 
-    @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnDatatypeStringDatatypeChangedCheckSpec monthlyPartitionStringDatatypeChanged;
+    @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Stores a separate data quality check result for each monthly partition.")
+    private ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec monthlyPartitionDetectedDatatypeInTextChanged;
 
     /**
-     * Returns a date match format percentage check.
-     * @return Maximum date match format percentage check.
+     * Returns a count of expected values in datatype detected check.
+     * @return Datatype detected check.
      */
-    public ColumnDatatypeDateMatchFormatPercentCheckSpec getMonthlyPartitionDateMatchFormatPercent() {
-        return monthlyPartitionDateMatchFormatPercent;
+    public ColumnDetectedDatatypeInTextCheckSpec getMonthlyPartitionDetectedDatatypeInText() {
+        return monthlyPartitionDetectedDatatypeInText;
     }
 
     /**
-     * Sets a new definition of a date match format percentage check.
-     * @param monthlyPartitionDateMatchFormatPercent Date match format percentage check.
+     * Sets a new definition of a datatype detected check.
+     * @param monthlyPartitionDetectedDatatypeInText Datatype detected check.
      */
-    public void setMonthlyPartitionDateMatchFormatPercent(ColumnDatatypeDateMatchFormatPercentCheckSpec monthlyPartitionDateMatchFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionDateMatchFormatPercent, monthlyPartitionDateMatchFormatPercent));
-        this.monthlyPartitionDateMatchFormatPercent = monthlyPartitionDateMatchFormatPercent;
-        propagateHierarchyIdToField(monthlyPartitionDateMatchFormatPercent, "monthly_partition_date_match_format_percent");
+    public void setMonthlyPartitionDetectedDatatypeInText(ColumnDetectedDatatypeInTextCheckSpec monthlyPartitionDetectedDatatypeInText) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionDetectedDatatypeInText, monthlyPartitionDetectedDatatypeInText));
+        this.monthlyPartitionDetectedDatatypeInText = monthlyPartitionDetectedDatatypeInText;
+        propagateHierarchyIdToField(monthlyPartitionDetectedDatatypeInText, "monthly_partition_detected_datatype_in_text");
     }
 
     /**
      * Returns a count of expected values in datatype changed check.
      * @return Datatype changed check.
      */
-    public ColumnDatatypeStringDatatypeChangedCheckSpec getMonthlyPartitionStringDatatypeChanged() {
-        return monthlyPartitionStringDatatypeChanged;
+    public ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec getMonthlyPartitionDetectedDatatypeInTextChanged() {
+        return monthlyPartitionDetectedDatatypeInTextChanged;
     }
 
     /**
      * Sets a new definition of a datatype changed check.
-     * @param monthlyPartitionStringDatatypeChanged Datatype changed check.
+     * @param monthlyPartitionDetectedDatatypeInTextChanged Datatype changed check.
      */
-    public void setMonthlyPartitionStringDatatypeChanged(ColumnDatatypeStringDatatypeChangedCheckSpec monthlyPartitionStringDatatypeChanged) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringDatatypeChanged, monthlyPartitionStringDatatypeChanged));
-        this.monthlyPartitionStringDatatypeChanged = monthlyPartitionStringDatatypeChanged;
-        propagateHierarchyIdToField(monthlyPartitionStringDatatypeChanged, "monthly_partition_string_datatype_changed");
+    public void setMonthlyPartitionDetectedDatatypeInTextChanged(ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec monthlyPartitionDetectedDatatypeInTextChanged) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionDetectedDatatypeInTextChanged, monthlyPartitionDetectedDatatypeInTextChanged));
+        this.monthlyPartitionDetectedDatatypeInTextChanged = monthlyPartitionDetectedDatatypeInTextChanged;
+        propagateHierarchyIdToField(monthlyPartitionDetectedDatatypeInTextChanged, "monthly_partition_detected_datatype_in_text_changed");
     }
 
     /**
@@ -92,5 +97,49 @@ public class ColumnDatatypeMonthlyPartitionedChecksSpec extends AbstractCheckCat
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Gets the check target appropriate for all checks in this category.
+     *
+     * @return Corresponding check target.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return CheckTarget.column;
+    }
+
+    /**
+     * Gets the check type appropriate for all checks in this category.
+     *
+     * @return Corresponding check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.partitioned;
+    }
+
+    /**
+     * Gets the check timescale appropriate for all checks in this category.
+     *
+     * @return Corresponding check timescale.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return CheckTimeScale.monthly;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.STRING;
     }
 }

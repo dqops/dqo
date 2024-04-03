@@ -33,7 +33,7 @@ try:
         ).read()
     )
 except IOError:
-    print("Failed to load DQO version file.", file=sys.stderr)
+    print("Failed to load DQOps version file.", file=sys.stderr)
     sys.exit(-1)
 
 
@@ -71,7 +71,7 @@ def main():
         if os.access(dqo_path, os.X_OK):
             subprocess.call([dqo_path] + sys.argv[1:], env=dqo_envs)
         else:
-            subprocess.call(["/bin/sh", dqo_path] + sys.argv[1:], env=dqo_envs)
+            subprocess.call(["/bin/bash", dqo_path] + sys.argv[1:], env=dqo_envs)
     else:
         print("Operating system {0} unsupported".format(sys.platform), file=sys.stderr)
         sys.exit(-1)

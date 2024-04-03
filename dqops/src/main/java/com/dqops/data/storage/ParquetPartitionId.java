@@ -17,6 +17,7 @@ package com.dqops.data.storage;
 
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
@@ -26,26 +27,46 @@ import java.util.Objects;
  * Identifies a single partition for hive partitioned tables stored as parquet files.
  */
 public class ParquetPartitionId implements Comparable<ParquetPartitionId> {
+    @JsonPropertyDescription("Data domain name.")
+    private String dataDomain;
+
+    @JsonPropertyDescription("Table type.")
     private DqoRoot tableType;
+
+    @JsonPropertyDescription("Connection name.")
     private String connectionName;
+
+    @JsonPropertyDescription("Table name (schema.table).")
     private PhysicalTableName tableName;
+
+    @JsonPropertyDescription("The date of teh first day of the month that identifies a monthly partition.")
     private LocalDate month;
 
     /**
      * Creates a partition identifier for a single partition.
      * A partition is identified by a three level partitioning scheme: connection name, table name (schema.table)
      * and the month (the date of the first day of the month).
+     * @param dataDomain Data domain name.
      * @param tableType Target table type.
      * @param connectionName Connection name.
      * @param tableName Table name.
      * @param month The date of the first day of the month.
      */
-    public ParquetPartitionId(DqoRoot tableType, String connectionName, PhysicalTableName tableName, LocalDate month) {
+    public ParquetPartitionId(String dataDomain, DqoRoot tableType, String connectionName, PhysicalTableName tableName, LocalDate month) {
         assert month == null || month.getDayOfMonth() == 1;
+        this.dataDomain = dataDomain;
         this.tableType = tableType;
         this.connectionName = connectionName;
         this.tableName = tableName;
         this.month = month;
+    }
+
+    /**
+     * Returns the data domain name.
+     * @return Data domain name.
+     */
+    public String getDataDomain() {
+        return dataDomain;
     }
 
     /**
@@ -87,6 +108,7 @@ public class ParquetPartitionId implements Comparable<ParquetPartitionId> {
 
         ParquetPartitionId that = (ParquetPartitionId) o;
 
+        if (!Objects.equals(dataDomain, that.dataDomain)) return false;
         if (tableType != that.tableType) return false;
         if (!Objects.equals(connectionName, that.connectionName)) return false;
         if (!Objects.equals(tableName, that.tableName)) return false;
@@ -96,6 +118,9 @@ public class ParquetPartitionId implements Comparable<ParquetPartitionId> {
     @Override
     public int hashCode() {
         int result = tableType.hashCode();
+        if (dataDomain != null) {
+            result = 31 * result + dataDomain.hashCode();
+        }
         if (connectionName != null) {
             result = 31 * result + connectionName.hashCode();
         }
@@ -104,6 +129,17 @@ public class ParquetPartitionId implements Comparable<ParquetPartitionId> {
         }
         result = 31 * result + month.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ParquetPartitionId{" +
+                "dataDomain=" + dataDomain +
+                ", tableType=" + tableType +
+                ", connectionName='" + connectionName + '\'' +
+                ", tableName=" + tableName +
+                ", month=" + month +
+                '}';
     }
 
     /**
@@ -140,21 +176,26 @@ public class ParquetPartitionId implements Comparable<ParquetPartitionId> {
      */
     @Override
     public int compareTo(@NotNull ParquetPartitionId o) {
+        int compareDataDomain = this.dataDomain != null ? this.dataDomain.compareTo(o.dataDomain != null ? o.dataDomain : "") : (o.dataDomain != null ? -1 : 0);
+        if (compareDataDomain != 0) {
+            return compareDataDomain;
+        }
+
         int compareTableType = this.tableType.compareTo(o.tableType);
         if (compareTableType != 0) {
             return compareTableType;
         }
 
-        int compareConnection = this.connectionName.compareTo(o.connectionName);
+        int compareConnection = this.connectionName != null ? this.connectionName.compareTo(o.connectionName != null ? o.connectionName : "") :  (o.connectionName != null ? -1 : 0);
         if (compareConnection != 0) {
             return compareConnection;
         }
 
-        int compareSchemaTable = this.tableName.compareTo(o.tableName);
+        int compareSchemaTable = this.tableName != null ? this.tableName.compareTo(o.tableName) : (o.tableName != null ? -1 : 0);
         if (compareSchemaTable != 0) {
             return compareSchemaTable;
         }
 
-        return this.month.compareTo(o.month);
+        return this.month != null ? this.month.compareTo(o.month) : (o.month != null ? -1 : 0);
     }
 }

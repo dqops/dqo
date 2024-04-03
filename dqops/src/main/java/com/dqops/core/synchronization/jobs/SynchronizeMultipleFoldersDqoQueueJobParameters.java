@@ -18,6 +18,7 @@ package com.dqops.core.synchronization.jobs;
 import com.dqops.core.synchronization.fileexchange.FileSynchronizationDirection;
 import com.dqops.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
 import com.dqops.core.synchronization.status.FolderSynchronizationStatus;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -37,7 +38,7 @@ public class SynchronizeMultipleFoldersDqoQueueJobParameters implements Cloneabl
     /**
      * File synchronization direction.
      */
-    @JsonPropertyDescription("File synchronization direction, the default is full synchronization (push local changes and pull other changes from DQO Cloud).")
+    @JsonPropertyDescription("File synchronization direction, the default is full synchronization (push local changes and pull other changes from DQOps Cloud).")
     private FileSynchronizationDirection direction = FileSynchronizationDirection.full;
 
     /**
@@ -77,6 +78,30 @@ public class SynchronizeMultipleFoldersDqoQueueJobParameters implements Cloneabl
     private boolean checks;
 
     /**
+     * Synchronize the "settings" folder.
+     */
+    @JsonPropertyDescription("Synchronize the \"settings\" folder.")
+    private boolean settings;
+
+    /**
+     * Synchronize the ".credentials" folder.
+     */
+    @JsonPropertyDescription("Synchronize the \".credentials\" folder.")
+    private boolean credentials;
+
+    /**
+     * Synchronize the "dictionaries" folder.
+     */
+    @JsonPropertyDescription("Synchronize the \"dictionaries\" folder.")
+    private boolean dictionaries;
+
+    /**
+     * Synchronize the "patterns" folder.
+     */
+    @JsonPropertyDescription("Synchronize the \"patterns\" folder.")
+    private boolean patterns;
+
+    /**
      * Synchronize the ".data/sensor_readouts" folder.
      */
     @JsonPropertyDescription("Synchronize the \".data/sensor_readouts\" folder.")
@@ -107,9 +132,11 @@ public class SynchronizeMultipleFoldersDqoQueueJobParameters implements Cloneabl
     private boolean dataIncidents;
 
     /**
-     * Synchronize all folders that have local changes. When this field is set to true, there is no need to enable synchronization of single folders because DQO will decide which folders need synchronization (to be pushed to the cloud).
+     * Synchronize all folders that have local changes. When this field is set to true, there is no need to enable synchronization of single folders because DQOps
+     * will decide which folders need synchronization (to be pushed to the cloud).
      */
-    @JsonPropertyDescription("Synchronize all folders that have local changes. When this field is set to true, there is no need to enable synchronization of single folders because DQO will decide which folders need synchronization (to be pushed to the cloud).")
+    @JsonPropertyDescription("Synchronize all folders that have local changes. When this field is set to true, there is no need to enable synchronization of single folders " +
+            "because DQOps will decide which folders need synchronization (to be pushed to the cloud).")
     private boolean synchronizeFolderWithLocalChanges;
 
 
@@ -132,6 +159,22 @@ public class SynchronizeMultipleFoldersDqoQueueJobParameters implements Cloneabl
 
         if (localFoldersStatusModel.getChecks() == FolderSynchronizationStatus.changed) {
             this.checks = true;
+        }
+
+        if (localFoldersStatusModel.getSettings() == FolderSynchronizationStatus.changed) {
+            this.settings = true;
+        }
+
+        if (localFoldersStatusModel.getCredentials() == FolderSynchronizationStatus.changed) {
+            this.credentials = true;
+        }
+
+        if (localFoldersStatusModel.getDictionaries() == FolderSynchronizationStatus.changed) {
+            this.dictionaries = true;
+        }
+
+        if (localFoldersStatusModel.getPatterns() == FolderSynchronizationStatus.changed) {
+            this.patterns = true;
         }
 
         if (localFoldersStatusModel.getDataSensorReadouts() == FolderSynchronizationStatus.changed) {
@@ -163,6 +206,10 @@ public class SynchronizeMultipleFoldersDqoQueueJobParameters implements Cloneabl
         this.sensors = true;
         this.rules = true;
         this.checks = true;
+        this.settings = true;
+        this.credentials = true;
+        this.dictionaries = true;
+        this.patterns = true;
         this.dataSensorReadouts = true;
         this.dataCheckResults = true;
         this.dataStatistics = true;
@@ -180,6 +227,15 @@ public class SynchronizeMultipleFoldersDqoQueueJobParameters implements Cloneabl
         }
         catch (CloneNotSupportedException ex) {
             throw new DqoRuntimeException("Clone not supported", ex);
+        }
+    }
+
+    public static class SynchronizeMultipleFoldersDqoQueueJobParametersSampleFactory implements SampleValueFactory<SynchronizeMultipleFoldersDqoQueueJobParameters> {
+        @Override
+        public SynchronizeMultipleFoldersDqoQueueJobParameters createSample() {
+            SynchronizeMultipleFoldersDqoQueueJobParameters synchronizeMultipleFoldersDqoQueueJobParameters = new SynchronizeMultipleFoldersDqoQueueJobParameters();
+            synchronizeMultipleFoldersDqoQueueJobParameters.synchronizeAllFolders();
+            return synchronizeMultipleFoldersDqoQueueJobParameters;
         }
     }
 }

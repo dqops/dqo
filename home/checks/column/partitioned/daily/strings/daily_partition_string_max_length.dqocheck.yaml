@@ -1,9 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/strings/string_max_length
-  rule_name: comparison/max_value
-  help_text: Verifies that the length of string in a column does not exceed the maximum
-    accepted length. Creates a separate data quality check (and an alert) for each
-    daily partition.

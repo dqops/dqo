@@ -1,8 +1,8 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/range/max_value
   rule_name: comparison/between_floats
-  help_text: Verifies that the maximal value in a column is not outside the set range.
-    Creates a separate data quality check (and an alert) for each monthly partition.
+  help_text: Verifies that the maximum value in a column is not outside the expected
+    range. Stores a separate data quality check result for each monthly partition.

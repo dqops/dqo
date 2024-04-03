@@ -16,6 +16,7 @@
 package com.dqops.core.synchronization.filesystems.local;
 
 import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.SynchronizationRoot;
 import com.dqops.data.local.LocalDqoUserHomePathProvider;
@@ -25,7 +26,7 @@ import org.springframework.stereotype.Component;
 import java.nio.file.Path;
 
 /**
- * DQO file system that accesses local files (selected folders) in the DQO_USER_HOME.
+ * DQOps file system that accesses local files (selected folders) in the DQO_USER_HOME.
  */
 @Component
 public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchronizationFileSystemFactory {
@@ -35,7 +36,7 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
     /**
      * Default injection constructor.
      * @param localFileSystemService Local file system service.
-     * @param localDqoUserHomePathProvider Local DQO User Home path provider.
+     * @param localDqoUserHomePathProvider Local DQOps User Home path provider.
      */
     @Autowired
     public LocalSynchronizationFileSystemFactoryImpl(LocalFileSystemSynchronizationOperations localFileSystemService,
@@ -45,23 +46,26 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
     }
 
     /**
-     * Creates a DQO file system that accesses physical files on the local file system.
+     * Creates a DQOps file system that accesses physical files on the local file system.
      * @param rootType Root type (folder type).
-     * @return DQO file system that can manage local files in a selected folder.
+     * @param userIdentity User identity that identifies the data domain.
+     * @return DQOps file system that can manage local files in a selected folder.
      */
-    public SynchronizationRoot createUserHomeFolderFileSystem(DqoRoot rootType) {
-        Path absoluteLocalPathToFolder = getAbsoluteLocalPathToFolder(rootType);
-        UserHomeFileSystemSynchronizationRoot userHomeFileSystemRoot = new UserHomeFileSystemSynchronizationRoot(absoluteLocalPathToFolder);
+    @Override
+    public SynchronizationRoot createUserHomeFolderFileSystem(DqoRoot rootType, UserDomainIdentity userIdentity) {
+        Path absoluteLocalPathToFolder = getAbsoluteLocalPathToFolder(rootType, userIdentity);
+        UserHomeFileSystemSynchronizationRoot userHomeFileSystemRoot = new UserHomeFileSystemSynchronizationRoot(absoluteLocalPathToFolder, rootType);
         return new SynchronizationRoot(userHomeFileSystemRoot, this.localFileSystemService);
     }
 
     /**
      * Returns an absolute path to a selected folder inside the DQO_USER_HOME.
      * @param rootType Root type (folder type).
+     * @param userIdentity User identity that identifies the data domain.
      * @return Absolute file system path to a requested folder.
      */
-    public Path getAbsoluteLocalPathToFolder(DqoRoot rootType) {
-        Path localUserHomePath = this.localDqoUserHomePathProvider.getLocalUserHomePath();
+    public Path getAbsoluteLocalPathToFolder(DqoRoot rootType, UserDomainIdentity userIdentity) {
+        Path localUserHomePath = this.localDqoUserHomePathProvider.getLocalUserHomePath(userIdentity);
 
         switch (rootType) {
             case data_sensor_readouts:
@@ -90,6 +94,18 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
 
             case checks:
                 return localUserHomePath.resolve(BuiltInFolderNames.CHECKS);
+
+            case settings:
+                return localUserHomePath.resolve(BuiltInFolderNames.SETTINGS);
+
+            case credentials:
+                return localUserHomePath.resolve(BuiltInFolderNames.CREDENTIALS);
+
+            case dictionaries:
+                return localUserHomePath.resolve(BuiltInFolderNames.DICTIONARIES);
+
+            case patterns:
+                return localUserHomePath.resolve(BuiltInFolderNames.PATTERNS);
 
             default:
                 throw new IllegalArgumentException("Unsupported root: " +  rootType.toString());

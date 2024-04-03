@@ -53,6 +53,12 @@ public interface JobSchedulerService {
     void start(FileSystemSynchronizationReportingMode synchronizationMode, CheckRunReportingMode checkRunReportingMode);
 
     /**
+     * Stops the job scheduler, but with an option to start it again.
+     */
+    void stop();
+
+
+    /**
      * Stops the scheduler.
      */
     void shutdown();

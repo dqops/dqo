@@ -37,6 +37,7 @@ public class HistoricDataPointTimeSeriesCollector {
     private final DateTimeColumn timePeriodColumn;
     private final InstantColumn timePeriodUtcColumn;
     private final DoubleColumn actualValueColumn;
+    private final DoubleColumn expectedValueColumn;
     private final TimePeriodGradient gradient;
     private final ZoneId timeZoneId;
     private LongIndex timePeriodIndex;
@@ -55,6 +56,7 @@ public class HistoricDataPointTimeSeriesCollector {
 		this.timePeriodColumn = (DateTimeColumn) timeSeriesData.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
         this.timePeriodUtcColumn = (InstantColumn) timeSeriesData.column(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
 		this.actualValueColumn = (DoubleColumn) timeSeriesData.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        this.expectedValueColumn = (DoubleColumn) timeSeriesData.column(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
         this.gradient = gradient;
         this.timeZoneId = timeZoneId;
     }
@@ -92,15 +94,16 @@ public class HistoricDataPointTimeSeriesCollector {
             if (rowTimePeriodUtc == null) {
                 rowTimePeriodUtc = rowTimePeriodInDefaultTz;
             }
-            Duration timeZoneOffsetDuration = Duration.between(rowTimePeriodUtc, rowTimePeriodInDefaultTz); // this is the difference between the database default timezone and the DQO instance default time zone
+            Duration timeZoneOffsetDuration = Duration.between(rowTimePeriodUtc, rowTimePeriodInDefaultTz); // this is the difference between the database default timezone and the DQOps instance default time zone
 
             LocalDateTime rowTruncatedTimePeriod = LocalDateTimeTruncateUtility.truncateTimePeriod(rowTimePeriod, this.gradient);
-            Double rowActualValue = this.actualValueColumn.get(rowIndex);
+            Double rowActualValue = !this.actualValueColumn.isMissing(rowIndex) ? this.actualValueColumn.get(rowIndex) : null;
+            Double rowExpectedValue = !this.expectedValueColumn.isMissing(rowIndex) ? this.expectedValueColumn.get(rowIndex) : null;
             int timePeriodsDifference = (int)LocalDateTimePeriodUtility.calculateDifferenceInPeriodsCount(rowTruncatedTimePeriod, readoutTimestamp, this.gradient);
             ZoneOffset zoneOffsetFix = ZoneOffset.ofTotalSeconds((int) timeZoneOffsetDuration.getSeconds());
             Instant rowTimePeriodInstant = rowTruncatedTimePeriod.toInstant(zoneOffsetFix);
 
-            HistoricDataPoint historicDataPoint = new HistoricDataPoint(rowTimePeriodInstant, rowTruncatedTimePeriod, -timePeriodsDifference, rowActualValue);
+            HistoricDataPoint historicDataPoint = new HistoricDataPoint(rowTimePeriodInstant, rowTruncatedTimePeriod, -timePeriodsDifference, rowActualValue, rowExpectedValue);
             historicDataPoints[timePeriodsCount - timePeriodsDifference] = historicDataPoint;
         }
 
@@ -136,9 +139,10 @@ public class HistoricDataPointTimeSeriesCollector {
                 rowTimePeriodUtc = rowTimePeriodInDefaultTz;
             }
 
-            Double rowActualValue = this.actualValueColumn.get(rowIndex);
+            Double rowActualValue = !this.actualValueColumn.isMissing(rowIndex) ? this.actualValueColumn.get(rowIndex) : null;
+            Double rowExpectedValue = !this.expectedValueColumn.isMissing(rowIndex) ? this.expectedValueColumn.get(rowIndex) : null;
 
-            HistoricDataPoint historicDataPoint = new HistoricDataPoint(rowTimePeriodUtc, rowTimePeriod, -i - 1, rowActualValue);
+            HistoricDataPoint historicDataPoint = new HistoricDataPoint(rowTimePeriodUtc, rowTimePeriod, -i - 1, rowActualValue, rowExpectedValue);
             historicDataPoints[readoutsCount - i - 1] = historicDataPoint;
         }
 

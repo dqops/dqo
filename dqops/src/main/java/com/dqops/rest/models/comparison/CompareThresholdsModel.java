@@ -101,7 +101,7 @@ public class CompareThresholdsModel {
      * @return Default compare threshold.
      */
     public static CompareThresholdsModel createDefaultCompareThreshold() {
-        return new CompareThresholdsModel(0.0, 1.0, 5.0);
+        return new CompareThresholdsModel(0.0, 1.0, null);
     }
 
     /**

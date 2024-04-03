@@ -15,13 +15,15 @@
  */
 package com.dqops.data.readouts.services;
 
-import com.dqops.data.models.DataDeleteResult;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.readouts.models.SensorReadoutsFragmentFilter;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshot;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
 import com.dqops.data.storage.FileStorageSettings;
 import com.dqops.data.storage.ParquetPartitionMetadataService;
+import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,30 +47,32 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
     /**
      * Deletes the readouts from a table, applying specific filters to get the fragment (if necessary).
      * @param filter Filter for the readouts fragment that is of interest.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Data delete operation summary.
      */
     @Override
-    public DataDeleteResult deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter) {
+    public DeleteStoredDataResult deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter,
+                                                                       UserDomainIdentity userIdentity) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
-        Map<String, Set<String>> conditions = new HashMap<>();
+        Map<String, Set<String>> conditions = new LinkedHashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
             String columnName = kv.getKey();
             String columnValue = kv.getValue();
-            Set<String> wrappedValue = new HashSet<>(){{add(columnValue);}};
+            Set<String> wrappedValue = new LinkedHashSet<>(){{add(columnValue);}};
             conditions.put(columnName, wrappedValue);
         }
 
         if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
-            conditions.put(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
+            conditions.put(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME, new LinkedHashSet<>(filter.getColumnNames()));
         }
 
-        DataDeleteResult dataDeleteResult = new DataDeleteResult();
+        DeleteStoredDataResult deleteStoredDataResult = new DeleteStoredDataResult();
 
         FileStorageSettings fileStorageSettings = SensorReadoutsSnapshot.createSensorReadoutsStorageSettings();
-        List<String> connections = this.parquetPartitionMetadataService.listConnections(fileStorageSettings);
+        List<String> connections = this.parquetPartitionMetadataService.listConnections(fileStorageSettings, userIdentity);
         if (connections == null) {
             // No connections present.
-            return dataDeleteResult;
+            return deleteStoredDataResult;
         }
 
         List<String> filteredConnections = connections.stream()
@@ -77,7 +81,7 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
 
         for (String connectionName: filteredConnections) {
             List<PhysicalTableName> tables = this.parquetPartitionMetadataService.listTablesForConnection(
-                    connectionName, fileStorageSettings);
+                    connectionName, fileStorageSettings, userIdentity);
 
             if (tables == null) {
                 // No tables present for this connection.
@@ -86,11 +90,17 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
 
             Collection<SensorReadoutsSnapshot> sensorReadoutsSnapshots = tables.stream()
                     .filter(schemaTableName ->
-                            filter.getTableSearchFilters().getSchemaNameSearchPattern().match(schemaTableName.getSchemaName())
-                                    && filter.getTableSearchFilters().gettableNameSearchPattern().match(schemaTableName.getTableName()))
+                    {
+                        SearchPattern schemaNameSearchPattern = filter.getTableSearchFilters().getSchemaNameSearchPattern();
+                        SearchPattern tableNameSearchPattern = filter.getTableSearchFilters().getTableNameSearchPattern();
+
+                        return (schemaNameSearchPattern == null || schemaNameSearchPattern.match(schemaTableName.getSchemaName())) &&
+                                (tableNameSearchPattern == null || tableNameSearchPattern.match(schemaTableName.getTableName()));
+                    })
                     .map(tableName -> this.sensorReadoutsSnapshotFactory.createSnapshot(
-                            filter.getTableSearchFilters().getConnectionName(),
-                            tableName
+                            filter.getTableSearchFilters().getConnection(),
+                            tableName,
+                            userIdentity
                     ))
                     .collect(Collectors.toList());
 
@@ -104,13 +114,13 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
                     continue;
                 }
 
-                DataDeleteResult snapshotDataDeleteResult = currentSnapshot.getDeleteResults();
-                dataDeleteResult.concat(snapshotDataDeleteResult);
+                DeleteStoredDataResult snapshotDeleteStoredDataResult = currentSnapshot.getDeleteResults();
+                deleteStoredDataResult.concat(snapshotDeleteStoredDataResult);
 
                 currentSnapshot.save();
             }
         }
 
-        return dataDeleteResult;
+        return deleteStoredDataResult;
     }
 }

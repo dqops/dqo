@@ -61,8 +61,8 @@ public class ColumnUniquenessDistinctPercentSensorParametersSpecBigQueryTests ex
         return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "length_int", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersRecurring(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(this.sampleTableMetadata, "length_int", this.checkSpec, timeScale);
+    private SensorExecutionRunParameters getRunParametersMonitoring(CheckTimeScale timeScale) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(this.sampleTableMetadata, "length_int", this.checkSpec, timeScale);
     }
 
     private SensorExecutionRunParameters getRunParametersPartitioned(CheckTimeScale timeScale, String timeSeriesColumn) {
@@ -100,9 +100,9 @@ public class ColumnUniquenessDistinctPercentSensorParametersSpecBigQueryTests ex
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0
-                        THEN 100.0
-                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                    WHEN COUNT(%s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) 
+                    / COUNT(analyzed_table.`length_int`)
                 END AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
@@ -130,9 +130,9 @@ public class ColumnUniquenessDistinctPercentSensorParametersSpecBigQueryTests ex
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0
-                        THEN 100.0
-                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                    WHEN COUNT(%s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) 
+                    / COUNT(analyzed_table.`length_int`)
                 END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
@@ -151,16 +151,16 @@ public class ColumnUniquenessDistinctPercentSensorParametersSpecBigQueryTests ex
     }
 
     @Test
-    void renderSensor_whenRecurringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
+    void renderSensor_whenMonitoringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0
-                        THEN 100.0
-                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                    WHEN COUNT(%s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) 
+                    / COUNT(analyzed_table.`length_int`)
                 END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
@@ -186,9 +186,9 @@ public class ColumnUniquenessDistinctPercentSensorParametersSpecBigQueryTests ex
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0
-                        THEN 100.0
-                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                    WHEN COUNT(%s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) 
+                    / COUNT(analyzed_table.`length_int`)
                 END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
@@ -221,9 +221,9 @@ public class ColumnUniquenessDistinctPercentSensorParametersSpecBigQueryTests ex
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0
-                        THEN 100.0
-                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                    WHEN COUNT(%s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) 
+                    / COUNT(analyzed_table.`length_int`)
                 END AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -241,8 +241,8 @@ public class ColumnUniquenessDistinctPercentSensorParametersSpecBigQueryTests ex
     }
 
     @Test
-    void renderSensor_whenRecurringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
+    void renderSensor_whenMonitoringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
@@ -251,9 +251,9 @@ public class ColumnUniquenessDistinctPercentSensorParametersSpecBigQueryTests ex
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0
-                        THEN 100.0
-                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                    WHEN COUNT(%s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) 
+                    / COUNT(analyzed_table.`length_int`)
                 END AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
@@ -283,9 +283,9 @@ public class ColumnUniquenessDistinctPercentSensorParametersSpecBigQueryTests ex
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0
-                        THEN 100.0
-                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                    WHEN COUNT(%s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) 
+                    / COUNT(analyzed_table.`length_int`)
                 END AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1,
                 analyzed_table.`date` AS time_period,
@@ -325,9 +325,9 @@ public class ColumnUniquenessDistinctPercentSensorParametersSpecBigQueryTests ex
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0
-                        THEN 100.0
-                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                    WHEN COUNT(%s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) 
+                    / COUNT(analyzed_table.`length_int`)
                 END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
@@ -349,8 +349,8 @@ public class ColumnUniquenessDistinctPercentSensorParametersSpecBigQueryTests ex
     }
 
     @Test
-    void renderSensor_whenRecurringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
+    void renderSensor_whenMonitoringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
@@ -361,9 +361,9 @@ public class ColumnUniquenessDistinctPercentSensorParametersSpecBigQueryTests ex
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0
-                        THEN 100.0
-                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                    WHEN COUNT(%s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) 
+                    / COUNT(analyzed_table.`length_int`)
                 END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
@@ -397,9 +397,9 @@ public class ColumnUniquenessDistinctPercentSensorParametersSpecBigQueryTests ex
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0
-                        THEN 100.0
-                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                    WHEN COUNT(%s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) 
+                    / COUNT(analyzed_table.`length_int`)
                 END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,

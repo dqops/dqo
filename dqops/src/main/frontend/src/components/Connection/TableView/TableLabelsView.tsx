@@ -1,20 +1,21 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { setIsUpdatedLabels } from '../../../redux/actions/connection.actions';
 import {
   getTableLabels,
   setUpdatedLabels,
   updateTableLabels
 } from '../../../redux/actions/table.actions';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import ActionGroup from './TableActionGroup';
-import LabelsView from '../LabelsView';
-import { useParams } from "react-router-dom";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 import { CheckTypes } from "../../../shared/routes";
+import LabelsView from '../LabelsView';
+import ActionGroup from './TableActionGroup';
+import { useDecodedParams } from '../../../utils';
 
 const TableLabelsView = () => {
-  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
-  const { labels, isUpdating, isUpdatedLabels, tableBasic } = useSelector(getFirstLevelState(checkTypes));
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useDecodedParams();
+  const { labels, isUpdating, isUpdatedLabels } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
@@ -24,13 +25,14 @@ const TableLabelsView = () => {
 
   const onUpdate = async () => {
     await dispatch(
-      updateTableLabels(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, labels)
+      updateTableLabels(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, (Array.from(labels).filter(x => String(x).length !== 0) as any))
     );
     await dispatch(getTableLabels(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false));
   };
 
   const handleChange = (value: string[]) => {
     dispatch(setUpdatedLabels(checkTypes, firstLevelActiveTab, value));
+    dispatch(setIsUpdatedLabels(checkTypes, firstLevelActiveTab, true))
   };
 
   return (

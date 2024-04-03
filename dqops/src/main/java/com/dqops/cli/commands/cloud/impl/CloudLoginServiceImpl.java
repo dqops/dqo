@@ -16,6 +16,7 @@
 package com.dqops.cli.commands.cloud.impl;
 
 import com.dqops.cli.terminal.TerminalFactory;
+import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.cloud.rest.api.ApiKeyRequestApi;
 import com.dqops.cloud.rest.handler.ApiClient;
@@ -24,13 +25,16 @@ import com.dqops.core.dqocloud.accesskey.DqoCloudAccessTokenCache;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.client.DqoCloudApiClientFactory;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.browser.OpenBrowserFailedException;
 import com.dqops.utils.browser.OpenBrowserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -43,7 +47,7 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Service that will open a browser and log in to the DQO cloud.
+ * Service that will open a browser and log in to the DQOps cloud.
  */
 @Component
 @Slf4j
@@ -55,6 +59,7 @@ public class CloudLoginServiceImpl implements CloudLoginService {
     private DqoCloudApiClientFactory dqoCloudApiClientFactory;
     private DqoCloudAccessTokenCache dqoCloudAccessTokenCache;
     private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+    private DqoUserPrincipalProvider userPrincipalProvider;
 
     /**
      * Injection constructor.
@@ -62,9 +67,10 @@ public class CloudLoginServiceImpl implements CloudLoginService {
      * @param openBrowserService Open browser service.
      * @param terminalFactory Terminal factory.
      * @param dqoCloudConfigurationProperties Configuration properties.
-     * @param dqoCloudApiClientFactory DQO Cloud API client factory.
-     * @param dqoCloudAccessTokenCache DQO Cloud access key cache which must be invalidated when the api key changes.
-     * @param dqoCloudApiKeyProvider DQO Cloud API key provider (cache) that must be invalidated.
+     * @param dqoCloudApiClientFactory DQOps Cloud API client factory.
+     * @param dqoCloudAccessTokenCache DQOps Cloud access key cache which must be invalidated when the api key changes.
+     * @param dqoCloudApiKeyProvider DQOps Cloud API key provider (cache) that must be invalidated.
+     * @param userPrincipalProvider User principal provider for the local user.
      */
     @Autowired
     public CloudLoginServiceImpl(UserHomeContextFactory userHomeContextFactory,
@@ -73,7 +79,8 @@ public class CloudLoginServiceImpl implements CloudLoginService {
                                  DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
                                  DqoCloudApiClientFactory dqoCloudApiClientFactory,
                                  DqoCloudAccessTokenCache dqoCloudAccessTokenCache,
-                                 DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
+                                 DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
+                                 DqoUserPrincipalProvider userPrincipalProvider) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.openBrowserService = openBrowserService;
         this.terminalFactory = terminalFactory;
@@ -81,6 +88,7 @@ public class CloudLoginServiceImpl implements CloudLoginService {
         this.dqoCloudApiClientFactory = dqoCloudApiClientFactory;
         this.dqoCloudAccessTokenCache = dqoCloudAccessTokenCache;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
+        this.userPrincipalProvider = userPrincipalProvider;
     }
 
     /**
@@ -97,8 +105,8 @@ public class CloudLoginServiceImpl implements CloudLoginService {
             String apiKeyRequestUrl = this.dqoCloudConfigurationProperties.getApiKeyRequestUrl() + apiKeyRequest;
 
             TerminalWriter terminalWriter = this.terminalFactory.getWriter();
-            terminalWriter.writeLine("Opening the DQO Cloud API Key request, please log in or create your DQO Cloud account.");
-            terminalWriter.writeLine("DQO Cloud API Key request may be opened manually by navigating to: " + apiKeyRequestUrl);
+            terminalWriter.writeLine("Opening the DQOps Cloud API Key request, please log in or create your DQOps Cloud account.");
+            terminalWriter.writeLine("DQOps Cloud API Key request may be opened manually by navigating to: " + apiKeyRequestUrl);
             terminalWriter.writeLine("Please wait up to 30 seconds after signup/login or press any key to cancel");
 
             try {
@@ -112,7 +120,8 @@ public class CloudLoginServiceImpl implements CloudLoginService {
             Duration waitDuration = Duration.of(this.dqoCloudConfigurationProperties.getApiKeyPickupTimeoutSeconds(), ChronoUnit.SECONDS);
             Instant startTime = Instant.now();
             Instant timeoutTime = startTime.plus(waitDuration);
-            CompletableFuture<Boolean> waitForConsoleInputMono = this.terminalFactory.getReader().waitForConsoleInput(waitDuration);
+            TerminalReader terminalReader = this.terminalFactory.getReader();
+            CompletableFuture<Boolean> waitForConsoleInputMono = terminalReader.waitForConsoleInput(waitDuration, false);
 
             // now waiting for the api key...
             while (Instant.now().isBefore(timeoutTime) && !waitForConsoleInputMono.isDone()) {
@@ -121,8 +130,8 @@ public class CloudLoginServiceImpl implements CloudLoginService {
 
                     saveApiKeyInUserSettings(apiKey);
 
-                    terminalWriter.writeLine("API Key: " + apiKey);
-                    terminalWriter.writeLine("DQO Cloud API Key was retrieved and stored in the settings.");
+                    terminalWriter.writeLine("DQOps Cloud Pairing API Key: " + apiKey);
+                    terminalWriter.writeLine("DQOps Cloud Pairing API Key was retrieved and stored in the settings.");
                     waitForConsoleInputMono.cancel(true);
                     return true;
                 }
@@ -135,8 +144,10 @@ public class CloudLoginServiceImpl implements CloudLoginService {
             }
 
             if (waitForConsoleInputMono.isDone() && Objects.equals(true, waitForConsoleInputMono.get())) {
-                this.terminalFactory.getReader().tryReadChar(0, true); // read that character that was typed
-                terminalWriter.writeLine("API Key retrieval cancelled, run the \"cloud login\" command again from the shell.");
+                terminalWriter.writeLine("DQOps Cloud Pairing API Key retrieval cancelled, run the \"cloud login\" command again to get a new key or disable synchronization with DQOps Cloud.");
+
+                Boolean disableCloudSync = terminalReader.promptBoolean("Do you want to disable synchronization with DQOps Cloud?", false);
+                this.saveDisableCloudSync(disableCloudSync);
             }
         }
         catch (Exception ex) {
@@ -151,14 +162,54 @@ public class CloudLoginServiceImpl implements CloudLoginService {
      * @param apiKey API key to store.
      */
     public void saveApiKeyInUserSettings(String apiKey) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
-        SettingsSpec settingsSpec = userHome.getSettings().getSpec();
-        if (settingsSpec == null) {
-            settingsSpec = new SettingsSpec();
-            userHome.getSettings().setSpec(settingsSpec);
+        LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            userHome.getSettings().setSpec(localSettingsSpec);
         }
-        settingsSpec.setApiKey(apiKey);
+        localSettingsSpec.setApiKey(apiKey);
+        if (!Strings.isNullOrEmpty(apiKey)) {
+            localSettingsSpec.setDisableCloudSync(false);
+        }
+        userHomeContext.flush();
+
+        this.dqoCloudApiKeyProvider.invalidate();
+        this.dqoCloudAccessTokenCache.invalidate();
+    }
+
+    /**
+     * Enables synchronization with DQOps Cloud.
+     */
+    @Override
+    public void enableCloudSync() {
+        this.saveDisableCloudSync(false);
+    }
+
+    /**
+     * Disable synchronization with DQOps Cloud.
+     */
+    @Override
+    public void disableCloudSync() {
+        this.saveDisableCloudSync(true);
+    }
+
+    /**
+     * Saves an updated local settings file with a new value of the disableCloudSync flag.
+     * @param disableCloudSync The new value of the disable cloud sync flag.
+     */
+    public void saveDisableCloudSync(boolean disableCloudSync) {
+        DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
+        UserHome userHome = userHomeContext.getUserHome();
+        LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            userHome.getSettings().setSpec(localSettingsSpec);
+        }
+        localSettingsSpec.setDisableCloudSync(disableCloudSync);
         userHomeContext.flush();
 
         this.dqoCloudApiKeyProvider.invalidate();

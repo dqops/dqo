@@ -22,7 +22,8 @@ import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.SchedulingRootNode;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -46,7 +47,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, RWarning extends AbstractRuleParametersSpec, RError extends AbstractRuleParametersSpec, RFatal extends AbstractRuleParametersSpec>
-            extends AbstractSpec implements Cloneable {
+            extends AbstractSpec implements Cloneable, SchedulingRootNode {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("parameters", o -> o.getParameters());
@@ -62,14 +63,14 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private RecurringScheduleSpec scheduleOverride;
+    private MonitoringScheduleSpec scheduleOverride;
 
     @JsonPropertyDescription("Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private CommentsListSpec comments;
 
-    @JsonPropertyDescription("Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.")
+    @JsonPropertyDescription("Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
@@ -77,7 +78,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean excludeFromKpi;
 
-    @JsonPropertyDescription("Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.")
+    @JsonPropertyDescription("Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean includeInSla;
 
@@ -85,7 +86,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String qualityDimension;
 
-    @JsonPropertyDescription("Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.")
+    @JsonPropertyDescription("Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String displayName;
 
@@ -96,10 +97,16 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     private String dataGrouping;
 
     /**
+     * True when this check was copied from the configuration of the default observability checks and is not stored in the table's YAML file (it is transient).
+     */
+    @JsonIgnore
+    private boolean defaultCheck;
+
+    /**
      * Returns the schedule configuration for running the checks automatically.
      * @return Schedule configuration.
      */
-    public RecurringScheduleSpec getScheduleOverride() {
+    public MonitoringScheduleSpec getScheduleOverride() {
         return scheduleOverride;
     }
 
@@ -107,7 +114,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * Stores a new schedule configuration.
      * @param scheduleOverride New schedule configuration.
      */
-    public void setScheduleOverride(RecurringScheduleSpec scheduleOverride) {
+    public void setScheduleOverride(MonitoringScheduleSpec scheduleOverride) {
         setDirtyIf(!Objects.equals(this.scheduleOverride, scheduleOverride));
         this.scheduleOverride = scheduleOverride;
         propagateHierarchyIdToField(scheduleOverride, "schedule_override");
@@ -132,7 +139,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     }
 
     /**
-     * Checks if the data quality check (or recurring) is disabled.
+     * Checks if the data quality check (or monitoring) is disabled.
      * @return True when the check is disabled.
      */
     public boolean isDisabled() {
@@ -230,6 +237,23 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      */
     public void setDataGrouping(String dataGrouping) {
         this.dataGrouping = dataGrouping;
+    }
+
+    /**
+     * Returns true if this check is an observability check that was added as a transient check, because it is configured in the default observability checks.
+     * @return True when it is a default check (not persisted in YAML), false when it is a materialized check that is configured in the table.
+     */
+    public boolean isDefaultCheck() {
+        return defaultCheck;
+    }
+
+    /**
+     * Sets a flag that this check is a default observability check.
+     * @param defaultCheck True when it is a default check.
+     */
+    public void setDefaultCheck(boolean defaultCheck) {
+        this.setDirtyIf(this.defaultCheck != defaultCheck);
+        this.defaultCheck = defaultCheck;
     }
 
     /**
@@ -376,8 +400,17 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     }
 
     /**
+     * Returns an alternative check's friendly name that is shown on the check editor. It is used to show "empty table" name next to profile_row_count check.
+     * @return An alternative name, or null when the check has no alternative name to show.
+     */
+    @JsonIgnore
+    public String getFriendlyName() {
+        return null;
+    }
+
+    /**
      * Returns the data quality check name (YAML compliant) that is used as a field name on a check category class.
-     * @return Check category name, for example "row_count", etc.
+     * @return Check category name, for example, "row_count", etc.
      */
     @JsonIgnore
     public String getCheckName() {
@@ -401,6 +434,16 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
         }
 
         return Objects.equals(hierarchyId.get(hierarchyId.size() - 3), AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME);
+    }
+
+    /**
+     * Returns true if this is a standard data quality check that is always shown on the data quality checks editor screen.
+     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
+     * @return True when it is a standard check, false when it is an advanced check. The default value is 'false' (all checks are non-standard, advanced checks).
+     */
+    @JsonIgnore
+    public boolean isStandard() {
+        return false;
     }
 
     /**

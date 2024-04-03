@@ -25,14 +25,16 @@ public interface SynchronizationStatusTracker {
      * Updates the folder synchronization status.
      *
      * @param folderRoot Folder type.
+     * @param dataDomain Data domain name.
      * @param newStatus  New synchronization status.
      */
-    void changeFolderSynchronizationStatus(DqoRoot folderRoot, FolderSynchronizationStatus newStatus);
+    void changeFolderSynchronizationStatus(DqoRoot folderRoot, String dataDomain, FolderSynchronizationStatus newStatus);
 
     /**
-     * Returns the current folder synchronization status for each folder that is synchronized do DQO Cloud.
+     * Returns the current folder synchronization status for each folder that is synchronized do DQOps Cloud.
      *
+     * @param dataDomain Data domain name.
      * @return Current folder synchronization status.
      */
-    CloudSynchronizationFoldersStatusModel getCurrentSynchronizationStatus();
+    CloudSynchronizationFoldersStatusModel getCurrentSynchronizationStatus(String dataDomain);
 }

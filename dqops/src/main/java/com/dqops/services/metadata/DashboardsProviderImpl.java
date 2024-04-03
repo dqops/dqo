@@ -37,7 +37,7 @@ public class DashboardsProviderImpl implements DashboardsProvider {
 
     /**
      * Default injection constructor.
-     * @param dqoHomeContextFactory DQO Home context factory, returns the default implementation of the DQO home.
+     * @param dqoHomeContextFactory DQOps Home context factory, returns the default implementation of the DQOps home.
      */
     @Autowired
     public DashboardsProviderImpl(DqoHomeContextFactory dqoHomeContextFactory) {
@@ -56,9 +56,10 @@ public class DashboardsProviderImpl implements DashboardsProvider {
                 DashboardsFolderListSpec defaultTemplatedFolderList = dqoHomeContext.getDqoHome().getDashboards().getSpec();
                 DashboardsFolderListSpec expandedDashboardTree = defaultTemplatedFolderList.createExpandedDashboardTree();
 
-                for (DashboardsFolderSpec rootDashboardFolder : expandedDashboardTree) {
-                    rootDashboardFolder.sort();
-                }
+                // disable sorting, we will show the original order
+//                for (DashboardsFolderSpec rootDashboardFolder : expandedDashboardTree) {
+//                    rootDashboardFolder.sort();
+//                }
                 this.dashboardFolderTree = expandedDashboardTree;
             }
 

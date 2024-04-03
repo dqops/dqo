@@ -1,25 +1,25 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import {
-  CheckResultDetailedSingleModel,
-  CheckResultsDetailedDataModel
-} from '../../../api';
-import Select from '../../Select';
-import { Table } from '../../Table';
-import { useTree } from '../../../contexts/treeContext';
-import moment from 'moment';
-import SvgIcon from '../../SvgIcon';
-import clsx from 'clsx';
-import { ChartView } from './ChartView';
-import { getCheckResults } from '../../../redux/actions/source.actions';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { CheckTypes } from '../../../shared/routes';
-import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { IconButton } from '@material-tailwind/react';
+import clsx from 'clsx';
+import moment from 'moment';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import {
+  CheckResultEntryModel,
+  CheckResultsListModel
+} from '../../../api';
+import { useTree } from '../../../contexts/treeContext';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { getCheckResults } from '../../../redux/actions/source.actions';
+import { getFirstLevelActiveTab } from '../../../redux/selectors';
+import { CheckTypes } from '../../../shared/routes';
+import { getLocalDateInUserTimeZone, useDecodedParams } from '../../../utils';
+import Select from '../../Select';
+import SvgIcon from '../../SvgIcon';
+import { Table } from '../../Table';
+import { ChartView } from './ChartView';
 
 interface CheckResultsTabProps {
-  results: CheckResultsDetailedDataModel[];
+  results: CheckResultsListModel[];
   dataGroup?: string;
   month?: string;
   onChangeMonth: (month: string) => void;
@@ -58,10 +58,10 @@ const CheckResultsTab = ({
     schema: string;
     table: string;
     column: string;
-  } = useParams();
+  } = useDecodedParams();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
-  const getSeverityClass = (row: CheckResultDetailedSingleModel) => {
+  const getSeverityClass = (row: CheckResultEntryModel) => {
     if (row.severity === 1) return 'bg-yellow-100';
     if (row.severity === 2) return 'bg-orange-100';
     if (row.severity === 3) return 'bg-red-100';
@@ -228,12 +228,12 @@ const CheckResultsTab = ({
       )
     },
     {
-      label: 'Include In Kpi',
+      label: 'Include In KPI',
       value: 'includeInKpi',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
     },
     {
-      label: 'Include In Sla',
+      label: 'Include In SLA (Data Contract)',
       value: 'includeInSla',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
     },
@@ -296,9 +296,12 @@ const CheckResultsTab = ({
 
   const allResults = results
     .map((result) =>
-      (result.singleCheckResults || []).map((item) => ({
+      (result.checkResultEntries || [])
+      .map((item) => ({
         ...item,
-        checkName: result.checkName
+        checkName: results[0].checkName,
+        executedAt: Number(moment(getLocalDateInUserTimeZone(new Date(String(item.executedAt)))).format('YYYY-MM-DD HH:mm:ss')),
+        timePeriod: item.timePeriod?.replace(/T/g, " ")
       }))
     )
     .reduce((arr, el) => [...arr, ...el], []);
@@ -310,7 +313,7 @@ const CheckResultsTab = ({
     >
       <div className="flex space-x-8 items-center">
         <div className="flex space-x-4 items-center">
-          <div className="text-sm">Time series</div>
+          <div className="text-sm">Data group (time series)</div>
           <Select
             value={ dataGroup || results[0]?.dataGroup }
             options={
@@ -372,7 +375,7 @@ const CheckResultsTab = ({
         </div>
       </div>
       {results.length === 0 && (
-        <div className="text-gray-700 mt-5">No Data</div>
+        <div className="text-gray-700 mt-5 text-sm">No Data</div>
       )}
 
       {mode === 'table' && (
@@ -381,9 +384,11 @@ const CheckResultsTab = ({
             <Table
               className="mt-4 w-full"
               columns={columns}
-              data={(results[0].singleCheckResults || []).map((item) => ({
+              data={(results[0].checkResultEntries || []).map((item) => ({
                 ...item,
-                checkName: results[0].checkName
+                checkName: results[0].checkName,
+                executedAt: moment(getLocalDateInUserTimeZone(new Date(String(item.executedAt)))).format('YYYY-MM-DD HH:mm:ss'),
+                timePeriod: item.timePeriod?.replace(/T/g, " ")
               }))}
               emptyMessage="No Data"
               getRowClass={getSeverityClass}

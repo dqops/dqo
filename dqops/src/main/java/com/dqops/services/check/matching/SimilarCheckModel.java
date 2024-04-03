@@ -33,7 +33,7 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "SimilarCheckModel", description = "Model that identifies a similar check in another category or another type of check (recurring, partition).")
+@ApiModel(value = "SimilarCheckModel", description = "Model that identifies a similar check in another category or another type of check (monitoring, partition).")
 public class SimilarCheckModel {
     /**
      * The check target (table or column).
@@ -48,9 +48,9 @@ public class SimilarCheckModel {
     private CheckType checkType;
 
     /**
-     * The time scale (daily, monthly). The time scale is optional and could be null (for profiling checks).
+     * The time scale (daily, monthly). The time scale is optional and can be null (for profiling checks).
      */
-    @JsonPropertyDescription("The time scale (daily, monthly). The time scale is optional and could be null (for profiling checks).")
+    @JsonPropertyDescription("The time scale (daily, monthly). The time scale is optional and can be null (for profiling checks).")
     private CheckTimeScale timeScale;
 
     /**
@@ -62,7 +62,7 @@ public class SimilarCheckModel {
     /**
      * The similar check name in another category.
      */
-    @JsonPropertyDescription("The similar check name in another category.")
+    @JsonPropertyDescription("Similar check name in another category.")
     private String checkName;
 
     /**

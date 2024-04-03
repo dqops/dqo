@@ -1,5 +1,5 @@
 ///
-/// Copyright © 2021 DQOps (support@dqops.com)
+/// Copyright © 2024 DQOps (support@dqops.com)
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
@@ -17,13 +17,14 @@
 import { SOURCE_ACTION } from '../types';
 import { CheckTypes } from '../../shared/routes';
 import {
-  CheckResultsDetailedDataModel,
-  ErrorsDetailedDataModel,
+  CheckResultsListModel,
+  ErrorsListModel,
   ConnectionIncidentGroupingSpec,
-  SensorReadoutsDetailedDataModel,
+  SensorReadoutsListModel,
   CheckModel,
   CheckSearchFiltersCheckTypeEnum,
-  TableIncidentGroupingSpec
+  TableIncidentGroupingSpec,
+  CheckTemplate
 } from '../../api';
 import { Dispatch } from 'redux';
 import { AxiosResponse } from 'axios';
@@ -34,6 +35,7 @@ import {
   SensorReadoutsApi,
   TableApiClient
 } from '../../services/apiClient';
+import { IFilterTemplate } from '../../shared/constants';
 
 export const addFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   type: SOURCE_ACTION.ADD_FIRST_LEVEL_TAB,
@@ -68,14 +70,16 @@ export const setCheckResults = (
   checkType: CheckTypes,
   activeTab: string,
   checkName: string,
-  checkResults: CheckResultsDetailedDataModel[]
+  comparisonName: string,
+  checkResults: CheckResultsListModel[]
 ) => ({
   type: SOURCE_ACTION.SET_CHECK_RESULTS,
   checkType,
   activeTab,
   data: {
     checkName,
-    checkResults
+    checkResults,
+    comparisonName
   }
 });
 
@@ -83,14 +87,16 @@ export const setSensorReadouts = (
   checkType: CheckTypes,
   activeTab: string,
   checkName: string,
-  sensorReadouts: SensorReadoutsDetailedDataModel[]
+  comparisonName: string,
+  sensorReadouts: SensorReadoutsListModel[]
 ) => ({
   type: SOURCE_ACTION.SET_SENSOR_READOUTS,
   checkType,
   activeTab,
   data: {
     checkName,
-    sensorReadouts
+    sensorReadouts,
+    comparisonName
   }
 });
 
@@ -98,7 +104,8 @@ export const setSensorErrors = (
   checkType: CheckTypes,
   activeTab: string,
   checkName: string,
-  errors: ErrorsDetailedDataModel[]
+  comparisonName: string,
+  errors: ErrorsListModel[]
 ) => {
   return {
     type: SOURCE_ACTION.SET_SENSOR_ERRORS,
@@ -106,7 +113,8 @@ export const setSensorErrors = (
     activeTab,
     data: {
       checkName,
-      sensorErrors: errors
+      sensorErrors: errors,
+      comparisonName
     }
   };
 };
@@ -250,7 +258,7 @@ export const getCheckResultsSuccess = (
   checkType: CheckTypes,
   activeTab: string,
   checkName: string,
-  checkResults: CheckResultsDetailedDataModel[]
+  checkResults: CheckResultsListModel[]
 ) => ({
   type: SOURCE_ACTION.GET_CHECK_RESULTS_SUCCESS,
   checkType,
@@ -306,23 +314,26 @@ export const getCheckResults =
     dispatch(getCheckResultsRequest(checkType, activeTab));
 
     const successCallback = (
-      res: AxiosResponse<CheckResultsDetailedDataModel[]>
+      res: AxiosResponse<CheckResultsListModel[]>
     ) => {
+      const filteredChecks = [...res.data]
+
       dispatch(
         getCheckResultsSuccess(
           checkType,
           activeTab,
           checkName,
-          res.data.filter((item) => item.checkName === checkName)
-        )
-      );
-
+          filteredChecks ?? []
+          )
+          );
+          
       dispatch(
         setCheckResults(
           checkType,
           activeTab,
           checkName,
-          res.data.filter((item) => item.checkName === checkName)
+          comparisonName ?? "",
+          filteredChecks ?? []
         )
       );
     };
@@ -346,8 +357,8 @@ export const getCheckResults =
           )
             .then(successCallback)
             .catch(errCallback);
-        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-          CheckResultApi.getColumnRecurringChecksResults(
+        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+          CheckResultApi.getColumnMonitoringChecksResults(
             connection,
             schema,
             table,
@@ -396,8 +407,8 @@ export const getCheckResults =
           )
             .then(successCallback)
             .catch(errCallback);
-        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-          CheckResultApi.getTableRecurringChecksResults(
+        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+          CheckResultApi.getTableMonitoringChecksResults(
             connection,
             schema,
             table,
@@ -446,7 +457,7 @@ export const getCheckReadoutsSuccess = (
   checkType: CheckTypes,
   activeTab: string,
   checkName: string,
-  checkResults: CheckResultsDetailedDataModel[]
+  checkResults: CheckResultsListModel[]
 ) => ({
   type: SOURCE_ACTION.GET_CHECK_READOUTS_SUCCESS,
   checkType,
@@ -503,18 +514,23 @@ export const getCheckReadouts =
     dispatch(getCheckReadoutsRequest(checkType, activeTab));
 
     const successCallback = (
-      res: AxiosResponse<SensorReadoutsDetailedDataModel[]>
+      res: AxiosResponse<SensorReadoutsListModel[]>
     ) => {
+      const sensors = [...res.data]
+
+      if (sensors && sensors[0] && sensors[0].sensorReadoutEntries && comparisonName && comparisonName.length > 0) {
+        sensors[0].sensorReadoutEntries = sensors[0].sensorReadoutEntries.filter(entry => entry.tableComparison === comparisonName);
+      }
+      
+      const filteredSensors = sensors.filter((item) => item.checkName === checkName)
+
       dispatch(
         setSensorReadouts(
           checkType,
           activeTab,
           checkName,
-          res.data.filter(
-            (item) =>
-              item.singleSensorReadouts &&
-              item.singleSensorReadouts[0]?.checkName === checkName
-          )
+          comparisonName ?? '',
+          filteredSensors ?? []
         )
       );
     };
@@ -538,8 +554,8 @@ export const getCheckReadouts =
         )
           .then(successCallback)
           .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-        SensorReadoutsApi.getColumnRecurringSensorReadouts(
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        SensorReadoutsApi.getColumnMonitoringSensorReadouts(
           connection,
           schema,
           table,
@@ -586,8 +602,8 @@ export const getCheckReadouts =
         )
           .then(successCallback)
           .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-        SensorReadoutsApi.getTableRecurringSensorReadouts(
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        SensorReadoutsApi.getTableMonitoringSensorReadouts(
           connection,
           schema,
           table,
@@ -633,7 +649,7 @@ export const getCheckErrorsSuccess = (
   checkType: CheckTypes,
   activeTab: string,
   checkName: string,
-  checkResults: CheckResultsDetailedDataModel[]
+  checkResults: CheckResultsListModel[]
 ) => ({
   type: SOURCE_ACTION.GET_CHECK_ERROR_SUCCESS,
   checkType,
@@ -688,13 +704,22 @@ export const getCheckErrors =
   (dispatch: any) => {
     dispatch(getCheckErrorsRequest(checkType, activeTab));
 
-    const successCallback = (res: AxiosResponse<ErrorsDetailedDataModel[]>) => {
+    const successCallback = (res: AxiosResponse<ErrorsListModel[]>) => {
+      const errors = [...res.data]
+
+      if (errors && errors[0] && errors[0].errorEntries && comparisonName && comparisonName.length > 0) {
+        errors[0].errorEntries = errors[0].errorEntries.filter((item) => item.tableComparison === comparisonName)
+      }
+
+      const filteredErrors = errors.filter((item) => item.checkName === checkName)
+
       dispatch(
         setSensorErrors(
           checkType,
           activeTab,
           checkName,
-          res.data.filter((item) => item.checkName === checkName)
+          comparisonName ?? '',
+          filteredErrors ?? []
         )
       );
     };
@@ -718,8 +743,8 @@ export const getCheckErrors =
         )
           .then(successCallback)
           .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-        ErrorsApi.getColumnRecurringErrors(
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        ErrorsApi.getColumnMonitoringErrors(
           connection,
           schema,
           table,
@@ -766,8 +791,8 @@ export const getCheckErrors =
         )
           .then(successCallback)
           .catch(errCallback);
-      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.recurring) {
-        ErrorsApi.getTableRecurringErrors(
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        ErrorsApi.getTableMonitoringErrors(
           connection,
           schema,
           table,
@@ -948,3 +973,28 @@ export const closeCheck = (
   activeTab,
   data: checkName
 });
+
+export const setMultiCheckFilters = (
+  checkType: CheckTypes,
+  activeTab: string,
+  multiCheckFilters: IFilterTemplate,
+  timeScale: 'daily' | 'monthly' | 'advanced'
+) => ({
+  type: SOURCE_ACTION.SET_MULTICHECK_FILTERS,
+  data: {[timeScale]: multiCheckFilters},
+  activeTab,
+  checkType,
+})
+
+export const setMultiCheckSearchedChecks = (
+  checkType: CheckTypes,
+  activeTab: string,
+  multiCheckSearchedChecks: CheckTemplate[],
+  timeScale: 'daily' | 'monthly' | 'advanced'
+) => ({
+  type: SOURCE_ACTION.SET_MULTICHECK_SEARCHED_CHECKS,
+  data: {[timeScale]: multiCheckSearchedChecks},
+  activeTab,
+  checkType,
+  timeScale 
+})

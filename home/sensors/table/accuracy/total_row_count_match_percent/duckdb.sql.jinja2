@@ -1,0 +1,10 @@
+{% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+
+SELECT
+    (SELECT
+        COUNT(*)
+    FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+    ) AS expected_value,
+    COUNT(*) AS actual_value
+FROM {{ lib.render_target_table() }} AS analyzed_table
+{{- lib.render_where_clause() -}}

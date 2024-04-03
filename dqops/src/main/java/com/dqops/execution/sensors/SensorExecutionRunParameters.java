@@ -22,6 +22,8 @@ import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.execution.checks.EffectiveSensorRuleNames;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
+import com.dqops.metadata.sources.fileformat.FileFormatSpec;
+import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -98,7 +100,7 @@ public class SensorExecutionRunParameters {
      * @param check Check specification (when a quality check is executed).
      * @param profiler Profiler specification (when a profiler is executed).
      * @param effectiveSensorRuleNames A pair of effective sensor names and rule names. The sensor name and rule name are retrieved from the check definition (for custom checks) or from the sensor parameters and rule parameters for built-in checks.
-     * @param checkType Check type (profiling, recurring, partitioned).
+     * @param checkType Check type (profiling, monitoring, partitioned).
      * @param timeSeries Effective time series configuration.
      * @param timeWindowFilter Time window filter (optional), configures the absolute time range of data to analyze and/or the time window (recent days/months) for incremental partition checks.
      * @param dataGroupings Effective data groupings configuration.
@@ -288,7 +290,7 @@ public class SensorExecutionRunParameters {
     }
 
     /**
-     * Returns the check type (profiling, recurring, partitioned).
+     * Returns the check type (profiling, monitoring, partitioned).
      * @return Check type.
      */
     public CheckType getCheckType() {
@@ -296,7 +298,7 @@ public class SensorExecutionRunParameters {
     }
 
     /**
-     * Sets the check type (profiling, recurring, partitioned).
+     * Sets the check type (profiling, monitoring, partitioned).
      * @param checkType Check type.
      */
     public void setCheckType(CheckType checkType) {
@@ -554,5 +556,50 @@ public class SensorExecutionRunParameters {
             this.additionalFilters = new ArrayList<>();
         }
         this.additionalFilters.add(filter);
+    }
+
+    /**
+     * Returns a string representation of the object.
+     * The output describes the target connection, table, column, check, sensor.
+     */
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (this.check != null) {
+            stringBuilder.append("Check ");
+            stringBuilder.append(this.check.getHierarchyId() != null ? this.check.getHierarchyId().toString() : "");
+        } else if (this.profiler != null) {
+            stringBuilder.append("Statistics collector ");
+            stringBuilder.append(this.profiler.getHierarchyId() != null ? this.profiler.getHierarchyId().toString() : "");
+        } else {
+            stringBuilder.append("Sensor ");
+        }
+
+        if (this.connection != null) {
+            stringBuilder.append(", on connection: ");
+            stringBuilder.append(this.connection.getConnectionName());
+        }
+
+        if (this.table != null) {
+            stringBuilder.append(", table: ");
+            stringBuilder.append(this.table.getPhysicalTableName());
+        }
+
+        if (this.column != null) {
+            stringBuilder.append(", column: ");
+            stringBuilder.append(this.column.getColumnName());
+        }
+
+        // todo: more and better info
+
+        if (this.connection != null && this.connection.getDuckdb() != null) {
+            FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(this.connection.getDuckdb(), this.table);
+            if (fileFormatSpec != null) {
+                stringBuilder.append(", file format: ");
+                stringBuilder.append(fileFormatSpec.toString());
+            }
+        }
+
+        return stringBuilder.toString();
     }
 }

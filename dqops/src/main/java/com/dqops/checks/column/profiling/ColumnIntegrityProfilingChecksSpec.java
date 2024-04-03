@@ -16,10 +16,15 @@
 package com.dqops.checks.column.profiling;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyMatchPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyNotMatchCountCheckSpec;
+import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityLookupKeyNotFoundCountCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -37,51 +42,51 @@ import java.util.Objects;
 public class ColumnIntegrityProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnIntegrityProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("profile_foreign_key_not_match_count", o -> o.profileForeignKeyNotMatchCount);
-            put("profile_foreign_key_match_percent", o -> o.profileForeignKeyMatchPercent);
+            put("profile_lookup_key_not_found", o -> o.profileLookupKeyNotFound);
+            put("profile_lookup_key_found_percent", o -> o.profileLookupKeyFoundPercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count.")
-    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec profileForeignKeyNotMatchCount;
+    @JsonPropertyDescription("Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys.")
+    private ColumnIntegrityLookupKeyNotFoundCountCheckSpec profileLookupKeyNotFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count.")
-    private ColumnIntegrityForeignKeyMatchPercentCheckSpec profileForeignKeyMatchPercent;
+    @JsonPropertyDescription("Measures the percentage of valid values that are present in a dictionary table. Joins this table to a dictionary table using an outer join.")
+    private ColumnIntegrityForeignKeyMatchPercentCheckSpec profileLookupKeyFoundPercent;
 
     /**
      * Returns an integrity value not match count check specification.
      * @return Integrity value not match count check specification.
      */
-    public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getProfileForeignKeyNotMatchCount() {
-        return profileForeignKeyNotMatchCount;
+    public ColumnIntegrityLookupKeyNotFoundCountCheckSpec getProfileLookupKeyNotFound() {
+        return profileLookupKeyNotFound;
     }
 
     /**
      * Sets integrity value not match count check specification.
-     * @param profileForeignKeyNotMatchCount Integrity value not match count check specification.
+     * @param profileLookupKeyNotFound Integrity value not match count check specification.
      */
-    public void setProfileForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec profileForeignKeyNotMatchCount) {
-        this.setDirtyIf(!Objects.equals(this.profileForeignKeyNotMatchCount, profileForeignKeyNotMatchCount));
-        this.profileForeignKeyNotMatchCount = profileForeignKeyNotMatchCount;
-        propagateHierarchyIdToField(profileForeignKeyNotMatchCount, "profile_foreign_key_not_match_count");
+    public void setProfileLookupKeyNotFound(ColumnIntegrityLookupKeyNotFoundCountCheckSpec profileLookupKeyNotFound) {
+        this.setDirtyIf(!Objects.equals(this.profileLookupKeyNotFound, profileLookupKeyNotFound));
+        this.profileLookupKeyNotFound = profileLookupKeyNotFound;
+        propagateHierarchyIdToField(profileLookupKeyNotFound, "profile_lookup_key_not_found");
     }
 
     /**
      * Returns an integrity value match percent check specification.
      * @return Integrity value match percent check specification.
      */
-    public ColumnIntegrityForeignKeyMatchPercentCheckSpec getProfileForeignKeyMatchPercent() {
-        return profileForeignKeyMatchPercent;
+    public ColumnIntegrityForeignKeyMatchPercentCheckSpec getProfileLookupKeyFoundPercent() {
+        return profileLookupKeyFoundPercent;
     }
 
     /**
      * Sets integrity value match percent check specification.
-     * @param profileForeignKeyMatchPercent Integrity value match percent check specification.
+     * @param profileLookupKeyFoundPercent Integrity value match percent check specification.
      */
-    public void setProfileForeignKeyMatchPercent(ColumnIntegrityForeignKeyMatchPercentCheckSpec profileForeignKeyMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileForeignKeyMatchPercent, profileForeignKeyMatchPercent));
-        this.profileForeignKeyMatchPercent = profileForeignKeyMatchPercent;
-        propagateHierarchyIdToField(profileForeignKeyMatchPercent, "profile_foreign_key_match_percent");
+    public void setProfileLookupKeyFoundPercent(ColumnIntegrityForeignKeyMatchPercentCheckSpec profileLookupKeyFoundPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileLookupKeyFoundPercent, profileLookupKeyFoundPercent));
+        this.profileLookupKeyFoundPercent = profileLookupKeyFoundPercent;
+        propagateHierarchyIdToField(profileLookupKeyFoundPercent, "profile_lookup_key_found_percent");
     }
 
     /**
@@ -92,5 +97,49 @@ public class ColumnIntegrityProfilingChecksSpec extends AbstractCheckCategorySpe
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Gets the check target appropriate for all checks in this category.
+     *
+     * @return Corresponding check target.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return CheckTarget.column;
+    }
+
+    /**
+     * Gets the check type appropriate for all checks in this category.
+     *
+     * @return Corresponding check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.profiling;
+    }
+
+    /**
+     * Gets the check timescale appropriate for all checks in this category.
+     *
+     * @return Corresponding check timescale.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return null;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.ANY;
     }
 }

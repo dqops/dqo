@@ -17,6 +17,7 @@ package com.dqops.cli.commands.data;
 
 import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.ICommand;
+import com.dqops.cli.completion.completedcommands.IConnectionNameCommand;
 import com.dqops.cli.completion.completers.ConnectionNameCompleter;
 import com.dqops.cli.completion.completers.FullTableNameCompleter;
 import com.dqops.core.jobqueue.DqoJobQueue;
@@ -25,6 +26,8 @@ import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.RepairStoredDataQueueJob;
 import com.dqops.core.jobqueue.jobs.data.RepairStoredDataQueueJobParameters;
 import com.dqops.core.jobqueue.jobs.data.RepairStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -37,9 +40,10 @@ import picocli.CommandLine;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "repair", header = "Verify integrity of parquet files used to store data and removes corrupted files", description = "Verify integrity of parquet files used to store data and removes corrupted files. Be careful when using this command, as it permanently deletes the selected data and cannot be undone.")
-public class DataRepairCliCommand extends BaseCommand implements ICommand {
+public class DataRepairCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
     private DqoJobQueue dqoJobQueue;
     private DqoQueueJobFactory dqoQueueJobFactory;
+    private DqoUserPrincipalProvider principalProvider;
 
     public DataRepairCliCommand() {
     }
@@ -48,13 +52,25 @@ public class DataRepairCliCommand extends BaseCommand implements ICommand {
      * Dependency injection constructor.
      * @param dqoJobQueue Job queue.
      * @param dqoQueueJobFactory Job queue factory.
+     * @param principalProvider Principal provider.
      */
     @Autowired
     public DataRepairCliCommand(DqoJobQueue dqoJobQueue,
-                                DqoQueueJobFactory dqoQueueJobFactory) {
+                                DqoQueueJobFactory dqoQueueJobFactory,
+                                DqoUserPrincipalProvider principalProvider) {
         this.dqoJobQueue = dqoJobQueue;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
+        this.principalProvider = principalProvider;
     }
+
+    @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name",
+            completionCandidates = ConnectionNameCompleter.class,
+            required = true)
+    private String connection;
+
+    @CommandLine.Option(names = {"-t", "--table", "--full-table-name"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'",
+            completionCandidates = FullTableNameCompleter.class)
+    private String table;
 
     @CommandLine.Option(names = {"-er", "--errors"}, description = "Repair the execution errors")
     private boolean repairErrors = false;
@@ -68,15 +84,22 @@ public class DataRepairCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"-sr", "--sensor-readouts"}, description = "Repair the sensor readouts")
     private boolean repairSensorReadouts = false;
 
-    @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name",
-            completionCandidates = ConnectionNameCompleter.class,
-            required = true)
-    private String connection;
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'",
-            completionCandidates = FullTableNameCompleter.class)
-    private String table;
+    /**
+     * Gets the connection name.
+     * @return Connection name.
+     */
+    public String getConnection() {
+        return connection;
+    }
 
+    /**
+     * Sets the connection name.
+     * @param connection Connection name.
+     */
+    public void setConnection(String connection) {
+        this.connection = connection;
+    }
 
     protected RepairStoredDataQueueJobParameters createRepairParameters() {
         RepairStoredDataQueueJobParameters repairStoredDataQueueJobParameters = new RepairStoredDataQueueJobParameters(
@@ -113,7 +136,8 @@ public class DataRepairCliCommand extends BaseCommand implements ICommand {
 
         RepairStoredDataQueueJob repairStoredDataJob = this.dqoQueueJobFactory.createRepairStoredDataJob();
         repairStoredDataJob.setRepairParameters(repairParameters);
-        PushJobResult<RepairStoredDataQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(repairStoredDataJob);
+        DqoUserPrincipal principal = this.principalProvider.getLocalUserPrincipal();
+        PushJobResult<RepairStoredDataQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(repairStoredDataJob, principal);
         RepairStoredDataQueueJobResult jobResult = pushJobResult.getFinishedFuture().get();
         return 0;
     }

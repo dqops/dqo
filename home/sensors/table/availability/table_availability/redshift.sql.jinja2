@@ -1,9 +1,6 @@
 {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
 SELECT
-    CASE
-       WHEN COUNT(*) > 0 THEN COUNT(*)
-       ELSE 1.0
-    END AS actual_value
+    0.0 AS actual_value
     {{- lib.render_time_dimension_projection('tab_scan') }}
 FROM
     (

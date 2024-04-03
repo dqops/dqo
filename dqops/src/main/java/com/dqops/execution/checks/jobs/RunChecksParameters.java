@@ -19,10 +19,13 @@ import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.checks.progress.SilentCheckExecutionProgressListener;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.EqualsAndHashCode;
 
@@ -32,6 +35,7 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(value = "RunChecksParameters", description = "Run checks configuration, specifies the target checks that should be executed and an optional time window.")
 @EqualsAndHashCode(callSuper = false)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class RunChecksParameters implements Cloneable {
     /**
      * Target data quality checks filter.
@@ -56,13 +60,14 @@ public class RunChecksParameters implements Cloneable {
      * Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.
      */
     @JsonPropertyDescription("Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean dummyExecution;
 
     /**
      * The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
      */
     @JsonPropertyDescription("The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.")
-    private RunChecksJobResult runChecksResult;
+    private RunChecksResult runChecksResult;
 
     /**
      * Default constructor.
@@ -155,7 +160,7 @@ public class RunChecksParameters implements Cloneable {
      * Returns the result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
      * @return The job result object.
      */
-    public RunChecksJobResult getRunChecksResult() {
+    public RunChecksResult getRunChecksResult() {
         return runChecksResult;
     }
 
@@ -163,7 +168,7 @@ public class RunChecksParameters implements Cloneable {
      * Sets the result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
      * @param runChecksResult The new job result object.
      */
-    public void setRunChecksResult(RunChecksJobResult runChecksResult) {
+    public void setRunChecksResult(RunChecksResult runChecksResult) {
         this.runChecksResult = runChecksResult;
     }
 
@@ -177,6 +182,16 @@ public class RunChecksParameters implements Cloneable {
         }
         catch (CloneNotSupportedException ex) {
             throw new DqoRuntimeException("Clone not supported", ex);
+        }
+    }
+
+    public static class RunChecksParametersSampleFactory implements SampleValueFactory<RunChecksParameters> {
+        @Override
+        public RunChecksParameters createSample() {
+            RunChecksParameters runChecksParameters = new RunChecksParameters();
+            runChecksParameters.setCheckSearchFilters(new CheckSearchFilters.CheckSearchFiltersSampleFactory().createSample());
+
+            return runChecksParameters;
         }
     }
 }

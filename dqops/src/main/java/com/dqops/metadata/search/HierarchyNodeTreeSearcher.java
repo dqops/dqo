@@ -20,7 +20,7 @@ import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.id.HierarchyNode;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
@@ -90,12 +90,12 @@ public interface HierarchyNodeTreeSearcher {
     Collection<RuleDefinitionSpec> findRules(HierarchyNode startNode, RuleDefinitionSearchFilters ruleDefinitionSearchFilters);
 
     /**
-     * Search for recurring schedules specs in the tree.
+     * Search for monitoring schedules specs in the tree.
      * @param startNode Start node to begin search. It could be the user home root or any other nested node (ConnectionSpec, TableSpec, etc.)
-     * @param recurringScheduleSearchFilters Search filters.
-     * @return Collection of recurring schedules specs nodes that passed the filter.
+     * @param monitoringScheduleSearchFilters Search filters.
+     * @return Collection of monitoring schedules specs nodes that passed the filter.
      */
-    Collection<RecurringScheduleSpec> findSchedules(HierarchyNode startNode, RecurringScheduleSearchFilters recurringScheduleSearchFilters);
+    Collection<MonitoringScheduleSpec> findSchedules(HierarchyNode startNode, MonitoringScheduleSearchFilters monitoringScheduleSearchFilters);
 
     /**
      * Search for all nodes that have a schedule defined and are not disabled. Schedule roots are nodes that have a schedule, so all nested checks should be executed

@@ -17,11 +17,11 @@
 package com.dqops.core.scheduler.defaults;
 
 import com.dqops.core.configuration.DqoSchedulerDefaultSchedulesConfigurationProperties;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
-import com.dqops.metadata.settings.SettingsWrapper;
-import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
+import com.dqops.metadata.userhome.UserHome;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -51,27 +51,27 @@ public class DefaultSchedulesProviderImpl implements DefaultSchedulesProvider {
      * @return Schedules configuration with the default schedules (only configured ones) or null when no schedules are configured.
      */
     @Override
-    public RecurringSchedulesSpec createDefaultRecurringSchedules() {
-        RecurringSchedulesSpec schedules = new RecurringSchedulesSpec();
+    public DefaultSchedulesSpec createDefaultSchedules() {
+        DefaultSchedulesSpec schedules = new DefaultSchedulesSpec();
 
         if (!Strings.isNullOrEmpty(this.defaultSchedulesConfigurationProperties.getProfiling())) {
-            schedules.setProfiling(new RecurringScheduleSpec(this.defaultSchedulesConfigurationProperties.getProfiling()));
+            schedules.setProfiling(new MonitoringScheduleSpec(this.defaultSchedulesConfigurationProperties.getProfiling()));
         }
 
-        if (!Strings.isNullOrEmpty(this.defaultSchedulesConfigurationProperties.getRecurringDaily())) {
-            schedules.setRecurringDaily(new RecurringScheduleSpec(this.defaultSchedulesConfigurationProperties.getRecurringDaily()));
+        if (!Strings.isNullOrEmpty(this.defaultSchedulesConfigurationProperties.getMonitoringDaily())) {
+            schedules.setMonitoringDaily(new MonitoringScheduleSpec(this.defaultSchedulesConfigurationProperties.getMonitoringDaily()));
         }
 
-        if (!Strings.isNullOrEmpty(this.defaultSchedulesConfigurationProperties.getRecurringMonthly())) {
-            schedules.setRecurringMonthly(new RecurringScheduleSpec(this.defaultSchedulesConfigurationProperties.getRecurringMonthly()));
+        if (!Strings.isNullOrEmpty(this.defaultSchedulesConfigurationProperties.getMonitoringMonthly())) {
+            schedules.setMonitoringMonthly(new MonitoringScheduleSpec(this.defaultSchedulesConfigurationProperties.getMonitoringMonthly()));
         }
 
         if (!Strings.isNullOrEmpty(this.defaultSchedulesConfigurationProperties.getPartitionedDaily())) {
-            schedules.setPartitionedDaily(new RecurringScheduleSpec(this.defaultSchedulesConfigurationProperties.getPartitionedDaily()));
+            schedules.setPartitionedDaily(new MonitoringScheduleSpec(this.defaultSchedulesConfigurationProperties.getPartitionedDaily()));
         }
 
         if (!Strings.isNullOrEmpty(this.defaultSchedulesConfigurationProperties.getPartitionedMonthly())) {
-            schedules.setPartitionedMonthly(new RecurringScheduleSpec(this.defaultSchedulesConfigurationProperties.getPartitionedMonthly()));
+            schedules.setPartitionedMonthly(new MonitoringScheduleSpec(this.defaultSchedulesConfigurationProperties.getPartitionedMonthly()));
         }
 
         if (schedules.isDefault()) {
@@ -82,23 +82,22 @@ public class DefaultSchedulesProviderImpl implements DefaultSchedulesProvider {
     }
 
     /**
-     * Creates a new recurring schedule configuration for a new connection.
-     * @return New recurring schedule configuration for a new connection.
+     * Creates a new monitoring schedule configuration for a new connection.
+     * @return New monitoring schedule configuration for a new connection.
      */
     @Override
-    public RecurringSchedulesSpec createRecurringSchedulesSpecForNewConnection() {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
-        if (settingsWrapper == null || settingsWrapper.getSpec() == null) {
-            return createDefaultRecurringSchedules();
+    public DefaultSchedulesSpec createMonitoringSchedulesSpecForNewConnection(UserHome userHome) {
+        MonitoringSchedulesWrapper schedulesWrapper = userHome.getDefaultSchedules();
+        if (schedulesWrapper == null || schedulesWrapper.getSpec() == null) {
+            return createDefaultSchedules();
         }
 
-        if (settingsWrapper.getSpec().getDefaultSchedules() == null) {
+        if (schedulesWrapper.getSpec() == null) {
             return null;
         }
 
-        RecurringSchedulesSpec defaultSchedules = settingsWrapper.getSpec().getDefaultSchedules();
-        RecurringSchedulesSpec clonedSchedules = defaultSchedules.deepClone();
+        DefaultSchedulesSpec defaultSchedules = schedulesWrapper.getSpec();
+        DefaultSchedulesSpec clonedSchedules = defaultSchedules.deepClone();
 
         return clonedSchedules;
     }

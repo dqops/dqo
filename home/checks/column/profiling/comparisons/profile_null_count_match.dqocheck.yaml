@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: check
 spec:
@@ -8,3 +8,4 @@ spec:
     values in a tested column in a parent table and the count of null values in a
     column in the reference table. The difference must be below defined percentage
     thresholds.
+  standard: true

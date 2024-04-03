@@ -19,15 +19,17 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyIdModel;
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.statistics.StatisticsCollectorTarget;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import org.apache.parquet.Strings;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -37,17 +39,29 @@ import java.util.stream.Collectors;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public class StatisticsCollectorSearchFilters extends TableSearchFilters implements Cloneable {
-    private String columnName;
+    @JsonPropertyDescription("The list of column names or column name patters. This field accepts search patterns in the format: 'fk_\\*', '\\*_id', 'prefix\\*suffix'.")
+    private List<String> columnNames = new ArrayList<>();
+
+    @JsonPropertyDescription("The target statistics collector name to capture only selected statistics. Uses the short collector name" +
+            "This field supports search patterns such as: 'prefix\\*', '\\*suffix', 'prefix_\\*_suffix'. " +
+            "In order to collect only top 10 most common column samples, use 'column_samples'.")
     private String collectorName;
+
+    @JsonPropertyDescription("The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. " +
+            "This field supports search patterns such as: 'table/volume/row_\\*', '\\*_count', 'table/volume/prefix_\\*_suffix'.")
     private String sensorName;
+
+    @JsonPropertyDescription("The target statistics collector category, for example: *nulls*, *volume*, *sampling*.")
     private String collectorCategory;
+
+    @JsonPropertyDescription("The target type of object to collect statistics from. Supported values are: *table* to collect only table level statistics or *column* to collect only column level statistics.")
     private StatisticsCollectorTarget target;
 
     @JsonIgnore // we can't serialize it because it is a mix of types, will not support deserialization correctly
     private Set<HierarchyId> collectorsHierarchyIds;
 
     @JsonIgnore
-    private SearchPattern columnNameSearchPattern;
+    private List<SearchPattern> columnNameSearchPatterns;
     @JsonIgnore
     private SearchPattern collectorNameSearchPattern;
     @JsonIgnore
@@ -62,19 +76,19 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
     }
 
     /**
-     * Gets a column name search pattern.
-     * @return Column name search pattern.
+     * Returns a set of target column names. When the collection of column names is not empty, only column level statistics are collected.
+     * @return Collection of target column names.
      */
-    public String getColumnName() {
-        return columnName;
+    public List<String> getColumnNames() {
+        return columnNames;
     }
 
     /**
-     * Sets a column name search pattern.
-     * @param columnName Column name search pattern.
+     * Sets a set of target column names.
+     * @param columnNames Set of target column names.
      */
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
+    public void setColumnNames(List<String> columnNames) {
+        this.columnNames = columnNames;
     }
 
     /**
@@ -191,12 +205,15 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      * Lazy getter, parses <code>columnName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>columnName</code>.
      */
-    public SearchPattern getColumnNameSearchPattern() {
-        if (columnNameSearchPattern == null && columnName != null) {
-            columnNameSearchPattern = SearchPattern.create(false, columnName);
+    @JsonIgnore
+    public List<SearchPattern> getColumnNameSearchPatterns() {
+        if (columnNameSearchPatterns == null && this.columnNames != null) {
+            columnNameSearchPatterns = this.columnNames.stream()
+                    .map(cn -> SearchPattern.create(false, cn))
+                    .collect(Collectors.toList());
         }
 
-        return columnNameSearchPattern;
+        return columnNameSearchPatterns;
     }
 
     /**
@@ -204,8 +221,9 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      * Lazy getter, parses <code>collectorName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>collectorName</code>.
      */
+    @JsonIgnore
     public SearchPattern getCollectorNameSearchPattern() {
-        if (collectorNameSearchPattern == null && collectorName != null) {
+        if (collectorNameSearchPattern == null && !Strings.isNullOrEmpty(collectorName)) {
             collectorNameSearchPattern = SearchPattern.create(false, collectorName);
         }
 
@@ -217,8 +235,9 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      * Lazy getter, parses <code>sensorName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>sensorName</code>.
      */
+    @JsonIgnore
     public SearchPattern getSensorNameSearchPattern() {
-        if (sensorNameSearchPattern == null && sensorName != null) {
+        if (sensorNameSearchPattern == null && !Strings.isNullOrEmpty(sensorName)) {
             sensorNameSearchPattern = SearchPattern.create(false, sensorName);
         }
 
@@ -234,12 +253,33 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
         try {
             StatisticsCollectorSearchFilters cloned = (StatisticsCollectorSearchFilters) super.clone();
             if (this.collectorsHierarchyIds != null) {
-                cloned.collectorsHierarchyIds = new HashSet<>(this.collectorsHierarchyIds);
+                cloned.collectorsHierarchyIds = new LinkedHashSet<>(this.collectorsHierarchyIds);
             }
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
             throw new RuntimeException("Cannot clone the object", ex);
+        }
+    }
+
+    public static StatisticsCollectorSearchFilters fromTableSearchFilters(TableSearchFilters tableSearchFilters) {
+        return new StatisticsCollectorSearchFilters() {{
+            setConnection(tableSearchFilters.getConnection());
+            setFullTableName(tableSearchFilters.getFullTableName());
+            setEnabled(tableSearchFilters.getEnabled());
+            setTags(tableSearchFilters.getTags());
+            setLabels(tableSearchFilters.getLabels());
+        }};
+    }
+
+    public static class StatisticsCollectorSearchFiltersSampleFactory implements SampleValueFactory<StatisticsCollectorSearchFilters> {
+        @Override
+        public StatisticsCollectorSearchFilters createSample() {
+            StatisticsCollectorSearchFilters statisticsCollectorSearchFilters = fromTableSearchFilters(new TableSearchFilters.TableSearchFiltersSampleFactory().createSample());
+            statisticsCollectorSearchFilters.setColumnNames(List.of(SampleStringsRegistry.getColumnName()));
+            statisticsCollectorSearchFilters.setCollectorCategory(SampleStringsRegistry.getCategoryName());
+
+            return statisticsCollectorSearchFilters;
         }
     }
 }

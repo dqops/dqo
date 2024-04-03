@@ -23,7 +23,8 @@ import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
-import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
@@ -97,6 +98,7 @@ public class TableServiceImpl implements TableService {
      * @param checkTimeScale (Optional) Check time-scale.
      * @param checkCategory  (Optional) Check category.
      * @param checkName      (Optional) Check name.
+     * @param principal      User principal.
      * @return List of column level check templates on the requested table, matching the optional filters. Null if table doesn't exist.
      */
     @Override
@@ -105,28 +107,29 @@ public class TableServiceImpl implements TableService {
                                                  CheckType checkType,
                                                  CheckTimeScale checkTimeScale,
                                                  String checkCategory,
-                                                 String checkName) {
+                                                 String checkName,
+                                                 DqoUserPrincipal principal) {
         if (Strings.isNullOrEmpty(connectionName)
                 || tableName == null
                 || checkType == null) {
             // Connection name, table name and check type have to be provided.
             return null;
         }
-        if ((checkType == CheckType.partitioned || checkType == CheckType.recurring) && checkTimeScale == null) {
-            // Time scale has to be provided for partitioned and recurring checks.
+        if ((checkType == CheckType.partitioned || checkType == CheckType.monitoring) && checkTimeScale == null) {
+            // Time scale has to be provided for partitioned and monitoring checks.
             return null;
         }
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
-        checkSearchFilters.setConnectionName(connectionName);
-        checkSearchFilters.setSchemaTableName(tableName.toTableSearchFilter());
+        checkSearchFilters.setConnection(connectionName);
+        checkSearchFilters.setFullTableName(tableName.toTableSearchFilter());
         checkSearchFilters.setCheckType(checkType);
         checkSearchFilters.setTimeScale(checkTimeScale);
         // Filtering by checkTarget has to be done apart from these filters.
         checkSearchFilters.setCheckCategory(checkCategory);
         checkSearchFilters.setCheckName(checkName);
 
-        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
+        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.findAllConfiguredAndPossibleChecks(checkSearchFilters, principal);
 
         CheckContainerTypeModel checkContainerTypeModel = new CheckContainerTypeModel(checkType, checkTimeScale);
 
@@ -139,7 +142,7 @@ public class TableServiceImpl implements TableService {
                 .flatMap(model -> model.getCategories().stream())
                 // For each category get check templates
                 .map(categoryModel -> {
-                    Map<String, CheckModel> checkNameToExampleCheck = new HashMap<>();
+                    Map<String, CheckModel> checkNameToExampleCheck = new LinkedHashMap<>();
                     for (CheckModel checkModel: categoryModel.getChecks()) {
                         if (!checkNameToExampleCheck.containsKey(checkModel.getCheckName())) {
                             checkNameToExampleCheck.put(checkModel.getCheckName(), checkModel);
@@ -165,13 +168,15 @@ public class TableServiceImpl implements TableService {
                                                                        String checkCategory,
                                                                        String checkName,
                                                                        Boolean checkEnabled,
-                                                                       Boolean checkConfigured) {
+                                                                       Boolean checkConfigured,
+                                                                       int limit,
+                                                                       DqoUserPrincipal principal) {
         CheckSearchFilters filters = new CheckSearchFilters();
         filters.setCheckType(checkContainerTypeModel.getCheckType());
         filters.setTimeScale(checkContainerTypeModel.getCheckTimeScale());
-        filters.setConnectionName(connectionName);
-        filters.setSchemaTableName(physicalTableName.toTableSearchFilter());
-        filters.setColumnName(columnNamePattern);
+        filters.setConnection(connectionName);
+        filters.setFullTableName(physicalTableName.toTableSearchFilter());
+        filters.setColumn(columnNamePattern);
         filters.setColumnDataType(columnDataType);
         filters.setCheckTarget(checkTarget);
         filters.setCheckCategory(checkCategory);
@@ -179,7 +184,7 @@ public class TableServiceImpl implements TableService {
         filters.setEnabled(checkEnabled);
         filters.setCheckConfigured(checkConfigured);
 
-        return this.checkFlatConfigurationFactory.fromCheckSearchFilters(filters);
+        return this.checkFlatConfigurationFactory.findAllCheckConfigurations(filters, principal, limit);
     }
 
     /**
@@ -187,16 +192,17 @@ public class TableServiceImpl implements TableService {
      * Cleans all stored data from .data folder related to this table.
      * @param connectionName Connection name
      * @param tableName      Physical table name.
+     * @param principal Principal that will be used to run the job.
      * @return Asynchronous job result object for deferred background operations.
      */
     @Override
-    public PushJobResult<DeleteStoredDataQueueJobResult> deleteTable(String connectionName, PhysicalTableName tableName) {
+    public PushJobResult<DeleteStoredDataResult> deleteTable(String connectionName, PhysicalTableName tableName, DqoUserPrincipal principal) {
         List<PhysicalTableName> tableNameList = new LinkedList<>();
         tableNameList.add(tableName);
 
-        Map<String, Iterable<PhysicalTableName>> connectionToTableMapping = new HashMap<>();
+        Map<String, Iterable<PhysicalTableName>> connectionToTableMapping = new LinkedHashMap<>();
         connectionToTableMapping.put(connectionName, tableNameList);
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> jobResultList = this.deleteTables(connectionToTableMapping);
+        List<PushJobResult<DeleteStoredDataResult>> jobResultList = this.deleteTables(connectionToTableMapping, principal);
 
         return jobResultList.isEmpty() ? null : jobResultList.get(0);
     }
@@ -205,11 +211,14 @@ public class TableServiceImpl implements TableService {
      * Deletes tables from metadata and flushes user context.
      * Cleans all stored data from .data folder related to these tables.
      * @param connectionToTables Connection name to tables on that connection mapping.
+     * @param principal Principal that will be used to run the job.
      * @return Asynchronous job result objects for deferred background operations.
      */
     @Override
-    public List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteTables(Map<String, Iterable<PhysicalTableName>> connectionToTables) {
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
+    public List<PushJobResult<DeleteStoredDataResult>> deleteTables(
+            Map<String, Iterable<PhysicalTableName>> connectionToTables,
+            DqoUserPrincipal principal) {
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         List<DeleteStoredDataQueueJobParameters> deleteStoredDataParameters = new ArrayList<>();
@@ -225,8 +234,8 @@ public class TableServiceImpl implements TableService {
                 tableWrapper.markForDeletion();
 
                 DeleteStoredDataQueueJobParameters param = new DeleteStoredDataQueueJobParameters() {{
-                    setConnectionName(connectionName);
-                    setSchemaTableName(tableName.toTableSearchFilter());
+                    setConnection(connectionName);
+                    setFullTableName(tableName.toTableSearchFilter());
                     setDeleteStatistics(true);
                     setDeleteCheckResults(true);
                     setDeleteSensorReadouts(true);
@@ -236,11 +245,11 @@ public class TableServiceImpl implements TableService {
             }
         }
 
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> results = new ArrayList<>();
+        List<PushJobResult<DeleteStoredDataResult>> results = new ArrayList<>();
         for (DeleteStoredDataQueueJobParameters param : deleteStoredDataParameters) {
             DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
             deleteStoredDataJob.setDeletionParameters(param);
-            PushJobResult<DeleteStoredDataQueueJobResult> jobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob);
+            PushJobResult<DeleteStoredDataResult> jobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob, principal);
             results.add(jobResult);
         }
 

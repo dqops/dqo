@@ -15,28 +15,40 @@
  */
 package com.dqops.data.errors.normalization;
 
+import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.errors.factory.ErrorSource;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
+import com.dqops.data.normalization.CommonColumnNames;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.readouts.normalization.SensorReadoutsNormalizationService;
 import com.dqops.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
+import com.dqops.utils.tables.TableColumnUtility;
+import com.google.common.hash.Hashing;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
+import tech.tablesaw.columns.Column;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Error normalization service that creates normalized error tables for errors, filling all possible fields.
  */
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationService {
     private SensorReadoutsNormalizationService sensorReadoutsNormalizationService;
     private CommonTableNormalizationService commonNormalizationService;
     private DefaultTimeZoneProvider defaultTimeZoneProvider;
+    private final AtomicLong errorIdCounter = new AtomicLong();
 
     /**
      * Dependency injection constructor for the error normalization service.
@@ -105,6 +117,12 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
         normalizedSensorReadout.getIdColumn().setName(ErrorsColumnNames.READOUT_ID_COLUMN_NAME); // renaming the ID column
         Table table = normalizedSensorReadout.getTable();
 
+        // remove a severity column if present
+        Column<?> severityColumn = TableColumnUtility.findColumn(table, CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+        if (severityColumn != null) {
+            table.removeColumns(severityColumn);
+        }
+
         // adding remaining columns
         TextColumn errorMessageColumn = TextColumn.create(ErrorsColumnNames.ERROR_MESSAGE_COLUMN_NAME, table.rowCount());
         errorMessageColumn.setMissingTo(makeErrorMessage(exception));
@@ -125,11 +143,44 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
         long columnHash = sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().getHierarchyId().hashCode64() : 0L;
 
         LongColumn dataStreamHashColumn = normalizedSensorReadout.getDataGroupHashColumn();
-        TextColumn rowIdColumn = this.commonNormalizationService.createRowIdColumnAndUpdateIndexes(dataStreamHashColumn, errorTimestampColumn,
+        TextColumn rowIdColumn = this.commonNormalizationService.createErrorRowIdColumn(dataStreamHashColumn, errorMessageColumn,
                 checkHash, tableHash, columnHash, table.rowCount());
         table.addColumns(rowIdColumn);
 
         return new ErrorsNormalizedResult(table);
+    }
+
+    /**
+     * Creates and fills the "id" column by combining hashes for the error row. Includes also an executed at timestamp and an incremental ID.
+     * @param sortedDataGroupingHashColumn Data grouping hashes column.
+     * @param sortedTimePeriodColumn Time period column.
+     * @param checkHash Check hash value.
+     * @param tableHash Table hash value.
+     * @param columnHash Column hash value (or 0L when the check is not on a column level).
+     * @param rowCount Row count.
+     * @return ID column, filled with values.
+     */
+    public TextColumn createErrorRowIdColumnAndUpdateIndexes(LongColumn sortedDataGroupingHashColumn,
+                                                             DateTimeColumn sortedTimePeriodColumn,
+                                                             long checkHash,
+                                                             long tableHash,
+                                                             long columnHash,
+                                                             int rowCount,
+                                                             Instant executedAt) {
+        TextColumn idColumn = TextColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
+
+        for (int i = 0; i < rowCount ; i++) {
+            Long dataGroupingHash = sortedDataGroupingHashColumn.get(i);
+            long timePeriodLong = sortedTimePeriodColumn.getLongInternal(i);
+            long timePeriodHashed = Hashing.farmHashFingerprint64().hashLong(timePeriodLong).asLong();
+            long executedAtEpoch = executedAt.toEpochMilli();
+            long errorCounter = errorIdCounter.getAndIncrement();
+            UUID uuid = new UUID(checkHash ^ timePeriodHashed ^ executedAtEpoch, dataGroupingHash ^ tableHash ^ columnHash ^ ~timePeriodHashed ^ errorCounter);
+            String idString = uuid.toString();
+            idColumn.set(i, idString);
+        }
+
+        return idColumn;
     }
 
     /**

@@ -16,8 +16,12 @@
 package com.dqops.metadata.search;
 
 import com.dqops.checks.AbstractCheckSpec;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
+import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 
@@ -54,19 +58,44 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<F
             }
         }
 
-        RecurringSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
+        DefaultSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
         assert this.filters.getSchedule() != null;
 
-        if (schedulesOverride != null && !schedulesOverride.isDefault()) {
-            RecurringScheduleSpec scheduleForCheckSchedulingGroup = schedulesOverride.getScheduleForCheckSchedulingGroup(this.filters.getScheduleGroup());
+        if (schedulesOverride != null && !schedulesOverride.isDefault() && this.filters.getSchedulingGroups() != null) {
+            for (CheckRunScheduleGroup scheduleGroup : this.filters.getSchedulingGroups()) {
+                MonitoringScheduleSpec scheduleForCheckSchedulingGroup = schedulesOverride.getScheduleForCheckSchedulingGroup(scheduleGroup);
 
-            if (scheduleForCheckSchedulingGroup != null &&
-                    !Objects.equals(scheduleForCheckSchedulingGroup, this.filters.getSchedule())) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;  // this table has a different schedule, no longer collecting nested checks
+                if (scheduleForCheckSchedulingGroup == null ||
+                        Objects.equals(scheduleForCheckSchedulingGroup, this.filters.getSchedule())) {
+                    return TreeNodeTraversalResult.TRAVERSE_CHILDREN;  // this table has no schedule, or it is the table with the same CRON expression
+                }
             }
+            return TreeNodeTraversalResult.SKIP_CHILDREN;  // no schedule matched
         }
 
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of categories of data quality checks.
+     *
+     * @param checksContainerSpec Container of data quality checks that has nested categories (and categories contain checks).
+     * @param parameter           Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractRootChecksContainerSpec checksContainerSpec, FoundResultsCollector<AbstractCheckSpec<?, ?, ?, ?>> parameter) {
+        if (this.filters.getSchedulingGroups() == null) {
+            return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+        }
+
+        CheckRunScheduleGroup schedulingGroupForCheckRootContainer = checksContainerSpec.getSchedulingGroup();
+
+        if (this.filters.getSchedulingGroups().contains(schedulingGroupForCheckRootContainer)) {
+            return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+        }
+
+        return TreeNodeTraversalResult.SKIP_CHILDREN; // the schedule does not match this type of checks
     }
 
     /**
@@ -87,7 +116,7 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<F
             }
         }
 
-        RecurringScheduleSpec checkSchedule = abstractCheckSpec.getScheduleOverride();
+        MonitoringScheduleSpec checkSchedule = abstractCheckSpec.getScheduleOverride();
         assert this.filters.getSchedule() != null;
 
         if (checkSchedule != null && !checkSchedule.isDefault()) {
@@ -99,5 +128,29 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<F
         foundNodes.add(abstractCheckSpec);
 
         return TreeNodeTraversalResult.SKIP_CHILDREN; // no need to traverse deeper
+    }
+
+    /**
+     * Accepts a list of default configuration of table observability checks wrappers.
+     *
+     * @param tableDefaultChecksPatternWrappers Table observability default checks list.
+     * @param parameter                         Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableDefaultChecksPatternList tableDefaultChecksPatternWrappers, FoundResultsCollector<AbstractCheckSpec<?, ?, ?, ?>> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a default configuration of column observability checks wrapper.
+     *
+     * @param columnDefaultChecksPatternWrappers Column observability default checks specification.
+     * @param parameter                          Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ColumnDefaultChecksPatternList columnDefaultChecksPatternWrappers, FoundResultsCollector<AbstractCheckSpec<?, ?, ?, ?>> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 }

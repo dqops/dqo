@@ -19,7 +19,7 @@ import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Holder of a single DQO job on the queue.
+ * Holder of a single DQOps job on the queue.
  */
 public class DqoJobQueueEntry implements Comparable<DqoJobQueueEntry> {
     private DqoQueueJob<?> job;
@@ -49,7 +49,7 @@ public class DqoJobQueueEntry implements Comparable<DqoJobQueueEntry> {
 
     /**
      * Returns the dqo job object instance.
-     * @return DQO Job instance.
+     * @return DQOps Job instance.
      */
     public DqoQueueJob<?> getJob() {
         return job;

@@ -25,6 +25,7 @@ import com.dqops.execution.rules.finder.RuleDefinitionFindResult;
 import com.dqops.execution.rules.runners.AbstractRuleRunner;
 import com.dqops.utils.python.PythonCallerService;
 import com.dqops.utils.python.PythonExecutionException;
+import org.apache.parquet.Strings;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
@@ -72,12 +73,22 @@ public class PythonRuleRunner extends AbstractRuleRunner {
         HomeFilePath ruleHomeRelativePath = ruleDefinitionFindResult.getRulePythonFilePath();
 
         PythonRuleCallInput ruleInput = new PythonRuleCallInput();
+        String dataDomainFolder = executionContext.getUserHomeContext() != null &&
+                executionContext.getUserHomeContext().getUserIdentity() != null ?
+                executionContext.getUserHomeContext().getUserIdentity().getDataDomainFolder() : "";
+        String dataDomainModule = Strings.isNullOrEmpty(dataDomainFolder) ? "default" : dataDomainFolder.replace(' ', '_');
+        ruleInput.setDataDomainModule(dataDomainModule);
         ruleInput.setRuleParameters(ruleRunParameters);
         String pathToHome = this.homeLocationFindService.getHomePath(ruleDefinitionFindResult.getHome());
         String absolutePathToPythonRule = Path.of(pathToHome).resolve(ruleHomeRelativePath.toRelativePath()).toAbsolutePath().toString();
         ruleInput.setRuleModulePath(absolutePathToPythonRule);
+        ruleInput.setHomePath(pathToHome);
+        ruleInput.setRuleModuleLastModified(ruleDefinitionFindResult.getRulePythonFileLastModified());
 
         PythonRuleCallOutput output = this.pythonCallerService.executePythonHomeScript(ruleInput, evaluateRulesModule, PythonRuleCallOutput.class);
+        if (output == null) {
+            return null;
+        }
 
         if (output.getError() != null) {
             throw new PythonExecutionException("Data quality rule " + absolutePathToPythonRule + " failed to execute, error: " + output.getError());

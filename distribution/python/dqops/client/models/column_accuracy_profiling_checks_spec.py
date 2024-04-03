@@ -1,10 +1,14 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_accuracy_profiling_checks_spec_custom_checks import (
+        ColumnAccuracyProfilingChecksSpecCustomChecks,
+    )
     from ..models.column_accuracy_total_average_match_percent_check_spec import (
         ColumnAccuracyTotalAverageMatchPercentCheckSpec,
     )
@@ -25,10 +29,13 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ColumnAccuracyProfilingChecksSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnAccuracyProfilingChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, ColumnAccuracyProfilingChecksSpecCustomChecks]): Dictionary of additional custom
+            checks within this category. The keys are check names defined in the definition section. The sensor parameters
+            and rules should match the type of the configured sensor and rule for the custom check.
         profile_total_sum_match_percent (Union[Unset, ColumnAccuracyTotalSumMatchPercentCheckSpec]):
         profile_total_min_match_percent (Union[Unset, ColumnAccuracyTotalMinMatchPercentCheckSpec]):
         profile_total_max_match_percent (Union[Unset, ColumnAccuracyTotalMaxMatchPercentCheckSpec]):
@@ -36,6 +43,7 @@ class ColumnAccuracyProfilingChecksSpec:
         profile_total_not_null_count_match_percent (Union[Unset, ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec]):
     """
 
+    custom_checks: Union[Unset, "ColumnAccuracyProfilingChecksSpecCustomChecks"] = UNSET
     profile_total_sum_match_percent: Union[
         Unset, "ColumnAccuracyTotalSumMatchPercentCheckSpec"
     ] = UNSET
@@ -51,9 +59,13 @@ class ColumnAccuracyProfilingChecksSpec:
     profile_total_not_null_count_match_percent: Union[
         Unset, "ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         profile_total_sum_match_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_total_sum_match_percent, Unset):
             profile_total_sum_match_percent = (
@@ -87,6 +99,8 @@ class ColumnAccuracyProfilingChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if profile_total_sum_match_percent is not UNSET:
             field_dict[
                 "profile_total_sum_match_percent"
@@ -112,6 +126,9 @@ class ColumnAccuracyProfilingChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_accuracy_profiling_checks_spec_custom_checks import (
+            ColumnAccuracyProfilingChecksSpecCustomChecks,
+        )
         from ..models.column_accuracy_total_average_match_percent_check_spec import (
             ColumnAccuracyTotalAverageMatchPercentCheckSpec,
         )
@@ -129,6 +146,15 @@ class ColumnAccuracyProfilingChecksSpec:
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[Unset, ColumnAccuracyProfilingChecksSpecCustomChecks]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = ColumnAccuracyProfilingChecksSpecCustomChecks.from_dict(
+                _custom_checks
+            )
+
         _profile_total_sum_match_percent = d.pop(
             "profile_total_sum_match_percent", UNSET
         )
@@ -205,6 +231,7 @@ class ColumnAccuracyProfilingChecksSpec:
             )
 
         column_accuracy_profiling_checks_spec = cls(
+            custom_checks=custom_checks,
             profile_total_sum_match_percent=profile_total_sum_match_percent,
             profile_total_min_match_percent=profile_total_min_match_percent,
             profile_total_max_match_percent=profile_total_max_match_percent,

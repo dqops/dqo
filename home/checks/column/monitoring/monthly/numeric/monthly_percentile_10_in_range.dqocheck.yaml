@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/numeric/percentile
+  rule_name: comparison/between_floats
+  help_text: Verifies that the percentile 10 of all values in a column is not outside
+    the expected range. Stores the most recent value for each month when the data
+    quality check was evaluated.

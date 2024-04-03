@@ -20,16 +20,17 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.partitioned.comparison.TableComparisonMonthlyPartitionedChecksSpecMap;
-import com.dqops.checks.table.partitioned.sql.TableSqlMonthlyPartitionedChecksSpec;
-import com.dqops.checks.table.partitioned.volume.TableVolumeMonthlyPartitionedChecksSpec;
+import com.dqops.checks.table.partitioned.customsql.TableCustomSqlMonthlyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.timeliness.TableTimelinessMonthlyPartitionedChecksSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
-import com.dqops.metadata.timeseries.TimePeriodGradient;
-import com.dqops.metadata.timeseries.TimeSeriesMode;
+import com.dqops.checks.table.partitioned.volume.TableVolumeMonthlyPartitionedChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
+import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
+import com.dqops.metadata.timeseries.TimeSeriesMode;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -52,7 +53,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
         {
             put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
-            put("sql", o -> o.sql);
+            put("custom_sql", o -> o.customSql);
             put("comparisons", o -> o.comparisons);
 
             // accuracy checks are not supported on partitioned checks yet, but we support comparisons
@@ -72,7 +73,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     @JsonPropertyDescription("Custom SQL monthly partitioned data quality checks that verify the quality of every month of data separately")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlMonthlyPartitionedChecksSpec sql;
+    private TableCustomSqlMonthlyPartitionedChecksSpec customSql;
 
     @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -120,18 +121,18 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
      * Returns the container of custom SQL checks.
      * @return Custom sql checks.
      */
-    public TableSqlMonthlyPartitionedChecksSpec getSql() {
-        return sql;
+    public TableCustomSqlMonthlyPartitionedChecksSpec getCustomSql() {
+        return customSql;
     }
 
     /**
      * Sets a reference to a container of custom SQL checks.
-     * @param sql Container of custom SQL checks.
+     * @param customSql Container of custom SQL checks.
      */
-    public void setSql(TableSqlMonthlyPartitionedChecksSpec sql) {
-        this.setDirtyIf(!Objects.equals(this.sql, sql));
-        this.sql = sql;
-        this.propagateHierarchyIdToField(sql, "sql");
+    public void setCustomSql(TableCustomSqlMonthlyPartitionedChecksSpec customSql) {
+        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
+        this.customSql = customSql;
+        this.propagateHierarchyIdToField(customSql, "custom_sql");
     }
 
     /**
@@ -180,7 +181,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     }
 
     /**
-     * Returns the type of checks (profiling, recurring, partitioned).
+     * Returns the type of checks (profiling, monitoring, partitioned).
      *
      * @return Check type.
      */
@@ -191,7 +192,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     }
 
     /**
-     * Returns the time range for recurring and partitioned checks (daily, monthly, etc.).
+     * Returns the time range for monitoring and partitioned checks (daily, monthly, etc.).
      * Profiling checks do not have a time range and return null.
      *
      * @return Time range (daily, monthly, ...).
@@ -216,11 +217,20 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     /**
      * Returns the name of the cron expression that is used to schedule checks in this check root object.
      *
-     * @return Recurring schedule group (named schedule) that is used to schedule the checks in this root.
+     * @return Monitoring schedule group (named schedule) that is used to schedule the checks in this root.
      */
     @Override
     @JsonIgnore
-    public CheckRunRecurringScheduleGroup getSchedulingGroup() {
-        return CheckRunRecurringScheduleGroup.partitioned_monthly;
+    public CheckRunScheduleGroup getSchedulingGroup() {
+        return CheckRunScheduleGroup.partitioned_monthly;
+    }
+
+    public static class TableMonthlyPartitionedCheckCategoriesSpecSampleFactory implements SampleValueFactory<TableMonthlyPartitionedCheckCategoriesSpec> {
+        @Override
+        public TableMonthlyPartitionedCheckCategoriesSpec createSample() {
+            return new TableMonthlyPartitionedCheckCategoriesSpec() {{
+                setVolume(new TableVolumeMonthlyPartitionedChecksSpec.TableVolumeMonthlyPartitionedChecksSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

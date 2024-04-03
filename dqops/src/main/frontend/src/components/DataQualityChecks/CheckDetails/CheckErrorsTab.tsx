@@ -1,13 +1,14 @@
 import React, { useMemo } from 'react';
-import { ErrorsDetailedDataModel } from '../../../api';
+import { ErrorsListModel } from '../../../api';
 import Select from '../../Select';
 import { Table } from '../../Table';
 import { useTree } from '../../../contexts/treeContext';
 import moment from 'moment/moment';
 import ErrorText from './ErrorText';
+import { getLocalDateInUserTimeZone } from '../../../utils';
 
 interface CheckErrorsTabProps {
-  errors: ErrorsDetailedDataModel[];
+  errors: ErrorsListModel[];
   dataGroup?: string;
   month?: string;
   onChangeMonth: (month: string) => void;
@@ -69,7 +70,7 @@ const CheckErrorsTab = ({
     >
       <div className="flex space-x-8 items-center">
         <div className="flex space-x-4 items-center">
-          <div className="text-sm">Data group</div>
+          <div className="text-sm">Data group (time series)</div>
           <Select
             value={ dataGroup || errors[0]?.dataGroup}
             options={
@@ -90,15 +91,16 @@ const CheckErrorsTab = ({
           />
         </div>
       </div>
-      {errors.length === 0 && <div className="text-gray-700 mt-5">No Data</div>}
+      {errors.length === 0 && <div className="text-gray-700 mt-5 text-sm">No Data</div>}
       {errors.map((result, index) => (
         <div key={index} className="mb-4">
           <Table
             className="mt-4 w-full"
             columns={columns}
-            data={(result.singleErrors || []).map((item) => ({
+            data={(result.errorEntries || []).map((item) => ({
               ...item,
-              checkName: result.checkName
+              checkName: result.checkName,
+              executedAt: moment(getLocalDateInUserTimeZone(new Date(String(item.executedAt)))).format('YYYY-MM-DD HH:mm:ss')
             }))}
             emptyMessage="No Data"
           />

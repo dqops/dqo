@@ -17,12 +17,17 @@ package com.dqops.metadata.search;
 
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import org.apache.parquet.Strings;
 
 /**
  * Hierarchy node search filters.
  */
 public class RuleDefinitionSearchFilters {
+    @JsonPropertyDescription("The target rule name. This filter supports search patterns such as 'prefix_\\*', '\\*_suffix', 'prefix\\*suffix'.")
     private String ruleName;
+
+    @JsonPropertyDescription("Boolean flag to search only for enabled rules or only disabled rules. The default value is *true*, which prevents searching for all rules despite their enabled status.")
     private Boolean enabled = true;
 
     @JsonIgnore
@@ -75,8 +80,9 @@ public class RuleDefinitionSearchFilters {
      * Lazy getter, parses <code>ruleName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>ruleName</code>.
      */
+    @JsonIgnore
     public SearchPattern getRuleNameSearchPattern() {
-        if (ruleNameSearchPattern == null && ruleName != null) {
+        if (ruleNameSearchPattern == null && !Strings.isNullOrEmpty(ruleName)) {
             ruleNameSearchPattern = SearchPattern.create(false, ruleName);
         }
 

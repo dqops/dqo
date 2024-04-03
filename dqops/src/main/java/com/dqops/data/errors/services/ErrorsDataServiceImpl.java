@@ -17,14 +17,12 @@ package com.dqops.data.errors.services;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
-import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
-import com.dqops.data.checkresults.services.CheckResultsDetailedFilterParameters;
-import com.dqops.data.checkresults.services.models.CheckResultDetailedSingleModel;
-import com.dqops.data.checkresults.services.models.CheckResultsDetailedDataModel;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
-import com.dqops.data.errors.services.models.ErrorDetailedSingleModel;
-import com.dqops.data.errors.services.models.ErrorsDetailedDataModel;
+import com.dqops.data.errors.services.models.ErrorEntryModel;
+import com.dqops.data.errors.services.models.ErrorsListModel;
 import com.dqops.data.errors.snapshot.ErrorsSnapshot;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactory;
 import com.dqops.data.normalization.CommonTableNormalizationService;
@@ -71,24 +69,26 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
      *
      * @param rootChecksContainerSpec Root checks container.
      * @param loadParameters          Load parameters.
+     * @param userDomainIdentity      User identity within the data domain.
      * @return Complete model of the errors.
      */
     @Override
-    public ErrorsDetailedDataModel[] readErrorsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                        ErrorsDetailedFilterParameters loadParameters) {
-        Map<Long, ErrorsDetailedDataModel> errorMap = new LinkedHashMap<>();
+    public ErrorsListModel[] readErrorsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
+                                                ErrorsDetailedFilterParameters loadParameters,
+                                                UserDomainIdentity userDomainIdentity) {
+        Map<Long, ErrorsListModel> errorMap = new LinkedHashMap<>();
         HierarchyId checksContainerHierarchyId = rootChecksContainerSpec.getHierarchyId();
         String connectionName = checksContainerHierarchyId.getConnectionName();
         PhysicalTableName physicalTableName = checksContainerHierarchyId.getPhysicalTableName();
 
-        Table errorsTable = loadRecentErrors(loadParameters, connectionName, physicalTableName);
+        Table errorsTable = loadRecentErrors(loadParameters, connectionName, physicalTableName, userDomainIdentity);
         if (errorsTable == null || errorsTable.isEmpty()) {
-            return new ErrorsDetailedDataModel[0]; // empty array
+            return new ErrorsListModel[0]; // empty array
         }
 
         Table filteredTable = filterTableToRootChecksContainerAndFilterParameters(rootChecksContainerSpec, errorsTable, loadParameters);
         if (filteredTable.isEmpty()) {
-            return new ErrorsDetailedDataModel[0]; // empty array
+            return new ErrorsListModel[0]; // empty array
         }
 
         Table filteredTableByDataGroup = filteredTable;
@@ -98,7 +98,7 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
         }
 
         if (filteredTableByDataGroup.isEmpty()) {
-            return new ErrorsDetailedDataModel[0]; // empty array
+            return new ErrorsListModel[0]; // empty array
         }
 
         Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
@@ -114,16 +114,16 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
             Long checkHash = checkHashColumn.get(rowIndex);
             String dataGroupNameForCheck = allDataGroupColumn.get(rowIndex);
-            ErrorsDetailedDataModel errorsDetailedDataModel = errorMap.get(checkHash);
+            ErrorsListModel errorsListModel = errorMap.get(checkHash);
 
-            ErrorDetailedSingleModel singleModel = null;
+            ErrorEntryModel singleModel = null;
 
-            if (errorsDetailedDataModel != null) {
-                if (errorsDetailedDataModel.getSingleErrors().size() >= loadParameters.getMaxResultsPerCheck()) {
+            if (errorsListModel != null) {
+                if (errorsListModel.getErrorEntries().size() >= loadParameters.getMaxResultsPerCheck()) {
                     continue; // enough results loaded
                 }
 
-                if (!Objects.equals(dataGroupNameForCheck, errorsDetailedDataModel.getDataGroup())) {
+                if (!Objects.equals(dataGroupNameForCheck, errorsListModel.getDataGroup())) {
                     continue; // we are not mixing groups, results for a different group were already loaded
                 }
             } else {
@@ -132,15 +132,15 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
                 String checkCategory = row.getString(ErrorsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
                 String checkDisplayName = row.getString(ErrorsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
                 String checkName = row.getString(ErrorsColumnNames.CHECK_NAME_COLUMN_NAME);
-                String checkType = row.getString(ErrorsColumnNames.CHECK_TYPE_COLUMN_NAME);
+                String checkTypeString = row.getString(ErrorsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
-                errorsDetailedDataModel = new ErrorsDetailedDataModel();
-                errorsDetailedDataModel.setCheckCategory(checkCategory);
-                errorsDetailedDataModel.setCheckName(checkName);
-                errorsDetailedDataModel.setCheckHash(checkHash);
-                errorsDetailedDataModel.setCheckType(checkType);
-                errorsDetailedDataModel.setCheckDisplayName(checkDisplayName);
-                errorsDetailedDataModel.setDataGroup(dataGroupNameForCheck);
+                errorsListModel = new ErrorsListModel();
+                errorsListModel.setCheckCategory(checkCategory);
+                errorsListModel.setCheckName(checkName);
+                errorsListModel.setCheckHash(checkHash);
+                errorsListModel.setCheckType(CheckType.fromString(checkTypeString));
+                errorsListModel.setCheckDisplayName(checkDisplayName);
+                errorsListModel.setDataGroup(dataGroupNameForCheck);
 
                 Selection resultsForCheckHash = checkHashColumnUnsorted.isIn(checkHash);
                 List<String> dataGroupsForCheck = allDataGroupColumnUnsorted.where(resultsForCheckHash)
@@ -151,18 +151,18 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
                     dataGroupsForCheck.add(0, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
                 }
 
-                errorsDetailedDataModel.setDataGroupsNames(dataGroupsForCheck);
-                errorMap.put(checkHash, errorsDetailedDataModel);
+                errorsListModel.setDataGroupsNames(dataGroupsForCheck);
+                errorMap.put(checkHash, errorsListModel);
             }
 
             if (singleModel == null) {
                 singleModel = createErrorSingleModel(sortedTable.row(rowIndex));
             }
 
-            errorsDetailedDataModel.getSingleErrors().add(singleModel);
+            errorsListModel.getErrorEntries().add(singleModel);
         }
 
-        return errorMap.values().toArray(ErrorsDetailedDataModel[]::new);
+        return errorMap.values().toArray(ErrorsListModel[]::new);
     }
 
     /**
@@ -171,16 +171,17 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
      * @return Model with a single error.
      */
     @NotNull
-    private static ErrorDetailedSingleModel createErrorSingleModel(Row row) {
+    private static ErrorEntryModel createErrorSingleModel(Row row) {
         Double actualValue = TableRowUtility.getSanitizedDoubleValue(row, ErrorsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         Double expectedValue = TableRowUtility.getSanitizedDoubleValue(row, ErrorsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
 
         String columnName = TableRowUtility.getSanitizedStringValue(row, ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME);
         String dataGroupName = row.getString(ErrorsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        String checkTypeString = row.getString(ErrorsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
         Integer durationMs = row.getInt(ErrorsColumnNames.DURATION_MS_COLUMN_NAME);
         Instant executedAt = row.getInstant(ErrorsColumnNames.EXECUTED_AT_COLUMN_NAME);
-        String timeGradient = row.getString(ErrorsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+        String timeGradientString = row.getString(ErrorsColumnNames.TIME_GRADIENT_COLUMN_NAME);
         LocalDateTime timePeriod = row.getDateTime(ErrorsColumnNames.TIME_PERIOD_COLUMN_NAME);
 
         String provider = row.getString(ErrorsColumnNames.PROVIDER_COLUMN_NAME);
@@ -191,17 +192,19 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
         String errorMessage = row.getString(ErrorsColumnNames.ERROR_MESSAGE_COLUMN_NAME);
         LocalDateTime errorTimestamp = row.getDateTime(ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME);
         String errorSource = row.getString(ErrorsColumnNames.ERROR_SOURCE_COLUMN_NAME);
+        String tableComparison = row.getString(ErrorsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
 
-        ErrorDetailedSingleModel singleModel = new ErrorDetailedSingleModel() {{
+        ErrorEntryModel singleModel = new ErrorEntryModel() {{
             setActualValue(actualValue);
             setExpectedValue(expectedValue);
 
             setColumnName(columnName);
             setDataGroup(dataGroupName);
+            setCheckType(CheckType.fromString(checkTypeString));
 
             setDurationMs(durationMs);
             setExecutedAt(executedAt);
-            setTimeGradient(timeGradient);
+            setTimeGradient(TimePeriodGradient.fromString(timeGradientString));
             setTimePeriod(timePeriod);
 
             setProvider(provider);
@@ -212,6 +215,8 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
             setErrorMessage(errorMessage);
             setErrorSource(errorSource);
             setErrorTimestamp(errorTimestamp);
+
+            setTableComparison(tableComparison);
         }};
         return singleModel;
     }
@@ -303,13 +308,15 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
      * @param loadParameters Load parameters.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
+     * @param userDomainIdentity User identity within the data domain.
      * @return Table with errors for the most recent two months inside the specified range or null when no data found.
      */
     protected Table loadRecentErrors(ErrorsDetailedFilterParameters loadParameters,
                                      String connectionName,
-                                     PhysicalTableName physicalTableName) {
+                                     PhysicalTableName physicalTableName,
+                                     UserDomainIdentity userDomainIdentity) {
         ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_DETAILED);
+                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_DETAILED, userDomainIdentity);
         int maxMonthsToLoad = DEFAULT_MAX_RECENT_LOADED_MONTHS;
 
         if (loadParameters.getStartMonth() != null && loadParameters.getEndMonth() != null) {

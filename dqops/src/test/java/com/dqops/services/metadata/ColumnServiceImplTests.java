@@ -21,6 +21,8 @@ import com.dqops.core.jobqueue.DqoJobQueue;
 import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
+import com.dqops.core.principal.*;
+import com.dqops.data.storage.DummyParquetPartitionStorageService;
 import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -40,10 +42,12 @@ public class ColumnServiceImplTests extends BaseTest {
     private ColumnServiceImpl sut;
     private UserHomeContextFactory userHomeContextFactory;
     private DqoJobQueue dqoJobQueue;
+    private UserDomainIdentity userDomainIdentity;
 
     @BeforeEach
     public void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
+        this.userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
         this.dqoJobQueue = DqoJobQueueObjectMother.getDefaultJobQueue();
@@ -56,7 +60,7 @@ public class ColumnServiceImplTests extends BaseTest {
     }
 
     private UserHome createHierarchyTree() {
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
         TableWrapper table1 = connectionWrapper.getTables().createAndAddNew(
@@ -124,9 +128,10 @@ public class ColumnServiceImplTests extends BaseTest {
         String connectionName = "conn";
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab2");
         String columnName = "col1";
-        this.sut.deleteColumn(connectionName, tableName, columnName);
+        DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+        this.sut.deleteColumn(connectionName, tableName, columnName, principal);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
 
@@ -148,9 +153,10 @@ public class ColumnServiceImplTests extends BaseTest {
         String connectionName = "conn";
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab2");
         String columnName = "col4";
-        this.sut.deleteColumn(connectionName, tableName, columnName);
+        DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+        this.sut.deleteColumn(connectionName, tableName, columnName, principal);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
 
@@ -180,9 +186,10 @@ public class ColumnServiceImplTests extends BaseTest {
         Map<String, Map<PhysicalTableName, Iterable<String>>> connToTableToColumnsMap = new HashMap<>();
         connToTableToColumnsMap.put(connectionName, tableToColumnsMap);
 
-        this.sut.deleteColumns(connToTableToColumnsMap);
+        DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+        this.sut.deleteColumns(connToTableToColumnsMap, principal);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
 
@@ -219,9 +226,10 @@ public class ColumnServiceImplTests extends BaseTest {
         Map<String, Map<PhysicalTableName, Iterable<String>>> connToTableToColumnsMap = new HashMap<>();
         connToTableToColumnsMap.put(connectionName, tableToColumnsMap);
 
-        this.sut.deleteColumns(connToTableToColumnsMap);
+        DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+        this.sut.deleteColumns(connToTableToColumnsMap, principal);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
 

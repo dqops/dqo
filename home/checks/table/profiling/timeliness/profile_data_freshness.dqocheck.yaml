@@ -1,7 +1,8 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: table/timeliness/data_freshness
   rule_name: comparison/max_days
   help_text: Calculates the number of days since the most recent event timestamp (freshness)
+  standard: true

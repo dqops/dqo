@@ -1,8 +1,8 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/numeric/percentile
   rule_name: change/change_percent_30_days
-  help_text: Verifies that the median in a column changed in a fixed rate since last
-    readout from last month.
+  help_text: Verifies that the median in a column changed in a fixed rate since the
+    last readout from the last month.

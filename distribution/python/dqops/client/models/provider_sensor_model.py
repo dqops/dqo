@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.provider_sensor_model_provider_type import ProviderSensorModelProviderType
+from ..models.provider_type import ProviderType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -12,26 +13,32 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ProviderSensorModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ProviderSensorModel:
     """Provider sensor model
 
     Attributes:
-        provider_type (Union[Unset, ProviderSensorModelProviderType]): Provider type.
+        provider_type (Union[Unset, ProviderType]):
         provider_sensor_definition_spec (Union[Unset, ProviderSensorDefinitionSpec]):
-        sql_template (Union[Unset, str]): Provider Sql template
+        sql_template (Union[Unset, str]): Provider specific Jinja2 SQL template
         custom (Union[Unset, bool]): Whether the provider sensor is a User Home provider sensor
-        built_in (Union[Unset, bool]): This is a DQO built-in provider sensor, whose parameters cannot be changed.
+        built_in (Union[Unset, bool]): This is a DQOps built-in provider sensor, whose parameters cannot be changed.
+        can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
+        yaml_parsing_error (Union[Unset, str]): Optional parsing error that was captured when parsing the YAML file.
+            This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing
+            error message and the file location.
     """
 
-    provider_type: Union[Unset, ProviderSensorModelProviderType] = UNSET
+    provider_type: Union[Unset, ProviderType] = UNSET
     provider_sensor_definition_spec: Union[
         Unset, "ProviderSensorDefinitionSpec"
     ] = UNSET
     sql_template: Union[Unset, str] = UNSET
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    can_edit: Union[Unset, bool] = UNSET
+    yaml_parsing_error: Union[Unset, str] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         provider_type: Union[Unset, str] = UNSET
@@ -47,6 +54,8 @@ class ProviderSensorModel:
         sql_template = self.sql_template
         custom = self.custom
         built_in = self.built_in
+        can_edit = self.can_edit
+        yaml_parsing_error = self.yaml_parsing_error
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -61,6 +70,10 @@ class ProviderSensorModel:
             field_dict["custom"] = custom
         if built_in is not UNSET:
             field_dict["builtIn"] = built_in
+        if can_edit is not UNSET:
+            field_dict["canEdit"] = can_edit
+        if yaml_parsing_error is not UNSET:
+            field_dict["yamlParsingError"] = yaml_parsing_error
 
         return field_dict
 
@@ -72,11 +85,11 @@ class ProviderSensorModel:
 
         d = src_dict.copy()
         _provider_type = d.pop("providerType", UNSET)
-        provider_type: Union[Unset, ProviderSensorModelProviderType]
+        provider_type: Union[Unset, ProviderType]
         if isinstance(_provider_type, Unset):
             provider_type = UNSET
         else:
-            provider_type = ProviderSensorModelProviderType(_provider_type)
+            provider_type = ProviderType(_provider_type)
 
         _provider_sensor_definition_spec = d.pop("providerSensorDefinitionSpec", UNSET)
         provider_sensor_definition_spec: Union[Unset, ProviderSensorDefinitionSpec]
@@ -93,12 +106,18 @@ class ProviderSensorModel:
 
         built_in = d.pop("builtIn", UNSET)
 
+        can_edit = d.pop("canEdit", UNSET)
+
+        yaml_parsing_error = d.pop("yamlParsingError", UNSET)
+
         provider_sensor_model = cls(
             provider_type=provider_type,
             provider_sensor_definition_spec=provider_sensor_definition_spec,
             sql_template=sql_template,
             custom=custom,
             built_in=built_in,
+            can_edit=can_edit,
+            yaml_parsing_error=yaml_parsing_error,
         )
 
         provider_sensor_model.additional_properties = d

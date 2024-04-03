@@ -19,6 +19,7 @@ import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.SourceConnection;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -30,10 +31,9 @@ import com.dqops.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
 import com.dqops.execution.sensors.progress.SensorExecutionProgressListener;
 import com.dqops.execution.sensors.runners.AbstractSensorRunner;
 import com.dqops.execution.sensors.runners.GenericSensorResultsFactory;
-import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.metadata.sources.PhysicalTableName;
-import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.sources.*;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
+import com.dqops.utils.logging.UserErrorLogger;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +45,6 @@ import tech.tablesaw.api.Table;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,20 +61,24 @@ public class TableColumnListUnorderedHashSensorRunner extends AbstractSensorRunn
     public static final String CLASS_NAME = TableColumnListUnorderedHashSensorRunner.class.getName();
     private ConnectionProviderRegistry connectionProviderRegistry;
     private TableMetadataSensorExecutor tableMetadataSensorExecutor;
+    private UserErrorLogger userErrorLogger;
 
     /**
      * Dependency injection constructor that receives all dependencies.
      * @param connectionProviderRegistry Connection provider registry, used to retrieve a connector instance for the target data source.
      * @param defaultTimeZoneProvider The default time zone provider.
      * @param tableMetadataSensorExecutor Table metadata shared executor.
+     * @param userErrorLogger Check execution logger.
      */
     @Autowired
     public TableColumnListUnorderedHashSensorRunner(ConnectionProviderRegistry connectionProviderRegistry,
                                                     DefaultTimeZoneProvider defaultTimeZoneProvider,
-                                                    TableMetadataSensorExecutor tableMetadataSensorExecutor) {
+                                                    TableMetadataSensorExecutor tableMetadataSensorExecutor,
+                                                    UserErrorLogger userErrorLogger) {
         super(defaultTimeZoneProvider);
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.tableMetadataSensorExecutor = tableMetadataSensorExecutor;
+        this.userErrorLogger = userErrorLogger;
     }
 
     /**
@@ -113,6 +116,10 @@ public class TableColumnListUnorderedHashSensorRunner extends AbstractSensorRunn
         SensorExecutionRunParameters sensorRunParameters = sensorPrepareResult.getSensorRunParameters();
         PhysicalTableName physicalTableName = sensorRunParameters.getTable().getPhysicalTableName();
 
+        if (!groupedSensorExecutionResult.isSuccess()) {
+            return new SensorExecutionResult(sensorRunParameters, groupedSensorExecutionResult.getException());
+        }
+
         try {
             TableSpec introspectedTableSpec = groupedSensorExecutionResult.getCapturedMetadataResult();
 
@@ -134,7 +141,7 @@ public class TableColumnListUnorderedHashSensorRunner extends AbstractSensorRunn
             return new SensorExecutionResult(sensorRunParameters, table);
         }
         catch (Throwable exception) {
-            log.debug("Sensor failed to analyze the metadata of:" + physicalTableName.toTableSearchFilter(), exception);
+            this.userErrorLogger.logSensor("Sensor failed to analyze the metadata of:" + physicalTableName.toTableSearchFilter(), exception);
             return new SensorExecutionResult(sensorRunParameters, exception);
         }
     }
@@ -166,13 +173,23 @@ public class TableColumnListUnorderedHashSensorRunner extends AbstractSensorRunn
 
                 jobCancellationToken.throwIfCancelled();
                 ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
-                try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true)) {
+                SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(executionContext.getUserHomeContext().getUserHome());
+                try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true, secretValueLookupContext)) {
                     jobCancellationToken.throwIfCancelled();
                     String schemaName = sensorRunParameters.getTable().getPhysicalTableName().getSchemaName();
                     String tableName = sensorRunParameters.getTable().getPhysicalTableName().getTableName();
-                    List<TableSpec> retrievedTableSpecList = sourceConnection.retrieveTableMetadata(schemaName, new ArrayList<>() {{
-                        add(tableName);
-                    }});
+
+                    ConnectionList connections = executionContext.getUserHomeContext().getUserHome().getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionSpec.getConnectionName(), true);
+
+                    List<TableSpec> retrievedTableSpecList = sourceConnection.retrieveTableMetadata(
+                            schemaName,
+                            new ArrayList<>() {{
+                                add(tableName);
+                            }},
+                            connectionWrapper,
+                            secretValueLookupContext
+                    );
 
                     if (retrievedTableSpecList.size() == 0) {
                         // table not found
@@ -199,7 +216,8 @@ public class TableColumnListUnorderedHashSensorRunner extends AbstractSensorRunn
             return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
         }
         catch (Throwable exception) {
-            log.debug("Sensor failed to execute a query :" + renderedSensorSql, exception);
+            this.userErrorLogger.logSensor(sensorRunParameters.toString() + " failed to execute a query: " + renderedSensorSql +
+                        ", error: " + exception.getMessage(), exception);
             return new SensorExecutionResult(sensorRunParameters, exception);
         }
     }

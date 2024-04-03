@@ -1,10 +1,12 @@
-import React, { useMemo } from 'react';
-import { CheckTypes, ROUTES } from '../../shared/routes';
 import clsx from 'clsx';
-import SvgIcon from '../SvgIcon';
-import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import React, { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
+import IconButton from '../IconButton';
+import SvgIcon from '../SvgIcon';
 
 type NavigationMenu = {
   label: string;
@@ -25,8 +27,8 @@ const navigations: NavigationMenu[] = [
     value: CheckTypes.PROFILING
   },
   {
-    label: 'Recurring checks',
-    value: CheckTypes.RECURRING
+    label: 'Monitoring checks',
+    value: CheckTypes.MONITORING
   },
   {
     label: 'Partition checks',
@@ -53,8 +55,9 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
     column: string;
     tab: string;
     checkTypes: CheckTypes;
-  } = useParams();
+  } = useDecodedParams();
   const history = useHistory();
+  const [showNavigation, setShowNavigation] = useState(false)
 
   const activeIndex = useMemo(() => {
     return navigations.findIndex((item) => item.value === checkTypes);
@@ -114,8 +117,8 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
     );
 
     if (defaultTab) {
-      if (item.value === CheckTypes.RECURRING) {
-        url = ROUTES.COLUMN_RECURRING(
+      if (item.value === CheckTypes.MONITORING) {
+        url = ROUTES.COLUMN_MONITORING(
           item.value,
           connection,
           schema,
@@ -123,7 +126,7 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
           column,
           defaultTab
         );
-        value = ROUTES.COLUMN_RECURRING_VALUE(
+        value = ROUTES.COLUMN_MONITORING_VALUE(
           item.value,
           connection,
           schema,
@@ -149,7 +152,7 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
       }
     } else {
       const tab =
-        item.value === CheckTypes.RECURRING ||
+        item.value === CheckTypes.MONITORING ||
         item.value === CheckTypes.PARTITIONED
           ? 'daily'
           : item.value === CheckTypes.PROFILING
@@ -176,32 +179,43 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
     history.push(url);
   };
 
-  return (
+  const renderNavigation = () => {
+    return (
     <div className="flex space-x-3 px-4 pt-2 border-b border-gray-300 pb-4 mb-2">
       {navigations.map((item, index) => (
-        <div
-          className={clsx(
-            'flex items-center cursor-pointer w-70',
-            activeIndex === index ? 'font-bold' : ''
-          )}
-          key={item.value}
-          onClick={() => onChangeNavigation(item)}
-        >
-          {activeIndex > index ? (
-            <SvgIcon name="chevron-left" className="w-3 mr-2" />
-          ) : (
-            ''
-          )}
-          <span>{item.label}</span>
-          {activeIndex < index ? (
-            <SvgIcon name="chevron-right" className="w-6 ml-2" />
-          ) : (
-            ''
-          )}
-        </div>
-      ))}
-    </div>
-  );
+      <div
+        className={clsx(
+          'flex items-center cursor-pointer w-70',
+          activeIndex === index ? 'font-bold' : ''
+        )}
+        key={item.value}
+        onClick={() => onChangeNavigation(item)}
+      >
+        {activeIndex > index ? (
+          <SvgIcon name="chevron-left" className="w-6 mr-2" />
+        ) : (
+          ''
+        )}
+        <span>{item.label}</span>
+        {activeIndex < index ? (
+          <SvgIcon name="chevron-right" className="w-6 ml-2" />
+        ) : (
+          ''
+        )}
+      </div>
+    ))}
+  </div>
+    )
+  }
+
+  return (
+    <>
+    <IconButton className=' absolute right-0 top-7' >
+      <SvgIcon name={showNavigation ? "chevron-down" : "chevron-left"} className='ml-3 w-6 h-6' onClick={() => setShowNavigation(prev => !prev)}/>
+    </IconButton>
+    {showNavigation ? renderNavigation() : null}
+    </>
+  )
 };
 
 export default ColumnNavigation;

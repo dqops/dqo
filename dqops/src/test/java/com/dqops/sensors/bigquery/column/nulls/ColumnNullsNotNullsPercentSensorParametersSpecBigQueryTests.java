@@ -61,8 +61,8 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "date3", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersRecurring(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(this.sampleTableMetadata, "date3", this.checkSpec, timeScale);
+    private SensorExecutionRunParameters getRunParametersMonitoring(CheckTimeScale timeScale) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(this.sampleTableMetadata, "date3", this.checkSpec, timeScale);
     }
 
     private SensorExecutionRunParameters getRunParametersPartitioned(CheckTimeScale timeScale, String timeSeriesColumn) {
@@ -100,7 +100,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -129,7 +129,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
@@ -149,14 +149,14 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
     }
 
     @Test
-    void renderSensor_whenRecurringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
+    void renderSensor_whenMonitoringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
@@ -183,7 +183,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
@@ -217,7 +217,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1
@@ -236,8 +236,8 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
     }
 
     @Test
-    void renderSensor_whenRecurringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
+    void renderSensor_whenMonitoringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
@@ -246,7 +246,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
@@ -277,7 +277,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
@@ -317,7 +317,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
@@ -339,8 +339,8 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
     }
 
     @Test
-    void renderSensor_whenRecurringDefaultTimeSeriesTwoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
+    void renderSensor_whenMonitoringDefaultTimeSeriesTwoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
@@ -350,7 +350,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
@@ -383,7 +383,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,

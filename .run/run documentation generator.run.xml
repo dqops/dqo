@@ -1,0 +1,19 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="run documentation generator" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="temurin-17" />
+    <option name="VM_PARAMETERS" value="--add-opens java.base/java.util.concurrent=ALL-UNNAMED" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <envs>
+      <env name="DQO_HOME" value="$PROJECT_DIR$/home" />
+      <env name="DQO_USER_HOME" value="$PROJECT_DIR$/userhome" />
+      <env name="HADOOP_HOME" value="$PROJECT_DIR$/home" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="com.dqops.utils.docs.GenerateDocumentationPostProcessor" />
+    <module name="dqo-dqops" />
+    <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/dqops" />
+    <shortenClasspath name="ARGS_FILE" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

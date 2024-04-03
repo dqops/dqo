@@ -15,17 +15,19 @@
  */
 package com.dqops.checks;
 
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.parquet.Strings;
 
 /**
- * Enumeration of data quality check types: profiling, recurring, partitioned.
+ * Enumeration of data quality check types: profiling, monitoring, partitioned.
  */
 public enum CheckType {
     @JsonProperty("profiling")
     profiling("profiling"),
 
-    @JsonProperty("recurring")
-    recurring("recurring"),
+    @JsonProperty("monitoring")
+    monitoring("monitoring"),
 
     @JsonProperty("partitioned")
     partitioned("partitioned");
@@ -42,5 +44,39 @@ public enum CheckType {
      */
     public String getDisplayName() {
         return displayName;
+    }
+
+    /**
+     * Converts a string to an enum value.
+     * @param value String value of this enum.
+     * @return Enum value or null when the value is null or empty.
+     */
+    public static CheckType fromString(String value) {
+        if (Strings.isNullOrEmpty(value)) {
+            return null;
+        }
+
+        switch (value) {
+            case "profiling":
+            case "adhoc": // old values
+                return profiling;
+
+            case "monitoring":
+            case "checkpoint": // old values
+                return monitoring;
+
+            case "partitioned":
+                return partitioned;
+
+            default:
+                throw new EnumConstantNotPresentException(CheckType.class, value);
+        }
+    }
+
+    public static class CheckTypeSampleFactory implements SampleValueFactory<CheckType> {
+        @Override
+        public CheckType createSample() {
+            return monitoring;
+        }
     }
 }

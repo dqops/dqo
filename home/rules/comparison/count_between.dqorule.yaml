@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
+  mode: current_value
+  fields:
+  - field_name: min_count
+    display_name: min_count
+    help_text: "Minimum accepted count (inclusive), leave empty when the limit is\
+      \ not assigned."
+    data_type: long
+    required: true
+  - field_name: max_count
+    display_name: max_count
+    help_text: "Maximum accepted count (inclusive), leave empty when the limit is\
+      \ not assigned."
+    data_type: long
+    required: true

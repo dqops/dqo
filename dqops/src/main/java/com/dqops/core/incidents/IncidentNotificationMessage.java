@@ -92,8 +92,11 @@ public class IncidentNotificationMessage {
     /**
      * The data stream name that was affected by a data quality incident.
      */
-    @JsonPropertyDescription("The data stream name that was affected by a data quality incident.")
-    private String dataStreamName;
+    @JsonPropertyDescription("The data group name that was affected by a data quality incident. " +
+            "The data group names are created from the values of columns and tags configured in the data grouping configuration. " +
+            "An example data group when grouping a static tag \"customers\"  as the first level grouping and a *country* column value for the second grouping level is " +
+            "*customers / UK*.")
+    private String dataGroupName;
 
     /**
      * The data quality dimension that was affected by a data quality incident.
@@ -144,15 +147,25 @@ public class IncidentNotificationMessage {
     private IncidentStatus status;
 
     /**
+     * Notification text in Markdown format that contains the most important fields from the class.
+     */
+    @JsonPropertyDescription("Notification text in Markdown format that contains the most important fields from the class.")
+    private String text;
+
+    /**
      * Creates a new incident notification message from a single row of the "incidents" table. The column names are defined in {@link com.dqops.data.incidents.factory.IncidentsColumnNames} class.
-     * @param incidentRow Incident row - a row from the Incident's Tablesaw row.
-     * @param connectionName Connection name.
+     * @param messageParameters Incident notification message parameters with Tablesaw row.
      * @return Incident notification message.
      */
-    public static IncidentNotificationMessage fromIncidentRow(Row incidentRow, String connectionName) {
+    public static IncidentNotificationMessage fromIncidentRow(
+            IncidentNotificationMessageParameters messageParameters,
+            IncidentNotificationMessageFormatter textCreator) {
+
+        Row incidentRow = messageParameters.getIncidentRow();
+
         IncidentNotificationMessage message = new IncidentNotificationMessage();
         message.setIncidentId(incidentRow.getString(IncidentsColumnNames.ID_COLUMN_NAME));
-        message.setConnection(connectionName);
+        message.setConnection(messageParameters.getConnectionName());
         message.setSchema(incidentRow.getString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME));
         message.setTable(incidentRow.getString(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME));
         if (!incidentRow.isMissing(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME)) {
@@ -163,7 +176,7 @@ public class IncidentNotificationMessage {
         message.setLastSeen(incidentRow.getInstant(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME));
         message.setIncidentUntil(incidentRow.getInstant(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME));
         if (!incidentRow.isMissing(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME)) {
-            message.setDataStreamName(incidentRow.getString(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME));
+            message.setDataGroupName(incidentRow.getString(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME));
         }
         if (!incidentRow.isMissing(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME)) {
             message.setQualityDimension(incidentRow.getString(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME));
@@ -184,6 +197,16 @@ public class IncidentNotificationMessage {
         message.setFailedChecksCount(incidentRow.getInt(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME));
         message.setStatus(IncidentStatus.valueOf(incidentRow.getString(IncidentsColumnNames.STATUS_COLUMN_NAME)));
 
+        message.setText(textCreator.prepareText(messageParameters));
+
         return message;
+    }
+
+    @Override
+    public String toString() {
+        return "IncidentNotificationMessage{" +
+                "incidentId='" + incidentId + '\'' +
+                ", text='" + text + '\'' +
+                '}';
     }
 }

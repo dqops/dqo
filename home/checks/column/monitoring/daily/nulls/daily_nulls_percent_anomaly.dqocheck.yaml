@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/nulls/null_percent
+  rule_name: percentile/anomaly_stationary_percentile_moving_average
+  help_text: Detects day-to-day anomalies in the percentage of null values. Raises
+    a data quality issue when the rate of null values increases or decreases too much
+    during the last 90 days.
+  standard: true

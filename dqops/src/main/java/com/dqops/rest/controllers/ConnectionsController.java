@@ -17,31 +17,38 @@ package com.dqops.rest.controllers;
 
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.PushJobResult;
-import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.dictionaries.CommonColumnModel;
-import com.dqops.rest.models.metadata.ConnectionBasicModel;
 import com.dqops.rest.models.metadata.ConnectionModel;
+import com.dqops.rest.models.metadata.ConnectionSpecificationModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.check.CheckService;
 import com.dqops.services.check.models.AllChecksPatchParameters;
-import com.dqops.services.check.models.BulkCheckDisableParameters;
+import com.dqops.services.check.models.BulkCheckDeactivateParameters;
+import com.dqops.services.locking.RestApiLockService;
 import com.dqops.services.metadata.ConnectionService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -56,22 +63,28 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Connections", description = "Manages connections to monitored data sources")
+@Api(value = "Connections", description = "Operations for adding/updating/deleting the configuration of data sources managed by DQOps.")
 public class ConnectionsController {
     private final ConnectionService connectionService;
     private final UserHomeContextFactory userHomeContextFactory;
     private final DefaultSchedulesProvider defaultSchedulesProvider;
+    private final RestApiLockService lockService;
+    private final JobSchedulerService jobSchedulerService;
     private final CheckService checkService;
 
     @Autowired
     public ConnectionsController(ConnectionService connectionService,
                                  CheckService checkService,
                                  UserHomeContextFactory userHomeContextFactory,
-                                 DefaultSchedulesProvider defaultSchedulesProvider) {
+                                 DefaultSchedulesProvider defaultSchedulesProvider,
+                                 RestApiLockService lockService,
+                                 JobSchedulerService jobSchedulerService) {
         this.connectionService = connectionService;
         this.checkService = checkService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.defaultSchedulesProvider = defaultSchedulesProvider;
+        this.lockService = lockService;
+        this.jobSchedulerService = jobSchedulerService;
     }
 
     /**
@@ -79,19 +92,26 @@ public class ConnectionsController {
      * @return List of connections.
      */
     @GetMapping(produces = "application/json")
-    @ApiOperation(value = "getAllConnections", notes = "Returns a list of connections (data sources)", response = ConnectionBasicModel[].class)
+    @ApiOperation(value = "getAllConnections", notes = "Returns a list of connections (data sources)", response = ConnectionModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = ConnectionBasicModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = ConnectionModel[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<ConnectionBasicModel>> getAllConnections() {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<ConnectionModel>> getAllConnections(@AuthenticationPrincipal DqoUserPrincipal principal) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
-        Stream<ConnectionBasicModel> modelStream = connections.toList().stream()
-                .map(cw -> ConnectionBasicModel.fromConnectionSpecification(cw.getName(), cw.getSpec()));
+        boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+        boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+        Stream<ConnectionModel> modelStream = connections.toList().stream()
+                .map(cw -> ConnectionModel.fromConnectionSpecification(cw.getName(), cw.getSpec(), isEditor, isOperator))
+                .sorted(Comparator.comparing(model -> model.getConnectionName()));
 
         return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK); // 200
     }
@@ -102,16 +122,21 @@ public class ConnectionsController {
      * @return Full connection model with the connection name and the connection specification.
      */
     @GetMapping(value = "/{connectionName}", produces = "application/json")
-    @ApiOperation(value = "getConnection", notes = "Return the full details of a connection given the connection name", response = ConnectionModel.class)
+    @ApiOperation(value = "getConnection", notes = "Return the full details of a connection given the connection name", response = ConnectionSpecificationModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Connection returned", response = ConnectionModel.class),
+            @ApiResponse(code = 200, message = "Connection returned", response = ConnectionSpecificationModel.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<ConnectionModel>> getConnection(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<ConnectionSpecificationModel>> getConnection(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -121,13 +146,15 @@ public class ConnectionsController {
         }
 
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        ConnectionModel connectionModel = new ConnectionModel() {{
+        ConnectionSpecificationModel connectionSpecificationModel = new ConnectionSpecificationModel() {{
             setConnectionName(connectionName);
             setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
             setSpec(connectionSpec);
+            setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            setYamlParsingError(connectionSpec.getYamlParsingError());
         }};
 
-        return new ResponseEntity<>(Mono.just(connectionModel), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Mono.just(connectionSpecificationModel), HttpStatus.OK); // 200
     }
 
     /**
@@ -136,16 +163,21 @@ public class ConnectionsController {
      * @return Connection basic model with the connection name and the connection parameters.
      */
     @GetMapping(value = "/{connectionName}/basic", produces = "application/json")
-    @ApiOperation(value = "getConnectionBasic", notes = "Return the basic details of a connection given the connection name", response = ConnectionBasicModel.class)
+    @ApiOperation(value = "getConnectionBasic", notes = "Return the basic details of a connection given the connection name", response = ConnectionModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Connection basic information returned", response = ConnectionBasicModel.class),
+            @ApiResponse(code = 200, message = "Connection basic information returned", response = ConnectionModel.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<ConnectionBasicModel>> getConnectionBasic(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<ConnectionModel>> getConnectionBasic(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -155,9 +187,12 @@ public class ConnectionsController {
         }
 
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        ConnectionBasicModel connectionBasicModel = ConnectionBasicModel.fromConnectionSpecification(connectionName, connectionSpec);
+        boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+        boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+        ConnectionModel connectionModel = ConnectionModel.fromConnectionSpecification(
+                connectionName, connectionSpec, isEditor, isOperator);
 
-        return new ResponseEntity<>(Mono.just(connectionBasicModel), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Mono.just(connectionModel), HttpStatus.OK); // 200
     }
 
     /**
@@ -167,17 +202,22 @@ public class ConnectionsController {
      * @return Connection's schedule specification.
      */
     @GetMapping(value = "/{connectionName}/schedules/{schedulingGroup}", produces = "application/json")
-    @ApiOperation(value = "getConnectionSchedulingGroup", notes = "Return the schedule for a connection for a scheduling group", response = RecurringScheduleSpec.class)
+    @ApiOperation(value = "getConnectionSchedulingGroup", notes = "Return the schedule for a connection for a scheduling group", response = MonitoringScheduleSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Connection's schedule returned", response = RecurringScheduleSpec.class),
+            @ApiResponse(code = 200, message = "Connection's schedule returned", response = MonitoringScheduleSpec.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<RecurringScheduleSpec>> getConnectionSchedulingGroup(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<MonitoringScheduleSpec>> getConnectionSchedulingGroup(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunRecurringScheduleGroup schedulingGroup) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -187,12 +227,12 @@ public class ConnectionsController {
         }
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
 
-        RecurringSchedulesSpec schedules = connectionSpec.getSchedules();
+        DefaultSchedulesSpec schedules = connectionSpec.getSchedules();
         if (schedules == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
 
-        RecurringScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
+        MonitoringScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
 
         return new ResponseEntity<>(Mono.justOrEmpty(schedule), HttpStatus.OK); // 200
     }
@@ -203,16 +243,21 @@ public class ConnectionsController {
      * @return Connection's list of comments.
      */
     @GetMapping(value = "/{connectionName}/comments", produces = "application/json")
-    @ApiOperation(value = "getConnectionComments", notes = "Return the comments for a connection", response = CommentsListSpec.class)
+    @ApiOperation(value = "getConnectionComments", notes = "Return the comments for a connection", response = CommentsListSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Connection's comments returned", response = CommentsListSpec.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CommentsListSpec>> getConnectionComments(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -233,16 +278,21 @@ public class ConnectionsController {
      * @return Connection's list of labels.
      */
     @GetMapping(value = "/{connectionName}/labels", produces = "application/json")
-    @ApiOperation(value = "getConnectionLabels", notes = "Return the labels for a connection", response = LabelSetSpec.class)
+    @ApiOperation(value = "getConnectionLabels", notes = "Return the labels for a connection", response = LabelSetSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Connection's labels returned", response = LabelSetSpec.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<LabelSetSpec>> getConnectionLabels(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -263,16 +313,22 @@ public class ConnectionsController {
      * @return Connection's default data grouping configuration.
      */
     @GetMapping(value = "/{connectionName}/defaultgroupingconfiguration", produces = "application/json")
-    @ApiOperation(value = "getConnectionDefaultGroupingConfiguration", notes = "Return the default data grouping configuration for a connection", response = DataGroupingConfigurationSpec.class)
+    @ApiOperation(value = "getConnectionDefaultGroupingConfiguration", notes = "Return the default data grouping configuration for a connection",
+            response = DataGroupingConfigurationSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Connection's default data grouping configuration returned", response = DataGroupingConfigurationSpec.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<DataGroupingConfigurationSpec>> getConnectionDefaultGroupingConfiguration(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -294,16 +350,21 @@ public class ConnectionsController {
      */
     @GetMapping(value = "/{connectionName}/incidentgrouping", produces = "application/json")
     @ApiOperation(value = "getConnectionIncidentGrouping", notes = "Retrieves the configuration of data quality incident grouping and incident notifications",
-            response = ConnectionIncidentGroupingSpec.class)
+            response = ConnectionIncidentGroupingSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Connection's incident grouping configuration returned", response = ConnectionIncidentGroupingSpec.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<ConnectionIncidentGroupingSpec>> getConnectionIncidentGrouping(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -325,16 +386,21 @@ public class ConnectionsController {
      */
     @GetMapping(value = "/{connectionName}/commoncolumns", produces = "application/json")
     @ApiOperation(value = "getConnectionCommonColumns", notes = "Finds common column names that are used on one or more tables. " +
-            "The list of columns is sorted in descending order by column name.", response = CommonColumnModel[].class)
+            "The list of columns is sorted in descending order by column name.", response = CommonColumnModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of common columns within a connection returned", response = CommonColumnModel[].class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<CommonColumnModel>> getConnectionCommonColumns(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -344,7 +410,7 @@ public class ConnectionsController {
         }
 
         List<TableWrapper> tableWrapperList = connectionWrapper.getTables().toList();
-        Map<String, CommonColumnModel> foundColumns = new HashMap<>();
+        Map<String, CommonColumnModel> foundColumns = new LinkedHashMap<>();
         for (TableWrapper tableWrapper : tableWrapperList) {
             ColumnSpecMap columns = tableWrapper.getSpec().getColumns();
             for (String columnName : columns.keySet()) {
@@ -371,24 +437,29 @@ public class ConnectionsController {
      * @param connectionSpec Connection specification.
      * @return Empty response.
      */
-    @PostMapping(value = "/{connectionName}",consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createConnection", notes = "Creates a new connection")
+    @PostMapping(value = "/{connectionName}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "createConnection", notes = "Creates a new connection", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New connection successfully created"),
+            @ApiResponse(code = 201, message = "New connection successfully created", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 409, message = "Connection with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> createConnection(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> createConnection(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Connection specification") @RequestBody ConnectionSpec connectionSpec) {
         if (Strings.isNullOrEmpty(connectionName) || connectionSpec == null || connectionSpec.getProviderType() == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -400,7 +471,7 @@ public class ConnectionsController {
         ConnectionWrapper connectionWrapper = connections.createAndAddNew(connectionName);
         connectionWrapper.setSpec(connectionSpec);
         if (connectionSpec.getSchedules() == null) {
-            connectionSpec.setSchedules(this.defaultSchedulesProvider.createRecurringSchedulesSpecForNewConnection());
+            connectionSpec.setSchedules(this.defaultSchedulesProvider.createMonitoringSchedulesSpecForNewConnection(userHome));
         }
 
         userHomeContext.flush();
@@ -411,27 +482,32 @@ public class ConnectionsController {
     /**
      * Creates (adds) a new connection given teh basic information.
      * @param connectionName Connection name.
-     * @param connectionBasicModel Basic connection model.
+     * @param connectionModel Basic connection model.
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/basic", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createConnectionBasic", notes = "Creates a new connection given the basic information.")
+    @ApiOperation(value = "createConnectionBasic", notes = "Creates a new connection given the basic information.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New connection successfully created"),
+            @ApiResponse(code = 201, message = "New connection successfully created", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 409, message = "Connection with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> createConnectionBasic(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> createConnectionBasic(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Basic connection model") @RequestBody ConnectionBasicModel connectionBasicModel) {
-        if (Strings.isNullOrEmpty(connectionName) || connectionBasicModel == null || connectionBasicModel.getProviderType() == null) {
+            @ApiParam("Basic connection model") @RequestBody ConnectionModel connectionModel) {
+        if (Strings.isNullOrEmpty(connectionName) || connectionModel == null || connectionModel.getProviderType() == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -442,9 +518,9 @@ public class ConnectionsController {
 
         ConnectionWrapper connectionWrapper = connections.createAndAddNew(connectionName);
         ConnectionSpec connectionSpec = new ConnectionSpec();
-        connectionBasicModel.copyToConnectionSpecification(connectionSpec);
+        connectionModel.copyToConnectionSpecification(connectionSpec);
         if (connectionSpec.getSchedules() == null) {
-            connectionSpec.setSchedules(this.defaultSchedulesProvider.createRecurringSchedulesSpecForNewConnection());
+            connectionSpec.setSchedules(this.defaultSchedulesProvider.createMonitoringSchedulesSpecForNewConnection(userHome));
         }
         connectionWrapper.setSpec(connectionSpec);
         userHomeContext.flush();
@@ -459,138 +535,168 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnection", notes = "Updates an existing connection")
+    @ApiOperation(value = "updateConnection", notes = "Updates an existing connection", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection successfully updated"),
+            @ApiResponse(code = 204, message = "Connection successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateConnection(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateConnection(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Connection specification") @RequestBody ConnectionSpec connectionSpec) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        // TODO: validate the connectionSpec
-        connectionWrapper.setSpec(connectionSpec);
-        userHomeContext.flush();
+                    // TODO: validate the connectionSpec
+                    connectionWrapper.setSpec(connectionSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
      * Updates the basic details of an existing connection.
      * @param connectionName       Connection name.
-     * @param connectionBasicModel Connection basic model.
+     * @param connectionModel Connection basic model.
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/basic", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionBasic", notes = "Updates the basic information of a connection")
+    @ApiOperation(value = "updateConnectionBasic", notes = "Updates the basic information of a connection", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection's basic parameters successfully updated"),
+            @ApiResponse(code = 204, message = "Connection's basic parameters successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateConnectionBasic(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateConnectionBasic(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Connection basic details") @RequestBody ConnectionBasicModel connectionBasicModel) {
-        if (!Objects.equals(connectionName, connectionBasicModel.getConnectionName())) {
+            @ApiParam("Connection basic details") @RequestBody ConnectionModel connectionModel) {
+        if (!Objects.equals(connectionName, connectionModel.getConnectionName())) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - connection name mismatch
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        connectionBasicModel.copyToConnectionSpecification(existingConnectionSpec);
-        // TODO: some validation should be executed before flushing
+                    ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
+                    connectionModel.copyToConnectionSpecification(existingConnectionSpec);
+                    // TODO: some validation should be executed before flushing
 
-        userHomeContext.flush();
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
      * Updates the configuration of a check run schedule for a scheduling group (named schedule) of an existing connection.
      * @param connectionName        Connection name.
-     * @param recurringScheduleSpec Schedule specification.
+     * @param monitoringScheduleSpec Schedule specification.
      * @param schedulingGroup       Scheduling group.
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schedules/{schedulingGroup}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionSchedulingGroup", notes = "Updates the schedule of a connection for a scheduling group (named schedule for checks with a similar time series configuration)")
+    @ApiOperation(value = "updateConnectionSchedulingGroup",
+            notes = "Updates the schedule of a connection for a scheduling group (named schedule for checks with a similar time series configuration)", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection's schedule successfully updated"),
+            @ApiResponse(code = 204, message = "Connection's schedule successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateConnectionSchedulingGroup(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateConnectionSchedulingGroup(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunRecurringScheduleGroup schedulingGroup,
-            @ApiParam("Recurring schedule definition to store") @RequestBody Optional<RecurringScheduleSpec> recurringScheduleSpec) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup,
+            @ApiParam("Monitoring schedule definition to store") @RequestBody MonitoringScheduleSpec monitoringScheduleSpec) {
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        RecurringSchedulesSpec schedules = existingConnectionSpec.getSchedules();
-        if (schedules == null) {
-            schedules = new RecurringSchedulesSpec();
-            existingConnectionSpec.setSchedules(schedules);
-        }
+                    ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
 
-        RecurringScheduleSpec newScheduleSpec = recurringScheduleSpec.orElse(null);
-        switch (schedulingGroup) {
-            case profiling:
-                schedules.setProfiling(newScheduleSpec);
-                break;
+                    DefaultSchedulesSpec schedules = existingConnectionSpec.getSchedules();
+                    if (schedules == null) {
+                        schedules = new DefaultSchedulesSpec();
+                        existingConnectionSpec.setSchedules(schedules);
+                    }
 
-            case recurring_daily:
-                schedules.setRecurringDaily(newScheduleSpec);
-                break;
+                    switch (schedulingGroup) {
+                        case profiling:
+                            schedules.setProfiling(monitoringScheduleSpec);
+                            break;
 
-            case recurring_monthly:
-                schedules.setRecurringMonthly(newScheduleSpec);
-                break;
+                        case monitoring_daily:
+                            schedules.setMonitoringDaily(monitoringScheduleSpec);
+                            break;
 
-            case partitioned_daily:
-                schedules.setPartitionedDaily(newScheduleSpec);
-                break;
+                        case monitoring_monthly:
+                            schedules.setMonitoringMonthly(monitoringScheduleSpec);
+                            break;
 
-            case partitioned_monthly:
-                schedules.setPartitionedMonthly(newScheduleSpec);
-                break;
+                        case partitioned_daily:
+                            schedules.setPartitionedDaily(monitoringScheduleSpec);
+                            break;
 
-            default:
-                throw new UnsupportedOperationException("Unsupported scheduling group " + schedulingGroup);
-        }
+                        case partitioned_monthly:
+                            schedules.setPartitionedMonthly(monitoringScheduleSpec);
+                            break;
 
-        userHomeContext.flush();
+                        default:
+                            throw new UnsupportedOperationException("Unsupported scheduling group " + schedulingGroup);
+                    }
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    boolean scheduleChanged = existingConnectionSpec.isDirty();
+                    userHomeContext.flush();
+
+                    if (scheduleChanged) {
+                        this.jobSchedulerService.triggerMetadataSynchronization();
+                    }
+
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -600,35 +706,38 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/labels", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionLabels", notes = "Updates the list of labels of a connection")
+    @ApiOperation(value = "updateConnectionLabels", notes = "Updates the list of labels of a connection", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection's labels successfully updated"),
+            @ApiResponse(code = 204, message = "Connection's labels successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateConnectionLabels(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateConnectionLabels(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("List of labels") @RequestBody Optional<LabelSetSpec> labelSetSpec) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
+            @ApiParam("List of labels") @RequestBody LabelSetSpec labelSetSpec) {
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        if (labelSetSpec.isPresent()) {
-            existingConnectionSpec.setLabels(labelSetSpec.get());
-        } else {
-            existingConnectionSpec.setLabels(null);
-        }
-        userHomeContext.flush();
+                    connectionWrapper.getSpec().setLabels(labelSetSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -638,35 +747,38 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/comments", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionComments", notes = "Updates (replaces) the list of comments of a connection")
+    @ApiOperation(value = "updateConnectionComments", notes = "Updates (replaces) the list of comments of a connection", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection's comments successfully updated"),
+            @ApiResponse(code = 204, message = "Connection's comments successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateConnectionComments(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateConnectionComments(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("List of comments") @RequestBody Optional<CommentsListSpec> commentsListSpec) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
+            @ApiParam("List of comments") @RequestBody CommentsListSpec commentsListSpec) {
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        if (commentsListSpec.isPresent()) {
-            existingConnectionSpec.setComments(commentsListSpec.get());
-        } else {
-            existingConnectionSpec.setComments(null);
-        }
-        userHomeContext.flush();
+                    connectionWrapper.getSpec().setComments(commentsListSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -676,37 +788,39 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/defaultgroupingconfiguration", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionDefaultGroupingConfiguration", notes = "Updates the default data grouping connection of a connection")
+    @ApiOperation(value = "updateConnectionDefaultGroupingConfiguration", notes = "Updates the default data grouping connection of a connection", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection's default data grouping configuration successfully updated"),
+            @ApiResponse(code = 204, message = "Connection's default data grouping configuration successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateConnectionDefaultGroupingConfiguration(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateConnectionDefaultGroupingConfiguration(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Default data grouping configuration to be assigned to a connection")
-                @RequestBody Optional<DataGroupingConfigurationSpec> dataGroupingConfigurationSpec) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
+                @RequestBody DataGroupingConfigurationSpec dataGroupingConfigurationSpec) {
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        if (dataGroupingConfigurationSpec.isPresent()) {
-            existingConnectionSpec.setDefaultGroupingConfiguration(dataGroupingConfigurationSpec.get());
-        }
-        else {
-            existingConnectionSpec.setDefaultGroupingConfiguration(null);
-        }
-        userHomeContext.flush();
+                    connectionWrapper.getSpec().setDefaultGroupingConfiguration(dataGroupingConfigurationSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -716,55 +830,64 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/incidentgrouping", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateConnectionIncidentGrouping", notes = "Updates (replaces) configuration of incident grouping and notifications on a connection (data source) level.")
+    @ApiOperation(value = "updateConnectionIncidentGrouping",
+            notes = "Updates (replaces) configuration of incident grouping and notifications on a connection (data source) level.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection's incident configuration successfully updated"),
+            @ApiResponse(code = 204, message = "Connection's incident configuration successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateConnectionIncidentGrouping(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateConnectionIncidentGrouping(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Incident grouping and notification configuration") @RequestBody Optional<ConnectionIncidentGroupingSpec> incidentGroupingSpec) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
+            @ApiParam("Incident grouping and notification configuration") @RequestBody ConnectionIncidentGroupingSpec incidentGroupingSpec) {
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        if (incidentGroupingSpec.isPresent()) {
-            existingConnectionSpec.setIncidentGrouping(incidentGroupingSpec.get());
-        } else {
-            existingConnectionSpec.setIncidentGrouping(null);
-        }
-        userHomeContext.flush();
+                    connectionWrapper.getSpec().setIncidentGrouping(incidentGroupingSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
-     * Enables a named check on this connection in the locations specified by filter.
+     * Activates a named check on this connection in the locations specified by filter.
      * Allows for configuring the rules for particular alert levels.
      * @param connectionName        Connection name.
      * @param checkName             Check name.
      * @param updatePatchParameters Check search filters and template model with the configurations.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/checks/{checkName}/bulkenable", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "bulkEnableConnectionChecks", notes = "Enables a named check on this connection in the locations specified by filter")
+    @PutMapping(value = "/{connectionName}/checks/{checkName}/bulkactivate", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "bulkActivateConnectionChecks", notes = "Activates all named check on this connection in the locations specified by filter", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Checks enabled in bulk"),
+            @ApiResponse(code = 204, message = "Checks enabled in bulk", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> bulkEnableConnectionChecks(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> bulkActivateConnectionChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check name") @PathVariable String checkName,
             @ApiParam("Check search filters and rules configuration")
@@ -773,57 +896,68 @@ public class ConnectionsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST); // 400 - update patch parameters not supplied
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        updatePatchParameters.getCheckSearchFilters().setConnectionName(connectionName);
-        updatePatchParameters.getCheckSearchFilters().setCheckName(checkName);
-        checkService.updateAllChecksPatch(updatePatchParameters);
+                    updatePatchParameters.getCheckSearchFilters().setConnection(connectionName);
+                    updatePatchParameters.getCheckSearchFilters().setCheckName(checkName);
+                    checkService.activateOrUpdateAllChecks(updatePatchParameters, principal);
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
-     * Disables a named check on this connection in the locations specified by filter.
+     * Deactivates (deletes) a named check on this connection in the locations specified by filter.
      * @param connectionName        Connection name.
      * @param checkName             Check name.
-     * @param bulkDisableParameters Check search filters and table/column selectors.
+     * @param bulkDeactivateParameters Check search filters and table/column selectors.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/checks/{checkName}/bulkdisable", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "bulkDisableConnectionChecks", notes = "Disables a named check on this connection in the locations specified by filter")
+    @PutMapping(value = "/{connectionName}/checks/{checkName}/bulkdeactivate", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "bulkDeactivateConnectionChecks", notes = "Deactivates (deletes) all named check on this connection in the locations specified by filter", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Checks disabled"),
+            @ApiResponse(code = 204, message = "Checks disabled", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> bulkDisableConnectionChecks(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> bulkDeactivateConnectionChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check name") @PathVariable String checkName,
             @ApiParam("Check search filters and table/column selectors.")
-            @RequestBody BulkCheckDisableParameters bulkDisableParameters) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
+            @RequestBody BulkCheckDeactivateParameters bulkDeactivateParameters) {
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                    }
 
-        bulkDisableParameters.getCheckSearchFilters().setConnectionName(connectionName);
-        bulkDisableParameters.getCheckSearchFilters().setCheckName(checkName);
+                    bulkDeactivateParameters.getCheckSearchFilters().setConnection(connectionName);
+                    bulkDeactivateParameters.getCheckSearchFilters().setCheckName(checkName);
 
-        checkService.disableChecks(bulkDisableParameters);
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    checkService.deleteChecks(bulkDeactivateParameters, principal);
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -832,25 +966,33 @@ public class ConnectionsController {
      * @return Deferred operations job id.
      */
     @DeleteMapping(value = "/{connectionName}", produces = "application/json")
-    @ApiOperation(value = "deleteConnection", notes = "Deletes a connection")
+    @ApiOperation(value = "deleteConnection", notes = "Deletes a connection",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Connection successfully deleted", response = DqoQueueJobId.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Mono<DqoQueueJobId>> deleteConnection(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
+        return this.lockService.callSynchronouslyOnConnection(connectionName,
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+                    ConnectionList connections = userHome.getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                    if (connectionWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        PushJobResult<DeleteStoredDataQueueJobResult> backgroundJob = this.connectionService.deleteConnection(connectionName);
-        return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
+                    PushJobResult<DeleteStoredDataResult> backgroundJob = this.connectionService.deleteConnection(connectionName, principal);
+                    return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
+                });
     }
 }

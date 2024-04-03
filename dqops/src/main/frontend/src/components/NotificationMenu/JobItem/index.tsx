@@ -1,84 +1,50 @@
 import {
-  CheckResultsOverviewDataModelStatusesEnum,
-  DqoJobChangeModelStatusEnum,
-  DqoJobEntryParametersModel,
-  DqoJobHistoryEntryModel,
-  DqoJobHistoryEntryModelStatusEnum
-} from '../../../api';
-import React, { useState } from 'react';
-import SvgIcon from '../../SvgIcon';
-import {
   Accordion,
   AccordionBody,
   AccordionHeader
 } from '@material-tailwind/react';
+import clsx from 'clsx';
 import moment from 'moment';
-import JobChild from '../JobChild';
-import { reduceCounter } from '../../../redux/actions/job.actions';
+import React, { useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import {
+  DqoJobHistoryEntryModelJobTypeEnum,
+  DqoJobHistoryEntryModelStatusEnum
+} from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { reduceCounter } from '../../../redux/actions/job.actions';
+import { IRootState } from '../../../redux/reducers';
 import { JobApiClient } from '../../../services/apiClient';
-
-interface jobInterface {
-  errorMessage?: string | undefined;
-  jobId: {
-    jobId: number | undefined;
-    createdAt: number | undefined;
-  };
-  jobType: string;
-  parameters: DqoJobEntryParametersModel | undefined;
-  status: DqoJobChangeModelStatusEnum | undefined;
-  statusChangedAt?: number | undefined;
-  childs: DqoJobHistoryEntryModel[];
-}
+import SvgIcon from '../../SvgIcon';
+import JobChild from '../JobChild';
+import TooltipRunChecks from './TooltipRunChecks';
 
 const JobItem = ({
-  job,
-  notifnumber
+  jobId,
+  notifnumber,
+  canUserCancelJobs
 }: {
-  job: jobInterface;
+  jobId: string;
   notifnumber?: number;
+  canUserCancelJobs?: boolean;
 }) => {
-  const dispatch = useActionDispatch();
-
-  // const getNotificationDate = (notification: any) => {
-  //   if (notification.type === 'job') {
-  //     return notification.item.jobId?.createdAt;
-  //   }
-  //   return notification.item.date;
-  // };
-
   const [sizeOfNot, setSizeOfNot] = useState<number | undefined>(notifnumber);
+  const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+
+  const dispatch = useActionDispatch();
   const reduceCount = () => {
     dispatch(reduceCounter(true, sizeOfNot));
   };
 
-  // useEffect(() => {
-  //   firstMatchingItem();
-  // }, []);
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
-  // const data = useMemo(() => {
-  //   const jobsData = Object.values(job_dictionary_state)
-  //     .sort((a, b) => {
-  //       return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
-  //     })
-  //     .map((item) => ({ type: 'job', item }));
-
-  //   const errorData = errors.map((item: IError) => ({ type: 'error', item }));
-
-  //   const newData = jobsData.concat(errorData);
-
-  //   newData.sort((a, b) => {
-  //     const date1 = getNotificationDate(a);
-  //     const date2 = getNotificationDate(b);
-
-  //     return moment(date1).isBefore(moment(date2)) ? 1 : -1;
-  //   });
-
-  //   return newData;
-  // }, [job_dictionary_state, errors]);
-
-  const [open, setOpen] = useState(false);
-  const [open2, setOpen2] = useState(false);
+  const job = useMemo(() => {
+    return job_dictionary_state[jobId];
+  }, [job_dictionary_state[jobId]]);
 
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
@@ -91,28 +57,15 @@ const JobItem = ({
   };
 
   const cancelJob = async (jobId: number) => {
-    await JobApiClient.cancelJob(jobId);
+    await JobApiClient.cancelJob(jobId.toString());
   };
 
-  const getColor = (status: CheckResultsOverviewDataModelStatusesEnum) => {
-    switch (status) {
-      case 'valid':
-        return '#029a80';
-      case 'warning':
-        return '#ebe51e';
-      case 'error':
-        return '#ff9900';
-      case 'fatal':
-        return '#e3170a';
-      case 'execution_error':
-        return 'black';
-      default:
-        return 'black';
-    }
-  };
+  const hasInvalidApiKeyError = job?.childs?.some((x) =>
+    x.errorMessage?.includes('dqocloud.accesskey')
+  );
 
   const renderStatus = () => {
-    if (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
+    if (job.status === DqoJobHistoryEntryModelStatusEnum.finished) {
       return <SvgIcon name="success" className="w-4 h-4 text-primary" />;
     }
     if (job.status === DqoJobHistoryEntryModelStatusEnum.waiting) {
@@ -130,30 +83,42 @@ const JobItem = ({
     if (job.status === DqoJobHistoryEntryModelStatusEnum.cancelled) {
       return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
     }
+    if (hasInvalidApiKeyError) {
+      return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
+    }
   };
-  // const firstMatchingItem = (): boolean => {
-  //   for (const x of data) {
-  //     if (x.item.jobId?.parentJobId?.jobId === job.jobId?.jobId) {
-  //       return true;
-  //     }
-  //   }
 
-  //   return false;
-  // };
+  if (!job || !job.jobType) {
+    return <></>;
+  }
 
   return (
     <Accordion open={open} style={{ position: 'relative' }}>
       <AccordionHeader className="!outline-none" onClick={() => setOpen(!open)}>
-        <div className="group flex justify-between items-center text-sm w-full text-gray-700 ">
+        <div
+          className="group flex justify-between items-center text-sm w-full text-gray-700"
+          onMouseEnter={() => setTooltipOpen(true)}
+          onMouseLeave={() => setTooltipOpen(false)}
+        >
           <div className="flex space-x-1 items-center">
-            <div>{job.jobType}</div>
-            {renderStatus()}
+            <div>
+              {job.jobType !== undefined && String(job.jobType).length !== 0
+                ? job.jobType
+                    .replace(/_/g, ' ')
+                    .replace(/./, (c) => c.toUpperCase())
+                : 'Error'}
+            </div>
           </div>
           <div className="flex items-center gap-x-2">
             {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
               <div
+                className={clsx(
+                  canUserCancelJobs === false
+                    ? 'pointer-events-none cursor-not-allowed'
+                    : ''
+                )}
                 onClick={() =>
-                  cancelJob(job.jobId.jobId ? Number(job.jobId?.jobId) : 0)
+                  cancelJob(job?.jobId?.jobId ? Number(job.jobId?.jobId) : 0)
                 }
               >
                 <SvgIcon name="canceljobs" />
@@ -163,115 +128,16 @@ const JobItem = ({
             )}
             <div className=" relative">
               <div className="flex items-center gap-x-3">
-                {job.jobType === 'run checks' &&
-                  job.status == DqoJobHistoryEntryModelStatusEnum.succeeded && (
-                    <div
-                      className="w-3 h-3"
-                      style={{
-                        backgroundColor: getColor(
-                          job.parameters?.runChecksParameters?.runChecksResult
-                            ?.highestSeverity
-                            ? job.parameters?.runChecksParameters
-                                ?.runChecksResult?.highestSeverity
-                            : 'error'
-                        )
-                      }}
-                    />
+                {job.jobType ===
+                  DqoJobHistoryEntryModelJobTypeEnum.run_checks &&
+                  job.status == DqoJobHistoryEntryModelStatusEnum.finished && (
+                    <TooltipRunChecks job={job} open={tooltipOpen} />
                   )}
-                <div>
+                <div className="flex gap-x-2 items-center">
+                  {renderStatus()}
                   {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
                 </div>
               </div>
-              {job.jobType === 'run checks' &&
-                job.status == DqoJobHistoryEntryModelStatusEnum.succeeded && (
-                  <div
-                    className="hidden group-hover:block absolute px-5 gap-y-1 w-80 h-29 rounded-md border border-gray-400 z-50 bg-white"
-                    style={{
-                      transform: 'translate(50%, -50%)',
-                      top: '550%',
-                      right: '165%'
-                    }}
-                  >
-                    <div className="flex gap-x-2">
-                      <div className="font-light">Highest severity:</div>
-                      <div
-                        style={{
-                          color: getColor(
-                            job.parameters?.runChecksParameters?.runChecksResult
-                              ?.highestSeverity
-                              ? job.parameters?.runChecksParameters
-                                  ?.runChecksResult?.highestSeverity
-                              : 'error'
-                          )
-                        }}
-                      >
-                        {
-                          job.parameters?.runChecksParameters?.runChecksResult
-                            ?.highestSeverity
-                        }
-                      </div>
-                    </div>
-                    <div className="flex gap-x-2">
-                      <div className="font-light">Executed check:</div>
-                      <div>
-                        {
-                          job.parameters?.runChecksParameters?.runChecksResult
-                            ?.executedChecks
-                        }
-                      </div>
-                    </div>
-                    <div className="flex gap-x-2">
-                      <div className="font-light">Valid result:</div>
-                      <div>
-                        {job.parameters?.runChecksParameters?.runChecksResult
-                          ?.validResults === 0
-                          ? '-'
-                          : job.parameters?.runChecksParameters?.runChecksResult
-                              ?.validResults}
-                      </div>
-                    </div>
-                    <div className="flex gap-x-2">
-                      <div className="font-light">Warnings:</div>
-                      <div>
-                        {job.parameters?.runChecksParameters?.runChecksResult
-                          ?.warnings === 0
-                          ? '-'
-                          : job.parameters?.runChecksParameters?.runChecksResult
-                              ?.warnings}
-                      </div>
-                    </div>
-                    <div className="flex gap-x-2">
-                      <div className="font-light">Errors</div>
-                      <div>
-                        {job.parameters?.runChecksParameters?.runChecksResult
-                          ?.errors === 0
-                          ? '-'
-                          : job.parameters?.runChecksParameters?.runChecksResult
-                              ?.errors}
-                      </div>
-                    </div>
-                    <div className="flex gap-x-2">
-                      <div className="font-light">Fatals:</div>
-                      <div>
-                        {job.parameters?.runChecksParameters?.runChecksResult
-                          ?.fatals === 0
-                          ? '-'
-                          : job.parameters?.runChecksParameters?.runChecksResult
-                              ?.fatals}
-                      </div>
-                    </div>
-                    <div className="flex gap-x-2">
-                      <div className="font-light">Execution Fatals:</div>
-                      <div>
-                        {job.parameters?.runChecksParameters?.runChecksResult
-                          ?.executionErrors === 0
-                          ? '-'
-                          : job.parameters?.runChecksParameters?.runChecksResult
-                              ?.executionErrors}
-                      </div>
-                    </div>
-                  </div>
-                )}
             </div>
           </div>
         </div>
@@ -283,6 +149,16 @@ const JobItem = ({
             <tr className="flex justify-between w-108">
               <td>Status</td>
               <td>{job?.status}</td>
+              {hasInvalidApiKeyError && (
+                <span className="px-2 text-red-500">
+                  (DQOps Cloud Pairing API Key is invalid. Your trial period has
+                  expired, or your FREE account was not granted free access to
+                  the Data Quality Data Lake due to daily limits, or a new
+                  version of DQOps was released. Please run {"'"}cloud login
+                  {"'"} from DQOps shell or contact DQOps support to request
+                  access to the data quality data lake and dashboards)
+                </span>
+              )}
             </tr>
             <tr className="flex justify-between w-108">
               <td>Last Changed</td>
@@ -290,25 +166,29 @@ const JobItem = ({
                 {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
               </td>
             </tr>
-            {job?.parameters?.runChecksParameters?.checkSearchFilters &&
+            {job?.parameters?.runChecksParameters?.check_search_filters &&
               Object.entries(
-                job?.parameters?.runChecksParameters?.checkSearchFilters
+                job?.parameters?.runChecksParameters?.check_search_filters
               ).map(([key, value], index) => (
                 <tr key={index} className="flex justify-between w-108">
-                  <td>{key}</td>
+                  <td>
+                    {key
+                      .replace(/([a-z])([A-Z])/g, '$1 $2')
+                      .replace(/^\w/, (c) => c.toUpperCase())}
+                  </td>
                   <td>{renderValue(value)}</td>
                 </tr>
               ))}
             {job?.parameters?.importSchemaParameters && (
               <>
                 <tr className="flex justify-between w-108">
-                  <td>Connection Name</td>
+                  <td>Connection name</td>
                   <td>
                     {job?.parameters?.importSchemaParameters?.connectionName}
                   </td>
                 </tr>
                 <tr className="flex justify-between w-108">
-                  <td>Schema Name</td>
+                  <td>Schema name</td>
                   <td>{job?.parameters?.importSchemaParameters?.schemaName}</td>
                 </tr>
                 <tr className="flex justify-between w-108">
@@ -344,26 +224,30 @@ const JobItem = ({
               </>
             )}
             {job?.parameters?.collectStatisticsParameters
-              ?.statisticsCollectorSearchFilters &&
+              ?.statistics_collector_search_filters &&
               Object.entries(
                 job?.parameters?.collectStatisticsParameters
-                  ?.statisticsCollectorSearchFilters
+                  ?.statistics_collector_search_filters
               ).map(([key, value], index) => (
                 <tr key={index} className="flex justify-between w-108">
-                  <td>{key}</td>
+                  <td>
+                    {key
+                      .replace(/([a-z])([A-Z])/g, '$1 $2')
+                      .replace(/^\w/, (c) => c.toUpperCase())}
+                  </td>
                   <td>{renderValue(value)}</td>
                 </tr>
               ))}
             {job?.parameters?.importTableParameters && (
               <>
                 <tr className="flex justify-between w-108">
-                  <td>Connection Name</td>
+                  <td>Connection name</td>
                   <td>
                     {job?.parameters?.importTableParameters?.connectionName}
                   </td>
                 </tr>
                 <tr className="flex justify-between w-108">
-                  <td>Schema Name</td>
+                  <td>Schema name</td>
                   <td>{job?.parameters?.importTableParameters?.schemaName}</td>
                 </tr>
                 <tr className="flex justify-between w-108">

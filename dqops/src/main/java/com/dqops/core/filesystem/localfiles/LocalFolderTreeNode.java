@@ -17,6 +17,7 @@ package com.dqops.core.filesystem.localfiles;
 
 import com.dqops.core.filesystem.virtual.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.parquet.Strings;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -67,8 +68,8 @@ public class LocalFolderTreeNode extends FolderTreeNode {
     public void loadChildFilesAndFolders() {
         super.loadChildFilesAndFolders();
 
-        List<HomeFolderPath> subFolders = this.context.getStorageService().listFolders(this.getFolderPath());
-        List<HomeFilePath> files = this.context.getStorageService().listFiles(this.getFolderPath());
+        List<HomeFolderPath> subFolders = this.context.getStorageService().listFolders(this.getFolderPath(), true);
+        List<HomeFilePath> files = this.context.getStorageService().listFiles(this.getFolderPath(), true);
 
         if (subFolders != null && subFolders.size() > 0) {
             Set<String> existingSubFolders = this.getSubFolders().stream().map(f -> f.getFolderName().getObjectName()).collect(Collectors.toSet());
@@ -121,7 +122,7 @@ public class LocalFolderTreeNode extends FolderTreeNode {
     public void flush() {
         super.flush();
         if (this.isDeleteOnFlush()) {
-			this.context.getStorageService().tryDeleteFolder(this.getFolderPath());
+			this.context.getStorageService().tryDeleteFolder(this.getFolderPath(), true);
         }
     }
 
@@ -150,7 +151,7 @@ public class LocalFolderTreeNode extends FolderTreeNode {
         }
 
         Path directPath = Path.of(homePath);
-        if (this.getFolderPath().size() > 0) {
+        if (!this.getFolderPath().isEmpty() || !Strings.isNullOrEmpty(this.getFolderPath().getDataDomain())) {
             directPath = directPath.resolve(this.getFolderPath().toRelativePath());
         }
 

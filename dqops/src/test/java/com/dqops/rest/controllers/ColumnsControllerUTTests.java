@@ -19,19 +19,25 @@ import com.dqops.BaseTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
-import com.dqops.checks.column.recurring.ColumnRecurringChecksRootSpec;
-import com.dqops.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
-import com.dqops.checks.column.recurring.nulls.ColumnNullsDailyRecurringChecksSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.nulls.ColumnNullsDailyMonitoringChecksSpec;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import com.dqops.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
-import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.numeric.ColumnNumericMonthlyPartitionedChecksSpec;
+import com.dqops.checks.defaults.DefaultObservabilityConfigurationServiceImpl;
+import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
 import com.dqops.core.jobqueue.DqoJobQueue;
 import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
+import com.dqops.core.principal.DqoUserPrincipalObjectMother;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
@@ -40,19 +46,18 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.rules.comparison.MaxCountRule15ParametersSpec;
-import com.dqops.services.check.mapping.utils.CheckContainerBasicModelUtility;
+import com.dqops.rules.comparison.*;
+import com.dqops.services.check.mapping.utils.CheckContainerListModelUtility;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
-import com.dqops.services.check.mapping.basicmodels.CheckContainerBasicModel;
+import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingServiceImpl;
-import com.dqops.rest.models.metadata.ColumnBasicModel;
+import com.dqops.rest.models.metadata.ColumnListModel;
 import com.dqops.rest.models.metadata.ColumnModel;
-import com.dqops.rules.comparison.MaxCountRule0ParametersSpec;
-import com.dqops.rules.comparison.MaxCountRule10ParametersSpec;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
+import com.dqops.services.locking.RestApiLockServiceImpl;
 import com.dqops.services.metadata.ColumnService;
 import com.dqops.services.metadata.ColumnServiceImpl;
 import com.dqops.utils.BeanFactoryObjectMother;
@@ -68,7 +73,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 public class ColumnsControllerUTTests extends BaseTest {
@@ -76,21 +80,25 @@ public class ColumnsControllerUTTests extends BaseTest {
     private UserHomeContextFactory userHomeContextFactory;
     private UserHomeContext userHomeContext;
     private SampleTableMetadata sampleTable;
+    private UserDomainIdentity userDomainIdentity;
     
     @BeforeEach
     void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
+        this.userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
         DqoJobQueue dqoJobQueue = DqoJobQueueObjectMother.getDefaultJobQueue();
         ColumnService columnService = new ColumnServiceImpl(this.userHomeContextFactory, dqoQueueJobFactory, dqoJobQueue);
 
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                reflectionService, new SensorDefinitionFindServiceImpl());
+                reflectionService, new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         ModelToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new ModelToSpecCheckMappingServiceImpl(reflectionService);
         DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
-        this.sut = new ColumnsController(columnService, this.userHomeContextFactory, dqoHomeContextFactory, specToUiCheckMappingService, uiToSpecCheckMappingService, null);
-        this.userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        this.sut = new ColumnsController(columnService, this.userHomeContextFactory, dqoHomeContextFactory, specToUiCheckMappingService,
+                uiToSpecCheckMappingService, null, new DefaultObservabilityConfigurationServiceImpl(ConnectionProviderRegistryObjectMother.getInstance()),
+                new RestApiLockServiceImpl());
+        this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
     }
 
@@ -98,12 +106,13 @@ public class ColumnsControllerUTTests extends BaseTest {
     void getColumns_whenSampleTableRequested_thenReturnsListOfColumns() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Flux<ColumnBasicModel>> responseEntity = this.sut.getColumns(
+        ResponseEntity<Flux<ColumnListModel>> responseEntity = this.sut.getColumns(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
 
-        List<ColumnBasicModel> result = responseEntity.getBody().collectList().block();
+        List<ColumnListModel> result = responseEntity.getBody().collectList().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(3, result.size());
     }
@@ -114,6 +123,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
         ResponseEntity<Mono<ColumnModel>> responseEntity = this.sut.getColumn(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -133,13 +143,14 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<ColumnBasicModel>> responseEntity = this.sut.getColumnBasic(
+        ResponseEntity<Mono<ColumnListModel>> responseEntity = this.sut.getColumnBasic(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 columnSpec.getColumnName());
 
-        ColumnBasicModel result = responseEntity.getBody().block();
+        ColumnListModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(columnSpec.getColumnName(), result.getColumnName());
         Assertions.assertEquals(this.sampleTable.getConnectionName(), result.getConnectionName());
@@ -154,6 +165,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
         ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getColumnProfilingChecksModel(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -161,16 +173,17 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         CheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(13, result.getCategories().size());
+        Assertions.assertEquals(17, result.getCategories().size());
     }
 
     @ParameterizedTest
     @EnumSource(CheckTimeScale.class)
-    void getColumnRecurringChecksModel_whenColumnFromSampleTableRequested_thenReturnsRecurringChecksUI(CheckTimeScale timePartition) {
+    void getColumnMonitoringChecksModel_whenColumnFromSampleTableRequested_thenReturnsMonitoringChecksUI(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getColumnRecurringChecksModel(
+        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getColumnMonitoringChecksModel(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -181,9 +194,9 @@ public class ColumnsControllerUTTests extends BaseTest {
         Assertions.assertNotNull(result);
 
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(13, result.getCategories().size());
+            Assertions.assertEquals(17, result.getCategories().size());
         } else {
-            Assertions.assertEquals(13, result.getCategories().size());
+            Assertions.assertEquals(16, result.getCategories().size());
         }
     }
 
@@ -194,6 +207,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
         ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getColumnPartitionedChecksModel(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -203,9 +217,9 @@ public class ColumnsControllerUTTests extends BaseTest {
         CheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(11, result.getCategories().size());
+            Assertions.assertEquals(15, result.getCategories().size());
         } else {
-            Assertions.assertEquals(11, result.getCategories().size());
+            Assertions.assertEquals(14, result.getCategories().size());
         }
     }
 
@@ -214,36 +228,38 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<CheckContainerBasicModel>> responseEntity = this.sut.getColumnProfilingChecksBasicModel(
+        ResponseEntity<Mono<CheckContainerListModel>> responseEntity = this.sut.getColumnProfilingChecksBasicModel(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 columnSpec.getColumnName());
 
-        CheckContainerBasicModel result = responseEntity.getBody().block();
+        CheckContainerListModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(13, CheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(17, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
     @EnumSource(CheckTimeScale.class)
-    void getColumnRecurringChecksBasicModel_whenColumnFromSampleTableRequested_thenReturnsRecurringChecksUIBasic(CheckTimeScale timePartition) {
+    void getColumnMonitoringChecksBasicModel_whenColumnFromSampleTableRequested_thenReturnsMonitoringChecksUIBasic(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<CheckContainerBasicModel>> responseEntity = this.sut.getColumnRecurringChecksBasicModel(
+        ResponseEntity<Mono<CheckContainerListModel>> responseEntity = this.sut.getColumnMonitoringChecksBasicModel(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 columnSpec.getColumnName(),
                 timePartition);
 
-        CheckContainerBasicModel result = responseEntity.getBody().block();
+        CheckContainerListModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(13, CheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(17, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         } else {
-            Assertions.assertEquals(13, CheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(16, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         }
     }
 
@@ -253,19 +269,20 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<CheckContainerBasicModel>> responseEntity = this.sut.getColumnPartitionedChecksBasicModel(
+        ResponseEntity<Mono<CheckContainerListModel>> responseEntity = this.sut.getColumnPartitionedChecksBasicModel(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 columnSpec.getColumnName(),
                 timePartition);
 
-        CheckContainerBasicModel result = responseEntity.getBody().block();
+        CheckContainerListModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(11, CheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(15, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         } else {
-            Assertions.assertEquals(11, CheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(14, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         }
     }
 
@@ -274,11 +291,11 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        MaxCountRule0ParametersSpec maxCountRule1 = new MaxCountRule0ParametersSpec();
+        MaxCountRule0WarningParametersSpec maxCountRule1 = new MaxCountRule0WarningParametersSpec();
         maxCountRule1.setMaxCount(10L);
-        MaxCountRule10ParametersSpec maxCountRule2 = new MaxCountRule10ParametersSpec();
+        MaxCountRule0ErrorParametersSpec maxCountRule2 = new MaxCountRule0ErrorParametersSpec();
         maxCountRule2.setMaxCount(20L);
-        MaxCountRule15ParametersSpec maxCountRule3 = new MaxCountRule15ParametersSpec();
+        MaxCountRule100ParametersSpec maxCountRule3 = new MaxCountRule100ParametersSpec();
         maxCountRule3.setMaxCount(30L);
 
         ColumnNullsCountCheckSpec nullsChecksSpec = new ColumnNullsCountCheckSpec();
@@ -291,12 +308,13 @@ public class ColumnsControllerUTTests extends BaseTest {
         ColumnProfilingCheckCategoriesSpec sampleProfilingCheck = new ColumnProfilingCheckCategoriesSpec();
         sampleProfilingCheck.setNulls(nullChecks);
         
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnProfilingChecks(
+        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateColumnProfilingChecks(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 columnSpec.getColumnName(),
-                Optional.of(sampleProfilingCheck));
+                sampleProfilingCheck);
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
@@ -304,15 +322,15 @@ public class ColumnsControllerUTTests extends BaseTest {
     }
 
     @Test
-    void updateColumnRecurringChecksDaily_whenColumnAndRecurringRequested_updatesRecurring() {
+    void updateColumnMonitoringChecksDaily_whenColumnAndMonitoringRequested_updatesMonitoring() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        MaxCountRule0ParametersSpec maxCountRule1 = new MaxCountRule0ParametersSpec();
+        MaxCountRule0WarningParametersSpec maxCountRule1 = new MaxCountRule0WarningParametersSpec();
         maxCountRule1.setMaxCount(10L);
-        MaxCountRule10ParametersSpec maxCountRule2 = new MaxCountRule10ParametersSpec();
+        MaxCountRule0ErrorParametersSpec maxCountRule2 = new MaxCountRule0ErrorParametersSpec();
         maxCountRule2.setMaxCount(20L);
-        MaxCountRule15ParametersSpec maxCountRule3 = new MaxCountRule15ParametersSpec();
+        MaxCountRule100ParametersSpec maxCountRule3 = new MaxCountRule100ParametersSpec();
         maxCountRule3.setMaxCount(30L);
 
         ColumnNullsCountCheckSpec nullsChecksSpec = new ColumnNullsCountCheckSpec();
@@ -320,24 +338,25 @@ public class ColumnsControllerUTTests extends BaseTest {
         nullsChecksSpec.setError(maxCountRule2);
         nullsChecksSpec.setFatal(maxCountRule3);
 
-        ColumnNullsDailyRecurringChecksSpec nullDailyRecurring = new ColumnNullsDailyRecurringChecksSpec();
-        nullDailyRecurring.setDailyNullsCount(nullsChecksSpec);
-        ColumnDailyRecurringCheckCategoriesSpec dailyRecurring = new ColumnDailyRecurringCheckCategoriesSpec();
-        dailyRecurring.setNulls(nullDailyRecurring);
-        ColumnRecurringChecksRootSpec sampleRecurring = new ColumnRecurringChecksRootSpec();
-        sampleRecurring.setDaily(dailyRecurring);
+        ColumnNullsDailyMonitoringChecksSpec nullDailyMonitoring = new ColumnNullsDailyMonitoringChecksSpec();
+        nullDailyMonitoring.setDailyNullsCount(nullsChecksSpec);
+        ColumnDailyMonitoringCheckCategoriesSpec dailyMonitoring = new ColumnDailyMonitoringCheckCategoriesSpec();
+        dailyMonitoring.setNulls(nullDailyMonitoring);
+        ColumnMonitoringCheckCategoriesSpec sampleMonitoring = new ColumnMonitoringCheckCategoriesSpec();
+        sampleMonitoring.setDaily(dailyMonitoring);
         
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnRecurringChecksDaily(
+        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateColumnMonitoringChecksDaily(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 columnSpec.getColumnName(),
-                Optional.of(sampleRecurring.getDaily()));
+                sampleMonitoring.getDaily());
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertSame(columnSpec.getRecurringChecks().getDaily(), sampleRecurring.getDaily());
-        Assertions.assertNull(columnSpec.getRecurringChecks().getMonthly());
+        Assertions.assertSame(columnSpec.getMonitoringChecks().getDaily(), sampleMonitoring.getDaily());
+        Assertions.assertNull(columnSpec.getMonitoringChecks().getMonthly());
     }
 
     @Test
@@ -345,11 +364,11 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        MaxCountRule0ParametersSpec maxCountRule1 = new MaxCountRule0ParametersSpec();
+        MaxCountRule0WarningParametersSpec maxCountRule1 = new MaxCountRule0WarningParametersSpec();
         maxCountRule1.setMaxCount(10L);
-        MaxCountRule10ParametersSpec maxCountRule2 = new MaxCountRule10ParametersSpec();
+        MaxCountRule0ErrorParametersSpec maxCountRule2 = new MaxCountRule0ErrorParametersSpec();
         maxCountRule2.setMaxCount(20L);
-        MaxCountRule15ParametersSpec maxCountRule3 = new MaxCountRule15ParametersSpec();
+        MaxCountRule100ParametersSpec maxCountRule3 = new MaxCountRule100ParametersSpec();
         maxCountRule3.setMaxCount(30L);
         
         ColumnNegativeCountCheckSpec negativeChecksSpec = new ColumnNegativeCountCheckSpec();
@@ -358,18 +377,19 @@ public class ColumnsControllerUTTests extends BaseTest {
         negativeChecksSpec.setFatal(maxCountRule3);
         
         ColumnNumericMonthlyPartitionedChecksSpec negativeMonthlyPartitionedChecks = new ColumnNumericMonthlyPartitionedChecksSpec();
-        negativeMonthlyPartitionedChecks.setMonthlyPartitionNegativeCount(negativeChecksSpec);
+        negativeMonthlyPartitionedChecks.setMonthlyPartitionNegativeValues(negativeChecksSpec);
         ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCheck = new ColumnMonthlyPartitionedCheckCategoriesSpec();
         monthlyPartitionedCheck.setNumeric(negativeMonthlyPartitionedChecks);
-        ColumnPartitionedChecksRootSpec samplePartitionedCheck = new ColumnPartitionedChecksRootSpec();
+        ColumnPartitionedCheckCategoriesSpec samplePartitionedCheck = new ColumnPartitionedCheckCategoriesSpec();
         samplePartitionedCheck.setMonthly(monthlyPartitionedCheck);
         
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnPartitionedChecksMonthly(
+        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateColumnPartitionedChecksMonthly(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 columnSpec.getColumnName(),
-                Optional.of(samplePartitionedCheck.getMonthly()));
+                samplePartitionedCheck.getMonthly());
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);

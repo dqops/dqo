@@ -39,7 +39,7 @@ import java.util.Arrays;
 
 @SpringBootTest
 public class AnomalyStationaryPercentileMovingAverageRuleParametersSpecTests extends BaseTest {
-    private AnomalyStationaryPercentileMovingAverageRule1ParametersSpec sut;
+    private AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -49,7 +49,7 @@ public class AnomalyStationaryPercentileMovingAverageRuleParametersSpecTests ext
 
     @BeforeEach
     void setUp() {
-        this.sut = new AnomalyStationaryPercentileMovingAverageRule1ParametersSpec();
+        this.sut = new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
@@ -70,12 +70,12 @@ public class AnomalyStationaryPercentileMovingAverageRuleParametersSpecTests ext
         }
 
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
-                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(13.55, ruleExecutionResult.getLowerBound(), 0.1);
         Assertions.assertEquals(26.44, ruleExecutionResult.getUpperBound(), 0.1);
@@ -88,12 +88,12 @@ public class AnomalyStationaryPercentileMovingAverageRuleParametersSpecTests ext
         Arrays.fill(this.sensorReadouts, 10.0);
 
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
-                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(10.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(10.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(10.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(10.0, ruleExecutionResult.getUpperBound());
@@ -102,12 +102,12 @@ public class AnomalyStationaryPercentileMovingAverageRuleParametersSpecTests ext
     @Test
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
-                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
         Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());

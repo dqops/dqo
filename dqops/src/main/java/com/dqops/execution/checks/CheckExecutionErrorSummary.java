@@ -43,22 +43,22 @@ public class CheckExecutionErrorSummary {
         StringBuilder messageBuilder = new StringBuilder("Check execution error");
         if (failedAt != null) {
             messageBuilder.append(" at\n");
-            if (failedAt.getConnectionName() != null) {
+            if (failedAt.getConnection() != null) {
                 messageBuilder
                         .append("\tConnection:\t")
-                        .append(failedAt.getConnectionName())
+                        .append(failedAt.getConnection())
                         .append("\n");
             }
-            if (failedAt.getSchemaTableName() != null) {
+            if (failedAt.getFullTableName() != null) {
                 messageBuilder
                         .append("\tSchema.Table:\t")
-                        .append(failedAt.getSchemaTableName())
+                        .append(failedAt.getFullTableName())
                         .append("\n");
             }
-            if (failedAt.getColumnName() != null) {
+            if (failedAt.getColumn() != null) {
                 messageBuilder
                         .append("\tColumn:\t")
-                        .append(failedAt.getColumnName())
+                        .append(failedAt.getColumn())
                         .append("\n");
             }
             if (failedAt.getCheckName() != null) {

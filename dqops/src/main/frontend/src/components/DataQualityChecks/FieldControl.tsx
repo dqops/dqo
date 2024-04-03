@@ -15,6 +15,8 @@ import TextArea from '../TextArea';
 import IntegerListField from '../IntegerListField';
 import FieldDatePicker from '../FieldDatePicker';
 import clsx from 'clsx';
+import FloatingPointInput from '../FloatingPointInput';
+import ExtendedTextAre from '../ExtendedTextArea';
 
 interface ISensorParametersFieldSettingsProps {
   field: FieldModel;
@@ -57,8 +59,8 @@ const FieldControl = ({
         return field.integer_list_value || [];
       case ParameterDefinitionSpecDataTypeEnum.enum:
         return field.enum_value;
-      case ParameterDefinitionSpecDataTypeEnum.instant:
-        return field.date_time_value;
+      case ParameterDefinitionSpecDataTypeEnum.datetime:
+        return field.datetime_value;
       case ParameterDefinitionSpecDataTypeEnum.object:
         return field.integer_value;
       case ParameterDefinitionSpecDataTypeEnum.date:
@@ -73,8 +75,12 @@ const FieldControl = ({
     });
   };
 
-  const isInvalid = !field.optional && !value && value !== 0 && !disabled;
-
+  const isInvalid =
+    !field.optional &&
+    !disabled &&
+    (value === undefined ||
+      value === '' ||
+      (Array.isArray(value) && value.length === 0));
   return (
     <div>
       {type === 'boolean' && (
@@ -91,12 +97,15 @@ const FieldControl = ({
         <>
           {field.definition?.display_hint ===
           ParameterDefinitionSpecDisplayHintEnum.textarea ? (
-            <TextArea
+            <ExtendedTextAre
               label={label}
               value={value}
               tooltipText={tooltip}
               className="!min-w-30 !max-w-30 !text-xs"
               onChange={(e) => handleChange({ string_value: e.target.value })}
+              setValue={(value: string) =>
+                handleChange({ string_value: value })
+              }
               disabled={disabled}
               error={isInvalid}
               rows={1}
@@ -121,7 +130,12 @@ const FieldControl = ({
         <NumberInput
           label={label}
           value={value}
-          onChange={(value) => handleChange({ integer_value: value })}
+          onChange={(value) =>
+            handleChange({
+              integer_value:
+                String(value).length === 0 ? undefined : Number(value)
+            })
+          }
           tooltipText={tooltip}
           className={clsx(
             '!h-8 !text-xs !min-w-30 !max-w-30',
@@ -135,7 +149,11 @@ const FieldControl = ({
         <NumberInput
           label={label}
           value={value}
-          onChange={(value) => handleChange({ long_value: value })}
+          onChange={(value) =>
+            handleChange({
+              long_value: String(value).length === 0 ? undefined : Number(value)
+            })
+          }
           tooltipText={tooltip}
           className={clsx(
             '!h-8 !text-xs !min-w-30 !max-w-30',
@@ -147,10 +165,15 @@ const FieldControl = ({
         />
       )}
       {type === ParameterDefinitionSpecDataTypeEnum.double && (
-        <NumberInput
+        <FloatingPointInput
           label={label}
           value={value}
-          onChange={(value) => handleChange({ double_value: value })}
+          onChange={(value) =>
+            handleChange({
+              double_value:
+                String(value).length === 0 ? undefined : Number(value)
+            })
+          }
           tooltipText={tooltip}
           className={clsx(
             '!h-8 !text-xs !min-w-30 !max-w-30',
@@ -193,6 +216,7 @@ const FieldControl = ({
             handleChange({ string_list_value: value })
           }
           onSave={onSave}
+          disabled={disabled}
         />
       )}
       {field?.definition?.data_type ===
@@ -204,6 +228,7 @@ const FieldControl = ({
           onChange={(value: number[]) =>
             handleChange({ integer_list_value: value })
           }
+          disabled={disabled}
         />
       )}
       {field?.definition?.data_type ===

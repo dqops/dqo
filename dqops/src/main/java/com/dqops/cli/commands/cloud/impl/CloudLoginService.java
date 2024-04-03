@@ -16,7 +16,7 @@
 package com.dqops.cli.commands.cloud.impl;
 
 /**
- * Service that will open a browser and log in to the DQO cloud.
+ * Service that will open a browser and log in to the DQOps cloud.
  */
 public interface CloudLoginService {
     /**
@@ -24,4 +24,14 @@ public interface CloudLoginService {
      * @return True when the api key was retrieved, false when there was an error.
      */
     boolean logInToDqoCloud();
+
+    /**
+     * Enables synchronization with DQOps Cloud.
+     */
+    void enableCloudSync();
+
+    /**
+     * Disable synchronization with DQOps Cloud.
+     */
+    void disableCloudSync();
 }

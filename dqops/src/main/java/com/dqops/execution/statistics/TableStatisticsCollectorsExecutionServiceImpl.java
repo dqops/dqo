@@ -15,13 +15,12 @@
  */
 package com.dqops.execution.statistics;
 
-import com.dqops.connectors.ConnectionProvider;
-import com.dqops.connectors.ConnectionProviderRegistry;
-import com.dqops.connectors.DataTypeCategory;
-import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.connectors.*;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
+import com.dqops.core.configuration.DqoStatisticsCollectorConfigurationProperties;
 import com.dqops.core.jobqueue.*;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.data.statistics.normalization.StatisticsResultsNormalizationService;
 import com.dqops.data.statistics.normalization.StatisticsResultsNormalizedResult;
@@ -41,12 +40,14 @@ import com.dqops.execution.statistics.progress.ExecuteStatisticsCollectorsOnTabl
 import com.dqops.execution.statistics.progress.ExecuteStatisticsCollectorsOnTableStartEvent;
 import com.dqops.execution.statistics.progress.SavingStatisticsResultsEvent;
 import com.dqops.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
+import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
+import com.dqops.utils.logging.UserErrorLogger;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,8 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
     private StatisticsResultsNormalizationService statisticsResultsNormalizationService;
     private StatisticsSnapshotFactory statisticsSnapshotFactory;
     private DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties;
+    private DqoStatisticsCollectorConfigurationProperties statisticsCollectorConfigurationProperties;
+    private final UserErrorLogger userErrorLogger;
 
     /**
      * Creates a statistics collectors execution service with given dependencies.
@@ -78,7 +81,9 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
      * @param connectionProviderRegistry Connection provider.
      * @param statisticsResultsNormalizationService Normalization service that creates profiling results.
      * @param statisticsSnapshotFactory Statistics results snapshot factory. Snapshots support storage of profiler results.
-     * @param dqoSensorLimitsConfigurationProperties DQO sensor limits configuration.
+     * @param dqoSensorLimitsConfigurationProperties DQOps sensor limits configuration.
+     * @param statisticsCollectorConfigurationProperties Statistics collector configuration properties.
+     * @param userErrorLogger Execution logger.
      */
     @Autowired
     public TableStatisticsCollectorsExecutionServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
@@ -87,7 +92,9 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
                                                          ConnectionProviderRegistry connectionProviderRegistry,
                                                          StatisticsResultsNormalizationService statisticsResultsNormalizationService,
                                                          StatisticsSnapshotFactory statisticsSnapshotFactory,
-                                                         DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties) {
+                                                         DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties,
+                                                         DqoStatisticsCollectorConfigurationProperties statisticsCollectorConfigurationProperties,
+                                                         UserErrorLogger userErrorLogger) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
@@ -95,6 +102,8 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
         this.statisticsResultsNormalizationService = statisticsResultsNormalizationService;
         this.statisticsSnapshotFactory = statisticsSnapshotFactory;
         this.dqoSensorLimitsConfigurationProperties = dqoSensorLimitsConfigurationProperties;
+        this.statisticsCollectorConfigurationProperties = statisticsCollectorConfigurationProperties;
+        this.userErrorLogger = userErrorLogger;
     }
 
     /**
@@ -136,10 +145,11 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
         progressListener.onExecuteStatisticsCollectorsOnTableStart(new ExecuteStatisticsCollectorsOnTableStartEvent(connectionWrapper, tableSpec, collectors));
         String connectionName = connectionWrapper.getName();
         PhysicalTableName physicalTableName = tableSpec.getPhysicalTableName();
-        StatisticsSnapshot statisticsSnapshot = this.statisticsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
+        UserDomainIdentity userDomainIdentity = userHome.getUserIdentity();
+        StatisticsSnapshot statisticsSnapshot = this.statisticsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
         Table allNormalizedStatisticsTable = statisticsSnapshot.getTableDataChanges().getNewOrChangedRows();
 
-        Map<String, Integer> successfulCollectorsPerColumn = new HashMap<>();
+        Map<String, Integer> successfulCollectorsPerColumn = new LinkedHashMap<>();
 
         List<SensorPrepareResult> allPreparedSensors = this.prepareSensors(collectors, executionContext, userHome, progressListener,
                 executionStatistics, statisticsDataScope, jobCancellationToken);
@@ -169,7 +179,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
                     }
                 }
 
-                if (statisticsDataScope == StatisticsDataScope.data_groupings && sensorExecutionResult.isSuccess() &&
+                if (statisticsDataScope == StatisticsDataScope.data_group && sensorExecutionResult.isSuccess() &&
                         sensorExecutionResult.getResultTable().rowCount() == 0) {
                     continue; // no results captured, moving to the next sensor
                 }
@@ -228,6 +238,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
                                                     CollectorExecutionStatistics executionStatistics,
                                                     StatisticsDataScope statisticsDataScope,
                                                     JobCancellationToken jobCancellationToken) {
+        DqoHome dqoHome = executionContext.getDqoHomeContext().getDqoHome();
         List<SensorPrepareResult> sensorPrepareResults = new ArrayList<>();
         int sensorResultId = 0;
 
@@ -237,8 +248,8 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
             }
 
             try {
-                SensorExecutionRunParameters sensorRunParameters = createSensorRunParameters(userHome, statisticsCollectorSpec, statisticsDataScope);
-                if (!collectorSupportsTarget(statisticsCollectorSpec, sensorRunParameters)) {
+                SensorExecutionRunParameters sensorRunParameters = createSensorRunParameters(dqoHome, userHome, statisticsCollectorSpec, statisticsDataScope);
+                if (sensorRunParameters == null || !collectorSupportsTarget(statisticsCollectorSpec, sensorRunParameters)) {
                     continue; // the collector does not support that target
                 }
                 executionStatistics.incrementCollectorsExecutedCount(1);
@@ -253,7 +264,11 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
                 SensorPrepareResult sensorPrepareResult = this.dataQualitySensorRunner.prepareSensor(executionContext, sensorRunParameters, progressListener);
 
                 if (!sensorPrepareResult.isSuccess()) {
-                    executionStatistics.incrementCollectorsFailedCount(1);
+                    this.userErrorLogger.logStatistics("Failed to prepare a sensor for statistics collector, error: " +
+                                ((sensorPrepareResult.getPrepareException() != null) ? sensorPrepareResult.getPrepareException().getMessage() : ""),
+                                sensorPrepareResult.getPrepareException());
+
+                    executionStatistics.incrementCollectorsFailedCount(sensorPrepareResult.getPrepareException());
                     SensorExecutionResult sensorExecutionResultFailedPrepare = new SensorExecutionResult(sensorRunParameters, sensorPrepareResult.getPrepareException());
                     progressListener.onSensorFailed(new SensorFailedEvent(sensorRunParameters.getTable(), sensorRunParameters,
                             sensorExecutionResultFailedPrepare, sensorPrepareResult.getPrepareException()));
@@ -319,7 +334,11 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
                                 sensorPrepareResult, progressListener, jobCancellationToken);
 
                         if (!sensorExecuteResult.isSuccess()) {
-                            executionStatistics.incrementCollectorsFailedCount(1);
+                            this.userErrorLogger.logStatistics("Failed to execute a sensor for statistics collector, error: " +
+                                                    ((sensorExecuteResult.getException() != null) ? sensorExecuteResult.getException().getMessage() : ""),
+                                            sensorExecuteResult.getException());
+
+                            executionStatistics.incrementCollectorsFailedCount(sensorExecuteResult.getException());
                             progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters,
                                     sensorExecuteResult, sensorExecuteResult.getException()));
                             continue;
@@ -355,19 +374,22 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
             return true; // this is not a column level profiler, should work
         }
 
-        ColumnTypeSnapshotSpec typeSnapshot = sensorRunParameters.getColumn().getTypeSnapshot();
-        if (typeSnapshot == null || Strings.isNullOrEmpty(typeSnapshot.getColumnType())) {
-            return false; // the data type not known, we cannot risk failing the profiler, skipping
-        }
-
         DataTypeCategory[] supportedDataTypes = statisticsCollectorSpec.getSupportedDataTypes();
         if (supportedDataTypes == null) {
             return true; // all data types supported
         }
 
-        ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(sensorRunParameters.getConnection().getProviderType());
+        ProviderType providerType = sensorRunParameters.getConnection().getProviderType();
+        ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
         ProviderDialectSettings dialectSettings = connectionProvider.getDialectSettings(sensorRunParameters.getConnection());
-        DataTypeCategory targetColumnTypeCategory = dialectSettings.detectColumnType(typeSnapshot);
+        DataTypeCategory targetColumnTypeCategory;
+
+        ColumnTypeSnapshotSpec typeSnapshot = sensorRunParameters.getColumn().getTypeSnapshot();
+        if (typeSnapshot == null || Strings.isNullOrEmpty(typeSnapshot.getColumnType())) {
+            targetColumnTypeCategory = DataTypeCategory.text; // we are assuming that all unknown types are text types, just to allow analyzing calculated columns
+        } else {
+            targetColumnTypeCategory = dialectSettings.detectColumnType(typeSnapshot);
+        }
 
         for (DataTypeCategory supportedDataType : supportedDataTypes) {
             if (targetColumnTypeCategory == supportedDataType) {
@@ -380,12 +402,14 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
 
     /**
      * Creates a sensor run parameters from the statistics collector specification. Retrieves the connection, table, column and sensor parameters.
+     * @param dqoHome DQO home.
      * @param userHome User home with the metadata.
      * @param statisticsCollectorSpec Statistics collector specification.
      * @param statisticsDataScope Statistics collector data scope to analyze - the whole table or each data stream separately.
      * @return Sensor run parameters.
      */
-    public SensorExecutionRunParameters createSensorRunParameters(UserHome userHome,
+    public SensorExecutionRunParameters createSensorRunParameters(DqoHome dqoHome,
+                                                                  UserHome userHome,
                                                                   AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec,
                                                                   StatisticsDataScope statisticsDataScope) {
         HierarchyId checkHierarchyId = statisticsCollectorSpec.getHierarchyId();
@@ -400,8 +424,9 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
         // TODO: statistics collection could support time windows or a time range, the filter that is passed downstream is now null
 
         SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createStatisticsSensorParameters(
-                connectionSpec, tableSpec, columnSpec, statisticsCollectorSpec, null, statisticsDataScope, dialectSettings);
-        return sensorRunParameters;
+                dqoHome, userHome, connectionSpec, tableSpec, columnSpec, statisticsCollectorSpec,
+                null, statisticsDataScope, dialectSettings);
+        return sensorRunParameters; // may return null if the sensor is not supported on the data source
     }
 
 }

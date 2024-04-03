@@ -5,10 +5,10 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
-from ...models.check_result_detailed_single_model import CheckResultDetailedSingleModel
-from ...models.get_incident_issues_direction import GetIncidentIssuesDirection
-from ...models.get_incident_issues_order import GetIncidentIssuesOrder
+from ...client import AuthenticatedClient, Client
+from ...models.check_result_entry_model import CheckResultEntryModel
+from ...models.check_result_sort_order import CheckResultSortOrder
+from ...models.sort_direction import SortDirection
 from ...types import UNSET, Response, Unset
 
 
@@ -18,7 +18,6 @@ def _get_kwargs(
     month: int,
     incident_id: str,
     *,
-    client: Client,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
@@ -26,19 +25,10 @@ def _get_kwargs(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
-    direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
+    order: Union[Unset, None, CheckResultSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}api/incidents/{connectionName}/{year}/{month}/{incidentId}/issues".format(
-        client.base_url,
-        connectionName=connection_name,
-        year=year,
-        month=month,
-        incidentId=incident_id,
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     params["page"] = page
@@ -75,25 +65,24 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/incidents/{connectionName}/{year}/{month}/{incidentId}/issues".format(
+            connectionName=connection_name,
+            year=year,
+            month=month,
+            incidentId=incident_id,
+        ),
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[List["CheckResultDetailedSingleModel"]]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[List["CheckResultEntryModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
         for response_200_item_data in _response_200:
-            response_200_item = CheckResultDetailedSingleModel.from_dict(
-                response_200_item_data
-            )
+            response_200_item = CheckResultEntryModel.from_dict(response_200_item_data)
 
             response_200.append(response_200_item)
 
@@ -105,8 +94,8 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[List["CheckResultDetailedSingleModel"]]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[List["CheckResultEntryModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -121,7 +110,7 @@ def sync_detailed(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
@@ -129,9 +118,9 @@ def sync_detailed(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
-    direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
-) -> Response[List["CheckResultDetailedSingleModel"]]:
+    order: Union[Unset, None, CheckResultSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
+) -> Response[List["CheckResultEntryModel"]]:
     """getIncidentIssues
 
      Return a paged list of failed data quality check results that are related to an incident.
@@ -148,15 +137,15 @@ def sync_detailed(
         date (Union[Unset, None, datetime.date]):
         column (Union[Unset, None, str]):
         check (Union[Unset, None, str]):
-        order (Union[Unset, None, GetIncidentIssuesOrder]):
-        direction (Union[Unset, None, GetIncidentIssuesDirection]):
+        order (Union[Unset, None, CheckResultSortOrder]):
+        direction (Union[Unset, None, SortDirection]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['CheckResultDetailedSingleModel']]
+        Response[List['CheckResultEntryModel']]
     """
 
     kwargs = _get_kwargs(
@@ -164,7 +153,6 @@ def sync_detailed(
         year=year,
         month=month,
         incident_id=incident_id,
-        client=client,
         page=page,
         limit=limit,
         filter_=filter_,
@@ -176,8 +164,7 @@ def sync_detailed(
         direction=direction,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -190,7 +177,7 @@ def sync(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
@@ -198,9 +185,9 @@ def sync(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
-    direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
-) -> Optional[List["CheckResultDetailedSingleModel"]]:
+    order: Union[Unset, None, CheckResultSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
+) -> Optional[List["CheckResultEntryModel"]]:
     """getIncidentIssues
 
      Return a paged list of failed data quality check results that are related to an incident.
@@ -217,15 +204,15 @@ def sync(
         date (Union[Unset, None, datetime.date]):
         column (Union[Unset, None, str]):
         check (Union[Unset, None, str]):
-        order (Union[Unset, None, GetIncidentIssuesOrder]):
-        direction (Union[Unset, None, GetIncidentIssuesDirection]):
+        order (Union[Unset, None, CheckResultSortOrder]):
+        direction (Union[Unset, None, SortDirection]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['CheckResultDetailedSingleModel']
+        List['CheckResultEntryModel']
     """
 
     return sync_detailed(
@@ -252,7 +239,7 @@ async def asyncio_detailed(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
@@ -260,9 +247,9 @@ async def asyncio_detailed(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
-    direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
-) -> Response[List["CheckResultDetailedSingleModel"]]:
+    order: Union[Unset, None, CheckResultSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
+) -> Response[List["CheckResultEntryModel"]]:
     """getIncidentIssues
 
      Return a paged list of failed data quality check results that are related to an incident.
@@ -279,15 +266,15 @@ async def asyncio_detailed(
         date (Union[Unset, None, datetime.date]):
         column (Union[Unset, None, str]):
         check (Union[Unset, None, str]):
-        order (Union[Unset, None, GetIncidentIssuesOrder]):
-        direction (Union[Unset, None, GetIncidentIssuesDirection]):
+        order (Union[Unset, None, CheckResultSortOrder]):
+        direction (Union[Unset, None, SortDirection]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['CheckResultDetailedSingleModel']]
+        Response[List['CheckResultEntryModel']]
     """
 
     kwargs = _get_kwargs(
@@ -295,7 +282,6 @@ async def asyncio_detailed(
         year=year,
         month=month,
         incident_id=incident_id,
-        client=client,
         page=page,
         limit=limit,
         filter_=filter_,
@@ -307,8 +293,7 @@ async def asyncio_detailed(
         direction=direction,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -319,7 +304,7 @@ async def asyncio(
     month: int,
     incident_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
@@ -327,9 +312,9 @@ async def asyncio(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-    order: Union[Unset, None, GetIncidentIssuesOrder] = UNSET,
-    direction: Union[Unset, None, GetIncidentIssuesDirection] = UNSET,
-) -> Optional[List["CheckResultDetailedSingleModel"]]:
+    order: Union[Unset, None, CheckResultSortOrder] = UNSET,
+    direction: Union[Unset, None, SortDirection] = UNSET,
+) -> Optional[List["CheckResultEntryModel"]]:
     """getIncidentIssues
 
      Return a paged list of failed data quality check results that are related to an incident.
@@ -346,15 +331,15 @@ async def asyncio(
         date (Union[Unset, None, datetime.date]):
         column (Union[Unset, None, str]):
         check (Union[Unset, None, str]):
-        order (Union[Unset, None, GetIncidentIssuesOrder]):
-        direction (Union[Unset, None, GetIncidentIssuesDirection]):
+        order (Union[Unset, None, CheckResultSortOrder]):
+        direction (Union[Unset, None, SortDirection]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['CheckResultDetailedSingleModel']
+        List['CheckResultEntryModel']
     """
 
     return (

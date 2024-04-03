@@ -18,19 +18,23 @@ package com.dqops.rest.controllers;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.data.checkresults.services.CheckResultsDetailedFilterParameters;
 import com.dqops.data.readouts.services.SensorReadoutsDataService;
 import com.dqops.data.readouts.services.SensorReadoutsDetailedFilterParameters;
-import com.dqops.data.readouts.services.models.SensorReadoutsDetailedDataModel;
+import com.dqops.data.readouts.services.models.SensorReadoutsListModel;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.core.principal.DqoUserPrincipal;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
@@ -43,7 +47,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "SensorReadouts", description = "Returns the complete sensor readouts of executed checks on tables and columns.")
+@Api(value = "SensorReadouts", description = "Operations that are retrieving the data quality sensor readouts of executed checks on tables and columns.")
 public class SensorReadoutsController {
     private UserHomeContextFactory userHomeContextFactory;
     private SensorReadoutsDataService sensorReadoutsDataService;
@@ -72,15 +76,20 @@ public class SensorReadoutsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/readouts", produces = "application/json")
     @ApiOperation(value = "getTableProfilingSensorReadouts", notes = "Returns the complete results of the most recent check executions for all table level data quality profiling checks on a table",
-            response = SensorReadoutsDetailedDataModel[].class)
+            response = SensorReadoutsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Complete view sensor readouts of recent check runs for table level data quality profiling checks on a table returned",
-                    response = SensorReadoutsDetailedDataModel[].class),
+                    response = SensorReadoutsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<SensorReadoutsDetailedDataModel>> getTableProfilingSensorReadouts(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<SensorReadoutsListModel>> getTableProfilingSensorReadouts(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -92,7 +101,7 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -122,13 +131,13 @@ public class SensorReadoutsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        SensorReadoutsDetailedDataModel[] sensorReadoutsDetailedDataModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                checks, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsDetailedDataModels), HttpStatus.OK); // 200
+        SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
+                checks, loadParams, principal.getDataDomainIdentity());
+        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the complete sensor readouts of recent recurring executions on a table given a connection name, table name and a time scale.
+     * Retrieves the complete sensor readouts of recent monitoring executions on a table given a connection name, table name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -138,17 +147,22 @@ public class SensorReadoutsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent sensor readouts.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/readouts", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringSensorReadouts", notes = "Returns the complete results of the most recent table level recurring executions for the recurring at a requested time scale",
-            response = SensorReadoutsDetailedDataModel[].class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/readouts", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringSensorReadouts", notes = "Returns the complete results of the most recent table level monitoring executions for the monitoring at a requested time scale",
+            response = SensorReadoutsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Complete view of the most recent recurring executions for the recurring at a requested time scale on a table returned",
-                    response = SensorReadoutsDetailedDataModel[].class),
+            @ApiResponse(code = 200, message = "Complete view of the most recent monitoring executions for the monitoring at a requested time scale on a table returned",
+                    response = SensorReadoutsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<SensorReadoutsDetailedDataModel>> getTableRecurringSensorReadouts(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<SensorReadoutsListModel>> getTableMonitoringSensorReadouts(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -161,7 +175,7 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -181,7 +195,7 @@ public class SensorReadoutsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec recurringPartition = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec monitoringPartition = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
         SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
         checkName.ifPresent(loadParams::setCheckName);
         category.ifPresent(loadParams::setCheckCategory);
@@ -191,9 +205,9 @@ public class SensorReadoutsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        SensorReadoutsDetailedDataModel[] sensorReadoutsDetailedDataModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                recurringPartition, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsDetailedDataModels), HttpStatus.OK); // 200
+        SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
+                monitoringPartition, loadParams, principal.getDataDomainIdentity());
+        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
     }
 
     /**
@@ -208,15 +222,21 @@ public class SensorReadoutsController {
      * @return View of the most recent partitioned checks results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/readouts", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedSensorReadouts", notes = "Returns a complete view of sensor readouts for recent table level partitioned checks executions for a requested time scale", response = SensorReadoutsDetailedDataModel[].class)
+    @ApiOperation(value = "getTablePartitionedSensorReadouts", notes = "Returns a complete view of sensor readouts for recent table level partitioned checks executions for a requested time scale",
+            response = SensorReadoutsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The complete view of the sensor readouts for recent partitioned check executions for a requested time scale on a table returned",
-                    response = SensorReadoutsDetailedDataModel[].class),
+                    response = SensorReadoutsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<SensorReadoutsDetailedDataModel>> getTablePartitionedSensorReadouts(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<SensorReadoutsListModel>> getTablePartitionedSensorReadouts(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -229,7 +249,7 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -259,9 +279,9 @@ public class SensorReadoutsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        SensorReadoutsDetailedDataModel[] sensorReadoutsDetailedDataModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                partitionedCheckPartition, new SensorReadoutsDetailedFilterParameters());
-        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsDetailedDataModels), HttpStatus.OK); // 200
+        SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
+                partitionedCheckPartition, loadParams, principal.getDataDomainIdentity());
+        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
     }
 
     /**
@@ -277,15 +297,20 @@ public class SensorReadoutsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/readouts", produces = "application/json")
     @ApiOperation(value = "getColumnProfilingSensorReadouts", notes = "Returns sensor results of the recent check executions for all column level data quality profiling checks on a column",
-            response = SensorReadoutsDetailedDataModel[].class)
+            response = SensorReadoutsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Complete view sensor readouts of recent check runs for column level data quality profiling checks on a column returned",
-                    response = SensorReadoutsDetailedDataModel[].class),
+                    response = SensorReadoutsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<SensorReadoutsDetailedDataModel>> getColumnProfilingSensorReadouts(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<SensorReadoutsListModel>> getColumnProfilingSensorReadouts(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -298,7 +323,7 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -333,13 +358,13 @@ public class SensorReadoutsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        SensorReadoutsDetailedDataModel[] sensorReadoutsDetailedDataModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                checks, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsDetailedDataModels), HttpStatus.OK); // 200
+        SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
+                checks, loadParams, principal.getDataDomainIdentity());
+        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the complete sensor readouts of recent recurring executions on a column given a connection name, table name, column name and a time scale.
+     * Retrieves the complete sensor readouts of recent monitoring executions on a column given a connection name, table name, column name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -350,17 +375,22 @@ public class SensorReadoutsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent sensor readouts.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/readouts", produces = "application/json")
-    @ApiOperation(value = "getColumnRecurringSensorReadouts", notes = "Returns a complete view of the sensor readouts for recent column level recurring executions for the recurring at a requested time scale",
-            response = SensorReadoutsDetailedDataModel[].class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/readouts", produces = "application/json")
+    @ApiOperation(value = "getColumnMonitoringSensorReadouts", notes = "Returns a complete view of the sensor readouts for recent column level monitoring executions for the monitoring at a requested time scale",
+            response = SensorReadoutsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "View of the sensor readouts of recent recurring executions for the recurring at a requested time scale on a column returned",
-                    response = SensorReadoutsDetailedDataModel[].class),
+            @ApiResponse(code = 200, message = "View of the sensor readouts of recent monitoring executions for the monitoring at a requested time scale on a column returned",
+                    response = SensorReadoutsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<SensorReadoutsDetailedDataModel>> getColumnRecurringSensorReadouts(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<SensorReadoutsListModel>> getColumnMonitoringSensorReadouts(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -374,7 +404,7 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -399,7 +429,7 @@ public class SensorReadoutsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec recurringPartition = columnSpec.getColumnCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec monitoringPartition = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
         SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
         checkName.ifPresent(loadParams::setCheckName);
         category.ifPresent(loadParams::setCheckCategory);
@@ -409,9 +439,9 @@ public class SensorReadoutsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        SensorReadoutsDetailedDataModel[] sensorReadoutsDetailedDataModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                recurringPartition, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsDetailedDataModels), HttpStatus.OK); // 200
+        SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
+                monitoringPartition, loadParams, principal.getDataDomainIdentity());
+        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
     }
 
     /**
@@ -428,15 +458,20 @@ public class SensorReadoutsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/readouts", produces = "application/json")
     @ApiOperation(value = "getColumnPartitionedSensorReadouts", notes = "Returns a view of the sensor readouts for recent column level partitioned checks executions for a requested time scale",
-            response = SensorReadoutsDetailedDataModel[].class)
+            response = SensorReadoutsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "View of the sensor readouts for recent partitioned check executions for a requested time scale on a column returned",
-                    response = SensorReadoutsDetailedDataModel[].class),
+                    response = SensorReadoutsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<SensorReadoutsDetailedDataModel>> getColumnPartitionedSensorReadouts(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<SensorReadoutsListModel>> getColumnPartitionedSensorReadouts(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -450,7 +485,7 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -485,8 +520,8 @@ public class SensorReadoutsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        SensorReadoutsDetailedDataModel[] sensorReadoutsDetailedDataModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                partitionedCheckPartition, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsDetailedDataModels), HttpStatus.OK); // 200
+        SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
+                partitionedCheckPartition, loadParams, principal.getDataDomainIdentity());
+        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
     }
 }

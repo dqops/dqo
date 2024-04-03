@@ -16,11 +16,12 @@
 package com.dqops.utils.docs.sensors;
 
 import com.dqops.BaseTest;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
-import com.dqops.sensors.column.strings.ColumnStringsStringMatchRegexPercentSensorParametersSpec;
+import com.dqops.sensors.column.patterns.ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec;
 import com.dqops.utils.docs.ProviderTypeModel;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -40,28 +41,28 @@ public class SensorDocumentationModelFactoryImplTests extends BaseTest {
         Path dqoHomePath = Path.of(System.getenv("DQO_HOME"));
         DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         this.sut = new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
     }
 
     @Test
     void createSensorDocumentation_whenCalledForClassWithSensorParameterFields_thenCreatesDocumentationModel() {
-        ColumnStringsStringMatchRegexPercentSensorParametersSpec parametersSpec = new ColumnStringsStringMatchRegexPercentSensorParametersSpec();
+        ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec parametersSpec = new ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec();
         SensorDocumentationModel sensorDocumentation = this.sut.createSensorDocumentation(parametersSpec);
 
         Assertions.assertNotNull(sensorDocumentation);
         Assertions.assertEquals("Column level sensor that calculates the percent of values that fit to a regex in a column.", sensorDocumentation.getSensorParametersJavaDoc());
         Assertions.assertEquals("column", sensorDocumentation.getTarget());
-        Assertions.assertEquals("strings", sensorDocumentation.getCategory());
-        Assertions.assertEquals("string_match_regex_percent", sensorDocumentation.getSensorName());
-        Assertions.assertEquals("column/strings/string_match_regex_percent", sensorDocumentation.getFullSensorName());
+        Assertions.assertEquals("patterns", sensorDocumentation.getCategory());
+        Assertions.assertEquals("texts_matching_regex_percent", sensorDocumentation.getSensorName());
+        Assertions.assertEquals("column/patterns/texts_matching_regex_percent", sensorDocumentation.getFullSensorName());
 
         Assertions.assertNotNull(sensorDocumentation.getSqlTemplates());
-        Assertions.assertEquals(7,sensorDocumentation.getSqlTemplates().keySet().size());
+        Assertions.assertEquals(12,sensorDocumentation.getSqlTemplates().keySet().size());
         Assertions.assertTrue(sensorDocumentation.getSqlTemplates().keySet().stream()
                 .map(ProviderTypeModel::getProviderTypeName)
                 .anyMatch(provider -> provider.equals("bigquery")));
-        Assertions.assertEquals(7,sensorDocumentation.getSqlTemplates().values().size());
+        Assertions.assertEquals(12,sensorDocumentation.getSqlTemplates().values().size());
 
         Assertions.assertNotNull(sensorDocumentation.getDefinition());
         Assertions.assertEquals(1, sensorDocumentation.getDefinition().getSpec().getFields().size());

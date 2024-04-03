@@ -1,18 +1,21 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.mysql_parameters_spec_sslmode import MysqlParametersSpecSslmode
+from ..models.my_sql_ssl_mode import MySqlSslMode
+from ..models.mysql_engine_type import MysqlEngineType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.mysql_parameters_spec_properties import MysqlParametersSpecProperties
+    from ..models.single_store_db_parameters_spec import SingleStoreDbParametersSpec
 
 
 T = TypeVar("T", bound="MysqlParametersSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class MysqlParametersSpec:
     """
     Attributes:
@@ -26,11 +29,11 @@ class MysqlParametersSpec:
             dynamic substitution.
         password (Union[Unset, str]): MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
             format to use dynamic substitution.
-        options (Union[Unset, str]): MySQL connection 'options' initialization parameter. For example setting this to -c
-            statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a
-            ${MYSQL_OPTIONS} configuration with a custom environment variable.
-        sslmode (Union[Unset, MysqlParametersSpecSslmode]): SslMode MySQL connection parameter.
-        properties (Union[Unset, MysqlParametersSpecProperties]):
+        sslmode (Union[Unset, MySqlSslMode]):
+        single_store_db_parameters_spec (Union[Unset, SingleStoreDbParametersSpec]):
+        mysql_engine_type (Union[Unset, MysqlEngineType]):
+        properties (Union[Unset, MysqlParametersSpecProperties]): A dictionary of custom JDBC parameters that are added
+            to the JDBC connection string, a key/value dictionary.
     """
 
     host: Union[Unset, str] = UNSET
@@ -38,10 +41,11 @@ class MysqlParametersSpec:
     database: Union[Unset, str] = UNSET
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
-    options: Union[Unset, str] = UNSET
-    sslmode: Union[Unset, MysqlParametersSpecSslmode] = UNSET
+    sslmode: Union[Unset, MySqlSslMode] = UNSET
+    single_store_db_parameters_spec: Union[Unset, "SingleStoreDbParametersSpec"] = UNSET
+    mysql_engine_type: Union[Unset, MysqlEngineType] = UNSET
     properties: Union[Unset, "MysqlParametersSpecProperties"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         host = self.host
@@ -49,10 +53,19 @@ class MysqlParametersSpec:
         database = self.database
         user = self.user
         password = self.password
-        options = self.options
         sslmode: Union[Unset, str] = UNSET
         if not isinstance(self.sslmode, Unset):
             sslmode = self.sslmode.value
+
+        single_store_db_parameters_spec: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.single_store_db_parameters_spec, Unset):
+            single_store_db_parameters_spec = (
+                self.single_store_db_parameters_spec.to_dict()
+            )
+
+        mysql_engine_type: Union[Unset, str] = UNSET
+        if not isinstance(self.mysql_engine_type, Unset):
+            mysql_engine_type = self.mysql_engine_type.value
 
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
@@ -71,10 +84,14 @@ class MysqlParametersSpec:
             field_dict["user"] = user
         if password is not UNSET:
             field_dict["password"] = password
-        if options is not UNSET:
-            field_dict["options"] = options
         if sslmode is not UNSET:
             field_dict["sslmode"] = sslmode
+        if single_store_db_parameters_spec is not UNSET:
+            field_dict[
+                "single_store_db_parameters_spec"
+            ] = single_store_db_parameters_spec
+        if mysql_engine_type is not UNSET:
+            field_dict["mysql_engine_type"] = mysql_engine_type
         if properties is not UNSET:
             field_dict["properties"] = properties
 
@@ -85,6 +102,7 @@ class MysqlParametersSpec:
         from ..models.mysql_parameters_spec_properties import (
             MysqlParametersSpecProperties,
         )
+        from ..models.single_store_db_parameters_spec import SingleStoreDbParametersSpec
 
         d = src_dict.copy()
         host = d.pop("host", UNSET)
@@ -97,14 +115,30 @@ class MysqlParametersSpec:
 
         password = d.pop("password", UNSET)
 
-        options = d.pop("options", UNSET)
-
         _sslmode = d.pop("sslmode", UNSET)
-        sslmode: Union[Unset, MysqlParametersSpecSslmode]
+        sslmode: Union[Unset, MySqlSslMode]
         if isinstance(_sslmode, Unset):
             sslmode = UNSET
         else:
-            sslmode = MysqlParametersSpecSslmode(_sslmode)
+            sslmode = MySqlSslMode(_sslmode)
+
+        _single_store_db_parameters_spec = d.pop(
+            "single_store_db_parameters_spec", UNSET
+        )
+        single_store_db_parameters_spec: Union[Unset, SingleStoreDbParametersSpec]
+        if isinstance(_single_store_db_parameters_spec, Unset):
+            single_store_db_parameters_spec = UNSET
+        else:
+            single_store_db_parameters_spec = SingleStoreDbParametersSpec.from_dict(
+                _single_store_db_parameters_spec
+            )
+
+        _mysql_engine_type = d.pop("mysql_engine_type", UNSET)
+        mysql_engine_type: Union[Unset, MysqlEngineType]
+        if isinstance(_mysql_engine_type, Unset):
+            mysql_engine_type = UNSET
+        else:
+            mysql_engine_type = MysqlEngineType(_mysql_engine_type)
 
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, MysqlParametersSpecProperties]
@@ -119,8 +153,9 @@ class MysqlParametersSpec:
             database=database,
             user=user,
             password=password,
-            options=options,
             sslmode=sslmode,
+            single_store_db_parameters_spec=single_store_db_parameters_spec,
+            mysql_engine_type=mysql_engine_type,
             properties=properties,
         )
 

@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: check
 spec:
@@ -7,3 +7,4 @@ spec:
   help_text: Verifies that the percentage of difference in total average of a column
     in a table and total average of a column of another table does not exceed the
     set number.
+  standard: true

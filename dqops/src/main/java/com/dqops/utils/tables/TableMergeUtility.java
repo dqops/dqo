@@ -63,7 +63,11 @@ public class TableMergeUtility {
      */
     protected static Table recreateCurrentTableWithDifferentColumns(Table sourceTable, List<Column<?>> expectedColumns) {
         Map<String, ? extends Column<?>> currentColumnsByColumnName = sourceTable.columns().stream()
-                .collect(Collectors.toMap(c -> c.name(), c -> c));
+                .collect(Collectors.toMap(
+                        c -> c.name(),
+                        c -> c,
+                        (key, value) -> value,
+                        LinkedHashMap::new));
 
         List<Column<?>> newColumns = new ArrayList<>();
         for (Column<?> expectedColumn : expectedColumns) {

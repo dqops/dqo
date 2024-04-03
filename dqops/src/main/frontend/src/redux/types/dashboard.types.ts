@@ -1,5 +1,5 @@
 ///
-/// Copyright © 2021 DQOps (support@dqops.com)
+/// Copyright © 2024 DQOps (support@dqops.com)
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
@@ -20,4 +20,5 @@ export enum DASHBOARD_ACTION {
   GET_DASHBOARDS_ERROR = 'DASHBOARD_ACTION/GET_DASHBOARDS_ERROR',
 
   TOGGLE_DASHBOARD_FOLDER = 'DASHBOARD_ACTION/TOGGLE_DASHBOARD_FOLDER',
+  TOGGLE_DASHBOARD_TOOLTIP = 'DASHBOARD_ACTION/TOGGLE_DASHBOARD_TOOLTIP'
 }

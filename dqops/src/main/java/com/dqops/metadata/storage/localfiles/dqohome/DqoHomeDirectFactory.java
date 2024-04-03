@@ -17,24 +17,27 @@ package com.dqops.metadata.storage.localfiles.dqohome;
 
 import com.dqops.core.configuration.DqoCacheConfigurationProperties;
 import com.dqops.core.configuration.DqoConfigurationProperties;
+import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
 import com.dqops.core.filesystem.cache.LocalFileSystemCacheImpl;
 import com.dqops.core.filesystem.localfiles.LocalFolderTreeNode;
 import com.dqops.core.filesystem.virtual.FileSystemContext;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.utils.logging.UserErrorLoggerImpl;
 import com.dqops.utils.serialization.YamlSerializerImpl;
 
 import java.nio.file.Path;
 
 /**
- * Creates a DQO home instance directly without using Spring IoC.
- * WARNING: this class should be only used internally by DQO build tools (classes called by Maven during build).
+ * Creates a DQOps home instance directly without using Spring IoC.
+ * WARNING: this class should be only used internally by DQOps build tools (classes called by Maven during build).
  */
 public class DqoHomeDirectFactory {
     /**
-     * Creates an instance of DQO home given a path.
-     * WARNING: this method should be only used internally by DQO build tools (classes called by Maven during build).
-     * @param dqoHomePath Path to DQO home.
-     * @return DQO Home context.
+     * Creates an instance of DQOps home given a path.
+     * WARNING: this method should be only used internally by DQOps build tools (classes called by Maven during build).
+     * @param dqoHomePath Path to DQOps home.
+     * @return DQOps Home context.
      */
     public static DqoHomeContext openDqoHome(Path dqoHomePath) {
         DqoCacheConfigurationProperties dqoCacheConfigurationProperties = new DqoCacheConfigurationProperties();
@@ -43,9 +46,9 @@ public class DqoHomeDirectFactory {
         LocalFileSystemCacheImpl localFileSystemCache = new LocalFileSystemCacheImpl(dqoCacheConfigurationProperties);
         LocalDqoHomeFileStorageServiceImpl localDqoHomeFileStorageService = new LocalDqoHomeFileStorageServiceImpl(dqoHomePath.toString(), localFileSystemCache);
         FileSystemContext fileSystemContext = new FileSystemContext(localDqoHomeFileStorageService);
-        LocalFolderTreeNode dqoHomeFolder = new LocalFolderTreeNode(fileSystemContext, new HomeFolderPath());
+        LocalFolderTreeNode dqoHomeFolder = new LocalFolderTreeNode(fileSystemContext, new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN));
         DqoHomeContext dqoHomeContext = new DqoHomeContext(dqoHomeFolder);
-        YamlSerializerImpl yamlSerializer = new YamlSerializerImpl(new DqoConfigurationProperties());
+        YamlSerializerImpl yamlSerializer = new YamlSerializerImpl(new DqoConfigurationProperties(), new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties()));
         FileDqoHomeImpl fileDqoHome = FileDqoHomeImpl.create(dqoHomeContext, yamlSerializer);
         dqoHomeContext.setDqoHome(fileDqoHome);
 

@@ -16,7 +16,7 @@
 package com.dqops.utils.docs.sensors;
 
 import com.dqops.metadata.dqohome.DqoHome;
-import com.dqops.utils.docs.HandledClassesLinkageStore;
+import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.files.DocumentationFolder;
 
 import java.nio.file.Path;
@@ -30,8 +30,8 @@ public interface SensorDocumentationGenerator {
      *
      * @param projectRootPath Path to the project root folder, used to find the target/classes folder and scan for classes.
      * @param linkageStore
-     * @param dqoHome         DQO home.
+     * @param dqoHome         DQOps home.
      * @return Folder structure with rendered markdown files.
      */
-    DocumentationFolder renderSensorDocumentation(Path projectRootPath, HandledClassesLinkageStore linkageStore, DqoHome dqoHome);
+    DocumentationFolder renderSensorDocumentation(Path projectRootPath, LinkageStore<Class<?>> linkageStore, DqoHome dqoHome);
 }

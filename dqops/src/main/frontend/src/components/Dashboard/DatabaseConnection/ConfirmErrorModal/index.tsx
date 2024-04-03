@@ -1,6 +1,6 @@
-import React from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
-import Button from "../../../Button";
+import React from 'react';
+import Button from '../../../Button';
 
 interface ConfirmErrorModalProps {
   open: boolean;
@@ -9,19 +9,21 @@ interface ConfirmErrorModalProps {
   onConfirm: () => void;
 }
 
-const ConfirmErrorModal = ({ open, onClose, message, onConfirm }: ConfirmErrorModalProps) => {
+const ConfirmErrorModal = ({
+  open,
+  onClose,
+  message,
+  onConfirm
+}: ConfirmErrorModalProps) => {
   return (
     <Dialog open={open} handler={onClose} className="min-w-200">
       <DialogBody className="pt-6 pb-2 px-6">
         <div className="flex flex-col">
-          <div className="text-2xl text-gray-900 whitespace-normal break-all">
-            Connection to the data source failed
+          <div className="text-2xl text-gray-900 whitespace-normal">
+          Connection to the data source failed, do you want to save the connection anyway?
           </div>
-          <div className="text-xl text-red-700 whitespace-normal break-word p-3 border my-4 rounded-lg max-h-[110px] overflow-y-auto">
+          <div className="text-lg text-red-700 whitespace-normal break-word p-3 border my-4 rounded-lg max-h-[110px] overflow-y-auto">
             {message}
-          </div>
-          <div className="text-center text-xl text-gray-900">
-            Do you want to save the connection anyway?
           </div>
         </div>
       </DialogBody>
@@ -29,16 +31,16 @@ const ConfirmErrorModal = ({ open, onClose, message, onConfirm }: ConfirmErrorMo
         <Button
           color="primary"
           className="px-8"
-          onClick={onClose}
-          label="No"
+          onClick={onConfirm}
+          label="Yes"
           variant="outlined"
         />
-
         <Button
           color="primary"
           className="px-8"
-          label="Yes"
-          onClick={onConfirm}
+          onClick={onClose}
+          label="No"
+          variant="outlined"
         />
       </DialogFooter>
     </Dialog>

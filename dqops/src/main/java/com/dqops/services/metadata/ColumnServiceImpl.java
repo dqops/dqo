@@ -20,7 +20,8 @@ import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
-import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -82,22 +83,24 @@ public class ColumnServiceImpl implements ColumnService {
      * @param connectionName Connection name
      * @param tableName      Physical table name.
      * @param columnName     Column name.
+     * @param principal Principal that will be used to run the job.
      * @return Asynchronous job result object for deferred background operations.
      */
     @Override
-    public PushJobResult<DeleteStoredDataQueueJobResult> deleteColumn(String connectionName,
-                                                                      PhysicalTableName tableName,
-                                                                      String columnName) {
+    public PushJobResult<DeleteStoredDataResult> deleteColumn(String connectionName,
+                                                              PhysicalTableName tableName,
+                                                              String columnName,
+                                                              DqoUserPrincipal principal) {
         List<String> columnNameList = new LinkedList<>();
         columnNameList.add(columnName);
 
-        Map<PhysicalTableName, Iterable<String>> tableToColumnMapping = new HashMap<>();
+        Map<PhysicalTableName, Iterable<String>> tableToColumnMapping = new LinkedHashMap<>();
         tableToColumnMapping.put(tableName, columnNameList);
 
-        Map<String, Map<PhysicalTableName, Iterable<String>>> connToTabToColMapping = new HashMap<>();
+        Map<String, Map<PhysicalTableName, Iterable<String>>> connToTabToColMapping = new LinkedHashMap<>();
         connToTabToColMapping.put(connectionName, tableToColumnMapping);
 
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> jobResultList = this.deleteColumns(connToTabToColMapping);
+        List<PushJobResult<DeleteStoredDataResult>> jobResultList = this.deleteColumns(connToTabToColMapping, principal);
 
         return jobResultList.isEmpty() ? null : jobResultList.get(0);
     }
@@ -106,12 +109,14 @@ public class ColumnServiceImpl implements ColumnService {
      * Deletes columns from metadata and flushes user context.
      * Cleans all stored data from .data folder related to these columns.
      * @param connectionToTableToColumns Mapping for every connection to a mapping for every table for which columns need to be deleted.
+     * @param principal Principal that will be used to run the job.
      * @return List of asynchronous job result objects for deferred background operations.
      */
     @Override
-    public List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteColumns(
-            Map<String, Map<PhysicalTableName, Iterable<String>>> connectionToTableToColumns) {
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
+    public List<PushJobResult<DeleteStoredDataResult>> deleteColumns(
+            Map<String, Map<PhysicalTableName, Iterable<String>>> connectionToTableToColumns,
+            DqoUserPrincipal principal) {
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         List<DeleteStoredDataQueueJobParameters> deleteStoredDataParameters = new ArrayList<>();
@@ -137,8 +142,8 @@ public class ColumnServiceImpl implements ColumnService {
                 }
 
                 DeleteStoredDataQueueJobParameters param = new DeleteStoredDataQueueJobParameters() {{
-                    setConnectionName(connectionName);
-                    setSchemaTableName(tableName.toTableSearchFilter());
+                    setConnection(connectionName);
+                    setFullTableName(tableName.toTableSearchFilter());
                     setColumnNames(columnNamesRemoved);
                     setDeleteStatistics(true);
                     setDeleteCheckResults(true);
@@ -149,11 +154,11 @@ public class ColumnServiceImpl implements ColumnService {
             }
         }
 
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> results = new ArrayList<>();
+        List<PushJobResult<DeleteStoredDataResult>> results = new ArrayList<>();
         for (DeleteStoredDataQueueJobParameters param : deleteStoredDataParameters) {
             DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
             deleteStoredDataJob.setDeletionParameters(param);
-            PushJobResult<DeleteStoredDataQueueJobResult> jobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob);
+            PushJobResult<DeleteStoredDataResult> jobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob, principal);
             results.add(jobResult);
         }
 

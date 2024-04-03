@@ -1,5 +1,5 @@
 ///
-/// Copyright © 2021 DQOps (support@dqops.com)
+/// Copyright © 2024 DQOps (support@dqops.com)
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
@@ -33,5 +33,8 @@ export enum JOB_ACTION {
   SET_ADVISOR_OBJECT = 'JOB_ACTION/SET_ADVISOR_OBJECT',
   SET_ADVISOR_JOBID = 'JOB_ACTION/SET_ADVISOR_JOBID',
   SET_CRON_SCHEDULER = 'JOB/ACTION/SET_CRON_SCHEDULER',
-  SET_IS_LICENSE_FREE = 'JOB_ACTION/SET_IS_LICENSE_FREE'
+  SET_IS_LICENSE_FREE = 'JOB_ACTION/SET_IS_LICENSE_FREE',
+  SET_USER_PROFILE = 'JOB_ACTION/SET_USER_PROFILE',
+  SET_ERRORS = 'JOB_ACTION/SET_ERRORS',
+  SET_IS_ERROR_MODAL_OPEN = 'JOB_ACTION/SET_IS_ERROR_MODAL_OPEN'
 }

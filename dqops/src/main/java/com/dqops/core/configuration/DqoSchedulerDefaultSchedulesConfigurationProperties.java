@@ -21,7 +21,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for DQO that configures the default cron schedules applied to new connections. Properties are mapped to the "dqo.scheduler.default-schedules." prefix.
+ * Configuration POJO with the configuration for DQOps that configures the default cron schedules applied to new connections. Properties are mapped to the "dqo.scheduler.default-schedules." prefix.
  */
 @Configuration
 @ConfigurationProperties(prefix = "dqo.scheduler.default-schedules")
@@ -29,19 +29,19 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class DqoSchedulerDefaultSchedulesConfigurationProperties implements Cloneable {
     /**
-     * The default cron scheduling expression for running advanced profiling checks.
+     * The default cron scheduling expression for running profiling checks.
      */
     private String profiling;
 
     /**
-     * The default cron scheduling expression for running daily recurring checks.
+     * The default cron scheduling expression for running daily monitoring checks.
      */
-    private String recurringDaily;
+    private String monitoringDaily;
 
     /**
-     * The default cron scheduling expression for running monthly recurring checks.
+     * The default cron scheduling expression for running monthly monitoring checks.
      */
-    private String recurringMonthly;
+    private String monitoringMonthly;
 
     /**
      * The default cron scheduling expression for running daily partitioned checks.

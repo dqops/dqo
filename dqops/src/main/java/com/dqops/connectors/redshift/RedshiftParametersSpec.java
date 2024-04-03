@@ -16,6 +16,7 @@
 package com.dqops.connectors.redshift;
 
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -64,11 +65,8 @@ public class RedshiftParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String password;
 
-    @CommandLine.Option(names = {"--redshift-options"}, description = "Redshift connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
-    @JsonPropertyDescription("Redshift connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.")
-    private String options;
-
     @CommandLine.Option(names = {"-R"}, description = "Redshift additional properties that are added to the JDBC connection string")
+    @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
 
@@ -158,23 +156,6 @@ public class RedshiftParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the custom connection initialization options.
-     * @return Connection initialization options.
-     */
-    public String getOptions() {
-        return options;
-    }
-
-    /**
-     * Sets the connection initialization options.
-     * @param options Connection initialization options.
-     */
-    public void setOptions(String options) {
-        setDirtyIf(!Objects.equals(this.options, options));
-        this.options = options;
-    }
-
-    /**
      * Returns a key/value map of additional properties that are included in the JDBC connection string.
      * @return Key/value dictionary of additional JDBC properties.
      */
@@ -212,17 +193,18 @@ public class RedshiftParametersSpec extends BaseProviderParametersSpec
 
     /**
      * Creates a trimmed and expanded version of the object without unwanted properties, but with all variables like ${ENV_VAR} expanded.
+     * @param secretValueProvider Secret value provider.
+     * @param lookupContext Secret lookup context.
      * @return Trimmed and expanded version of this object.
      */
-    public RedshiftParametersSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public RedshiftParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         RedshiftParametersSpec cloned = this.deepClone();
-        cloned.host = secretValueProvider.expandValue(cloned.host);
-        cloned.port = secretValueProvider.expandValue(cloned.port);
-        cloned.database = secretValueProvider.expandValue(cloned.database);
-        cloned.user = secretValueProvider.expandValue(cloned.user);
-        cloned.password = secretValueProvider.expandValue(cloned.password);
-        cloned.options = secretValueProvider.expandValue(cloned.options);
-        cloned.properties = secretValueProvider.expandProperties(cloned.properties);
+        cloned.host = secretValueProvider.expandValue(cloned.host, lookupContext);
+        cloned.port = secretValueProvider.expandValue(cloned.port, lookupContext);
+        cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
+        cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
+        cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
+        cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
         return cloned;
     }

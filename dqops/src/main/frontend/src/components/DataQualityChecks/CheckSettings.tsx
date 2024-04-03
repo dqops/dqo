@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import DataGroupingDimensionItem from './DataGroupingDimensionItem';
 import ScheduleTab from './ScheduleTab';
 import CommentsView from '../Connection/CommentsView';
 import SensorParametersSettings from './SensorParametersSettings';
@@ -7,7 +6,7 @@ import Tabs from '../Tabs';
 import { ITab } from './CheckListItem';
 import SvgIcon from '../SvgIcon';
 import IconButton from '../IconButton';
-import { DataGroupingDimensionSpec, CheckModel } from '../../api';
+import {  CheckModel } from '../../api';
 import CheckSettingsTab from './CheckSettingsTab';
 
 interface ICheckSettingsProps {
@@ -17,6 +16,7 @@ interface ICheckSettingsProps {
   tabs: ITab[];
   onClose: () => void;
   onChange: (check: CheckModel) => void;
+  isDefaultEditing?: boolean
 }
 
 const CheckSettings = ({
@@ -25,33 +25,11 @@ const CheckSettings = ({
   setActiveTab,
   tabs,
   onClose,
-  onChange
+  onChange,
+  isDefaultEditing
 }: ICheckSettingsProps) => {
   const [text, setText] = useState('');
-  const getDataGroupingDimensionLevel = (index: number) => {
-    if (index === 0) return check?.data_grouping_override?.level_1;
-    if (index === 1) return check?.data_grouping_override?.level_2;
-    if (index === 2) return check?.data_grouping_override?.level_3;
-    if (index === 3) return check?.data_grouping_override?.level_4;
-    if (index === 4) return check?.data_grouping_override?.level_5;
-    if (index === 5) return check?.data_grouping_override?.level_6;
-    if (index === 6) return check?.data_grouping_override?.level_7;
-    if (index === 7) return check?.data_grouping_override?.level_8;
-    if (index === 8) return check?.data_grouping_override?.level_9;
-  };
 
-  const onChangeDataGroupingDimensionLevel = (
-    dataGroupingDimensionLevel: DataGroupingDimensionSpec,
-    index: number
-  ) => {
-    onChange({
-      ...check,
-      data_grouping_override: {
-        ...check?.data_grouping_override,
-        [`level${index + 1}`]: dataGroupingDimensionLevel
-      }
-    });
-  };
 
   const handleChange = (obj: any) => {
     onChange({
@@ -72,23 +50,8 @@ const CheckSettings = ({
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         <div className="pt-5">
           {activeTab === 'check-settings' && (
-            <CheckSettingsTab check={check} onChange={onChange} />
-          )}
-          {activeTab === 'data-streams' && (
-            <div>
-              {Array(9)
-                .fill(0)
-                .map((item, index) => (
-                  <DataGroupingDimensionItem
-                    idx={index}
-                    key={index}
-                    dataGroupingLevel={getDataGroupingDimensionLevel(index)}
-                    onChange={(dataGroupingDimensionLevel) =>
-                      onChangeDataGroupingDimensionLevel(dataGroupingDimensionLevel, index)
-                    }
-                  />
-                ))}
-            </div>
+            <CheckSettingsTab check={check} onChange={onChange} 
+            isDefaultEditing={isDefaultEditing} />
           )}
           {activeTab === 'schedule' && (
             <ScheduleTab

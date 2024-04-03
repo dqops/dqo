@@ -69,12 +69,13 @@ public class BetweenPercentChange1DayRuleParametersSpecTests extends BaseTest {
         this.sensorReadouts[readoutsCount - 4] = 17.6;
         this.sensorReadouts[readoutsCount - 2] = 16.0;
 
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(14.4,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(15.2, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(14.4, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(16.0, ruleExecutionResult.getUpperBound());
@@ -93,12 +94,13 @@ public class BetweenPercentChange1DayRuleParametersSpecTests extends BaseTest {
         this.sensorReadouts[readoutsCount - 4] = 17.6;
         this.sensorReadouts[readoutsCount - 1] = 16.0;
 
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(16.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(16.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(16.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(16.0, ruleExecutionResult.getUpperBound());
@@ -117,12 +119,13 @@ public class BetweenPercentChange1DayRuleParametersSpecTests extends BaseTest {
         this.sensorReadouts[readoutsCount - 4] = 80.6;
         this.sensorReadouts[readoutsCount - 1] = 200.0;
 
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(800.1,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertFalse(ruleExecutionResult.isPassed());
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(510.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(220.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(800.0, ruleExecutionResult.getUpperBound());
@@ -141,12 +144,13 @@ public class BetweenPercentChange1DayRuleParametersSpecTests extends BaseTest {
         this.sensorReadouts[readoutsCount - 4] = 80.6;
         this.sensorReadouts[readoutsCount - 1] = null;
 
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1251.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
         Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
@@ -155,12 +159,13 @@ public class BetweenPercentChange1DayRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
         Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());

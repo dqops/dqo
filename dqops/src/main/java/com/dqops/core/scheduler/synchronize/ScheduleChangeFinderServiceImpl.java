@@ -15,11 +15,14 @@
  */
 package com.dqops.core.scheduler.synchronize;
 
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.scheduler.schedules.UniqueSchedulesCollection;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
-import com.dqops.metadata.search.RecurringScheduleSearchFilters;
+import com.dqops.metadata.search.MonitoringScheduleSearchFilters;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -39,15 +42,18 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
     private HierarchyNodeTreeSearcher nodeTreeSearcher;
     private UserHomeContextFactory userHomeContextFactory;
     private SecretValueProvider secretValueProvider;
+    private final DqoUserPrincipalProvider dqoUserPrincipalProvider;
 
     @Autowired
     public ScheduleChangeFinderServiceImpl(
             HierarchyNodeTreeSearcher nodeTreeSearcher,
             UserHomeContextFactory userHomeContextFactory,
-            SecretValueProvider secretValueProvider) {
+            SecretValueProvider secretValueProvider,
+            DqoUserPrincipalProvider dqoUserPrincipalProvider) {
         this.nodeTreeSearcher = nodeTreeSearcher;
         this.userHomeContextFactory = userHomeContextFactory;
         this.secretValueProvider = secretValueProvider;
+        this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
     }
 
     /**
@@ -55,27 +61,31 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
      * @return All unique schedules to run data quality checks.
      */
     public UniqueSchedulesCollection loadCurrentSchedulesForDataQualityChecks() {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity()); // TODO: to support multiple data domains, we must iterate over data domains and scan them all
         UserHome userHome = userHomeContext.getUserHome();
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
 
-        RecurringScheduleSearchFilters recurringScheduleSearchFilters = new RecurringScheduleSearchFilters();
-        recurringScheduleSearchFilters.setScheduleEnabled(true);
-        // we can add additional filters if this instance should only process schedules in one connection or matching a connection name pattern
-        Collection<RecurringScheduleSpec> schedules = this.nodeTreeSearcher.findSchedules(userHome, recurringScheduleSearchFilters);
+        MonitoringScheduleSearchFilters monitoringScheduleSearchFilters = new MonitoringScheduleSearchFilters();
+        monitoringScheduleSearchFilters.setScheduleEnabled(true);
+        // NOTE 1: we can add additional filters if this instance should only process schedules in one connection or matching a connection name pattern
+        // NOTE 2: this code will not detect that a default observability check has a custom schedule, because the default checks are not applied
+        Collection<MonitoringScheduleSpec> schedules = this.nodeTreeSearcher.findSchedules(userHome, monitoringScheduleSearchFilters);
 
         UniqueSchedulesCollection uniqueSchedulesCollection = new UniqueSchedulesCollection();
-        for (RecurringScheduleSpec recurringSchedule : schedules) {
-            if (Strings.isNullOrEmpty(recurringSchedule.getCronExpression())) {
+        for (MonitoringScheduleSpec monitoringSchedule : schedules) {
+            if (Strings.isNullOrEmpty(monitoringSchedule.getCronExpression())) {
                 continue;
             }
 
-            ConnectionWrapper parentConnectionWrapper = userHome.findConnectionFor(recurringSchedule.getHierarchyId());
+            ConnectionWrapper parentConnectionWrapper = userHome.findConnectionFor(monitoringSchedule.getHierarchyId());
             assert parentConnectionWrapper != null;
 
-            RecurringScheduleSpec clonedRecurringSchedule = recurringSchedule.expandAndTrim(this.secretValueProvider);
-            clonedRecurringSchedule.setHierarchyId(null);
+            MonitoringScheduleSpec clonedMonitoringSchedule = monitoringSchedule.expandAndTrim(
+                    this.secretValueProvider, secretValueLookupContext);
+            clonedMonitoringSchedule.setHierarchyId(null);
 
-            uniqueSchedulesCollection.add(clonedRecurringSchedule);
+            uniqueSchedulesCollection.add(clonedMonitoringSchedule);
         }
 
         return uniqueSchedulesCollection;

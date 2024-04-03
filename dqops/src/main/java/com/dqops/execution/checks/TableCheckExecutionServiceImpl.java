@@ -21,6 +21,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractColumnComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
 import com.dqops.checks.custom.CustomCheckSpec;
+import com.dqops.checks.defaults.DefaultObservabilityConfigurationService;
 import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ProviderDialectSettings;
@@ -29,6 +30,8 @@ import com.dqops.core.incidents.IncidentImportQueueService;
 import com.dqops.core.incidents.TableIncidentImportBatch;
 import com.dqops.core.jobqueue.*;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshot;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import com.dqops.data.errors.normalization.ErrorsNormalizationService;
@@ -55,6 +58,7 @@ import com.dqops.execution.sensors.progress.PreparingSensorEvent;
 import com.dqops.execution.sensors.progress.SensorExecutedEvent;
 import com.dqops.execution.sensors.progress.SensorFailedEvent;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
+import com.dqops.metadata.definitions.checks.CheckDefinitionList;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
@@ -71,12 +75,14 @@ import com.dqops.rules.HistoricDataPointsGrouping;
 import com.dqops.rules.RuleTimeWindowSettingsSpec;
 import com.dqops.utils.datetime.LocalDateTimePeriodUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
+import com.dqops.utils.logging.UserErrorLogger;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.DoubleColumn;
+import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.Table;
 
 import java.time.LocalDateTime;
@@ -102,6 +108,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
     private final RuleDefinitionFindService ruleDefinitionFindService;
     private final IncidentImportQueueService incidentImportQueueService;
     private final DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties;
+    private final UserErrorLogger userErrorLogger;
+    private final DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
 
     /**
      * Creates a data quality check execution service.
@@ -117,7 +125,9 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param errorsSnapshotFactory Error snapshot factory, provides read and write support for errors stored in tabular format.
      * @param ruleDefinitionFindService Rule definition find service - used to find the rule definitions and get their configured time windows.
      * @param incidentImportQueueService New incident import queue service. Identifies new incidents and sends notifications.
-     * @param dqoSensorLimitsConfigurationProperties DQO sensor limit configuration parameters.
+     * @param dqoSensorLimitsConfigurationProperties DQOps sensor limit configuration parameters.
+     * @param userErrorLogger Check execution logger.
+     * @param defaultObservabilityConfigurationService Default observability configuration service.
      */
     @Autowired
     public TableCheckExecutionServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
@@ -132,7 +142,9 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                                           ErrorsSnapshotFactory errorsSnapshotFactory,
                                           RuleDefinitionFindService ruleDefinitionFindService,
                                           IncidentImportQueueService incidentImportQueueService,
-                                          DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties) {
+                                          DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties,
+                                          UserErrorLogger userErrorLogger,
+                                          DefaultObservabilityConfigurationService defaultObservabilityConfigurationService) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
@@ -146,6 +158,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         this.ruleDefinitionFindService = ruleDefinitionFindService;
         this.incidentImportQueueService = incidentImportQueueService;
         this.dqoSensorLimitsConfigurationProperties = dqoSensorLimitsConfigurationProperties;
+        this.userErrorLogger = userErrorLogger;
+        this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
     }
 
     /**
@@ -174,26 +188,34 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         jobCancellationToken.throwIfCancelled();
         CheckExecutionSummary checkExecutionSummary = new CheckExecutionSummary();
 
-        Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = this.hierarchyNodeTreeSearcher.findChecks(targetTable, checkSearchFilters);
+        TableSpec originalTableSpec = targetTable.getSpec();
+        TableSpec tableSpec = originalTableSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(connectionWrapper.getSpec(), tableSpec, userHome);
+        // TODO: before applying default checks, we could look into the filters, if the run check filters are selective (one column, or one check), we could use
+        // a different variant of applying default checks, or pass the CheckSearchFilters object to the defaultObservabilityConfigurationService
+
+        Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = this.hierarchyNodeTreeSearcher.findChecks(tableSpec, checkSearchFilters);
         if (checks.size() == 0) {
             return checkExecutionSummary; // no checks for this table
         }
         jobCancellationToken.throwIfCancelled();
 
-        TableSpec tableSpec = targetTable.getSpec();
         progressListener.onExecuteChecksOnTableStart(new ExecuteChecksOnTableStartEvent(connectionWrapper, tableSpec, checks));
         String connectionName = connectionWrapper.getName();
         PhysicalTableName physicalTableName = tableSpec.getPhysicalTableName();
+        UserDomainIdentity userDomainIdentity = userHome.getUserIdentity();
 
-        SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
+        SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
         Table allNormalizedSensorResultsTable = sensorReadoutsSnapshot.getTableDataChanges().getNewOrChangedRows();
+        IntColumn severityColumnTemporary = IntColumn.create(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+        allNormalizedSensorResultsTable.addColumns(severityColumnTemporary); // temporary column to allow importing custom severity from custom SQL checks, bypassing rule evaluation, this column is removed before saving
         jobCancellationToken.throwIfCancelled();
 
-        CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
+        CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
         Table allRuleEvaluationResultsTable = checkResultsSnapshot.getTableDataChanges().getNewOrChangedRows();
         jobCancellationToken.throwIfCancelled();
 
-        ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
+        ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
         Table allErrorsTable = errorsSnapshot.getTableDataChanges().getNewOrChangedRows();
         jobCancellationToken.throwIfCancelled();
 
@@ -212,6 +234,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 allRuleEvaluationResultsTable, allErrorsTable, executionStatistics);
 
         if (sensorReadoutsSnapshot.getTableDataChanges().hasChanges() && !dummySensorExecution) {
+            allNormalizedSensorResultsTable.removeColumns(severityColumnTemporary); // removed, it was temporary
             progressListener.onSavingSensorResults(new SavingSensorResultsEvent(tableSpec, sensorReadoutsSnapshot));
             sensorReadoutsSnapshot.save();
         }
@@ -236,7 +259,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     checkResultsSnapshot.getTableDataChanges().getNewOrChangedRows(),
                     connectionWrapper.getSpec(),
                     tableSpec);
-            this.incidentImportQueueService.importTableIncidents(tableIncidentImportBatch);
+            this.incidentImportQueueService.importTableIncidents(tableIncidentImportBatch, userDomainIdentity);
         }
 
         return checkExecutionSummary;
@@ -266,7 +289,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         }
 
         List<SensorPrepareResult> allPreparedSensors = this.prepareSensors(
-                checks, executionContext, userHome, userTimeWindowFilters, progressListener,
+                checks, executionContext, userHome, tableSpec, userTimeWindowFilters, progressListener,
                 allErrorsTable, checkExecutionSummary, executionStatistics, jobCancellationToken);
 
         GroupedSensorsCollection groupedSensorsCollection = new GroupedSensorsCollection(this.dqoSensorLimitsConfigurationProperties.getMaxMergedQueries());
@@ -292,7 +315,6 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                         sensorExecutionResult, sensorRunParameters);
                 progressListener.onSensorResultsNormalized(new SensorResultsNormalizedEvent(
                         tableSpec, sensorRunParameters, sensorExecutionResult, normalizedSensorResults));
-                allNormalizedSensorResultsTable.append(normalizedSensorResults.getTable());
 
                 LocalDateTime maxTimePeriod = normalizedSensorResults.getTimePeriodColumn().max(); // most recent time period that was captured
                 LocalDateTime minTimePeriod = normalizedSensorResults.getTimePeriodColumn().min(); // oldest time period that was captured
@@ -317,26 +339,29 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
                     sensorReadoutsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic sensor readouts
                     checkResultsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // will be used for notifications
-
-                    try {
-                        RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateRules(
-                                executionContext, sensorExecutionResult.getSensorRunParameters().getCheck(), sensorRunParameters,
-                                normalizedSensorResults, sensorReadoutsSnapshot, progressListener);
-                        progressListener.onRuleExecuted(new RuleExecutedEvent(tableSpec, sensorRunParameters, normalizedSensorResults, ruleEvaluationResult));
-
-                        allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());
-                        executionStatistics.addRuleEvaluationResults(ruleEvaluationResult);
-                    }
-                    catch (Throwable ex) {
-                        log.error("Rule " + ruleDefinitionName + " failed to execute: " + ex.getMessage(), ex);
-                        executionStatistics.incrementRuleExecutionErrorsCount(1);
-                        ErrorsNormalizedResult normalizedRuleErrorResults = this.errorsNormalizationService.createNormalizedRuleErrorResults(
-                                sensorExecutionResult, sensorRunParameters, ex);
-                        allErrorsTable.append(normalizedRuleErrorResults.getTable());
-                        progressListener.onRuleFailed(new RuleFailedEvent(tableSpec, sensorRunParameters, sensorExecutionResult, ex, ruleDefinitionName));
-                        checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(ex, sensorRunParameters.getCheckSearchFilter()));
-                    }
                 }
+
+                try {
+                    RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateRules(
+                            executionContext, sensorExecutionResult.getSensorRunParameters().getCheck(), sensorRunParameters,
+                            normalizedSensorResults, sensorReadoutsSnapshot, progressListener);
+                    progressListener.onRuleExecuted(new RuleExecutedEvent(tableSpec, sensorRunParameters, normalizedSensorResults, ruleEvaluationResult));
+
+                    allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());
+                    executionStatistics.addRuleEvaluationResults(ruleEvaluationResult);
+                }
+                catch (Throwable ex) {
+                    this.userErrorLogger.logRule("Rule " + ruleDefinitionName + " failed to execute on " + sensorRunParameters.toString() + " : " + ex.getMessage() +
+                            "The check that failed to run: " +  sensorRunParameters.getCheck().getHierarchyId().toString(), ex);
+                    executionStatistics.incrementRuleExecutionErrorsCount(1);
+                    ErrorsNormalizedResult normalizedRuleErrorResults = this.errorsNormalizationService.createNormalizedRuleErrorResults(
+                            sensorExecutionResult, sensorRunParameters, ex);
+                    allErrorsTable.append(normalizedRuleErrorResults.getTable());
+                    progressListener.onRuleFailed(new RuleFailedEvent(tableSpec, sensorRunParameters, sensorExecutionResult, ex, ruleDefinitionName));
+                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(ex, sensorRunParameters.getCheckSearchFilter()));
+                }
+
+                allNormalizedSensorResultsTable.append(normalizedSensorResults.getTable());
             }
             catch (DqoQueueJobCancelledException cex) {
                 // ignore the error, just stop running checks
@@ -373,7 +398,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         }
 
         List<SensorPrepareResult> allPreparedSensorsOnComparedTable = this.prepareSensors(
-                checks, executionContext, userHome, userTimeWindowFilters, progressListener,
+                checks, executionContext, userHome, tableSpec, userTimeWindowFilters, progressListener,
                 allErrorsTable, checkExecutionSummary, executionStatistics, jobCancellationToken);
 
         GroupedSensorsCollection groupedSensorsCollectionOnComparedTable = new GroupedSensorsCollection(this.dqoSensorLimitsConfigurationProperties.getMaxMergedQueries());
@@ -449,8 +474,6 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     normalizedSensorResultsComparedTable.getTable().append(expectedValuesNotInComparedTable); // append rows from the reference table that do not have a match in the tested (compared table), so the actual_value is null, but the expected_value is not
                 }
 
-                allNormalizedSensorResultsTable.append(normalizedSensorResultsComparedTable.getTable()); // TODO: decide how many results we want to store, table comparison may generate a lot of values, we also need to merge it
-
                 LocalDateTime maxTimePeriod = LocalDateTimePeriodUtility.max(
                         normalizedSensorResultsComparedTable.getTimePeriodColumn().max(),
                         normalizedSensorResultsReferenceTable.getTimePeriodColumn().max()); // most recent time period that was captured
@@ -476,7 +499,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                         executionStatistics.addRuleEvaluationResults(ruleEvaluationResult);
                     }
                     catch (Throwable ex) {
-                        log.error("Rule " + ruleDefinitionName + " failed to execute: " + ex.getMessage(), ex);
+                        this.userErrorLogger.logRule("Rule " + ruleDefinitionName + " failed to execute on " + sensorRunParametersComparedTable.toString() + ": " + ex.getMessage() +
+                                "The check that failed to run: " +  sensorRunParametersComparedTable.getCheck().getHierarchyId().toString(), ex);
                         executionStatistics.incrementRuleExecutionErrorsCount(1);
                         ErrorsNormalizedResult normalizedRuleErrorResults = this.errorsNormalizationService.createNormalizedRuleErrorResults(
                                 sensorExecutionResultComparedTable, sensorRunParametersComparedTable, ex);
@@ -485,6 +509,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                         checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(ex, sensorRunParametersComparedTable.getCheckSearchFilter()));
                     }
                 }
+
+                allNormalizedSensorResultsTable.append(normalizedSensorResultsComparedTable.getTable()); // TODO: decide how many results we want to store, table comparison may generate a lot of values, we also need to merge it
             }
             catch (DqoQueueJobCancelledException cex) {
                 // ignore the error, just stop running checks
@@ -502,6 +528,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param checks Collection of checks that will be prepared.
      * @param executionContext Execution context - to access sensor definitions.
      * @param userHome User home.
+     * @param targetTableSpec The table specification.
      * @param userTimeWindowFilters Optional user provided time window filters.
      * @param progressListener Progress listener - to report progress.
      * @param allErrorsTable Target table where errors are added when parsing fails.
@@ -513,6 +540,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
     public List<SensorPrepareResult> prepareSensors(Collection<AbstractCheckSpec<?, ?, ?, ?>> checks,
                                                     ExecutionContext executionContext,
                                                     UserHome userHome,
+                                                    TableSpec targetTableSpec,
                                                     TimeWindowFilterParameters userTimeWindowFilters,
                                                     CheckExecutionProgressListener progressListener,
                                                     Table allErrorsTable,
@@ -530,8 +558,13 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             executionStatistics.incrementExecutedChecksCount(1);
 
             try {
-                SensorExecutionRunParameters sensorRunParameters = createSensorRunParameters(userHome, checkSpec, userTimeWindowFilters);
+                SensorExecutionRunParameters sensorRunParameters = createSensorRunParameters(userHome, targetTableSpec, checkSpec, userTimeWindowFilters);
                 if (!sensorRunParameters.isSuccess()) {
+                    this.userErrorLogger.logCheck(sensorRunParameters.toString() + " failed to capture the initial configuration, error: " +
+                                    (sensorRunParameters.getSensorConfigurationException() != null ?
+                                            sensorRunParameters.getSensorConfigurationException().getMessage() : ""),
+                                    sensorRunParameters.getSensorConfigurationException());
+
                     executionStatistics.incrementSensorExecutionErrorsCount(1);
                     Throwable sensorConfigurationException = sensorRunParameters.getSensorConfigurationException();
                     SensorExecutionResult sensorExecutionResultWithError = new SensorExecutionResult(sensorRunParameters, sensorConfigurationException);
@@ -556,6 +589,9 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                             " cannot be executed because the timestamp column is not configured for date/time partitioned data quality checks. " +
                             "Configure the name of the columns in the \"timestamp_columns\" node on the table level (.dqotable.yaml file).");
 
+                    this.userErrorLogger.logCheck(sensorRunParameters.toString() + "cannot be executed because it misses required timestamp column configuration, error: " +
+                            missingTimestampException.getMessage(), missingTimestampException);
+
                     executionStatistics.incrementSensorExecutionErrorsCount(1);
                     SensorExecutionResult sensorExecutionResultWithError = new SensorExecutionResult(sensorRunParameters, missingTimestampException);
                     ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
@@ -571,6 +607,10 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 SensorPrepareResult sensorPrepareResult = this.dataQualitySensorRunner.prepareSensor(executionContext, sensorRunParameters, progressListener);
 
                 if (!sensorPrepareResult.isSuccess()) {
+                    this.userErrorLogger.logSensor(sensorRunParameters.toString() + " failed to prepare, error: " +
+                                (sensorPrepareResult.getPrepareException() != null ? sensorPrepareResult.getPrepareException().getMessage() : ""),
+                                sensorPrepareResult.getPrepareException());
+
                     executionStatistics.incrementSensorExecutionErrorsCount(1);
                     SensorExecutionResult sensorExecutionResultFailedPrepare = new SensorExecutionResult(sensorRunParameters, sensorPrepareResult.getPrepareException());
                     ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
@@ -629,6 +669,11 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             try {
                 SensorExecutionRunParameters sensorRunParameters = createSensorRunParametersToReferenceTable(userHome, checkSpec, userTimeWindowFilters);
                 if (!sensorRunParameters.isSuccess()) {
+                    this.userErrorLogger.logCheck(sensorRunParameters.toString() + " failed to capture the initial configuration, error: " +
+                                    (sensorRunParameters.getSensorConfigurationException() != null ?
+                                            sensorRunParameters.getSensorConfigurationException().getMessage() : ""),
+                            sensorRunParameters.getSensorConfigurationException());
+
                     executionStatistics.incrementSensorExecutionErrorsCount(1);
 
                     Throwable sensorConfigurationException = sensorRunParameters.getSensorConfigurationException();
@@ -656,6 +701,9 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                             " cannot be executed because the timestamp column is not configured for date/time partitioned data quality checks. " +
                             "Configure the name of the columns in the \"timestamp_columns\" node on the table level (.dqotable.yaml file).");
 
+                    this.userErrorLogger.logCheck(sensorRunParameters.toString() + "cannot be executed because it misses required timestamp column configuration, error: " +
+                            missingTimestampException.getMessage(), missingTimestampException);
+
                     executionStatistics.incrementSensorExecutionErrorsCount(1);
                     SensorExecutionResult sensorExecutionResultWithError = new SensorExecutionResult(sensorRunParameters, missingTimestampException);
 //                    ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
@@ -674,6 +722,10 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 sensorPrepareResults.add(sensorPrepareResult); // adding even if it is wrong
 
                 if (!sensorPrepareResult.isSuccess()) {
+                    this.userErrorLogger.logSensor(sensorRunParameters.toString() + " failed to prepare, error: " +
+                                    (sensorPrepareResult.getPrepareException() != null ? sensorPrepareResult.getPrepareException().getMessage() : ""),
+                            sensorPrepareResult.getPrepareException());
+
                     executionStatistics.incrementSensorExecutionErrorsCount(1);
                     SensorExecutionResult sensorExecutionResultFailedPrepare = new SensorExecutionResult(sensorRunParameters, sensorPrepareResult.getPrepareException());
 //                    ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
@@ -700,7 +752,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
     /**
      * Executes prepared sensors.
-     * @param groupedSensorsCollection Collection of sensors grouped by executors and similar queries that could be merged together.
+     * @param groupedSensorsCollection Collection of sensors grouped by executors and similar queries that can be merged together.
      * @param executionContext Execution context - to access sensor definitions.
      * @param progressListener Progress listener - to report progress.
      * @param allErrorsTable Target table where errors are added when parsing fails.
@@ -753,6 +805,10 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                                 sensorPrepareResult, progressListener, jobCancellationToken);
 
                         if (!sensorExecuteResult.isSuccess()) {
+                            this.userErrorLogger.logSensor(sensorRunParameters.toString() + " failed to execute, error: " +
+                                            (sensorExecuteResult.getException() != null ?sensorExecuteResult.getException().getMessage() : ""),
+                                    sensorExecuteResult.getException());
+
                             executionStatistics.incrementSensorExecutionErrorsCount(1);
                             if (allErrorsTable != null) {
                                 ErrorsNormalizedResult normalizedSensorErrorResults = this.errorsNormalizationService.createNormalizedSensorErrorResults(
@@ -788,24 +844,25 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
     /**
      * Creates a sensor run parameters from the check specification. Retrieves the connection, table, column and sensor parameters.
      * @param userHome User home with the metadata.
+     * @param tableSpec Target table to query.
      * @param checkSpec Check specification.
      * @param userTimeWindowFilters Optional user time window filters, to run the checks for a given time period.
      * @return Sensor run parameters.
      */
     public SensorExecutionRunParameters createSensorRunParameters(UserHome userHome,
+                                                                  TableSpec tableSpec,
                                                                   AbstractCheckSpec<?,?,?,?> checkSpec,
                                                                   TimeWindowFilterParameters userTimeWindowFilters) {
         try {
             HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
             ConnectionWrapper connectionWrapper = userHome.findConnectionFor(checkHierarchyId);
-            TableWrapper tableWrapper = userHome.findTableFor(checkHierarchyId);
-            ColumnSpec columnSpec = userHome.findColumnFor(checkHierarchyId); // may be null
+            String targetColumnName = checkHierarchyId.getColumnName();
+            ColumnSpec columnSpec = targetColumnName != null ? tableSpec.getColumns().get(targetColumnName) : null; // may be null
             ConnectionSpec connectionSpec = connectionWrapper.getSpec();
             ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
             ProviderDialectSettings dialectSettings = connectionProvider.getDialectSettings(connectionSpec);
-            TableSpec tableSpec = tableWrapper.getSpec();
 
-            List<HierarchyNode> nodesOnPath = List.of(checkHierarchyId.getNodesOnPath(userHome));
+            List<HierarchyNode> nodesOnPath = List.of(checkHierarchyId.getNodesOnPath(tableSpec));
             Optional<HierarchyNode> timeSeriesProvider = Lists.reverse(nodesOnPath)
                     .stream()
                     .filter(n -> n instanceof AbstractRootChecksContainerSpec)
@@ -829,6 +886,14 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 customCheckDefinitionSpec = userHome.getChecks().getCheckDefinitionSpec(
                         rootChecksContainerSpec.getCheckTarget(), checkType,
                         rootChecksContainerSpec.getCheckTimeScale(), checkSpec.getCategoryName(), customCheckSpec.getCheckName());
+                if (customCheckDefinitionSpec == null) {
+                    String fullCheckName = CheckDefinitionList.makeCheckName(rootChecksContainerSpec.getCheckTarget(), checkType,
+                            rootChecksContainerSpec.getCheckTimeScale(), checkSpec.getCategoryName(), customCheckSpec.getCheckName());
+                    String errorMessage = "Cannot execute a custom check " + fullCheckName + " on the table " + tableSpec.toString() +
+                            " because the custom check is not defined. The configured check that failed to execute is " + checkSpec.getHierarchyId().toString();
+                    this.userErrorLogger.logCheck(errorMessage, null);
+                    throw new DqoRuntimeException(errorMessage);
+                }
             }
 
             Optional<HierarchyNode> comparisonCheckCategory = Lists.reverse(nodesOnPath)
@@ -843,10 +908,13 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 String referenceTableConfigurationName = comparisonCheckCategorySpec.getComparisonName();
                 tableComparisonConfigurationSpec = tableSpec.getTableComparisons().get(referenceTableConfigurationName);
                 if (tableComparisonConfigurationSpec == null) {
-                    throw new DqoRuntimeException("Cannot execute a table comparison check on table " + tableSpec.toString() +
+                    String errorMessage = "Cannot execute a table comparison check on table " + tableSpec.toString() +
                             " because the reference table configuration " + referenceTableConfigurationName + " is not configured on the table. " +
                             "Reason: an old configuration of comparison checks is still configured, despite that the reference table configuration was removed. " +
-                            "Please remove table comparison check configuration to fix the problem.");
+                            "Please remove table comparison check configuration to fix the problem. " +
+                            "The configured check that failed to execute is " + checkSpec.getHierarchyId().toString();
+                    this.userErrorLogger.logCheck(errorMessage, null);
+                    throw new DqoRuntimeException(errorMessage);
                 }
 
                 dataGroupingConfigurationForComparison = tableComparisonConfigurationSpec.getGroupingColumns()
@@ -855,13 +923,14 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             }
 
             SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
-                    connectionSpec, tableSpec, columnSpec, checkSpec, customCheckDefinitionSpec, checkType, dataGroupingConfigurationForComparison,
+                    userHome, connectionSpec, tableSpec, columnSpec, checkSpec, customCheckDefinitionSpec, checkType, dataGroupingConfigurationForComparison,
                     tableComparisonConfigurationSpec, timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
             sensorRunParameters.appendAdditionalFilter(extraComparisonFilter);
             return sensorRunParameters;
         }
         catch (Throwable ex) {
-            log.warn("Sensor execution run parameters preparation failed, message: " + ex.getMessage(), ex);
+            this.userErrorLogger.logCheck("Sensor execution run parameters preparation failed, message: " + ex.getMessage() +
+                    ", the check that failed to run: " +  checkSpec.getHierarchyId().toString(), ex);
             return new SensorExecutionRunParameters(checkSpec, ex);
         }
     }
@@ -881,7 +950,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
             TableWrapper comparedTableWrapper = userHome.findTableFor(checkHierarchyId);
             ColumnSpec comparedColumnSpec = userHome.findColumnFor(checkHierarchyId); // may be null
-            TableSpec comparedTableSpec = comparedTableWrapper.getSpec();
+            TableSpec comparedTableSpec = comparedTableWrapper.getSpec(); // NOTE: this method does not support default checks, because the createSensorRunParametersToReferenceTable method does not get a cloned TableSpec with applied default checks, but it is ok, no need to apply default comparisons without configuring comparisons
 
             List<HierarchyNode> nodesOnPath = List.of(checkHierarchyId.getNodesOnPath(userHome));
 
@@ -894,22 +963,30 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             String comparisonName = comparisonCheckCategorySpec.getComparisonName();
             TableComparisonConfigurationSpec tableComparisonConfigurationSpec = comparedTableSpec.getTableComparisons().get(comparisonName);
             if (tableComparisonConfigurationSpec == null) {
-                throw new DqoRuntimeException("Cannot execute a table comparison check on table " + comparedTableSpec.toString() +
+                String errorMessage = "Cannot execute a table comparison check on table " + comparedTableSpec.toString() +
                         " because the reference table configuration " + comparisonName + " is not configured on the table. " +
                         "Reason: an old configuration of comparison checks is still configured, despite that the reference table configuration was removed. " +
-                        "Please remove table comparison check configuration to fix the problem.");
+                        "Please remove table comparison check configuration to fix the problem. " +
+                        "The check that failed to run: " +  checkSpec.getHierarchyId().toString();
+                this.userErrorLogger.logCheck(errorMessage, null);
+                throw new DqoRuntimeException(errorMessage);
             }
 
             ConnectionWrapper referencedConnectionWrapper = userHome.getConnections().getByObjectName(tableComparisonConfigurationSpec.getReferenceTableConnectionName(), true);
             if (referencedConnectionWrapper == null) {
-                throw new DqoRuntimeException("Cannot compare table " + comparedTableSpec.toString() + " to a reference table, because the data source connection " +
-                        tableComparisonConfigurationSpec.getReferenceTableConnectionName() + " is not defined in the metadata.");
+                String errorMessage = "Cannot compare table " + comparedTableSpec.toString() + " to a reference table, because the data source connection " +
+                        tableComparisonConfigurationSpec.getReferenceTableConnectionName() + " is not defined in the metadata.";
+                this.userErrorLogger.logCheck(errorMessage, null);
+                throw new DqoRuntimeException(errorMessage);
             }
             PhysicalTableName referenceTablePhysicalName = new PhysicalTableName(tableComparisonConfigurationSpec.getReferenceTableSchemaName(), tableComparisonConfigurationSpec.getReferenceTableName());
             TableWrapper referenceTableWrapper = referencedConnectionWrapper.getTables().getByObjectName(referenceTablePhysicalName, true);
             if (referenceTableWrapper == null) {
-                throw new DqoRuntimeException("Cannot compare table " + comparedTableSpec.toString() + " to a reference table, because the referenced table " +
-                        tableComparisonConfigurationSpec.getReferenceTableConnectionName() + "." + referenceTablePhysicalName.toString() + " is not defined in the metadata.");
+                String errorMessage = "Cannot compare table " + comparedTableSpec.toString() + " to a reference table, because the referenced table " +
+                        tableComparisonConfigurationSpec.getReferenceTableConnectionName() + "." + referenceTablePhysicalName.toString() + " is not defined in the metadata. " +
+                        "The check that failed to run: " +  checkSpec.getHierarchyId().toString();
+                this.userErrorLogger.logCheck(errorMessage, null);
+                throw new DqoRuntimeException(errorMessage);
             }
             ConnectionSpec referencedConnectionSpec = referencedConnectionWrapper.getSpec();
             TableSpec referencedTableSpec = referenceTableWrapper.getSpec();
@@ -923,9 +1000,13 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 referencedColumnName = columnComparisonCheckCategorySpec.getReferenceColumn();
                 referencedColumnSpec = referencedTableSpec.getColumns().get(referencedColumnName);
                 if (referencedColumnSpec == null) {
-                    throw new DqoRuntimeException("Cannot compare table " + comparedTableSpec.toString() + " to a reference table, because the referenced column " +
+                    String errorMessage = "Cannot compare table " + comparedTableSpec.toString() + " to a reference table, because the referenced column " +
                             referencedColumnName + " was not found in the referenced table " +
-                            tableComparisonConfigurationSpec.getReferenceTableConnectionName() + "." + referenceTablePhysicalName.toString() + " in the metadata. Please fix the configuration or import the metadata of the missing column.");
+                            tableComparisonConfigurationSpec.getReferenceTableConnectionName() + "." + referenceTablePhysicalName.toString() +
+                            " in the metadata. Please fix the configuration or import the metadata of the missing column. " +
+                            "The check that failed to run: " +  checkSpec.getHierarchyId().toString();
+                    this.userErrorLogger.logCheck(errorMessage, null);
+                    throw new DqoRuntimeException(errorMessage);
                 }
             }
 
@@ -960,7 +1041,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     this.sensorExecutionRunParametersFactory.makeEffectiveIncrementalFilter(comparedTableSpec, timeSeriesConfigurationSpec, userTimeWindowFilters);
 
             SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
-                    referencedConnectionSpec, referencedTableSpec, referencedColumnSpec, checkSpec, customCheckDefinitionSpec, checkType, referencedTableGroupingConfiguration,
+                    userHome, referencedConnectionSpec, referencedTableSpec, referencedColumnSpec, checkSpec, customCheckDefinitionSpec, checkType, referencedTableGroupingConfiguration,
                     tableComparisonConfigurationSpec, timeSeriesConfigurationSpec, timeWindowConfigurationFromComparedTable, referencedDialectSettings);
             sensorRunParameters.setTableComparisonConfiguration(tableComparisonConfigurationSpec);
             sensorRunParameters.setReferenceColumnName(referencedColumnName);
@@ -969,7 +1050,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             return sensorRunParameters;
         }
         catch (Throwable ex) {
-            log.warn("Sensor execution run parameters preparation failed, message: " + ex.getMessage(), ex);
+            this.userErrorLogger.logCheck("Sensor execution run parameters preparation failed, message: " + ex.getMessage() +
+                    "The check that failed to run: " +  checkSpec.getHierarchyId().toString(), ex);
             return new SensorExecutionRunParameters(checkSpec, ex);
         }
     }

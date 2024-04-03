@@ -15,12 +15,16 @@
  */
 package com.dqops.checks.table.partitioned.comparison;
 
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractTableComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.ComparisonCheckRules;
 import com.dqops.checks.comparison.TableCompareCheckType;
 import com.dqops.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -110,5 +114,50 @@ public class TableComparisonDailyPartitionedChecksSpec extends AbstractTableComp
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns true if this type of comparison checks support a column count comparison.
+     * Profiling and monitoring checks that compare the whole table support also comparing the column count.
+     * Partitioned checks do not support comparing row count and their comparison check containers return false.
+     *
+     * @return True - the column count match check is supported for this type of checks, false when it is not supported.
+     */
+    @Override
+    public boolean supportsColumnComparisonCheck() {
+        return false;
+    }
+
+    /**
+     * Gets the check type appropriate for all checks in this category.
+     *
+     * @return Corresponding check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.partitioned;
+    }
+
+    /**
+     * Gets the check timescale appropriate for all checks in this category.
+     *
+     * @return Corresponding check timescale.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return CheckTimeScale.daily;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.ANY;
     }
 }

@@ -1,10 +1,10 @@
 import React from 'react';
-import { RecurringScheduleSpec } from '../../api';
+import { MonitoringScheduleSpec } from '../../api';
 import ScheduleView from "../ScheduleView";
 
 interface IScheduleTabProps {
-  schedule?: RecurringScheduleSpec;
-  onChange: (item?: RecurringScheduleSpec) => void;
+  schedule?: MonitoringScheduleSpec;
+  onChange: (item?: MonitoringScheduleSpec) => void;
 }
 
 const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {
@@ -18,7 +18,7 @@ const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {
 
   return (
     <div className={isDisabled ? 'text-gray-700' : ''}>
-      <ScheduleView handleChange={handleChange} schedule={schedule} />
+      <ScheduleView handleChange={handleChange} schedule={schedule}/>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: check
 spec:
@@ -7,3 +7,4 @@ spec:
   help_text: "Detects if the number of column matches an expected number. Retrieves\
     \ the metadata of the monitored table, counts the number of columns and compares\
     \ it to an expected value (an expected number of columns)."
+  standard: true

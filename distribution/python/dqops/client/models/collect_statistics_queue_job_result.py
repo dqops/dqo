@@ -1,83 +1,92 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
+from ..models.dqo_job_status import DqoJobStatus
 from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.collect_statistics_result import CollectStatisticsResult
+    from ..models.dqo_queue_job_id import DqoQueueJobId
+
 
 T = TypeVar("T", bound="CollectStatisticsQueueJobResult")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CollectStatisticsQueueJobResult:
-    """Returns the result with the summary of the statistics collected.
+    """Object returned from the operation that queues a "collect statistics" job. The result contains the job id that was
+    started and optionally can also contain the result of collecting the statistics  if the operation was started with
+    wait=true parameter to wait for the "collect statistics" job to finish.
 
-    Attributes:
-        executed_statistics_collectors (Union[Unset, int]): The total count of all executed statistics collectors.
-        total_collectors_executed (Union[Unset, int]): The count of executed statistics collectors.
-        columns_analyzed (Union[Unset, int]): The count of columns for which DQO executed a collector and tried to read
-            the statistics.
-        columns_successfully_analyzed (Union[Unset, int]): The count of columns for which DQO managed to obtain
-            statistics.
-        total_collectors_failed (Union[Unset, int]): The count of statistics collectors that failed to execute.
-        total_collected_results (Union[Unset, int]): The total number of results that were collected.
+        Attributes:
+            job_id (Union[Unset, DqoQueueJobId]): Identifies a single job that was pushed to the job queue.
+            result (Union[Unset, CollectStatisticsResult]): Returns the result with the summary of the statistics collected.
+            status (Union[Unset, DqoJobStatus]):
     """
 
-    executed_statistics_collectors: Union[Unset, int] = UNSET
-    total_collectors_executed: Union[Unset, int] = UNSET
-    columns_analyzed: Union[Unset, int] = UNSET
-    columns_successfully_analyzed: Union[Unset, int] = UNSET
-    total_collectors_failed: Union[Unset, int] = UNSET
-    total_collected_results: Union[Unset, int] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    job_id: Union[Unset, "DqoQueueJobId"] = UNSET
+    result: Union[Unset, "CollectStatisticsResult"] = UNSET
+    status: Union[Unset, DqoJobStatus] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        executed_statistics_collectors = self.executed_statistics_collectors
-        total_collectors_executed = self.total_collectors_executed
-        columns_analyzed = self.columns_analyzed
-        columns_successfully_analyzed = self.columns_successfully_analyzed
-        total_collectors_failed = self.total_collectors_failed
-        total_collected_results = self.total_collected_results
+        job_id: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.job_id, Unset):
+            job_id = self.job_id.to_dict()
+
+        result: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.result, Unset):
+            result = self.result.to_dict()
+
+        status: Union[Unset, str] = UNSET
+        if not isinstance(self.status, Unset):
+            status = self.status.value
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if executed_statistics_collectors is not UNSET:
-            field_dict["executedStatisticsCollectors"] = executed_statistics_collectors
-        if total_collectors_executed is not UNSET:
-            field_dict["totalCollectorsExecuted"] = total_collectors_executed
-        if columns_analyzed is not UNSET:
-            field_dict["columnsAnalyzed"] = columns_analyzed
-        if columns_successfully_analyzed is not UNSET:
-            field_dict["columnsSuccessfullyAnalyzed"] = columns_successfully_analyzed
-        if total_collectors_failed is not UNSET:
-            field_dict["totalCollectorsFailed"] = total_collectors_failed
-        if total_collected_results is not UNSET:
-            field_dict["totalCollectedResults"] = total_collected_results
+        if job_id is not UNSET:
+            field_dict["jobId"] = job_id
+        if result is not UNSET:
+            field_dict["result"] = result
+        if status is not UNSET:
+            field_dict["status"] = status
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.collect_statistics_result import CollectStatisticsResult
+        from ..models.dqo_queue_job_id import DqoQueueJobId
+
         d = src_dict.copy()
-        executed_statistics_collectors = d.pop("executedStatisticsCollectors", UNSET)
+        _job_id = d.pop("jobId", UNSET)
+        job_id: Union[Unset, DqoQueueJobId]
+        if isinstance(_job_id, Unset):
+            job_id = UNSET
+        else:
+            job_id = DqoQueueJobId.from_dict(_job_id)
 
-        total_collectors_executed = d.pop("totalCollectorsExecuted", UNSET)
+        _result = d.pop("result", UNSET)
+        result: Union[Unset, CollectStatisticsResult]
+        if isinstance(_result, Unset):
+            result = UNSET
+        else:
+            result = CollectStatisticsResult.from_dict(_result)
 
-        columns_analyzed = d.pop("columnsAnalyzed", UNSET)
-
-        columns_successfully_analyzed = d.pop("columnsSuccessfullyAnalyzed", UNSET)
-
-        total_collectors_failed = d.pop("totalCollectorsFailed", UNSET)
-
-        total_collected_results = d.pop("totalCollectedResults", UNSET)
+        _status = d.pop("status", UNSET)
+        status: Union[Unset, DqoJobStatus]
+        if isinstance(_status, Unset):
+            status = UNSET
+        else:
+            status = DqoJobStatus(_status)
 
         collect_statistics_queue_job_result = cls(
-            executed_statistics_collectors=executed_statistics_collectors,
-            total_collectors_executed=total_collectors_executed,
-            columns_analyzed=columns_analyzed,
-            columns_successfully_analyzed=columns_successfully_analyzed,
-            total_collectors_failed=total_collectors_failed,
-            total_collected_results=total_collected_results,
+            job_id=job_id,
+            result=result,
+            status=status,
         )
 
         collect_statistics_queue_job_result.additional_properties = d

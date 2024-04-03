@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="RedshiftParametersSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class RedshiftParametersSpec:
     """
     Attributes:
@@ -27,10 +28,8 @@ class RedshiftParametersSpec:
             dynamic substitution.
         password (Union[Unset, str]): Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
             format to use dynamic substitution.
-        options (Union[Unset, str]): Redshift connection 'options' initialization parameter. For example setting this to
-            -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also
-            a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.
-        properties (Union[Unset, RedshiftParametersSpecProperties]):
+        properties (Union[Unset, RedshiftParametersSpecProperties]): A dictionary of custom JDBC parameters that are
+            added to the JDBC connection string, a key/value dictionary.
     """
 
     host: Union[Unset, str] = UNSET
@@ -38,9 +37,8 @@ class RedshiftParametersSpec:
     database: Union[Unset, str] = UNSET
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
-    options: Union[Unset, str] = UNSET
     properties: Union[Unset, "RedshiftParametersSpecProperties"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         host = self.host
@@ -48,7 +46,6 @@ class RedshiftParametersSpec:
         database = self.database
         user = self.user
         password = self.password
-        options = self.options
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
@@ -66,8 +63,6 @@ class RedshiftParametersSpec:
             field_dict["user"] = user
         if password is not UNSET:
             field_dict["password"] = password
-        if options is not UNSET:
-            field_dict["options"] = options
         if properties is not UNSET:
             field_dict["properties"] = properties
 
@@ -90,8 +85,6 @@ class RedshiftParametersSpec:
 
         password = d.pop("password", UNSET)
 
-        options = d.pop("options", UNSET)
-
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, RedshiftParametersSpecProperties]
         if isinstance(_properties, Unset):
@@ -105,7 +98,6 @@ class RedshiftParametersSpec:
             database=database,
             user=user,
             password=password,
-            options=options,
             properties=properties,
         )
 

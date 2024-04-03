@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import Tabs from '../../Tabs';
-import DataQualityChecks from '../../DataQualityChecks';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import {
+  CheckContainerModel,
+  CheckResultsOverviewDataModel
+} from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { setActiveFirstLevelUrl } from '../../../redux/actions/source.actions';
 import {
   getTableDailyPartitionedChecks,
   getTableMonthlyPartitionedChecks,
@@ -10,36 +15,43 @@ import {
   updateTableDailyPartitionedChecks,
   updateTableMonthlyPartitionedChecks
 } from '../../../redux/actions/table.actions';
-import { useSelector } from 'react-redux';
-import {
-  CheckResultsOverviewDataModel,
-  CheckContainerModel
-} from '../../../api';
-import TableActionGroup from './TableActionGroup';
-import { CheckResultOverviewApi } from '../../../services/apiClient';
-import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../../shared/routes';
 import {
   getFirstLevelActiveTab,
-  getFirstLevelState
+  getFirstLevelState,
+  getSecondLevelTab
 } from '../../../redux/selectors';
-import { TableReferenceComparisons } from './TableReferenceComparisons';
+import { CheckResultOverviewApi } from '../../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../../shared/routes';
+import DataQualityChecks from '../../DataQualityChecks';
+import Tabs from '../../Tabs';
+import TableActionGroup from './TableActionGroup';
+import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
+import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
+import { useDecodedParams } from '../../../utils';
 
 const initTabs = [
   {
-    label: 'Daily',
+    label: 'Table quality status (daily checks)',
+    value: 'table-quality-status-daily'
+  },
+  {
+    label: 'Daily checks',
     value: 'daily'
   },
   {
-    label: 'Monthly',
+    label: 'Table quality status (monthly checks)',
+    value: 'table-quality-status-monthly'
+  },
+  {
+    label: 'Monthly checks',
     value: 'monthly'
   },
   {
-    label: 'Daily Comparisons',
+    label: 'Daily comparisons',
     value: 'daily_comparisons'
   },
   {
-    label: 'Monthly Comparisons',
+    label: 'Monthly comparisons',
     value: 'monthly_comparisons'
   }
 ];
@@ -57,7 +69,7 @@ const TablePartitionedChecksView = () => {
     schema: string;
     table: string;
     tab: string;
-  } = useParams();
+  } = useDecodedParams();
   const [tabs, setTabs] = useState(initTabs);
   const [dailyCheckResultsOverview, setDailyCheckResultsOverview] = useState<
     CheckResultsOverviewDataModel[]
@@ -67,6 +79,7 @@ const TablePartitionedChecksView = () => {
   const history = useHistory();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const activeTab = getSecondLevelTab(checkTypes, tab);
 
   const {
     dailyPartitionedChecks,
@@ -99,7 +112,7 @@ const TablePartitionedChecksView = () => {
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
-    if (tab === 'daily' || tab === 'daily_comparisons') {
+    if (activeTab === 'daily' || activeTab === 'daily_comparisons') {
       if (!dailyPartitionedChecks) return;
 
       await dispatch(
@@ -180,25 +193,6 @@ const TablePartitionedChecksView = () => {
     );
   }, [isUpdatedMonthlyPartitionedChecks]);
 
-  useEffect(() => {
-    if (
-      tab !== 'daily' &&
-      tab !== 'monthly' &&
-      tab !== 'daily_comparisons' &&
-      tab !== 'monthly_comparisons'
-    ) {
-      history.push(
-        ROUTES.TABLE_LEVEL_PAGE(
-          checkTypes,
-          connectionName,
-          schemaName,
-          tableName,
-          'daily'
-        )
-      );
-    }
-  }, [tab]);
-
   const getDailyCheckOverview = () => {
     CheckResultOverviewApi.getTablePartitionedChecksOverview(
       connectionName,
@@ -221,32 +215,41 @@ const TablePartitionedChecksView = () => {
     });
   };
 
-  const onChangeTab = (tab: string) => {
+  const onChangeTab = (activeTab: string) => {
+    dispatch(
+      setActiveFirstLevelUrl(
+        checkTypes,
+        firstLevelActiveTab,
+        ROUTES.TABLE_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, activeTab)
+      )
+    );
     history.push(
       ROUTES.TABLE_LEVEL_PAGE(
         checkTypes,
         connectionName,
         schemaName,
         tableName,
-        tab
+        activeTab
       )
     );
   };
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">
-      <TableActionGroup
-        shouldDelete={false}
-        onUpdate={onUpdate}
-        isUpdated={
-          isUpdatedDailyPartitionedChecks || isUpdatedMonthlyPartitionedChecks
-        }
-        isUpdating={isUpdating}
-      />
+      {(activeTab === 'monthly' || activeTab === 'daily') &&
+        <TableActionGroup
+          shouldDelete={false}
+          onUpdate={onUpdate}
+          isUpdated={
+            isUpdatedDailyPartitionedChecks || isUpdatedMonthlyPartitionedChecks
+          }
+          isUpdating={isUpdating}
+        />
+      }
       <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
+        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
-      {tab === 'daily' && (
+      {activeTab === 'daily' && (
         <DataQualityChecks
           onUpdate={onUpdate}
           checksUI={dailyPartitionedChecks}
@@ -256,7 +259,7 @@ const TablePartitionedChecksView = () => {
           loading={loading}
         />
       )}
-      {tab === 'monthly' && (
+      {activeTab === 'monthly' && (
         <DataQualityChecks
           onUpdate={onUpdate}
           checksUI={monthlyPartitionedChecks}
@@ -266,20 +269,26 @@ const TablePartitionedChecksView = () => {
           loading={loading}
         />
       )}
-      {tab === 'daily_comparisons' && (
+      {activeTab === 'table-quality-status-daily' && (
+        <TableQualityStatus timeScale="daily" />
+      )}
+      {activeTab === 'table-quality-status-monthly' && (
+        <TableQualityStatus timeScale="monthly" />
+      )}
+      {activeTab === 'daily_comparisons' && (
         <TableReferenceComparisons
           checkTypes={checkTypes}
           timePartitioned="daily"
           checksUI={dailyPartitionedChecks}
-          fetchChecks={onUpdate}
+          onUpdateChecks={onUpdate}
         />
       )}
-      {tab === 'monthly_comparisons' && (
+      {activeTab === 'monthly_comparisons' && (
         <TableReferenceComparisons
           checkTypes={checkTypes}
           timePartitioned="monthly"
           checksUI={monthlyPartitionedChecks}
-          fetchChecks={onUpdate}
+          onUpdateChecks={onUpdate}
         />
       )}
     </div>

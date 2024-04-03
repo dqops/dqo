@@ -32,7 +32,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the percentile 25 of values in a monitored column is in a set range.
+ * This check finds the 25th percentile value in a numeric column. The 10th percentile is a value greater than 25% of the smallest values and smaller than the remaining 75% of other values.
+ * This check verifies that the 25th percentile is within the range of accepted values and raises a data quality issue when it is not within a valid range.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

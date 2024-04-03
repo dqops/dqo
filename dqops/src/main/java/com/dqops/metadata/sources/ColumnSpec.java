@@ -18,13 +18,14 @@ package com.dqops.metadata.sources;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
-import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import com.dqops.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
-import com.dqops.checks.column.recurring.ColumnMonthlyRecurringCheckCategoriesSpec;
-import com.dqops.checks.column.recurring.ColumnRecurringChecksRootSpec;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.comments.CommentsListSpec;
@@ -33,6 +34,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.statistics.column.ColumnStatisticsCollectorsRootCategoriesSpec;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -55,7 +57,7 @@ public class ColumnSpec extends AbstractSpec {
         {
 			put("type_snapshot", o -> o.typeSnapshot);
 			put("profiling_checks", o -> o.profilingChecks);
-            put("recurring_checks", o -> o.recurringChecks);
+            put("monitoring_checks", o -> o.monitoringChecks);
             put("partitioned_checks", o -> o.partitionedChecks);
             put("statistics", o -> o.statistics);
             put("labels", o -> o.labels);
@@ -67,7 +69,7 @@ public class ColumnSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
-    @JsonPropertyDescription("SQL expression used for calculated fields or when additional column value transformation is required before the column could be used analyzed in data quality checks (data type conversion, transformation). It should be an SQL expression using the SQL language of the analyzed database type. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed table or {column} to replace the content with the analyzed column name. An example to extract a value from a string column that stores a JSON in PostgreSQL: \"{column}::json->'address'->'zip'\".")
+    @JsonPropertyDescription("SQL expression used for calculated fields or when additional column value transformation is required before the column can be used for analysis with data quality checks (data type conversion, transformation). It should be an SQL expression that uses the SQL language of the analyzed database type. Use the replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of the table under analysis, or {column} to replace the content with the analyzed column name. An example of extracting a value from a string column storing JSON in PostgreSQL: \"{column}::json->'address'->'zip'\".")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private String sqlExpression;
 
@@ -80,15 +82,15 @@ public class ColumnSpec extends AbstractSpec {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnProfilingCheckCategoriesSpec profilingChecks;
 
-    @JsonPropertyDescription("Configuration of column level recurring checks. Recurring are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A recurring stores only the most recent data quality check result for each period of time.")
+    @JsonPropertyDescription("Configuration of column level monitoring checks. Monitoring are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring stores only the most recent data quality check result for each period of time.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnRecurringChecksRootSpec recurringChecks;
+    private ColumnMonitoringCheckCategoriesSpec monitoringChecks;
 
     @JsonPropertyDescription("Configuration of column level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnPartitionedChecksRootSpec partitionedChecks;
+    private ColumnPartitionedCheckCategoriesSpec partitionedChecks;
 
     @JsonPropertyDescription("Custom configuration of a column level statistics collector (a basic profiler). Enables customization of the statistics collector settings when the collector is analysing this column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -188,28 +190,28 @@ public class ColumnSpec extends AbstractSpec {
     }
 
     /**
-     * Returns configuration of enabled column level recurring checks.
-     * @return Column level recurring.
+     * Returns configuration of enabled column level monitoring checks.
+     * @return Column level monitoring.
      */
-    public ColumnRecurringChecksRootSpec getRecurringChecks() {
-        return recurringChecks;
+    public ColumnMonitoringCheckCategoriesSpec getMonitoringChecks() {
+        return monitoringChecks;
     }
 
     /**
-     * Sets a new configuration of column level data quality recurring checks.
-     * @param recurringChecks New recurring checks configuration.
+     * Sets a new configuration of column level data quality monitoring checks.
+     * @param monitoringChecks New monitoring checks configuration.
      */
-    public void setRecurringChecks(ColumnRecurringChecksRootSpec recurringChecks) {
-        setDirtyIf(!Objects.equals(this.recurringChecks, recurringChecks));
-        this.recurringChecks = recurringChecks;
-        propagateHierarchyIdToField(recurringChecks, "recurring_checks");
+    public void setMonitoringChecks(ColumnMonitoringCheckCategoriesSpec monitoringChecks) {
+        setDirtyIf(!Objects.equals(this.monitoringChecks, monitoringChecks));
+        this.monitoringChecks = monitoringChecks;
+        propagateHierarchyIdToField(monitoringChecks, "monitoring_checks");
     }
 
     /**
      * Returns configuration of enabled column level date/time partitioned checks.
      * @return Column level date/time partitioned checks.
      */
-    public ColumnPartitionedChecksRootSpec getPartitionedChecks() {
+    public ColumnPartitionedCheckCategoriesSpec getPartitionedChecks() {
         return partitionedChecks;
     }
 
@@ -217,7 +219,7 @@ public class ColumnSpec extends AbstractSpec {
      * Sets a new configuration of column level date/time partitioned data quality checks.
      * @param partitionedChecks New configuration of date/time partitioned checks.
      */
-    public void setPartitionedChecks(ColumnPartitionedChecksRootSpec partitionedChecks) {
+    public void setPartitionedChecks(ColumnPartitionedCheckCategoriesSpec partitionedChecks) {
         setDirtyIf(!Objects.equals(this.partitionedChecks, partitionedChecks));
         this.partitionedChecks = partitionedChecks;
         propagateHierarchyIdToField(partitionedChecks, "partitioned_checks");
@@ -290,10 +292,32 @@ public class ColumnSpec extends AbstractSpec {
     public AbstractRootChecksContainerSpec getColumnCheckRootContainer(CheckType checkType,
                                                                        CheckTimeScale checkTimeScale,
                                                                        boolean attachCheckContainer) {
+        return getColumnCheckRootContainer(checkType, checkTimeScale, attachCheckContainer, true);
+    }
+
+    /**
+     * Retrieves a non-null root check container for the requested category.  Returns null when the check container is not present.
+     * Creates a new check root container object if there was no such object configured and referenced
+     * from the column specification.
+     *
+     * @param checkType            Check type.
+     * @param checkTimeScale       Time scale. Null value is accepted for profiling checks, for other time scale aware checks, the proper time scale is required.
+     * @param attachCheckContainer When the check container doesn't exist, should the newly created check container be attached to the column.
+     * @param createEmptyContainerWhenNull Creates a new check container instance when it is null.
+     * @return Newly created container root.
+     */
+    public AbstractRootChecksContainerSpec getColumnCheckRootContainer(CheckType checkType,
+                                                                       CheckTimeScale checkTimeScale,
+                                                                       boolean attachCheckContainer,
+                                                                       boolean createEmptyContainerWhenNull) {
         switch (checkType) {
             case profiling: {
                 if (this.profilingChecks != null) {
                     return this.profilingChecks;
+                }
+
+                if (!createEmptyContainerWhenNull) {
+                    return null;
                 }
 
                 ColumnProfilingCheckCategoriesSpec columnProfilingCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
@@ -304,40 +328,52 @@ public class ColumnSpec extends AbstractSpec {
                 return columnProfilingCheckCategoriesSpec;
             }
 
-            case recurring: {
-                ColumnRecurringChecksRootSpec recurringSpec = this.recurringChecks;
-                if (recurringSpec == null) {
-                    recurringSpec = new ColumnRecurringChecksRootSpec();
-                    recurringSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "recurring_checks"));
+            case monitoring: {
+                ColumnMonitoringCheckCategoriesSpec monitoringSpec = this.monitoringChecks;
+                if (monitoringSpec == null) {
+                    if (!createEmptyContainerWhenNull) {
+                        return null;
+                    }
+
+                    monitoringSpec = new ColumnMonitoringCheckCategoriesSpec();
+                    monitoringSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "monitoring_checks"));
                     if (attachCheckContainer) {
-                        this.recurringChecks = recurringSpec;
+                        this.monitoringChecks = monitoringSpec;
                     }
                 }
 
                 switch (checkTimeScale) {
                     case daily: {
-                        if (recurringSpec.getDaily() != null) {
-                            return recurringSpec.getDaily();
+                        if (monitoringSpec.getDaily() != null) {
+                            return monitoringSpec.getDaily();
                         }
 
-                        ColumnDailyRecurringCheckCategoriesSpec dailyRecurringCategoriesSpec = new ColumnDailyRecurringCheckCategoriesSpec();
-                        dailyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "daily"));
-                        if (attachCheckContainer) {
-                            recurringSpec.setDaily(dailyRecurringCategoriesSpec);
+                        if (!createEmptyContainerWhenNull) {
+                            return null;
                         }
-                        return dailyRecurringCategoriesSpec;
+
+                        ColumnDailyMonitoringCheckCategoriesSpec dailyMonitoringCategoriesSpec = new ColumnDailyMonitoringCheckCategoriesSpec();
+                        dailyMonitoringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(monitoringSpec.getHierarchyId(), "daily"));
+                        if (attachCheckContainer) {
+                            monitoringSpec.setDaily(dailyMonitoringCategoriesSpec);
+                        }
+                        return dailyMonitoringCategoriesSpec;
                     }
                     case monthly: {
-                        if (recurringSpec.getMonthly() != null) {
-                            return recurringSpec.getMonthly();
+                        if (monitoringSpec.getMonthly() != null) {
+                            return monitoringSpec.getMonthly();
                         }
 
-                        ColumnMonthlyRecurringCheckCategoriesSpec monthlyRecurringCategoriesSpec = new ColumnMonthlyRecurringCheckCategoriesSpec();
-                        monthlyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "monthly"));
-                        if (attachCheckContainer) {
-                            recurringSpec.setMonthly(monthlyRecurringCategoriesSpec);
+                        if (!createEmptyContainerWhenNull) {
+                            return null;
                         }
-                        return monthlyRecurringCategoriesSpec;
+
+                        ColumnMonthlyMonitoringCheckCategoriesSpec monthlyMonitoringCategoriesSpec = new ColumnMonthlyMonitoringCheckCategoriesSpec();
+                        monthlyMonitoringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(monitoringSpec.getHierarchyId(), "monthly"));
+                        if (attachCheckContainer) {
+                            monitoringSpec.setMonthly(monthlyMonitoringCategoriesSpec);
+                        }
+                        return monthlyMonitoringCategoriesSpec;
                     }
                     default:
                         throw new IllegalArgumentException("Check time scale " + checkTimeScale + " is not supported");
@@ -345,9 +381,13 @@ public class ColumnSpec extends AbstractSpec {
             }
 
             case partitioned: {
-                ColumnPartitionedChecksRootSpec partitionedChecksSpec = this.partitionedChecks;
+                ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = this.partitionedChecks;
                 if (partitionedChecksSpec == null) {
-                    partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
+                    if (!createEmptyContainerWhenNull) {
+                        return null;
+                    }
+
+                    partitionedChecksSpec = new ColumnPartitionedCheckCategoriesSpec();
                     partitionedChecksSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "partitioned_checks"));
                     if (attachCheckContainer) {
                         this.partitionedChecks = partitionedChecksSpec;
@@ -360,6 +400,10 @@ public class ColumnSpec extends AbstractSpec {
                             return partitionedChecksSpec.getDaily();
                         }
 
+                        if (!createEmptyContainerWhenNull) {
+                            return null;
+                        }
+
                         ColumnDailyPartitionedCheckCategoriesSpec dailyPartitionedCategoriesSpec = new ColumnDailyPartitionedCheckCategoriesSpec();
                         dailyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "daily"));
                         if (attachCheckContainer) {
@@ -370,6 +414,10 @@ public class ColumnSpec extends AbstractSpec {
                     case monthly: {
                         if (partitionedChecksSpec.getMonthly() != null) {
                             return partitionedChecksSpec.getMonthly();
+                        }
+
+                        if (!createEmptyContainerWhenNull) {
+                            return null;
                         }
 
                         ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCategoriesSpec = new ColumnMonthlyPartitionedCheckCategoriesSpec();
@@ -392,7 +440,7 @@ public class ColumnSpec extends AbstractSpec {
 
     /**
      * Sets the given container of checks at a proper level of the check hierarchy.
-     * The object could be a profiling check container, one of recurring containers or one of partitioned checks container.
+     * The object could be a profiling check container, one of monitoring containers or one of partitioned checks container.
      * @param checkRootContainer Root check container to store.
      */
     @JsonIgnore
@@ -404,30 +452,30 @@ public class ColumnSpec extends AbstractSpec {
         if (checkRootContainer instanceof ColumnProfilingCheckCategoriesSpec) {
             this.setProfilingChecks((ColumnProfilingCheckCategoriesSpec)checkRootContainer);
         }
-        else if (checkRootContainer instanceof ColumnDailyRecurringCheckCategoriesSpec) {
-            if (this.recurringChecks == null) {
-                this.setRecurringChecks(new ColumnRecurringChecksRootSpec());
+        else if (checkRootContainer instanceof ColumnDailyMonitoringCheckCategoriesSpec) {
+            if (this.monitoringChecks == null) {
+                this.setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec());
             }
 
-            this.getRecurringChecks().setDaily((ColumnDailyRecurringCheckCategoriesSpec)checkRootContainer);
+            this.getMonitoringChecks().setDaily((ColumnDailyMonitoringCheckCategoriesSpec)checkRootContainer);
         }
-        else if (checkRootContainer instanceof ColumnMonthlyRecurringCheckCategoriesSpec) {
-            if (this.recurringChecks == null) {
-                this.setRecurringChecks(new ColumnRecurringChecksRootSpec());
+        else if (checkRootContainer instanceof ColumnMonthlyMonitoringCheckCategoriesSpec) {
+            if (this.monitoringChecks == null) {
+                this.setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec());
             }
 
-            this.getRecurringChecks().setMonthly((ColumnMonthlyRecurringCheckCategoriesSpec)checkRootContainer);
+            this.getMonitoringChecks().setMonthly((ColumnMonthlyMonitoringCheckCategoriesSpec)checkRootContainer);
         }
         else if (checkRootContainer instanceof ColumnDailyPartitionedCheckCategoriesSpec) {
             if (this.partitionedChecks == null) {
-                this.setPartitionedChecks(new ColumnPartitionedChecksRootSpec());
+                this.setPartitionedChecks(new ColumnPartitionedCheckCategoriesSpec());
             }
 
             this.getPartitionedChecks().setDaily((ColumnDailyPartitionedCheckCategoriesSpec)checkRootContainer);
         }
         else if (checkRootContainer instanceof ColumnMonthlyPartitionedCheckCategoriesSpec) {
             if (this.partitionedChecks == null) {
-                this.setPartitionedChecks(new ColumnPartitionedChecksRootSpec());
+                this.setPartitionedChecks(new ColumnPartitionedCheckCategoriesSpec());
             }
 
             this.getPartitionedChecks().setMonthly((ColumnMonthlyPartitionedCheckCategoriesSpec)checkRootContainer);
@@ -484,19 +532,20 @@ public class ColumnSpec extends AbstractSpec {
      * Creates a trimmed version of the object without unwanted properties. Additionally, some variables that contain environment variables are expanded.
      * A trimmed version is passed to a Jinja2 sql template as a context parameter.
      * @param secretValueProvider Secret value provider.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Trimmed version of this object.
      */
-    public ColumnSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public ColumnSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
         try {
             ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" deepClone, we are using an alternative clone concept
             cloned.comments = null;
             cloned.profilingChecks = null;
-            cloned.recurringChecks = null;
+            cloned.monitoringChecks = null;
             cloned.partitionedChecks = null;
             cloned.statistics = null;
             cloned.labels = null;
             if (cloned.typeSnapshot != null) {
-                cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider);
+                cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             return cloned;
         }
@@ -518,7 +567,7 @@ public class ColumnSpec extends AbstractSpec {
             }
             cloned.comments = null;
             cloned.profilingChecks = null;
-            cloned.recurringChecks = null;
+            cloned.monitoringChecks = null;
             cloned.partitionedChecks = null;
             cloned.labels = null;
             cloned.statistics = null;
@@ -538,7 +587,7 @@ public class ColumnSpec extends AbstractSpec {
             return true;
         }
 
-        if (this.recurringChecks != null && this.recurringChecks.hasAnyConfiguredChecks()) {
+        if (this.monitoringChecks != null && this.monitoringChecks.hasAnyConfiguredChecks()) {
             return true;
         }
 
@@ -559,13 +608,24 @@ public class ColumnSpec extends AbstractSpec {
             case profiling:
                 return this.profilingChecks != null && this.profilingChecks.hasAnyConfiguredChecks();
 
-            case recurring:
-                return this.recurringChecks != null && this.recurringChecks.hasAnyConfiguredChecks();
+            case monitoring:
+                return this.monitoringChecks != null && this.monitoringChecks.hasAnyConfiguredChecks();
 
             case partitioned:
                 return this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks();
         }
 
         return false;
+    }
+
+    public static class ColumnSpecSampleFactory implements SampleValueFactory<ColumnSpec> {
+        @Override
+        public ColumnSpec createSample() {
+            return new ColumnSpec() {{
+                setDisabled(false);
+                setTypeSnapshot(new ColumnTypeSnapshotSpec.ColumnTypeSnapshotSpecSampleFactory().createSample());
+                setProfilingChecks(new ColumnProfilingCheckCategoriesSpec.ColumnProfilingCheckCategoriesSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

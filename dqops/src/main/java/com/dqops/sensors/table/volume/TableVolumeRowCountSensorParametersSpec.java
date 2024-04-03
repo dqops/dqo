@@ -18,6 +18,8 @@ package com.dqops.sensors.table.volume;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.AbstractSensorParametersSpec;
+import com.dqops.utils.docs.generators.SampleValueFactory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -54,5 +56,23 @@ public class TableVolumeRowCountSensorParametersSpec extends AbstractSensorParam
     @Override
     public String getSensorDefinitionName() {
         return "table/volume/row_count";
+    }
+
+    /**
+     * Returns the default value that is used when the sensor returned no rows.
+     *
+     * @return Default value to use when the sensor returned no rows.
+     */
+    @Override
+    @JsonIgnore
+    public Double getDefaultValue() {
+        return 0.0;
+    }
+
+    public static class TableVolumeRowCountSensorParametersSpecSampleFactory implements SampleValueFactory<TableVolumeRowCountSensorParametersSpec> {
+        @Override
+        public TableVolumeRowCountSensorParametersSpec createSample() {
+            return new TableVolumeRowCountSensorParametersSpec();
+        }
     }
 }

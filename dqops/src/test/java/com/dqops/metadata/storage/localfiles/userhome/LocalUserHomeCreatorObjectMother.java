@@ -15,11 +15,12 @@
  */
 package com.dqops.metadata.storage.localfiles.userhome;
 
-import com.dqops.checks.defaults.services.DefaultObservabilityCheckSettingsFactoryImpl;
+import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsFactoryImpl;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalFactoryObjectMother;
 import com.dqops.core.configuration.*;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
+import com.dqops.core.principal.UserDomainIdentityFactoryImpl;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProviderImpl;
 import com.dqops.utils.BeanFactoryObjectMother;
 import com.dqops.utils.serialization.YamlSerializerObjectMother;
@@ -48,7 +49,8 @@ public class LocalUserHomeCreatorObjectMother {
         LocalUserHomeCreatorImpl localUserHomeCreator = new LocalUserHomeCreatorImpl(
                 homeLocationFindService, userHomeContextFactory, terminalFactory, noLoggingConfiguration, defaultUserConfiguration, defaultDockerUserhomeConfiguration,
                 dqoInstanceConfigurationProperties, YamlSerializerObjectMother.getDefault(), defaultSchedulesProvider,
-                new DefaultObservabilityCheckSettingsFactoryImpl());
+                new DefaultObservabilityCheckSettingsFactoryImpl(),
+                new UserDomainIdentityFactoryImpl(defaultUserConfiguration));
         return localUserHomeCreator;
     }
 
@@ -62,7 +64,7 @@ public class LocalUserHomeCreatorObjectMother {
     }
 
     /**
-     * Initialized a DQO User home at a given location.
+     * Initialized a DQOps User home at a given location.
      * @param pathToUserHome Path to a dqo user home to initialize.
      */
     public static void initializeDqoUserHomeAt(String pathToUserHome) {

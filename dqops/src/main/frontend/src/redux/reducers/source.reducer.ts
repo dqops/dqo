@@ -1,5 +1,5 @@
 ///
-/// Copyright © 2021 DQOps (support@dqops.com)
+/// Copyright © 2024 DQOps (support@dqops.com)
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
 /// limitations under the License.
 ///
 
-import { SOURCE_ACTION } from '../types';
-import { CheckTypes } from '../../shared/routes';
-import { CheckRunRecurringScheduleGroup } from '../../shared/enums/scheduling.enum';
 import { DataGroupingConfigurationSpec } from '../../api';
+import { CheckRunMonitoringScheduleGroup } from '../../shared/enums/scheduling.enum';
+import { CheckTypes } from '../../shared/routes';
+import { SOURCE_ACTION } from '../types';
 
 export interface INestTab {
   url: string;
@@ -35,7 +35,7 @@ export interface ISourceState {
     tabs: INestTab[];
     activeTab?: string;
   };
-  [CheckTypes.RECURRING]: {
+  [CheckTypes.MONITORING]: {
     tabs: INestTab[];
     activeTab?: string;
   };
@@ -52,7 +52,7 @@ const initialState: ISourceState = {
   profiling: {
     tabs: []
   },
-  recurring: {
+  monitoring: {
     tabs: []
   },
   partitioned: {
@@ -68,7 +68,7 @@ export type BasicAction = {
 
 export type Action = BasicAction & {
   data?: any;
-  schedulingGroup?: CheckRunRecurringScheduleGroup;
+  schedulingGroup?: CheckRunMonitoringScheduleGroup;
   error?: any;
 };
 
@@ -105,11 +105,10 @@ const setActiveTabState = (
     }
   };
 };
-
 const connectionReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case SOURCE_ACTION.ADD_FIRST_LEVEL_TAB: {
-      const existing = state[action.checkType].tabs.find(
+      const existing = state[action.checkType]?.tabs.find(
         (item) => item.value === action.data.value
       );
       const { state: actionState, ...data } = action.data;
@@ -120,7 +119,7 @@ const connectionReducer = (state = initialState, action: Action) => {
           [action.checkType]: {
             ...state[action.checkType],
             activeTab: action.data.value,
-            tabs: state[action.checkType].tabs.map((item) =>
+            tabs: state[action.checkType]?.tabs.map((item) =>
               item.value === action.data.value
                 ? {
                     ...item,
@@ -149,7 +148,7 @@ const connectionReducer = (state = initialState, action: Action) => {
         }
       };
     case SOURCE_ACTION.SET_ACTIVE_FIRST_LEVEL_URL: {
-      const newTabs = state[action.checkType].tabs.map((item) =>
+      const newTabs = state[action.checkType]?.tabs.map((item) =>
         item.value === action.activeTab
           ? {
               ...item,
@@ -198,16 +197,16 @@ const connectionReducer = (state = initialState, action: Action) => {
     }
 
     case SOURCE_ACTION.CLOSE_FIRST_LEVEL_TAB: {
-      const index = state[action.checkType].tabs.findIndex(
+      const index = state[action.checkType]?.tabs.findIndex(
         (item) => item.value === action.data
       );
       let activeTab = state[action.checkType].activeTab;
 
       if (state[action.checkType].activeTab === action.data) {
         if (index > 0) {
-          activeTab = state[action.checkType].tabs[index - 1].value;
-        } else if (index < state[action.checkType].tabs.length - 1) {
-          activeTab = state[action.checkType].tabs[index + 1].value;
+          activeTab = state[action.checkType]?.tabs[index - 1].value;
+        } else if (index < state[action.checkType]?.tabs.length - 1) {
+          activeTab = state[action.checkType]?.tabs[index + 1].value;
         }
       }
 
@@ -215,7 +214,7 @@ const connectionReducer = (state = initialState, action: Action) => {
         ...state,
         [action.checkType]: {
           ...state[action.checkType],
-          tabs: state[action.checkType].tabs.filter(
+          tabs: state[action.checkType]?.tabs.filter(
             (item) => item.value !== action.data
           ),
           activeTab
@@ -230,7 +229,7 @@ const connectionReducer = (state = initialState, action: Action) => {
 
     case SOURCE_ACTION.GET_CONNECTION_SCHEDULE_GROUP_SUCCESS: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
@@ -341,7 +340,7 @@ const connectionReducer = (state = initialState, action: Action) => {
       });
     case SOURCE_ACTION.SET_UPDATED_SCHEDULE_GROUP: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
@@ -364,7 +363,7 @@ const connectionReducer = (state = initialState, action: Action) => {
 
     case SOURCE_ACTION.SET_IS_UPDATED_SCHEDULE_GROUP: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
@@ -451,7 +450,7 @@ const connectionReducer = (state = initialState, action: Action) => {
       });
     case SOURCE_ACTION.GET_TABLE_SCHEDULE_GROUP_SUCCESS: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
@@ -608,34 +607,34 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdating: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_CHECKS:
+    case SOURCE_ACTION.GET_TABLE_DAILY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_CHECKS_SUCCESS:
+    case SOURCE_ACTION.GET_TABLE_DAILY_MONITORING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        dailyRecurring: action.data,
-        isUpdatedDailyRecurring: false,
+        dailyMonitoring: action.data,
+        isUpdatedDailyMonitoring: false,
         error: null
       });
-    case SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_CHECKS_ERROR:
+    case SOURCE_ACTION.GET_TABLE_DAILY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_CHECKS:
+    case SOURCE_ACTION.GET_TABLE_MONTHLY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_CHECKS_SUCCESS:
+    case SOURCE_ACTION.GET_TABLE_MONTHLY_MONITORING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        monthlyRecurring: action.data,
-        isUpdatedMonthlyRecurring: false,
+        monthlyMonitoring: action.data,
+        isUpdatedMonthlyMonitoring: false,
         error: null
       });
-    case SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_CHECKS_ERROR:
+    case SOURCE_ACTION.GET_TABLE_MONTHLY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
@@ -672,30 +671,30 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING_CHECKS:
+    case SOURCE_ACTION.UPDATE_TABLE_DAILY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING_CHECKS_SUCCESS:
+    case SOURCE_ACTION.UPDATE_TABLE_DAILY_MONITORING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING_CHECKS_ERROR:
+    case SOURCE_ACTION.UPDATE_TABLE_DAILY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_CHECKS:
+    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_CHECKS_SUCCESS:
+    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_MONITORING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_CHECKS_ERROR:
+    case SOURCE_ACTION.UPDATE_TABLE_MONTHLY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
@@ -744,18 +743,18 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_TABLE_RECURRING_CHECKS_MODEL_FILTER:
+    case SOURCE_ACTION.GET_TABLE_MONITORING_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_TABLE_RECURRING_CHECKS_MODEL_FILTER_SUCCESS:
+    case SOURCE_ACTION.GET_TABLE_MONITORING_CHECKS_MODEL_FILTER_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        recurringUIFilter: action.data,
-        isUpdatedRecurringUIFilter: false,
+        monitoringChecksUIFilter: action.data,
+        isUpdatedMonitoringUIFilter: false,
         error: null
       });
-    case SOURCE_ACTION.GET_TABLE_RECURRING_CHECKS_MODEL_FILTER_ERROR:
+    case SOURCE_ACTION.GET_TABLE_MONITORING_CHECKS_MODEL_FILTER_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
@@ -792,15 +791,15 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdatedChecksUi: true,
         checksUI: action.data
       });
-    case SOURCE_ACTION.SET_TABLE_DAILY_RECURRING_CHECKS:
+    case SOURCE_ACTION.SET_TABLE_DAILY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
-        isUpdatedDailyRecurring: true,
-        dailyRecurring: action.data
+        isUpdatedDailyMonitoring: true,
+        dailyMonitoring: action.data
       });
-    case SOURCE_ACTION.SET_TABLE_MONTHLY_RECURRING_CHECKS:
+    case SOURCE_ACTION.SET_TABLE_MONTHLY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
-        isUpdatedMonthlyRecurring: true,
-        monthlyRecurring: action.data
+        isUpdatedMonthlyMonitoring: true,
+        monthlyMonitoring: action.data
       });
     case SOURCE_ACTION.SET_TABLE_DAILY_PARTITIONED_CHECKS:
       return setActiveTabState(state, action, {
@@ -822,10 +821,10 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdatedChecksUIFilter: true,
         checksUIFilter: action.data
       });
-    case SOURCE_ACTION.SET_UPDATED_RECURRING_CHECKS_MODEL_FILTER:
+    case SOURCE_ACTION.SET_UPDATED_MONITORING_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
-        isUpdatedRecurringUIFilter: true,
-        recurringUIFilter: action.data
+        isUpdatedMonitoringUIFilter: true,
+        monitoringUIFilter: action.data
       });
     case SOURCE_ACTION.SET_UPDATED_PARTITIONED_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
@@ -972,34 +971,34 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING_CHECKS:
+    case SOURCE_ACTION.GET_COLUMN_DAILY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING_CHECKS_SUCCESS:
+    case SOURCE_ACTION.GET_COLUMN_DAILY_MONITORING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        dailyRecurring: action.data,
-        isUpdatedDailyRecurring: false,
+        dailyMonitoring: action.data,
+        isUpdatedDailyMonitoring: false,
         error: null
       });
-    case SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING_CHECKS_ERROR:
+    case SOURCE_ACTION.GET_COLUMN_DAILY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING_CHECKS:
+    case SOURCE_ACTION.GET_COLUMN_MONTHLY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING_CHECKS_SUCCESS:
+    case SOURCE_ACTION.GET_COLUMN_MONTHLY_MONITORING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        monthlyRecurring: action.data,
-        isUpdatedMonthlyRecurring: false,
+        monthlyMonitoring: action.data,
+        isUpdatedMonthlyMonitoring: false,
         error: null
       });
-    case SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING_CHECKS_ERROR:
+    case SOURCE_ACTION.GET_COLUMN_MONTHLY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
@@ -1036,30 +1035,30 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING_CHECKS:
+    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING_CHECKS_SUCCESS:
+    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_MONITORING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING_CHECKS_ERROR:
+    case SOURCE_ACTION.UPDATE_COLUMN_DAILY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_CHECKS:
+    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
         isUpdating: true
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_CHECKS_SUCCESS:
+    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_MONITORING_CHECKS_SUCCESS:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: null
       });
-    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_CHECKS_ERROR:
+    case SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
         isUpdating: false,
         error: action.error
@@ -1097,15 +1096,15 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdatedColumnBasic: true,
         columnBasic: action.data
       });
-    case SOURCE_ACTION.SET_COLUMN_DAILY_RECURRING_CHECKS:
+    case SOURCE_ACTION.SET_COLUMN_DAILY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
-        isUpdatedDailyRecurring: true,
-        dailyRecurring: action.data
+        isUpdatedDailyMonitoring: true,
+        dailyMonitoring: action.data
       });
-    case SOURCE_ACTION.SET_COLUMN_MONTHLY_RECURRING_CHECKS:
+    case SOURCE_ACTION.SET_COLUMN_MONTHLY_MONITORING_CHECKS:
       return setActiveTabState(state, action, {
-        isUpdatedMonthlyRecurring: true,
-        monthlyRecurring: action.data
+        isUpdatedMonthlyMonitoring: true,
+        monthlyMonitoring: action.data
       });
     case SOURCE_ACTION.SET_COLUMN_DAILY_PARTITIONED_CHECKS:
       return setActiveTabState(state, action, {
@@ -1133,18 +1132,18 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         error: action.error
       });
-    case SOURCE_ACTION.GET_COLUMN_RECURRING_CHECKS_MODEL_FILTER:
+    case SOURCE_ACTION.GET_COLUMN_MONITORING_CHECKS_MODEL_FILTER:
       return setActiveTabState(state, action, {
         loading: true
       });
-    case SOURCE_ACTION.GET_COLUMN_RECURRING_CHECKS_MODEL_FILTER_SUCCESS:
+    case SOURCE_ACTION.GET_COLUMN_MONITORING_CHECKS_MODEL_FILTER_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        recurringUIFilter: action.data,
-        isUpdatedRecurringUIFilter: false,
+        monitoringUIFilter: action.data,
+        isUpdatedMonitoringUIFilter: false,
         error: null
       });
-    case SOURCE_ACTION.GET_COLUMN_RECURRING_CHECKS_MODEL_FILTER_ERROR:
+    case SOURCE_ACTION.GET_COLUMN_MONITORING_CHECKS_MODEL_FILTER_ERROR:
       return setActiveTabState(state, action, {
         loading: false,
         error: action.error
@@ -1167,39 +1166,76 @@ const connectionReducer = (state = initialState, action: Action) => {
       });
     case SOURCE_ACTION.SET_CHECK_RESULTS: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
+      let key = action.data.checkName;
+      if (String(action?.data?.comparisonName).length > 0) {
+        key = action.data.checkName + '/' + action.data.comparisonName;
+      } else if (
+        Object.keys(action.data.checkResults).length > 0 &&
+        action.data.checkResults?.[0].checkResultEntries?.[0]?.tableComparison
+      ) {
+        key =
+          action.data.checkName +
+          '/' +
+          action.data.checkResults?.[0].checkResultEntries?.[0]
+            ?.tableComparison;
+      }
 
       return setActiveTabState(state, action, {
         checkResults: {
           ...(firstState.checkResults || {}),
-          [action.data.checkName]: action.data.checkResults
+          [key]: action.data.checkResults
         }
       });
     }
     case SOURCE_ACTION.SET_SENSOR_READOUTS: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
-
+      let key = action.data.checkName;
+      if (String(action.data.comparisonName).length > 0) {
+        key = action.data.checkName + '/' + action.data.comparisonName;
+      } else if (
+        Object.keys(action.data.sensorReadouts).length > 0 &&
+        action.data.sensorReadouts?.[0].sensorReadoutEntries?.[0]
+          .tableComparison
+      ) {
+        key =
+          action.data.checkName +
+          '/' +
+          action.data.sensorReadouts?.[0].sensorReadoutEntries?.[0]
+            .tableComparison;
+      }
       return setActiveTabState(state, action, {
         sensorReadouts: {
           ...(firstState.sensorReadouts || {}),
-          [action.data.checkName]: action.data.sensorReadouts
+          [key]: action.data.sensorReadouts
         }
       });
     }
     case SOURCE_ACTION.SET_SENSOR_ERRORS: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
-
+      let key = action.data.checkName;
+      if (String(action.data.comparisonName).length > 0) {
+        key = action.data.checkName + '/' + action.data.comparisonName;
+      } else if (
+        Object.keys(action.data.sensorErrors).length > 0 &&
+        action.data?.sensorErrors?.[0]?.errorEntries?.[0]?.tableComparison
+      ) {
+        key =
+          action.data.checkName +
+          '/' +
+          action.data?.sensorErrors?.[0]?.errorEntries?.[0]?.tableComparison;
+      }
       const newSensors = {
         ...(firstState.sensorErrors || {}),
-        [action.data.checkName]: action.data.sensorErrors
+        [key]: action.data.sensorErrors
       };
       return setActiveTabState(state, action, {
         sensorErrors: newSensors
@@ -1207,10 +1243,9 @@ const connectionReducer = (state = initialState, action: Action) => {
     }
     case SOURCE_ACTION.SET_CHECK_FILTERS: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
-
       const newCheckFilters = {
         ...(firstState.checkFilters || {}),
         [action.data.checkName]: action.data.filters
@@ -1298,13 +1333,13 @@ const connectionReducer = (state = initialState, action: Action) => {
 
     case SOURCE_ACTION.TOGGLE_CHECK: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
-      const checksState: Record<string, boolean> = firstState.checksState || {} as any;
+      const checksState: Record<string, boolean> =
+        firstState.checksState || ({} as any);
 
-      console.log('firstAte', checksState)
       return setActiveTabState(state, action, {
         checksState: {
           ...checksState,
@@ -1314,17 +1349,44 @@ const connectionReducer = (state = initialState, action: Action) => {
     }
     case SOURCE_ACTION.CLOSE_CHECK: {
       const firstState =
-        state[action.checkType].tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
 
-      const checksState: Record<string, boolean> = firstState.checksState || {} as any;
+      const checksState: Record<string, boolean> =
+        firstState.checksState || ({} as any);
 
       return setActiveTabState(state, action, {
         checksState: {
           ...checksState,
           [action.data]: false
         }
+      });
+    }
+    case SOURCE_ACTION.SET_MULTICHECK_FILTERS: {
+      const firstState =
+        state[action.checkType]?.tabs.find(
+          (item) => item.value === action.activeTab
+        )?.state || {};
+
+      const checksState: Record<string, any> =
+        firstState.multiCheckFilters || ({} as any);
+
+      return setActiveTabState(state, action, {
+        multiCheckFilters: { ...checksState, ...action.data }
+      });
+    }
+    case SOURCE_ACTION.SET_MULTICHECK_SEARCHED_CHECKS: {
+      const firstState =
+        state[action.checkType]?.tabs.find(
+          (item) => item.value === action.activeTab
+        )?.state || {};
+
+      const checksState: Record<string, any> =
+        firstState.multiCheckSearchedChecks || ({} as any);
+
+      return setActiveTabState(state, action, {
+        multiCheckSearchedChecks: { ...checksState, ...action.data }
       });
     }
     default:

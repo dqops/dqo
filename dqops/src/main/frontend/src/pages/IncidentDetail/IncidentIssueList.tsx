@@ -1,4 +1,4 @@
-import { CheckResultDetailedSingleModel, IncidentModel } from "../../api";
+import { CheckResultEntryModel, CheckResultEntryModelTimeGradientEnum, IncidentModel } from "../../api";
 import React, { useState } from "react";
 import SvgIcon from "../../components/SvgIcon";
 import CheckDetails from "../../components/DataQualityChecks/CheckDetails/CheckDetails";
@@ -11,7 +11,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 type IncidentIssueRowProps = {
-  issue: CheckResultDetailedSingleModel;
+  issue: CheckResultEntryModel;
   incidentDetail?: IncidentModel;
 }
 
@@ -42,7 +42,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
     return name;
   }
 
-  const getSeverityClass = (row: CheckResultDetailedSingleModel) => {
+  const getSeverityClass = (row: CheckResultEntryModel) => {
     if (row.severity === 1) return 'bg-yellow-100';
     if (row.severity === 2) return 'bg-orange-100';
     if (row.severity === 3) return 'bg-red-100';
@@ -59,29 +59,37 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
   };
 
   const navigate = () => {
-    const url = ROUTES.COLUMN_LEVEL_PAGE(
-      incidentDetail?.checkType ?? "profiling",
-      incidentDetail?.connection ?? "",
-      incidentDetail?.schema ?? "",
-      incidentDetail?.table ?? "",
-      issue.columnName ?? "",
-      'detail'
-    );
-    const value = ROUTES.COLUMN_LEVEL_VALUE(
-      incidentDetail?.checkType ?? "profiling",
-      incidentDetail?.connection ?? "",
-      incidentDetail?.schema ?? "",
-      incidentDetail?.table ?? "",
-      issue.columnName ?? ""
-    );
-    dispatch(
-      addFirstLevelTab(CheckTypes.PROFILING, {
-        url,
-        value,
-        state: {},
-        label: issue.columnName
-      })
-    );
+    const {
+      connection = '',
+      schema = '',
+      table = '',
+    } = incidentDetail || {};
+    const {
+      checkType = CheckTypes.PROFILING,
+      columnName,
+      timeGradient
+    } = issue
+
+    let url, value, label;
+    if (columnName && columnName.length > 0) {
+      url = ROUTES.COLUMN_LEVEL_PAGE(checkType, connection , schema, table, columnName, checkType === CheckTypes.PROFILING ? 'advanced' 
+      : timeGradient === CheckResultEntryModelTimeGradientEnum.month ? 'monthly' : 'daily');
+      value = ROUTES.COLUMN_LEVEL_VALUE(checkType, connection, schema, table, columnName);
+      label = columnName;
+    } else {
+      url = ROUTES.TABLE_LEVEL_PAGE(checkType, connection, schema, table, checkType === CheckTypes.PROFILING ? 'advanced' 
+      : timeGradient === CheckResultEntryModelTimeGradientEnum.month ? 'monthly' : 'daily');
+      value = ROUTES.TABLE_LEVEL_VALUE(checkType, connection, schema, table);
+      label = table;
+    }
+  
+    const tabData = {
+      url,
+      value,
+      state: {},
+      label,
+    };  
+    dispatch(addFirstLevelTab(checkType as CheckTypes, tabData));
     history.push(url);
   };
 
@@ -99,7 +107,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
           </div>
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          <a className="text-blue-700 underline" onClick={navigate}>
+          <a className="text-blue-700 underline cursor-pointer" onClick={navigate}>
             {issue.checkName}
           </a>
         </td>
@@ -117,6 +125,9 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
           <div>{typeof issue.expectedValue === 'number' ? issue.expectedValue : ''}</div>
+        </td>
+        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+          {issue.dataGroup}
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
           {getIssueSeverityLevel(issue.severity)}
@@ -148,9 +159,6 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
           {issue.durationMs}
         </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          {issue.dataGroup}
-        </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
           <span>{issue.id}</span>
         </td>
@@ -159,7 +167,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
         <tr>
           <td colSpan={12}>
             <CheckDetails
-              checkTypes={(incidentDetail?.checkType ?? CheckTypes.PROFILING) as CheckTypes}
+              checkTypes={(issue?.checkType ?? CheckTypes.PROFILING) as CheckTypes}
               connection={incidentDetail?.connection ?? ''}
               schema={incidentDetail?.schema ?? ''}
               table={incidentDetail?.table ?? ''}
@@ -167,6 +175,8 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
               runCheckType={issue.checkType}
               onClose={closeCheckDetails}
               category={incidentDetail?.checkCategory}
+              comparisonName={issue.tableComparison}
+              column={issue.columnName}
             />
           </td>
         </tr>
@@ -176,7 +186,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
 };
 
 type IncidentIssueListProps = {
-  issues: CheckResultDetailedSingleModel[];
+  issues: CheckResultEntryModel[];
   filters?: IncidentIssueFilter;
   onChangeFilter: (obj: Partial<IncidentIssueFilter>) => void;
   incidentDetail?: IncidentModel;
@@ -260,6 +270,15 @@ export const IncidentIssueList = ({ issues, filters, onChangeFilter, incidentDet
               onChange={handleSortChange}
             />
           </th>
+          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+            <SortableColumn
+              className="justify-end"
+              label="Data Group"
+              order="dataGroup"
+              direction={filters?.order === 'dataGroup' ? filters.direction : undefined}
+              onChange={handleSortChange}
+            />
+          </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
             <SortableColumn
               className="justify-end"
@@ -288,22 +307,13 @@ export const IncidentIssueList = ({ issues, filters, onChangeFilter, incidentDet
             <span>Fatal<br/>Upper Threshold</span>
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-            Include In Kpi
+            Include In KPI
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-            Include In Sla
+            Include In SLA (Data Contract)
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
             Duration Ms
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-            <SortableColumn
-              className="justify-end"
-              label="Data Group"
-              order="dataGroup"
-              direction={filters?.order === 'dataGroup' ? filters.direction : undefined}
-              onChange={handleSortChange}
-            />
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
             Id

@@ -15,7 +15,10 @@
  */
 package com.dqops.core.jobqueue.jobs.table;
 
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
@@ -26,8 +29,13 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @EqualsAndHashCode(callSuper = false)
 public class ImportTablesQueueJobParameters {
+    @JsonPropertyDescription("Connection name")
     private String connectionName;
+
+    @JsonPropertyDescription("Schema name")
     private String schemaName;
+
+    @JsonPropertyDescription("Optional list of table names inside the schema. When the list of tables is empty, all tables are imported.")
     private List<String> tableNames;
 
     public ImportTablesQueueJobParameters() {
@@ -91,5 +99,16 @@ public class ImportTablesQueueJobParameters {
      */
     public void setTableNames(List<String> tableNames) {
         this.tableNames = tableNames;
+    }
+
+    public static class ImportTablesQueueJobParametersSampleFactory implements SampleValueFactory<ImportTablesQueueJobParameters> {
+        @Override
+        public ImportTablesQueueJobParameters createSample() {
+            return new ImportTablesQueueJobParameters() {{
+                setConnectionName(SampleStringsRegistry.getConnectionName());
+                setSchemaName(SampleStringsRegistry.getSchemaName());
+                setTableNames(List.of(SampleStringsRegistry.getTableName()));
+            }};
+        }
     }
 }

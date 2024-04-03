@@ -15,17 +15,24 @@
  */
 package com.dqops.metadata.search;
 
-import com.dqops.metadata.scheduling.CheckRunRecurringScheduleGroup;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
+import java.util.Set;
 
 /**
  * Hierarchy node search filters used to find all check nodes that match exactly a schedule (by a cron expression)
  * or have no schedule at all, so they are just collected.
  */
 public class ScheduledChecksSearchFilters {
+    @JsonPropertyDescription("Boolean flag to search only for enabled rules or only disabled checks. The default value is *true*.")
     private Boolean enabled = true;
-    private RecurringScheduleSpec schedule;
-    private CheckRunRecurringScheduleGroup scheduleGroup;
+
+    private MonitoringScheduleSpec schedule;
+
+    private Set<CheckRunScheduleGroup> schedulingGroups;
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -57,7 +64,7 @@ public class ScheduledChecksSearchFilters {
      * Returns a schedule that must be equal.
      * @return Schedule that must equal.
      */
-    public RecurringScheduleSpec getSchedule() {
+    public MonitoringScheduleSpec getSchedule() {
         return schedule;
     }
 
@@ -65,24 +72,24 @@ public class ScheduledChecksSearchFilters {
      * Sets a schedule template that must equal exactly.
      * @param schedule Expected schedule.
      */
-    public void setSchedule(RecurringScheduleSpec schedule) {
+    public void setSchedule(MonitoringScheduleSpec schedule) {
         this.schedule = schedule;
     }
 
     /**
-     * Returns an optional schedule group (daily, monthly, profiling) to filter check root nodes.
-     * The schedule group could be null to return all checks or when the search root object is an abstract check that has an individual schedule.
-     * @return Optional schedule group.
+     * Returns an optional collection of target scheduling groups (monitoring daily, monitoring monthly, profiling, ...) to filter check container nodes.
+     * The schedule groups set can have a null value to return all checks or when the search root object is an abstract check that has an individual schedule.
+     * @return Optional set of target scheduling groups (types of checks).
      */
-    public CheckRunRecurringScheduleGroup getScheduleGroup() {
-        return scheduleGroup;
+    public Set<CheckRunScheduleGroup> getSchedulingGroups() {
+        return schedulingGroups;
     }
 
     /**
-     * Sets a filter for a schedule group which identifies the expected type of checks.
-     * @param scheduleGroup Schedule group.
+     * Sets a reference to a collection (set) of target scheduling groups - types of checks to run.
+     * @param schedulingGroups Collection of scheduling groups.
      */
-    public void setScheduleGroup(CheckRunRecurringScheduleGroup scheduleGroup) {
-        this.scheduleGroup = scheduleGroup;
+    public void setSchedulingGroups(Set<CheckRunScheduleGroup> schedulingGroups) {
+        this.schedulingGroups = schedulingGroups;
     }
 }

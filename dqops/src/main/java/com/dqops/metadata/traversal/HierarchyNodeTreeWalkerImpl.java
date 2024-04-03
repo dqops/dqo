@@ -16,6 +16,8 @@
 package com.dqops.metadata.traversal;
 
 import com.dqops.metadata.id.HierarchyNode;
+import com.dqops.utils.serialization.YamlDeserializationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,6 +26,7 @@ import java.util.List;
  * Hierarchy tree node traversal helper. Walks the hierarchy tree.
  */
 @Component
+@Slf4j
 public class HierarchyNodeTreeWalkerImpl implements HierarchyNodeTreeWalker {
     /**
      * Traverses a hierarchy node tree starting from the given node.
@@ -40,8 +43,13 @@ public class HierarchyNodeTreeWalkerImpl implements HierarchyNodeTreeWalker {
         TreeTraverseAction action = result.getAction();
         if (action == TreeTraverseAction.TRAVERSE_CHILDREN) {
             for (HierarchyNode childNode : node.children()) {
-                if (!traverseHierarchyNodeTree(childNode, onNodeTraverse)) {
-                    return false;
+                try {
+                    if (!traverseHierarchyNodeTree(childNode, onNodeTraverse)) {
+                        return false;
+                    }
+                }
+                catch (YamlDeserializationException ex) {
+                    // Corrupted YAML file, skipping, the file was logged already
                 }
             }
             return true;

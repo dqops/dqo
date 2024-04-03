@@ -15,10 +15,10 @@
  */
 package com.dqops.rules.comparison;
 
-import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -39,12 +39,12 @@ public class EqualsInteger1RuleParametersSpec extends AbstractRuleParametersSpec
         }
     };
 
-    @JsonPropertyDescription("Expected value for the actual_value returned by the sensor. It must be an integer value.")
-    @SampleValues(values = "1")
+    @JsonPropertyDescription("Expected value for the actual_value returned by the sensor. It must be an integer value. The default value is 1.")
+    @RequiredField
     private Long expectedValue = 1L;
 
     /**
-     * Creates the default object that expects 0.
+     * Creates the default object that expects 1.
      */
     public EqualsInteger1RuleParametersSpec() {
     }

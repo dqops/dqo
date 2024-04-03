@@ -17,14 +17,16 @@ package com.dqops.utils.python;
 
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Python settings required to start python inside a virtual environment.
  */
 public class PythonVirtualEnv {
     private Path virtualEnvPath;
-    private HashMap<String, String> environmentVariables = new HashMap<>();
+    private HashMap<String, String> environmentVariables = new LinkedHashMap<>();
     private String pythonInterpreterPath;
+    private boolean enableDebugging;
 
     /**
      * Returns the virtual environment root path.
@@ -73,5 +75,21 @@ public class PythonVirtualEnv {
      */
     public void setPythonInterpreterPath(String pythonInterpreterPath) {
         this.pythonInterpreterPath = pythonInterpreterPath;
+    }
+
+    /**
+     * Adds an environment variable PYDEVD_USE_CYTHON=NO which simplifies debugging.
+     * @return Enable debugging.
+     */
+    public boolean isEnableDebugging() {
+        return enableDebugging;
+    }
+
+    /**
+     * Decides if python should be started with an extra environment variable PYDEVD_USE_CYTHON=NO.
+     * @param enableDebugging True - add PYDEVD_USE_CYTHON=NO environment variable.
+     */
+    public void setEnableDebugging(boolean enableDebugging) {
+        this.enableDebugging = enableDebugging;
     }
 }

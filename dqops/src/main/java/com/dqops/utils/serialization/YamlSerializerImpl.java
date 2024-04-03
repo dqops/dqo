@@ -16,6 +16,7 @@
 package com.dqops.utils.serialization;
 
 import com.dqops.core.configuration.DqoConfigurationProperties;
+import com.dqops.utils.logging.UserErrorLogger;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -41,14 +42,18 @@ import java.nio.file.Path;
 public class YamlSerializerImpl implements YamlSerializer {
     private final ObjectMapper mapper;
     private final DqoConfigurationProperties configurationProperties;
+    private final UserErrorLogger userErrorLogger;
 
     /**
      * Creates a yaml serializer.
      * @param configurationProperties Configuration properties.
+     * @param userErrorLogger User error logger.
      */
     @Autowired
-    public YamlSerializerImpl(DqoConfigurationProperties configurationProperties) {
+    public YamlSerializerImpl(DqoConfigurationProperties configurationProperties,
+                              UserErrorLogger userErrorLogger) {
         this.configurationProperties = configurationProperties;
+        this.userErrorLogger = userErrorLogger;
         YAMLFactory yamlFactory = new YAMLFactory();
         yamlFactory.disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER);
         yamlFactory.enable(YAMLGenerator.Feature.MINIMIZE_QUOTES);
@@ -105,13 +110,16 @@ public class YamlSerializerImpl implements YamlSerializer {
         }
         catch (JacksonException e) {
             JsonLocation location = e.getLocation();
-            String message = e.getOriginalMessage();
+            String message = e.getOriginalMessage().replace('"', '\'');
 
             if (location != null) {
                 message += " at line " + location.getLineNr() + ", column " + location.getColumnNr();
             }
 
-            throw new YamlSerializationException(message, e);
+            throw new YamlDeserializationException(message, null);
+        }
+        catch (Exception ex) {
+            throw new YamlDeserializationException("Failed to deserialize a YAML file, error: " + ex.getMessage(), null, ex);
         }
     }
 
@@ -130,7 +138,7 @@ public class YamlSerializerImpl implements YamlSerializer {
         }
         catch (JacksonException e) {
             JsonLocation location = e.getLocation();
-            String message = e.getOriginalMessage();
+            String message = e.getOriginalMessage().replace('"', '\'');
 
             if (location != null) {
                 message += " at line " + location.getLineNr() + ", column " + location.getColumnNr();
@@ -140,14 +148,25 @@ public class YamlSerializerImpl implements YamlSerializer {
                 message += ", file path: " + filePathForMessage;
             }
 
-            log.error("Failed to deserialize YAML, " + message, e);
+            if (this.userErrorLogger != null) {
+                this.userErrorLogger.logYaml("Failed to deserialize YAML, " + message + ", file: " + filePathForMessage, null);
+            }
+
             try {
                 T emptyInstance = clazz.getDeclaredConstructor().newInstance();
+                if (emptyInstance instanceof InvalidYamlStatusHolder) {
+                    InvalidYamlStatusHolder invalidYamlStatusHolder = (InvalidYamlStatusHolder)emptyInstance;
+                    invalidYamlStatusHolder.setYamlParsingError(message);
+                }
                 return emptyInstance;
             }
             catch (Exception ex) {
-                throw new YamlSerializationException("Failed to instantiate a new object, because a YAML file was empty: " + message, e);
+                throw new YamlDeserializationException("Failed to instantiate a new object, because a YAML file was empty: " + message, filePathForMessage, e);
             }
+        }
+        catch (Exception ex) {
+            log.warn("Failed to deserialize YAML, file: " + filePathForMessage + ", error: " + ex.getMessage(), ex);
+            throw new YamlDeserializationException("Failed to deserialize a YAML file " + filePathForMessage + ", error: " + ex.getMessage(), filePathForMessage, ex);
         }
     }
 }

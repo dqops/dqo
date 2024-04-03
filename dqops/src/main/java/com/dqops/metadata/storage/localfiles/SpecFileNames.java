@@ -60,18 +60,43 @@ public final class SpecFileNames {
     public static final String CUSTOM_CHECK_SPEC_FILE_EXT_YAML = ".dqocheck.yaml";
 
     /**
+     * Default table-level checks pattern file extension.
+     */
+    public static final String TABLE_DEFAULT_CHECKS_SPEC_FILE_EXT_YAML = ".dqotablepattern.yaml";
+
+    /**
+     * Default column-level checks pattern file extension.
+     */
+    public static final String COLUMN_DEFAULT_CHECKS_SPEC_FILE_EXT_YAML = ".dqocolumnpattern.yaml";
+
+    /**
+     * The name of the "default" patterns of default checks for both tables and columns.
+     */
+    public static final String DEFAULT_CHECKS_PATTERN_NAME = "default";
+
+    /**
      * Custom module file extension (.py).
      */
     public static final String CUSTOM_RULE_PYTHON_MODULE_FILE_EXT_PY = ".py";
 
     /**
-     * Custom settings file.
+     * Local settings file.
      */
-    public static final String SETTINGS_SPEC_FILE_NAME_YAML = ".localsettings.dqosettings.yaml";
+    public static final String LOCAL_SETTINGS_SPEC_FILE_NAME_YAML = ".localsettings.dqosettings.yaml";
 
     /**
      * Data quality dashboards definitions file name.
      */
     public static final String DASHBOARDS_SPEC_FILE_NAME_YAML = "dashboardslist.dqodashboards.yaml";
+
+    /**
+     * Default monitoring schedules file name.
+     */
+    public static final String DEFAULT_MONITORING_SCHEDULES_SPEC_FILE_NAME_YAML = "defaultschedules.dqoschedules.yaml";
+
+    /**
+     * Default notification configuration file name.
+     */
+    public static final String DEFAULT_NOTIFICATIONS_FILE_NAME_YAML = "defaultnotifications.dqonotifications.yaml";
 
 }

@@ -24,6 +24,7 @@ import com.dqops.rules.comparison.MaxDaysRule2ParametersSpec;
 import com.dqops.rules.comparison.MaxDaysRule7ParametersSpec;
 import com.dqops.sensors.table.timeliness.TableTimelinessPartitionReloadLagSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -34,10 +35,10 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that calculates maximum difference in days between ingestion timestamp and event timestamp rows.
+ * A table-level check that calculates the maximum difference in days between ingestion timestamp and event timestamp values on any row.
  * This check should be executed only as a partitioned check because this check finds the longest delay between the time that the row was created
  * in the data source and the timestamp when the row was loaded into its daily or monthly partition.
- * This check will detect that a daily or monthly partition was reloaded, setting also the most recent timestamps in the created_at, loaded_at, inserted_at or other similar columns
+ * This check detects that a daily or monthly partition was reloaded, setting also the most recent timestamps in the created_at, loaded_at, inserted_at or other similar columns
  * filled by the data pipeline or an ETL process during data loading.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -156,6 +157,18 @@ public class TablePartitionReloadLagCheckSpec extends AbstractCheckSpec<TableTim
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns true if this is a standard data quality check that is always shown on the data quality checks editor screen.
+     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
+     *
+     * @return True when it is a standard check, false when it is an advanced check. The default value is 'false' (all checks are non-standard, advanced checks).
+     */
+    @Override
+    @JsonIgnore
+    public boolean isStandard() {
+        return true;
     }
 
     /**

@@ -18,6 +18,7 @@ package com.dqops.connectors.postgresql;
 import com.dqops.connectors.ConnectorOperationFailedException;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.zaxxer.hikari.HikariConfig;
@@ -27,7 +28,9 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * Postgresql source connection.
@@ -49,21 +52,21 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
 
     /**
      * Creates a hikari connection pool config for the connection specification.
-     *
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      * @return Hikari config.
      */
     @Override
-    public HikariConfig createHikariConfig() {
+    public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
         PostgresqlParametersSpec postgresqlSpec = connectionSpec.getPostgresql();
 
-        String host = this.getSecretValueProvider().expandValue(postgresqlSpec.getHost());
+        String host = this.getSecretValueProvider().expandValue(postgresqlSpec.getHost(), secretValueLookupContext);
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
         jdbcConnectionBuilder.append("jdbc:postgresql://");
         jdbcConnectionBuilder.append(host);
 
-        String port = this.getSecretValueProvider().expandValue(postgresqlSpec.getPort());
+        String port = this.getSecretValueProvider().expandValue(postgresqlSpec.getPort(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(port)) {
             try {
                 int portNumber = Integer.parseInt(port);
@@ -75,7 +78,7 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
             }
         }
         jdbcConnectionBuilder.append('/');
-        String database = this.getSecretValueProvider().expandValue(postgresqlSpec.getDatabase());
+        String database = this.getSecretValueProvider().expandValue(postgresqlSpec.getDatabase(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(database)) {
             jdbcConnectionBuilder.append(database);
         }
@@ -90,16 +93,20 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
         }
 
         if (postgresqlSpec.getProperties() != null) {
-            dataSourceProperties.putAll(postgresqlSpec.getProperties());
+            dataSourceProperties.putAll(postgresqlSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
-        String userName = this.getSecretValueProvider().expandValue(postgresqlSpec.getUser());
+        String userName = this.getSecretValueProvider().expandValue(postgresqlSpec.getUser(), secretValueLookupContext);
         hikariConfig.setUsername(userName);
 
-        String password = this.getSecretValueProvider().expandValue(postgresqlSpec.getPassword());
+        String password = this.getSecretValueProvider().expandValue(postgresqlSpec.getPassword(), secretValueLookupContext);
         hikariConfig.setPassword(password);
 
-        String options =  this.getSecretValueProvider().expandValue(postgresqlSpec.getOptions());
+        String options =  this.getSecretValueProvider().expandValue(postgresqlSpec.getOptions(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(options)) {
             dataSourceProperties.put("options", options);
         }

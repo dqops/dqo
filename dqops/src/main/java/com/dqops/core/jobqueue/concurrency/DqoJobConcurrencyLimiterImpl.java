@@ -28,7 +28,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
- * DQO job queue concurrency limiter. Maintains a count of concurrent jobs running in parallel in order to enforce
+ * DQOps job queue concurrency limiter. Maintains a count of concurrent jobs running in parallel in order to enforce
  * concurrency limits.
  */
 @Component

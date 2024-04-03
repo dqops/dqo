@@ -15,10 +15,10 @@
  */
 package com.dqops.rules.change;
 
-import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -47,17 +47,16 @@ public class ChangePercent1DayRule10ParametersSpec extends AbstractRuleParameter
     }
 
     @JsonPropertyDescription("Percentage of maximum accepted change compared to a readout 1 day ago (inclusive).")
-    @SampleValues(values = "5")
+    @RequiredField
     private Double maxPercent = 10.0;
 
     @JsonPropertyDescription("When the exact_day parameter is unchecked (exact_day: false), the rule search for the most recent sensor readouts from the past 60 days and compares them. " +
             "If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.")
-    @SampleValues(values = "false")
-    private Boolean exactDay = false;
+    private Boolean exactDay = true;
 
     /**
-     * Gets the maximal accepted absolute value of the change of data quality check readout, relative to the previous readout.
-     * @return Maximal accepted absolute value of data quality check readout's change, relative to the previous readout.
+     * Gets the maximum accepted absolute value of the change of data quality check readout, relative to the previous readout.
+     * @return Maximum accepted absolute value of data quality check readout's change, relative to the previous readout.
      */
     public Double getMaxPercent() {
         return maxPercent;

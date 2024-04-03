@@ -23,7 +23,7 @@ import com.dqops.cli.commands.table.impl.TableCliService;
 import com.dqops.cli.completion.completedcommands.IConnectionNameCommand;
 import com.dqops.cli.completion.completers.ConnectionNameCompleter;
 import com.dqops.cli.completion.completers.TableNameCompleter;
-import com.dqops.cli.terminal.FileWritter;
+import com.dqops.cli.terminal.FileWriter;
 import com.dqops.cli.terminal.TablesawDatasetTableModel;
 import com.dqops.cli.terminal.TerminalTableWritter;
 import com.dqops.cli.terminal.TerminalWriter;
@@ -46,7 +46,7 @@ public class TableListCliCommand extends BaseCommand implements ICommand, IConne
     private TableCliService tableImportService;
     private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWritter;
-    private FileWritter fileWritter;
+    private FileWriter fileWriter;
 
     public TableListCliCommand() {
     }
@@ -55,18 +55,18 @@ public class TableListCliCommand extends BaseCommand implements ICommand, IConne
     public TableListCliCommand(TerminalWriter terminalWriter,
 							   TableCliService tableImportService,
                                TerminalTableWritter terminalTableWritter,
-                               FileWritter fileWritter) {
+                               FileWriter fileWriter) {
         this.tableImportService = tableImportService;
         this.terminalWriter = terminalWriter;
         this.terminalTableWritter = terminalTableWritter;
-        this.fileWritter = fileWritter;
+        this.fileWriter = fileWriter;
     }
 
     @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name",
             required = false, completionCandidates = ConnectionNameCompleter.class)
     private String connectionName;
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Table name filter",
+    @CommandLine.Option(names = {"-t", "--table", "--full-table-name"}, description = "Full table name filter in the form \"schema.table\", but also supporting patterns: public.*, *.customers, landing*.customer*.",
             required = false, completionCandidates = TableNameCompleter.class)
     private String tableName;
 
@@ -143,14 +143,14 @@ public class TableListCliCommand extends BaseCommand implements ICommand, IConne
                     tableBuilder.addInnerBorder(BorderStyle.oldschool);
                     tableBuilder.addHeaderBorder(BorderStyle.oldschool);
                     String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
-                    CliOperationStatus cliOperationStatus2 = this.fileWritter.writeStringToFile(renderedTable);
+                    CliOperationStatus cliOperationStatus2 = this.fileWriter.writeStringToFile(renderedTable);
                     this.terminalWriter.writeLine(cliOperationStatus2.getMessage());
                 } else {
                     this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
                 }
             } else {
                 if (this.isWriteToFile()) {
-                    CliOperationStatus cliOperationStatus2 = this.fileWritter.writeStringToFile(cliOperationStatus.getMessage());
+                    CliOperationStatus cliOperationStatus2 = this.fileWriter.writeStringToFile(cliOperationStatus.getMessage());
                     this.terminalWriter.writeLine(cliOperationStatus2.getMessage());
                 }
                 else {

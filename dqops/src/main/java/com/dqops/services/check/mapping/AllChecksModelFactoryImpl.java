@@ -19,11 +19,15 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.ConnectionSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
+import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.userhome.UserHome;
@@ -34,6 +38,7 @@ import com.dqops.services.check.mapping.models.column.TableColumnChecksModel;
 import com.dqops.services.check.mapping.models.table.AllTableChecksModel;
 import com.dqops.services.check.mapping.models.table.SchemaTableChecksModel;
 import com.dqops.services.check.mapping.models.table.TableChecksModel;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,9 +47,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
-    ExecutionContextFactory executionContextFactory;
-    HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher;
-    SpecToModelCheckMappingService specToModelCheckMappingService;
+    private ExecutionContextFactory executionContextFactory;
+    private HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher;
+    private SpecToModelCheckMappingService specToModelCheckMappingService;
 
     @Autowired
     public AllChecksModelFactoryImpl(ExecutionContextFactory executionContextFactory,
@@ -59,16 +64,20 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
      * Creates a list of {@link AllChecksModel}s based on provided filters.
      *
      * @param checkSearchFilters Check search filters.
+     * @param principal User principal.
      * @return List of {@link AllChecksModel}s (by connections) fitting the filters.
      */
     @Override
-    public List<AllChecksModel> fromCheckSearchFilters(CheckSearchFilters checkSearchFilters) {
-        ExecutionContext executionContext = this.executionContextFactory.create();
+    public List<AllChecksModel> findAllConfiguredAndPossibleChecks(CheckSearchFilters checkSearchFilters,
+                                                                   DqoUserPrincipal principal) {
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
+        boolean canManageChecks = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
         ConnectionSearchFilters connectionSearchFilters = new ConnectionSearchFilters();
-        connectionSearchFilters.setConnectionName(checkSearchFilters.getConnectionName());
+        connectionSearchFilters.setConnectionName(checkSearchFilters.getConnection());
 
         Collection<ConnectionSpec> connectionSpecs = this.hierarchyNodeTreeSearcher.findConnections(userHome, connectionSearchFilters);
         if (connectionSpecs.isEmpty()) {
@@ -78,7 +87,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
 
         List<AllChecksModel> uiConnectionPatches = connectionSpecs.stream()
                 .map(connectionSpec -> userHome.getConnections().getByObjectName(connectionSpec.getConnectionName(), true))
-                .map(connectionWrapper -> this.getAllChecksForConnection(connectionWrapper, checkSearchFilters, executionContext))
+                .map(connectionWrapper -> this.getAllChecksForConnection(connectionWrapper, checkSearchFilters, executionContext, canManageChecks))
                 .filter(allChecksModel ->
                         (allChecksModel.getColumnChecksModel() != null && !allChecksModel.getColumnChecksModel().getTableColumnChecksModels().isEmpty())
                                 || (allChecksModel.getTableChecksModel() != null && !allChecksModel.getTableChecksModel().getSchemaTableChecksModels().isEmpty()))
@@ -87,9 +96,47 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
         return uiConnectionPatches;
     }
 
+    /**
+     * Generate one fake table and one fake column, capture all available checks that are supported on the connection.
+     * @param connectionName Connection name.
+     * @param schemaName Schema name.
+     * @param checkSearchFilters Additional check search filter to limit the list of possible checks.
+     * @param principal Calling user principal.
+     * @return Model of all possible checks, including both table and column level checks.
+     */
+    public AllChecksModel createTemplatedCheckModelsAvailableOnConnection(
+            String connectionName,
+            String schemaName,
+            CheckSearchFilters checkSearchFilters,
+            DqoUserPrincipal principal) {
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+        UserHome userHome = userHomeContext.getUserHome();
+        boolean canManageChecks = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
+        ConnectionWrapper originalConnectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
+        if (originalConnectionWrapper == null) {
+            // No connections matching the filter.
+            return null;
+        }
+
+        ConnectionWrapperImpl templatedConnectionWrapper = new ConnectionWrapperImpl(connectionName);
+        templatedConnectionWrapper.setHierarchyId(originalConnectionWrapper.getHierarchyId());
+        templatedConnectionWrapper.setSpec(originalConnectionWrapper.getSpec().deepClone());
+        TableWrapper templatedTable = templatedConnectionWrapper.getTables().createAndAddNew(new PhysicalTableName(schemaName, "sample_table"));
+        TableSpec templatedTableSpec = new TableSpec();
+        templatedTable.setSpec(templatedTableSpec);
+        templatedTableSpec.getColumns().put("sample_column", new ColumnSpec());
+
+        AllChecksModel allChecksForConnection = this.getAllChecksForConnection(templatedConnectionWrapper, checkSearchFilters, executionContext, canManageChecks);
+        return allChecksForConnection;
+    }
+
     protected AllChecksModel getAllChecksForConnection(ConnectionWrapper connectionWrapper,
                                                        CheckSearchFilters checkSearchFilters,
-                                                       ExecutionContext executionContext) {
+                                                       ExecutionContext executionContext,
+                                                       boolean canManageChecks) {
         AllChecksModel allChecksModel = new AllChecksModel();
         allChecksModel.setConnectionName(connectionWrapper.getName());
 
@@ -99,13 +146,13 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
 
         if (checkTarget != CheckTarget.column) {
             AllTableChecksModel allTableChecksModel = this.getAllTableChecksForConnection(
-                    connectionWrapper, checkSearchFilters, executionContext);
+                    connectionWrapper, checkSearchFilters, executionContext, canManageChecks);
             allChecksModel.setTableChecksModel(allTableChecksModel);
         }
 
         if (checkTarget != CheckTarget.table) {
             AllColumnChecksModel columnChecksModel = this.getAllColumnChecksForConnection(
-                    connectionWrapper, checkSearchFilters, executionContext);
+                    connectionWrapper, checkSearchFilters, executionContext, canManageChecks);
             allChecksModel.setColumnChecksModel(columnChecksModel);
         }
 
@@ -114,7 +161,8 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
 
     protected AllTableChecksModel getAllTableChecksForConnection(ConnectionWrapper connectionWrapper,
                                                                  CheckSearchFilters checkSearchFilters,
-                                                                 ExecutionContext executionContext) {
+                                                                 ExecutionContext executionContext,
+                                                                 boolean canManageChecks) {
         AllTableChecksModel allTableChecksModel = new AllTableChecksModel();
         Collection<TableWrapper> tableWrappers = this.hierarchyNodeTreeSearcher
                 .findTables(connectionWrapper, checkSearchFilters);
@@ -128,7 +176,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
                         .filter(tableWrapper -> tableWrapper.getPhysicalTableName().getSchemaName().equals(schemaName))
                         .collect(Collectors.toList()))
                 .map(tables -> this.getSchemaTableCheckModelForTables(connectionWrapper.getSpec(),
-                        tables, checkSearchFilters, executionContext))
+                        tables, checkSearchFilters, executionContext, canManageChecks))
                 .filter(schemaTableChecksModel -> !schemaTableChecksModel.getTableChecksModels().isEmpty())
                 .collect(Collectors.toList());
 
@@ -139,7 +187,8 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
     protected SchemaTableChecksModel getSchemaTableCheckModelForTables(ConnectionSpec connectionSpec,
                                                                        List<TableWrapper> tableWrappers,
                                                                        CheckSearchFilters checkSearchFilters,
-                                                                       ExecutionContext executionContext) {
+                                                                       ExecutionContext executionContext,
+                                                                       boolean canManageChecks) {
         String schemaName = tableWrappers.stream().findAny().get().getPhysicalTableName().getSchemaName();
         SchemaTableChecksModel schemaTableChecks = new SchemaTableChecksModel();
         schemaTableChecks.setSchemaName(schemaName);
@@ -147,7 +196,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
         // TODO: Add templates.
 
         List<TableChecksModel> tableChecksModels = tableWrappers.stream()
-                .map(tableWrapper -> getTableChecksModelForTable(connectionSpec, tableWrapper, checkSearchFilters, executionContext))
+                .map(tableWrapper -> getTableChecksModelForTable(connectionSpec, tableWrapper, checkSearchFilters, executionContext, canManageChecks))
                 .filter(tableChecksModel -> !tableChecksModel.getCheckContainers().isEmpty())
                 .collect(Collectors.toList());
         schemaTableChecks.setTableChecksModels(tableChecksModels);
@@ -157,7 +206,8 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
     protected TableChecksModel getTableChecksModelForTable(ConnectionSpec connectionSpec,
                                                            TableWrapper tableWrapper,
                                                            CheckSearchFilters checkSearchFilters,
-                                                           ExecutionContext executionContext) {
+                                                           ExecutionContext executionContext,
+                                                           boolean canManageChecks) {
         String tableName = tableWrapper.getPhysicalTableName().getTableName();
         TableChecksModel tableChecksModel = new TableChecksModel();
         tableChecksModel.setTableName(tableName);
@@ -169,22 +219,29 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
 
         List<CheckType> checkTypes = this.getPossibleCheckTypes(checkSearchFilters.getCheckType());
         List<CheckTimeScale> timeScales = this.getPossibleCheckTimeScales(checkSearchFilters.getTimeScale());
+        boolean findAlsoNotConfiguredChecks = checkSearchFilters.getCheckConfigured() == null || !checkSearchFilters.getCheckConfigured();
 
-        Map<CheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new HashMap<>();
+        Map<CheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new LinkedHashMap<>();
         for (CheckType checkType : checkTypes) {
             if (checkType == CheckType.profiling) {
-                AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, null, false);
+                AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, null, false, findAlsoNotConfiguredChecks);
+                if (checkContainer == null) {
+                    continue;
+                }
                 checkContainers.put(new CheckContainerTypeModel(checkType, null), checkContainer);
             }
             else {
                 for (CheckTimeScale timeScale : timeScales) {
-                    AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, timeScale, false);
+                    AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, timeScale, false, findAlsoNotConfiguredChecks);
+                    if (checkContainer == null) {
+                        continue;
+                    }
                     checkContainers.put(new CheckContainerTypeModel(checkType, timeScale), checkContainer);
                 }
             }
         }
 
-        Map<CheckContainerTypeModel, CheckContainerModel> checkContainerModels = checkContainers.entrySet().stream()
+        List<AbstractMap.SimpleEntry<CheckContainerTypeModel, CheckContainerModel>> checkModelsMapEntries = checkContainers.entrySet().stream()
                 .map(checkContainerPair -> new AbstractMap.SimpleEntry<>(
                         checkContainerPair.getKey(),
                         this.specToModelCheckMappingService.createModel(
@@ -193,14 +250,18 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
                                 connectionSpec,
                                 tableSpec,
                                 executionContext,
-                                connectionSpec.getProviderType())
+                                connectionSpec.getProviderType(),
+                                canManageChecks)
                 )).map(uiCheckContainerModelPair -> new AbstractMap.SimpleEntry<>(
                         uiCheckContainerModelPair.getKey(),
                         pruneCheckContainerModel(
                                 uiCheckContainerModelPair.getValue(),
                                 checkSearchFilters)
                 )).filter(prunedPair -> prunedPair.getValue() != null)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .collect(Collectors.toList());
+
+        Map<CheckContainerTypeModel, CheckContainerModel> checkContainerModels = new LinkedHashMap<>(); // to preserve order
+        checkModelsMapEntries.forEach(mapEntry -> checkContainerModels.put(mapEntry.getKey(), mapEntry.getValue()));
 
         tableChecksModel.setCheckContainers(checkContainerModels);
         return tableChecksModel;
@@ -208,7 +269,8 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
 
     protected AllColumnChecksModel getAllColumnChecksForConnection(ConnectionWrapper connectionWrapper,
                                                                    CheckSearchFilters checkSearchFilters,
-                                                                   ExecutionContext executionContext) {
+                                                                   ExecutionContext executionContext,
+                                                                   boolean canManageChecks) {
         AllColumnChecksModel allColumnChecksModel = new AllColumnChecksModel();
         Collection<TableWrapper> tableWrappers = this.hierarchyNodeTreeSearcher
                 .findTables(connectionWrapper, checkSearchFilters);
@@ -217,7 +279,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
 
         List<TableColumnChecksModel> tableColumnChecksModels = tableWrappers.stream()
                 .map(table -> this.getTableColumnCheckModelForTable(connectionWrapper.getSpec(),
-                        table, checkSearchFilters, executionContext))
+                        table, checkSearchFilters, executionContext, canManageChecks))
                 .filter(tableColumnChecksModel -> !tableColumnChecksModel.getColumnChecksModels().isEmpty())
                 .collect(Collectors.toList());
 
@@ -228,7 +290,8 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
     protected TableColumnChecksModel getTableColumnCheckModelForTable(ConnectionSpec connectionSpec,
                                                                       TableWrapper tableWrapper,
                                                                       CheckSearchFilters checkSearchFilters,
-                                                                      ExecutionContext executionContext) {
+                                                                      ExecutionContext executionContext,
+                                                                      boolean canManageChecks) {
         PhysicalTableName schemaTableName = tableWrapper.getPhysicalTableName();
         TableColumnChecksModel tableColumnChecksModel = new TableColumnChecksModel();
         tableColumnChecksModel.setSchemaTableName(schemaTableName);
@@ -238,18 +301,24 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
 
         // TODO: Add templates.
 
+        SearchPattern columnNameSearchPattern = checkSearchFilters.getColumnNameSearchPattern();
+        SearchPattern columnDataTypeSearchPattern = checkSearchFilters.getColumnDataTypeSearchPattern();
+
         List<ColumnChecksModel> columnChecksModels = tableSpec.getColumns().entrySet().stream()
                 .filter(colToSpec ->
-                        (checkSearchFilters.getColumnName() == null || colToSpec.getKey().equals(checkSearchFilters.getColumnName()))
-                                && (checkSearchFilters.getColumnNullable() == null || colToSpec.getValue().getTypeSnapshot().getNullable() == checkSearchFilters.getColumnNullable())
-                                && (checkSearchFilters.getColumnDataType() == null || colToSpec.getValue().getTypeSnapshot().getColumnType().equals(checkSearchFilters.getColumnDataType()))
+                        (columnNameSearchPattern == null || columnNameSearchPattern.match(colToSpec.getKey()))
+                                && (checkSearchFilters.getColumnNullable() == null || colToSpec.getValue().getTypeSnapshot() != null
+                                    && colToSpec.getValue().getTypeSnapshot().getNullable() == checkSearchFilters.getColumnNullable())
+                                && (columnDataTypeSearchPattern == null || colToSpec.getValue().getTypeSnapshot() != null
+                                   && columnDataTypeSearchPattern.match(colToSpec.getValue().getTypeSnapshot().getColumnType()))
                 ).map(columnNameToSpec -> getColumnChecksModelForColumn(
                         connectionSpec,
                         tableSpec,
                         columnNameToSpec.getKey(),
                         columnNameToSpec.getValue(),
                         checkSearchFilters,
-                        executionContext))
+                        executionContext,
+                        canManageChecks))
                 .filter(columnChecksModel -> !columnChecksModel.getCheckContainers().isEmpty())
                 .collect(Collectors.toList());
         tableColumnChecksModel.setColumnChecksModels(columnChecksModels);
@@ -261,7 +330,8 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
                                                               String columnName,
                                                               ColumnSpec columnSpec,
                                                               CheckSearchFilters checkSearchFilters,
-                                                              ExecutionContext executionContext) {
+                                                              ExecutionContext executionContext,
+                                                              boolean canManageChecks) {
         ColumnChecksModel columnChecksModel = new ColumnChecksModel();
         columnChecksModel.setColumnName(columnName);
 
@@ -269,38 +339,50 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
 
         List<CheckType> checkTypes = this.getPossibleCheckTypes(checkSearchFilters.getCheckType());
         List<CheckTimeScale> timeScales = this.getPossibleCheckTimeScales(checkSearchFilters.getTimeScale());
+        boolean findAlsoNotConfiguredChecks = checkSearchFilters.getCheckConfigured() == null || !checkSearchFilters.getCheckConfigured();
 
-        Map<CheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new HashMap<>();
+
+        Map<CheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new LinkedHashMap<>();
         for (CheckType checkType : checkTypes) {
             if (checkType == CheckType.profiling) {
-                AbstractRootChecksContainerSpec checkContainer = columnSpec.getColumnCheckRootContainer(checkType, null, false);
+                AbstractRootChecksContainerSpec checkContainer = columnSpec.getColumnCheckRootContainer(checkType, null, false, findAlsoNotConfiguredChecks);
+                if (checkContainer == null) {
+                    continue;
+                }
                 checkContainers.put(new CheckContainerTypeModel(checkType, null), checkContainer);
             }
             else {
                 for (CheckTimeScale timeScale : timeScales) {
-                    AbstractRootChecksContainerSpec checkContainer = columnSpec.getColumnCheckRootContainer(checkType, timeScale, false);
+                    AbstractRootChecksContainerSpec checkContainer = columnSpec.getColumnCheckRootContainer(checkType, timeScale, false, findAlsoNotConfiguredChecks);
+                    if (checkContainer == null) {
+                        continue;
+                    }
                     checkContainers.put(new CheckContainerTypeModel(checkType, timeScale), checkContainer);
                 }
             }
         }
 
-        Map<CheckContainerTypeModel, CheckContainerModel> checkContainerModels = checkContainers.entrySet().stream()
+        List<AbstractMap.SimpleEntry<CheckContainerTypeModel, CheckContainerModel>> checkModelsMapEntries = checkContainers.entrySet().stream()
                 .map(checkContainerPair -> new AbstractMap.SimpleEntry<>(
                         checkContainerPair.getKey(),
                         this.specToModelCheckMappingService.createModel(
-                            checkContainerPair.getValue(),
-                            checkSearchFilters,
-                            connectionSpec,
-                            tableSpec,
-                            executionContext,
-                            connectionSpec.getProviderType())
+                                checkContainerPair.getValue(),
+                                checkSearchFilters,
+                                connectionSpec,
+                                tableSpec,
+                                executionContext,
+                                connectionSpec.getProviderType(),
+                                canManageChecks)
                 )).map(uiCheckContainerModelPair -> new AbstractMap.SimpleEntry<>(
                         uiCheckContainerModelPair.getKey(),
                         pruneCheckContainerModel(
-                            uiCheckContainerModelPair.getValue(),
-                            checkSearchFilters)
+                                uiCheckContainerModelPair.getValue(),
+                                checkSearchFilters)
                 )).filter(prunedPair -> prunedPair.getValue() != null)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .collect(Collectors.toList());
+
+        Map<CheckContainerTypeModel, CheckContainerModel> checkContainerModels = new LinkedHashMap<>(); // to preserve order
+        checkModelsMapEntries.forEach(mapEntry -> checkContainerModels.put(mapEntry.getKey(), mapEntry.getValue()));
 
         columnChecksModel.setCheckContainers(checkContainerModels);
         return columnChecksModel;
@@ -317,6 +399,9 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
             CheckContainerModel baseModel,
             CheckSearchFilters checkSearchFilters) {
         CheckContainerModel result = new CheckContainerModel();
+        result.setCanEdit(baseModel.isCanEdit());
+        result.setCanRunChecks(baseModel.isCanRunChecks());
+        result.setCanDeleteData(baseModel.isCanDeleteData());
         for (QualityCategoryModel categoryModel: baseModel.getCategories()) {
             if (checkSearchFilters.getCheckCategory() == null
                     || checkSearchFilters.getCheckCategory().equals(categoryModel.getCategory())) {

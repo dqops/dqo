@@ -15,11 +15,15 @@
  */
 package com.dqops.sensors;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner;
 import com.dqops.metadata.basespecs.AbstractSpec;
+import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.reflection.ClassInfo;
+import com.dqops.utils.reflection.FieldInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -27,6 +31,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -82,11 +88,25 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec {
      * Creates a cloned and trimmed version of the object. A trimmed and cloned copy is passed to the sensor.
      * All configurable variables that may use a secret value or environment variable expansion in the form ${ENV_VAR} are also expanded.
      * @param secretValueProvider Secret value provider.
+     * @param lookupContext Secret lookup context.
      * @return Cloned and expanded copy of the object.
      */
-    public AbstractSensorParametersSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public AbstractSensorParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         AbstractSensorParametersSpec cloned = (AbstractSensorParametersSpec)super.deepClone();
-        cloned.filter = secretValueProvider.expandValue(cloned.filter);
+        cloned.filter = secretValueProvider.expandValue(cloned.filter, lookupContext);
+
+        ClassInfo reflectionClassInfo = this.getChildMap().getReflectionClassInfo();
+        for (FieldInfo fieldInfo : reflectionClassInfo.getFields()) {
+            if (fieldInfo.getDataType() == ParameterDataType.string_list_type) {
+                Object rawFieldValue = fieldInfo.getRawFieldValue(cloned);
+                if (rawFieldValue instanceof List) {
+                    List<String> originalList = (List<String>)rawFieldValue;
+                    List<String> expandedList = secretValueProvider.expandList(originalList, lookupContext);
+                    fieldInfo.setFieldValue(expandedList, cloned);
+                }
+            }
+        }
+
         return cloned;
     }
 
@@ -113,11 +133,11 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec {
     }
 
     /**
-     * Returns true if the sensor supports data streams. The default value is true.
-     * @return True when the sensor supports data streams.
+     * Returns true if the sensor supports data grouping. The default value is true.
+     * @return True when the sensor supports data grouping.
      */
     @JsonIgnore
-    public boolean getSupportsDataStreams() {
+    public boolean getSupportsDataGrouping() {
        return true;
     }
 
@@ -137,6 +157,31 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec {
      */
     @JsonIgnore
     public boolean getAlwaysSupportedOnAllProviders() {
+        return false;
+    }
+
+    /**
+     * Returns the default value that is used when the sensor returned no rows.
+     * @return Default value to use when the sensor returned no rows.
+     */
+    @JsonIgnore
+    public Double getDefaultValue() { return null;}
+
+    /**
+     * Returns true if the sensor is a timeliness sensor that requires an event timestamp column. The default value is false.
+     * @return True the sensor requires an event timestamp column.
+     */
+    @JsonIgnore
+    public boolean getRequiresEventTimestampColumn() {
+        return false;
+    }
+
+    /**
+     * Returns true if the sensor is a timeliness sensor that requires an ingestion timestamp column. The default value is false.
+     * @return True the sensor requires an ingestion timestamp column.
+     */
+    @JsonIgnore
+    public boolean getRequiresIngestionTimestampColumn() {
         return false;
     }
 }

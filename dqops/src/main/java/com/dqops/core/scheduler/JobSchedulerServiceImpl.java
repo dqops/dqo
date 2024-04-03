@@ -16,6 +16,14 @@
 package com.dqops.core.scheduler;
 
 import com.dqops.core.configuration.DqoSchedulerConfigurationProperties;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
+import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import com.dqops.core.dqocloud.apikey.DqoCloudLicenseType;
+import com.dqops.core.jobqueue.DqoJobQueue;
+import com.dqops.core.jobqueue.ParentDqoJobQueue;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.core.scheduler.runcheck.RunScheduledChecksSchedulerJob;
 import com.dqops.core.scheduler.synchronize.JobSchedulesDelta;
@@ -23,7 +31,8 @@ import com.dqops.core.scheduler.synchronize.SynchronizeMetadataSchedulerJob;
 import com.dqops.core.scheduler.schedules.UniqueSchedulesCollection;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +40,8 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.List;
 
 import static org.quartz.JobBuilder.newJob;
@@ -43,6 +54,7 @@ import static org.quartz.JobBuilder.newJob;
 @Slf4j
 public class JobSchedulerServiceImpl implements JobSchedulerService {
     private boolean started;
+    private boolean shutdownInitiated;
     private Scheduler scheduler;
     private DqoSchedulerConfigurationProperties schedulerConfigurationProperties;
     private SchedulerFactoryBean schedulerFactory;
@@ -50,6 +62,11 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     private TriggerFactory triggerFactory;
     private JobDataMapAdapter jobDataMapAdapter;
     private ScheduledJobListener scheduledJobListener;
+    private DqoJobQueue dqoJobQueue;
+    private ParentDqoJobQueue parentDqoJobQueue;
+    private DefaultTimeZoneProvider defaultTimeZoneProvider;
+    private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+    private DqoUserPrincipalProvider principalProvider;
     private JobDetail runChecksJob;
     private JobDetail synchronizeMetadataJob;
     private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
@@ -63,6 +80,11 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      * @param triggerFactory Trigger factory that creates quartz triggers for the schedules defined in the metadata.
      * @param jobDataMapAdapter Job data adapter that can retrieve the original schedule from the trigger arguments.
      * @param scheduledJobListener  Job listener that is notified when a job starts or finishes.
+     * @param dqoJobQueue Standard job queue, used to ensure that the job queue starts before the job scheduler.
+     * @param parentDqoJobQueue Parent job queue, used to ensure that the job queue starts before the job scheduler.
+     * @param defaultTimeZoneProvider Default time zone provider.
+     * @param dqoCloudApiKeyProvider DQOps Cloud api key provider.
+     * @param principalProvider Local user principal provider.
      */
     @Autowired
     public JobSchedulerServiceImpl(DqoSchedulerConfigurationProperties schedulerConfigurationProperties,
@@ -70,13 +92,23 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                                    SpringIoCJobFactory jobFactory,
                                    TriggerFactory triggerFactory,
                                    JobDataMapAdapter jobDataMapAdapter,
-                                   ScheduledJobListener scheduledJobListener) {
+                                   ScheduledJobListener scheduledJobListener,
+                                   DqoJobQueue dqoJobQueue,
+                                   ParentDqoJobQueue parentDqoJobQueue,
+                                   DefaultTimeZoneProvider defaultTimeZoneProvider,
+                                   DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
+                                   DqoUserPrincipalProvider principalProvider) {
         this.schedulerConfigurationProperties = schedulerConfigurationProperties;
         this.schedulerFactory = schedulerFactory;
         this.jobFactory = jobFactory;
         this.triggerFactory = triggerFactory;
         this.jobDataMapAdapter = jobDataMapAdapter;
         this.scheduledJobListener = scheduledJobListener;
+        this.dqoJobQueue = dqoJobQueue;
+        this.parentDqoJobQueue = parentDqoJobQueue;
+        this.defaultTimeZoneProvider = defaultTimeZoneProvider;
+        this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
+        this.principalProvider = principalProvider;
     }
 
     /**
@@ -115,15 +147,21 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         this.synchronizationMode = synchronizationMode;
         this.checkRunReportingMode = checkRunReportingMode;
 
-        log.debug(String.format("Starting the job scheduler, synchronization mode: %s, check run mode: %s",
-                synchronizationMode, checkRunReportingMode));
-
         if (this.started) {
             return;
         }
 
+        if (log.isInfoEnabled()) {
+            log.info(String.format("Starting the job scheduler, synchronization mode: %s, check run mode: %s, using the time zone: %s",
+                    synchronizationMode, checkRunReportingMode, this.defaultTimeZoneProvider.getDefaultTimeZoneId()));
+        }
+
+        boolean schedulerWasPreviouslyRunning = this.scheduler != null;
+
         createAndStartScheduler();
-        defineDefaultJobs();
+        if (!schedulerWasPreviouslyRunning) {
+            defineDefaultJobs();
+        }
         this.started = true;
     }
 
@@ -131,8 +169,15 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      * Creates and starts a scheduler, but without any jobs.
      */
     public void createAndStartScheduler() {
-        assert scheduler == null;
+        this.dqoJobQueue.start(); // ensure that the job queues are working
+        this.parentDqoJobQueue.start();
+
         try {
+            if (this.scheduler != null) {
+                this.scheduler.start();
+                return; // scheduler was started, stopped, and we are now starting it again
+            }
+
             this.scheduler = schedulerFactory.getScheduler();
             this.scheduler.setJobFactory(this.jobFactory);
             if (this.scheduler.getListenerManager().getJobListeners().stream()
@@ -169,14 +214,44 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             }
 
             String scanMetadataCronSchedule = this.schedulerConfigurationProperties.getSynchronizeCronSchedule();
-            RecurringScheduleSpec scanMetadataRecurringScheduleSpec = new RecurringScheduleSpec(scanMetadataCronSchedule);
-            Trigger scanMetadataTrigger = this.triggerFactory.createTrigger(scanMetadataRecurringScheduleSpec, JobKeys.SYNCHRONIZE_METADATA);
+            DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createUserPrincipalForAdministrator();
+            DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipalForAdministrator.getDataDomainIdentity());
+            if (dqoCloudApiKey != null) {
+                DqoCloudApiKeyPayload apiKeyPayload = dqoCloudApiKey.getApiKeyPayload();
+                if (apiKeyPayload.getLicenseType() == DqoCloudLicenseType.FREE ||
+                        (apiKeyPayload.getLicenseType() == DqoCloudLicenseType.PERSONAL && apiKeyPayload.getExpiresAt() != null)) {
+                    int minuteToStart = (Instant.now().atOffset(ZoneOffset.UTC).getMinute() + 5) % 60;
+                    scanMetadataCronSchedule = minuteToStart + " * * * *";
+                }
+            }
+
+            MonitoringScheduleSpec scanMetadataMonitoringScheduleSpec = new MonitoringScheduleSpec(scanMetadataCronSchedule);
+            Trigger scanMetadataTrigger = this.triggerFactory.createTrigger(scanMetadataMonitoringScheduleSpec, JobKeys.SYNCHRONIZE_METADATA);
 
             this.scheduler.scheduleJob(scanMetadataTrigger);
         } catch (SchedulerException ex) {
             log.error("Failed to define the default jobs because " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
         }
+    }
+
+    /**
+     * Stops the job scheduler, but with an option to start it again.
+     */
+    @Override
+    public void stop() {
+        if (!this.started || this.scheduler == null) {
+            return;
+        }
+
+        try {
+            this.scheduler.standby();
+        } catch (SchedulerException ex) {
+            log.error("Failed to pause the scheduler because " + ex.getMessage(), ex);
+            throw new JobSchedulerException(ex);
+        }
+
+        this.started = false;
     }
 
     /**
@@ -188,6 +263,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         if (!this.started) {
             return;
         }
+
+        this.shutdownInitiated = true;
 
         log.debug("Shutting down the job scheduler");
 
@@ -207,6 +284,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                     }
                 }
 
+                this.scheduler.shutdown();
                 this.schedulerFactory.stop();
             }
             this.scheduler = null;
@@ -217,6 +295,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         }
         finally {
             this.started = false;
+            this.shutdownInitiated = false;
         }
     }
 
@@ -225,6 +304,10 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      */
     @Override
     public void triggerMetadataSynchronization() {
+        if (!this.started || this.shutdownInitiated) {
+            return;
+        }
+
         log.debug("Triggering the SYNCHRONIZE_METADATA job on the job scheduler.");
 
         try {
@@ -262,7 +345,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             List<? extends Trigger> triggersOfJob = this.scheduler.getTriggersOfJob(jobKey);
 
             for (Trigger trigger : triggersOfJob) {
-                RecurringScheduleSpec schedule = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
+                MonitoringScheduleSpec schedule = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
                 schedulesCollection.add(schedule);
             }
 
@@ -297,7 +380,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         }
 
         for (Trigger trigger : triggersOfJob) {
-            RecurringScheduleSpec scheduleOnTrigger = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
+            MonitoringScheduleSpec scheduleOnTrigger = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
 
             if (schedulesDelta.getSchedulesToDelete().contains(scheduleOnTrigger)) {
                 try {
@@ -312,7 +395,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             }
         }
 
-        for (RecurringScheduleSpec scheduleToAdd : schedulesDelta.getSchedulesToAdd().getUniqueSchedules()) {
+        for (MonitoringScheduleSpec scheduleToAdd : schedulesDelta.getSchedulesToAdd().getUniqueSchedules()) {
             try {
                 Trigger triggerToAdd = this.triggerFactory.createTrigger(scheduleToAdd, jobKey);
 

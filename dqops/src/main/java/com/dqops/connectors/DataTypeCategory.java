@@ -41,10 +41,10 @@ public enum DataTypeCategory {
     numeric_float,
 
     /**
-     * Instant time using UTC timezone (with no time zone).
+     * Absolute timestamp time using UTC timezone (with no time zone).
      */
-    @JsonProperty("datetime_instant")
-    datetime_instant,
+    @JsonProperty("datetime_timestamp")
+    datetime_timestamp,
 
     /**
      * Local date time.
@@ -65,16 +65,16 @@ public enum DataTypeCategory {
     datetime_time,
 
     /**
-     * String column that accepts short values, typically: string, varchar, nvarchar, etc.
+     * Short (limited) text column that accepts short values, typically: string, varchar, nvarchar, etc.
      */
-    @JsonProperty("string")
-    string,
+    @JsonProperty("text")
+    text,
 
     /**
      * Long column (clob, text, etc).
      */
-    @JsonProperty("text")
-    text,
+    @JsonProperty("clob")
+    clob,
 
     /**
      * Json columns.
@@ -106,19 +106,25 @@ public enum DataTypeCategory {
     @JsonProperty("other")
     other;
 
+
     /**
-     * All data types that could be detected (they are not "other"). Null checks support these data types.
+     * All data types without even checking the data type.
+     */
+    public static DataTypeCategory[] ANY = new DataTypeCategory[0];
+
+    /**
+     * All data types that can be detected (they are not "other"). Null checks support these data types.
      */
     public static DataTypeCategory[] ALL_KNOWN = new DataTypeCategory[] {
             numeric_integer,
             numeric_decimal,
             numeric_float,
-            datetime_instant,
+            datetime_timestamp,
             datetime_datetime,
             datetime_date,
             datetime_time,
-            string,
             text,
+            clob,
             json,
             bool,
             binary,
@@ -132,12 +138,12 @@ public enum DataTypeCategory {
             numeric_integer,
             numeric_decimal,
             numeric_float,
-            datetime_instant,
+            datetime_timestamp,
             datetime_datetime,
             datetime_date,
             datetime_time,
-            string,
             text,
+            clob,
             json,
             bool,
             binary,
@@ -160,11 +166,11 @@ public enum DataTypeCategory {
             numeric_integer,
             numeric_decimal,
             numeric_float,
-            datetime_instant,
+            datetime_timestamp,
             datetime_datetime,
             datetime_date,
             datetime_time,
-            string,
+            text,
             bool,
     };
 
@@ -172,9 +178,24 @@ public enum DataTypeCategory {
      * Data types that contain a date inside (date, datetime, timestamp).
      */
     public static DataTypeCategory[] CONTAINS_DATE = new DataTypeCategory[] {
-            datetime_instant,
+            datetime_timestamp,
             datetime_datetime,
             datetime_date,
+    };
+
+    /**
+     * Just a simple string type (not clob).
+     */
+    public static DataTypeCategory[] STRING = new DataTypeCategory[] {
+            text
+    };
+
+    /**
+     * Just a boolean type or an integer as a fallback.
+     */
+    public static DataTypeCategory[] BOOLEAN = new DataTypeCategory[] {
+            bool,
+            numeric_integer
     };
 
     /**
@@ -192,6 +213,30 @@ public enum DataTypeCategory {
      * @return True when it is a date(time) data type with a date part.
      */
     public static boolean hasDate(DataTypeCategory dataTypeCategory) {
-        return dataTypeCategory == datetime_date || dataTypeCategory == datetime_datetime || dataTypeCategory == datetime_instant;
+        return dataTypeCategory == datetime_date || dataTypeCategory == datetime_datetime || dataTypeCategory == datetime_timestamp;
+    }
+
+    /**
+     * Verifies if the <code>dataTypeCategory</code> is on the list of accepted categories.
+     * @param dataTypeCategory Tested data type category.
+     * @param dataTypeCategories Array of accepted data types. If the array is null, we assume that all types match and we return true.
+     * @return True when the <code>dataTypeCategory</code> is on the list.
+     */
+    public static boolean isDataTypeInList(DataTypeCategory dataTypeCategory, DataTypeCategory[] dataTypeCategories) {
+        if (dataTypeCategories == null || dataTypeCategories.length == 0) {
+            return true; // no data type category means that all categories are valid
+        }
+
+        if (dataTypeCategory == null) {
+            return false; // data type not detected, but a list of required type categories is given
+        }
+
+        for (DataTypeCategory expectedCategory : dataTypeCategories) {
+            if (expectedCategory == dataTypeCategory) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

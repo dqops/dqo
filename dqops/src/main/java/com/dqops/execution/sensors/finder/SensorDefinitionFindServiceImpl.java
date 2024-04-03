@@ -17,6 +17,7 @@ package com.dqops.execution.sensors.finder;
 
 import com.dqops.connectors.ProviderType;
 import com.dqops.core.filesystem.virtual.HomeFilePath;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapper;
@@ -43,11 +44,13 @@ public class SensorDefinitionFindServiceImpl implements SensorDefinitionFindServ
             ExecutionContext executionContext, String sensorName, ProviderType providerType) {
         UserHome userHome = executionContext.getUserHomeContext() != null ? executionContext.getUserHomeContext().getUserHome() : null;
         DqoHome dqoHome = executionContext.getDqoHomeContext().getDqoHome();
-
         String jinjaFileNameRelativeToHome = sensorName + "/" + providerType.name() + ".sql.jinja2";
-        HomeFilePath jinjaFileHomePath = HomeFilePath.fromFilePath(jinjaFileNameRelativeToHome);
+        String dataDomain = executionContext.getUserHomeContext() != null ?
+                executionContext.getUserHomeContext().getUserIdentity().getDataDomainFolder() : UserDomainIdentity.DEFAULT_DATA_DOMAIN;
+        HomeFilePath jinjaFileHomePath = HomeFilePath.fromFilePath(dataDomain, jinjaFileNameRelativeToHome);
 
         if (userHome != null) {
+
             SensorDefinitionWrapper userSensorDefinitionWrapper = userHome.getSensors().getByObjectName(sensorName, true);
             if (userSensorDefinitionWrapper != null) {
                 ProviderSensorDefinitionWrapper userProviderSensorDefinitionWrapper =
@@ -59,6 +62,7 @@ public class SensorDefinitionFindServiceImpl implements SensorDefinitionFindServ
                     return new SensorDefinitionFindResult(userSensorDefinitionWrapper.getSpec(),
                             userProviderSensorDefinitionWrapper.getSpec(),
                             userHomeIsLocalFileSystem ? null : userProviderSensorDefinitionWrapper.getSqlTemplate(),  // return a sql template as a string only when the file is not stored in a file system
+                            userProviderSensorDefinitionWrapper.getSqlTemplateLastModified(),
                             providerType,
                             HomeType.USER_HOME,
                             userHomeIsLocalFileSystem ? jinjaFileHomePath : null);
@@ -84,6 +88,7 @@ public class SensorDefinitionFindServiceImpl implements SensorDefinitionFindServ
                 builtinSensorDefinitionWrapper.getSpec(),
                 builtinProviderSensorDefinitionWrapper.getSpec(),
                 dqoHomeIsLocalFileSystem ? null : builtinProviderSensorDefinitionWrapper.getSqlTemplate(),
+                builtinProviderSensorDefinitionWrapper.getSqlTemplateLastModified(),
                 providerType,
                 HomeType.DQO_HOME,
                 dqoHomeIsLocalFileSystem ? jinjaFileHomePath : null);

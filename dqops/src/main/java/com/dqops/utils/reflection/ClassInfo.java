@@ -31,16 +31,19 @@ public class ClassInfo {
     private final Class<?> reflectedClass;
     private final Constructor<?> constructor;
     private final List<FieldInfo> fields = new ArrayList<>();
+    private final String metaDescription;
 
     /**
      * Creates a class reflection info, storing the class type.
      *
      * @param reflectedClass Target class type.
-     * @param constructor
+     * @param constructor The default parameterless constructor.
+     * @param metaDescription Metadata description of the class to be used for documentation.
      */
-    public ClassInfo(Class<?> reflectedClass, Constructor<?> constructor) {
+    public ClassInfo(Class<?> reflectedClass, Constructor<?> constructor, String metaDescription) {
         this.reflectedClass = reflectedClass;
         this.constructor = constructor;
+        this.metaDescription = metaDescription;
     }
 
     /**
@@ -65,6 +68,14 @@ public class ClassInfo {
      */
     public List<FieldInfo> getFields() {
         return fields;
+    }
+
+    /**
+     * Returns the meta description content to be used to document this object.
+     * @return Meta description.
+     */
+    public String getMetaDescription() {
+        return metaDescription;
     }
 
     /**

@@ -17,8 +17,12 @@ package com.dqops.utils.reflection;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.AbstractCheckCategorySpec;
-import com.dqops.checks.table.checkspecs.volume.TableAnomalyDifferencingRowCountCheckSpec;
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
+import com.dqops.checks.table.checkspecs.volume.TableRowCountAnomalyDifferencingCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -26,11 +30,11 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.rules.RuleTimeWindowSettingsSpec;
 import com.dqops.rules.averages.PercentMovingAverageRuleParametersSpec;
-import com.dqops.rules.comparison.MinCountRule0ParametersSpec;
-import com.dqops.sensors.column.numeric.ColumnNumericExpectedNumbersInUseCountSensorParametersSpec;
-import com.dqops.sensors.column.strings.ColumnStringsStringLengthInRangePercentSensorParametersSpec;
-import com.dqops.sensors.column.strings.StringsBuiltInDateFormats;
-import com.dqops.sensors.column.datetime.ColumnDatetimeValueInRangeDatePercentSensorParametersSpec;
+import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
+import com.dqops.sensors.column.acceptedvalues.ColumnNumericExpectedNumbersInUseCountSensorParametersSpec;
+import com.dqops.sensors.column.text.ColumnTextTextLengthInRangePercentSensorParametersSpec;
+import com.dqops.sensors.column.text.TextBuiltInDateFormats;
+import com.dqops.sensors.column.datetime.ColumnDateInRangePercentSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -104,7 +108,7 @@ public class ReflectionServiceImplTests extends BaseTest {
 
     @Test
     void reflectClass_whenReflectingSensorParametersSpecification_thenReturnsAllRequestedFields() {
-        ClassInfo classInfo = this.sut.reflectClass(ColumnStringsStringLengthInRangePercentSensorParametersSpec.class);
+        ClassInfo classInfo = this.sut.reflectClass(ColumnTextTextLengthInRangePercentSensorParametersSpec.class);
         Assertions.assertNotNull(classInfo);
         Assertions.assertEquals(3, classInfo.getFields().size());
         Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "minLength")));
@@ -113,7 +117,7 @@ public class ReflectionServiceImplTests extends BaseTest {
     }
     @Test
     void reflectClass_whenReflectingRuleParametersClass_thenReturnsAllRequestedFields() {
-        ClassInfo classInfo = this.sut.reflectClass(MinCountRule0ParametersSpec.class);
+        ClassInfo classInfo = this.sut.reflectClass(MinCountRule1ParametersSpec.class);
         Assertions.assertNotNull(classInfo);
         Assertions.assertEquals(1, classInfo.getFields().size());
         Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "minCount")));
@@ -121,9 +125,9 @@ public class ReflectionServiceImplTests extends BaseTest {
 
     @Test
     void createEnumValue_whenEnumFieldGivenWithPropertyName_thenReturnsEnumInfo() {
-        EnumValueInfo enumValue = this.sut.createEnumValue(StringsBuiltInDateFormats.ISO8601);
+        EnumValueInfo enumValue = this.sut.createEnumValue(TextBuiltInDateFormats.ISO8601);
         Assertions.assertNotNull(enumValue);
-        Assertions.assertSame(StringsBuiltInDateFormats.ISO8601, enumValue.getEnumInstance());
+        Assertions.assertSame(TextBuiltInDateFormats.ISO8601, enumValue.getEnumInstance());
         Assertions.assertEquals("ISO8601", enumValue.getJavaName());
         Assertions.assertEquals("YYYY-MM-DD", enumValue.getYamlName());
         Assertions.assertEquals("YYYY-MM-DD", enumValue.getDisplayName());
@@ -197,7 +201,7 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertEquals("maxPercentAbove", fieldInfo.getClassFieldName());
         Assertions.assertEquals("max_percent_above", fieldInfo.getYamlFieldName());
         Assertions.assertEquals("max_percent_above", fieldInfo.getDisplayName());
-        Assertions.assertEquals("Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.", fieldInfo.getHelpText());
+        Assertions.assertEquals("The maximum percentage (e.g., 3%) by which the current sensor readout can be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
         Assertions.assertEquals(null, fieldInfo.getDefaultValue()); // the field is nullable
@@ -331,22 +335,22 @@ public class ReflectionServiceImplTests extends BaseTest {
         Map<String, EnumValueInfo> enumValuesByYamlName = fieldInfo.getEnumValuesByName();
         Assertions.assertNotNull(enumValuesByYamlName);
         Assertions.assertEquals(12, enumValuesByYamlName.size());
-        Assertions.assertSame(ParameterDataType.string_type, enumValuesByYamlName.get("string_type").getEnumInstance());
+        Assertions.assertSame(ParameterDataType.string_type, enumValuesByYamlName.get("string").getEnumInstance());
         Assertions.assertEquals(null, fieldInfo.getDefaultValue());
         Assertions.assertEquals(null, fieldInfo.getConstructor());
     }
 
     @Test
     void makeFieldInfo_whenFieldIsLocalDate_thenReturnsFieldInfoWithLocalDateType() throws Exception {
-        Field field = ColumnDatetimeValueInRangeDatePercentSensorParametersSpec.class.getDeclaredField("minValue");
+        Field field = ColumnDateInRangePercentSensorParametersSpec.class.getDeclaredField("minDate");
         FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
         Assertions.assertNotNull(fieldInfo);
         Assertions.assertSame(field.getType(), fieldInfo.getClazz());
         Assertions.assertEquals(ParameterDataType.date_type, fieldInfo.getDataType());
-        Assertions.assertEquals("minValue", fieldInfo.getClassFieldName());
-        Assertions.assertEquals("min_value", fieldInfo.getYamlFieldName());
-        Assertions.assertEquals("min_value", fieldInfo.getDisplayName());
-        Assertions.assertEquals("Lower bound range variable.", fieldInfo.getHelpText());
+        Assertions.assertEquals("minDate", fieldInfo.getClassFieldName());
+        Assertions.assertEquals("min_date", fieldInfo.getYamlFieldName());
+        Assertions.assertEquals("min_date", fieldInfo.getDisplayName());
+        Assertions.assertEquals("The earliest accepted date.", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
         Assertions.assertEquals(null, fieldInfo.getDefaultValue());
@@ -365,16 +369,18 @@ public class ReflectionServiceImplTests extends BaseTest {
 
         @JsonProperty("customSerialization_option（笑）")
         @JsonPropertyDescription("Some description.")
-        private TableAnomalyDifferencingRowCountCheckSpec ordinarilyNamedCheck;
+        private TableRowCountAnomalyDifferencingCheckSpec ordinarilyNamedCheck;
 
 
-        public TableAnomalyDifferencingRowCountCheckSpec getOrdinarilyNamedCheck() {
+        public TableRowCountAnomalyDifferencingCheckSpec getOrdinarilyNamedCheck() {
             return ordinarilyNamedCheck;
         }
 
-        public void setOrdinarilyNamedCheck(TableAnomalyDifferencingRowCountCheckSpec ordinarilyNamedCheck) {
+        public void setOrdinarilyNamedCheck(TableRowCountAnomalyDifferencingCheckSpec ordinarilyNamedCheck) {
             this.ordinarilyNamedCheck = ordinarilyNamedCheck;
         }
+
+
 
         /**
          * Returns the child map on the spec class with all fields.
@@ -384,6 +390,49 @@ public class ReflectionServiceImplTests extends BaseTest {
         @Override
         protected ChildHierarchyNodeFieldMap getChildMap() {
             return FIELDS;
+        }
+
+        /**
+         * Gets the check target appropriate for all checks in this category.
+         *
+         * @return Corresponding check target.
+         */
+        @Override
+        //@JsonIgnore
+        public CheckTarget getCheckTarget() {
+            return null;
+        }
+
+        /**
+         * Gets the check type appropriate for all checks in this category.
+         *
+         * @return Corresponding check type.
+         */
+        @Override
+        //@JsonIgnore
+        public CheckType getCheckType() {
+            return null;
+        }
+
+        /**
+         * Gets the check timescale appropriate for all checks in this category.
+         *
+         * @return Corresponding check timescale.
+         */
+        @Override
+        //@JsonIgnore
+        public CheckTimeScale getCheckTimeScale() {
+            return null;
+        }
+
+        /**
+         * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+         *
+         * @return Array of supported data type categories.
+         */
+        @Override
+        public DataTypeCategory[] getSupportedDataTypeCategories() {
+            return DataTypeCategory.ANY;
         }
     }
 

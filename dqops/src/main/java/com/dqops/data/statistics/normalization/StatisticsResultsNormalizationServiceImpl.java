@@ -23,6 +23,7 @@ import com.dqops.data.statistics.factory.*;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.utils.tables.TableColumnUtility;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
@@ -204,7 +205,7 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
 
         TextColumn scopeColumn = TextColumn.create(StatisticsColumnNames.SCOPE_COLUMN_NAME, resultRowCount);
         if (sensorRunParameters.getColumn() != null) {
-            scopeColumn.setMissingTo(sensorRunParameters.getDataGroupings() != null ? StatisticsDataScope.data_groupings.name() : StatisticsDataScope.table.name());
+            scopeColumn.setMissingTo(sensorRunParameters.getDataGroupings() != null ? StatisticsDataScope.data_group.name() : StatisticsDataScope.table.name());
         }
         normalizedResults.addColumns(scopeColumn);
 
@@ -331,7 +332,7 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         TextColumn updatedByColumn = TextColumn.create(StatisticsColumnNames.UPDATED_BY_COLUMN_NAME, resultRowCount);
         normalizedResults.addColumns(updatedByColumn);
 
-        TextColumn idColumn = this.commonNormalizationService.createRowIdColumnAndUpdateIndexes(dataStreamHashColumn, executedAtColumn, sampleIndexColumn,
+        TextColumn idColumn = this.commonNormalizationService.createRowIdColumn(dataStreamHashColumn, executedAtColumn, sampleIndexColumn,
                 collectorHash, tableHash, columnHash != null ? columnHash.longValue() : 0L, resultRowCount);
         normalizedResults.insertColumn(0, idColumn);
 
@@ -407,7 +408,7 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
             TextColumn truncatedTextColumn = TextColumn.create(columnName, resultsTable.rowCount());
             for (int i = 0; i < stringColumn.size(); i++) {
                 String stringValue = stringColumn.get(i);
-                if (stringValue != null) {
+                if (!Strings.isNullOrEmpty(stringValue)) {
                     if (stringValue.length() > this.statisticsCollectorConfigurationProperties.getTruncatedStringsLength()) {
                         stringValue = stringValue.substring(0, this.statisticsCollectorConfigurationProperties.getTruncatedStringsLength());
                     }

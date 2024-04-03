@@ -1,13 +1,13 @@
+import clsx from 'clsx';
 import React from 'react';
-
-import { DATABASE_TYPE } from '../../../shared/enums';
+import { ConnectionModelProviderTypeEnum } from '../../../api';
+import { databaseOptions } from '../../../shared/constants';
 import SvgIcon from '../../SvgIcon';
-import { ConnectionBasicModelProviderTypeEnum } from '../../../api';
 
 interface ISelectDatabaseProps {
   onSelect: (
-    db: ConnectionBasicModelProviderTypeEnum,
-    nameOfdatabase?: string
+    db: ConnectionModelProviderTypeEnum,
+    nameOfDatabase?: string
   ) => void;
 }
 
@@ -18,344 +18,25 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
         Select a database
       </div>
       <div className="flex justify-center content-center">
-        <div className="flex flex-wrap gap-6 ">
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(
-                ConnectionBasicModelProviderTypeEnum.postgresql,
-                'AlloyDB'
-              )
-            }
-          >
-            <SvgIcon name="alloydb" className="mb-3 w-20 text-blue-500" />
-            <div className="text-xl font-semibold text-gray-700">
-              AlloyDB for PostgreSQL
-            </div>
-          </div>
-
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(
-                ConnectionBasicModelProviderTypeEnum.postgresql,
-                'Amazon Aurora'
-              )
-            }
-          >
-            <SvgIcon name="amazonrds" className="mb-3 w-20 text-blue-500" />
-            <div className="text-xl font-semibold text-gray-700">
-              Amazon Aurora
-            </div>
-          </div>
-          <div
+        <div className="flex flex-wrap gap-6">
+          {databaseOptions.map((option, index) => (
+            <div
+              key={index}
               className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-              onClick={() =>
-                  onSelect(ConnectionBasicModelProviderTypeEnum.redshift)
-              }
-          >
-            <SvgIcon name="redshift" className="mb-3 w-16 text-blue-500" />
-            <div className="text-xl font-semibold text-gray-700">Amazon Redshift</div>
-          </div>
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(
-                ConnectionBasicModelProviderTypeEnum.mysql,
-                'Amazon RDS for mySQL'
-              )
-            }
-          >
-            <SvgIcon name="amazonrds" className="mb-3 w-20 text-blue-500" />
-            <div className="text-xl font-semibold text-gray-700">
-              Amazon RDS for mySQL
+              onClick={() => onSelect(option.type, option.name)}
+            >
+              <SvgIcon
+                name={option.iconName}
+                className={clsx(
+                  'mb-3 text-blue-500',
+                  option.name === 'Spark' && 'w-30'
+                )}
+              />
+              <div className="text-lg font-semibold text-gray-700">
+                {option.displayName}
+              </div>
             </div>
-          </div>
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(
-                ConnectionBasicModelProviderTypeEnum.postgresql,
-                'Amazon RDS for PostgreSQL'
-              )
-            }
-          >
-            <SvgIcon name="amazonrds" className="mb-3 w-20 text-blue-500" />
-            <div className="text-xl font-semibold text-gray-700">
-              Amazon RDS for PostgreSQL
-            </div>
-          </div>
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(
-                ConnectionBasicModelProviderTypeEnum.sqlserver,
-                'Amazon RDS for SQL Server'
-              )
-            }
-          >
-            <SvgIcon name="amazonrds" className="mb-3 w-20 text-blue-500" />
-            <div className="text-xl font-semibold text-gray-700">
-              Amazon RDS for SQL Server
-            </div>
-          </div>
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(
-                ConnectionBasicModelProviderTypeEnum.mysql,
-                'Azure Database for MySQL'
-              )
-            }
-          >
-            <SvgIcon
-              name="azuredatabaseformysql"
-              className="mb-3 w-20 text-blue-500"
-            />
-            <div className="text-xl font-semibold text-gray-700">
-              Azure Database for MySQL
-            </div>
-          </div>
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(
-                ConnectionBasicModelProviderTypeEnum.postgresql,
-                'Azure Database for PostgreSQL'
-              )
-            }
-          >
-            <SvgIcon
-              name="azuredatabaseforpostgresql"
-              className="mb-3 w-20 text-blue-500"
-            />
-            <div className="text-xl font-semibold text-gray-700">
-              Azure Database for PostgreSQL
-            </div>
-          </div>
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(
-                ConnectionBasicModelProviderTypeEnum.sqlserver,
-                'Azure SQL Database'
-              )
-            }
-          >
-            <SvgIcon
-              name="azuresqldatabase"
-              className="mb-3 w-20 text-blue-500"
-            />
-            <div className="text-xl font-semibold text-gray-700">
-              Azure SQL Database
-            </div>
-          </div>
-
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(
-                ConnectionBasicModelProviderTypeEnum.sqlserver,
-                'Azure SQL Managed Instance'
-              )
-            }
-          >
-            <SvgIcon
-              name="azuresqlmanagedinstance"
-              className="mb-3 w-20 text-blue-500"
-            />
-            <div className="text-xl font-semibold text-gray-700">
-              Azure SQL Managed Instance
-            </div>
-          </div>
-
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(
-                ConnectionBasicModelProviderTypeEnum.sqlserver,
-                'Azure Synapse Analytics'
-              )
-            }
-          >
-            <SvgIcon
-              name="azuresynapseanalytics"
-              className="mb-3 w-20 text-blue-500"
-            />
-            <div className="text-xl font-semibold text-gray-700">
-              Azure Synapse Analytics
-            </div>
-          </div>
-
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(ConnectionBasicModelProviderTypeEnum.bigquery)
-            }
-          >
-            <SvgIcon name="big-query" className="mb-3 w-16" />
-            <div className="text-xl font-semibold text-gray-700">Bigquery</div>
-          </div>
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(
-                ConnectionBasicModelProviderTypeEnum.mysql,
-                'Cloud SQL for MySQL'
-              )
-            }
-          >
-            <SvgIcon
-              name="cloudsqlformysql"
-              className="mb-3 w-20 text-blue-500"
-            />
-            <div className="text-xl font-semibold text-gray-700">
-              Cloud SQL for MySQL
-            </div>
-          </div>
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(
-                ConnectionBasicModelProviderTypeEnum.postgresql,
-                'Cloud SQL for PostgreSQL'
-              )
-            }
-          >
-            <SvgIcon
-              name="cloudsqlforpostgresql"
-              className="mb-3 w-20 text-blue-500"
-            />
-            <div className="text-xl font-semibold text-gray-700">
-              Cloud SQL for PostgreSQL
-            </div>
-          </div>
-
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(
-                ConnectionBasicModelProviderTypeEnum.sqlserver,
-                'Cloud SQL for SQL Server'
-              )
-            }
-          >
-            <SvgIcon
-              name="cloudsqlforsqlserver"
-              className="mb-3 w-20 text-blue-500"
-            />
-            <div className="text-xl font-semibold text-gray-700">
-              Cloud SQL for SQL Server
-            </div>
-          </div>
-
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(
-                ConnectionBasicModelProviderTypeEnum.postgresql,
-                'CockroachDB'
-              )
-            }
-          >
-            <SvgIcon name="cockroachdb" className="mb-3 w-20 text-blue-500" />
-            <div className="text-xl font-semibold text-gray-700">
-              CockroachDB
-            </div>
-          </div>
-
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(ConnectionBasicModelProviderTypeEnum.mysql, 'MariaDB')
-            }
-          >
-            <SvgIcon name="mariadb" className="mb-3 w-20 text-blue-500" />
-            <div className="text-xl font-semibold text-gray-700">MariaDB</div>
-          </div>
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(ConnectionBasicModelProviderTypeEnum.sqlserver)
-            }
-          >
-            <SvgIcon name="sqlserver" className="mb-3 w-20 text-blue-500" />
-            <div className="text-xl font-semibold text-gray-700">
-              Microsoft SQL Server
-            </div>
-          </div>
-
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.mysql)}
-          >
-            <SvgIcon name="mysql" className="mb-3 w-20 text-blue-500" />
-            <div className="text-xl font-semibold text-gray-700">MySQL</div>
-          </div>
-
-          <div
-              className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-              onClick={() =>
-                  onSelect(ConnectionBasicModelProviderTypeEnum.oracle)
-              }
-          >
-            <SvgIcon name="oracle" className="mb-3 w-16 text-blue-500" />
-            <div className="text-xl font-semibold text-gray-700">Oracle Database</div>
-          </div>
-
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(
-                ConnectionBasicModelProviderTypeEnum.mysql,
-                'Percona Server for MySQL'
-              )
-            }
-          >
-            <SvgIcon
-              name="perconaserverformysql"
-              className="mb-3 w-20 text-blue-500"
-            />
-            <div className="text-xl font-semibold text-gray-700">
-              Percona Server for MySQL
-            </div>
-          </div>
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(ConnectionBasicModelProviderTypeEnum.postgresql)
-            }
-          >
-            <SvgIcon name="postgresql" className="mb-3 w-16 text-blue-500" />
-            <div className="text-xl font-semibold text-gray-700">
-              PostgreSQL
-            </div>
-          </div>
-
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(ConnectionBasicModelProviderTypeEnum.snowflake)
-            }
-          >
-            <SvgIcon name="snowflake" className="mb-3 w-16 text-blue-500" />
-            <div className="text-xl font-semibold text-gray-700">Snowflake</div>
-          </div>
-
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(
-                ConnectionBasicModelProviderTypeEnum.postgresql,
-                'YugabyteDB'
-              )
-            }
-          >
-            <SvgIcon name="yugabytedb" className="mb-3 w-16 text-blue-500" />
-            <div className="text-xl font-semibold text-gray-700">
-              YugabyteDB
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>

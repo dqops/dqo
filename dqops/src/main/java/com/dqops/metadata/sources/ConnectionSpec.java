@@ -18,21 +18,29 @@ package com.dqops.metadata.sources;
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
+import com.dqops.connectors.databricks.DatabricksParametersSpec;
+import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
+import com.dqops.connectors.presto.PrestoParametersSpec;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
+import com.dqops.connectors.spark.SparkParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
+import com.dqops.connectors.trino.TrinoParametersSpec;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.*;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -52,7 +60,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class ConnectionSpec extends AbstractSpec {
+public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHolder {
     private static final ChildHierarchyNodeFieldMapImpl<ConnectionSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("comments", o -> o.comments);
@@ -60,10 +68,15 @@ public class ConnectionSpec extends AbstractSpec {
 			put("bigquery", o -> o.bigquery);
 			put("snowflake", o -> o.snowflake);
             put("postgresql", o -> o.postgresql);
+            put("duckdb", o -> o.duckdb);
             put("redshift", o -> o.redshift);
             put("sqlserver", o -> o.sqlserver);
+            put("presto", o -> o.presto);
+            put("trino", o -> o.trino);
             put("mysql", o -> o.mysql);
             put("oracle", o -> o.oracle);
+            put("spark", o -> o.spark);
+            put("databricks", o -> o.databricks);
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
             put("incident_grouping", o -> o.incidentGrouping);
@@ -92,6 +105,12 @@ public class ConnectionSpec extends AbstractSpec {
     private PostgresqlParametersSpec postgresql;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("DuckDB connection parameters. Specify parameters in the duckdb section or set the url (which is the DuckDB JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private DuckdbParametersSpec duckdb;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Redshift JDBC url).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
@@ -104,19 +123,43 @@ public class ConnectionSpec extends AbstractSpec {
     private SqlServerParametersSpec sqlserver;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
-    @JsonPropertyDescription("MySQL connection parameters. Specify parameters in the sqlserver section or set the url (which is the MySQL JDBC url).")
+    @JsonPropertyDescription("Presto connection parameters. Specify parameters in the presto section or set the url (which is the Presto JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private PrestoParametersSpec presto;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("Trino connection parameters. Specify parameters in the trino section or set the url (which is the Trino JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TrinoParametersSpec trino;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("MySQL connection parameters. Specify parameters in the mysql section or set the url (which is the MySQL JDBC url).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MysqlParametersSpec mysql;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
-    @JsonPropertyDescription("Oracle connection parameters. Specify parameters in the postgresql section or set the url (which is the Oracle JDBC url).")
+    @JsonPropertyDescription("Oracle connection parameters. Specify parameters in the oracle section or set the url (which is the Oracle JDBC url).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private OracleParametersSpec oracle;
 
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("Spark connection parameters. Specify parameters in the spark section or set the url (which is the Spark JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private SparkParametersSpec spark;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("Databricks connection parameters. Specify parameters in the databricks section or set the url (which is the Databricks JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private DatabricksParametersSpec databricks;
+
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
-    private Integer parallelRunsLimit;
+    private Integer parallelJobsLimit;
 
     @JsonPropertyDescription("Default data grouping configuration for all tables. The configuration may be overridden on table, column and check level. " +
             "Data groupings are configured in two cases: " +
@@ -131,7 +174,7 @@ public class ConnectionSpec extends AbstractSpec {
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private RecurringSchedulesSpec schedules;
+    private DefaultSchedulesSpec schedules;
 
     @JsonPropertyDescription("Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.")
     @ToString.Exclude
@@ -149,6 +192,29 @@ public class ConnectionSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private LabelSetSpec labels;
+
+    @JsonIgnore
+    private String yamlParsingError;
+
+    /**
+     * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
+     *
+     * @param yamlParsingError YAML parsing error.
+     */
+    @Override
+    public void setYamlParsingError(String yamlParsingError) {
+        this.yamlParsingError = yamlParsingError;
+    }
+
+    /**
+     * Returns the YAML parsing error that was captured.
+     *
+     * @return YAML parsing error.
+     */
+    @Override
+    public String getYamlParsingError() {
+        return this.yamlParsingError;
+    }
 
     /**
      * Default constructor.
@@ -234,6 +300,25 @@ public class ConnectionSpec extends AbstractSpec {
         this.postgresql = postgresql;
         propagateHierarchyIdToField(postgresql, "postgresql");
     }
+
+    /**
+     * Returns the connection parameters for DuckDB.
+     * @return DuckDB connection parameters.
+     */
+    public DuckdbParametersSpec getDuckdb() {
+        return duckdb;
+    }
+
+    /**
+     * Sets the DuckDB connection parameters.
+     * @param duckdb New DuckDB connection parameters.
+     */
+    public void setDuckdb(DuckdbParametersSpec duckdb) {
+        setDirtyIf(!Objects.equals(this.duckdb, duckdb));
+        this.duckdb = duckdb;
+        propagateHierarchyIdToField(duckdb, "duckdb");
+    }
+
     /**
      * Returns the connection parameters for Redshift.
      * @return Redshift connection parameters.
@@ -268,6 +353,42 @@ public class ConnectionSpec extends AbstractSpec {
         setDirtyIf(!Objects.equals(this.sqlserver, sqlserver));
         this.sqlserver = sqlserver;
         propagateHierarchyIdToField(sqlserver, "sqlserver");
+    }
+
+    /**
+     * Returns the connection parameters for Presto.
+     * @return Presto connection parameters.
+     */
+    public PrestoParametersSpec getPresto() {
+        return presto;
+    }
+
+    /**
+     * Sets the Presto connection parameters.
+     * @param presto New Presto connection parameters.
+     */
+    public void setPresto(PrestoParametersSpec presto) {
+        setDirtyIf(!Objects.equals(this.presto, presto));
+        this.presto = presto;
+        propagateHierarchyIdToField(presto, "presto");
+    }
+
+    /**
+     * Returns the connection parameters for Trino.
+     * @return Trino connection parameters.
+     */
+    public TrinoParametersSpec getTrino() {
+        return trino;
+    }
+
+    /**
+     * Sets the Trino connection parameters.
+     * @param trino New Trino connection parameters.
+     */
+    public void setTrino(TrinoParametersSpec trino) {
+        setDirtyIf(!Objects.equals(this.trino, trino));
+        this.trino = trino;
+        propagateHierarchyIdToField(trino, "trino");
     }
 
     /**
@@ -307,10 +428,46 @@ public class ConnectionSpec extends AbstractSpec {
     }
 
     /**
+     * Returns the connection parameters for Spark.
+     * @return Spark connection parameters.
+     */
+    public SparkParametersSpec getSpark() {
+        return spark;
+    }
+
+    /**
+     * Sets the Spark connection parameters.
+     * @param spark New Spark connection parameters.
+     */
+    public void setSpark(SparkParametersSpec spark) {
+        setDirtyIf(!Objects.equals(this.spark, spark));
+        this.spark = spark;
+        propagateHierarchyIdToField(spark, "spark");
+    }
+
+    /**
+     * Returns the connection parameters for Databricks.
+     * @return Databricks connection parameters.
+     */
+    public DatabricksParametersSpec getDatabricks() {
+        return databricks;
+    }
+
+    /**
+     * Sets the Databricks connection parameters.
+     * @param databricks New Databricks connection parameters.
+     */
+    public void setDatabricks(DatabricksParametersSpec databricks) {
+        setDirtyIf(!Objects.equals(this.databricks, databricks));
+        this.databricks = databricks;
+        propagateHierarchyIdToField(databricks, "databricks");
+    }
+
+    /**
      * Returns the configuration of schedules for each type of check.
      * @return Configuration of schedules for each type of checks.
      */
-    public RecurringSchedulesSpec getSchedules() {
+    public DefaultSchedulesSpec getSchedules() {
         return schedules;
     }
 
@@ -318,7 +475,7 @@ public class ConnectionSpec extends AbstractSpec {
      * Sets the configuration of schedules for running each type of checks.
      * @param schedules Configuration of schedules.
      */
-    public void setSchedules(RecurringSchedulesSpec schedules) {
+    public void setSchedules(DefaultSchedulesSpec schedules) {
         setDirtyIf(!Objects.equals(this.schedules, schedules));
         this.schedules = schedules;
         propagateHierarchyIdToField(schedules, "schedules");
@@ -328,17 +485,17 @@ public class ConnectionSpec extends AbstractSpec {
      * Returns the limit of parallel data quality checks that could be started at the same time on the connection.
      * @return Concurrency limit (number of parallel jobs) that are executing checks or null when no limits are enforced.
      */
-    public Integer getParallelRunsLimit() {
-        return parallelRunsLimit;
+    public Integer getParallelJobsLimit() {
+        return parallelJobsLimit;
     }
 
     /**
      * Sets the concurrency limit of the number of checks that can run in parallel on this connection.
-     * @param parallelRunsLimit New concurrency limit or null when no limit is applied.
+     * @param parallelJobsLimit New concurrency limit or null when no limit is applied.
      */
-    public void setParallelRunsLimit(Integer parallelRunsLimit) {
-        this.setDirtyIf(!Objects.equals(this.parallelRunsLimit, parallelRunsLimit));
-        this.parallelRunsLimit = parallelRunsLimit;
+    public void setParallelJobsLimit(Integer parallelJobsLimit) {
+        this.setDirtyIf(!Objects.equals(this.parallelJobsLimit, parallelJobsLimit));
+        this.parallelJobsLimit = parallelJobsLimit;
     }
 
     /**
@@ -445,31 +602,53 @@ public class ConnectionSpec extends AbstractSpec {
 
     /**
      * Creates a trimmed and expanded version of the object without unwanted properties, but with all variables like ${ENV_VAR} expanded.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Trimmed and expanded version of this object.
      */
-    public ConnectionSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public ConnectionSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
         try {
             ConnectionSpec cloned = (ConnectionSpec) super.clone();
             if (cloned.defaultGroupingConfiguration != null) {
-                cloned.defaultGroupingConfiguration = cloned.defaultGroupingConfiguration.expandAndTrim(secretValueProvider);
+                cloned.defaultGroupingConfiguration = cloned.defaultGroupingConfiguration.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.bigquery != null) {
-                cloned.bigquery = cloned.bigquery.expandAndTrim(secretValueProvider);
+                cloned.bigquery = cloned.bigquery.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.snowflake != null) {
-                cloned.snowflake = cloned.snowflake.expandAndTrim(secretValueProvider);
+                cloned.snowflake = cloned.snowflake.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.postgresql != null) {
-                cloned.postgresql = cloned.postgresql.expandAndTrim(secretValueProvider);
+                cloned.postgresql = cloned.postgresql.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.duckdb != null) {
+                cloned.duckdb = cloned.duckdb.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.redshift != null) {
-                cloned.redshift = cloned.redshift.expandAndTrim(secretValueProvider);
+                cloned.redshift = cloned.redshift.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.mysql != null) {
+                cloned.mysql = cloned.mysql.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.presto != null) {
+                cloned.presto = cloned.presto.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.trino != null) {
+                cloned.trino = cloned.trino.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.oracle != null) {
+                cloned.oracle = cloned.oracle.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.sqlserver != null) {
-                cloned.sqlserver = cloned.sqlserver.expandAndTrim(secretValueProvider);
+                cloned.sqlserver = cloned.sqlserver.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.spark != null) {
+                cloned.spark = cloned.spark.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.databricks != null) {
+                cloned.databricks = cloned.databricks.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.incidentGrouping != null) {
-                cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider);
+                cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             cloned.comments = null;
             cloned.schedules = null;
@@ -527,5 +706,16 @@ public class ConnectionSpec extends AbstractSpec {
                 (ConnectionProviderSpecificParameters) providerConfigChild;
 
         return providerConfiguration;
+    }
+
+    public static class ConnectionSpecSampleFactory implements SampleValueFactory<ConnectionSpec> {
+        @Override
+        public ConnectionSpec createSample() {
+            return new ConnectionSpec() {{
+                setProviderType(ProviderType.postgresql);
+                setPostgresql(new PostgresqlParametersSpec.PostgresqlParametersSpecSampleFactory().createSample());
+                setParallelJobsLimit(4);
+            }};
+        }
     }
 }

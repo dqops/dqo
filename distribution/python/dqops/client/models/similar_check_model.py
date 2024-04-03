@@ -1,34 +1,34 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.similar_check_model_check_target import SimilarCheckModelCheckTarget
-from ..models.similar_check_model_check_type import SimilarCheckModelCheckType
-from ..models.similar_check_model_time_scale import SimilarCheckModelTimeScale
+from ..models.check_target import CheckTarget
+from ..models.check_time_scale import CheckTimeScale
+from ..models.check_type import CheckType
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="SimilarCheckModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class SimilarCheckModel:
-    """Model that identifies a similar check in another category or another type of check (recurring, partition).
+    """Model that identifies a similar check in another category or another type of check (monitoring, partition).
 
     Attributes:
-        check_target (Union[Unset, SimilarCheckModelCheckTarget]): The check target (table or column).
-        check_type (Union[Unset, SimilarCheckModelCheckType]): The check type.
-        time_scale (Union[Unset, SimilarCheckModelTimeScale]): The time scale (daily, monthly). The time scale is
-            optional and could be null (for profiling checks).
+        check_target (Union[Unset, CheckTarget]):
+        check_type (Union[Unset, CheckType]):
+        time_scale (Union[Unset, CheckTimeScale]):
         category (Union[Unset, str]): The check's category.
-        check_name (Union[Unset, str]): The similar check name in another category.
+        check_name (Union[Unset, str]): Similar check name in another category.
     """
 
-    check_target: Union[Unset, SimilarCheckModelCheckTarget] = UNSET
-    check_type: Union[Unset, SimilarCheckModelCheckType] = UNSET
-    time_scale: Union[Unset, SimilarCheckModelTimeScale] = UNSET
+    check_target: Union[Unset, CheckTarget] = UNSET
+    check_type: Union[Unset, CheckType] = UNSET
+    time_scale: Union[Unset, CheckTimeScale] = UNSET
     category: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         check_target: Union[Unset, str] = UNSET
@@ -66,25 +66,25 @@ class SimilarCheckModel:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         _check_target = d.pop("check_target", UNSET)
-        check_target: Union[Unset, SimilarCheckModelCheckTarget]
+        check_target: Union[Unset, CheckTarget]
         if isinstance(_check_target, Unset):
             check_target = UNSET
         else:
-            check_target = SimilarCheckModelCheckTarget(_check_target)
+            check_target = CheckTarget(_check_target)
 
         _check_type = d.pop("check_type", UNSET)
-        check_type: Union[Unset, SimilarCheckModelCheckType]
+        check_type: Union[Unset, CheckType]
         if isinstance(_check_type, Unset):
             check_type = UNSET
         else:
-            check_type = SimilarCheckModelCheckType(_check_type)
+            check_type = CheckType(_check_type)
 
         _time_scale = d.pop("time_scale", UNSET)
-        time_scale: Union[Unset, SimilarCheckModelTimeScale]
+        time_scale: Union[Unset, CheckTimeScale]
         if isinstance(_time_scale, Unset):
             time_scale = UNSET
         else:
-            time_scale = SimilarCheckModelTimeScale(_time_scale)
+            time_scale = CheckTimeScale(_time_scale)
 
         category = d.pop("category", UNSET)
 

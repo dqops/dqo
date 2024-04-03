@@ -17,7 +17,7 @@ package com.dqops.bigquery.sensors.column.numeric;
 
 import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.numeric.ColumnValueAboveMaxValuePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.numeric.ColumnNumberAboveMaxValuePercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.numeric.ColumnNumericValueAboveMaxValuePercentSensorParametersSpec;
+import com.dqops.sensors.column.numeric.ColumnNumericNumberAboveMaxValuePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,9 +39,9 @@ import tech.tablesaw.api.Table;
 
 @SpringBootTest
 public class BigQueryColumnMaxValueAboveMaxValuePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnNumericValueAboveMaxValuePercentSensorParametersSpec sut;
+    private ColumnNumericNumberAboveMaxValuePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnValueAboveMaxValuePercentCheckSpec checkSpec;
+    private ColumnNumberAboveMaxValuePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -49,8 +49,8 @@ public class BigQueryColumnMaxValueAboveMaxValuePercentSensorParametersSpecInteg
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnNumericValueAboveMaxValuePercentSensorParametersSpec();
-        this.checkSpec = new ColumnValueAboveMaxValuePercentCheckSpec();
+        this.sut = new ColumnNumericNumberAboveMaxValuePercentSensorParametersSpec();
+        this.checkSpec = new ColumnNumberAboveMaxValuePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -70,10 +70,10 @@ public class BigQueryColumnMaxValueAboveMaxValuePercentSensorParametersSpecInteg
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
         this.sut.setMaxValue(16);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -85,10 +85,10 @@ public class BigQueryColumnMaxValueAboveMaxValuePercentSensorParametersSpecInteg
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
         this.sut.setMaxValue(16);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

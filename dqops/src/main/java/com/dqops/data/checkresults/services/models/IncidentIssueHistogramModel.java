@@ -16,7 +16,9 @@
 
 package com.dqops.data.checkresults.services.models;
 
+import com.dqops.checks.CheckType;
 import com.dqops.data.incidents.services.models.IncidentDailyIssuesCount;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -28,31 +30,103 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.dqops.checks.CheckTimeScale.daily;
+import static com.dqops.checks.CheckTimeScale.monthly;
+
 /**
  * Model that returns histograms of the data quality issue occurrences related to a data quality incident.
- * The dates in the daily histogram are using the default timezone of the DQO server.
+ * The dates in the daily histogram are using the default timezone of the DQOps server.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
 public class IncidentIssueHistogramModel {
     /**
-     * A map of the numbers of data quality issues per day, the day uses the DQO server timezone.
+     * True when this data quality incident is based on data quality issues from profiling checks within the filters applied to search for linked data quality issues.
      */
-    @JsonPropertyDescription("A map of the numbers of data quality issues per day, the day uses the DQO server timezone.")
-    private TreeMap<LocalDate, IncidentDailyIssuesCount> days = new TreeMap<>();
+    @JsonPropertyDescription("True when this data quality incident is based on data quality issues from profiling checks within the filters applied to search for linked data quality issues.")
+    private boolean hasProfilingIssues;
+
+    /**
+     * True when this data quality incident is based on data quality issues from daily monitoring checks within the filters applied to search for linked data quality issues.
+     */
+    @JsonPropertyDescription("True when this data quality incident is based on data quality issues from daily monitoring checks within the filters applied to search for linked data quality issues.")
+    private boolean hasDailyMonitoringIssues;
+
+    /**
+     * True when this data quality incident is based on data quality issues from monthly monitoring checks within the filters applied to search for linked data quality issues.
+     */
+    @JsonPropertyDescription("True when this data quality incident is based on data quality issues from monthly monitoring checks within the filters applied to search for linked data quality issues.")
+    private boolean hasMonthlyMonitoringIssues;
+
+    /**
+     * True when this data quality incident is based on data quality issues from daily partitioned checks within the filters applied to search for linked data quality issues.
+     */
+    @JsonPropertyDescription("True when this data quality incident is based on data quality issues from daily partitioned checks within the filters applied to search for linked data quality issues.")
+    private boolean hasDailyPartitionedIssues;
+
+    /**
+     * True when this data quality incident is based on data quality issues from monthly partitioned checks within the filters applied to search for linked data quality issues.
+     */
+    @JsonPropertyDescription("True when this data quality incident is based on data quality issues from monthly partitioned checks within the filters applied to search for linked data quality issues.")
+    private boolean hasMonthlyPartitionedIssues;
+
+    /**
+     * A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.
+     */
+    @JsonPropertyDescription("A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.")
+    private Map<LocalDate, IncidentDailyIssuesCount> days = new TreeMap<>();
 
     /**
      * A map of column names with the most data quality issues related to the incident. The map returns the count of issues as the value.
      */
     @JsonPropertyDescription("A map of column names with the most data quality issues related to the incident. The map returns the count of issues as the value.")
-    private LinkedHashMap<String, Integer> columns = new LinkedHashMap<>();
+    private Map<String, Integer> columns = new LinkedHashMap<>();
 
     /**
      * A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.
      */
     @JsonPropertyDescription("A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.")
-    private LinkedHashMap<String, Integer> checks = new LinkedHashMap<>();
+    private Map<String, Integer> checks = new LinkedHashMap<>();
+
+    /**
+     * Turns on a flag for profiling, monitoring or partitioned checks when an issue in that type was detected.
+     * @param checkType Check type.
+     * @param timeScale Check time scale.
+     */
+    public void markCheckType(CheckType checkType, TimePeriodGradient timeScale) {
+        if (checkType == null) {
+            return;
+        }
+
+        switch (checkType) {
+            case profiling:
+                this.hasProfilingIssues = true;
+                break;
+
+            case monitoring:
+                switch (timeScale) {
+                    case day:
+                        this.hasDailyMonitoringIssues = true;
+                        break;
+                    case month:
+                        this.hasMonthlyMonitoringIssues = true;
+                        break;
+                }
+                break;
+
+            case partitioned:
+                switch (timeScale) {
+                    case day:
+                        this.hasDailyPartitionedIssues = true;
+                        break;
+                    case month:
+                        this.hasMonthlyPartitionedIssues = true;
+                        break;
+                }
+                break;
+        }
+    }
 
     /**
      * Increments a count of data quality issues for a date.
@@ -109,8 +183,17 @@ public class IncidentIssueHistogramModel {
             return;
         }
 
-        LocalDate firstDate = this.days.firstKey();
-        LocalDate lastDate = this.days.lastKey();
+        LocalDate firstDate;
+        LocalDate lastDate;
+
+        if (this.days instanceof TreeMap) {
+            firstDate = ((TreeMap<LocalDate, IncidentDailyIssuesCount>) this.days).firstKey();
+            lastDate = ((TreeMap<LocalDate, IncidentDailyIssuesCount>) this.days).lastKey();
+        } else {
+            List<LocalDate> daysKeysSortedList = this.days.keySet().stream().sorted().collect(Collectors.toList());
+            firstDate = daysKeysSortedList.get(0);
+            lastDate = daysKeysSortedList.get(daysKeysSortedList.size() - 1);
+        }
 
         for (LocalDate date = firstDate.plus(1L, ChronoUnit.DAYS); date.isBefore(lastDate);
              date = date.plus(1L, ChronoUnit.DAYS)) {
@@ -144,7 +227,7 @@ public class IncidentIssueHistogramModel {
      * @param histogramSize Histogram size.
      * @return New hashmap that is sorted and truncated.
      */
-    protected LinkedHashMap<String, Integer> findTop(LinkedHashMap<String, Integer> map, int histogramSize) {
+    protected LinkedHashMap<String, Integer> findTop(Map<String, Integer> map, int histogramSize) {
         final LinkedHashMap<String, Integer> result = new LinkedHashMap<>();
         map.entrySet()
                 .stream()

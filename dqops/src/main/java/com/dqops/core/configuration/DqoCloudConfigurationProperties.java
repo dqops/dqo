@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the configuration for dqo.ai. Properties are mapped to the "dqo.cloud." prefix that are responsible for the configuration of the DQO Cloud.
+ * Configuration POJO with the configuration for cloud.dqops.com. Properties are mapped to the "dqo.cloud." prefix that are responsible for the configuration of the DQOps Cloud.
  */
 @Configuration
 @ConfigurationProperties(prefix = "dqo.cloud")
@@ -39,18 +39,19 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     private long retryBackoffMillis = 10;
     private boolean startWithoutApiKey;
     private boolean authenticateWithDqoCloud;
+    private long idleTimeoutSeconds = 30;
 
     /**
-     * Returns the DQO Cloud API Key that was configured in an environment variable or in a configuration file.
+     * Returns the DQOps Cloud API Key that was configured in an environment variable or in a configuration file.
      * When the key is missing, then an API key from the settings is used.
-     * @return DQO Api key.
+     * @return DQOps Cloud Api key.
      */
     public String getApiKey() {
         return apiKey;
     }
 
     /**
-     * Sets the DQO Cloud api key.
+     * Sets the DQOps Cloud api key.
      * @param apiKey API key.
      */
     public void setApiKey(String apiKey) {
@@ -58,7 +59,7 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     }
 
     /**
-     * DQO Cloud login url used to obtain the API Key.
+     * DQOps Cloud login url used to obtain the API Key.
      * @return Cloud login url.
      */
     public String getApiKeyRequestUrl() {
@@ -106,15 +107,15 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Returns the base url for the DQO Cloud UI.
-     * @return Base url for the DQO Cloud UI.
+     * Returns the base url for the DQOps Cloud UI.
+     * @return Base url for the DQOps Cloud UI.
      */
     public String getUiBaseUrl() {
         return uiBaseUrl;
     }
 
     /**
-     * Sets the base url for the DQO Cloud UI.
+     * Sets the base url for the DQOps Cloud UI.
      * @param uiBaseUrl UI base url.
      */
     public void setUiBaseUrl(String uiBaseUrl) {
@@ -122,7 +123,7 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Returns the base url for the DQO Cloud REST API.
+     * Returns the base url for the DQOps Cloud REST API.
      * @return REST Api base url.
      */
     public String getRestApiBaseUrl() {
@@ -138,32 +139,32 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Returns the number of files that are uploaded to DQO Cloud in parallel using HTTP/2 multiplexing.
-     * @return Number of files that are uploaded to DQO Cloud in parallel.
+     * Returns the number of files that are uploaded to DQOps Cloud in parallel using HTTP/2 multiplexing.
+     * @return Number of files that are uploaded to DQOps Cloud in parallel.
      */
     public int getParallelFileUploads() {
         return parallelFileUploads;
     }
 
     /**
-     * Sets the number of files that are uploaded to DQO Cloud in parallel using HTTP/2 multiplexing.
-     * @param parallelFileUploads New number of files that are uploaded to DQO Cloud in parallel.
+     * Sets the number of files that are uploaded to DQOps Cloud in parallel using HTTP/2 multiplexing.
+     * @param parallelFileUploads New number of files that are uploaded to DQOps Cloud in parallel.
      */
     public void setParallelFileUploads(int parallelFileUploads) {
         this.parallelFileUploads = parallelFileUploads;
     }
 
     /**
-     * Returns the number of files that are downloaded from DQO Cloud in parallel using HTTP/2 multiplexing.
-     * @return Number of files that are downloaded from DQO Cloud in parallel.
+     * Returns the number of files that are downloaded from DQOps Cloud in parallel using HTTP/2 multiplexing.
+     * @return Number of files that are downloaded from DQOps Cloud in parallel.
      */
     public int getParallelFileDownloads() {
         return parallelFileDownloads;
     }
 
     /**
-     * Sets the number of files that are downloaded from DQO Cloud in parallel using HTTP/2 multiplexing.
-     * @param parallelFileDownloads New number of files that are downloaded from DQO Cloud in parallel.
+     * Sets the number of files that are downloaded from DQOps Cloud in parallel using HTTP/2 multiplexing.
+     * @param parallelFileDownloads New number of files that are downloaded from DQOps Cloud in parallel.
      */
     public void setParallelFileDownloads(int parallelFileDownloads) {
         this.parallelFileDownloads = parallelFileDownloads;
@@ -186,7 +187,7 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Returns the number of retries during file upload or download to the DQO cloud.
+     * Returns the number of retries during file upload or download to the DQOps cloud.
      * @return Max number of retries.
      */
     public int getMaxRetries() {
@@ -194,7 +195,7 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Sets the number of retries during file upload or download to the DQO cloud.
+     * Sets the number of retries during file upload or download to the DQOps cloud.
      * @param maxRetries Maximum number of retries.
      */
     public void setMaxRetries(int maxRetries) {
@@ -202,7 +203,7 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Returns the initial delay for the first retry of uploading or downloading files to the DQO Cloud, specified in milliseconds.
+     * Returns the initial delay for the first retry of uploading or downloading files to the DQOps Cloud, specified in milliseconds.
      * @return The initial delay in milliseconds for the first retry.
      */
     public long getRetryBackoffMillis() {
@@ -210,7 +211,7 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Sets the initial delay for the first retry of uploading or downloading files to the DQO Cloud, specified in milliseconds.
+     * Sets the initial delay for the first retry of uploading or downloading files to the DQOps Cloud, specified in milliseconds.
      * @param retryBackoffMillis The initial delay in milliseconds for the first retry.
      */
     public void setRetryBackoffMillis(long retryBackoffMillis) {
@@ -218,7 +219,7 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     }
 
     /**
-     * True when it is allowed to start DQO without a DQO Cloud api key.
+     * True when it is allowed to start DQOps without a DQOps Cloud api key.
      * @return True when dqo can start without an api key.
      */
     public boolean isStartWithoutApiKey() {
@@ -226,24 +227,24 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Sets a flag to enable starting DQO without an API key.
-     * @param startWithoutApiKey Start DQO without an api key.
+     * Sets a flag to enable starting DQOps without an API key.
+     * @param startWithoutApiKey Start DQOps without an api key.
      */
     public void setStartWithoutApiKey(boolean startWithoutApiKey) {
         this.startWithoutApiKey = startWithoutApiKey;
     }
 
     /**
-     * Enables user authentication using DQO Cloud credentials.
-     * @return Authenticate users with DQO Cloud.
+     * Enables user authentication using DQOps Cloud credentials.
+     * @return Authenticate users with DQOps Cloud.
      */
     public boolean isAuthenticateWithDqoCloud() {
         return authenticateWithDqoCloud;
     }
 
     /**
-     * Sets the flag to enable user authentication with DQO Cloud credentials.
-     * @param authenticateWithDqoCloud Authenticate users with DQO Cloud credentials.
+     * Sets the flag to enable user authentication with DQOps Cloud credentials.
+     * @param authenticateWithDqoCloud Authenticate users with DQOps Cloud credentials.
      */
     public void setAuthenticateWithDqoCloud(boolean authenticateWithDqoCloud) {
         this.authenticateWithDqoCloud = authenticateWithDqoCloud;
@@ -251,7 +252,7 @@ public class DqoCloudConfigurationProperties implements Cloneable {
 
     /**
      * Clones the current object.
-     * @return
+     * @return Cloned instance.
      */
     @Override
     public DqoCloudConfigurationProperties clone() {
@@ -261,5 +262,21 @@ public class DqoCloudConfigurationProperties implements Cloneable {
         catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    /**
+     * Returns the timeout of idle connections to DQOps cloud that are closed.
+     * @return Idle connection timeout in seconds.
+     */
+    public long getIdleTimeoutSeconds() {
+        return idleTimeoutSeconds;
+    }
+
+    /**
+     * Sets the timeout when idle connections are closed.
+     * @param idleTimeoutSeconds Idle connections timeout.
+     */
+    public void setIdleTimeoutSeconds(long idleTimeoutSeconds) {
+        this.idleTimeoutSeconds = idleTimeoutSeconds;
     }
 }

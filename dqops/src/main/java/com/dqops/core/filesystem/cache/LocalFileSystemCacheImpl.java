@@ -49,14 +49,20 @@ import java.util.function.Function;
 public class LocalFileSystemCacheImpl implements LocalFileSystemCache, DisposableBean {
     private final Cache<Path, List<HomeFolderPath>> folderListsCache;
     private final Cache<Path, List<HomeFilePath>> fileListsCache;
-    private final Cache<Path, FileContent> textFilesCache;
+    private final Cache<Path, FileContent> fileContentsCache;
     private final Cache<Path, LoadedMonthlyPartition> parquetFilesCache;
     private WatchService watchService;
-    private final Map<Path, WatchKey> directoryWatchers = new LinkedHashMap<>();
+    private final Map<Path, WatchKey> directoryWatchersByPath = new LinkedHashMap<>();
+    private final Map<WatchKey, Path> watchedDirectoriesByWatchKey = new LinkedHashMap<>();
     private final Object directoryWatchersLock = new Object();
     private final DqoCacheConfigurationProperties dqoCacheConfigurationProperties;
     private Instant nextFileChangeDetectionAt = Instant.now().minus(100L, ChronoUnit.MILLIS);
+    private boolean wasRecentlyInvalidated;
 
+    /**
+     * Dependency injection constructor.
+     * @param dqoCacheConfigurationProperties Cache configuration parameters.
+     */
     @Autowired
     public LocalFileSystemCacheImpl(DqoCacheConfigurationProperties dqoCacheConfigurationProperties) {
         this.dqoCacheConfigurationProperties = dqoCacheConfigurationProperties;
@@ -79,7 +85,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
                 .maximumSize(dqoCacheConfigurationProperties.getFileListsLimit())
                 .expireAfterWrite(dqoCacheConfigurationProperties.getExpireAfterSeconds(), TimeUnit.SECONDS)
                 .build();
-        this.textFilesCache = Caffeine.newBuilder()
+        this.fileContentsCache = Caffeine.newBuilder()
                 .maximumSize(dqoCacheConfigurationProperties.getFileListsLimit())
                 .expireAfterWrite(dqoCacheConfigurationProperties.getExpireAfterSeconds(), TimeUnit.SECONDS)
                 .build();
@@ -111,12 +117,16 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      * @param folderPath Folder path.
      */
     public void startFolderWatcher(Path folderPath) {
+        if (folderPath == null) {
+            return;
+        }
+
         if (!this.dqoCacheConfigurationProperties.isWatchFileSystemChanges()) {
             return;
         }
 
         synchronized (this.directoryWatchersLock) {
-            if (this.directoryWatchers.containsKey(folderPath)) {
+            if (this.directoryWatchersByPath.containsKey(folderPath)) {
                 return;
             }
 
@@ -128,7 +138,8 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
                 WatchKey watchKey = folderPath.register(this.watchService,
                         StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_MODIFY);
 
-                this.directoryWatchers.put(folderPath, watchKey);
+                this.directoryWatchersByPath.put(folderPath, watchKey);
+                this.watchedDirectoriesByWatchKey.put(watchKey, folderPath);
             }
             catch (IOException ioe) {
                 throw new DqoRuntimeException("Cannot start watching changes in the folder " + folderPath, ioe);
@@ -141,17 +152,22 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      * @param folderPath Folder path.
      */
     public void stopFolderWatcher(Path folderPath) {
+        if (folderPath == null) {
+            return;
+        }
+
         if (!this.dqoCacheConfigurationProperties.isWatchFileSystemChanges()) {
             return;
         }
 
         synchronized (this.directoryWatchersLock) {
-            if (!this.directoryWatchers.containsKey(folderPath)) {
+            if (!this.directoryWatchersByPath.containsKey(folderPath)) {
                 return;
             }
 
-            WatchKey watchKey = this.directoryWatchers.get(folderPath);
-            this.directoryWatchers.remove(folderPath);
+            WatchKey watchKey = this.directoryWatchersByPath.get(folderPath);
+            this.directoryWatchersByPath.remove(folderPath);
+            this.watchedDirectoriesByWatchKey.remove(watchKey);
             watchKey.cancel();
         }
     }
@@ -176,10 +192,19 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
 
         WatchKey watchKey;
         while ((watchKey = this.watchService.poll()) != null) {
-            for (WatchEvent<?> event : watchKey.pollEvents()) {
-                Path filePath = (Path) event.context();
-                invalidateFile(filePath);
-                invalidateFolder(filePath); // we don't know if it is a file or a folder
+            Path directoryPath;
+            synchronized (this.directoryWatchersLock) {
+                directoryPath = this.watchedDirectoriesByWatchKey.get(watchKey);
+            }
+
+            if (directoryPath != null) {
+                for (WatchEvent<?> event : watchKey.pollEvents()) {
+                    Path filePath = (Path) event.context();
+                    Path absoluteFilePath = directoryPath.resolve(filePath).toAbsolutePath().normalize();
+                    invalidateFile(absoluteFilePath);
+                    invalidateFolder(absoluteFilePath); // we don't know if it is a file or a folder
+                    invalidateFolder(directoryPath);
+                }
             }
             watchKey.reset();
         }
@@ -201,7 +226,8 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         if (this.dqoCacheConfigurationProperties.isEnable()) {
             this.startFolderWatcher(folderPath);
             this.processFileChanges(false);
-            return this.folderListsCache.get(folderPath, listingFunction);
+            List<HomeFolderPath> homeFolderPaths = this.folderListsCache.get(folderPath, listingFunction);
+            return homeFolderPaths;
         }
 
         return listingFunction.apply(folderPath);
@@ -234,25 +260,30 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         if (this.dqoCacheConfigurationProperties.isEnable()) {
             this.startFolderWatcher(filePath.getParent());
             this.processFileChanges(false);
-            return this.textFilesCache.get(filePath, readFunction);
+            return this.fileContentsCache.get(filePath, readFunction);
         }
 
         return readFunction.apply(filePath);
     }
 
     /**
-     * Stores a content of a text file in the cache. Also invalidates a cached list of files from the parent folder.
+     * Stores a content of a file in the cache. Also invalidates a cached list of files from the parent folder.
      * @param filePath Cache key (file path).
      * @param fileContent File content.
      */
     @Override
-    public void storeTextFile(Path filePath, FileContent fileContent) {
+    public void storeFile(Path filePath, FileContent fileContent) {
         if (!this.dqoCacheConfigurationProperties.isEnable()) {
             return;
         }
 
         this.startFolderWatcher(filePath.getParent());
-        this.textFilesCache.put(filePath, fileContent);
+        if (this.wasRecentlyInvalidated) {
+            this.wasRecentlyInvalidated = false;
+            processFileChanges(true);
+        }
+
+        this.fileContentsCache.put(filePath, fileContent);
 
         Path parentFolderPath = filePath.getParent();
         this.fileListsCache.invalidate(parentFolderPath);
@@ -289,6 +320,11 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         }
 
         this.startFolderWatcher(filePath.getParent());
+        if (this.wasRecentlyInvalidated) {
+            this.wasRecentlyInvalidated = false;
+            processFileChanges(true);
+        }
+
         this.parquetFilesCache.put(filePath, table);
 
         Path parentFolderPath = filePath.getParent();
@@ -304,8 +340,13 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      */
     @Override
     public void removeFile(Path filePath) {
-        this.textFilesCache.invalidate(filePath);
+        if (filePath == null) {
+            return;
+        }
+
+        this.fileContentsCache.invalidate(filePath);
         this.parquetFilesCache.invalidate(filePath);
+        this.wasRecentlyInvalidated = true;
 
         Path parentFolderPath = filePath.getParent();
         this.fileListsCache.invalidate(parentFolderPath);
@@ -321,6 +362,10 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      */
     @Override
     public void removeFolder(Path folderPath) {
+        if (folderPath == null) {
+            return;
+        }
+
         this.folderListsCache.invalidate(folderPath);
         this.fileListsCache.invalidate(folderPath);
 
@@ -338,6 +383,10 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      */
     @Override
     public void invalidateFolder(Path folderPath) {
+        if (folderPath == null) {
+            return;
+        }
+
         this.folderListsCache.invalidate(folderPath);
         this.fileListsCache.invalidate(folderPath);
     }
@@ -348,8 +397,13 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      */
     @Override
     public void invalidateFile(Path filePath) {
-        this.textFilesCache.invalidate(filePath);
+        if (filePath == null) {
+            return;
+        }
+
+        this.fileContentsCache.invalidate(filePath);
         this.parquetFilesCache.invalidate(filePath);
+        this.wasRecentlyInvalidated = true;
 
         Path folderPath = filePath.getParent();
         if (folderPath != null) {
@@ -365,16 +419,18 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
     public void invalidateAll() {
         this.folderListsCache.invalidateAll();
         this.fileListsCache.invalidateAll();
-        this.textFilesCache.invalidateAll();
+        this.fileContentsCache.invalidateAll();
         this.parquetFilesCache.invalidateAll();
+        this.wasRecentlyInvalidated = true;
 
         if (this.dqoCacheConfigurationProperties.isWatchFileSystemChanges() && this.watchService != null) {
             synchronized (this.directoryWatchersLock) {
-                for (WatchKey watchKey : this.directoryWatchers.values()) {
+                for (WatchKey watchKey : this.directoryWatchersByPath.values()) {
                     watchKey.cancel();
                 }
 
-                this.directoryWatchers.clear();
+                this.directoryWatchersByPath.clear();
+                this.watchedDirectoriesByWatchKey.clear();
             }
         }
     }

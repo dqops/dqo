@@ -23,13 +23,16 @@ import java.nio.file.Path;
  */
 public abstract class FileSystemSynchronizationRoot {
     private Path rootPath;
+    private DqoRoot rootType;
 
     /**
      * Creates a root file system.
      * @param rootPath Root file system path.
+     * @param rootType Root type.
      */
-    public FileSystemSynchronizationRoot(Path rootPath) {
+    public FileSystemSynchronizationRoot(Path rootPath, DqoRoot rootType) {
         this.rootPath = rootPath;
+        this.rootType = rootType;
     }
 
     /**
@@ -38,5 +41,13 @@ public abstract class FileSystemSynchronizationRoot {
      */
     public Path getRootPath() {
         return rootPath;
+    }
+
+    /**
+     * Returns the type of the root folder.
+     * @return Root folder type.
+     */
+    public DqoRoot getRootType() {
+        return rootType;
     }
 }

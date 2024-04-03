@@ -22,7 +22,7 @@ import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import java.util.Objects;
 
 /**
- * DQO root folders in the dqo use home that may be replicated to a remote file system (uploaded to DQO Cloud or any other cloud).
+ * DQOps root folders in the dqo use home that may be replicated to a remote file system (uploaded to DQOps Cloud or any other cloud).
  * It is also used as a lock scope.
  */
 public enum DqoRoot {
@@ -72,19 +72,39 @@ public enum DqoRoot {
     checks,
 
     /**
+     * Settings in the settings/ folder that are synchronized to DQOps Cloud.
+     */
+    settings,
+
+    /**
+     * Shared credentials in the .credentials/ folder that are synchronized to DQOps Cloud.
+     */
+    credentials,
+
+    /**
+     * Data dictionaries (CSV files) in the dictionaries/ folder that are synchronized to DQOps Cloud.
+     */
+    dictionaries,
+
+    /**
+     * Default checks configurations for tables or columns matching a pattern.
+     */
+    patterns,
+
+    /**
      * Local file indexes.
      */
     _indexes,
 
     /**
-     * Local settings file.
+     * Local settings file that is not synchronized.
      */
-    _settings;
+    _local_settings;
 
     /**
      * Creates a dqo user home root from the folder path.
      * @param folderPath Folder path.
-     * @return DQO root folder or null when locking on the target folder is not supported.
+     * @return DQOps root folder or null when locking on the target folder is not supported.
      */
     public static DqoRoot fromHomeFolderPath(HomeFolderPath folderPath) {
         if (folderPath.isEmpty()) {
@@ -108,12 +128,28 @@ public enum DqoRoot {
             return checks;
         }
 
+        if (Objects.equals(folder1, BuiltInFolderNames.SETTINGS)) {
+            return settings;
+        }
+
+        if (Objects.equals(folder1, BuiltInFolderNames.CREDENTIALS)) {
+            return credentials;
+        }
+
+        if (Objects.equals(folder1, BuiltInFolderNames.DICTIONARIES)) {
+            return dictionaries;
+        }
+
+        if (Objects.equals(folder1, BuiltInFolderNames.PATTERNS)) {
+            return patterns;
+        }
+
         if (Objects.equals(folder1, BuiltInFolderNames.INDEX)) {
             return _indexes;
         }
 
-        if (Objects.equals(folder1, SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML)) {
-            return _settings;
+        if (Objects.equals(folder1, SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML)) {
+            return _local_settings;
         }
 
         if (Objects.equals(folder1, BuiltInFolderNames.DATA) && folderPath.size() > 1) {

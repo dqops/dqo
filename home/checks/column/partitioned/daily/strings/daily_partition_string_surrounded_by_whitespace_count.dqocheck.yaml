@@ -1,9 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/strings/string_surrounded_by_whitespace_count
-  rule_name: comparison/max_count
-  help_text: Verifies that the number of strings surrounded by whitespace in a column
-    does not exceed the maximum accepted count. Creates a separate data quality check
-    (and an alert) for each daily partition.

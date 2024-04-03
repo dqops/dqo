@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -12,14 +12,10 @@ spec:
   fields:
   - field_name: anomaly_percent
     display_name: anomaly_percent
-    help_text: "Probability that the current sensor readout will achieve values within\
-      \ the mean according to the distribution of the previous values gathered within\
-      \ the time window. In other words, the inter-quantile range around the mean\
-      \ of the estimated normal distribution. Set the time window at the threshold\
-      \ level for all severity levels (warning, error, fatal) at once. The default\
-      \ is a time window of 90 periods (days, etc.), but at least 30 readouts must\
-      \ exist to run the calculation. You can change the default value by modifying\
-      \ prediction_time_window parameterin Definitions section."
+    help_text: "The probability (in percent) that the current sensor readout (measure)\
+      \ is an anomaly, because the value is outside the regular range of previous\
+      \ readouts. The default time window of 90 time periods (days, etc.) is used,\
+      \ but at least 30 readouts must exist to run the calculation."
     data_type: double
-    sample_values:
-    - 0.1
+    required: true
+    default_value: 0.5

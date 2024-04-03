@@ -15,6 +15,7 @@
  */
 package com.dqops.data.statistics.services;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.statistics.services.models.StatisticsResultsForColumnModel;
 import com.dqops.data.statistics.services.models.StatisticsResultsForTableModel;
 import com.dqops.metadata.sources.PhysicalTableName;
@@ -27,25 +28,29 @@ public interface StatisticsDataService {
      * Retrieves the most recent table statistics results for a given table.
      * @param connectionName Connection name.
      * @param physicalTableName Full table name (schema and table).
-     * @param dataStreamName Data stream name.
-     * @param includeColumnLevelStatistics True when column level statistics should be also included.
+     * @param dataGroup Data group name.
+     * @param includeColumnLevelStatistics True when column level statistics should also be included.
+     * @param userDomainIdentity User identity with the data domain.
      * @return Statistics results for the given table.
      */
     StatisticsResultsForTableModel getMostRecentStatisticsForTable(String connectionName,
                                                                    PhysicalTableName physicalTableName,
-                                                                   String dataStreamName,
-                                                                   boolean includeColumnLevelStatistics);
+                                                                   String dataGroup,
+                                                                   boolean includeColumnLevelStatistics,
+                                                                   UserDomainIdentity userDomainIdentity);
 
     /**
      * Retrieves the most recent table statistics results for a given column.
      * @param connectionName    Connection name.
      * @param physicalTableName Full table name (schema and table).
      * @param columName         Column name.
-     * @param dataStreamName    Data stream name.
+     * @param dataGroup         Data group name.
+     * @param userDomainIdentity User identity with the data domain.
      * @return Statistics results for the given table.
      */
     StatisticsResultsForColumnModel getMostRecentStatisticsForColumn(String connectionName,
                                                                      PhysicalTableName physicalTableName,
                                                                      String columName,
-                                                                     String dataStreamName);
+                                                                     String dataGroup,
+                                                                     UserDomainIdentity userDomainIdentity);
 }

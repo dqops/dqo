@@ -15,6 +15,8 @@
  */
 package com.dqops.metadata.search;
 
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.*;
@@ -28,6 +30,7 @@ import com.dqops.statistics.column.ColumnStatisticsCollectorsRootCategoriesSpec;
 import com.dqops.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
 import com.google.common.base.Strings;
 
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -53,7 +56,7 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
      */
     @Override
     public TreeNodeTraversalResult accept(ConnectionList connectionList, SearchParameterObject parameter) {
-        String connectionNameFilter = this.filters.getConnectionName();
+        String connectionNameFilter = this.filters.getConnection();
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -80,7 +83,7 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
      */
     @Override
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
-        String connectionNameFilter = this.filters.getConnectionName();
+        String connectionNameFilter = this.filters.getConnection();
 
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
         labelsSearcherObject.setConnectionLabels(connectionWrapper.getSpec().getLabels());
@@ -105,7 +108,7 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
      */
     @Override
     public TreeNodeTraversalResult accept(TableList tableList, SearchParameterObject parameter) {
-        String schemaTableName = this.filters.getSchemaTableName();
+        String schemaTableName = this.filters.getFullTableName();
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -132,7 +135,7 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
      */
     @Override
     public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
-        String schemaTableName = this.filters.getSchemaTableName();
+        String schemaTableName = this.filters.getFullTableName();
 
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -198,22 +201,32 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
      */
     @Override
     public TreeNodeTraversalResult accept(ColumnSpecMap columnSpecMap, SearchParameterObject parameter) {
-        String columnNameFilter = this.filters.getColumnName();
-        if (Strings.isNullOrEmpty(columnNameFilter)) {
+        Collection<String> targetColumnNames = this.filters.getColumnNames();
+        if (targetColumnNames == null || targetColumnNames.isEmpty()) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
 
-        if (StringPatternComparer.isSearchPattern(columnNameFilter)) {
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // we need to iterate anyway
+        if (targetColumnNames.size() == 1) {
+            String columnNameFilter = targetColumnNames.stream().findFirst().get();
+            if (Strings.isNullOrEmpty(columnNameFilter)) {
+                return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+            }
+
+            if (StringPatternComparer.isSearchPattern(columnNameFilter)) {
+                return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // we need to iterate anyway
+            }
+
+            // exact column name given, let's find it
+            ColumnSpec columnSpec = columnSpecMap.get(columnNameFilter);
+            if (columnSpec == null) {
+                return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
+            }
+
+            return TreeNodeTraversalResult.traverseSelectedChildNodes(columnSpec);
+
         }
 
-        // exact column name given, let's find it
-        ColumnSpec columnSpec = columnSpecMap.get(columnNameFilter);
-        if (columnSpec == null) {
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
-        }
-
-        return TreeNodeTraversalResult.traverseSelectedChildNodes(columnSpec);
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**
@@ -243,10 +256,13 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
-        String columnNameFilter = this.filters.getColumnName();
-        if (!Strings.isNullOrEmpty(columnNameFilter)) {
+        Collection<String> columnNames = this.filters.getColumnNames();
+        if (columnNames != null && !columnNames.isEmpty()) {
             String columnName = columnSpec.getHierarchyId().getLast().toString();
-            if (!StringPatternComparer.matchSearchPattern(columnName, columnNameFilter)) {
+            boolean columnNameMatch = columnNames.stream()
+                    .anyMatch(columnNameFilter -> StringPatternComparer.matchSearchPattern(columnName, columnNameFilter));
+
+            if (!columnNameMatch) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
         }
@@ -365,6 +381,11 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
             }
         }
 
+        if (rootProfilerContainerSpec.getTarget() == StatisticsCollectorTarget.table &&
+                this.filters.getColumnNames() != null && !this.filters.getColumnNames().isEmpty()) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;  // target columns already selected, ignoring table level checks
+        }
+
         return super.accept(rootProfilerContainerSpec, parameter);
     }
 
@@ -386,5 +407,29 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
         }
 
         return super.accept(collectorsCategorySpec, parameter);
+    }
+
+    /**
+     * Accepts a list of default configuration of table observability checks wrappers.
+     *
+     * @param tableDefaultChecksPatternWrappers Table observability default checks list.
+     * @param parameter                         Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableDefaultChecksPatternList tableDefaultChecksPatternWrappers, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a default configuration of column observability checks wrapper.
+     *
+     * @param columnDefaultChecksPatternWrappers Column observability default checks specification.
+     * @param parameter                          Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ColumnDefaultChecksPatternList columnDefaultChecksPatternWrappers, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 }

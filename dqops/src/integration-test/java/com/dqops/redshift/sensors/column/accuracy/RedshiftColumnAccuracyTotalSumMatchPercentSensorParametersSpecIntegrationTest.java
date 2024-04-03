@@ -48,7 +48,7 @@ public class RedshiftColumnAccuracyTotalSumMatchPercentSensorParametersSpecInteg
     @BeforeEach
     void setUp() {
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip4_test, ProviderType.redshift);
-        this.sampleTableMetadataReferenced = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip6_test, ProviderType.bigquery);
+        this.sampleTableMetadataReferenced = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip6_test, ProviderType.redshift);
         IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadata);
         IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadataReferenced);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -76,11 +76,11 @@ public class RedshiftColumnAccuracyTotalSumMatchPercentSensorParametersSpecInteg
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
         this.sut.setReferencedTable(this.sampleTableMetadataReferenced.getTableData().getHashedTableName());
         this.sut.setReferencedColumn("result");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "result", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -94,11 +94,11 @@ public class RedshiftColumnAccuracyTotalSumMatchPercentSensorParametersSpecInteg
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
         this.sut.setReferencedTable(this.sampleTableMetadataReferenced.getTableData().getHashedTableName());
         this.sut.setReferencedColumn("result");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "result", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

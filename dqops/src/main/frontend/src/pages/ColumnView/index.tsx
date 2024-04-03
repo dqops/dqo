@@ -1,27 +1,28 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import ColumnNavigation from '../../components/ColumnNavigation';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
-import ColumnDetails from './ColumnDetails';
-import ColumnCommentsView from './ColumnCommentsView';
-import ColumnLabelsView from './ColumnLabelsView';
-import ColumnRecurringChecksView from './ColumnRecurringChecksView';
-import ColumnProfilingView from './ColumnProfilingChecksView';
-import ColumnPartitionedChecksView from './ColumnPartitionedChecksView';
-import { useSelector } from 'react-redux';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import ConnectionLayout from '../../components/ConnectionLayout';
-import {
-  getFirstLevelActiveTab,
-  getFirstLevelState
-} from '../../redux/selectors';
-import ColumnNavigation from '../../components/ColumnNavigation';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState,
+  getSecondLevelTab
+} from '../../redux/selectors';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
+import ColumnCommentsView from './ColumnCommentsView';
+import ColumnDetails from './ColumnDetails';
+import ColumnLabelsView from './ColumnLabelsView';
+import ColumnMonitoringChecksView from './ColumnMonitoringChecksView';
+import ColumnPartitionedChecksView from './ColumnPartitionedChecksView';
+import ColumnProfilingView from './ColumnProfilingChecksView';
 
 const initTabs = [
   {
-    label: 'Column',
+    label: 'Column metadata',
     value: 'detail'
   },
   {
@@ -40,7 +41,7 @@ const ColumnView = () => {
     schema: schemaName,
     table: tableName,
     column: columnName,
-    tab: activeTab,
+    tab,
     checkTypes
   }: {
     connection: string;
@@ -49,7 +50,7 @@ const ColumnView = () => {
     column: string;
     tab: string;
     checkTypes: CheckTypes;
-  } = useParams();
+  } = useDecodedParams();
   const [tabs, setTabs] = useState(initTabs);
 
   const history = useHistory();
@@ -58,13 +59,13 @@ const ColumnView = () => {
     isUpdatedComments,
     isUpdatedLabels,
     isUpdatedChecksUi,
-    isUpdatedDailyRecurring,
-    isUpdatedMonthlyRecurring,
+    isUpdatedDailyMonitoring,
+    isUpdatedMonthlyMonitoring,
     isUpdatedDailyPartitionedChecks,
     isUpdatedMonthlyPartitionedChecks
   } = useSelector(getFirstLevelState(checkTypes));
-  const isRecurringOnly = useMemo(
-    () => checkTypes === CheckTypes.RECURRING,
+  const isMonitoringOnly = useMemo(
+    () => checkTypes === CheckTypes.MONITORING,
     [checkTypes]
   );
   const isPartitionCheckOnly = useMemo(
@@ -76,10 +77,11 @@ const ColumnView = () => {
     [checkTypes]
   );
   const showAllSubTabs = () =>
-    !isRecurringOnly && !isPartitionCheckOnly && !isProfilingCheckOnly;
+    !isMonitoringOnly && !isPartitionCheckOnly && !isProfilingCheckOnly;
 
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const dispatch = useActionDispatch();
+  const activeTab = getSecondLevelTab(checkTypes, tab);
 
   const onChangeTab = (tab: string) => {
     dispatch(
@@ -149,15 +151,15 @@ const ColumnView = () => {
   useEffect(() => {
     setTabs(
       tabs.map((item) =>
-        item.value === 'recurring'
+        item.value === 'monitoring'
           ? {
               ...item,
-              isUpdated: isUpdatedDailyRecurring || isUpdatedMonthlyRecurring
+              isUpdated: isUpdatedDailyMonitoring || isUpdatedMonthlyMonitoring
             }
           : item
       )
     );
-  }, [isUpdatedDailyRecurring, isUpdatedMonthlyRecurring]);
+  }, [isUpdatedDailyMonitoring, isUpdatedMonthlyMonitoring]);
 
   useEffect(() => {
     setTabs(
@@ -176,13 +178,13 @@ const ColumnView = () => {
 
   const description = useMemo(() => {
     if (isProfilingCheckOnly) {
-      return 'Advanced profiling for ';
+      return 'Profiling checks for ';
     }
-    if (isRecurringOnly) {
+    if (isMonitoringOnly) {
       if (activeTab === 'monthly') {
-        return 'Monthly recurring checks for ';
+        return 'Monthly monitoring checks for ';
       } else {
-        return 'Daily recurring checks for ';
+        return 'Daily monitoring checks for ';
       }
     }
     if (isPartitionCheckOnly) {
@@ -197,19 +199,19 @@ const ColumnView = () => {
       return 'Data source configuration for ';
     }
     return '';
-  }, [isProfilingCheckOnly, isRecurringOnly, isPartitionCheckOnly, activeTab]);
+  }, [isProfilingCheckOnly, isMonitoringOnly, isPartitionCheckOnly, activeTab]);
 
   return (
-    <ConnectionLayout>
+    <>
       <div className="relative">
         <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 pr-[360px]">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="column" className="w-5 h-5 shrink-0" />
-            <div className="text-xl font-semibold truncate">{`${description}${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
+            <div className="text-lg font-semibold truncate">{`${description}${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
           </div>
         </div>
         <ColumnNavigation />
-        {isRecurringOnly && <ColumnRecurringChecksView />}
+        {isMonitoringOnly && <ColumnMonitoringChecksView />}
         {isPartitionCheckOnly && <ColumnPartitionedChecksView />}
         {isProfilingCheckOnly && (
           <ColumnProfilingView
@@ -253,7 +255,7 @@ const ColumnView = () => {
           </>
         )}
       </div>
-    </ConnectionLayout>
+    </>
   );
 };
 

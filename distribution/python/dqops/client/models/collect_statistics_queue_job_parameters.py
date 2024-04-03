@@ -1,16 +1,13 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.collect_statistics_queue_job_parameters_data_scope import (
-    CollectStatisticsQueueJobParametersDataScope,
-)
+from ..models.statistics_data_scope import StatisticsDataScope
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.collect_statistics_queue_job_result import (
-        CollectStatisticsQueueJobResult,
-    )
+    from ..models.collect_statistics_result import CollectStatisticsResult
     from ..models.statistics_collector_search_filters import (
         StatisticsCollectorSearchFilters,
     )
@@ -19,26 +16,25 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="CollectStatisticsQueueJobParameters")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CollectStatisticsQueueJobParameters:
     """
     Attributes:
         statistics_collector_search_filters (Union[Unset, StatisticsCollectorSearchFilters]):
-        data_scope (Union[Unset, CollectStatisticsQueueJobParametersDataScope]): The target scope of collecting
-            statistics. Statistics could be collected on a whole table or for each data grouping separately.
+        data_scope (Union[Unset, StatisticsDataScope]):
         dummy_sensor_execution (Union[Unset, bool]): Boolean flag that enables a dummy statistics collection (sensors
             are executed, but the statistics results are not written to the parquet files).
-        collect_statistics_result (Union[Unset, CollectStatisticsQueueJobResult]): Returns the result with the summary
-            of the statistics collected.
+        collect_statistics_result (Union[Unset, CollectStatisticsResult]): Returns the result with the summary of the
+            statistics collected.
     """
 
     statistics_collector_search_filters: Union[
         Unset, "StatisticsCollectorSearchFilters"
     ] = UNSET
-    data_scope: Union[Unset, CollectStatisticsQueueJobParametersDataScope] = UNSET
+    data_scope: Union[Unset, StatisticsDataScope] = UNSET
     dummy_sensor_execution: Union[Unset, bool] = UNSET
-    collect_statistics_result: Union[Unset, "CollectStatisticsQueueJobResult"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    collect_statistics_result: Union[Unset, "CollectStatisticsResult"] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         statistics_collector_search_filters: Union[Unset, Dict[str, Any]] = UNSET
@@ -61,29 +57,27 @@ class CollectStatisticsQueueJobParameters:
         field_dict.update({})
         if statistics_collector_search_filters is not UNSET:
             field_dict[
-                "statisticsCollectorSearchFilters"
+                "statistics_collector_search_filters"
             ] = statistics_collector_search_filters
         if data_scope is not UNSET:
-            field_dict["dataScope"] = data_scope
+            field_dict["data_scope"] = data_scope
         if dummy_sensor_execution is not UNSET:
-            field_dict["dummySensorExecution"] = dummy_sensor_execution
+            field_dict["dummy_sensor_execution"] = dummy_sensor_execution
         if collect_statistics_result is not UNSET:
-            field_dict["collectStatisticsResult"] = collect_statistics_result
+            field_dict["collect_statistics_result"] = collect_statistics_result
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.collect_statistics_queue_job_result import (
-            CollectStatisticsQueueJobResult,
-        )
+        from ..models.collect_statistics_result import CollectStatisticsResult
         from ..models.statistics_collector_search_filters import (
             StatisticsCollectorSearchFilters,
         )
 
         d = src_dict.copy()
         _statistics_collector_search_filters = d.pop(
-            "statisticsCollectorSearchFilters", UNSET
+            "statistics_collector_search_filters", UNSET
         )
         statistics_collector_search_filters: Union[
             Unset, StatisticsCollectorSearchFilters
@@ -97,21 +91,21 @@ class CollectStatisticsQueueJobParameters:
                 )
             )
 
-        _data_scope = d.pop("dataScope", UNSET)
-        data_scope: Union[Unset, CollectStatisticsQueueJobParametersDataScope]
+        _data_scope = d.pop("data_scope", UNSET)
+        data_scope: Union[Unset, StatisticsDataScope]
         if isinstance(_data_scope, Unset):
             data_scope = UNSET
         else:
-            data_scope = CollectStatisticsQueueJobParametersDataScope(_data_scope)
+            data_scope = StatisticsDataScope(_data_scope)
 
-        dummy_sensor_execution = d.pop("dummySensorExecution", UNSET)
+        dummy_sensor_execution = d.pop("dummy_sensor_execution", UNSET)
 
-        _collect_statistics_result = d.pop("collectStatisticsResult", UNSET)
-        collect_statistics_result: Union[Unset, CollectStatisticsQueueJobResult]
+        _collect_statistics_result = d.pop("collect_statistics_result", UNSET)
+        collect_statistics_result: Union[Unset, CollectStatisticsResult]
         if isinstance(_collect_statistics_result, Unset):
             collect_statistics_result = UNSET
         else:
-            collect_statistics_result = CollectStatisticsQueueJobResult.from_dict(
+            collect_statistics_result = CollectStatisticsResult.from_dict(
                 _collect_statistics_result
             )
 

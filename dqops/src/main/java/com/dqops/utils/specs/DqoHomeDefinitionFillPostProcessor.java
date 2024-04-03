@@ -16,11 +16,13 @@
 
 package com.dqops.utils.specs;
 
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
+import com.dqops.services.check.matching.SimilarCheckGroupingKeyFactoryImpl;
 import com.dqops.services.check.matching.SimilarCheckMatchingServiceImpl;
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
@@ -40,12 +42,12 @@ public class DqoHomeDefinitionFillPostProcessor {
     public static void main(String[] args) throws Exception {
         try {
             if (args.length == 0) {
-                System.out.println("DQO Home specification fix utility");
+                System.out.println("DQOPs Home specification fix utility");
                 System.out.println("Missing required parameter: <path to the project dir>");
                 return;
             }
 
-            System.out.println("Updating specification files in DQO Home for project: " + args[0]);
+            System.out.println("Updating specification files in DQOps Home for project: " + args[0]);
             Path projectDir = Path.of(args[0]);
             HandlebarsDocumentationUtilities.configure(projectDir);
 
@@ -63,11 +65,11 @@ public class DqoHomeDefinitionFillPostProcessor {
     /**
      * Updates specifications for rules.
      * @param projectRoot Path to the project root.
-     * @param dqoHomeContext DQO home instance with access to the rule references.
+     * @param dqoHomeContext DQOps home instance with access to the rule references.
      */
     public static void updateSpecificationsForRules(Path projectRoot, DqoHomeContext dqoHomeContext) {
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         RuleDefinitionDefaultSpecUpdateService ruleDefinitionDefaultSpecUpdateService =
                 new RuleDefinitionDefaultSpecUpdateServiceImpl(dqoHomeContext, specToUiCheckMappingService);
 
@@ -78,11 +80,11 @@ public class DqoHomeDefinitionFillPostProcessor {
     /**
      * Updates specifications for sensors.
      * @param projectRoot Path to the project root.
-     * @param dqoHomeContext DQO home instance with access to the sensor references.
+     * @param dqoHomeContext DQOps home instance with access to the sensor references.
      */
     public static void updateSpecificationsForSensors(Path projectRoot, DqoHomeContext dqoHomeContext) {
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         SensorDefinitionDefaultSpecUpdateService sensorDefinitionDefaultSpecUpdateService =
                 new SensorDefinitionDefaultSpecUpdateServiceImpl(dqoHomeContext, specToUiCheckMappingService);
 
@@ -91,11 +93,11 @@ public class DqoHomeDefinitionFillPostProcessor {
 
     /**
      * Updates specifications for built-in checks.
-     * @param dqoHomeContext DQO home instance with access to the check references.
+     * @param dqoHomeContext DQOps home instance with access to the check references.
      */
     public static void updateSpecificationsForChecks(DqoHomeContext dqoHomeContext) {
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         CheckDefinitionDefaultSpecUpdateService sensorDefinitionDefaultSpecUpdateService =
                 new CheckDefinitionDefaultSpecUpdateServiceImpl(new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService,
                         new DqoHomeContextFactory() {
@@ -103,7 +105,7 @@ public class DqoHomeDefinitionFillPostProcessor {
                             public DqoHomeContext openLocalDqoHome() {
                                 return dqoHomeContext;
                             }
-                        }));
+                        }, new SimilarCheckGroupingKeyFactoryImpl()));
 
         sensorDefinitionDefaultSpecUpdateService.updateCheckSpecifications(dqoHomeContext);
     }

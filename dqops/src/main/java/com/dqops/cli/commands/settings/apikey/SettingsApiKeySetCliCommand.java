@@ -18,7 +18,7 @@ package com.dqops.cli.commands.settings.apikey;
 import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.ICommand;
-import com.dqops.cli.commands.settings.impl.SettingsService;
+import com.dqops.cli.commands.settings.impl.SettingsCliService;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
@@ -36,7 +36,7 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "set", header = "Set API key", description = "Set the API key used for accessing external services. This key is used to authenticate requests to the service.")
 public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand {
-	private SettingsService settingsService;
+	private SettingsCliService settingsCliService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 	private DqoCloudApiKeyProvider apiKeyProvider;
@@ -45,17 +45,17 @@ public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand
 	}
 
 	@Autowired
-	public SettingsApiKeySetCliCommand(SettingsService settingsService,
-									   TerminalReader terminalReader,
-									   TerminalWriter terminalWriter,
-									   DqoCloudApiKeyProvider apiKeyProvider) {
-		this.settingsService = settingsService;
+	public SettingsApiKeySetCliCommand(SettingsCliService settingsCliService,
+                                       TerminalReader terminalReader,
+                                       TerminalWriter terminalWriter,
+                                       DqoCloudApiKeyProvider apiKeyProvider) {
+		this.settingsCliService = settingsCliService;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 		this.apiKeyProvider = apiKeyProvider;
 	}
 
-	@CommandLine.Parameters(index = "0", description = "DQO Cloud Api key")
+	@CommandLine.Parameters(index = "0", description = "DQOps Cloud Api key")
 	private String key;
 
 	public String getKey() {
@@ -75,18 +75,18 @@ public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand
 	public Integer call() throws Exception {
 		if (Strings.isNullOrEmpty(this.key)) {
 			throwRequiredParameterMissingIfHeadless("key");
-			this.key = this.terminalReader.prompt("Api key", null, false);
+			this.key = this.terminalReader.prompt("DQOps Cloud Api key", null, false);
 		}
 
 		try {
 			this.apiKeyProvider.decodeApiKey(this.key);
 		}
 		catch (Exception ex) {
-			this.terminalWriter.writeLine("Invalid Cloud DQO API key: " + ex.getMessage());
+			this.terminalWriter.writeLine("Invalid DQOps Cloud API key: " + ex.getMessage());
 			return -1;
 		}
 
-		CliOperationStatus cliOperationStatus = this.settingsService.setApiKey(key);
+		CliOperationStatus cliOperationStatus = this.settingsCliService.setApiKey(key);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/accepted_values/number_found_in_set_percent
+  rule_name: comparison/min_percent
+  help_text: The check measures the percentage of rows whose value in a tested column
+    is one of values from a list of expected values or the column value is null. Verifies
+    that the percentage of rows having a valid column value does not exceed the minimum
+    accepted percentage. Stores a separate data quality check result for each daily
+    partition.
+  standard: true

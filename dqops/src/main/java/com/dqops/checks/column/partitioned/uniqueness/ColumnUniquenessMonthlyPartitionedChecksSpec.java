@@ -16,12 +16,14 @@
 package com.dqops.checks.column.partitioned.uniqueness;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
-import com.dqops.checks.column.checkspecs.uniqueness.ColumnDistinctCountCheckSpec;
-import com.dqops.checks.column.checkspecs.uniqueness.ColumnDistinctPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.uniqueness.ColumnDuplicateCountCheckSpec;
-import com.dqops.checks.column.checkspecs.uniqueness.ColumnDuplicatePercentCheckSpec;
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
+import com.dqops.checks.column.checkspecs.uniqueness.*;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -43,20 +45,29 @@ public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckC
             put("monthly_partition_distinct_percent", o -> o.monthlyPartitionDistinctPercent);
             put("monthly_partition_duplicate_count", o -> o.monthlyPartitionDuplicateCount);
             put("monthly_partition_duplicate_percent", o -> o.monthlyPartitionDuplicatePercent);
+
+            put("monthly_partition_distinct_count_change", o -> o.monthlyPartitionDistinctCountChange);
+            put("monthly_partition_distinct_percent_change", o -> o.monthlyPartitionDistinctPercentChange);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies  that the number of distinct values stays within an accepted range. Stores a separate data quality check result for each monthly partition.")
     private ColumnDistinctCountCheckSpec monthlyPartitionDistinctCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores a separate data quality check result for each monthly partition.")
     private ColumnDistinctPercentCheckSpec monthlyPartitionDistinctPercent;
 
-    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.")
     private ColumnDuplicateCountCheckSpec monthlyPartitionDuplicateCount;
 
-    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each monthly partition.")
     private ColumnDuplicatePercentCheckSpec monthlyPartitionDuplicatePercent;
+
+    @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.")
+    private ColumnDistinctCountChangeCheckSpec monthlyPartitionDistinctCountChange;
+
+    @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.")
+    private ColumnDistinctPercentChangeCheckSpec monthlyPartitionDistinctPercentChange;
 
     /**
      * Returns a distinct values count check specification.
@@ -131,6 +142,43 @@ public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckC
     }
 
     /**
+     * Returns the distinct count value change check specification.
+     * @return Distinct count value change check specification.
+     */
+    public ColumnDistinctCountChangeCheckSpec getMonthlyPartitionDistinctCountChange() {
+        return monthlyPartitionDistinctCountChange;
+    }
+
+    /**
+     * Sets a new specification of a distinct count value change check.
+     * @param monthlyPartitionDistinctCountChange Distinct count value change check specification.
+     */
+    public void setMonthlyPartitionDistinctCountChange(ColumnDistinctCountChangeCheckSpec monthlyPartitionDistinctCountChange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionDistinctCountChange, monthlyPartitionDistinctCountChange));
+        this.monthlyPartitionDistinctCountChange = monthlyPartitionDistinctCountChange;
+        propagateHierarchyIdToField(monthlyPartitionDistinctCountChange, "monthly_partition_distinct_count_change");
+    }
+
+    /**
+     * Returns the distinct percent value change check specification.
+     * @return Distinct percent value change check specification.
+     */
+    public ColumnDistinctPercentChangeCheckSpec getMonthlyPartitionDistinctPercentChange() {
+        return monthlyPartitionDistinctPercentChange;
+    }
+
+    /**
+     * Sets a new specification of a distinct percent value change check.
+     * @param monthlyPartitionDistinctPercentChange Distinct percent value change check specification.
+     */
+    public void setMonthlyPartitionDistinctPercentChange(ColumnDistinctPercentChangeCheckSpec monthlyPartitionDistinctPercentChange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionDistinctPercentChange, monthlyPartitionDistinctPercentChange));
+        this.monthlyPartitionDistinctPercentChange = monthlyPartitionDistinctPercentChange;
+        propagateHierarchyIdToField(monthlyPartitionDistinctPercentChange, "monthly_partition_distinct_percent_change");
+    }
+
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -138,5 +186,49 @@ public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckC
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Gets the check target appropriate for all checks in this category.
+     *
+     * @return Corresponding check target.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return CheckTarget.column;
+    }
+
+    /**
+     * Gets the check type appropriate for all checks in this category.
+     *
+     * @return Corresponding check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.partitioned;
+    }
+
+    /**
+     * Gets the check timescale appropriate for all checks in this category.
+     *
+     * @return Corresponding check timescale.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return CheckTimeScale.monthly;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.ANY;
     }
 }

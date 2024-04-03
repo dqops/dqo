@@ -10,6 +10,8 @@ import Checkbox from "../../components/Checkbox";
 import SectionWrapper from "../../components/Dashboard/SectionWrapper";
 import RuleParameters from "../../components/Sensors/RuleParameters";
 import Jinja2Code from "./Jinja2";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../redux/reducers";
 
 type ProvideSensorProps = {
   providerSensor?: ProviderSensorModel;
@@ -27,6 +29,9 @@ const ProvideSensor = ({
   onChange,
   providerType
 }: ProvideSensorProps) => {
+  const {  userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const handleChange = (obj: Partial<ProviderSensorDefinitionSpec>) => {
     if (!onChange) {
@@ -61,6 +66,8 @@ const ProvideSensor = ({
           options={runnerTypeOptions}
           value={providerSensor?.providerSensorDefinitionSpec?.type}
           onChange={(type) => handleChange({ type })}
+          disabled={userProfile.can_manage_definitions !== true}
+
         />
       </div>
       {providerSensor?.providerSensorDefinitionSpec?.type === ProviderSensorDefinitionSpecTypeEnum.java_class && (
@@ -69,6 +76,8 @@ const ProvideSensor = ({
           <Input
             value={providerSensor?.providerSensorDefinitionSpec?.java_class_name}
             onChange={(e) => handleChange({ java_class_name: e.target.value })}
+            disabled={userProfile.can_manage_definitions !== true}
+
           />
         </div>
       )}
@@ -80,6 +89,8 @@ const ProvideSensor = ({
           onChange={(checked) => handleChange({
             supports_grouping: checked
           })}
+          disabled={userProfile.can_manage_definitions !== true}
+
         />
       </div>
 
@@ -90,16 +101,19 @@ const ProvideSensor = ({
           onChange={(checked) => handleChange({
             supports_partitioned_checks: checked
           })}
+          disabled={userProfile.can_manage_definitions !== true}
+
         />
       </div>
 
 
-      <SectionWrapper className="mt-8 mb-4" title="Sensor Parameters">
+      <SectionWrapper className="mt-8 mb-4" title="Sensor parameters">
         <RuleParameters
           parameters={providerSensor?.providerSensorDefinitionSpec?.parameters}
           onChange={(parameters) => handleChange({
             parameters
           })}
+          canUserEdit={userProfile.can_manage_definitions}
         />
       </SectionWrapper>
 
@@ -108,6 +122,7 @@ const ProvideSensor = ({
             <Jinja2Code
             providerSensor={providerSensor}
             onChange={handleChangeTemplate}
+            
             />
           }
     </div>

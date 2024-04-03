@@ -1,8 +1,11 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/nulls/null_count
   rule_name: comparison/max_count
-  help_text: Verifies that the number of null values in a column does not exceed the
-    maximum accepted count.
+  help_text: Detects incomplete columns that contain any null values. Counts the number
+    of rows having a null value. Raises a data quality issue when the count of null
+    values is above a max_count threshold.
+  friendly_name: incomplete column
+  standard: true

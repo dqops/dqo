@@ -16,8 +16,11 @@
 package com.dqops.core.dqocloud.apikey;
 
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
+import com.dqops.core.configuration.DqoUserConfigurationProperties;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -32,9 +35,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
- * Service that retrieves the active DQO Cloud API key for the current user.
+ * Service that retrieves the active DQOps Cloud API key for the current user.
  * The api key could be enforced by setting an environment variable DQO_CLOUD_APIKEY or is stored in the settings
  * after the user executed the "login" CLI command.
  */
@@ -42,67 +47,109 @@ import java.nio.charset.StandardCharsets;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     private DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
+    private DqoUserConfigurationProperties dqoUserConfigurationProperties;
     private UserHomeContextFactory userHomeContextFactory;
     private SecretValueProvider secretValueProvider;
     private JsonSerializer jsonSerializer;
-    private DqoCloudApiKey cachedApiKey;
+    private final Map<String, DqoCloudApiKey> cachedApiKeysPerDomain = new LinkedHashMap<>();
     private final Object lock = new Object();
 
     /**
      * Default injection constructor.
-     * @param dqoCloudConfigurationProperties DQO Cloud configuration properties.
+     * @param dqoCloudConfigurationProperties DQOps Cloud configuration properties.
+     * @param dqoUserConfigurationProperties Configuration properties with the default user home.
      * @param userHomeContextFactory User home context factory - required to load the user settings.
      * @param secretValueProvider Secret value provider - used to resolve expressions in the settings.
      * @param jsonSerializer Json serializer - used to decode the API key.
      */
     @Autowired
     public DqoCloudApiKeyProviderImpl(DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
+                                      DqoUserConfigurationProperties dqoUserConfigurationProperties,
                                       UserHomeContextFactory userHomeContextFactory,
                                       SecretValueProvider secretValueProvider,
                                       JsonSerializer jsonSerializer) {
         this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
+        this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
         this.userHomeContextFactory = userHomeContextFactory;
         this.secretValueProvider = secretValueProvider;
         this.jsonSerializer = jsonSerializer;
     }
 
     /**
-     * Returns the api key for the DQO Cloud.
-     * @return DQO Cloud api key or null when the key was not yet configured.
+     * Returns the api key for the DQOps Cloud.
+     * @param userIdentity User identity, used to find the data domain name for which we need the DQOps Cloud synchronization key.
+     * @return DQOps Cloud api key or null when the key was not yet configured.
      */
     @Override
-    public DqoCloudApiKey getApiKey() {
+    public DqoCloudApiKey getApiKey(UserDomainIdentity userIdentity) {
         try {
+            DqoCloudApiKey cachedApiKeyPerDomain;
             synchronized (this.lock) {
-                if (this.cachedApiKey != null) {
-                    return this.cachedApiKey;
+                if (userIdentity != null) {
+                    String dataDomainCloud = userIdentity.getDataDomainCloud();
+                    cachedApiKeyPerDomain = this.cachedApiKeysPerDomain.get(dataDomainCloud);
+                } else {
+                    cachedApiKeyPerDomain = this.cachedApiKeysPerDomain.get(this.dqoUserConfigurationProperties.getDefaultDataDomain());
                 }
 
-                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-                SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
-                SettingsSpec settingsSpec = settingsWrapper.getSpec();
-                String apiKey = null;
-
-                if (settingsSpec != null) {
-                    SettingsSpec settings = settingsSpec.expandAndTrim(this.secretValueProvider);
-                    apiKey = settings.getApiKey();
+                if (cachedApiKeyPerDomain != null) {
+                    return cachedApiKeyPerDomain;
                 }
-
-                if (Strings.isNullOrEmpty(apiKey)) {
-                    apiKey = this.dqoCloudConfigurationProperties.getApiKey(); // take the api keys from configuration, it could be pulled from a secret manager or environment variables
-                }
-
-                if (Strings.isNullOrEmpty(apiKey)) {
-                    return null;
-                }
-
-                DqoCloudApiKey dqoCloudApiKey = decodeApiKey(apiKey);
-                this.cachedApiKey = dqoCloudApiKey;
-                return dqoCloudApiKey;
             }
+
+            UserDomainIdentity userIdentityForRootHome = userIdentity != null ? userIdentity : UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY;
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentityForRootHome);
+            SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+            LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+            boolean cloudSyncDisabledInSettings = localSettingsSpec != null && localSettingsSpec.isDisableCloudSync();
+            String apiKey = null;
+
+            if (localSettingsSpec != null && !cloudSyncDisabledInSettings) {
+                SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHomeContext.getUserHome());
+                LocalSettingsSpec settings = localSettingsSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
+                apiKey = settings.getApiKey();
+            }
+
+            if (Strings.isNullOrEmpty(apiKey) && !cloudSyncDisabledInSettings) {
+                apiKey = this.dqoCloudConfigurationProperties.getApiKey(); // take the api keys from configuration, it could be pulled from a secret manager or environment variables
+            }
+
+            if (Strings.isNullOrEmpty(apiKey)) {
+                return null;
+            }
+
+            DqoCloudApiKey dqoCloudApiKey = decodeApiKey(apiKey);
+            String apiKeyDomain = dqoCloudApiKey.getApiKeyPayload().getDefaultDomain();
+            if (Strings.isNullOrEmpty(apiKeyDomain)) {
+                apiKeyDomain = UserDomainIdentity.DEFAULT_DATA_DOMAIN;
+            }
+
+            synchronized (this.lock) {
+                this.cachedApiKeysPerDomain.put(apiKeyDomain, dqoCloudApiKey);
+            }
+
+            return dqoCloudApiKey;
         } catch (Exception e) {
-            throw new DqoCloudInvalidKeyException("API Key is invalid", e);
+            throw new DqoCloudInvalidKeyException("DQOps Cloud Pairing API Key is invalid, error: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Checks if the synchronization with DQOps Cloud is intentionally disabled (by running a `dqo cloud sync disable` command), so the returned api key was null,
+     * but in fact an api key is present.
+     *
+     * @param userIdentity User identity, used to find the data domain name for which we need the DQOps Cloud synchronization key.
+     * @return True when the api key was intentionally disabled.
+     */
+    @Override
+    public boolean isCloudSynchronizationDisabled(UserDomainIdentity userIdentity) {
+        UserDomainIdentity userIdentityForRootHome = userIdentity != null ? userIdentity : UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY;
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentityForRootHome);
+        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        boolean cloudSyncDisabledInSettings = localSettingsSpec != null && localSettingsSpec.isDisableCloudSync();
+
+        return cloudSyncDisabledInSettings;
     }
 
     /**
@@ -111,7 +158,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     @Override
     public void invalidate() {
         synchronized (this.lock) {
-            this.cachedApiKey = null;
+            this.cachedApiKeysPerDomain.clear();
         }
     }
 
@@ -136,7 +183,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
             return dqoCloudApiKey;
         }
         catch (DecoderException ex) {
-            throw new DqoCloudInvalidKeyException("Failed to decode a DQO Cloud API Key, error: " + ex.getMessage(), ex);
+            throw new DqoCloudInvalidKeyException("Failed to decode a DQOps Cloud API Key, error: " + ex.getMessage(), ex);
         }
     }
 }

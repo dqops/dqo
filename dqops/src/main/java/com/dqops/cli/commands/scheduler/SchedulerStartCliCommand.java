@@ -32,7 +32,8 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "start", header = "Starts a background job scheduler", description = "This operation should be called only from the shell mode. When the DQO is started as 'dqo scheduler start' from the operating system, it will stop immediately.")
+@CommandLine.Command(name = "start", header = "Starts a background job scheduler",
+        description = "This operation should be called only from the shell mode. When the DQOps is started as 'dqo scheduler start' from the operating system, it will stop immediately.")
 public class SchedulerStartCliCommand extends BaseCommand implements ICommand {
     private JobSchedulerService jobSchedulerService;
     private DqoSchedulerConfigurationProperties schedulerConfigurationProperties;
@@ -43,7 +44,7 @@ public class SchedulerStartCliCommand extends BaseCommand implements ICommand {
     /**
      * Creates a cli command given the dependencies.
      * @param jobSchedulerService Job scheduler dependency.
-     * @param schedulerConfigurationProperties DQO Scheduler configuration - used to get the default values.
+     * @param schedulerConfigurationProperties DQOps Scheduler configuration - used to get the default values.
      */
     @Autowired
     public SchedulerStartCliCommand(JobSchedulerService jobSchedulerService,
@@ -54,7 +55,7 @@ public class SchedulerStartCliCommand extends BaseCommand implements ICommand {
         this.checkRunMode = schedulerConfigurationProperties.getCheckRunMode();
     }
 
-    @CommandLine.Option(names = {"-sm", "--synchronization-mode"}, description = "Reporting mode for the DQO cloud synchronization (silent, summary, debug)")
+    @CommandLine.Option(names = {"-sm", "--synchronization-mode"}, description = "Reporting mode for the DQOps cloud synchronization (silent, summary, debug)")
     private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
 
     @CommandLine.Option(names = {"-crm", "--check-run-mode"}, description = "Check execution reporting mode (silent, summary, info, debug)")

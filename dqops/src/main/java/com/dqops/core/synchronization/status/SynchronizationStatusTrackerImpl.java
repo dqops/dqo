@@ -22,6 +22,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Objects;
 
 /**
@@ -30,7 +32,7 @@ import java.util.Objects;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class SynchronizationStatusTrackerImpl implements SynchronizationStatusTracker {
-    private volatile CloudSynchronizationFoldersStatusModel currentSynchronizationStatus = new CloudSynchronizationFoldersStatusModel();
+    private final HashMap<String, CloudSynchronizationFoldersStatusModel> domainSynchronizationStatus = new LinkedHashMap<>();
     private final Object lock = new Object();
     private final DqoJobQueueMonitoringService dqoJobQueueMonitoringService;
 
@@ -46,34 +48,48 @@ public class SynchronizationStatusTrackerImpl implements SynchronizationStatusTr
     /**
      * Updates the folder synchronization status.
      * @param folderRoot Folder type.
+     * @param dataDomain Data domain name.
      * @param newStatus New synchronization status.
      */
     @Override
-    public void changeFolderSynchronizationStatus(DqoRoot folderRoot, FolderSynchronizationStatus newStatus) {
+    public void changeFolderSynchronizationStatus(DqoRoot folderRoot, String dataDomain, FolderSynchronizationStatus newStatus) {
+        CloudSynchronizationFoldersStatusModel newSynchronizationStatus = null;
+
         synchronized (this.lock) {
-            FolderSynchronizationStatus currentStatus = this.currentSynchronizationStatus.getFolderStatus(folderRoot);
+            CloudSynchronizationFoldersStatusModel domainSynchronizationStatusModel = this.domainSynchronizationStatus.get(dataDomain);
+            if (domainSynchronizationStatusModel == null) {
+                domainSynchronizationStatusModel = new CloudSynchronizationFoldersStatusModel();
+                this.domainSynchronizationStatus.put(dataDomain, domainSynchronizationStatusModel);
+            }
+
+            FolderSynchronizationStatus currentStatus = domainSynchronizationStatusModel.getFolderStatus(folderRoot);
             if (Objects.equals(currentStatus, newStatus)) {
                 return; // no change
             }
 
-            CloudSynchronizationFoldersStatusModel newSynchronizationStatus = this.currentSynchronizationStatus.clone();
+            newSynchronizationStatus = domainSynchronizationStatusModel.clone();
             newSynchronizationStatus.setFolderStatus(folderRoot, newStatus);
 
-            this.currentSynchronizationStatus = newSynchronizationStatus;
-
-            // send the notification
-            this.dqoJobQueueMonitoringService.publishFolderSynchronizationStatus(newSynchronizationStatus);
+            this.domainSynchronizationStatus.put(dataDomain, newSynchronizationStatus);
         }
+
+        // send the notification
+        this.dqoJobQueueMonitoringService.publishFolderSynchronizationStatus(newSynchronizationStatus);
     }
 
     /**
-     * Returns the current folder synchronization status for each folder that is synchronized do DQO Cloud.
+     * Returns the current folder synchronization status for each folder that is synchronized do DQOps Cloud.
+     * @param dataDomain Data domain name.
      * @return Current folder synchronization status.
      */
     @Override
-    public CloudSynchronizationFoldersStatusModel getCurrentSynchronizationStatus() {
+    public CloudSynchronizationFoldersStatusModel getCurrentSynchronizationStatus(String dataDomain) {
         synchronized (this.lock) {
-            return this.currentSynchronizationStatus;
+            CloudSynchronizationFoldersStatusModel domainSynchronizationStatusModel = this.domainSynchronizationStatus.get(dataDomain);
+            if (domainSynchronizationStatusModel == null) {
+                domainSynchronizationStatusModel = new CloudSynchronizationFoldersStatusModel();
+            }
+            return domainSynchronizationStatusModel;
         }
     }
 }

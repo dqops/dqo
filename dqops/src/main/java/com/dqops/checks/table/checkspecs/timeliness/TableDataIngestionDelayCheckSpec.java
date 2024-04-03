@@ -34,8 +34,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that calculates time difference between the most recent row in the table and the most recent timestamp when the last row was loaded into the data warehouse / data lake.
- * The most recent row is identified by finding the most recent (maximum) value of the timestamp column that should contain the last modification timestamp from the source.
+ * A table-level check that calculates the time difference between the most recent row in the table and the most recent timestamp when the last row was loaded into the data warehouse or data lake.
+ * To identify the most recent row, the check finds the maximum value of the timestamp column that should contain the last modification timestamp from the source.
  * The timestamp when the row was loaded is identified by the most recent (maximum) value a timestamp column that was filled by the data pipeline, for example: "loaded_at", "updated_at", etc.
  * This check requires that the data pipeline is filling an extra column with the timestamp when the data loading job has been executed.
  * The names of both columns used for comparison should be specified in the "timestamp_columns" configuration entry on the table.

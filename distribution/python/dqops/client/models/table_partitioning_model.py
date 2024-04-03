@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -15,7 +16,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TablePartitioningModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TablePartitioningModel:
     """Table model with objects that describe the table partitioning.
 
@@ -24,13 +25,15 @@ class TablePartitioningModel:
         target (Union[Unset, PhysicalTableName]):
         timestamp_columns (Union[Unset, TimestampColumnsSpec]):
         incremental_time_window (Union[Unset, PartitionIncrementalTimeWindowSpec]):
+        can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
     """
 
     connection_name: Union[Unset, str] = UNSET
     target: Union[Unset, "PhysicalTableName"] = UNSET
     timestamp_columns: Union[Unset, "TimestampColumnsSpec"] = UNSET
     incremental_time_window: Union[Unset, "PartitionIncrementalTimeWindowSpec"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    can_edit: Union[Unset, bool] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name
@@ -46,6 +49,8 @@ class TablePartitioningModel:
         if not isinstance(self.incremental_time_window, Unset):
             incremental_time_window = self.incremental_time_window.to_dict()
 
+        can_edit = self.can_edit
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -57,6 +62,8 @@ class TablePartitioningModel:
             field_dict["timestamp_columns"] = timestamp_columns
         if incremental_time_window is not UNSET:
             field_dict["incremental_time_window"] = incremental_time_window
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
 
         return field_dict
 
@@ -94,11 +101,14 @@ class TablePartitioningModel:
                 _incremental_time_window
             )
 
+        can_edit = d.pop("can_edit", UNSET)
+
         table_partitioning_model = cls(
             connection_name=connection_name,
             target=target,
             timestamp_columns=timestamp_columns,
             incremental_time_window=incremental_time_window,
+            can_edit=can_edit,
         )
 
         table_partitioning_model.additional_properties = d

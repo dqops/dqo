@@ -32,7 +32,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures the sample standard deviation is in a set range in a monitored column.
+ * This check calculates the standard deviation of numeric values. It verifies that the standard deviation is within the range of accepted values
+ * and raises a data quality issue when it is not within a valid range.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -54,7 +55,7 @@ public class ColumnSampleStddevInRangeCheckSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private BetweenFloatsRuleParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a sample (unbiased) maximal values in range in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a sample (unbiased) maximum values in range in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private BetweenFloatsRuleParametersSpec error;

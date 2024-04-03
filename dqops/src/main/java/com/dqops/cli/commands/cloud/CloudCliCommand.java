@@ -23,14 +23,16 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * "cloud" 1st level cli command to connect and synchronize with DQO Cloud
+ * "cloud" 1st level cli command to connect and synchronize with DQOps Cloud
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "cloud", description = "Connect and synchronize the data with DQO Cloud",
+@CommandLine.Command(name = "cloud", description = "Manage the DQOps Cloud account. This group of commands supports connecting this DQOps instance to a DQOps Cloud account, " +
+        "changing the password and synchronizing local data with the Data Quality Data Warehouse hosted by DQOps Cloud",
         subcommands = {
-        CloudLoginCliCommand.class,
-        CloudSyncCliCommand.class
+            CloudLoginCliCommand.class,
+            CloudPasswordCliCommand.class,
+            CloudSyncCliCommand.class
 })
 public class CloudCliCommand extends BaseCommand {
 }

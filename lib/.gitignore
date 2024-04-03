@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### JDBC local drivers ###
+!jdbc-drivers/.*jar
+
+### DuckDB libraries download location ##
+.duckdb/

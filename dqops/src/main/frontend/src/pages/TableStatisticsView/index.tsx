@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import TableColumns from '../TableColumnsView/TableColumns';
+import moment from 'moment';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import {
   DataGroupingConfigurationSpec,
   TableColumnsStatisticsModel,
   TableStatisticsModel
 } from '../../api';
-import { AxiosResponse } from 'axios';
-import { TableApiClient } from '../../services/apiClient';
 import Loader from '../../components/Loader';
-import { useSelector } from 'react-redux';
+import { setCreatedDataStream } from '../../redux/actions/definition.actions';
 import { getFirstLevelState } from '../../redux/selectors';
-import { CheckTypes } from '../../shared/routes';
-import { useParams } from 'react-router-dom';
-import moment from 'moment';
 import { formatNumber } from '../../shared/constants';
-import { setCreatedDataStream } from '../../redux/actions/rule.actions';
+import { CheckTypes } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
+import TableColumns from '../TableColumnsView/TableColumns';
 
 export default function TableStatisticsView({
   connectionName,
@@ -23,7 +21,10 @@ export default function TableStatisticsView({
   updateData2,
   setLevelsData2,
   setNumberOfSelected2,
-  statistics
+  statistics,
+  onChangeSelectedColumns,
+  refreshListFunc,
+  rowCount
 }: {
   connectionName: string;
   schemaName: string;
@@ -32,9 +33,11 @@ export default function TableStatisticsView({
   setLevelsData2: (arg: DataGroupingConfigurationSpec) => void;
   setNumberOfSelected2: (arg: number) => void;
   statistics?: TableColumnsStatisticsModel;
+  onChangeSelectedColumns?: (columns: string[]) => void;
+  refreshListFunc: () => void;
+  rowCount: TableStatisticsModel;
 }) {
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
-  const [rowCount, setRowCount] = useState<TableStatisticsModel>();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const { loading } = useSelector(getFirstLevelState(checkTypes));
 
   const {
@@ -46,23 +49,23 @@ export default function TableStatisticsView({
     schema: string;
     table: string;
     tab: string;
-  } = useParams();
-  const fetchRows = async () => {
-    try {
-      const res: AxiosResponse<TableStatisticsModel> =
-        await TableApiClient.getTableStatistics(
-          connectionName,
-          schemaName,
-          tableName
-        );
-      setRowCount(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  useEffect(() => {
-    fetchRows();
-  }, [connectionName, schemaName, tableName]);
+  } = useDecodedParams();
+  // const fetchRows = async () => {
+  //   try {
+  //     const res: AxiosResponse<TableStatisticsModel> =
+  //       await TableApiClient.getTableStatistics(
+  //         connectionName,
+  //         schemaName,
+  //         tableName
+  //       );
+  //     setRowCount(res.data);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchRows();
+  // }, [connectionName, schemaName, tableName]);
 
   useEffect(() => {
     setNumberOfSelected(0);
@@ -101,19 +104,32 @@ export default function TableStatisticsView({
   }
 
   return (
-    <div>
-      <div className="inline-block justify-center gap-y-6 h-20 ml-4 mt-8 border border-gray-300 px-4 py-6 relative rounded">
+    <div className="text-sm">
+      <div className="inline-block justify-center gap-y-6 h-16 ml-4 mt-8 border border-gray-300 px-4 py-6 relative rounded">
         <div className="font-bold ml-3 px-2 absolute bg-white left-2 top-0 -translate-y-1/2 text-gray-700 ">
-          Table Statistics
+          Table statistics
         </div>
         <div className="flex justify-between gap-x-10">
           <div className="flex gap-x-6 ml-3">
-            <div>Total Rows</div>
+            <div>Total rows</div>
             <div>
               {rowCount &&
                 rowCount.statistics?.map((x, index) => (
                   <div key={index} className="font-bold">
                     {x.collector === 'row_count' && x.category === 'volume'
+                      ? formatNumber(Number(renderValue(x.result)))
+                      : ''}
+                  </div>
+                ))}
+            </div>
+          </div>
+          <div className="flex gap-x-6 ml-3">
+            <div>Column count</div>
+            <div>
+              {rowCount &&
+                rowCount.statistics?.map((x, index) => (
+                  <div key={index} className="font-bold">
+                    {x.collector === 'column_count'
                       ? formatNumber(Number(renderValue(x.result)))
                       : ''}
                   </div>
@@ -145,6 +161,8 @@ export default function TableStatisticsView({
         setLevelsData={setLevelsData}
         setNumberOfSelected={setNumberOfSelected}
         statistics={statistics}
+        onChangeSelectedColumns={onChangeSelectedColumns}
+        refreshListFunc={refreshListFunc}
       />
     </div>
   );

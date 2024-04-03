@@ -17,6 +17,7 @@ package com.dqops.core.synchronization.filesystems.dqocloud;
 
 import com.dqops.core.dqocloud.buckets.DqoCloudBucketAccessProvider;
 import com.dqops.core.dqocloud.buckets.DqoCloudRemoteBucket;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.SynchronizationRoot;
 import com.dqops.core.synchronization.filesystems.gcp.GSFileSystemSynchronizationRoot;
@@ -27,7 +28,7 @@ import org.springframework.stereotype.Component;
 import java.nio.file.Path;
 
 /**
- * Factory for a remote DQO Cloud file system.
+ * Factory for a remote DQOps Cloud file system.
  */
 @Component
 public class DqoCloudRemoteFileSystemServiceFactoryImpl implements DqoCloudRemoteFileSystemServiceFactory {
@@ -37,7 +38,7 @@ public class DqoCloudRemoteFileSystemServiceFactoryImpl implements DqoCloudRemot
     /**
      * Default injection constructor.
      * @param remoteFileSystemService Remote file system service for the Google Cloud.
-     * @param dqoCloudBucketAccessProvider DQO Cloud bucket access provider.
+     * @param dqoCloudBucketAccessProvider DQOps Cloud bucket access provider.
      */
     @Autowired
     public DqoCloudRemoteFileSystemServiceFactoryImpl(
@@ -48,17 +49,24 @@ public class DqoCloudRemoteFileSystemServiceFactoryImpl implements DqoCloudRemot
     }
 
     /**
-     * Creates a remote file system that accesses a remote DQO Cloud bucket to read and write the tenant's data.
+     * Creates a remote file system that accesses a remote DQOps Cloud bucket to read and write the tenant's data.
      * @param rootType Root type.
-     * @return DQO Cloud remote file system.
+     * @param userIdentity User identity.
+     * @return DQOps Cloud remote file system.
      */
-    public SynchronizationRoot createRemoteDqoCloudFSRW(DqoRoot rootType) {
-        DqoCloudRemoteBucket remoteBucketClient = this.dqoCloudBucketAccessProvider.getRemoteBucketClientRW(rootType);
+    @Override
+    public SynchronizationRoot createRemoteDqoCloudFSRW(DqoRoot rootType, UserDomainIdentity userIdentity) {
+        DqoCloudRemoteBucket remoteBucketClient = this.dqoCloudBucketAccessProvider.getRemoteBucketClientRW(rootType, userIdentity);
+        if (remoteBucketClient == null) {
+            return null;
+        }
+
         GSFileSystemSynchronizationRoot gsFileSystemRoot = new GSFileSystemSynchronizationRoot(
                 Path.of(remoteBucketClient.getObjectPrefix()),
                 remoteBucketClient.getStorage(),
                 remoteBucketClient.getBucketName(),
-                rootType);
+                rootType,
+                userIdentity);
         return new SynchronizationRoot(gsFileSystemRoot, this.remoteFileSystemService);
     }
 }

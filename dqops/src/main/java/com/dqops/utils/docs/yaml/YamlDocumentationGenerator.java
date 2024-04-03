@@ -15,7 +15,7 @@
  */
 package com.dqops.utils.docs.yaml;
 
-import com.dqops.utils.docs.HandledClassesLinkageStore;
+import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.files.DocumentationFolder;
 
 import java.nio.file.Path;
@@ -33,5 +33,5 @@ public interface YamlDocumentationGenerator {
      * @param yamlDocumentationSchema Yaml documentation schema, describing the layout of documentation for YAML.
      * @return Folder structure with rendered markdown files.
      */
-    DocumentationFolder renderYamlDocumentation(Path projectRootPath, HandledClassesLinkageStore linkageStore, List<YamlDocumentationSchemaNode> yamlDocumentationSchema);
+    DocumentationFolder renderYamlDocumentation(Path projectRootPath, LinkageStore<Class<?>> linkageStore, List<YamlDocumentationSchemaNode> yamlDocumentationSchema);
 }

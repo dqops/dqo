@@ -17,9 +17,15 @@ package com.dqops.metadata.storage.localfiles.userhome;
 
 import com.dqops.BaseTest;
 import com.dqops.core.configuration.DqoConfigurationPropertiesObjectMother;
+import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
+import com.dqops.core.configuration.DqoUserConfigurationProperties;
+import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
+import com.dqops.core.dqocloud.datadomains.CliCurrentDataDomainServiceImpl;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemFactory;
 import com.dqops.core.filesystem.localfiles.LocalFolderTreeNode;
 import com.dqops.core.filesystem.localfiles.LocalFolderTreeNodeObjectMother;
+import com.dqops.core.principal.*;
+import com.dqops.utils.logging.UserErrorLoggerImpl;
 import com.dqops.utils.serialization.JsonSerializer;
 import com.dqops.utils.serialization.JsonSerializerObjectMother;
 import com.dqops.utils.serialization.YamlSerializer;
@@ -37,12 +43,21 @@ public class UserHomeContextFactoryImplTests extends BaseTest {
     void openLocalHome_whenCalledForTestableHome_thenLoadsEmptyHome() {
         LocalFolderTreeNode localHomeFolder = LocalFolderTreeNodeObjectMother.createEmptyTemporaryUserHome(true);
         LocalFileSystemFactory factoryMock = mock(LocalFileSystemFactory.class);
-        when(factoryMock.openLocalUserHome()).thenReturn(localHomeFolder);
-        YamlSerializer yamlSerializer = new YamlSerializerImpl(DqoConfigurationPropertiesObjectMother.getDefaultCloned());
-        JsonSerializer jsonSerializer = JsonSerializerObjectMother.createNew();
-        UserHomeContextFactoryImpl sut = new UserHomeContextFactoryImpl(yamlSerializer, jsonSerializer, factoryMock);
+        DqoUserPrincipal dqoUserPrincipal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
 
-        UserHomeContext userHomeContext = sut.openLocalUserHome();
+        UserDomainIdentity userDomainIdentity = dqoUserPrincipal.getDataDomainIdentity();
+        when(factoryMock.openLocalUserHome(userDomainIdentity)).thenReturn(localHomeFolder);
+        UserErrorLoggerImpl userErrorLogger = new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties());
+        YamlSerializer yamlSerializer = new YamlSerializerImpl(DqoConfigurationPropertiesObjectMother.getDefaultCloned(), userErrorLogger);
+        JsonSerializer jsonSerializer = JsonSerializerObjectMother.createNew();
+
+        DqoUserConfigurationProperties defaultUserConfiguration = DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration();
+        UserHomeContextCacheImpl userHomeContextCache = new UserHomeContextCacheImpl(
+                new CliCurrentDataDomainServiceImpl(defaultUserConfiguration),
+                new UserDomainIdentityFactoryImpl(defaultUserConfiguration));
+        UserHomeContextFactoryImpl sut = new UserHomeContextFactoryImpl(yamlSerializer, jsonSerializer, factoryMock, userHomeContextCache);
+
+        UserHomeContext userHomeContext = sut.openLocalUserHome(userDomainIdentity);
         Assertions.assertNotNull(userHomeContext);
         Assertions.assertSame(localHomeFolder, userHomeContext.getHomeRoot());
         Assertions.assertNotNull(userHomeContext.getUserHome());

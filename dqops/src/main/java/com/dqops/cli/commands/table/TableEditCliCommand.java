@@ -59,11 +59,13 @@ public class TableEditCliCommand extends BaseCommand implements ICommand, IConne
         this.tableEditService = tableEditService;
     }
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'", completionCandidates = FullTableNameCompleter.class)
-    private String table;
-
     @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection Name", completionCandidates = ConnectionNameCompleter.class)
     private String connection;
+
+    @CommandLine.Option(names = {"-t", "--table", "--full-table-name"},
+            description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'", completionCandidates = FullTableNameCompleter.class)
+    private String table;
+
 
     /**
      * Returns the table name.

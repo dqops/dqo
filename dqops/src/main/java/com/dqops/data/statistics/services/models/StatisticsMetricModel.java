@@ -16,6 +16,9 @@
 package com.dqops.data.statistics.services.models;
 
 import com.dqops.data.statistics.factory.StatisticsResultDataType;
+import com.dqops.utils.docs.generators.SampleLongsRegistry;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -50,7 +53,7 @@ public class StatisticsMetricModel {
     private StatisticsResultDataType resultDataType;
 
     /**
-     * The metric value that was collected. It could be a string, datetime, date, double - depending on the data type.
+     * The metric value that was collected. It can be a string, datetime, date, double - depending on the data type.
      */
     @JsonPropertyDescription("Statistics result for the metric")
     private Object result;
@@ -72,4 +75,17 @@ public class StatisticsMetricModel {
      */
     @JsonPropertyDescription("The index of the result that was returned. Filled only by the column value sampling profilers to identify each column value sample.")
     private Integer sampleIndex;
+
+    public static class StatisticsMetricModelSampleFactory implements SampleValueFactory<StatisticsMetricModel> {
+        @Override
+        public StatisticsMetricModel createSample() {
+            return new StatisticsMetricModel() {{
+                setCategory(SampleStringsRegistry.getCategoryName());
+                setCollector(SampleStringsRegistry.getCollectorName());
+                setResultDataType(StatisticsResultDataType.INTEGER);
+                setResult((int)SampleLongsRegistry.getSequenceNumber() % 10_000);
+                setCollectedAt(LocalDateTime.of(2007, 10, 11, 18, 0, 0));
+            }};
+        }
+    }
 }

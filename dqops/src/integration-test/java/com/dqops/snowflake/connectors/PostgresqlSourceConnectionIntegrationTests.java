@@ -19,6 +19,7 @@ import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.connectors.*;
 import com.dqops.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
 import com.dqops.connectors.snowflake.SnowflakeSourceConnection;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
@@ -37,12 +38,15 @@ import java.util.stream.Collectors;
 public class PostgresqlSourceConnectionIntegrationTests extends BaseBigQueryIntegrationTest {
     private SnowflakeSourceConnection sut;
     private ConnectionSpec connectionSpec;
+    private SecretValueLookupContext secretValueLookupContext;
 
     @BeforeEach
     void setUp() {
         ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(ProviderType.snowflake);
-		connectionSpec = SnowflakeConnectionSpecObjectMother.create().expandAndTrim(SecretValueProviderObjectMother.getInstance());
-		this.sut = (SnowflakeSourceConnection)connectionProvider.createConnection(connectionSpec, false);
+        this.secretValueLookupContext = new SecretValueLookupContext(null);
+        connectionSpec = SnowflakeConnectionSpecObjectMother.create()
+                .expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
+		this.sut = (SnowflakeSourceConnection)connectionProvider.createConnection(connectionSpec, false, secretValueLookupContext);
     }
 
     @AfterEach
@@ -52,12 +56,12 @@ public class PostgresqlSourceConnectionIntegrationTests extends BaseBigQueryInte
 
     @Test
     void open_whenCalled_thenJustReturns() {
-		this.sut.open();
+		this.sut.open(this.secretValueLookupContext);
     }
 
     @Test
     void listSchemas_whenSchemasPresent_thenReturnsKnownSchemas() {
-		this.sut.open();
+		this.sut.open(this.secretValueLookupContext);
         List<SourceSchemaModel> schemas = this.sut.listSchemas();
 
         Assertions.assertEquals(1, schemas.size());
@@ -66,20 +70,20 @@ public class PostgresqlSourceConnectionIntegrationTests extends BaseBigQueryInte
 
     @Test
     void listTables_whenPUBLICSchemaListed_thenReturnsTables() {
-		this.sut.open();
-        List<SourceTableModel> tables = this.sut.listTables("PUBLIC");
+		this.sut.open(this.secretValueLookupContext);
+        List<SourceTableModel> tables = this.sut.listTables("PUBLIC", secretValueLookupContext);
 
         Assertions.assertTrue(tables.size() > 0);
     }
 
     @Test
     void retrieveTableMetadata_whenFirstTableInSchemaIntrospected_thenReturnsTable() {
-		this.sut.open();
-        List<SourceTableModel> tables = this.sut.listTables("PUBLIC");
+		this.sut.open(this.secretValueLookupContext);
+        List<SourceTableModel> tables = this.sut.listTables("PUBLIC", secretValueLookupContext);
         ArrayList<String> tableNames = new ArrayList<>();
         tableNames.add(tables.get(0).getTableName().getTableName());
 
-        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("PUBLIC", tableNames);
+        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("PUBLIC", tableNames, null, null);
 
         Assertions.assertEquals(1, tableSpecs.size());
         TableSpec tableSpec = tableSpecs.get(0);
@@ -88,12 +92,12 @@ public class PostgresqlSourceConnectionIntegrationTests extends BaseBigQueryInte
 
     @Test
     void retrieveTableMetadata_whenRetrievingMetadataOfAllTablesInPUBLICSchema_thenReturnsTables() {
-		this.sut.open();
-        List<SourceTableModel> tables = this.sut.listTables("PUBLIC");
+		this.sut.open(this.secretValueLookupContext);
+        List<SourceTableModel> tables = this.sut.listTables("PUBLIC", secretValueLookupContext);
         List<String> tableNames = tables.stream()
                 .map(m -> m.getTableName().getTableName())
                 .collect(Collectors.toList());
-                List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("PUBLIC", tableNames);
+                List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("PUBLIC", tableNames, null, null);
 
         Assertions.assertTrue(tableSpecs.size() > 0);
     }

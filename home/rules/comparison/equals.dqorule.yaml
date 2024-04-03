@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -11,11 +11,8 @@ spec:
     help_text: Expected value for the actual_value returned by the sensor. The sensor
       value should equal expected_value +/- the error_margin.
     data_type: double
-    sample_values:
-    - 10.0
+    required: true
   - field_name: error_margin
     display_name: error_margin
     help_text: Error margin for comparison.
     data_type: double
-    sample_values:
-    - 0.01

@@ -28,9 +28,9 @@ import java.util.Objects;
 @SpringBootTest
 public class AbstractElementWrapperTests extends BaseTest {
     @Test
-    void getStatus_whenCalledOnNewObject_thenReturnsUnchanged() {
+    void getStatus_whenCalledOnNewObject_thenReturnsNotTouched() {
         TestableElementWrapper sut = new TestableElementWrapper("abc");
-        Assertions.assertEquals(InstanceStatus.UNCHANGED, sut.getStatus());
+        Assertions.assertEquals(InstanceStatus.NOT_TOUCHED, sut.getStatus());
     }
 
     @Test
@@ -38,7 +38,7 @@ public class AbstractElementWrapperTests extends BaseTest {
         TestableElementWrapper sut = new TestableElementWrapper("abc");
         TestableSpec model = new TestableSpec("model");
         sut.setSpec(model);
-        Assertions.assertEquals(InstanceStatus.UNCHANGED, sut.getStatus());
+        Assertions.assertEquals(InstanceStatus.ADDED, sut.getStatus());
         Assertions.assertSame(model, sut.getSpec());
     }
 
@@ -50,14 +50,14 @@ public class AbstractElementWrapperTests extends BaseTest {
 
         TestableSpec newModel = new TestableSpec("newmodel");
         sut.setSpec(newModel);
-        Assertions.assertEquals(InstanceStatus.MODIFIED, sut.getStatus());
+        Assertions.assertEquals(InstanceStatus.ADDED, sut.getStatus());
         Assertions.assertSame(newModel, sut.getSpec());
     }
 
     @Test
     void markForDeletion_whenUnchanged_thenSetsStatusToBeDeleted() {
         TestableElementWrapper sut = new TestableElementWrapper("abc");
-        Assertions.assertEquals(InstanceStatus.UNCHANGED, sut.getStatus());
+        Assertions.assertEquals(InstanceStatus.NOT_TOUCHED, sut.getStatus());
         sut.markForDeletion();
         Assertions.assertEquals(InstanceStatus.TO_BE_DELETED, sut.getStatus());
     }

@@ -20,20 +20,20 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import java.time.ZoneId;
 
 /**
- * Service that returns the default time zone configured on the DQO instance.
+ * Service that returns the default time zone configured on the DQOps instance.
  */
 public interface DefaultTimeZoneProvider {
     /**
-     * Retrieves the default time zone. The time zone could be configured in the user local settings. If it is not customized, then the default time zone
-     * in the configuration file is taken. If the time zone was not customized using environment variables then the default time zone is the time zone of the local computer.
+     * Retrieves the default time zone. The time zone can be configured in the user's local settings. If it has not been customized, the default time zone
+     * in the configuration file is taken. If the time zone has not been customized using environment variables, the default time zone is the local computer's time zone.
      * @return Default Java time zone.
      */
     ZoneId getDefaultTimeZoneId();
 
     /**
-     * Retrieves the default time zone. The time zone could be configured in the user local settings. If it is not customized, then the default time zone
-     * in the configuration file is taken. If the time zone was not customized using environment variables then the default time zone is the time zone of the local computer.
-     * @param userHomeContext DQO User home context with parameters.
+     * Retrieves the default time zone. The time zone can be configured in the user's local settings. If it has not been customized, the default time zone
+     * in the configuration file is taken. If the time zone has not been customized using environment variables, the default time zone is the local computer's time zone.
+     * @param userHomeContext DQOps User home context with parameters.
      * @return Default Java time zone.
      */
     ZoneId getDefaultTimeZoneId(UserHomeContext userHomeContext);

@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -31,7 +32,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = false)
 public class JinjaTemplateRenderOutput {
     private String template;
-    private Map<String, Object> parameters = new HashMap<>();
+    private Map<String, Object> parameters = new LinkedHashMap<>();
     private String result;
     private String error;
     private Integer totalProcessingMillis;

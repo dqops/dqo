@@ -19,11 +19,11 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.comparison.MaxCountRule0ParametersSpec;
-import com.dqops.rules.comparison.MaxCountRule10ParametersSpec;
-import com.dqops.rules.comparison.MaxCountRule15ParametersSpec;
+import com.dqops.rules.comparison.*;
 import com.dqops.sensors.column.nulls.ColumnNullsNullsCountSensorParametersSpec;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -34,13 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column-level check that ensures that there are no more than a set number of null values in the monitored column.
+ * Detects incomplete columns that contain any *null* values. Counts the number of rows having a null value.
+ * Raises a data quality issue when the count of null values is above a *max_count* threshold.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnNullsCountCheckSpec
-        extends AbstractCheckSpec<ColumnNullsNullsCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule15ParametersSpec> {
+        extends AbstractCheckSpec<ColumnNullsNullsCountSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule0ErrorParametersSpec, MaxCountRule100ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,17 +55,17 @@ public class ColumnNullsCountCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec warning;
+    private MaxCountRule0WarningParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with null values in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule10ParametersSpec error;
+    private MaxCountRule0ErrorParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule15ParametersSpec fatal;
+    private MaxCountRule100ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -91,7 +92,7 @@ public class ColumnNullsCountCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxCountRule0ParametersSpec getWarning() {
+    public MaxCountRule0WarningParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -99,7 +100,7 @@ public class ColumnNullsCountCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxCountRule0ParametersSpec warning) {
+    public void setWarning(MaxCountRule0WarningParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -111,7 +112,7 @@ public class ColumnNullsCountCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxCountRule10ParametersSpec getError() {
+    public MaxCountRule0ErrorParametersSpec getError() {
         return this.error;
     }
 
@@ -119,7 +120,7 @@ public class ColumnNullsCountCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxCountRule10ParametersSpec error) {
+    public void setError(MaxCountRule0ErrorParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -131,7 +132,7 @@ public class ColumnNullsCountCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxCountRule15ParametersSpec getFatal() {
+    public MaxCountRule100ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -139,7 +140,7 @@ public class ColumnNullsCountCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxCountRule15ParametersSpec fatal) {
+    public void setFatal(MaxCountRule100ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -156,6 +157,29 @@ public class ColumnNullsCountCheckSpec
     }
 
     /**
+     * Returns an alternative check's friendly name that is shown on the check editor. It is used to show "empty table" name next to profile_row_count check.
+     *
+     * @return An alternative name, or null when the check has no alternative name to show.
+     */
+    @Override
+    @JsonIgnore
+    public String getFriendlyName() {
+        return "incomplete column";
+    }
+
+    /**
+     * Returns true if this is a standard data quality check that is always shown on the data quality checks editor screen.
+     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
+     *
+     * @return True when it is a standard check, false when it is an advanced check. The default value is 'false' (all checks are non-standard, advanced checks).
+     */
+    @Override
+    @JsonIgnore
+    public boolean isStandard() {
+        return true;
+    }
+
+    /**
      * Returns the default data quality dimension name used when an overwritten data quality dimension name was not assigned.
      *
      * @return Default data quality dimension name.
@@ -163,5 +187,15 @@ public class ColumnNullsCountCheckSpec
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Completeness;
+    }
+
+    public static class ColumnNullsCountCheckSpecSampleFactory implements SampleValueFactory<ColumnNullsCountCheckSpec> {
+        @Override
+        public ColumnNullsCountCheckSpec createSample() {
+            return new ColumnNullsCountCheckSpec() {{
+                setParameters(new ColumnNullsNullsCountSensorParametersSpec.ColumnNullsNullsCountSensorParametersSpecSampleFactory().createSample());
+                setError(new MaxCountRule0ErrorParametersSpec.MaxCountRule10ParametersSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

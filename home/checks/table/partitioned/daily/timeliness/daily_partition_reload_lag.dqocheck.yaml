@@ -1,8 +1,10 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: table/timeliness/partition_reload_lag
   rule_name: comparison/max_days
-  help_text: Daily partitioned check calculating the longest time a row waited to
-    be load
+  help_text: "Daily partitioned check calculating the longest time a row waited to\
+    \ be loaded, it is the maximum difference in days between the ingestion timestamp\
+    \ and the event timestamp column on any row in the monitored partition"
+  standard: true

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -15,7 +16,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableStatisticsModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableStatisticsModel:
     """Model that returns a summary of the table level statistics (the basic profiling results).
 
@@ -25,6 +26,8 @@ class TableStatisticsModel:
         statistics (Union[Unset, List['StatisticsMetricModel']]): List of collected table level statistics.
         collect_table_statistics_job_template (Union[Unset, StatisticsCollectorSearchFilters]):
         collect_table_and_column_statistics_job_template (Union[Unset, StatisticsCollectorSearchFilters]):
+        can_collect_statistics (Union[Unset, bool]): Boolean flag that decides if the current user can collect
+            statistics.
     """
 
     connection_name: Union[Unset, str] = UNSET
@@ -36,7 +39,8 @@ class TableStatisticsModel:
     collect_table_and_column_statistics_job_template: Union[
         Unset, "StatisticsCollectorSearchFilters"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    can_collect_statistics: Union[Unset, bool] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name
@@ -66,6 +70,8 @@ class TableStatisticsModel:
                 self.collect_table_and_column_statistics_job_template.to_dict()
             )
 
+        can_collect_statistics = self.can_collect_statistics
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -83,6 +89,8 @@ class TableStatisticsModel:
             field_dict[
                 "collect_table_and_column_statistics_job_template"
             ] = collect_table_and_column_statistics_job_template
+        if can_collect_statistics is not UNSET:
+            field_dict["can_collect_statistics"] = can_collect_statistics
 
         return field_dict
 
@@ -141,12 +149,15 @@ class TableStatisticsModel:
                 )
             )
 
+        can_collect_statistics = d.pop("can_collect_statistics", UNSET)
+
         table_statistics_model = cls(
             connection_name=connection_name,
             table=table,
             statistics=statistics,
             collect_table_statistics_job_template=collect_table_statistics_job_template,
             collect_table_and_column_statistics_job_template=collect_table_and_column_statistics_job_template,
+            can_collect_statistics=can_collect_statistics,
         )
 
         table_statistics_model.additional_properties = d

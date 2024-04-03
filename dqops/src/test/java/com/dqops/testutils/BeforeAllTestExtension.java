@@ -17,6 +17,7 @@ package com.dqops.testutils;
 
 import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.data.storage.TablesawParquetSupportFix;
+import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeCreatorObjectMother;
 import com.dqops.utils.BeanFactoryObjectMother;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
@@ -35,6 +36,7 @@ public class BeforeAllTestExtension implements BeforeAllCallback, ExtensionConte
      */
     @Override
     public void beforeAll(ExtensionContext extensionContext) throws Exception {
+        AbstractSpec.VALIDATE_FIELD_MAP_ON_WRITE = true;
         BeanFactory beanFactory = SpringExtension.getApplicationContext(extensionContext);
         BeanFactoryObjectMother.setBeanFactory(beanFactory); // let object mothers use the bean factory without propagating too many object instances
         TablesawParquetSupportFix.ensureInitialized();

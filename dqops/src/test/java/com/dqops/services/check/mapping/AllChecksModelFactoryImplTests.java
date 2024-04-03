@@ -16,10 +16,16 @@
 package com.dqops.services.check.mapping;
 
 import com.dqops.BaseTest;
+import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalObjectMother;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -54,7 +60,7 @@ public class AllChecksModelFactoryImplTests extends BaseTest {
     void setUp() {
         DefaultTimeZoneProvider defaultTimeZoneProvider = DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider();
         TriggerFactory triggerFactory = new TriggerFactoryImpl(
-                new JobDataMapAdapterImpl(JsonSerializerObjectMother.getDefault()),
+                new JobDataMapAdapterImpl(JsonSerializerObjectMother.getDefault(), DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration()),
                 defaultTimeZoneProvider);
         
         SchedulesUtilityService schedulesUtilityService = new SchedulesUtilityServiceImpl(
@@ -64,11 +70,14 @@ public class AllChecksModelFactoryImplTests extends BaseTest {
         DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         SensorDefinitionFindServiceImpl sensorDefinitionFindService = new SensorDefinitionFindServiceImpl();
+        RuleDefinitionFindServiceImpl ruleDefinitionFindService = new RuleDefinitionFindServiceImpl();
+        SimilarCheckCacheImpl similarCheckCache = new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, ruleDefinitionFindService, dqoHomeContextFactory);
         SpecToModelCheckMappingService specToModelCheckMappingService = new SpecToModelCheckMappingServiceImpl(
                 reflectionService,
                 sensorDefinitionFindService,
+                ruleDefinitionFindService,
                 schedulesUtilityService,
-                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, dqoHomeContextFactory));
+                similarCheckCache);
 
         ExecutionContextFactory executionContextFactory = new ExecutionContextFactoryImpl(
                 UserHomeContextFactoryObjectMother.createWithInMemoryContext(),
@@ -80,7 +89,8 @@ public class AllChecksModelFactoryImplTests extends BaseTest {
                 new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl()),
                 specToModelCheckMappingService);
 
-        this.executionContext = executionContextFactory.create();
+        UserDomainIdentity adminIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
+        this.executionContext = executionContextFactory.create(adminIdentity);
 
         UserHome userHome = this.executionContext.getUserHomeContext().getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
@@ -98,9 +108,10 @@ public class AllChecksModelFactoryImplTests extends BaseTest {
     @Test
     void fromCheckSearchFilters_whenConnectionNameGiven_thenCreatesFullConnectionUiModel() {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
-        checkSearchFilters.setConnectionName(this.connectionSpec.getConnectionName());
+        checkSearchFilters.setConnection(this.connectionSpec.getConnectionName());
 
-        List<AllChecksModel> allChecksModels = this.sut.fromCheckSearchFilters(checkSearchFilters);
+        DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+        List<AllChecksModel> allChecksModels = this.sut.findAllConfiguredAndPossibleChecks(checkSearchFilters, principal);
         Assertions.assertNotNull(allChecksModels);
         Assertions.assertEquals(1, allChecksModels.size());
     }

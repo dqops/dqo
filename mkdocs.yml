@@ -1,92 +1,170 @@
 site_name: DQOps Data Quality Operations Center Documentation
 site_url: https://dqops.com/docs/
 repo_url: https://github.com/dqops/dqo
-edit_uri: edit/main/docs/
+site_description: DQOps is an open-source data quality platform for data quality and DataOps teams, providing customizable data quality checks and data quality dashboards.
 
 # Docs navigation
 nav:
-  - What is DQO?: "index.md"
+  - What is DQOps?: "index.md"
+  - Documentation guide: "documentation-guide.md"
   - Getting started:
       - "getting-started/index.md"
-      - Installation: "getting-started/installation/installation.md"
-      - Connect to a data source: "getting-started/adding-data-source-connection/adding-data-source-connection.md"
-      - Run data quality checks: "getting-started/run-data-quality-checks/run-data-quality-checks.md"
-      - Review results on the dashboards: "getting-started/review-results-on-dashboards/review-results-on-dashboards.md"
-  - DQO concepts:
+      - Installation: "getting-started/installation.md"
+      - Connect to a data source: "getting-started/add-data-source-connection.md"
+      - Review initial results and run monitoring checks: "getting-started/review-results-and-run-monitoring-checks.md"
+      - Review results on the dashboards: "getting-started/review-results-on-dashboards.md"
+  - DQOps concepts:
       - "dqo-concepts/index.md"
-      - Checks:
-          - "dqo-concepts/checks/index.md"
-          - Advanced profiling: "dqo-concepts/checks/advanced-profiling/advanced-profiling.md"
-          - Recurring checks: "dqo-concepts/checks/recurring-checks/recurring-checks.md"
-          - Partition checks: "dqo-concepts/checks/partition-checks/partition-checks.md"
-      - Sensors: "dqo-concepts/sensors/sensors.md"
-      - Rules: "dqo-concepts/rules/rules.md"
-      - Data quality KPIs: "dqo-concepts/data-quality-kpis/data-quality-kpis.md"
-      - Dashboards: "dqo-concepts/data-quality-dashboards/data-quality-dashboards.md"
-      - Data quality dimensions: "dqo-concepts/data-quality-dimensions/data-quality-dimensions.md"
-      - Data grouping: "dqo-concepts/data-grouping/data-grouping.md"
-      - Data storage: "dqo-concepts/data-storage/data-storage.md"
-      - Working with YAML files: "dqo-concepts/working-with-yaml-files/working-with-yaml-files.md"
-      - Working with CLI: "dqo-concepts/working-with-cli/working-with-cli.md"
-  - Use cases:
+      - What is a data quality check:
+          - "dqo-concepts/definition-of-data-quality-checks/index.md"
+          - Data profiling checks: "dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md"
+          - Data monitoring checks: "dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md"
+          - Partition checks: "dqo-concepts/definition-of-data-quality-checks/partition-checks.md"
+      - Configuring data sources: "dqo-concepts/configuring-data-sources.md"
+      - Configuring table metadata: "dqo-concepts/configuring-table-metadata.md"
+      - Configuring data quality checks: "dqo-concepts/configuring-data-quality-checks-and-rules.md"
+      - Running data quality checks: "dqo-concepts/running-data-quality-checks.md"
+      - Data observability: "dqo-concepts/data-observability.md"
+      - DQOps user home: "dqo-concepts/dqops-user-home-folder.md"
+      - Data quality sensors: "dqo-concepts/definition-of-data-quality-sensors.md"
+      - Data quality rules: "dqo-concepts/definition-of-data-quality-rules.md"
+      - Data quality dashboards: "dqo-concepts/types-of-data-quality-dashboards.md"
+      - Data quality dimensions: "dqo-concepts/data-quality-dimensions.md"
+      - Auditing time periods: "dqo-concepts/auditing-data-quality-with-time-periods.md"
+      - Data grouping: "dqo-concepts/measuring-data-quality-with-data-grouping.md"
+      - Data quality KPIs: "dqo-concepts/definition-of-data-quality-kpis.md"
+      - Incremental data quality monitoring: "dqo-concepts/incremental-data-quality-monitoring.md"
+      - Incident management: "dqo-concepts/grouping-data-quality-issues-to-incidents.md"
+      - User interface overview: "dqo-concepts/dqops-user-interface-overview.md"
+      - Command-line interface: "dqo-concepts/command-line-interface.md"
+      - Storing data quality results: "dqo-concepts/data-storage-of-data-quality-results.md"
+      - Deployment architecture: "dqo-concepts/architecture/dqops-architecture.md"
+      - Quality check execution flow: "dqo-concepts/architecture/data-quality-check-execution-flow.md"
+  - Installation guide:
+      - "dqops-installation/index.md"
+      - Download DQOps using PIP: "dqops-installation/install-dqops-using-pip.md"
+      - Run DQOps in Docker: "dqops-installation/run-dqops-as-docker-container.md"
+      - Install DQOps from GitHub: "dqops-installation/install-dqops-from-github.md"
+      - Install DQOps from release package: "dqops-installation/install-dqops-from-release-package.md"
+  - Data sources:
+      - "data-sources/index.md"
+      - Athena: "data-sources/athena.md"
+      - BigQuery: "data-sources/bigquery.md"
+      - CSV: "data-sources/csv.md"
+      - Databricks: "data-sources/databricks.md"
+      - DuckDB: "data-sources/duckdb.md"
+      - JSON: "data-sources/json.md"
+      - MySQL: "data-sources/mysql.md"
+      - Oracle: "data-sources/oracle.md"
+      - Parquet: "data-sources/parquet.md"
+      - PostgreSQL: "data-sources/postgresql.md"
+      - Presto: "data-sources/presto.md"
+      - Redshift: "data-sources/redshift.md"
+      - SingleStoreDB: "data-sources/single-store.md"
+      - Snowflake: "data-sources/snowflake.md"
+      - Spark: "data-sources/spark.md"
+      - SQL Server: "data-sources/sql-server.md"
+      - Trino: "data-sources/trino.md"
+########## INCLUDE TYPES OF CHECKS REFERENCE - DO NOT MODIFY MANUALLY
+  - Categories of checks:
+    - 'categories-of-data-quality-checks/index.md'
+    - Accepted values: 'categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md'
+    - Anomaly detection: 'categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md'
+    - Blanks and whitespaces: 'categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md'
+    - Boolean values: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md'
+    - Comparing tables: 'categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md'
+    - Custom SQL and multi column checks: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md'
+    - Data accuracy: 'categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md'
+    - Data type conversions: 'categories-of-data-quality-checks/how-to-verify-text-values-are-parsable.md'
+    - Data type detection: 'categories-of-data-quality-checks/how-to-detect-data-type-changes.md'
+    - Data volume: 'categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md'
+    - Empty and incomplete columns: 'categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md'
+    - Invalid dates: 'categories-of-data-quality-checks/how-to-detect-invalid-dates.md'
+    - Numeric statistics: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md'
+    - PII values: 'categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md'
+    - Referential integrity: 'categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md'
+    - Table availability: 'categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md'
+    - Table schema changes: 'categories-of-data-quality-checks/how-to-detect-table-schema-changes.md'
+    - Text patterns: 'categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md'
+    - Text statistics: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md'
+    - Timeliness and freshness: 'categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md'
+    - Uniqueness and duplicates: 'categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md'
+########## END INCLUDE TYPES OF CHECKS REFERENCE
+  - Use cases and examples:
       - "examples/index.md"
       - Data accuracy:
           - Integrity check between columns in different tables: "examples/data-accuracy/integrity-check-between-columns-in-different-tables.md"
+      - Data availability:
+          - Detect table availability issues: "examples/data-availability/detect-table-availability-issues.md"
       - Data completeness:
-          - Number of rows in the table: "examples/data-completeness/number-of-rows-in-the-table.md"
-          - Number of null values: "examples/data-completeness/number-of-null-values.md"
+          - Detect incomplete columns: "examples/data-completeness/detect-null-values.md"
+          - Detect empty or incomplete tables: "examples/data-completeness/detect-empty-or-incomplete-tables.md"
+      - Data consistency:
+          - Percentage of rows having only accepted values: "examples/data-consistency/percentage-of-rows-with-a-text-found-in-set.md"
+      - Data reasonability:
+          - Percentage of false boolean values: "examples/data-reasonability/percentage-of-false-values.md"
+          - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"
+          - A text not exceeding a maximum length: "examples/data-reasonability/text-not-exceeding-a-maximum-length.md"
       - Data uniqueness:
           - Percentage of duplicates: "examples/data-uniqueness/percentage-of-duplicates.md"
       - Data validity:
-          - Percentage of valid USA zipcodes: "examples/data-validity/percentage-of-valid-usa-zipcodes.md"
-          - Percentage of valid emails: "examples/data-validity/percentage-of-valid-emails.md"
-          - Percentage of valid latitude and longitude: "examples/data-validity/percentage-of-valid-latitude-and-longitude.md"
-          - Percentage of valid IP4 address: "examples/data-validity/percentage-of-valid-IP4-address.md"
-          - Percentage of strings matching date regex: "examples/data-validity/percentage-of-strings-matching-date-regex.md"
-          - Percentage of rows passing SQL condition: "examples/data-validity/percentage-of-rows-passing-sql-condition.md"
-          - Percentage of valid currency codes: "examples/data-validity/percentage-of-valid-currency-codes.md"
+          - Detect invalid emails: "examples/data-validity/detect-invalid-emails.md"
+          - Detect invalid IP4 address: "examples/data-validity/detect-invalid-ip4-addresses.md"
           - Percentage of negative values: "examples/data-validity/percentage-of-negative-values.md"
+          - Percentage of rows passing SQL condition: "examples/data-validity/percentage-of-rows-passing-sql-condition.md"
+          - Percentage of texts matching date regex: "examples/data-validity/percentage-of-texts-matching-date-regex.md"
+          - Percentage of valid currency codes: "examples/data-validity/percentage-of-valid-currency-codes.md"
+          - Percentage of valid latitude and longitude: "examples/data-validity/percentage-of-valid-latitude-and-longitude.md"
           - Percentage of valid UUID: "examples/data-validity/percentage-of-valid-uuid.md"
-      - Data consistency:
-          - Percent of rows with string values in set: "examples/data-consistency/percent-of-string-in-set.md"
-      - Data reasonability:
-          - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"
-          - A string not exceeding a set length: "examples/data-reasonability/string-not-exceeding-a-set-length.md"
-          - Percentage of false values: "examples/data-reasonability/percentage-of-false-values.md"
-      - Stability:
-          - Table availability: "examples/stability/table-availability.md"
+          - Percentage of rows containing USA zipcodes: "examples/data-validity/percentage-of-values-that-contains-usa-zipcode.md"
+      - Schema:
+          - Detect table schema changes: "examples/schema/detect-table-schema-changes.md"
       - Data quality monitoring:
+          - Detect empty tables: "examples/data-quality-monitoring/detect-empty-tables.md"
           - Running checks with a scheduler: "examples/data-quality-monitoring/running-checks-with-a-scheduler.md"
-  - Working with DQO:
-      - Installation:
-          - Install DQO using PIP: "working-with-dqo/installation/install-dqo-using-pip.md"
-          - Install DQO from Git: "working-with-dqo/installation/install-dqo-from-git.md"
-          - Install DQO from release package: "working-with-dqo/installation/install-dqo-from-release-package.md"
-          - Run DQO as Docker container: "working-with-dqo/installation/run-dqo-as-docker-container.md"
-      - Navigating the graphical interface: "working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md"
-      - Adding connections:
-          - "working-with-dqo/adding-data-source-connection/index.md"
-          - BigQuery: "working-with-dqo/adding-data-source-connection/bigquery.md"
-          - Snowflake: "working-with-dqo/adding-data-source-connection/snowflake.md"
-          - Redshift: "working-with-dqo/adding-data-source-connection/redshift.md"
-          - PostgreSQL: "working-with-dqo/adding-data-source-connection/postgresql.md"
-          - SQL Server: "working-with-dqo/adding-data-source-connection/sql-server.md"
-          - MySQL: "working-with-dqo/adding-data-source-connection/mysql.md"
-      - Basic data statistics: "working-with-dqo/basic-data-statistics/basic-data-statistics.md"
-      - Run data quality checks: "working-with-dqo/run-data-quality-checks/run-data-quality-checks.md"
-      - Review the results of data quality monitoring on dashboards: "working-with-dqo/data-quality-dashboards/data-quality-dashboards.md"
-      - Delete data quality results: "working-with-dqo/delete-data-quality-results/delete-data-quality-results.md"
+  - Working with DQOps:
+      - "working-with-dqo/index.md"
+      - Daily monitoring of data quality: "working-with-dqo/daily-monitoring-of-data-quality.md"
+      - Basic data statistics: "working-with-dqo/collecting-basic-data-statistics.md"
+      - Running data quality checks: "working-with-dqo/run-data-quality-checks.md"
+      - Review the data quality results on dashboards: "working-with-dqo/review-the-data-quality-results-on-dashboards.md"
+      - Delete data quality results: "working-with-dqo/delete-data-quality-results.md"
       - Schedules:
-          - "working-with-dqo/schedules/index.md"
-          - Configuring the schedules by modifying the YAML files: "working-with-dqo/schedules/configuring-schedules-by-modifying-yaml-file.md"
-          - Time zone configuration: "working-with-dqo/schedules/timezone-configuration.md"
-          - Cron formatting: "working-with-dqo/schedules/cron-formatting.md"
-      - Incidents and notifications: "working-with-dqo/incidents-and-notifications/incidents-and-notifications.md"
-      - Set up data grouping: "working-with-dqo/set-up-data-grouping/set-up-data-grouping.md"
-      - Working with DQO Shell: "working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md"
+          - "working-with-dqo/configure-scheduling-of-data-quality-checks/index.md"
+          - Configuring the schedules by modifying the YAML files: "working-with-dqo/configure-scheduling-of-data-quality-checks/configuring-schedules-by-modifying-yaml-file.md"
+          - Time zone configuration: "working-with-dqo/configure-scheduling-of-data-quality-checks/timezone-configuration.md"
+          - Cron formatting: "working-with-dqo/configure-scheduling-of-data-quality-checks/cron-formatting.md"
+      - Incidents and notifications: "working-with-dqo/managing-data-quality-incidents-with-dqops.md"
+      - Activate and deactivate multiple checks: "working-with-dqo/activate-and-deactivate-multiple-checks.md"
+      - Set up data grouping: "working-with-dqo/set-up-data-grouping-for-data-quality-checks.md"
+      - Compare tables: "working-with-dqo/compare-tables-between-data-sources.md"
+      - User and access management: "working-with-dqo/access-management.md"
+      - Managing errors: "working-with-dqo/managing-errors.md"
+      - Creating custom data quality checks: "working-with-dqo/creating-custom-data-quality-checks.md"
+      - Working with DQOps Shell: "working-with-dqo/working-with-dqo-shell.md"
+#      - Working with files: "working-with-dqo/working-with-files.md" // todo: finish the page
+  - Integrations:
+      - "integrations/index.md"
+      - Airflow:
+          - Setup: "integrations/airflow/index.md"
+          - Run checks operator: "integrations/airflow/run-checks-operator.md"
+          - Collect statistics operator: "integrations/airflow/collect-statistics-operator.md"
+          - Table import operator: "integrations/airflow/table-import-operator.md"
+          - Table status operator: "integrations/airflow/table-status-operator.md"
+          - Wait for job operator: "integrations/airflow/wait-for-job-operator.md"
+          - Run checks use case: "integrations/airflow/run-checks-use-case.md"
+      - Dbt:
+          - "integrations/dbt/index.md"
+          - Dbt cloud with run checks use case: "integrations/dbt/dbt-cloud-run-checks-use-case.md"
+          - Dbt cloud with table status use case: "integrations/dbt/dbt-cloud-table-status-use-case.md"
+          - Dbt core with run checks case: "integrations/dbt/dbt-core-use-case.md"
+      - Looker Studio: "integrations/looker-studio/creating-custom-data-quality-dashboards.md"
+      - Slack: "integrations/slack/configuring-slack-notifications.md"
+      - Visual Studio Code: "integrations/visual-studio-code/index.md"
+      - Webhooks: "integrations/webhooks/index.md"
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
-    - index: 'command-line-interface/index.md'
+    - 'command-line-interface/index.md'
     - dqo: 'command-line-interface/dqo.md'
     - cls: 'command-line-interface/cls.md'
     - connection: 'command-line-interface/connection.md'
@@ -101,214 +179,322 @@ nav:
     - run: 'command-line-interface/run.md'
     - rule: 'command-line-interface/rule.md'
 ########## END INCLUDE CLI COMMANDS
+########## INCLUDE PYTHON CLIENT REFERENCE - DO NOT MODIFY MANUALLY
+  - REST API Python client:
+    - 'client/index.md'
+    - models:
+      - 'client/models/index.md'
+      - check_results: 'client/models/check_results.md'
+      - check_results_overview: 'client/models/check_results_overview.md'
+      - checks: 'client/models/checks.md'
+      - columns: 'client/models/columns.md'
+      - common: 'client/models/common.md'
+      - connections: 'client/models/connections.md'
+      - dashboards: 'client/models/dashboards.md'
+      - data_grouping_configurations: 'client/models/data_grouping_configurations.md'
+      - data_sources: 'client/models/data_sources.md'
+      - default_column_check_patterns: 'client/models/default_column_check_patterns.md'
+      - default_table_check_patterns: 'client/models/default_table_check_patterns.md'
+      - dictionaries: 'client/models/dictionaries.md'
+      - environment: 'client/models/environment.md'
+      - errors: 'client/models/errors.md'
+      - incidents: 'client/models/incidents.md'
+      - jobs: 'client/models/jobs.md'
+      - log_shipping: 'client/models/log_shipping.md'
+      - rules: 'client/models/rules.md'
+      - schemas: 'client/models/schemas.md'
+      - sensor_readouts: 'client/models/sensor_readouts.md'
+      - sensors: 'client/models/sensors.md'
+      - shared_credentials: 'client/models/shared_credentials.md'
+      - table_comparison_results: 'client/models/table_comparison_results.md'
+      - table_comparisons: 'client/models/table_comparisons.md'
+      - tables: 'client/models/tables.md'
+      - users: 'client/models/users.md'
+    - operations:
+      - 'client/operations/index.md'
+      - check_results: 'client/operations/check_results.md'
+      - check_results_overview: 'client/operations/check_results_overview.md'
+      - checks: 'client/operations/checks.md'
+      - columns: 'client/operations/columns.md'
+      - connections: 'client/operations/connections.md'
+      - dashboards: 'client/operations/dashboards.md'
+      - data_grouping_configurations: 'client/operations/data_grouping_configurations.md'
+      - data_sources: 'client/operations/data_sources.md'
+      - default_column_check_patterns: 'client/operations/default_column_check_patterns.md'
+      - default_table_check_patterns: 'client/operations/default_table_check_patterns.md'
+      - defaults: 'client/operations/defaults.md'
+      - dictionaries: 'client/operations/dictionaries.md'
+      - environment: 'client/operations/environment.md'
+      - errors: 'client/operations/errors.md'
+      - healthcheck: 'client/operations/healthcheck.md'
+      - incidents: 'client/operations/incidents.md'
+      - jobs: 'client/operations/jobs.md'
+      - log_shipping: 'client/operations/log_shipping.md'
+      - rules: 'client/operations/rules.md'
+      - schemas: 'client/operations/schemas.md'
+      - sensor_readouts: 'client/operations/sensor_readouts.md'
+      - sensors: 'client/operations/sensors.md'
+      - shared_credentials: 'client/operations/shared_credentials.md'
+      - table_comparison_results: 'client/operations/table_comparison_results.md'
+      - table_comparisons: 'client/operations/table_comparisons.md'
+      - tables: 'client/operations/tables.md'
+      - timezones: 'client/operations/timezones.md'
+      - users: 'client/operations/users.md'
+########## END INCLUDE PYTHON CLIENT REFERENCE
 ########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY
-  - Checks:
+  - Data quality checks:
+    - 'checks/index.md'
     - table:
+      - 'checks/table/index.md'
       - accuracy:
+        - 'checks/table/accuracy/index.md'
         - total row count match percent: 'checks/table/accuracy/total-row-count-match-percent.md'
       - availability:
+        - 'checks/table/availability/index.md'
         - table availability: 'checks/table/availability/table-availability.md'
       - comparisons:
+        - 'checks/table/comparisons/index.md'
         - row count match: 'checks/table/comparisons/row-count-match.md'
+        - column count match: 'checks/table/comparisons/column-count-match.md'
+      - custom_sql:
+        - 'checks/table/custom_sql/index.md'
+        - sql condition failed on table: 'checks/table/custom_sql/sql-condition-failed-on-table.md'
+        - sql condition passed percent on table: 'checks/table/custom_sql/sql-condition-passed-percent-on-table.md'
+        - sql aggregate expression on table: 'checks/table/custom_sql/sql-aggregate-expression-on-table.md'
+        - import custom result on table: 'checks/table/custom_sql/import-custom-result-on-table.md'
       - schema:
+        - 'checks/table/schema/index.md'
         - column count: 'checks/table/schema/column-count.md'
         - column count changed: 'checks/table/schema/column-count-changed.md'
         - column list changed: 'checks/table/schema/column-list-changed.md'
         - column list or order changed: 'checks/table/schema/column-list-or-order-changed.md'
         - column types changed: 'checks/table/schema/column-types-changed.md'
-      - sql:
-        - sql condition passed percent on table: 'checks/table/sql/sql-condition-passed-percent-on-table.md'
-        - sql condition failed count on table: 'checks/table/sql/sql-condition-failed-count-on-table.md'
-        - sql aggregate expr table: 'checks/table/sql/sql-aggregate-expr-table.md'
       - timeliness:
+        - 'checks/table/timeliness/index.md'
         - data freshness: 'checks/table/timeliness/data-freshness.md'
         - data staleness: 'checks/table/timeliness/data-staleness.md'
         - data ingestion delay: 'checks/table/timeliness/data-ingestion-delay.md'
         - reload lag: 'checks/table/timeliness/reload-lag.md'
       - volume:
+        - 'checks/table/volume/index.md'
         - row count: 'checks/table/volume/row-count.md'
-        - row count anomaly differencing 30 days: 'checks/table/volume/row-count-anomaly-differencing-30-days.md'
-        - row count anomaly differencing: 'checks/table/volume/row-count-anomaly-differencing.md'
+        - row count anomaly: 'checks/table/volume/row-count-anomaly.md'
         - row count change: 'checks/table/volume/row-count-change.md'
-        - row count change yesterday: 'checks/table/volume/row-count-change-yesterday.md'
+        - row count change 1 day: 'checks/table/volume/row-count-change-1-day.md'
         - row count change 7 days: 'checks/table/volume/row-count-change-7-days.md'
         - row count change 30 days: 'checks/table/volume/row-count-change-30-days.md'
-        - row count anomaly stationary 30 days: 'checks/table/volume/row-count-anomaly-stationary-30-days.md'
-        - row count anomaly stationary: 'checks/table/volume/row-count-anomaly-stationary.md'
     - column:
+      - 'checks/column/index.md'
+      - accepted_values:
+        - 'checks/column/accepted_values/index.md'
+        - text found in set percent: 'checks/column/accepted_values/text-found-in-set-percent.md'
+        - number found in set percent: 'checks/column/accepted_values/number-found-in-set-percent.md'
+        - expected text values in use count: 'checks/column/accepted_values/expected-text-values-in-use-count.md'
+        - expected texts in top values count: 'checks/column/accepted_values/expected-texts-in-top-values-count.md'
+        - expected numbers in use count: 'checks/column/accepted_values/expected-numbers-in-use-count.md'
+        - text valid country code percent: 'checks/column/accepted_values/text-valid-country-code-percent.md'
+        - text valid currency code percent: 'checks/column/accepted_values/text-valid-currency-code-percent.md'
       - accuracy:
+        - 'checks/column/accuracy/index.md'
         - total sum match percent: 'checks/column/accuracy/total-sum-match-percent.md'
         - total min match percent: 'checks/column/accuracy/total-min-match-percent.md'
         - total max match percent: 'checks/column/accuracy/total-max-match-percent.md'
         - total average match percent: 'checks/column/accuracy/total-average-match-percent.md'
         - total not null count match percent: 'checks/column/accuracy/total-not-null-count-match-percent.md'
       - anomaly:
-        - mean anomaly stationary 30 days: 'checks/column/anomaly/mean-anomaly-stationary-30-days.md'
-        - mean anomaly stationary: 'checks/column/anomaly/mean-anomaly-stationary.md'
-        - median anomaly stationary 30 days: 'checks/column/anomaly/median-anomaly-stationary-30-days.md'
-        - median anomaly stationary: 'checks/column/anomaly/median-anomaly-stationary.md'
-        - sum anomaly differencing 30 days: 'checks/column/anomaly/sum-anomaly-differencing-30-days.md'
-        - sum anomaly differencing: 'checks/column/anomaly/sum-anomaly-differencing.md'
+        - 'checks/column/anomaly/index.md'
+        - sum anomaly: 'checks/column/anomaly/sum-anomaly.md'
+        - mean anomaly: 'checks/column/anomaly/mean-anomaly.md'
+        - median anomaly: 'checks/column/anomaly/median-anomaly.md'
+        - min anomaly: 'checks/column/anomaly/min-anomaly.md'
+        - max anomaly: 'checks/column/anomaly/max-anomaly.md'
         - mean change: 'checks/column/anomaly/mean-change.md'
-        - mean change yesterday: 'checks/column/anomaly/mean-change-yesterday.md'
+        - mean change 1 day: 'checks/column/anomaly/mean-change-1-day.md'
         - mean change 7 days: 'checks/column/anomaly/mean-change-7-days.md'
         - mean change 30 days: 'checks/column/anomaly/mean-change-30-days.md'
         - median change: 'checks/column/anomaly/median-change.md'
-        - median change yesterday: 'checks/column/anomaly/median-change-yesterday.md'
+        - median change 1 day: 'checks/column/anomaly/median-change-1-day.md'
         - median change 7 days: 'checks/column/anomaly/median-change-7-days.md'
         - median change 30 days: 'checks/column/anomaly/median-change-30-days.md'
         - sum change: 'checks/column/anomaly/sum-change.md'
-        - sum change yesterday: 'checks/column/anomaly/sum-change-yesterday.md'
+        - sum change 1 day: 'checks/column/anomaly/sum-change-1-day.md'
         - sum change 7 days: 'checks/column/anomaly/sum-change-7-days.md'
         - sum change 30 days: 'checks/column/anomaly/sum-change-30-days.md'
-        - sum anomaly stationary 30 days: 'checks/column/anomaly/sum-anomaly-stationary-30-days.md'
-        - sum anomaly stationary: 'checks/column/anomaly/sum-anomaly-stationary.md'
       - bool:
+        - 'checks/column/bool/index.md'
         - true percent: 'checks/column/bool/true-percent.md'
         - false percent: 'checks/column/bool/false-percent.md'
       - comparisons:
+        - 'checks/column/comparisons/index.md'
         - sum match: 'checks/column/comparisons/sum-match.md'
         - min match: 'checks/column/comparisons/min-match.md'
         - max match: 'checks/column/comparisons/max-match.md'
         - mean match: 'checks/column/comparisons/mean-match.md'
         - not null count match: 'checks/column/comparisons/not-null-count-match.md'
         - null count match: 'checks/column/comparisons/null-count-match.md'
+      - conversions:
+        - 'checks/column/conversions/index.md'
+        - text parsable to boolean percent: 'checks/column/conversions/text-parsable-to-boolean-percent.md'
+        - text parsable to integer percent: 'checks/column/conversions/text-parsable-to-integer-percent.md'
+        - text parsable to float percent: 'checks/column/conversions/text-parsable-to-float-percent.md'
+        - text parsable to date percent: 'checks/column/conversions/text-parsable-to-date-percent.md'
+      - custom_sql:
+        - 'checks/column/custom_sql/index.md'
+        - sql condition failed on column: 'checks/column/custom_sql/sql-condition-failed-on-column.md'
+        - sql condition passed percent on column: 'checks/column/custom_sql/sql-condition-passed-percent-on-column.md'
+        - sql aggregate expression on column: 'checks/column/custom_sql/sql-aggregate-expression-on-column.md'
+        - import custom result on column: 'checks/column/custom_sql/import-custom-result-on-column.md'
       - datatype:
-        - date match format percent: 'checks/column/datatype/date-match-format-percent.md'
-        - string datatype changed: 'checks/column/datatype/string-datatype-changed.md'
+        - 'checks/column/datatype/index.md'
+        - detected datatype in text: 'checks/column/datatype/detected-datatype-in-text.md'
+        - detected datatype in text changed: 'checks/column/datatype/detected-datatype-in-text-changed.md'
       - datetime:
+        - 'checks/column/datetime/index.md'
         - date values in future percent: 'checks/column/datetime/date-values-in-future-percent.md'
-        - datetime value in range date percent: 'checks/column/datetime/datetime-value-in-range-date-percent.md'
+        - date in range percent: 'checks/column/datetime/date-in-range-percent.md'
+        - text match date format percent: 'checks/column/datetime/text-match-date-format-percent.md'
       - integrity:
-        - foreign key not match count: 'checks/column/integrity/foreign-key-not-match-count.md'
-        - foreign key match percent: 'checks/column/integrity/foreign-key-match-percent.md'
+        - 'checks/column/integrity/index.md'
+        - lookup key not found: 'checks/column/integrity/lookup-key-not-found.md'
+        - lookup key found percent: 'checks/column/integrity/lookup-key-found-percent.md'
       - nulls:
+        - 'checks/column/nulls/index.md'
         - nulls count: 'checks/column/nulls/nulls-count.md'
         - nulls percent: 'checks/column/nulls/nulls-percent.md'
-        - nulls percent anomaly stationary 30 days: 'checks/column/nulls/nulls-percent-anomaly-stationary-30-days.md'
-        - nulls percent anomaly stationary: 'checks/column/nulls/nulls-percent-anomaly-stationary.md'
-        - nulls percent change: 'checks/column/nulls/nulls-percent-change.md'
-        - nulls percent change yesterday: 'checks/column/nulls/nulls-percent-change-yesterday.md'
-        - nulls percent change 7 days: 'checks/column/nulls/nulls-percent-change-7-days.md'
-        - nulls percent change 30 days: 'checks/column/nulls/nulls-percent-change-30-days.md'
+        - nulls percent anomaly: 'checks/column/nulls/nulls-percent-anomaly.md'
         - not nulls count: 'checks/column/nulls/not-nulls-count.md'
         - not nulls percent: 'checks/column/nulls/not-nulls-percent.md'
+        - nulls percent change: 'checks/column/nulls/nulls-percent-change.md'
+        - nulls percent change 1 day: 'checks/column/nulls/nulls-percent-change-1-day.md'
+        - nulls percent change 7 days: 'checks/column/nulls/nulls-percent-change-7-days.md'
+        - nulls percent change 30 days: 'checks/column/nulls/nulls-percent-change-30-days.md'
       - numeric:
-        - negative count: 'checks/column/numeric/negative-count.md'
-        - negative percent: 'checks/column/numeric/negative-percent.md'
-        - non negative count: 'checks/column/numeric/non-negative-count.md'
-        - non negative percent: 'checks/column/numeric/non-negative-percent.md'
-        - expected numbers in use count: 'checks/column/numeric/expected-numbers-in-use-count.md'
-        - number value in set percent: 'checks/column/numeric/number-value-in-set-percent.md'
-        - values in range numeric percent: 'checks/column/numeric/values-in-range-numeric-percent.md'
-        - values in range integers percent: 'checks/column/numeric/values-in-range-integers-percent.md'
-        - value below min value count: 'checks/column/numeric/value-below-min-value-count.md'
-        - value below min value percent: 'checks/column/numeric/value-below-min-value-percent.md'
-        - value above max value count: 'checks/column/numeric/value-above-max-value-count.md'
-        - value above max value percent: 'checks/column/numeric/value-above-max-value-percent.md'
-        - max in range: 'checks/column/numeric/max-in-range.md'
+        - 'checks/column/numeric/index.md'
+        - number below min value: 'checks/column/numeric/number-below-min-value.md'
+        - number above max value: 'checks/column/numeric/number-above-max-value.md'
+        - negative values: 'checks/column/numeric/negative-values.md'
+        - negative values percent: 'checks/column/numeric/negative-values-percent.md'
+        - number below min value percent: 'checks/column/numeric/number-below-min-value-percent.md'
+        - number above max value percent: 'checks/column/numeric/number-above-max-value-percent.md'
+        - number in range percent: 'checks/column/numeric/number-in-range-percent.md'
+        - integer in range percent: 'checks/column/numeric/integer-in-range-percent.md'
         - min in range: 'checks/column/numeric/min-in-range.md'
+        - max in range: 'checks/column/numeric/max-in-range.md'
+        - sum in range: 'checks/column/numeric/sum-in-range.md'
         - mean in range: 'checks/column/numeric/mean-in-range.md'
+        - median in range: 'checks/column/numeric/median-in-range.md'
         - percentile in range: 'checks/column/numeric/percentile-in-range.md'
+        - percentile 10 in range: 'checks/column/numeric/percentile-10-in-range.md'
+        - percentile 25 in range: 'checks/column/numeric/percentile-25-in-range.md'
+        - percentile 75 in range: 'checks/column/numeric/percentile-75-in-range.md'
+        - percentile 90 in range: 'checks/column/numeric/percentile-90-in-range.md'
         - sample stddev in range: 'checks/column/numeric/sample-stddev-in-range.md'
         - population stddev in range: 'checks/column/numeric/population-stddev-in-range.md'
         - sample variance in range: 'checks/column/numeric/sample-variance-in-range.md'
         - population variance in range: 'checks/column/numeric/population-variance-in-range.md'
-        - sum in range: 'checks/column/numeric/sum-in-range.md'
-        - invalid latitude count: 'checks/column/numeric/invalid-latitude-count.md'
+        - invalid latitude: 'checks/column/numeric/invalid-latitude.md'
         - valid latitude percent: 'checks/column/numeric/valid-latitude-percent.md'
-        - invalid longitude count: 'checks/column/numeric/invalid-longitude-count.md'
+        - invalid longitude: 'checks/column/numeric/invalid-longitude.md'
         - valid longitude percent: 'checks/column/numeric/valid-longitude-percent.md'
+        - non negative values: 'checks/column/numeric/non-negative-values.md'
+        - non negative values percent: 'checks/column/numeric/non-negative-values-percent.md'
+      - patterns:
+        - 'checks/column/patterns/index.md'
+        - text not matching regex found: 'checks/column/patterns/text-not-matching-regex-found.md'
+        - texts matching regex percent: 'checks/column/patterns/texts-matching-regex-percent.md'
+        - invalid email format found: 'checks/column/patterns/invalid-email-format-found.md'
+        - text not matching date pattern found: 'checks/column/patterns/text-not-matching-date-pattern-found.md'
+        - text matching date pattern percent: 'checks/column/patterns/text-matching-date-pattern-percent.md'
+        - text matching name pattern percent: 'checks/column/patterns/text-matching-name-pattern-percent.md'
+        - invalid uuid format found: 'checks/column/patterns/invalid-uuid-format-found.md'
+        - valid uuid format percent: 'checks/column/patterns/valid-uuid-format-percent.md'
+        - invalid ip4 address format found: 'checks/column/patterns/invalid-ip4-address-format-found.md'
+        - invalid ip6 address format found: 'checks/column/patterns/invalid-ip6-address-format-found.md'
       - pii:
-        - valid usa phone percent: 'checks/column/pii/valid-usa-phone-percent.md'
+        - 'checks/column/pii/index.md'
         - contains usa phone percent: 'checks/column/pii/contains-usa-phone-percent.md'
-        - valid usa zipcode percent: 'checks/column/pii/valid-usa-zipcode-percent.md'
-        - contains usa zipcode percent: 'checks/column/pii/contains-usa-zipcode-percent.md'
-        - valid email percent: 'checks/column/pii/valid-email-percent.md'
         - contains email percent: 'checks/column/pii/contains-email-percent.md'
-        - valid ip4 address percent: 'checks/column/pii/valid-ip4-address-percent.md'
+        - contains usa zipcode percent: 'checks/column/pii/contains-usa-zipcode-percent.md'
         - contains ip4 percent: 'checks/column/pii/contains-ip4-percent.md'
-        - valid ip6 address percent: 'checks/column/pii/valid-ip6-address-percent.md'
         - contains ip6 percent: 'checks/column/pii/contains-ip6-percent.md'
       - schema:
+        - 'checks/column/schema/index.md'
         - column exists: 'checks/column/schema/column-exists.md'
         - column type changed: 'checks/column/schema/column-type-changed.md'
-      - sql:
-        - sql condition passed percent on column: 'checks/column/sql/sql-condition-passed-percent-on-column.md'
-        - sql condition failed count on column: 'checks/column/sql/sql-condition-failed-count-on-column.md'
-        - sql aggregate expr column: 'checks/column/sql/sql-aggregate-expr-column.md'
-      - strings:
-        - string max length: 'checks/column/strings/string-max-length.md'
-        - string min length: 'checks/column/strings/string-min-length.md'
-        - string mean length: 'checks/column/strings/string-mean-length.md'
-        - string length below min length count: 'checks/column/strings/string-length-below-min-length-count.md'
-        - string length below min length percent: 'checks/column/strings/string-length-below-min-length-percent.md'
-        - string length above max length count: 'checks/column/strings/string-length-above-max-length-count.md'
-        - string length above max length percent: 'checks/column/strings/string-length-above-max-length-percent.md'
-        - string length in range percent: 'checks/column/strings/string-length-in-range-percent.md'
-        - string empty count: 'checks/column/strings/string-empty-count.md'
-        - string empty percent: 'checks/column/strings/string-empty-percent.md'
-        - string whitespace count: 'checks/column/strings/string-whitespace-count.md'
-        - string whitespace percent: 'checks/column/strings/string-whitespace-percent.md'
-        - string surrounded by whitespace count: 'checks/column/strings/string-surrounded-by-whitespace-count.md'
-        - string surrounded by whitespace percent: 'checks/column/strings/string-surrounded-by-whitespace-percent.md'
-        - string null placeholder count: 'checks/column/strings/string-null-placeholder-count.md'
-        - string null placeholder percent: 'checks/column/strings/string-null-placeholder-percent.md'
-        - string boolean placeholder percent: 'checks/column/strings/string-boolean-placeholder-percent.md'
-        - string parsable to integer percent: 'checks/column/strings/string-parsable-to-integer-percent.md'
-        - string parsable to float percent: 'checks/column/strings/string-parsable-to-float-percent.md'
-        - expected strings in use count: 'checks/column/strings/expected-strings-in-use-count.md'
-        - string value in set percent: 'checks/column/strings/string-value-in-set-percent.md'
-        - string valid dates percent: 'checks/column/strings/string-valid-dates-percent.md'
-        - string valid country code percent: 'checks/column/strings/string-valid-country-code-percent.md'
-        - string valid currency code percent: 'checks/column/strings/string-valid-currency-code-percent.md'
-        - string invalid email count: 'checks/column/strings/string-invalid-email-count.md'
-        - string invalid uuid count: 'checks/column/strings/string-invalid-uuid-count.md'
-        - string valid uuid percent: 'checks/column/strings/string-valid-uuid-percent.md'
-        - string invalid ip4 address count: 'checks/column/strings/string-invalid-ip4-address-count.md'
-        - string invalid ip6 address count: 'checks/column/strings/string-invalid-ip6-address-count.md'
-        - string not match regex count: 'checks/column/strings/string-not-match-regex-count.md'
-        - string match regex percent: 'checks/column/strings/string-match-regex-percent.md'
-        - string not match date regex count: 'checks/column/strings/string-not-match-date-regex-count.md'
-        - string match date regex percent: 'checks/column/strings/string-match-date-regex-percent.md'
-        - string match name regex percent: 'checks/column/strings/string-match-name-regex-percent.md'
-        - expected strings in top values count: 'checks/column/strings/expected-strings-in-top-values-count.md'
-        - string datatype detected: 'checks/column/strings/string-datatype-detected.md'
+      - text:
+        - 'checks/column/text/index.md'
+        - text min length: 'checks/column/text/text-min-length.md'
+        - text max length: 'checks/column/text/text-max-length.md'
+        - text mean length: 'checks/column/text/text-mean-length.md'
+        - text length below min length: 'checks/column/text/text-length-below-min-length.md'
+        - text length below min length percent: 'checks/column/text/text-length-below-min-length-percent.md'
+        - text length above max length: 'checks/column/text/text-length-above-max-length.md'
+        - text length above max length percent: 'checks/column/text/text-length-above-max-length-percent.md'
+        - text length in range percent: 'checks/column/text/text-length-in-range-percent.md'
       - uniqueness:
+        - 'checks/column/uniqueness/index.md'
         - distinct count: 'checks/column/uniqueness/distinct-count.md'
         - distinct percent: 'checks/column/uniqueness/distinct-percent.md'
         - duplicate count: 'checks/column/uniqueness/duplicate-count.md'
         - duplicate percent: 'checks/column/uniqueness/duplicate-percent.md'
-    - index: 'checks/index.md'
+        - distinct count anomaly: 'checks/column/uniqueness/distinct-count-anomaly.md'
+        - distinct percent anomaly: 'checks/column/uniqueness/distinct-percent-anomaly.md'
+        - distinct count change: 'checks/column/uniqueness/distinct-count-change.md'
+        - distinct count change 1 day: 'checks/column/uniqueness/distinct-count-change-1-day.md'
+        - distinct count change 7 days: 'checks/column/uniqueness/distinct-count-change-7-days.md'
+        - distinct count change 30 days: 'checks/column/uniqueness/distinct-count-change-30-days.md'
+        - distinct percent change: 'checks/column/uniqueness/distinct-percent-change.md'
+        - distinct percent change 1 day: 'checks/column/uniqueness/distinct-percent-change-1-day.md'
+        - distinct percent change 7 days: 'checks/column/uniqueness/distinct-percent-change-7-days.md'
+        - distinct percent change 30 days: 'checks/column/uniqueness/distinct-percent-change-30-days.md'
+      - whitespace:
+        - 'checks/column/whitespace/index.md'
+        - empty text found: 'checks/column/whitespace/empty-text-found.md'
+        - whitespace text found: 'checks/column/whitespace/whitespace-text-found.md'
+        - null placeholder text found: 'checks/column/whitespace/null-placeholder-text-found.md'
+        - empty text percent: 'checks/column/whitespace/empty-text-percent.md'
+        - whitespace text percent: 'checks/column/whitespace/whitespace-text-percent.md'
+        - null placeholder text percent: 'checks/column/whitespace/null-placeholder-text-percent.md'
+        - text surrounded by whitespace found: 'checks/column/whitespace/text-surrounded-by-whitespace-found.md'
+        - text surrounded by whitespace percent: 'checks/column/whitespace/text-surrounded-by-whitespace-percent.md'
 ########## END INCLUDE CHECK REFERENCE
   - Reference:
+    - 'reference/index.md'
 ########## INCLUDE SENSOR REFERENCE - DO NOT MODIFY MANUALLY
-    - Sensors:
+    - Data quality sensors:
+      - 'reference/sensors/index.md'
       - table:
+        - 'reference/sensors/table/index.md'
         - accuracy table sensors: 'reference/sensors/table/accuracy-table-sensors.md'
         - availability table sensors: 'reference/sensors/table/availability-table-sensors.md'
+        - custom_sql table sensors: 'reference/sensors/table/custom_sql-table-sensors.md'
         - schema table sensors: 'reference/sensors/table/schema-table-sensors.md'
-        - sql table sensors: 'reference/sensors/table/sql-table-sensors.md'
         - timeliness table sensors: 'reference/sensors/table/timeliness-table-sensors.md'
         - volume table sensors: 'reference/sensors/table/volume-table-sensors.md'
       - column:
+        - 'reference/sensors/column/index.md'
+        - accepted_values column sensors: 'reference/sensors/column/accepted_values-column-sensors.md'
         - accuracy column sensors: 'reference/sensors/column/accuracy-column-sensors.md'
         - bool column sensors: 'reference/sensors/column/bool-column-sensors.md'
+        - conversions column sensors: 'reference/sensors/column/conversions-column-sensors.md'
+        - custom_sql column sensors: 'reference/sensors/column/custom_sql-column-sensors.md'
         - datatype column sensors: 'reference/sensors/column/datatype-column-sensors.md'
         - datetime column sensors: 'reference/sensors/column/datetime-column-sensors.md'
         - integrity column sensors: 'reference/sensors/column/integrity-column-sensors.md'
         - nulls column sensors: 'reference/sensors/column/nulls-column-sensors.md'
         - numeric column sensors: 'reference/sensors/column/numeric-column-sensors.md'
+        - patterns column sensors: 'reference/sensors/column/patterns-column-sensors.md'
         - pii column sensors: 'reference/sensors/column/pii-column-sensors.md'
         - range column sensors: 'reference/sensors/column/range-column-sensors.md'
         - sampling column sensors: 'reference/sensors/column/sampling-column-sensors.md'
         - schema column sensors: 'reference/sensors/column/schema-column-sensors.md'
-        - sql column sensors: 'reference/sensors/column/sql-column-sensors.md'
-        - strings column sensors: 'reference/sensors/column/strings-column-sensors.md'
+        - text column sensors: 'reference/sensors/column/text-column-sensors.md'
         - uniqueness column sensors: 'reference/sensors/column/uniqueness-column-sensors.md'
+        - whitespace column sensors: 'reference/sensors/column/whitespace-column-sensors.md'
 ########## END INCLUDE SENSOR REFERENCE
 ########## INCLUDE RULE REFERENCE - DO NOT MODIFY MANUALLY
-    - Rules:
+    - Data quality rules:
+      - 'reference/rules/index.md'
       - Averages: 'reference/rules/Averages.md'
       - Change: 'reference/rules/Change.md'
       - Comparison: 'reference/rules/Comparison.md'
@@ -316,31 +502,41 @@ nav:
       - Stdev: 'reference/rules/Stdev.md'
 ########## END INCLUDE RULE REFERENCE
 ########## INCLUDE YAML REFERENCE - DO NOT MODIFY MANUALLY
-    - Yaml:
+    - DQOps YAML files schema:
+      - 'reference/yaml/index.md'
       - profiling:
+        - 'reference/yaml/profiling/index.md'
         - table profiling checks: 'reference/yaml/profiling/table-profiling-checks.md'
         - column profiling checks: 'reference/yaml/profiling/column-profiling-checks.md'
-      - recurring:
-        - table daily recurring checks: 'reference/yaml/recurring/table-daily-recurring-checks.md'
-        - table monthly recurring checks: 'reference/yaml/recurring/table-monthly-recurring-checks.md'
-        - column daily recurring checks: 'reference/yaml/recurring/column-daily-recurring-checks.md'
-        - column monthly recurring checks: 'reference/yaml/recurring/column-monthly-recurring-checks.md'
+      - monitoring:
+        - 'reference/yaml/monitoring/index.md'
+        - table daily monitoring checks: 'reference/yaml/monitoring/table-daily-monitoring-checks.md'
+        - table monthly monitoring checks: 'reference/yaml/monitoring/table-monthly-monitoring-checks.md'
+        - column daily monitoring checks: 'reference/yaml/monitoring/column-daily-monitoring-checks.md'
+        - column monthly monitoring checks: 'reference/yaml/monitoring/column-monthly-monitoring-checks.md'
       - partitioned:
+        - 'reference/yaml/partitioned/index.md'
         - table daily partitioned checks: 'reference/yaml/partitioned/table-daily-partitioned-checks.md'
         - table monthly partitioned checks: 'reference/yaml/partitioned/table-monthly-partitioned-checks.md'
         - column daily partitioned checks: 'reference/yaml/partitioned/column-daily-partitioned-checks.md'
         - column monthly partitioned checks: 'reference/yaml/partitioned/column-monthly-partitioned-checks.md'
       - ConnectionYaml: 'reference/yaml/ConnectionYaml.md'
+      - TableYaml: 'reference/yaml/TableYaml.md'
       - DashboardYaml: 'reference/yaml/DashboardYaml.md'
+      - SensorDefinitionYaml: 'reference/yaml/SensorDefinitionYaml.md'
       - ProviderSensorYaml: 'reference/yaml/ProviderSensorYaml.md'
       - RuleDefinitionYaml: 'reference/yaml/RuleDefinitionYaml.md'
-      - SensorDefinitionYaml: 'reference/yaml/SensorDefinitionYaml.md'
-      - SettingsYaml: 'reference/yaml/SettingsYaml.md'
-      - TableYaml: 'reference/yaml/TableYaml.md'
+      - CheckDefinitionYaml: 'reference/yaml/CheckDefinitionYaml.md'
+      - DefaultNotificationsYaml: 'reference/yaml/DefaultNotificationsYaml.md'
+      - TableDefaultChecksPatternYaml: 'reference/yaml/TableDefaultChecksPatternYaml.md'
+      - ColumnDefaultChecksPatternYaml: 'reference/yaml/ColumnDefaultChecksPatternYaml.md'
+      - DefaultSchedulesYaml: 'reference/yaml/DefaultSchedulesYaml.md'
+      - LocalSettingsYaml: 'reference/yaml/LocalSettingsYaml.md'
       - IncidentNotificationMessage: 'reference/yaml/IncidentNotificationMessage.md'
 ########## END INCLUDE YAML REFERENCE
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
-    - ParquetFiles:
+    - Parquet data files:
+      - 'reference/parquetfiles/index.md'
       - check_results: 'reference/parquetfiles/check_results.md'
       - errors: 'reference/parquetfiles/errors.md'
       - incidents: 'reference/parquetfiles/incidents.md'
@@ -349,19 +545,24 @@ nav:
 ########## END INCLUDE PARQUET FILES REFERENCE
 extra_css:
   - stylesheets/extra.css
-# Visual settings
+extra_javascript:
+  - javascripts/lazyload.min.js
+  # Visual settings
 theme:
   name: material
   custom_dir: docs
   features:
     - navigation.indexes
     - navigation.footer
+    - navigation.instant
+    - navigation.tracking
+    - navigation.prune
     - content.tabs.link
     - content.code.copy
     - content.code.annotate
-    - content.action.edit
   logo: images/logo.svg
   favicon: images/favicon.ico
+  language: en
   icon:
     repo: fontawesome/brands/github
   palette:
@@ -381,7 +582,21 @@ theme:
         name: Switch to light mode
   font: false
 # Disable search, the index is too big
-plugins: []
+plugins:
+  - glightbox:
+      skip_classes:
+        - glightbox-ignored-image
+  - meta-descriptions:
+      export_csv: false
+      quiet: true
+      enable_checks: true
+      min_length: 50
+      max_length: 160
+      trim: true
+  - group:
+      enabled: !ENV ENABLE_SEARCH
+      plugins:
+        - search
 # Markdown extensions
 markdown_extensions:
   - pymdownx.snippets
@@ -395,24 +610,20 @@ markdown_extensions:
   - pymdownx.details
   - attr_list
   - md_in_html
+  - def_list
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - meta
 extra:
   analytics:
     provider: google
     property: G-9W3BYMXFK5
-  consent:
-    title: Cookie consent
-    description: >-
-      We use cookies to recognize repeat visits and user preferences, as well
-      as to measure the effectiveness of our documentation and whether users
-      find what they are looking for. With your consent, you help us improve our documentation.
   homepage: https://dqops.com/
   generator: false
   social:
@@ -426,4 +637,4 @@ extra:
       link: https://hub.docker.com/r/dqops/dqo
     - icon: fontawesome/brands/facebook
       link: https://www.facebook.com/dqops
-copyright: Copyright &copy; 2021 - 2023 DQOps
+copyright: Copyright &copy; 2021 - 2024 DQOps by Documati

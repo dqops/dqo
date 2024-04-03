@@ -16,6 +16,8 @@
 package com.dqops.utils.docs.checks;
 
 import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.utils.docs.rules.RuleDocumentationModel;
+import com.dqops.utils.docs.sensors.SensorDocumentationModel;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -37,9 +39,19 @@ public class CheckDocumentationModel {
     private String checkHelp;
 
     /**
+     * The check target: table or column.
+     */
+    private String target;
+
+    /**
      * Check category.
      */
     private String category;
+
+    /**
+     * The name of the markdown file with the documentation of the category.
+     */
+    private String categoryPageName;
 
     /**
      * Check name inside the category.
@@ -52,9 +64,34 @@ public class CheckDocumentationModel {
     private String checkType;
 
     /**
+     * The name of the page with the check concept.
+     */
+    private String checkTypeConceptPage;
+
+    /**
      * Check time scale (daily, monthly, or empty).
      */
     private String timeScale;
+
+    /**
+     * Sensor documentation model.
+     */
+    private SensorDocumentationModel sensor;
+
+    /**
+     * Rule documentation model.
+     */
+    private RuleDocumentationModel rule;
+
+    /**
+     * The check is standard or advanced.
+     */
+    private boolean standard;
+
+    /**
+     * Check quality dimension (Availability, Consistency, etc.).
+     */
+    private String qualityDimension;
 
     /**
      * Check model with all remaining documentation.
@@ -120,19 +157,4 @@ public class CheckDocumentationModel {
      * Examples how the SQL for the sensor would be rendered for each template, when the sample yaml is used and data streams are enabled.
      */
     private List<CheckProviderRenderedSqlDocumentationModel> providerTemplatesDataStreams = new ArrayList<>();
-
-    /**
-     * CLI line with precise parameters to run this check on all tables within a connection.
-     */
-    private String runOnConnectionCliCommand;
-
-    /**
-     * CLI line with precise parameters to run this check on a selected table.
-     */
-    private String runOnTableCliCommand;
-
-    /**
-     * CLI line with precise parameters to run this check on a selected column.
-     */
-    private String runOnColumnCliCommand;
 }

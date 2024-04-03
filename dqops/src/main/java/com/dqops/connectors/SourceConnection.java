@@ -16,7 +16,9 @@
 package com.dqops.connectors;
 
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableSpec;
 import tech.tablesaw.api.Table;
 
@@ -35,8 +37,9 @@ public interface SourceConnection extends Closeable {
 
     /**
      * Opens a connection before it can be used for executing any statements.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      */
-    void open();
+    void open(SecretValueLookupContext secretValueLookupContext);
 
     /**
      * Closes a connection.
@@ -54,7 +57,7 @@ public interface SourceConnection extends Closeable {
      * @param schemaName Schema name.
      * @return List of tables in the given schema.
      */
-    List<SourceTableModel> listTables(String schemaName);
+    List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext);
 
     /**
      * Retrieves the metadata (column information) for a given list of tables from a given schema.
@@ -62,7 +65,7 @@ public interface SourceConnection extends Closeable {
      * @param tableNames Table names.
      * @return List of table specifications with the column list which pass the filters.
      */
-    List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames);
+    List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames, ConnectionWrapper connectionWrapper, SecretValueLookupContext secretValueLookupContext);
 
     /**
      * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
@@ -98,4 +101,10 @@ public interface SourceConnection extends Closeable {
      * @param data Dataset with the expected data.
      */
     void loadData(TableSpec tableSpec, Table data);
+
+    /**
+     * Drops a target table following the table specification.
+     * @param tableSpec Table specification with the physical table name, column names and physical column data types.
+     */
+    void dropTable(TableSpec tableSpec);
 }

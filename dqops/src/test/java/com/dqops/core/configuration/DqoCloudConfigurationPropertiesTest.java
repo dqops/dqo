@@ -35,6 +35,6 @@ public class DqoCloudConfigurationPropertiesTest extends BaseTest {
     void getApiKeyRequestUrl_whenRetrieved_thenReturnsUrl() {
         String loginUrl = this.sut.getApiKeyRequestUrl();
         Assertions.assertNotNull(loginUrl);
-        Assertions.assertEquals("https://cloud.dqo.ai/requestapikey/", loginUrl);
+        Assertions.assertEquals("https://cloud.dqops.com/requestapikey/", loginUrl);
     }
 }

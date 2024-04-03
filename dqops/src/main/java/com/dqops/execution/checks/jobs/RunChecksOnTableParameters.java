@@ -24,6 +24,8 @@ import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.EqualsAndHashCode;
 
@@ -33,6 +35,7 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(value = "RunChecksOnTableParameters", description = "Run checks configuration for a job that will run checks on a single table, specifies the target table and the target checks that should be executed and an optional time window.")
 @EqualsAndHashCode(callSuper = false)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class RunChecksOnTableParameters implements Cloneable {
     /**
      * The name of the target connection.
@@ -41,10 +44,10 @@ public class RunChecksOnTableParameters implements Cloneable {
     private String connection;
 
     /**
-     * The maximum number of concurrent 'run checks on table' jobs that could be run on this connection. Limits the number of concurrent jobs.
+     * The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs.
      * Null value means that there are no limits applied.
      */
-    @JsonPropertyDescription("The maximum number of concurrent 'run checks on table' jobs that could be run on this connection. Limits the number of concurrent jobs.")
+    @JsonPropertyDescription("The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs.")
     private Integer maxJobsPerConnection;
 
     /**
@@ -82,7 +85,7 @@ public class RunChecksOnTableParameters implements Cloneable {
      * The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
      */
     @JsonPropertyDescription("The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.")
-    private RunChecksJobResult runChecksResult;
+    private RunChecksResult runChecksResult;
 
     /**
      * Default constructor.
@@ -93,7 +96,7 @@ public class RunChecksOnTableParameters implements Cloneable {
     /**
      * Creates a check run parameters.
      * @param connection The name of the target connection.
-     * @param maxJobsPerConnection The maximum number of concurrent 'run checks on table' jobs that could be run on this connection. Limits the number of concurrent jobs.
+     * @param maxJobsPerConnection The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs.
      * @param table The full physical name (schema.table) of the target table.
      * @param checkSearchFilters Check search filters.
      * @param timeWindowFilter Optional user provided time window filters, used to restrict the time range that is analyzed.
@@ -133,7 +136,7 @@ public class RunChecksOnTableParameters implements Cloneable {
     }
 
     /**
-     * Returns the limit of concurrent jobs (run checks on table) that could be executed in parallel on this connection.
+     * Returns the limit of concurrent jobs (run checks on table) that can be executed in parallel on this connection.
      * @return Maximum number of concurrent check executions on this connection.
      */
     public Integer getMaxJobsPerConnection() {
@@ -141,7 +144,7 @@ public class RunChecksOnTableParameters implements Cloneable {
     }
 
     /**
-     * Sets the limit of concurrent jobs (run checks on table) that could be executed in parallel on this connection.
+     * Sets the limit of concurrent jobs (run checks on table) that can be executed in parallel on this connection.
      * @param maxJobsPerConnection Maximum number of concurrent check executions on this connection.
      */
     public void setMaxJobsPerConnection(Integer maxJobsPerConnection) {
@@ -232,7 +235,7 @@ public class RunChecksOnTableParameters implements Cloneable {
      * Returns the result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
      * @return The job result object.
      */
-    public RunChecksJobResult getRunChecksResult() {
+    public RunChecksResult getRunChecksResult() {
         return runChecksResult;
     }
 
@@ -240,7 +243,7 @@ public class RunChecksOnTableParameters implements Cloneable {
      * Sets the result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
      * @param runChecksResult The new job result object.
      */
-    public void setRunChecksResult(RunChecksJobResult runChecksResult) {
+    public void setRunChecksResult(RunChecksResult runChecksResult) {
         this.runChecksResult = runChecksResult;
     }
 

@@ -16,6 +16,8 @@
 package com.dqops.cli.commands.check.impl;
 
 import com.dqops.cli.commands.check.impl.models.AllChecksModelCliPatchParameters;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
@@ -26,7 +28,7 @@ import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.services.check.CheckService;
 import com.dqops.services.check.mapping.AllChecksModelFactory;
 import com.dqops.services.check.mapping.models.*;
-import com.dqops.services.check.models.BulkCheckDisableParameters;
+import com.dqops.services.check.models.BulkCheckDeactivateParameters;
 import com.dqops.services.check.models.AllChecksPatchParameters;
 import com.dqops.utils.conversion.StringTypeCaster;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,7 @@ import java.util.*;
 public class CheckCliServiceImpl implements CheckCliService {
     private final CheckService checkService;
     private final AllChecksModelFactory allChecksModelFactory;
+    private final DqoUserPrincipalProvider apiKeyPrincipalProvider;
 
     /**
      * Default injection constructor.
@@ -48,9 +51,11 @@ public class CheckCliServiceImpl implements CheckCliService {
      */
     @Autowired
     public CheckCliServiceImpl(CheckService checkService,
-                               AllChecksModelFactory allChecksModelFactory) {
+                               AllChecksModelFactory allChecksModelFactory,
+                               DqoUserPrincipalProvider apiKeyPrincipalProvider) {
         this.checkService = checkService;
         this.allChecksModelFactory = allChecksModelFactory;
+        this.apiKeyPrincipalProvider = apiKeyPrincipalProvider;
     }
 
     /**
@@ -66,19 +71,21 @@ public class CheckCliServiceImpl implements CheckCliService {
                                            TimeWindowFilterParameters timeWindowFilterParameters,
                                            CheckExecutionProgressListener checkExecutionProgressListener,
 										   boolean dummyRun) {
-        return this.checkService.runChecks(checkSearchFilters, timeWindowFilterParameters, checkExecutionProgressListener, dummyRun);
+        DqoUserPrincipal principal = this.apiKeyPrincipalProvider.getLocalUserPrincipal();
+        return this.checkService.runChecks(checkSearchFilters, timeWindowFilterParameters, checkExecutionProgressListener, dummyRun, principal);
     }
 
     /**
-     * Disable existing checks matching the provided filters.
+     * Deactivates existing checks matching the provided filters.
      *
      * @param filters Check search filters to find checks to disable.
      */
     @Override
-    public void disableChecks(CheckSearchFilters filters) {
-        BulkCheckDisableParameters parameters = new BulkCheckDisableParameters();
+    public void deactivateChecks(CheckSearchFilters filters) {
+        DqoUserPrincipal userPrincipal = this.apiKeyPrincipalProvider.getLocalUserPrincipal();
+        BulkCheckDeactivateParameters parameters = new BulkCheckDeactivateParameters();
         parameters.setCheckSearchFilters(filters);
-        this.checkService.disableChecks(parameters);
+        this.checkService.deleteChecks(parameters, userPrincipal);
     }
 
     /**
@@ -88,7 +95,8 @@ public class CheckCliServiceImpl implements CheckCliService {
      */
     @Override
     public List<AllChecksModel> updateAllChecksPatch(AllChecksModelCliPatchParameters parameters) {
-        CheckModel sampleModel = this.getSampleCheckModelForUpdates(parameters.getCheckSearchFilters());
+        DqoUserPrincipal userPrincipal = this.apiKeyPrincipalProvider.getLocalUserPrincipal();
+        CheckModel sampleModel = this.getSampleCheckModelForUpdates(parameters.getCheckSearchFilters(), userPrincipal);
         prepareSampleCheckModelForUpdates(sampleModel);
         patchCheckModel(sampleModel, parameters);
 
@@ -99,11 +107,11 @@ public class CheckCliServiceImpl implements CheckCliService {
             setCheckModelPatch(sampleModel);
         }};
 
-        return this.checkService.updateAllChecksPatch(allChecksPatchParameters);
+        return this.checkService.activateOrUpdateAllChecks(allChecksPatchParameters, userPrincipal);
     }
 
-    protected CheckModel getSampleCheckModelForUpdates(CheckSearchFilters checkSearchFilters) {
-        List<AllChecksModel> patches = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
+    protected CheckModel getSampleCheckModelForUpdates(CheckSearchFilters checkSearchFilters, DqoUserPrincipal principal) {
+        List<AllChecksModel> patches = this.allChecksModelFactory.findAllConfiguredAndPossibleChecks(checkSearchFilters, principal);
         Optional<CheckModel> sampleCheckModelFromTables = patches.stream()
                 .map(AllChecksModel::getTableChecksModel)
                 .flatMap(allTableChecksModel -> allTableChecksModel.getSchemaTableChecksModels().stream())
@@ -189,7 +197,7 @@ public class CheckCliServiceImpl implements CheckCliService {
 
     protected void patchSensorParametersInModel(CheckModel model,
                                                 List<FieldModel> sensorPatches) {
-        Map<String, FieldModel> modelSensorParamsByName = new HashMap<>();
+        Map<String, FieldModel> modelSensorParamsByName = new LinkedHashMap<>();
         for (FieldModel fieldModel: model.getSensorParameters()) {
             modelSensorParamsByName.put(fieldModel.getDefinition().getDisplayName(), fieldModel);
         }
@@ -203,21 +211,33 @@ public class CheckCliServiceImpl implements CheckCliService {
     }
 
     protected void patchRuleThresholdsModel(RuleThresholdsModel ruleThresholdsModel, AllChecksModelCliPatchParameters parameters) {
-        if (parameters.getWarningLevelOptions() != null) {
+        if (parameters.isDisableWarningLevel()) {
+            RuleParametersModel ruleParametersModel = ruleThresholdsModel.getWarning();
+            ruleParametersModel.setConfigured(false);
+        } else if (parameters.getWarningLevelOptions() != null) {
             Map<String, String> options = parameters.getWarningLevelOptions();
             List<FieldModel> newParameterFields = this.optionMapToFields(options);
 
             RuleParametersModel ruleParametersModel = ruleThresholdsModel.getWarning();
             this.patchRuleParameters(ruleParametersModel, newParameterFields);
         }
-        if (parameters.getErrorLevelOptions() != null) {
+
+        if (parameters.isDisableErrorLevel()) {
+            RuleParametersModel ruleParametersModel = ruleThresholdsModel.getError();
+            ruleParametersModel.setConfigured(false);
+        } else if (parameters.getErrorLevelOptions() != null) {
             Map<String, String> options = parameters.getErrorLevelOptions();
             List<FieldModel> newParameterFields = this.optionMapToFields(options);
 
             RuleParametersModel ruleParametersModel = ruleThresholdsModel.getError();
             this.patchRuleParameters(ruleParametersModel, newParameterFields);
         }
-        if (parameters.getFatalLevelOptions() != null) {
+
+        if (parameters.isDisableFatalLevel()) {
+            RuleParametersModel ruleParametersModel = ruleThresholdsModel.getFatal();
+            ruleParametersModel.setConfigured(false);
+        }
+        else if (parameters.getFatalLevelOptions() != null) {
             Map<String, String> options = parameters.getFatalLevelOptions();
             List<FieldModel> newParameterFields = this.optionMapToFields(options);
 
@@ -244,7 +264,7 @@ public class CheckCliServiceImpl implements CheckCliService {
             }
         }
 
-        ruleParametersModel.setConfigured(!ruleParameterFields.isEmpty());
+        ruleParametersModel.setConfigured(true);
     }
 
     protected List<FieldModel> optionMapToFields(Map<String, String> options) {

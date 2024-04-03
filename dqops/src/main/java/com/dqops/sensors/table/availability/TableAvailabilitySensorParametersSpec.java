@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Table availability sensor that executes a row count query. This sensor returns 0.0 when no failure was detected or 1.0 when a failure was detected.
+ * Table availability sensor runs a simple table scan query to detect if the table is queryable. This sensor returns 0.0 when no failure was detected or 1.0 when a failure was detected.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -76,7 +76,7 @@ public class TableAvailabilitySensorParametersSpec extends AbstractSensorParamet
      */
     @Override
     @JsonIgnore
-    public boolean getSupportsDataStreams() {
+    public boolean getSupportsDataGrouping() {
         return false;
     }
 

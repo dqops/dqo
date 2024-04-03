@@ -15,6 +15,7 @@
  */
 package com.dqops.data.readouts.snapshot;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.readouts.factory.SensorReadoutsTableFactory;
 import com.dqops.data.storage.ParquetPartitionStorageService;
 import com.dqops.metadata.sources.PhysicalTableName;
@@ -46,12 +47,13 @@ public class SensorReadoutsSnapshotFactoryImpl implements SensorReadoutsSnapshot
      * Creates an empty snapshot that is connected to the sensor readouts storage service that will load requested months on demand.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Sensor readouts snapshot connected to a storage service.
      */
     @Override
-    public SensorReadoutsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName) {
+    public SensorReadoutsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userIdentity) {
         Table newSensorReadouts = this.sensorReadoutsTableFactory.createEmptySensorReadoutsTable("new_sensor_readouts");
-        return new SensorReadoutsSnapshot(connectionName, physicalTableName, this.storageService, newSensorReadouts);
+        return new SensorReadoutsSnapshot(userIdentity, connectionName, physicalTableName, this.storageService, newSensorReadouts);
     }
 
     /**
@@ -61,11 +63,12 @@ public class SensorReadoutsSnapshotFactoryImpl implements SensorReadoutsSnapshot
      * @param connectionName    Connection name.
      * @param physicalTableName Physical table name.
      * @param columnNames       Array of column names to load from parquet files. Other columns will not be loaded.
+     * @param userIdentity      User identity that specifies the data domain.
      * @return Rule result snapshot connected to a storage service.
      */
     @Override
-    public SensorReadoutsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames) {
+    public SensorReadoutsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames, UserDomainIdentity userIdentity) {
         Table templateSensorReadouts = this.sensorReadoutsTableFactory.createEmptySensorReadoutsTable("template_sensor_readouts");
-        return new SensorReadoutsSnapshot(connectionName, physicalTableName, this.storageService, columnNames, templateSensorReadouts);
+        return new SensorReadoutsSnapshot(userIdentity, connectionName, physicalTableName, this.storageService, columnNames, templateSensorReadouts);
     }
 }

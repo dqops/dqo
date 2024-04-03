@@ -16,11 +16,13 @@
 
 package com.dqops.metadata.incidents;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -225,13 +227,25 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
     /**
      * Creates a cloned and expanded version of the objects. All parameters are changed to the values expanded from variables like ${ENV_VAR}.
      * @param secretValueProvider Secret value provider.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Cloned and expanded copy of the object.
      */
-    public ConnectionIncidentGroupingSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public ConnectionIncidentGroupingSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
         ConnectionIncidentGroupingSpec cloned = this.deepClone();
         if (cloned.webhooks != null) {
-            cloned.webhooks = cloned.webhooks.expandAndTrim(secretValueProvider);
+            cloned.webhooks = cloned.webhooks.expandAndTrim(secretValueProvider, secretValueLookupContext);
         }
         return cloned;
+    }
+
+    public static class ConnectionIncidentGroupingSpecSampleFactory implements SampleValueFactory<ConnectionIncidentGroupingSpec> {
+        @Override
+        public ConnectionIncidentGroupingSpec createSample() {
+            return new ConnectionIncidentGroupingSpec() {{
+                setGroupingLevel(IncidentGroupingLevel.table_dimension);
+                setDivideByDataGroups(true);
+                setWebhooks(new IncidentWebhookNotificationsSpec.IncidentWebhookNotificationsSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

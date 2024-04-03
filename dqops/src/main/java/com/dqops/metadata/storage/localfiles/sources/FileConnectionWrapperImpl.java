@@ -84,7 +84,7 @@ public class FileConnectionWrapperImpl extends ConnectionWrapperImpl {
                     if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
                         throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
                     }
-                    if (deserialized.getKind() != SpecificationKind.SOURCE) {
+                    if (deserialized.getKind() != SpecificationKind.source) {
                         throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
 
@@ -107,11 +107,17 @@ public class FileConnectionWrapperImpl extends ConnectionWrapperImpl {
      */
     @Override
     public void flush() {
-        if (this.getStatus() == InstanceStatus.DELETED) {
+        this.getTables().flush(); // the first call to flush, maybe all tables are deleted and the connection is deleted right after
+
+        this.clearDirty(false);
+
+        if (this.getStatus() == InstanceStatus.DELETED || this.getStatus() == InstanceStatus.NOT_TOUCHED) {
             return; // do nothing
         }
 
-		this.getTables().flush(); // the first call to flush, maybe all tables are deleted and the connection is deleted right after
+        if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() == null) {
+            return; // nothing to do, the instance is empty (no file)
+        }
 
         if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() != null && super.getSpec().isDirty() ) {
             super.getSpec().clearDirty(true);
@@ -126,11 +132,14 @@ public class FileConnectionWrapperImpl extends ConnectionWrapperImpl {
             case ADDED:
 				this.connectionFolderNode.addChildFile(SpecFileNames.CONNECTION_SPEC_FILE_NAME_YAML, newFileContent);
 				this.getSpec().clearDirty(true);
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.connectionFolderNode.getChildFileByFileName(SpecFileNames.CONNECTION_SPEC_FILE_NAME_YAML);
                 modifiedFileNode.changeContent(newFileContent);
 				this.getSpec().clearDirty(true);
                 break;
+
             case TO_BE_DELETED:
 				this.connectionFolderNode.deleteChildFile(SpecFileNames.CONNECTION_SPEC_FILE_NAME_YAML);
 				this.connectionFolderNode.setDeleteOnFlush(true); // will remove the whole folder for the source

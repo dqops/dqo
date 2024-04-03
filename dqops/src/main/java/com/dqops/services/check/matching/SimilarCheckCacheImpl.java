@@ -17,10 +17,9 @@
 package com.dqops.services.check.matching;
 
 import com.dqops.checks.CheckTarget;
+import com.dqops.execution.rules.finder.RuleDefinitionFindService;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindService;
-import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
-import com.dqops.metadata.userhome.UserHomeImpl;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.utils.reflection.ReflectionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +47,11 @@ public class SimilarCheckCacheImpl implements SimilarCheckCache {
     @Autowired
     public SimilarCheckCacheImpl(ReflectionService reflectionService,
                                  SensorDefinitionFindService sensorDefinitionFindService,
+                                 RuleDefinitionFindService ruleDefinitionFindService,
                                  DqoHomeContextFactory dqoHomeContextFactory) {
-        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, sensorDefinitionFindService);
-        this.similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService, dqoHomeContextFactory);
+        SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
+                reflectionService, sensorDefinitionFindService, ruleDefinitionFindService);
+        this.similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService, dqoHomeContextFactory, new SimilarCheckGroupingKeyFactoryImpl());
     }
 
     /**

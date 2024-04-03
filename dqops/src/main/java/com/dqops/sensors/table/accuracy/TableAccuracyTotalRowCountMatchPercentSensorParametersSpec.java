@@ -20,6 +20,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.AbstractSensorParametersSpec;
+import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -30,7 +31,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level sensor that calculates percentage of the difference of the total row count of all rows in the tested table and the total row count of the other (reference) table.
+ * Table level sensor that calculates the percentage of the difference of the total row count of all rows in the tested table and the total row count of the other (reference) table.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -42,8 +43,11 @@ public class TableAccuracyTotalRowCountMatchPercentSensorParametersSpec extends 
                 }
             };
 
-    @JsonPropertyDescription("This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.")
-    @SampleValues(values = { "dim_customer" })
+    @JsonPropertyDescription("The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, " +
+            "for example landing_zone.customer_raw, or only a table name. When only a table name is used, " +
+            "DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.")
+    @SampleValues(values = { "landing_zone.customer_raw" })
+    @RequiredField
     private String referencedTable;
 
     /**
@@ -90,7 +94,7 @@ public class TableAccuracyTotalRowCountMatchPercentSensorParametersSpec extends 
      */
     @Override
     @JsonIgnore
-    public boolean getSupportsDataStreams() {
+    public boolean getSupportsDataGrouping() {
         return false;
     }
 

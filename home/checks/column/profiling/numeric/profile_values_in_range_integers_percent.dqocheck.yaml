@@ -1,8 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/numeric/values_in_range_integers_percent
-  rule_name: comparison/min_percent
-  help_text: Verifies that the percentage of values from range in a column does not
-    exceed the minimum accepted percentage.

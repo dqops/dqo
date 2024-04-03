@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: check
 spec:
@@ -9,3 +9,4 @@ spec:
     \ by the time period, truncated to the month). Compares each group of data with\
     \ a GROUP BY clause. Stores the most recent captured value for each monthly partition\
     \ and optionally data groups."
+  standard: true

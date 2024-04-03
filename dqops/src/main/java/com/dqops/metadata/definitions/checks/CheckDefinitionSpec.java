@@ -15,18 +15,19 @@
  */
 package com.dqops.metadata.definitions.checks;
 
-import com.dqops.checks.CheckTarget;
-import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.CheckType;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.serialization.InvalidYamlStatusHolder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -36,7 +37,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class CheckDefinitionSpec extends AbstractSpec {
+public class CheckDefinitionSpec extends AbstractSpec implements InvalidYamlStatusHolder {
     private static final ChildHierarchyNodeFieldMapImpl<CheckDefinitionSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -57,14 +58,46 @@ public class CheckDefinitionSpec extends AbstractSpec {
         this.helpText = helpText;
     }
 
-    @JsonPropertyDescription("Sensor name. It is a folder name inside the user's home 'sensors' folder or the DQO Home (DQO distribution) home/sensors folder. Sample sensor name: table/volume/row_count.")
+    @JsonPropertyDescription("Sensor name. It is a folder name inside the user's home 'sensors' folder or the DQOps Home (DQOps distribution) home/sensors folder. " +
+            "Sample sensor name: table/volume/row_count.")
     private String sensorName;
 
-    @JsonPropertyDescription("Rule name used for the check. It is a path to a custom rule python module that starts at the user's home 'rules' folder. The path should not end with the .py file extension. Sample rule: myrules/my_custom_rule.")
+    @JsonPropertyDescription("Rule name used for the check. It is a path to a custom rule python module that starts at the user's home 'rules' folder. " +
+            "The path should not end with the .py file extension. Sample rule: myrules/my_custom_rule.")
     private String ruleName;
 
     @JsonPropertyDescription("Help text that describes the data quality check.")
     private String helpText;
+
+    @JsonPropertyDescription("An alternative check's name that is shown on the check editor.")
+    private String friendlyName;
+
+    @JsonPropertyDescription("This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean standard;
+
+    @JsonIgnore
+    private String yamlParsingError;
+
+    /**
+     * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
+     *
+     * @param yamlParsingError YAML parsing error.
+     */
+    @Override
+    public void setYamlParsingError(String yamlParsingError) {
+        this.yamlParsingError = yamlParsingError;
+    }
+
+    /**
+     * Returns the YAML parsing error that was captured.
+     *
+     * @return YAML parsing error.
+     */
+    @Override
+    public String getYamlParsingError() {
+        return this.yamlParsingError;
+    }
 
     /**
      * Returns a sensor name.
@@ -118,6 +151,40 @@ public class CheckDefinitionSpec extends AbstractSpec {
     }
 
     /**
+     * Returns the help text that is shown around the real check name on the check editor.
+     * @return Friendly name (optional).
+     */
+    public String getFriendlyName() {
+        return friendlyName;
+    }
+
+    /**
+     * Sets a friendly name of the check that is shown on the check editor.
+     * @param friendlyName Friendly name.
+     */
+    public void setFriendlyName(String friendlyName) {
+        this.setDirtyIf(!Objects.equals(this.friendlyName, friendlyName));
+        this.friendlyName = friendlyName;
+    }
+
+    /**
+     * Return true when this is a standard data quality check.
+     * @return True when it is a standard data quality check, always shown.
+     */
+    public boolean isStandard() {
+        return standard;
+    }
+
+    /**
+     * Sets the 'standard' flag to identify data quality checks that should be always shown in UI.
+     * @param standard True when it is a standard check.
+     */
+    public void setStandard(boolean standard) {
+        this.setDirtyIf(this.standard != standard);
+        this.standard = standard;
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -156,5 +223,50 @@ public class CheckDefinitionSpec extends AbstractSpec {
     public CheckDefinitionSpec deepClone() {
         CheckDefinitionSpec cloned = (CheckDefinitionSpec)super.deepClone();
         return cloned;
+    }
+
+    /**
+     * Returns the full check name, including the target, check type, time scale, category and the check name.
+     * @return Full check name.
+     */
+    @JsonIgnore
+    public String getFullCheckName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+        return hierarchyId.getLast().toString();
+    }
+
+    /**
+     * Returns the check name, without the category.
+     * @return Check name, without the category or type.
+     */
+    @JsonIgnore
+    public String getCheckName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+        String fullCheckName = (String)hierarchyId.get(hierarchyId.size() - 2);
+        String[] checkNameElements = StringUtils.split(fullCheckName, '/');
+
+        return checkNameElements[checkNameElements.length - 1];
+    }
+
+    /**
+     * Returns the check category extracted from the full check name.
+     * @return Check category.
+     */
+    @JsonIgnore
+    public String getCheckCategory() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+        String fullCheckName = (String)hierarchyId.get(hierarchyId.size() - 2);
+        String[] checkNameElements = StringUtils.split(fullCheckName, '/');
+
+        return checkNameElements[checkNameElements.length - 2];
     }
 }

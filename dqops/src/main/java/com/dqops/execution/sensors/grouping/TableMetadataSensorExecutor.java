@@ -19,12 +19,14 @@ import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.SourceConnection;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorPrepareResult;
 import com.dqops.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
 import com.dqops.execution.sensors.progress.SensorExecutionProgressListener;
 import com.dqops.metadata.sources.*;
+import com.dqops.utils.logging.UserErrorLogger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -44,15 +46,18 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class TableMetadataSensorExecutor extends AbstractGroupedSensorExecutor {
     private ConnectionProviderRegistry connectionProviderRegistry;
+    private final UserErrorLogger userErrorLogger;
 
     /**
      * Dependency injection constructor that receives all dependencies.
      * @param connectionProviderRegistry Connection provider registry, used to retrieve a connector instance for the target data source.
+     * @param userErrorLogger Check execution loggger.
      */
     @Autowired
-    public TableMetadataSensorExecutor(ConnectionProviderRegistry connectionProviderRegistry) {
+    public TableMetadataSensorExecutor(ConnectionProviderRegistry connectionProviderRegistry, UserErrorLogger userErrorLogger) {
         super(null);
         this.connectionProviderRegistry = connectionProviderRegistry;
+        this.userErrorLogger = userErrorLogger;
     }
 
     /**
@@ -83,13 +88,24 @@ public class TableMetadataSensorExecutor extends AbstractGroupedSensorExecutor {
                         firstSensorPrepareResult.getSensorDefinition(), connectionSpec, null));
 
                 ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
-                try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true)) {
+                SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(executionContext.getUserHomeContext().getUserHome());
+                try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true, secretValueLookupContext)) {
                     jobCancellationToken.throwIfCancelled();
                     String schemaName = physicalTableName.getSchemaName();
                     String tableName = physicalTableName.getTableName();
-                    List<TableSpec> retrievedTableSpecList = sourceConnection.retrieveTableMetadata(schemaName, new ArrayList<>() {{
-                        add(tableName);
-                    }});
+
+                    ConnectionList connections = executionContext.getUserHomeContext().getUserHome().getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionSpec.getConnectionName(), true);
+
+                    List<TableSpec> retrievedTableSpecList = sourceConnection.retrieveTableMetadata(
+                            schemaName,
+                            new ArrayList<>() {{
+                                add(tableName);
+                            }},
+                            connectionWrapper,
+                            secretValueLookupContext
+                    );
+
 
                     if (retrievedTableSpecList.size() == 0) {
                         // table not found
@@ -109,8 +125,8 @@ public class TableMetadataSensorExecutor extends AbstractGroupedSensorExecutor {
             return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, fakeTableSpec);
         }
         catch (Throwable exception) {
-            log.debug("Metadata sensor failed to read the metadata of the table:" +
-                    physicalTableName.toTableSearchFilter(), exception);
+            this.userErrorLogger.logSensor("Metadata sensor failed to read the metadata of the table: " +
+                        physicalTableName.toTableSearchFilter() + ", error: " + exception.getMessage(), exception);
             return new GroupedSensorExecutionResult(preparedSensorsGroup, startedAt, exception);
         }
     }

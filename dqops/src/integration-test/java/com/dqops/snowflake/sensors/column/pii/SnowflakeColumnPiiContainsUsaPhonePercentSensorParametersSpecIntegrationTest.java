@@ -30,6 +30,7 @@ import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.pii.ColumnPiiContainsUsaPhonePercentSensorParametersSpec;
 import com.dqops.snowflake.BaseSnowflakeIntegrationTest;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,12 +64,12 @@ public class SnowflakeColumnPiiContainsUsaPhonePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(92.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(69.56521606445312, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+    void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "usa_phone", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -76,12 +77,12 @@ public class SnowflakeColumnPiiContainsUsaPhonePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(92.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(69.56521606445312, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+    void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "usa_phone", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -89,7 +90,7 @@ public class SnowflakeColumnPiiContainsUsaPhonePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(92.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(69.56521606445312, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -102,7 +103,7 @@ public class SnowflakeColumnPiiContainsUsaPhonePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -115,6 +116,6 @@ public class SnowflakeColumnPiiContainsUsaPhonePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(92.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(69.56521606445312, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 }

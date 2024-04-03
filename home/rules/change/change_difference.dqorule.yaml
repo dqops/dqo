@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -14,5 +14,4 @@ spec:
     display_name: max_difference
     help_text: Maximum accepted absolute difference compared to previous readout (inclusive).
     data_type: double
-    sample_values:
-    - 10
+    required: true

@@ -15,24 +15,38 @@
  */
 package com.dqops.metadata.userhome;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.basespecs.Flushable;
+import com.dqops.metadata.credentials.SharedCredentialList;
+import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapper;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
 import com.dqops.metadata.definitions.checks.CheckDefinitionList;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionList;
+import com.dqops.metadata.dictionaries.DictionaryList;
 import com.dqops.metadata.fileindices.FileIndexList;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNode;
+import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableWrapper;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
 
 /**
  * User home model. Provides access to the data in the user home. The actual implementation can use a local file system,
  * a virtual file system or a database.
  */
 public interface UserHome extends Flushable, HierarchyNode {
+    /**
+     * Returns the user identity for whom the user home was opened. Also identifies the data domain, which is a folder with a copy of the DQOps user home for a given data domain.
+     * @return User identity.
+     */
+    UserDomainIdentity getUserIdentity();
+
     /**
      * Returns a list of connections.
      * @return Collection of connections.
@@ -62,6 +76,18 @@ public interface UserHome extends Flushable, HierarchyNode {
      * @return Settings.
      */
     SettingsWrapper getSettings();
+
+    /**
+     * Returns a collection of shared credentials.
+     * @return Collection of shared credentials.
+     */
+    SharedCredentialList getCredentials();
+
+    /**
+     * Returns a collection of data dictionary CSV files.
+     * @return Collection of data dictionaries.
+     */
+    DictionaryList getDictionaries();
 
     /**
      * Returns a list of file indexes.
@@ -98,4 +124,34 @@ public interface UserHome extends Flushable, HierarchyNode {
      * @return Node that was found.
      */
     HierarchyNode findNode(HierarchyId hierarchyId);
+
+    /**
+     * Returns a list of dashboards definitions.
+     * @return Collection of dashboards definitions.
+     */
+    DashboardFolderListSpecWrapper getDashboards();
+
+    /**
+     * Returns a default schedules definitions.
+     * @return Collection of default schedules definitions.
+     */
+    MonitoringSchedulesWrapper getDefaultSchedules();
+
+    /**
+     * Returns a collection of named patterns with the default configuration of table-level checks.
+     * @return Collection of table-level default checks patterns.
+     */
+    TableDefaultChecksPatternList getTableDefaultChecksPatterns();
+
+    /**
+     * Returns a collection of named patterns with the default configuration of column-level checks.
+     * @return Collection of column-level default checks patterns.
+     */
+    ColumnDefaultChecksPatternList getColumnDefaultChecksPatterns();
+
+    /**
+     * Returns a default notification webhooks.
+     * @return Collection of default observability checks definitions.
+     */
+    DefaultIncidentWebhookNotificationsWrapper getDefaultNotificationWebhook();
 }

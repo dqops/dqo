@@ -16,15 +16,14 @@
 package com.dqops.connectors.sqlserver;
 
 import com.dqops.connectors.ConnectorOperationFailedException;
-import com.dqops.connectors.RowCountLimitExceededException;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
-import com.dqops.connectors.jdbc.JdbcQueryFailedException;
-import com.dqops.core.jobqueue.JobCancellationListenerHandle;
-import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.utils.exceptions.RunSilently;
+import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
+import com.dqops.metadata.storage.localfiles.credentials.azure.AzureCredential;
+import com.dqops.metadata.storage.localfiles.credentials.azure.AzureCredentialsProvider;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +31,13 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.columns.Column;
 
 import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.Locale;
+import java.sql.SQLException;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * Microsoft SQL Server source connection.
@@ -46,6 +46,8 @@ import java.util.Properties;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
 
+    private final AzureCredentialsProvider azureCredentialsProvider;
+
     /**
      * Injection constructor for the MS SQL Server connection.
      * @param jdbcConnectionPool Jdbc connection pool.
@@ -53,41 +55,44 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Autowired
     public SqlServerSourceConnection(JdbcConnectionPool jdbcConnectionPool,
-                                      SecretValueProvider secretValueProvider,
-                                      SqlServerConnectionProvider sqlServerConnectionProvider) {
+                                     SecretValueProvider secretValueProvider,
+                                     SqlServerConnectionProvider sqlServerConnectionProvider,
+                                     AzureCredentialsProvider azureCredentialsProvider) {
         super(jdbcConnectionPool, secretValueProvider, sqlServerConnectionProvider);
+        this.azureCredentialsProvider = azureCredentialsProvider;
     }
 
     /**
      * Creates a hikari connection pool config for the connection specification.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      *
      * @return Hikari config.
      */
     @Override
-    public HikariConfig createHikariConfig() {
+    public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
         SqlServerParametersSpec sqlserverSpec = connectionSpec.getSqlserver();
 
-        String host = this.getSecretValueProvider().expandValue(sqlserverSpec.getHost());
+        String host = this.getSecretValueProvider().expandValue(sqlserverSpec.getHost(), secretValueLookupContext);
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
         jdbcConnectionBuilder.append("jdbc:sqlserver://;serverName=");
         jdbcConnectionBuilder.append(host);
 
-        String port = this.getSecretValueProvider().expandValue(sqlserverSpec.getPort());
+        String port = this.getSecretValueProvider().expandValue(sqlserverSpec.getPort(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(port)) {
             try {
                 int portNumber = Integer.parseInt(port);
-                jdbcConnectionBuilder.append(";port=");
+                jdbcConnectionBuilder.append(";port="); // todo: isn't it a property?
                 jdbcConnectionBuilder.append(portNumber);
             }
             catch (NumberFormatException nfe) {
                 throw new ConnectorOperationFailedException("Cannot create a connection to SQLSERVER, the port number is invalid: " + port, nfe);
             }
         }
-        String database = this.getSecretValueProvider().expandValue(sqlserverSpec.getDatabase());
+        String database = this.getSecretValueProvider().expandValue(sqlserverSpec.getDatabase(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(database)) {
-            jdbcConnectionBuilder.append(";databaseName=");
+            jdbcConnectionBuilder.append(";databaseName="); // todo: isn't it a property?
             jdbcConnectionBuilder.append(database);
         }
 
@@ -101,18 +106,61 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
         }
 
         if (sqlserverSpec.getProperties() != null) {
-            dataSourceProperties.putAll(sqlserverSpec.getProperties());
+            dataSourceProperties.putAll(sqlserverSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
-        String userName = this.getSecretValueProvider().expandValue(sqlserverSpec.getUser());
-        hikariConfig.setUsername(userName);
+        SqlServerAuthenticationMode authenticationMode = sqlserverSpec.getAuthenticationMode() == null ?
+                SqlServerAuthenticationMode.sql_password : sqlserverSpec.getAuthenticationMode();
+        switch (authenticationMode){
+            case sql_password:
+            case active_directory_password:
+            case active_directory_service_principal:
 
-        String password = this.getSecretValueProvider().expandValue(sqlserverSpec.getPassword());
-        hikariConfig.setPassword(password);
+                String userName = this.getSecretValueProvider().expandValue(sqlserverSpec.getUser(), secretValueLookupContext);
+                hikariConfig.setUsername(userName);
 
-        String options =  this.getSecretValueProvider().expandValue(sqlserverSpec.getOptions());
-        if (!Strings.isNullOrEmpty(options)) {
-            dataSourceProperties.put("options", options);
+                String password = this.getSecretValueProvider().expandValue(sqlserverSpec.getPassword(), secretValueLookupContext);
+                hikariConfig.setPassword(password);
+
+                String authenticationValue = getJdbcAuthenticationValue(authenticationMode);
+                dataSourceProperties.put("authentication", authenticationValue);
+
+                break;
+            case default_credential:
+
+                Optional<AzureCredential> azureCredential = azureCredentialsProvider.provideCredentials(secretValueLookupContext);
+                if(azureCredential.isPresent()
+                        && !azureCredential.get().getUser().isEmpty()
+                        && !azureCredential.get().getPassword().isEmpty()
+                        && !azureCredential.get().getAuthentication().isEmpty()
+                ){
+                    String defaultUserName = this.getSecretValueProvider().expandValue(azureCredential.get().getUser(), secretValueLookupContext);
+                    hikariConfig.setUsername(defaultUserName);
+
+                    String defaultPassword = this.getSecretValueProvider().expandValue(azureCredential.get().getPassword(), secretValueLookupContext);
+                    hikariConfig.setPassword(defaultPassword);
+
+                    dataSourceProperties.put("authentication", azureCredential.get().getAuthentication());
+
+                } else {
+                    // In case of authentication from local .azure folder (azure cli is installed, executed: az login and az account get-access-token), it got two issues:
+                    // 1. Token based login to Azure SQL end up with the error: Login failed for user '<token-identified principal>'. Incorrect or invalid token.
+                    // 2. Token generation has to be done out of the createHikariConfig method due to block method
+
+                    // TokenRequestContext tokenRequestContext = new TokenRequestContext().addScopes("https://management.azure.com/.default");
+                    // TokenCredential dacWithUserAssignedManagedIdentity = new DefaultAzureCredentialBuilder().build();
+                    // Mono<AccessToken> accessTokenMono = dacWithUserAssignedManagedIdentity.getToken(tokenRequestContext);
+                    // dataSourceProperties.put("accessToken", accessTokenMono.block().getToken());
+
+                    new RuntimeException("Can't use default credentials set in " + DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME + " file.");
+                }
+                break;
+            default:
+                throw new RuntimeException("Given enum is not supported : " + authenticationMode);
         }
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
@@ -120,51 +168,33 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
-     * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
-     *
-     * @param sqlQueryStatement       SQL statement that returns a row set.
-     * @param jobCancellationToken    Job cancellation token, enables cancelling a running query.
-     * @param maxRows                 Maximum rows limit.
-     * @param failWhenMaxRowsExceeded Throws an exception if the maximum number of rows is exceeded.
+     * Returns the value for the key "authentication" for the jdbc connection string.
+     * @param authenticationMode
+     * @return
+     */
+    private String getJdbcAuthenticationValue(SqlServerAuthenticationMode authenticationMode){
+        switch (authenticationMode){
+            case sql_password:                          return "SqlPassword";
+            case active_directory_password:             return "ActiveDirectoryPassword";
+            case active_directory_service_principal:    return "ActiveDirectoryServicePrincipal";
+            default: new RuntimeException("Given enum is not supported : " + authenticationMode);
+        }
+        return null;
+    }
+
+    /**
+     * Creates the tablesaw's Table from the ResultSet for the query execution
+     * @param results               ResultSet object that contains the data produced by a query
+     * @param sqlQueryStatement     SQL statement that returns a row set.
      * @return Tabular result captured from the query.
+     * @throws SQLException
      */
     @Override
-    public Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken, Integer maxRows, boolean failWhenMaxRowsExceeded) {
-        try {
-            try (Statement statement = this.getJdbcConnection().createStatement()) {
-                if (maxRows != null) {
-                    statement.setMaxRows(failWhenMaxRowsExceeded ? maxRows + 1 : maxRows);
-                }
-
-                try (JobCancellationListenerHandle cancellationListenerHandle =
-                             jobCancellationToken.registerCancellationListener(
-                                     cancellationToken -> RunSilently.run(statement::cancel))) {
-                    try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
-                        try (SqlServerResultSet sqlServerResultSet = new SqlServerResultSet(results)) {
-                            Table resultTable = Table.read().db(sqlServerResultSet, sqlQueryStatement);
-                            if (maxRows != null && resultTable.rowCount() > maxRows) {
-                                throw new RowCountLimitExceededException(maxRows);
-                            }
-
-                            for (Column<?> column : resultTable.columns()) {
-                                if (column.name() != null) {
-                                    column.setName(column.name().toLowerCase(Locale.ROOT));
-                                }
-                            }
-                            return resultTable;
-                        }
-                    }
-                }
-                finally {
-                    jobCancellationToken.throwIfCancelled();
-                }
-            }
-        }
-        catch (Exception ex) {
-            String connectionName = this.getConnectionSpec().getConnectionName();
-            throw new JdbcQueryFailedException(
-                    String.format("SQL query failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlQueryStatement),
-                    ex, sqlQueryStatement, connectionName);
+    protected Table rawTableResultFromResultSet(ResultSet results, String sqlQueryStatement) throws SQLException {
+        try (SqlServerResultSet sqlServerResultSet = new SqlServerResultSet(results)) {
+            Table resultTable = Table.read().db(sqlServerResultSet, sqlQueryStatement);
+            return resultTable;
         }
     }
+
 }

@@ -17,13 +17,15 @@ package com.dqops.rest.controllers;
 
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
+import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
+import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.secrets.signature.SignedObject;
 import com.dqops.rest.models.platform.DqoSettingsModel;
 import com.dqops.rest.models.platform.DqoUserProfileModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import com.dqops.core.principal.DqoUserPrincipal;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.AbstractEnvironment;
@@ -32,6 +34,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -43,42 +47,52 @@ import java.util.Locale;
 import java.util.stream.StreamSupport;
 
 /**
- * REST API controller that returns information about the configuration of DQO and the profile of the current user.
+ * REST API controller that returns information about the configuration of DQOps and the profile of the current user.
  */
 @RestController
 @RequestMapping("/api/environment")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Environment", description = "DQO environment and configuration controller, provides access to the DQO configuration.")
+@Api(value = "Environment", description = "DQOps environment and configuration controller, provides access to the DQOps configuration, " +
+        "current user's information and issue local API Keys for the calling user.")
 @Slf4j
 public class EnvironmentController {
     private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
     private Environment springEnvironment;
+    private InstanceCloudLoginService instanceCloudLoginService;
 
     /**
      * Dependency injection constructor of the environment controller.
-     * @param dqoCloudApiKeyProvider DQO API key provider.
+     * @param dqoCloudApiKeyProvider DQOps API key provider.
      * @param springEnvironment Spring Boot environment.
+     * @param instanceCloudLoginService Local instance authentication token service, used to issue a local API key.
      */
     @Autowired
     public EnvironmentController(DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
-                                 Environment springEnvironment) {
+                                 Environment springEnvironment,
+                                 InstanceCloudLoginService instanceCloudLoginService) {
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.springEnvironment = springEnvironment;
+        this.instanceCloudLoginService = instanceCloudLoginService;
     }
 
     /**
-     * Returns all effective DQO configuration settings.
+     * Returns all effective DQOps configuration settings.
      * @return Model with a summary of all effective configuration settings.
      */
     @GetMapping(value = "/settings", produces = "application/json")
-    @ApiOperation(value = "getDqoSettings", notes = "Returns all effective DQO configuration settings.",
-            response = DqoSettingsModel.class)
+    @ApiOperation(value = "getDqoSettings", notes = "Returns all effective DQOps configuration settings.",
+            response = DqoSettingsModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = DqoSettingsModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DqoSettingsModel>> getDqoSettings() {
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<DqoSettingsModel>> getDqoSettings(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
         final DqoSettingsModel dqoSettingsModel = new DqoSettingsModel();
         final MutablePropertySources sources = ((AbstractEnvironment) this.springEnvironment).getPropertySources();
 
@@ -114,20 +128,49 @@ public class EnvironmentController {
      */
     @GetMapping(value = "/profile", produces = "application/json")
     @ApiOperation(value = "getUserProfile", notes = "Returns the profile of the current user.",
-            response = DqoUserProfileModel.class)
+            response = DqoUserProfileModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = DqoUserProfileModel.class),
-            @ApiResponse(code = 404, message = "User not logged in", response = Void.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DqoUserProfileModel>> getUserProfile() {
-        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<DqoUserProfileModel>> getUserProfile(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
+        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(principal.getDataDomainIdentity());
         if (apiKey == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.createFreeUserModel();
+            return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
         }
 
-        DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.fromApiKey(apiKey);
+        DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.fromApiKeyAndPrincipal(apiKey, principal);
         return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
+    }
+
+    /**
+     * Issues a local API Key for the calling user.
+     * @return The local API key issued for the calling user.
+     */
+    @GetMapping(value = "/issueapikey", produces = "application/json")
+    @ApiOperation(value = "issueApiKey", notes = "Issues a local API Key for the calling user. This API Key can be used to authenticate using the DQOps REST API client. " +
+            "This API Key should be passed in the \"Authorization\" HTTP header in the format \"Authorization: Bearer <api_key>\".",
+            response = String.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = String.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<String>> issueApiKey(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
+        SignedObject<DqoUserTokenPayload> signedLocalApiKey = this.instanceCloudLoginService.issueApiKey(principal);
+
+        return new ResponseEntity<>(Mono.just(signedLocalApiKey.getSignedHex()), HttpStatus.OK);
     }
 }

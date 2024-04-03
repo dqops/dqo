@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 #
-# Copyright © 2023 DQOps (support@dqops.com)
+# Copyright © 2021-2024 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,9 +30,9 @@ fi
 
 if [ -z "$DQO_JAVA_OPTS" ]; then
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    export DQO_JAVA_OPTS=-Xmx2048m -Djavax.net.ssl.trustStoreType=KeychainStore
+    export DQO_JAVA_OPTS=-XX:MaxRAMPercentage=60.0 -Djavax.net.ssl.trustStoreType=KeychainStore
   else
-    export DQO_JAVA_OPTS=-Xmx2048m
+    export DQO_JAVA_OPTS=-XX:MaxRAMPercentage=60.0
   fi
 fi
 
@@ -46,7 +46,7 @@ else
   returnedValue=$?
   if [ $returnedValue -ne 0 ]; then
       echo Java not found and JAVA_HOME environment variable is not set.
-      echo Install Java 11 or newer and set JAVA_HOME to point to the Java installation directory.
+      echo Install Java 17 or newer and set JAVA_HOME to point to the Java installation directory.
       exit $returnedValue
   fi
 

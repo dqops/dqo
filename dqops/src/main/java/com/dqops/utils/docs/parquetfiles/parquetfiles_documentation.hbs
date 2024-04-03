@@ -1,9 +1,18 @@
-##{{parquetFileFullName}}{{#with "  "}}{{.}}{{/with}}
-{{parquetFileDescription}}{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
-**The columns of this table is described below**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
-| Column name | Description | Data type |
-|-------------|-------------|-----------|
-{{#each parquetColumnDetailsDocumentationModels}} | {{columnName}} | {{#if columnDescription}}{{columnDescription}}{{else}}Column name for the data stream.{{/if}} | {{lower columnType}} |
+# DQOps {{parquetFileFullName}} parquet table schema
+The parquet file schema for the {{parquetFileFullName}} table stored in the *[$DQO_USER_HOME](/docs/dqo-concepts/dqops-user-home-folder.md)/.data/{{parquetFileFullName}}* folder in DQOps.
+
+## Table description
+
+{{replace parquetFileDescription "$DQO_USER_HOME" "[$DQO_USER_HOME](/docs/dqo-concepts/dqops-user-home-folder.md)"}}
+
+
+## Parquet table schema
+The columns of this table are described below.
+
+| Column&nbsp;name | Description | Hive&nbsp;data&nbsp;type |
+|------------------|-------------|--------------------------|
+{{#each parquetColumnDetailsDocumentationModels}} | <span class="no-wrap-code">`{{columnName}}`</span> | {{#if columnDescription}}{{columnDescription}}{{else}}Data group value at a single level.{{/if}} | *{{columnType}}* |
 {{/each}}
+
+## What's more
+- You can find more information on how the Parquet files are partitioned in the [data quality results storage concept](/docs/dqo-concepts/data-storage-of-data-quality-results.md).

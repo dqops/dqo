@@ -1,10 +1,53 @@
-import { CheckTypes } from './routes';
-import { TimeWindowFilterParameters } from '../api';
+import {
+  CheckTemplate,
+  ConnectionModelProviderTypeEnum,
+  DqoJobHistoryEntryModel,
+  TableComparisonGroupingColumnPairModel,
+  TimeWindowFilterParameters
+} from '../api';
 
 export type PageTab = {
   label: string;
   value: string;
 };
+
+interface IDatabaseOption {
+  type: ConnectionModelProviderTypeEnum;
+  name: string;
+  iconName: string;
+  displayName: string;
+}
+
+export type TParameters = {
+  name?: string;
+  refConnection?: string;
+  refSchema?: string;
+  refTable?: string;
+  dataGroupingArray?: TableComparisonGroupingColumnPairModel[];
+};
+
+export interface IFilterTemplate {
+  tableNamePattern?: string | undefined;
+  columnNamePattern?: string | undefined;
+  columnDataType?: string | undefined;
+  checkTarget?: 'table' | 'column' | undefined;
+  checkCategory?: string | undefined;
+  checkName?: string | undefined;
+  activeOffCheck?: boolean;
+  selectedCheck?: CheckTemplate
+}
+export type TJobDictionary =  DqoJobHistoryEntryModel & {
+  childs: DqoJobHistoryEntryModel[];
+}
+
+export type TJobList = Record<string, string[]>;
+
+enum CheckTypes {
+  MONITORING = 'monitoring',
+  SOURCES = 'sources',
+  PROFILING = 'profiling',
+  PARTITIONED = 'partitioned'
+}
 
 export const CONNECTION_LEVEL_TABS: {
   [key in CheckTypes]: PageTab[];
@@ -55,7 +98,7 @@ export const CONNECTION_LEVEL_TABS: {
       value: 'schemas'
     }
   ],
-  [CheckTypes.RECURRING]: [
+  [CheckTypes.MONITORING]: [
     {
       label: 'Schedule',
       value: 'schedule'
@@ -88,38 +131,90 @@ export const TABLE_LEVEL_TABS: {
       value: 'labels'
     },
     {
-      label: 'Data Groupings',
-      value: 'data-streams'
+      label: 'Data groupings',
+      value: 'data-groupings'
     },
     {
       label: 'Date and time columns',
       value: 'timestamps'
+    },
+    {
+      label: 'Incident configuration',
+      value: 'incident_configuration'
     }
   ],
   [CheckTypes.PROFILING]: [
     {
-      label: 'Detail',
-      value: 'detail'
+      label: 'Basic data statistics',
+      value: 'statistics'
+    },
+    {
+      label: 'Table preview',
+      value: 'preview'
+    },
+    {
+      label: 'Table quality status',
+      value: 'table-quality-status'
+    },
+    {
+      label: 'Profiling checks',
+      value: 'advanced'
+    },
+    {
+      label: 'Table comparisons',
+      value: 'table-comparisons'
     }
   ],
   [CheckTypes.PARTITIONED]: [
     {
-      label: 'Daily',
+      label: 'Table quality status (daily checks)',
+      value: 'table-quality-status-daily'
+    },
+    {
+      label: 'Daily checks',
       value: 'daily'
     },
     {
-      label: 'Monthly',
+      label: 'Table quality status (monthly checks)',
+      value: 'table-quality-status-monthly'
+    },
+    {
+      label: 'Monthly checks',
       value: 'monthly'
+    },
+    {
+      label: 'Daily comparisons',
+      value: 'daily_comparisons'
+    },
+    {
+      label: 'Monthly comparisons',
+      value: 'monthly_comparisons'
     }
   ],
-  [CheckTypes.RECURRING]: [
+  [CheckTypes.MONITORING]: [
     {
-      label: 'Daily',
+      label: 'Table quality status (daily checks)',
+      value: 'table-quality-status-daily'
+    },
+    {
+      label: 'Daily checks',
       value: 'daily'
     },
     {
-      label: 'Monthly',
+      label: 'Table quality status (monthly checks)',
+      value: 'table-quality-status-monthly'
+    },
+    {
+      label: 'Monthly checks',
       value: 'monthly'
+    },
+    {
+      label: 'Daily comparisons',
+      value: 'daily_comparisons'
+    },
+    {
+      label: 'Monthly comparisons',
+      value: 'monthly_comparisons'
     }
   ]
 };
@@ -143,31 +238,242 @@ export const COLUMN_LEVEL_TABS: {
   ],
   [CheckTypes.PROFILING]: [
     {
-      label: 'Detail',
-      value: 'detail'
+      label: 'statistics',
+      value: 'statistics'
+    },
+    {
+      label: 'advanced',
+      value: 'advanced'
     }
   ],
   [CheckTypes.PARTITIONED]: [
     {
-      label: 'Daily',
+      label: 'Daily checks',
       value: 'daily'
     },
     {
-      label: 'Monthly',
+      label: 'Monthly checks',
       value: 'monthly'
     }
   ],
-  [CheckTypes.RECURRING]: [
+  [CheckTypes.MONITORING]: [
     {
-      label: 'Daily',
+      label: 'Daily checks',
       value: 'daily'
     },
     {
-      label: 'Monthly',
+      label: 'Monthly checks',
       value: 'monthly'
     }
   ]
 };
+
+export const databaseOptions: IDatabaseOption[] = [
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'AlloyDB',
+    iconName: 'alloydb',
+    displayName: 'AlloyDB for PostgreSQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.trino,
+    name: 'Athena',
+    iconName: 'athena',
+    displayName: 'Amazon Athena'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'Amazon Aurora',
+    iconName: 'amazonrds',
+    displayName: 'Amazon Aurora'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.mysql,
+    name: 'Amazon RDS for MySQL',
+    iconName: 'amazonrds',
+    displayName: 'Amazon RDS for MySQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'Amazon RDS for PostgreSQL',
+    iconName: 'amazonrds',
+    displayName: 'Amazon RDS for PostgreSQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.sqlserver,
+    name: 'Amazon RDS for SQL Server',
+    iconName: 'amazonrds',
+    displayName: 'Amazon RDS for SQL Server'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.redshift,
+    name: 'Redshift',
+    iconName: 'redshift',
+    displayName: 'Amazon Redshift'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.mysql,
+    name: 'Azure Database for MySQL',
+    iconName: 'azuredatabaseformysql',
+    displayName: 'Azure Database for MySQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'Azure Database for PostgreSQL',
+    iconName: 'azuredatabaseforpostgresql',
+    displayName: 'Azure Database for PostgreSQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.sqlserver,
+    name: 'Azure SQL Database',
+    iconName: 'azuresqldatabase',
+    displayName: 'Azure SQL Database'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.sqlserver,
+    name: 'Azure SQL Managed Instance',
+    iconName: 'azuresqlmanagedinstance',
+    displayName: 'Azure SQL Managed Instance'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.sqlserver,
+    name: 'Azure Synapse Analytics',
+    iconName: 'azuresynapseanalytics',
+    displayName: 'Azure Synapse Analytics'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.bigquery,
+    name: 'BigQuery',
+    iconName: 'bigquery',
+    displayName: 'Bigquery'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.mysql,
+    name: 'Cloud SQL for MySQL',
+    iconName: 'cloudsqlformysql',
+    displayName: 'Cloud SQL for MySQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'Cloud SQL for PostgreSQL',
+    iconName: 'cloudsqlforpostgresql',
+    displayName: 'Cloud SQL for PostgreSQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.sqlserver,
+    name: 'Cloud SQL for SQL Server',
+    iconName: 'cloudsqlforsqlserver',
+    displayName: 'Cloud SQL for SQL Server'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'CockroachDB',
+    iconName: 'cockroachdb',
+    displayName: 'CockroachDB'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.duckdb,
+    name: 'CSV',
+    iconName: 'csv',
+    displayName: 'CSV'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.databricks,
+    name: 'Databricks',
+    iconName: 'databricks',
+    displayName: 'Databricks'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.duckdb,
+    name: 'DuckDB',
+    iconName: 'duckdb',
+    displayName: 'DuckDB'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.duckdb,
+    name: 'JSON',
+    iconName: 'json',
+    displayName: 'JSON'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.mysql,
+    name: 'MariaDB',
+    iconName: 'mariadb',
+    displayName: 'MariaDB'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.sqlserver,
+    name: 'SQL Server',
+    iconName: 'sqlserver',
+    displayName: 'Microsoft SQL Server'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.mysql,
+    name: 'MySQL',
+    iconName: 'mysql',
+    displayName: 'MySQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.oracle,
+    name: 'Oracle',
+    iconName: 'oracle',
+    displayName: 'Oracle Database'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.duckdb,
+    name: 'Parquet',
+    iconName: 'parquet',
+    displayName: 'Parquet'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.mysql,
+    name: 'Percona Server for MySQL',
+    iconName: 'perconaserverformysql',
+    displayName: 'Percona Server for MySQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'Postgresql',
+    iconName: 'postgresql',
+    displayName: 'PostgreSQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.presto,
+    name: 'Presto',
+    iconName: 'presto',
+    displayName: 'Presto'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.mysql,
+    name: 'SingleStoreDB',
+    iconName: 'singlestoredb',
+    displayName: 'SingleStoreDB'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.spark,
+    name: 'Spark',
+    iconName: 'spark',
+    displayName: 'Spark'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.snowflake,
+    name: 'Snowflake',
+    iconName: 'snowflake',
+    displayName: 'Snowflake'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.trino,
+    name: 'Trino',
+    iconName: 'trino',
+    displayName: 'Trino'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'YugabyteDB',
+    iconName: 'yugabytedb',
+    displayName: 'YugabyteDB'
+  }
+];
 
 export const RUN_CHECK_TIME_WINDOW_FILTERS: {
   [key in string]: TimeWindowFilterParameters | null;
@@ -181,13 +487,25 @@ export const RUN_CHECK_TIME_WINDOW_FILTERS: {
     daily_partitioning_include_today: false,
     daily_partitioning_recent_days: 1
   },
+  'Last 3 days, including today': {
+    daily_partitioning_include_today: true,
+    daily_partitioning_recent_days: 3
+  },
   'Last 3 days, excluding today': {
     daily_partitioning_include_today: false,
     daily_partitioning_recent_days: 3
   },
+  'Last 7 days, including today': {
+    daily_partitioning_include_today: true,
+    daily_partitioning_recent_days: 7
+  },
   'Last 7 days, excluding today': {
     daily_partitioning_include_today: false,
     daily_partitioning_recent_days: 7
+  },
+  'Last 30 days, including today': {
+    daily_partitioning_include_today: true,
+    daily_partitioning_recent_days: 30
   },
   'Last 30 days, excluding today': {
     daily_partitioning_include_today: false,
@@ -201,9 +519,17 @@ export const RUN_CHECK_TIME_WINDOW_FILTERS: {
     monthly_partitioning_include_current_month: false,
     monthly_partitioning_recent_months: 1
   },
+  'Last 3 months, including current month': {
+    monthly_partitioning_include_current_month: true,
+    monthly_partitioning_recent_months: 3
+  },
   'Last 3 months, excluding current month': {
     monthly_partitioning_include_current_month: false,
     monthly_partitioning_recent_months: 3
+  },
+  'Last 12 months, including current month': {
+    monthly_partitioning_include_current_month: true,
+    monthly_partitioning_recent_months: 12
   },
   'Last 12 months, excluding current month': {
     monthly_partitioning_include_current_month: false,
@@ -261,28 +587,4 @@ export const dateToString = (k: string) => {
   }
   const a = k.replace(/T/g, ' ');
   return a;
-};
-
-export const datatype_detected = (numberForFile: any) => {
-  if (Number(numberForFile) === 1) {
-    return 'INTEGER';
-  }
-  if (Number(numberForFile) === 2) {
-    return 'FLOAT';
-  }
-  if (Number(numberForFile) === 3) {
-    return 'DATETIME';
-  }
-  if (Number(numberForFile) === 4) {
-    return 'TIMESTAMP';
-  }
-  if (Number(numberForFile) === 5) {
-    return 'BOOLEAN';
-  }
-  if (Number(numberForFile) === 6) {
-    return 'STRING';
-  }
-  if (Number(numberForFile) === 7) {
-    return 'Mixed data type';
-  }
 };

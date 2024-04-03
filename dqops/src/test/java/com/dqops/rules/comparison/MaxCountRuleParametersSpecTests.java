@@ -25,11 +25,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class MaxCountRuleParametersSpecTests extends BaseTest {
-    private MaxCountRule0ParametersSpec sut;
+    private MaxCountRule0WarningParametersSpec sut;
 
     @BeforeEach
     void setUp() {
-        this.sut = new MaxCountRule0ParametersSpec();
+        this.sut = new MaxCountRule0WarningParametersSpec();
     }
 
     @Test
@@ -54,7 +54,7 @@ public class MaxCountRuleParametersSpecTests extends BaseTest {
     @Test
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
         Assertions.assertNull(ruleExecutionResult.getExpectedValue());
         Assertions.assertNull(ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());

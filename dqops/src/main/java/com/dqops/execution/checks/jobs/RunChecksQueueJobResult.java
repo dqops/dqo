@@ -17,6 +17,7 @@ package com.dqops.execution.checks.jobs;
 
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.monitoring.DqoJobStatus;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.swagger.annotations.ApiModel;
@@ -33,24 +34,27 @@ import lombok.EqualsAndHashCode;
 @Data
 public class RunChecksQueueJobResult {
     /**
-     * Job id that identifies a job that was started on the DQO job queue.
+     * Job id that identifies a job that was started on the DQOps job queue.
      */
-    @JsonPropertyDescription("Job id that identifies a job that was started on the DQO job queue.")
+    @JsonPropertyDescription("Job id that identifies a job that was started on the DQOps job queue.")
     private DqoQueueJobId jobId;
 
     /**
-     * Optional result object that is returned only when the wait parameter was true and the "run checks" job has finished. Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected.
+     * Optional result object that is returned only when the wait parameter was true and the "run checks" job has finished.
+     * Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected.
      * The calling code (the data pipeline) can decide if further processing should be continued.
      */
-    @JsonPropertyDescription("Optional result object that is returned only when the wait parameter was true and the \"run checks\" job has finished. Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected. The calling code (the data pipeline) can decide if further processing should be continued.")
+    @JsonPropertyDescription("Optional result object that is returned only when the wait parameter was true and the \"run checks\" job has finished. " +
+            "Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected. " +
+            "The calling code (the data pipeline) can decide if further processing should be continued.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private RunChecksJobResult result;
+    private RunChecksResult result;
 
     /**
      * Job status.
      */
     @JsonPropertyDescription("Job status")
-    private DqoJobStatus status;
+    private DqoJobStatus status = DqoJobStatus.queued;
 
 
     public RunChecksQueueJobResult() {
@@ -62,7 +66,7 @@ public class RunChecksQueueJobResult {
      * @param result Job result.
      * @param status Job status.
      */
-    public RunChecksQueueJobResult(DqoQueueJobId jobId, RunChecksJobResult result, DqoJobStatus status) {
+    public RunChecksQueueJobResult(DqoQueueJobId jobId, RunChecksResult result, DqoJobStatus status) {
         this.jobId = jobId;
         this.result = result;
         this.status = status;
@@ -74,5 +78,16 @@ public class RunChecksQueueJobResult {
      */
     public RunChecksQueueJobResult(DqoQueueJobId jobId) {
         this.jobId = jobId;
+    }
+
+    public static class RunChecksQueueJobResultSampleFactory implements SampleValueFactory<RunChecksQueueJobResult> {
+        @Override
+        public RunChecksQueueJobResult createSample() {
+            return new RunChecksQueueJobResult() {{
+                setJobId(new DqoQueueJobId.DqoQueueJobIdSampleFactory().createSample());
+                setStatus(DqoJobStatus.finished);
+                setResult(new RunChecksResult.RunChecksResultSampleFactory().createSample());
+            }};
+        }
     }
 }

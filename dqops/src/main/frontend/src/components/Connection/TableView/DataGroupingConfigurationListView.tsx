@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { DataGroupingConfigurationBasicModel } from '../../../api';
+import { DataGroupingConfigurationListModel } from '../../../api';
 import Button from '../../Button';
 import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
 import ConfirmDialog from '../../CustomTree/ConfirmDialog';
 import RadioButton from '../../RadioButton';
 import SetDefaultDialog from './SetDefaultDialog';
 import SvgIcon from '../../SvgIcon';
-import { IconButton } from '@material-tailwind/react';
+import { IconButton, Tooltip } from '@material-tailwind/react';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import clsx from 'clsx';
 
 interface IDataGroupingConfigurationListViewProps {
-  dataGroupingConfigurations: DataGroupingConfigurationBasicModel[];
+  dataGroupingConfigurations: DataGroupingConfigurationListModel[];
   getDataGroupingConfigurations: () => void;
   onCreate: () => void;
-  onEdit: (groupingConfiguration: DataGroupingConfigurationBasicModel) => void;
+  onEdit: (groupingConfiguration: DataGroupingConfigurationListModel) => void;
 }
 
 const DataGroupingConfigurationListView = ({
@@ -24,10 +27,11 @@ const DataGroupingConfigurationListView = ({
   const [open, setOpen] = useState(false);
   const [defaultOpen, setDefaultOpen] = useState(false);
   const [selectedGroupingConfiguration, setSelectedGroupingConfiguration] =
-    useState<DataGroupingConfigurationBasicModel>();
+    useState<DataGroupingConfigurationListModel>();
   const [messageBox, setMessageBox] = useState<boolean>(false);
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const setDefaultGroupingConfiguration = async (
-    groupingConfiguration: DataGroupingConfigurationBasicModel,
+    groupingConfiguration: DataGroupingConfigurationListModel,
     nameOfGrouping?: string
   ) => {
     try {
@@ -44,7 +48,7 @@ const DataGroupingConfigurationListView = ({
   };
 
   const deleteGroupingConfiguration = async (
-    groupingConfiguration?: DataGroupingConfigurationBasicModel
+    groupingConfiguration?: DataGroupingConfigurationListModel
   ) => {
     if (!groupingConfiguration) {
       return;
@@ -64,14 +68,14 @@ const DataGroupingConfigurationListView = ({
   };
 
   const openConfirmDeleteModal = (
-    groupingConfiguration: DataGroupingConfigurationBasicModel
+    groupingConfiguration: DataGroupingConfigurationListModel
   ) => {
     setOpen(true);
     setSelectedGroupingConfiguration(groupingConfiguration);
   };
 
   const openConfirmDefaultModal = (
-    groupingConfiguration: DataGroupingConfigurationBasicModel
+    groupingConfiguration: DataGroupingConfigurationListModel
   ) => {
     setDefaultOpen(true);
     setSelectedGroupingConfiguration(groupingConfiguration);
@@ -85,7 +89,7 @@ const DataGroupingConfigurationListView = ({
     }
   }, [dataGroupingConfigurations]);
 
-  const elem: DataGroupingConfigurationBasicModel | undefined =
+  const elem: DataGroupingConfigurationListModel | undefined =
     dataGroupingConfigurations.find(
       (x) => x.default_data_grouping_configuration === true
     );
@@ -103,15 +107,24 @@ const DataGroupingConfigurationListView = ({
   return (
     <div className="px-8 py-4 text-sm">
       <table className="mb-4">
-        <thead>
-          <tr className="flex px-2 py-2">
-            <th className="w-5 h-5"></th>
+        <thead className="relative">
+          <tr className="flex py-2">
             <th>Data grouping configuration name</th>
+            {dataGroupingConfigurations.length !== 0 && (
+              <th className="absolute right-22.5">Action</th>
+            )}
           </tr>
         </thead>
         <tbody>
           <div className="pr-2 py-2 relative flex items-center gap-2  ">
-            <div className="w-5 h-5">
+            <div
+              className={clsx(
+                'w-5 h-5',
+                userProfile.can_manage_data_sources !== true
+                  ? 'pointer-events-none cursor-not-allowed'
+                  : ''
+              )}
+            >
               {' '}
               <RadioButton
                 checked={
@@ -137,7 +150,14 @@ const DataGroupingConfigurationListView = ({
                 ) : (
                   <div className="w-5 h-5"></div>
                 )} */}
-                <div className="w-5 h-5">
+                <div
+                  className={clsx(
+                    'w-5 h-5',
+                    userProfile.can_manage_data_sources !== true
+                      ? 'pointer-events-none cursor-not-allowed'
+                      : ''
+                  )}
+                >
                   <RadioButton
                     checked={
                       groupingConfiguration.default_data_grouping_configuration
@@ -152,24 +172,46 @@ const DataGroupingConfigurationListView = ({
                     }
                   />
                 </div>
-                <span
-                  onClick={() => onEdit(groupingConfiguration)}
-                  className="cursor-pointer underline"
-                >
+                <span>
                   {groupingConfiguration.data_grouping_configuration_name}
                 </span>
               </td>
 
-              <td className="px-2 py-2">
-                <IconButton
-                  size="sm"
-                  className="group bg-teal-500 ml-3"
-                  onClick={() => {
-                    openConfirmDeleteModal(groupingConfiguration);
-                  }}
+              <td className="px-20 py-2 ">
+                <Tooltip
+                  content={
+                    userProfile.can_manage_data_sources !== true
+                      ? 'Info'
+                      : 'Modify'
+                  }
                 >
-                  <SvgIcon name="delete" className="w-4" />
-                </IconButton>
+                  <IconButton
+                    size="sm"
+                    className="group bg-teal-500 ml-3"
+                    onClick={() => onEdit(groupingConfiguration)}
+                  >
+                    <SvgIcon
+                      name={
+                        userProfile.can_manage_data_sources !== true
+                          ? 'info'
+                          : 'edit'
+                      }
+                      className="w-4"
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content="Delete">
+                  <IconButton
+                    size="sm"
+                    className="group bg-teal-500 ml-3"
+                    onClick={() => {
+                      openConfirmDeleteModal(groupingConfiguration);
+                    }}
+                    disabled={userProfile.can_manage_data_sources !== true}
+                  >
+                    <SvgIcon name="delete" className="w-4" />
+                  </IconButton>
+                </Tooltip>
               </td>
             </tr>
           ))}
@@ -181,6 +223,7 @@ const DataGroupingConfigurationListView = ({
         className="text-sm"
         color="primary"
         onClick={onCreate}
+        disabled={userProfile.can_manage_data_sources !== true}
       />
       <ConfirmDialog
         open={open}
@@ -194,7 +237,7 @@ const DataGroupingConfigurationListView = ({
         open={defaultOpen}
         onClose={() => setDefaultOpen(false)}
         message={
-          'Data grouping is an advanced functionality of DQO that requires planning. DQO will add a GROUP BY clause to every data quality check query, generating a lot of data quality results. The number of rows returned by a GROUP BY clause in SQL will increase the number of data quality check results tracked by DQO and will impact data quality KPIs.'
+          'Data grouping is an advanced functionality of DQOps that requires planning. DQOps will add a GROUP BY clause to every data quality check query, generating a lot of data quality results. The number of rows returned by a GROUP BY clause in SQL will increase the number of data quality check results tracked by DQOps and will impact data quality KPIs.'
         }
         onConfirm={() =>
           setDefaultGroupingConfiguration(

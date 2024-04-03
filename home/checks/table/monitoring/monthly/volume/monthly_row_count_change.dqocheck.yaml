@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: table/volume/row_count
+  rule_name: change/change_percent
+  help_text: Detects when the volume (row count) changes since the last known row
+    count from a previous month exceeds the maximum accepted change percentage.
+  standard: true

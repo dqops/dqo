@@ -1,8 +1,9 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/pii/contains_email_percent
-  rule_name: comparison/min_percent
-  help_text: Verifies that the percentage of rows that contains valid emails in a
-    column does not exceed the minimum accepted percentage.
+  rule_name: comparison/max_percent
+  help_text: Detects emails in text columns. Verifies that the percentage of rows
+    that contains valid emails in a column does not exceed the minimum accepted percentage.
+  standard: true

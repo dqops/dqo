@@ -1,9 +1,11 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/nulls/null_percent
   rule_name: comparison/max_percent
-  help_text: Verifies that the percentage of null values in a column does not exceed
-    the set percentage. Creates a separate data quality check (and an alert) for each
-    daily partition.
+  help_text: Detects incomplete columns that contain any null values. Measures the
+    percentage of rows having a null value. Raises a data quality issue when the percentage
+    of null values is above a max_percent threshold. Stores a separate data quality
+    check result for each daily partition.
+  standard: true

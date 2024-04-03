@@ -22,6 +22,7 @@ import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,11 +35,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Model that contains the basic information about a table comparison configuration that specifies how the current table could be compared to another table that is a source of truth for comparison.
+ * Model that contains the basic information about a table comparison configuration that specifies how the current table can be compared with another table that is a source of truth for comparison.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "TableComparisonConfigurationModel", description = "Model that contains the basic information about a table comparison configuration that specifies how the current table could be compared to another table that is a source of truth for comparison.")
+@ApiModel(value = "TableComparisonConfigurationModel", description = "Model that contains the basic information about a table comparison configuration that specifies how the current table can be compared with another table that is a source of truth for comparison.")
 @Data
 public class TableComparisonConfigurationModel {
     /**
@@ -71,10 +72,10 @@ public class TableComparisonConfigurationModel {
     @JsonPropertyDescription("The schema and table name of the reference table that has the expected data.")
     private PhysicalTableName referenceTable;
 
-    @JsonPropertyDescription("The type of checks (profiling, recurring, partitioned) that this check comparison configuration is applicable. The default value is 'profiling'.")
+    @JsonPropertyDescription("The type of checks (profiling, monitoring, partitioned) that this check comparison configuration is applicable. The default value is 'profiling'.")
     private CheckType checkType = CheckType.profiling;
 
-    @JsonPropertyDescription("The time scale that this check comparison configuration is applicable. Supported values are 'daily' and 'monthly' for recurring and partitioned checks or an empty value for profiling checks.")
+    @JsonPropertyDescription("The time scale that this check comparison configuration is applicable. Supported values are 'daily' and 'monthly' for monitoring and partitioned checks or an empty value for profiling checks.")
     private CheckTimeScale timeScale;
 
     /**
@@ -86,11 +87,32 @@ public class TableComparisonConfigurationModel {
     private List<TableComparisonGroupingColumnPairModel> groupingColumns = new ArrayList<>();
 
     /**
+     * Boolean flag that decides if the current user can update or delete the table comparison.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete the table comparison.")
+    private boolean canEdit;
+
+    /**
+     * Boolean flag that decides if the current user can run comparison checks.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can run comparison checks.")
+    private boolean canRunCompareChecks;
+
+    /**
+     * Boolean flag that decides if the current user can delete data (results).
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
+    private boolean canDeleteData;
+
+    /**
      * Creates a basic model with the comparison from the comparison specification.
      * @param comparisonSpec Comparison specification.
+     * @param canCompareTables User can compare tables, edit the comparison definition, run comparison checks.
      * @return Table comparison model with the basic information.
      */
-    public static TableComparisonConfigurationModel fromTableComparisonSpec(TableComparisonConfigurationSpec comparisonSpec) {
+    public static TableComparisonConfigurationModel fromTableComparisonSpec(
+            TableComparisonConfigurationSpec comparisonSpec,
+            boolean canCompareTables) {
         HierarchyId comparedTableHierarchyId = comparisonSpec.getHierarchyId();
         if (comparedTableHierarchyId == null) {
             throw new DqoRuntimeException("Cannot map a detached comparison, because the connection and table name is unknown");
@@ -104,6 +126,9 @@ public class TableComparisonConfigurationModel {
         model.setReferenceTable(new PhysicalTableName(comparisonSpec.getReferenceTableSchemaName(), comparisonSpec.getReferenceTableName()));
         model.setCheckType(comparisonSpec.getCheckType());
         model.setTimeScale(comparisonSpec.getTimeScale());
+        model.setCanEdit(canCompareTables);
+        model.setCanRunCompareChecks(canCompareTables);
+        model.setCanDeleteData(canCompareTables);
 
         for (TableComparisonGroupingColumnsPairSpec groupingColumnsPairSpec : comparisonSpec.getGroupingColumns()) {
             TableComparisonGroupingColumnPairModel tableComparisonGroupingColumnPairModel =
@@ -134,10 +159,19 @@ public class TableComparisonConfigurationModel {
         groupingColumnsSpecList.clear();
         for (TableComparisonGroupingColumnPairModel groupingColumnPairModel : this.groupingColumns) {
             if (groupingColumnsSpecList.size() >= 9) {
-                throw new DqoRuntimeException("Too many data grouping columns. DQO supports up to 9 columns.");
+                throw new DqoRuntimeException("Too many data grouping columns. DQOps supports up to 9 columns.");
             }
             TableComparisonGroupingColumnsPairSpec groupingColumnsPairSpec = groupingColumnPairModel.createColumnsPairSpec();
             groupingColumnsSpecList.add(groupingColumnsPairSpec);
+        }
+    }
+
+    public static class TableComparisonConfigurationModelSampleFactory implements SampleValueFactory<TableComparisonConfigurationModel> {
+        @Override
+        public TableComparisonConfigurationModel createSample() {
+            return fromTableComparisonSpec(
+                    new TableComparisonConfigurationSpec.TableComparisonConfigurationSpecSampleFactory().createSample(),
+                    true);
         }
     }
 }

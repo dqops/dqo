@@ -18,7 +18,12 @@ package com.dqops.connectors.bigquery;
 import com.dqops.connectors.ConnectorOperationFailedException;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.jdbc.JdbConnectionPoolCreateException;
+import com.dqops.core.secrets.SecretValueLookupContext;
+import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileContent;
+import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.auth.oauth2.UserCredentials;
@@ -32,9 +37,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -56,9 +63,10 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
     /**
      * Returns or creates a BigQuery service for the given connection specification.
      * @param connectionSpec Connection specification (should be not mutable).
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return BigQuery service.
      */
-    public BigQueryInternalConnection getBigQueryService(ConnectionSpec connectionSpec) {
+    public BigQueryInternalConnection getBigQueryService(ConnectionSpec connectionSpec, SecretValueLookupContext secretValueLookupContext) {
         assert connectionSpec != null;
         assert connectionSpec.getProviderType() == ProviderType.bigquery;
         assert connectionSpec.getBigquery() != null;
@@ -66,7 +74,8 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
         try {
             final BigQueryParametersSpec clonedBigQueryConnectionSpec = connectionSpec.getBigquery().deepClone();
             final String connectionName = connectionSpec.getConnectionName();
-            return this.bigQueryServiceCache.get(clonedBigQueryConnectionSpec, () -> createBigQueryService(clonedBigQueryConnectionSpec, connectionName));
+            return this.bigQueryServiceCache.get(clonedBigQueryConnectionSpec, () -> createBigQueryService(
+                    clonedBigQueryConnectionSpec, connectionName, secretValueLookupContext));
         } catch (ExecutionException e) {
             throw new JdbConnectionPoolCreateException("Cannot create a BigQuery connection for " + connectionSpec.getConnectionName(), e);
         }
@@ -76,14 +85,35 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
      * Creates a big query service.
      * @param bigQueryParametersSpec Connection specification for a BigQuery connection.
      * @param connectionName Connection name, used for error reporting.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Connection specification.
      */
-    public BigQueryInternalConnection createBigQueryService(BigQueryParametersSpec bigQueryParametersSpec, String connectionName) {
+    public BigQueryInternalConnection createBigQueryService(BigQueryParametersSpec bigQueryParametersSpec,
+                                                            String connectionName,
+                                                            SecretValueLookupContext secretValueLookupContext) {
         try {
             GoogleCredentials googleCredentials = null;
             switch (bigQueryParametersSpec.getAuthenticationMode()) {
                 case google_application_credentials:
-                    googleCredentials = GoogleCredentials.getApplicationDefault();
+                    SharedCredentialWrapper defaultCredentialsSharedSecret =
+                            secretValueLookupContext != null && secretValueLookupContext.getUserHome() != null &&
+                            secretValueLookupContext.getUserHome().getCredentials() != null ?
+                            secretValueLookupContext.getUserHome().getCredentials()
+                            .getByObjectName(DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME, true) : null;
+                    if (defaultCredentialsSharedSecret != null && defaultCredentialsSharedSecret.getObject() != null) {
+                        String keyContent = defaultCredentialsSharedSecret.getObject().getTextContent();
+
+                        if (Objects.equals(keyContent.replace("\r\n", "\n"), DefaultCloudCredentialFileContent.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_INITIAL_CONTENT)) {
+                            throw new DqoRuntimeException("The .credentials/" + DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME +
+                                    " file contains default (fake) credentials. Please replace the content of the file with a valid GCP Service Account JSON key.");
+                        }
+
+                        try (InputStream keyReaderStream = new ByteArrayInputStream(keyContent.getBytes(StandardCharsets.UTF_8))) {
+                            googleCredentials = GoogleCredentials.fromStream(keyReaderStream);
+                        }
+                    } else {
+                        googleCredentials = GoogleCredentials.getApplicationDefault();
+                    }
                     break;
                 case json_key_content:
                     byte[] keyContentBytes = bigQueryParametersSpec.getJsonKeyContent().getBytes(StandardCharsets.UTF_8);
@@ -111,13 +141,31 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
             }
             if(googleCredentials instanceof ServiceAccountCredentials) {
                 ServiceAccountCredentials serviceAccountCredentials = (ServiceAccountCredentials) googleCredentials;
-                defaultProjectFromCredentials = serviceAccountCredentials.getQuotaProjectId();
+                defaultProjectFromCredentials = serviceAccountCredentials.getProjectId();
             }
 
-            String effectiveJobProjectId = MoreObjects.firstNonNull(MoreObjects.firstNonNull(
-                    bigQueryParametersSpec.getBillingProjectId(), defaultProjectFromCredentials), bigQueryParametersSpec.getSourceProjectId());
-            String effectiveQuotaProjectId = MoreObjects.firstNonNull(
-                    MoreObjects.firstNonNull(bigQueryParametersSpec.getQuotaProjectId(), defaultProjectFromCredentials), bigQueryParametersSpec.getSourceProjectId());
+            String effectiveJobProjectId = null;
+            switch (bigQueryParametersSpec.getJobsCreateProject()) {
+                case create_jobs_in_source_project:
+                    effectiveJobProjectId = bigQueryParametersSpec.getSourceProjectId();
+                    break;
+
+                case create_jobs_in_default_project_from_credentials:
+                    effectiveJobProjectId = defaultProjectFromCredentials;
+                    break;
+
+                case create_jobs_in_selected_billing_project_id:
+                    effectiveJobProjectId = bigQueryParametersSpec.getBillingProjectId();
+                    break;
+
+                default:
+                    effectiveJobProjectId = bigQueryParametersSpec.getSourceProjectId();
+            }
+
+            String effectiveQuotaProjectId =
+                    bigQueryParametersSpec.getQuotaProjectId() != null ? bigQueryParametersSpec.getQuotaProjectId() :
+                            effectiveJobProjectId != null ? effectiveJobProjectId :
+                                    bigQueryParametersSpec.getSourceProjectId(); // fallback - use the source project
 
             BigQueryOptions.Builder builder = BigQueryOptions.newBuilder()
                     .setCredentials(googleCredentials)
@@ -127,11 +175,12 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
             BigQueryOptions bigQueryOptions = builder.build();
             BigQuery service = bigQueryOptions.getService();
 
-            BigQueryInternalConnection bigQueryInternalConnection = new BigQueryInternalConnection(service, effectiveJobProjectId, effectiveQuotaProjectId);
+            BigQueryInternalConnection bigQueryInternalConnection = new BigQueryInternalConnection(
+                    connectionName, service, effectiveJobProjectId, effectiveQuotaProjectId);
             return bigQueryInternalConnection;
         }
         catch (Exception ex) {
-            throw new ConnectorOperationFailedException("Failed to open a BigQuery connection " + connectionName, ex);
+            throw new ConnectorOperationFailedException("Failed to open a BigQuery connection " + connectionName + ", error: " + ex.getMessage(), ex);
         }
     }
 }

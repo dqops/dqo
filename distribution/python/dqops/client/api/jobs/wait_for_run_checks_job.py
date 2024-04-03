@@ -4,21 +4,17 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.run_checks_queue_job_result import RunChecksQueueJobResult
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
-    job_id: int,
+    job_id: str,
     *,
-    client: Client,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}api/jobs/runchecks/{jobId}/wait".format(client.base_url, jobId=job_id)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     params["waitTimeout"] = wait_timeout
@@ -27,17 +23,15 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/jobs/runchecks/{jobId}/wait".format(
+            jobId=job_id,
+        ),
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[RunChecksQueueJobResult]:
     if response.status_code == HTTPStatus.OK:
         response_200 = RunChecksQueueJobResult.from_dict(response.json())
@@ -50,7 +44,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[RunChecksQueueJobResult]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -61,9 +55,9 @@ def _build_response(
 
 
 def sync_detailed(
-    job_id: int,
+    job_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Response[RunChecksQueueJobResult]:
     """waitForRunChecksJob
@@ -72,7 +66,7 @@ def sync_detailed(
     still running, but the wait timeout elapsed.
 
     Args:
-        job_id (int):
+        job_id (str):
         wait_timeout (Union[Unset, None, int]):
 
     Raises:
@@ -85,12 +79,10 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         job_id=job_id,
-        client=client,
         wait_timeout=wait_timeout,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -98,9 +90,9 @@ def sync_detailed(
 
 
 def sync(
-    job_id: int,
+    job_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Optional[RunChecksQueueJobResult]:
     """waitForRunChecksJob
@@ -109,7 +101,7 @@ def sync(
     still running, but the wait timeout elapsed.
 
     Args:
-        job_id (int):
+        job_id (str):
         wait_timeout (Union[Unset, None, int]):
 
     Raises:
@@ -128,9 +120,9 @@ def sync(
 
 
 async def asyncio_detailed(
-    job_id: int,
+    job_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Response[RunChecksQueueJobResult]:
     """waitForRunChecksJob
@@ -139,7 +131,7 @@ async def asyncio_detailed(
     still running, but the wait timeout elapsed.
 
     Args:
-        job_id (int):
+        job_id (str):
         wait_timeout (Union[Unset, None, int]):
 
     Raises:
@@ -152,20 +144,18 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         job_id=job_id,
-        client=client,
         wait_timeout=wait_timeout,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
 
 async def asyncio(
-    job_id: int,
+    job_id: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Optional[RunChecksQueueJobResult]:
     """waitForRunChecksJob
@@ -174,7 +164,7 @@ async def asyncio(
     still running, but the wait timeout elapsed.
 
     Args:
-        job_id (int):
+        job_id (str):
         wait_timeout (Union[Unset, None, int]):
 
     Raises:

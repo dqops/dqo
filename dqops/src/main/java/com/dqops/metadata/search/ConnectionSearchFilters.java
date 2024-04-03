@@ -17,20 +17,32 @@ package com.dqops.metadata.search;
 
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import org.apache.parquet.Strings;
 
 /**
- * Hierarchy node search filters.
+ * Connection search filters used to find a connection.
  */
 public class ConnectionSearchFilters {
+    @JsonPropertyDescription("The connection (data source) name. Supports search patterns in the format: 'source\\*', '\\*_prod', 'prefix\\*suffix'.")
     private String connectionName;
+
+    @JsonPropertyDescription("A boolean flag to target enabled connections. When the value of this field is not set, " +
+            "the default value of this field is *true*, targeting only enabled connections (data sources) that are not implicitly disabled.")
     private Boolean enabled = true;
-    private String[] dimensions;
+
+    @JsonPropertyDescription("An array of tags assigned as the default grouping tags on a connection. All tags must be present on the connection to match. The tags can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. " +
+            "The tags are assigned to the connection on the default data grouping screen when any of the data grouping hierarchy level is assigned a static value, which is a tag.")
+    private String[] tags;
+
+    @JsonPropertyDescription("An array of labels assigned to the connection. All labels must be present on a connection to match. The labels can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. " +
+            "The labels are assigned on the labels screen and stored in the *labels* node in the *connection.dqoconnection.yaml* file.")
     private String[] labels;
 
     @JsonIgnore
     private SearchPattern connectionNameSearchPattern;
     @JsonIgnore
-    private SearchPattern[] dimensionsSearchPatterns;
+    private SearchPattern[] tagsSearchPatterns;
     @JsonIgnore
     private SearchPattern[] labelsSearchPatterns;
     
@@ -80,16 +92,16 @@ public class ConnectionSearchFilters {
      * Returns the dimension name search patterns.
      * @return Dimension search patterns.
      */
-    public String[] getDimensions() {
-        return dimensions;
+    public String[] getTags() {
+        return tags;
     }
 
     /**
      * Sets the dimension search patterns.
-     * @param dimensions dimension search patterns.
+     * @param tags dimension search patterns.
      */
-    public void setDimensions(String[] dimensions) {
-        this.dimensions = dimensions;
+    public void setTags(String[] tags) {
+        this.tags = tags;
     }
 
     /**
@@ -113,8 +125,9 @@ public class ConnectionSearchFilters {
      * Lazy getter, parses <code>connectionName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>connectionName</code>.
      */
+    @JsonIgnore
     public SearchPattern getConnectionNameSearchPattern() {
-        if (connectionNameSearchPattern == null && connectionName != null) {
+        if (connectionNameSearchPattern == null && !Strings.isNullOrEmpty(connectionName)) {
             connectionNameSearchPattern = SearchPattern.create(false, connectionName);
         }
 
@@ -127,15 +140,15 @@ public class ConnectionSearchFilters {
      * @param i Index of requested dimension search pattern. Corresponds to <code>dimensions[i]</code>.
      * @return {@link SearchPattern} related to <code>i</code>'th <code>dimension</code>.
      */
-    public SearchPattern getDimensionSearchPatternAt(int i) {
-        if (dimensionsSearchPatterns == null) {
-            dimensionsSearchPatterns = new SearchPattern[dimensions.length];
+    public SearchPattern getTagSearchPatternAt(int i) {
+        if (tagsSearchPatterns == null) {
+            tagsSearchPatterns = new SearchPattern[tags.length];
         }
-        if (dimensionsSearchPatterns[i] == null && dimensions[i] != null) {
-            dimensionsSearchPatterns[i] = SearchPattern.create(false, dimensions[i]);
+        if (tagsSearchPatterns[i] == null && tags[i] != null) {
+            tagsSearchPatterns[i] = SearchPattern.create(false, tags[i]);
         }
 
-        return dimensionsSearchPatterns[i];
+        return tagsSearchPatterns[i];
     }
 
     /**

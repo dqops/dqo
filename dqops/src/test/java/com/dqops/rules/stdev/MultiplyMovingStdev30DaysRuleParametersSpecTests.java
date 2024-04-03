@@ -68,12 +68,13 @@ public class MultiplyMovingStdev30DaysRuleParametersSpecTests extends BaseTest {
                 this.sensorReadouts[i] = 25.0;
             }
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(14.91, ruleExecutionResult.getLowerBound(), 0.1);
         Assertions.assertEquals(25.09, ruleExecutionResult.getUpperBound(), 0.1);
@@ -82,12 +83,12 @@ public class MultiplyMovingStdev30DaysRuleParametersSpecTests extends BaseTest {
     @Test
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
-                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
         Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());

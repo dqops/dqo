@@ -1,5 +1,5 @@
 ///
-/// Copyright © 2021 DQOps (support@dqops.com)
+/// Copyright © 2024 DQOps (support@dqops.com)
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 import { IRootState } from '../reducers';
 import { CheckTypes } from '../../shared/routes';
+import { TABLE_LEVEL_TABS } from '../../shared/constants';
 
 export const getFirstLevelState =
   (checkType: CheckTypes) => (state: IRootState) => {
@@ -33,7 +34,7 @@ export const getFirstLevelActiveTab =
   };
 
 export const getFirstLevelSensorState = (state: IRootState) => {
-  const { tabs, activeTab = '' } = state.sensor;
+  const { tabs, activeTab = '' } = state.definition;
 
   return tabs.find((item) => item.url === activeTab)?.state || ({} as any);
 };
@@ -43,3 +44,9 @@ export const getFirstLevelIncidentsState = (state: IRootState) => {
 
   return tabs.find((item) => item.url === activeTab)?.state || ({} as any);
 };
+
+export const getSecondLevelTab = (checkType: CheckTypes, tab: string) : string => {
+  const secondTab = TABLE_LEVEL_TABS[checkType].find((x) => x.value === tab)?.value
+  
+  return secondTab ? secondTab : TABLE_LEVEL_TABS[checkType][0].value
+}

@@ -18,6 +18,7 @@ package com.dqops.sensors.column.nulls;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.AbstractSensorParametersSpec;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -54,5 +55,12 @@ public class ColumnNullsNullsCountSensorParametersSpec extends AbstractSensorPar
     @Override
     public String getSensorDefinitionName() {
         return "column/nulls/null_count";
+    }
+
+    public static class ColumnNullsNullsCountSensorParametersSpecSampleFactory implements SampleValueFactory<ColumnNullsNullsCountSensorParametersSpec> {
+        @Override
+        public ColumnNullsNullsCountSensorParametersSpec createSample() {
+            return new ColumnNullsNullsCountSensorParametersSpec();
+        }
     }
 }

@@ -1,65 +1,111 @@
-**valid longitude percent** checks  
+# valid longitude percent data quality checks
 
-**Description**  
-Column level check that ensures that there are no more than a set percentage of valid longitude values in a monitored column.
+This check verifies that numeric values are valid longitude coordinates. A valid longitude coordinate is in the range --180...180.
+ It measures the percentage of values within a valid range for a longitude.
+ This check raises a data quality issue when the rate of valid values is below the minimum accepted percentage.
+
 
 ___
+The **valid longitude percent** data quality check has the following variants for each
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
-## **profile valid longitude percent**  
-  
-**Check description**  
-Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage.  
-  
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_valid_longitude_percent|profiling| |[valid_longitude_percent](../../../../reference/sensors/Column/numeric-column-sensors/#valid-longitude-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
-  
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
-```
-dqo> check enable -c=connection_name -ch=profile_valid_longitude_percent
-```
-**Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
-```
-dqo> check run -ch=profile_valid_longitude_percent
-```
-It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
-```
-dqo> check run -c=connection_name -ch=profile_valid_longitude_percent
-```
-It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
-```
-dqo> check run -c=connection_name -t=table_name -ch=profile_valid_longitude_percent
-```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_valid_longitude_percent
-```
-**Check structure (Yaml)**
-```yaml
-      profiling_checks:
-        numeric:
-          profile_valid_longitude_percent:
-            warning:
-              min_percent: 100.0
-            error:
-              min_percent: 99.0
-            fatal:
-              min_percent: 95.0
-```
-**Sample configuration (Yaml)**  
-```yaml hl_lines="13-21"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+
+## profile valid longitude percent
+
+
+**Check description**
+
+Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage.
+
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_valid_longitude_percent`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+
+**Command-line examples**
+
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile valid longitude percent data quality check.
+
+??? example "Managing profile valid longitude percent check from DQOps shell"
+
+    === "Activate the check with a warning rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_valid_longitude_percent --enable-warning
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_valid_longitude_percent --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_valid_longitude_percent --enable-warning
+                            -Wmin_percent=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_valid_longitude_percent --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_valid_longitude_percent --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_valid_longitude_percent --enable-error
+                            -Emin_percent=value
+        ```
+
+
+    === "Run all configured checks"
+
+        Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *profile_valid_longitude_percent* check on all tables and columns on a single data source.
+
+        ```
+        dqo> check run -c=data_source_name -ch=profile_valid_longitude_percent
+        ```
+
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_valid_longitude_percent
+        ```
+
+        You can also run this check on all tables (and columns)  on which the *profile_valid_longitude_percent* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=profile_valid_longitude_percent
+        ```
+
+
+**YAML configuration**
+
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+
+
+```yaml hl_lines="7-15"
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
   columns:
     target_column:
       profiling_checks:
@@ -73,237 +119,569 @@ spec:
               min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
 
 ```
-### **BigQuery**
-=== "Sensor template for BigQuery"
-      
-    ```sql+jinja
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for BigQuery"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-    FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
-    FROM `<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **PostgreSQL**
-=== "Sensor template for PostgreSQL"
-      
-    ```sql+jinja
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for PostgreSQL"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **Redshift**
-=== "Sensor template for Redshift"
-      
-    ```sql+jinja
-    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Redshift"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **SQL Server**
-=== "Sensor template for SQL Server"
-      
-    ```sql+jinja
-    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT_BIG(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for SQL Server"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT_BIG(*) AS actual_value,
-        DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-        CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    ```
 
-### **Configuration with data grouping**  
-??? info "Click to see more"  
-    **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-21 39-44"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+??? info "Samples of generated SQL queries for each data source type"
+
+    Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+    [valid_longitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
+
+    ??? example "BigQuery"
+
+        === "Sensor template for BigQuery"
+
+            ```sql+jinja
+            {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for BigQuery"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM  AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Oracle"
+
+        === "Sensor template for Oracle"
+
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+              {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                      {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+              FROM(
+                  SELECT
+                             original_table.*
+                                 {{- lib.render_data_grouping_projections('original_table') }}
+                                 {{- lib.render_time_dimension_projection('original_table') }}
+                             FROM {{ lib.render_target_table() }} original_table
+                   {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                   ) analyzed_table
+              {{- lib.render_group_by() -}}
+              {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Oracle"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+                time_period,
+                time_period_utc
+              FROM(
+                  SELECT
+                             original_table.*,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                             FROM "<target_schema>"."<target_table>" original_table
+                   ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "PostgreSQL"
+
+        === "Sensor template for PostgreSQL"
+
+            ```sql+jinja
+            {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for PostgreSQL"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Redshift"
+
+        === "Sensor template for Redshift"
+
+            ```sql+jinja
+            {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Redshift"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Snowflake"
+
+        === "Sensor template for Snowflake"
+
+            ```sql+jinja
+            {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Snowflake"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "SQL Server"
+
+        === "Sensor template for SQL Server"
+
+            ```sql+jinja
+            {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for SQL Server"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG(analyzed_table.[target_column])
+                END AS actual_value,
+                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    
+
+Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
+
+??? info "Configuration with data grouping"
+
+    **Sample configuration with data grouping enabled (YAML)**
+    The sample below shows how to configure the data grouping and how it affects the generated SQL query.
+
+    ```yaml hl_lines="5-13 27-32"
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
-      incremental_time_window:
-        daily_partitioning_recent_days: 7
-        monthly_partitioning_recent_months: 1
       default_grouping_name: group_by_country_and_state
       groupings:
         group_by_country_and_state:
@@ -326,307 +704,682 @@ spec:
                   min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
         state:
           labels:
           - column used as the second grouping key
-    ```  
-    **BigQuery**  
-      
-    === "Sensor template for BigQuery"
-        ```sql+jinja
-        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+    ```
+
+    Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+    [valid_longitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
+
+    ??? example "BigQuery"
+
+        === "Sensor template for BigQuery"
+            ```sql+jinja
+            {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for BigQuery"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for BigQuery"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-            TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **PostgreSQL**  
-      
-    === "Sensor template for PostgreSQL"
-        ```sql+jinja
-        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for PostgreSQL"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Redshift**  
-      
-    === "Sensor template for Redshift"
-        ```sql+jinja
-        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM  AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Redshift"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Oracle"
+
+        === "Sensor template for Oracle"
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+              {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                      {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+              FROM(
+                  SELECT
+                             original_table.*
+                                 {{- lib.render_data_grouping_projections('original_table') }}
+                                 {{- lib.render_time_dimension_projection('original_table') }}
+                             FROM {{ lib.render_target_table() }} original_table
+                   {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                   ) analyzed_table
+              {{- lib.render_group_by() -}}
+              {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Oracle"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **SQL Server**  
-      
-    === "Sensor template for SQL Server"
-        ```sql+jinja
-        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT_BIG(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for SQL Server"
-        ```sql
-        SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT_BIG(*) AS actual_value,
-            analyzed_table.[country] AS grouping_level_1,
-            analyzed_table.[state] AS grouping_level_2,
-            DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-            CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state]
-        ORDER BY level_1, level_2
-                , 
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END as actual_value,
             
-        
+                            analyzed_table.grouping_level_1,
             
-        ```
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+              FROM(
+                  SELECT
+                             original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                             FROM "<target_schema>"."<target_table>" original_table
+                   ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "PostgreSQL"
+
+        === "Sensor template for PostgreSQL"
+            ```sql+jinja
+            {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for PostgreSQL"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Redshift"
+
+        === "Sensor template for Redshift"
+            ```sql+jinja
+            {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Redshift"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Snowflake"
+
+        === "Sensor template for Snowflake"
+            ```sql+jinja
+            {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Snowflake"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "SQL Server"
+
+        === "Sensor template for SQL Server"
+            ```sql+jinja
+            {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for SQL Server"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG(analyzed_table.[target_column])
+                END AS actual_value,
+                analyzed_table.[country] AS grouping_level_1,
+                analyzed_table.[state] AS grouping_level_2,
+                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            GROUP BY analyzed_table.[country], analyzed_table.[state]
+            ORDER BY level_1, level_2
+                    , 
+                
+            
+                
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     
-
-
-
-
-
-
 ___
 
-## **daily valid longitude percent**  
-  
-**Check description**  
-Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.  
-  
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_valid_longitude_percent|recurring|daily|[valid_longitude_percent](../../../../reference/sensors/Column/numeric-column-sensors/#valid-longitude-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
-  
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
-```
-dqo> check enable -c=connection_name -ch=daily_valid_longitude_percent
-```
-**Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
-```
-dqo> check run -ch=daily_valid_longitude_percent
-```
-It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
-```
-dqo> check run -c=connection_name -ch=daily_valid_longitude_percent
-```
-It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
-```
-dqo> check run -c=connection_name -t=table_name -ch=daily_valid_longitude_percent
-```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_valid_longitude_percent
-```
-**Check structure (Yaml)**
-```yaml
-      recurring_checks:
-        daily:
-          numeric:
-            daily_valid_longitude_percent:
-              warning:
-                min_percent: 100.0
-              error:
-                min_percent: 99.0
-              fatal:
-                min_percent: 95.0
-```
-**Sample configuration (Yaml)**  
-```yaml hl_lines="13-22"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+
+## daily valid longitude percent
+
+
+**Check description**
+
+Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
+
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_valid_longitude_percent`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+
+**Command-line examples**
+
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily valid longitude percent data quality check.
+
+??? example "Managing daily valid longitude percent check from DQOps shell"
+
+    === "Activate the check with a warning rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_valid_longitude_percent --enable-warning
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_valid_longitude_percent --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_valid_longitude_percent --enable-warning
+                            -Wmin_percent=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_valid_longitude_percent --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_valid_longitude_percent --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_valid_longitude_percent --enable-error
+                            -Emin_percent=value
+        ```
+
+
+    === "Run all configured checks"
+
+        Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *daily_valid_longitude_percent* check on all tables and columns on a single data source.
+
+        ```
+        dqo> check run -c=data_source_name -ch=daily_valid_longitude_percent
+        ```
+
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_valid_longitude_percent
+        ```
+
+        You can also run this check on all tables (and columns)  on which the *daily_valid_longitude_percent* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=daily_valid_longitude_percent
+        ```
+
+
+**YAML configuration**
+
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+
+
+```yaml hl_lines="7-16"
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
             daily_valid_longitude_percent:
@@ -638,237 +1391,569 @@ spec:
                 min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
 
 ```
-### **BigQuery**
-=== "Sensor template for BigQuery"
-      
-    ```sql+jinja
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for BigQuery"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
-    FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
-    FROM `<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **PostgreSQL**
-=== "Sensor template for PostgreSQL"
-      
-    ```sql+jinja
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for PostgreSQL"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        CAST(LOCALTIMESTAMP AS date) AS time_period,
-        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **Redshift**
-=== "Sensor template for Redshift"
-      
-    ```sql+jinja
-    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Redshift"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        CAST(LOCALTIMESTAMP AS date) AS time_period,
-        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-        TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **SQL Server**
-=== "Sensor template for SQL Server"
-      
-    ```sql+jinja
-    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT_BIG(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for SQL Server"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT_BIG(*) AS actual_value,
-        CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
-        CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    ```
 
-### **Configuration with data grouping**  
-??? info "Click to see more"  
-    **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-21 40-45"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+??? info "Samples of generated SQL queries for each data source type"
+
+    Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+    [valid_longitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
+
+    ??? example "BigQuery"
+
+        === "Sensor template for BigQuery"
+
+            ```sql+jinja
+            {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for BigQuery"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM  AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Oracle"
+
+        === "Sensor template for Oracle"
+
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+              {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                      {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+              FROM(
+                  SELECT
+                             original_table.*
+                                 {{- lib.render_data_grouping_projections('original_table') }}
+                                 {{- lib.render_time_dimension_projection('original_table') }}
+                             FROM {{ lib.render_target_table() }} original_table
+                   {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                   ) analyzed_table
+              {{- lib.render_group_by() -}}
+              {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Oracle"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+                time_period,
+                time_period_utc
+              FROM(
+                  SELECT
+                             original_table.*,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                             FROM "<target_schema>"."<target_table>" original_table
+                   ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "PostgreSQL"
+
+        === "Sensor template for PostgreSQL"
+
+            ```sql+jinja
+            {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for PostgreSQL"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Redshift"
+
+        === "Sensor template for Redshift"
+
+            ```sql+jinja
+            {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Redshift"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Snowflake"
+
+        === "Sensor template for Snowflake"
+
+            ```sql+jinja
+            {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Snowflake"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
+                TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "SQL Server"
+
+        === "Sensor template for SQL Server"
+
+            ```sql+jinja
+            {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for SQL Server"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG(analyzed_table.[target_column])
+                END AS actual_value,
+                CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
+                CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    
+
+Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
+
+??? info "Configuration with data grouping"
+
+    **Sample configuration with data grouping enabled (YAML)**
+    The sample below shows how to configure the data grouping and how it affects the generated SQL query.
+
+    ```yaml hl_lines="5-13 28-33"
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
-      incremental_time_window:
-        daily_partitioning_recent_days: 7
-        monthly_partitioning_recent_months: 1
       default_grouping_name: group_by_country_and_state
       groupings:
         group_by_country_and_state:
@@ -880,7 +1965,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             daily:
               numeric:
                 daily_valid_longitude_percent:
@@ -892,307 +1977,682 @@ spec:
                     min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
         state:
           labels:
           - column used as the second grouping key
-    ```  
-    **BigQuery**  
-      
-    === "Sensor template for BigQuery"
-        ```sql+jinja
-        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+    ```
+
+    Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+    [valid_longitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
+
+    ??? example "BigQuery"
+
+        === "Sensor template for BigQuery"
+            ```sql+jinja
+            {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for BigQuery"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for BigQuery"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
-        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **PostgreSQL**  
-      
-    === "Sensor template for PostgreSQL"
-        ```sql+jinja
-        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for PostgreSQL"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            CAST(LOCALTIMESTAMP AS date) AS time_period,
-            CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Redshift**  
-      
-    === "Sensor template for Redshift"
-        ```sql+jinja
-        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM  AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Redshift"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            CAST(LOCALTIMESTAMP AS date) AS time_period,
-            CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Oracle"
+
+        === "Sensor template for Oracle"
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+              {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                      {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+              FROM(
+                  SELECT
+                             original_table.*
+                                 {{- lib.render_data_grouping_projections('original_table') }}
+                                 {{- lib.render_time_dimension_projection('original_table') }}
+                             FROM {{ lib.render_target_table() }} original_table
+                   {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                   ) analyzed_table
+              {{- lib.render_group_by() -}}
+              {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Oracle"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-            TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **SQL Server**  
-      
-    === "Sensor template for SQL Server"
-        ```sql+jinja
-        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT_BIG(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for SQL Server"
-        ```sql
-        SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT_BIG(*) AS actual_value,
-            analyzed_table.[country] AS grouping_level_1,
-            analyzed_table.[state] AS grouping_level_2,
-            CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
-            CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state]
-        ORDER BY level_1, level_2
-                , 
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END as actual_value,
             
-        
+                            analyzed_table.grouping_level_1,
             
-        ```
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+              FROM(
+                  SELECT
+                             original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                             FROM "<target_schema>"."<target_table>" original_table
+                   ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "PostgreSQL"
+
+        === "Sensor template for PostgreSQL"
+            ```sql+jinja
+            {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for PostgreSQL"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Redshift"
+
+        === "Sensor template for Redshift"
+            ```sql+jinja
+            {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Redshift"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Snowflake"
+
+        === "Sensor template for Snowflake"
+            ```sql+jinja
+            {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Snowflake"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
+                TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "SQL Server"
+
+        === "Sensor template for SQL Server"
+            ```sql+jinja
+            {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for SQL Server"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG(analyzed_table.[target_column])
+                END AS actual_value,
+                analyzed_table.[country] AS grouping_level_1,
+                analyzed_table.[state] AS grouping_level_2,
+                CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
+                CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            GROUP BY analyzed_table.[country], analyzed_table.[state]
+            ORDER BY level_1, level_2
+                    , 
+                
+            
+                
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     
-
-
-
-
-
-
 ___
 
-## **monthly valid longitude percent**  
-  
-**Check description**  
-Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.  
-  
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_valid_longitude_percent|recurring|monthly|[valid_longitude_percent](../../../../reference/sensors/Column/numeric-column-sensors/#valid-longitude-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
-  
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
-```
-dqo> check enable -c=connection_name -ch=monthly_valid_longitude_percent
-```
-**Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
-```
-dqo> check run -ch=monthly_valid_longitude_percent
-```
-It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
-```
-dqo> check run -c=connection_name -ch=monthly_valid_longitude_percent
-```
-It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
-```
-dqo> check run -c=connection_name -t=table_name -ch=monthly_valid_longitude_percent
-```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_valid_longitude_percent
-```
-**Check structure (Yaml)**
-```yaml
-      recurring_checks:
-        monthly:
-          numeric:
-            monthly_valid_longitude_percent:
-              warning:
-                min_percent: 100.0
-              error:
-                min_percent: 99.0
-              fatal:
-                min_percent: 95.0
-```
-**Sample configuration (Yaml)**  
-```yaml hl_lines="13-22"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+
+## monthly valid longitude percent
+
+
+**Check description**
+
+Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.
+
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_valid_longitude_percent`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+
+**Command-line examples**
+
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly valid longitude percent data quality check.
+
+??? example "Managing monthly valid longitude percent check from DQOps shell"
+
+    === "Activate the check with a warning rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_valid_longitude_percent --enable-warning
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_valid_longitude_percent --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_valid_longitude_percent --enable-warning
+                            -Wmin_percent=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_valid_longitude_percent --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_valid_longitude_percent --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_valid_longitude_percent --enable-error
+                            -Emin_percent=value
+        ```
+
+
+    === "Run all configured checks"
+
+        Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *monthly_valid_longitude_percent* check on all tables and columns on a single data source.
+
+        ```
+        dqo> check run -c=data_source_name -ch=monthly_valid_longitude_percent
+        ```
+
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_valid_longitude_percent
+        ```
+
+        You can also run this check on all tables (and columns)  on which the *monthly_valid_longitude_percent* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=monthly_valid_longitude_percent
+        ```
+
+
+**YAML configuration**
+
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+
+
+```yaml hl_lines="7-16"
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      recurring_checks:
+      monitoring_checks:
         monthly:
           numeric:
             monthly_valid_longitude_percent:
@@ -1204,237 +2664,569 @@ spec:
                 min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
 
 ```
-### **BigQuery**
-=== "Sensor template for BigQuery"
-      
-    ```sql+jinja
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for BigQuery"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-    FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
-    FROM `<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **PostgreSQL**
-=== "Sensor template for PostgreSQL"
-      
-    ```sql+jinja
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for PostgreSQL"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **Redshift**
-=== "Sensor template for Redshift"
-      
-    ```sql+jinja
-    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Redshift"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **SQL Server**
-=== "Sensor template for SQL Server"
-      
-    ```sql+jinja
-    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT_BIG(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for SQL Server"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT_BIG(*) AS actual_value,
-        DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-        CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    ```
 
-### **Configuration with data grouping**  
-??? info "Click to see more"  
-    **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-21 40-45"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+??? info "Samples of generated SQL queries for each data source type"
+
+    Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+    [valid_longitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
+
+    ??? example "BigQuery"
+
+        === "Sensor template for BigQuery"
+
+            ```sql+jinja
+            {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for BigQuery"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM  AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Oracle"
+
+        === "Sensor template for Oracle"
+
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+              {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                      {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+              FROM(
+                  SELECT
+                             original_table.*
+                                 {{- lib.render_data_grouping_projections('original_table') }}
+                                 {{- lib.render_time_dimension_projection('original_table') }}
+                             FROM {{ lib.render_target_table() }} original_table
+                   {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                   ) analyzed_table
+              {{- lib.render_group_by() -}}
+              {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Oracle"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+                time_period,
+                time_period_utc
+              FROM(
+                  SELECT
+                             original_table.*,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                             FROM "<target_schema>"."<target_table>" original_table
+                   ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "PostgreSQL"
+
+        === "Sensor template for PostgreSQL"
+
+            ```sql+jinja
+            {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for PostgreSQL"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Redshift"
+
+        === "Sensor template for Redshift"
+
+            ```sql+jinja
+            {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Redshift"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Snowflake"
+
+        === "Sensor template for Snowflake"
+
+            ```sql+jinja
+            {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Snowflake"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "SQL Server"
+
+        === "Sensor template for SQL Server"
+
+            ```sql+jinja
+            {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for SQL Server"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG(analyzed_table.[target_column])
+                END AS actual_value,
+                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    
+
+Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
+
+??? info "Configuration with data grouping"
+
+    **Sample configuration with data grouping enabled (YAML)**
+    The sample below shows how to configure the data grouping and how it affects the generated SQL query.
+
+    ```yaml hl_lines="5-13 28-33"
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
-      incremental_time_window:
-        daily_partitioning_recent_days: 7
-        monthly_partitioning_recent_months: 1
       default_grouping_name: group_by_country_and_state
       groupings:
         group_by_country_and_state:
@@ -1446,7 +3238,7 @@ spec:
             column: state
       columns:
         target_column:
-          recurring_checks:
+          monitoring_checks:
             monthly:
               numeric:
                 monthly_valid_longitude_percent:
@@ -1458,301 +3250,681 @@ spec:
                     min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
         state:
           labels:
           - column used as the second grouping key
-    ```  
-    **BigQuery**  
-      
-    === "Sensor template for BigQuery"
-        ```sql+jinja
-        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+    ```
+
+    Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+    [valid_longitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
+
+    ??? example "BigQuery"
+
+        === "Sensor template for BigQuery"
+            ```sql+jinja
+            {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for BigQuery"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for BigQuery"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-            TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **PostgreSQL**  
-      
-    === "Sensor template for PostgreSQL"
-        ```sql+jinja
-        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for PostgreSQL"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Redshift**  
-      
-    === "Sensor template for Redshift"
-        ```sql+jinja
-        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM  AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Redshift"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Oracle"
+
+        === "Sensor template for Oracle"
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+              {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                      {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+              FROM(
+                  SELECT
+                             original_table.*
+                                 {{- lib.render_data_grouping_projections('original_table') }}
+                                 {{- lib.render_time_dimension_projection('original_table') }}
+                             FROM {{ lib.render_target_table() }} original_table
+                   {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                   ) analyzed_table
+              {{- lib.render_group_by() -}}
+              {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Oracle"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **SQL Server**  
-      
-    === "Sensor template for SQL Server"
-        ```sql+jinja
-        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT_BIG(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for SQL Server"
-        ```sql
-        SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT_BIG(*) AS actual_value,
-            analyzed_table.[country] AS grouping_level_1,
-            analyzed_table.[state] AS grouping_level_2,
-            DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-            CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state]
-        ORDER BY level_1, level_2
-                , 
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END as actual_value,
             
-        
+                            analyzed_table.grouping_level_1,
             
-        ```
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+              FROM(
+                  SELECT
+                             original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                             FROM "<target_schema>"."<target_table>" original_table
+                   ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "PostgreSQL"
+
+        === "Sensor template for PostgreSQL"
+            ```sql+jinja
+            {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for PostgreSQL"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Redshift"
+
+        === "Sensor template for Redshift"
+            ```sql+jinja
+            {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Redshift"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Snowflake"
+
+        === "Sensor template for Snowflake"
+            ```sql+jinja
+            {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Snowflake"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "SQL Server"
+
+        === "Sensor template for SQL Server"
+            ```sql+jinja
+            {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for SQL Server"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG(analyzed_table.[target_column])
+                END AS actual_value,
+                analyzed_table.[country] AS grouping_level_1,
+                analyzed_table.[state] AS grouping_level_2,
+                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            GROUP BY analyzed_table.[country], analyzed_table.[state]
+            ORDER BY level_1, level_2
+                    , 
+                
+            
+                
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     
-
-
-
-
-
-
 ___
 
-## **daily partition valid longitude percent**  
-  
-**Check description**  
-Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.  
-  
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_partition_valid_longitude_percent|partitioned|daily|[valid_longitude_percent](../../../../reference/sensors/Column/numeric-column-sensors/#valid-longitude-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
-  
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
-```
-dqo> check enable -c=connection_name -ch=daily_partition_valid_longitude_percent
-```
-**Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
-```
-dqo> check run -ch=daily_partition_valid_longitude_percent
-```
-It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
-```
-dqo> check run -c=connection_name -ch=daily_partition_valid_longitude_percent
-```
-It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
-```
-dqo> check run -c=connection_name -t=table_name -ch=daily_partition_valid_longitude_percent
-```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_valid_longitude_percent
-```
-**Check structure (Yaml)**
-```yaml
-      partitioned_checks:
-        daily:
-          numeric:
-            daily_partition_valid_longitude_percent:
-              warning:
-                min_percent: 100.0
-              error:
-                min_percent: 99.0
-              fatal:
-                min_percent: 95.0
-```
-**Sample configuration (Yaml)**  
-```yaml hl_lines="13-22"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+
+## daily partition valid longitude percent
+
+
+**Check description**
+
+Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.
+
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_valid_longitude_percent`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+
+**Command-line examples**
+
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition valid longitude percent data quality check.
+
+??? example "Managing daily partition valid longitude percent check from DQOps shell"
+
+    === "Activate the check with a warning rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_partition_valid_longitude_percent --enable-warning
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_valid_longitude_percent --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_valid_longitude_percent --enable-warning
+                            -Wmin_percent=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_partition_valid_longitude_percent --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_valid_longitude_percent --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_valid_longitude_percent --enable-error
+                            -Emin_percent=value
+        ```
+
+
+    === "Run all configured checks"
+
+        Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *daily_partition_valid_longitude_percent* check on all tables and columns on a single data source.
+
+        ```
+        dqo> check run -c=data_source_name -ch=daily_partition_valid_longitude_percent
+        ```
+
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_valid_longitude_percent
+        ```
+
+        You can also run this check on all tables (and columns)  on which the *daily_partition_valid_longitude_percent* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=daily_partition_valid_longitude_percent
+        ```
+
+
+**YAML configuration**
+
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+
+
+```yaml hl_lines="12-21"
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
+    partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -1770,238 +3942,580 @@ spec:
                 min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
+    date_column:
       labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
+      - "date or datetime column used as a daily or monthly partitioning key, dates\
+        \ (and times) are truncated to a day or a month by the sensor's query for\
+        \ partitioned checks"
 
 ```
-### **BigQuery**
-=== "Sensor template for BigQuery"
-      
-    ```sql+jinja
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for BigQuery"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        CAST(analyzed_table.`` AS DATE) AS time_period,
-        TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
-    FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
-    FROM `<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **PostgreSQL**
-=== "Sensor template for PostgreSQL"
-      
-    ```sql+jinja
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for PostgreSQL"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **Redshift**
-=== "Sensor template for Redshift"
-      
-    ```sql+jinja
-    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Redshift"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        CAST(analyzed_table."" AS date) AS time_period,
-        TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **SQL Server**
-=== "Sensor template for SQL Server"
-      
-    ```sql+jinja
-    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT_BIG(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for SQL Server"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT_BIG(*) AS actual_value,
-        CAST(analyzed_table.[] AS date) AS time_period,
-        CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
-    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY CAST(analyzed_table.[] AS date), CAST(analyzed_table.[] AS date)
-    ORDER BY CAST(analyzed_table.[] AS date)
-    
-        
-    ```
 
-### **Configuration with data grouping**  
-??? info "Click to see more"  
-    **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-21 40-45"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+??? info "Samples of generated SQL queries for each data source type"
+
+    Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+    [valid_longitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
+
+    ??? example "BigQuery"
+
+        === "Sensor template for BigQuery"
+
+            ```sql+jinja
+            {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for BigQuery"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM  AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Oracle"
+
+        === "Sensor template for Oracle"
+
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+              {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                      {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+              FROM(
+                  SELECT
+                             original_table.*
+                                 {{- lib.render_data_grouping_projections('original_table') }}
+                                 {{- lib.render_time_dimension_projection('original_table') }}
+                             FROM {{ lib.render_target_table() }} original_table
+                   {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                   ) analyzed_table
+              {{- lib.render_group_by() -}}
+              {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Oracle"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+                time_period,
+                time_period_utc
+              FROM(
+                  SELECT
+                             original_table.*,
+                TRUNC(CAST(original_table."date_column" AS DATE)) AS time_period,
+                CAST(TRUNC(CAST(original_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                             FROM "<target_schema>"."<target_table>" original_table
+                   ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "PostgreSQL"
+
+        === "Sensor template for PostgreSQL"
+
+            ```sql+jinja
+            {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for PostgreSQL"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                CAST(original_table."date_column" AS date) AS time_period,
+                CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Redshift"
+
+        === "Sensor template for Redshift"
+
+            ```sql+jinja
+            {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Redshift"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Snowflake"
+
+        === "Sensor template for Snowflake"
+
+            ```sql+jinja
+            {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Snowflake"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "SQL Server"
+
+        === "Sensor template for SQL Server"
+
+            ```sql+jinja
+            {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for SQL Server"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG(analyzed_table.[target_column])
+                END AS actual_value,
+                CAST(analyzed_table.[date_column] AS date) AS time_period,
+                CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            GROUP BY CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
+            ORDER BY CAST(analyzed_table.[date_column] AS date)
+            
+                
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                CAST(original_table."date_column" AS date) AS time_period,
+                CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    
+
+Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
+
+??? info "Configuration with data grouping"
+
+    **Sample configuration with data grouping enabled (YAML)**
+    The sample below shows how to configure the data grouping and how it affects the generated SQL query.
+
+    ```yaml hl_lines="10-4 38-43"
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
       timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
+        partition_by_column: date_column
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -2028,299 +4542,684 @@ spec:
                     min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
+        date_column:
           labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
+          - "date or datetime column used as a daily or monthly partitioning key, dates\
+            \ (and times) are truncated to a day or a month by the sensor's query for\
+            \ partitioned checks"
         country:
           labels:
           - column used as the first grouping key
         state:
           labels:
           - column used as the second grouping key
-    ```  
-    **BigQuery**  
-      
-    === "Sensor template for BigQuery"
-        ```sql+jinja
-        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+    ```
+
+    Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+    [valid_longitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
+
+    ??? example "BigQuery"
+
+        === "Sensor template for BigQuery"
+            ```sql+jinja
+            {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for BigQuery"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for BigQuery"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            CAST(analyzed_table.`` AS DATE) AS time_period,
-            TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
-        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-%d 00:00:00'))) AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **PostgreSQL**  
-      
-    === "Sensor template for PostgreSQL"
-        ```sql+jinja
-        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for PostgreSQL"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Redshift**  
-      
-    === "Sensor template for Redshift"
-        ```sql+jinja
-        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM  AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Redshift"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Oracle"
+
+        === "Sensor template for Oracle"
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+              {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                      {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+              FROM(
+                  SELECT
+                             original_table.*
+                                 {{- lib.render_data_grouping_projections('original_table') }}
+                                 {{- lib.render_time_dimension_projection('original_table') }}
+                             FROM {{ lib.render_target_table() }} original_table
+                   {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                   ) analyzed_table
+              {{- lib.render_group_by() -}}
+              {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Oracle"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            CAST(analyzed_table."" AS date) AS time_period,
-            TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **SQL Server**  
-      
-    === "Sensor template for SQL Server"
-        ```sql+jinja
-        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT_BIG(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for SQL Server"
-        ```sql
-        SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT_BIG(*) AS actual_value,
-            analyzed_table.[country] AS grouping_level_1,
-            analyzed_table.[state] AS grouping_level_2,
-            CAST(analyzed_table.[] AS date) AS time_period,
-            CAST((CAST(analyzed_table.[] AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[] AS date), CAST(analyzed_table.[] AS date)
-        ORDER BY level_1, level_2CAST(analyzed_table.[] AS date)
-        
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END as actual_value,
             
-        ```
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+              FROM(
+                  SELECT
+                             original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                TRUNC(CAST(original_table."date_column" AS DATE)) AS time_period,
+                CAST(TRUNC(CAST(original_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                             FROM "<target_schema>"."<target_table>" original_table
+                   ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "PostgreSQL"
+
+        === "Sensor template for PostgreSQL"
+            ```sql+jinja
+            {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for PostgreSQL"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(original_table."date_column" AS date) AS time_period,
+                CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Redshift"
+
+        === "Sensor template for Redshift"
+            ```sql+jinja
+            {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Redshift"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Snowflake"
+
+        === "Sensor template for Snowflake"
+            ```sql+jinja
+            {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Snowflake"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "SQL Server"
+
+        === "Sensor template for SQL Server"
+            ```sql+jinja
+            {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for SQL Server"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG(analyzed_table.[target_column])
+                END AS actual_value,
+                analyzed_table.[country] AS grouping_level_1,
+                analyzed_table.[state] AS grouping_level_2,
+                CAST(analyzed_table.[date_column] AS date) AS time_period,
+                CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
+            ORDER BY level_1, level_2CAST(analyzed_table.[date_column] AS date)
+            
+                
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(original_table."date_column" AS date) AS time_period,
+                CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     
-
-
-
-
-
-
 ___
 
-## **monthly partition valid longitude percent**  
-  
-**Check description**  
-Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.  
-  
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_partition_valid_longitude_percent|partitioned|monthly|[valid_longitude_percent](../../../../reference/sensors/Column/numeric-column-sensors/#valid-longitude-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
-  
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
-```
-dqo> check enable -c=connection_name -ch=monthly_partition_valid_longitude_percent
-```
-**Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
-```
-dqo> check run -ch=monthly_partition_valid_longitude_percent
-```
-It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
-```
-dqo> check run -c=connection_name -ch=monthly_partition_valid_longitude_percent
-```
-It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
-```
-dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_valid_longitude_percent
-```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_valid_longitude_percent
-```
-**Check structure (Yaml)**
-```yaml
-      partitioned_checks:
-        monthly:
-          numeric:
-            monthly_partition_valid_longitude_percent:
-              warning:
-                min_percent: 100.0
-              error:
-                min_percent: 99.0
-              fatal:
-                min_percent: 95.0
-```
-**Sample configuration (Yaml)**  
-```yaml hl_lines="13-22"
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+
+## monthly partition valid longitude percent
+
+
+**Check description**
+
+Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.
+
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_valid_longitude_percent`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+
+**Command-line examples**
+
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition valid longitude percent data quality check.
+
+??? example "Managing monthly partition valid longitude percent check from DQOps shell"
+
+    === "Activate the check with a warning rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_partition_valid_longitude_percent --enable-warning
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_partition_valid_longitude_percent --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_partition_valid_longitude_percent --enable-warning
+                            -Wmin_percent=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_partition_valid_longitude_percent --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_partition_valid_longitude_percent --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_partition_valid_longitude_percent --enable-error
+                            -Emin_percent=value
+        ```
+
+
+    === "Run all configured checks"
+
+        Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *monthly_partition_valid_longitude_percent* check on all tables and columns on a single data source.
+
+        ```
+        dqo> check run -c=data_source_name -ch=monthly_partition_valid_longitude_percent
+        ```
+
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_valid_longitude_percent
+        ```
+
+        You can also run this check on all tables (and columns)  on which the *monthly_partition_valid_longitude_percent* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=monthly_partition_valid_longitude_percent
+        ```
+
+
+**YAML configuration**
+
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+
+
+```yaml hl_lines="12-21"
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
+    partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -2338,238 +5237,580 @@ spec:
                 min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
+    date_column:
       labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
+      - "date or datetime column used as a daily or monthly partitioning key, dates\
+        \ (and times) are truncated to a day or a month by the sensor's query for\
+        \ partitioned checks"
 
 ```
-### **BigQuery**
-=== "Sensor template for BigQuery"
-      
-    ```sql+jinja
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for BigQuery"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
-        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
-    FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
-    FROM `<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **PostgreSQL**
-=== "Sensor template for PostgreSQL"
-      
-    ```sql+jinja
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for PostgreSQL"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **Redshift**
-=== "Sensor template for Redshift"
-      
-    ```sql+jinja
-    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Redshift"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
-    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
-### **SQL Server**
-=== "Sensor template for SQL Server"
-      
-    ```sql+jinja
-    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT_BIG(*) AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for SQL Server"
-      
-    ```sql
-    SELECT
-        100.0 * SUM(
-            CASE
-                WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT_BIG(*) AS actual_value,
-        DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1) AS time_period,
-        CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME) AS time_period_utc
-    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[]), 0)
-    ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)
-    
-        
-    ```
 
-### **Configuration with data grouping**  
-??? info "Click to see more"  
-    **Sample configuration (Yaml)**  
-    ```yaml hl_lines="11-21 40-45"
-    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+??? info "Samples of generated SQL queries for each data source type"
+
+    Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+    [valid_longitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
+
+    ??? example "BigQuery"
+
+        === "Sensor template for BigQuery"
+
+            ```sql+jinja
+            {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for BigQuery"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM  AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Oracle"
+
+        === "Sensor template for Oracle"
+
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+              {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                      {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+              FROM(
+                  SELECT
+                             original_table.*
+                                 {{- lib.render_data_grouping_projections('original_table') }}
+                                 {{- lib.render_time_dimension_projection('original_table') }}
+                             FROM {{ lib.render_target_table() }} original_table
+                   {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                   ) analyzed_table
+              {{- lib.render_group_by() -}}
+              {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Oracle"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+                time_period,
+                time_period_utc
+              FROM(
+                  SELECT
+                             original_table.*,
+                TRUNC(CAST(original_table."date_column" AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(original_table."date_column" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                             FROM "<target_schema>"."<target_table>" original_table
+                   ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "PostgreSQL"
+
+        === "Sensor template for PostgreSQL"
+
+            ```sql+jinja
+            {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for PostgreSQL"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Redshift"
+
+        === "Sensor template for Redshift"
+
+            ```sql+jinja
+            {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Redshift"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Snowflake"
+
+        === "Sensor template for Snowflake"
+
+            ```sql+jinja
+            {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Snowflake"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS time_period_utc
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "SQL Server"
+
+        === "Sensor template for SQL Server"
+
+            ```sql+jinja
+            {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for SQL Server"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG(analyzed_table.[target_column])
+                END AS actual_value,
+                DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
+                CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
+            ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
+            
+                
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    
+
+Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
+
+??? info "Configuration with data grouping"
+
+    **Sample configuration with data grouping enabled (YAML)**
+    The sample below shows how to configure the data grouping and how it affects the generated SQL query.
+
+    ```yaml hl_lines="10-4 38-43"
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
       timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
+        partition_by_column: date_column
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -2596,242 +5837,587 @@ spec:
                     min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
+        date_column:
           labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
+          - "date or datetime column used as a daily or monthly partitioning key, dates\
+            \ (and times) are truncated to a day or a month by the sensor's query for\
+            \ partitioned checks"
         country:
           labels:
           - column used as the first grouping key
         state:
           labels:
           - column used as the second grouping key
-    ```  
-    **BigQuery**  
-      
-    === "Sensor template for BigQuery"
-        ```sql+jinja
-        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+    ```
+
+    Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+    [valid_longitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
+
+    ??? example "BigQuery"
+
+        === "Sensor template for BigQuery"
+            ```sql+jinja
+            {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for BigQuery"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for BigQuery"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
-            TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
-        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table.`country` AS grouping_level_1,
-            analyzed_table.`state` AS grouping_level_2,
-            DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'))) AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **PostgreSQL**  
-      
-    === "Sensor template for PostgreSQL"
-        ```sql+jinja
-        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for PostgreSQL"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Redshift**  
-      
-    === "Sensor template for Redshift"
-        ```sql+jinja
-        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM  AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Redshift"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **Snowflake**  
-      
-    === "Sensor template for Snowflake"
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Oracle"
+
+        === "Sensor template for Oracle"
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-        ```sql
-        SELECT
-            100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+              {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                      {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+              FROM(
+                  SELECT
+                             original_table.*
+                                 {{- lib.render_data_grouping_projections('original_table') }}
+                                 {{- lib.render_time_dimension_projection('original_table') }}
+                             FROM {{ lib.render_target_table() }} original_table
+                   {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                   ) analyzed_table
+              {{- lib.render_group_by() -}}
+              {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Oracle"
+            ```sql
+            SELECT
                 CASE
-                    WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT(*) AS actual_value,
-            analyzed_table."country" AS grouping_level_1,
-            analyzed_table."state" AS grouping_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-        ```
-    **SQL Server**  
-      
-    === "Sensor template for SQL Server"
-        ```sql+jinja
-        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-        SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT_BIG(*) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for SQL Server"
-        ```sql
-        SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
-                    ELSE 0
-                END
-            )/COUNT_BIG(*) AS actual_value,
-            analyzed_table.[country] AS grouping_level_1,
-            analyzed_table.[state] AS grouping_level_2,
-            DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1) AS time_period,
-            CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[]), 0)
-        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[] AS date)), MONTH(CAST(analyzed_table.[] AS date)), 1)
-        
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END as actual_value,
             
-        ```
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+              FROM(
+                  SELECT
+                             original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                TRUNC(CAST(original_table."date_column" AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(original_table."date_column" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                             FROM "<target_schema>"."<target_table>" original_table
+                   ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "PostgreSQL"
+
+        === "Sensor template for PostgreSQL"
+            ```sql+jinja
+            {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for PostgreSQL"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Redshift"
+
+        === "Sensor template for Redshift"
+            ```sql+jinja
+            {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Redshift"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Snowflake"
+
+        === "Sensor template for Snowflake"
+            ```sql+jinja
+            {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Snowflake"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS time_period_utc
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` >= -180.0 AND analyzed_table.`target_column` <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table.`target_column`)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "SQL Server"
+
+        === "Sensor template for SQL Server"
+            ```sql+jinja
+            {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for SQL Server"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT_BIG(analyzed_table.[target_column])
+                END AS actual_value,
+                analyzed_table.[country] AS grouping_level_1,
+                analyzed_table.[state] AS grouping_level_2,
+                DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
+                CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
+            ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
+            
+                
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END as actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" >= -180.0 AND analyzed_table."target_column" <= 180.0 THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
+                END as actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     
-
-
-
-
-
-
 ___
+
+
+
+## What's next
+- Learn how to [configure data quality checks](../../../dqo-concepts/configuring-data-quality-checks-and-rules.md) in DQOps
+- Look at the examples of [running data quality checks](../../../dqo-concepts/running-data-quality-checks.md), targeting tables and columns

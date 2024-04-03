@@ -15,8 +15,9 @@
  */
 package com.dqops.data.checkresults.services;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.models.CheckResultsFragmentFilter;
-import com.dqops.data.models.DataDeleteResult;
+import com.dqops.data.models.DeleteStoredDataResult;
 
 /**
  * Service that deletes outdated results of a check.
@@ -26,7 +27,8 @@ public interface CheckResultsDeleteService {
     /**
      * Deletes the results from a table, applying specific filters to get the fragment (if necessary).
      * @param filter Filter for the result fragment that is of interest.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Data delete operation summary.
      */
-    DataDeleteResult deleteSelectedCheckResultsFragment(CheckResultsFragmentFilter filter);
+    DeleteStoredDataResult deleteSelectedCheckResultsFragment(CheckResultsFragmentFilter filter, UserDomainIdentity userIdentity);
 }

@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/SensorDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: sensor
 spec:
@@ -8,5 +8,5 @@ spec:
     help_text: The limit of results that are returned. The default value is 10 sample
       values with the highest count (the most popular).
     data_type: integer
-    sample_values:
-    - 10
+    required: true
+    default_value: 10

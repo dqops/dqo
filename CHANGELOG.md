@@ -1,3 +1,3 @@
-* Table comparison support
-* Anomaly detection checks renamed
+# 1.1.1
 * Bug fixes
+* Documentation changes

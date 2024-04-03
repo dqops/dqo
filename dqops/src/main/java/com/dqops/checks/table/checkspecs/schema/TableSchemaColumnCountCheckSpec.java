@@ -22,6 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.EqualsIntegerRuleParametersSpec;
 import com.dqops.sensors.table.schema.TableColumnCountSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -32,7 +33,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns.
+ * A table-level check that retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -53,7 +54,7 @@ public class TableSchemaColumnCountCheckSpec extends AbstractCheckSpec<TableColu
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private EqualsIntegerRuleParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting thresholdthat raises a data quality issue at an error severity level")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private EqualsIntegerRuleParametersSpec error;
@@ -153,12 +154,24 @@ public class TableSchemaColumnCountCheckSpec extends AbstractCheckSpec<TableColu
     }
 
     /**
+     * Returns true if this is a standard data quality check that is always shown on the data quality checks editor screen.
+     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
+     *
+     * @return True when it is a standard check, false when it is an advanced check. The default value is 'false' (all checks are non-standard, advanced checks).
+     */
+    @Override
+    @JsonIgnore
+    public boolean isStandard() {
+        return true;
+    }
+
+    /**
      * Returns the default data quality dimension name used when an overwritten data quality dimension name was not assigned.
      *
      * @return Default data quality dimension name.
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Validity;
+        return DefaultDataQualityDimensions.Completeness;
     }
 }

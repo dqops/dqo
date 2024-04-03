@@ -25,7 +25,7 @@ class BetweenIntsRuleParametersSpec:
 
     def __getattr__(self, name):
         if name == "from":
-            return self.from_
+            return self.from_ if hasattr(self, 'from_') else None
         return object.__getattribute__(self, name)
 
 
@@ -34,6 +34,7 @@ class HistoricDataPoint:
     local_datetime: datetime
     back_periods_index: int
     sensor_readout: float
+    expected_value: float
 
 
 class RuleTimeWindowSettingsSpec:
@@ -58,7 +59,7 @@ class RuleExecutionResult:
     lower_bound: int
     upper_bound: int
 
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.expected_value = expected_value
         self.lower_bound = lower_bound
@@ -67,12 +68,12 @@ class RuleExecutionResult:
 
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters,'actual_value'):
+    if not hasattr(rule_parameters, 'actual_value'):
         return RuleExecutionResult()
 
     expected_value = None
-    lower_bound = getattr(rule_parameters.parameters, "from")
-    upper_bound = rule_parameters.parameters.to
-    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    lower_bound = getattr(rule_parameters.parameters, "from") if hasattr(rule_parameters.parameters, 'from') else None
+    upper_bound = rule_parameters.parameters.to if hasattr(rule_parameters.parameters, 'to') else None
+    passed = (lower_bound if lower_bound is not None else rule_parameters.actual_value) <= rule_parameters.actual_value <= (upper_bound if upper_bound is not None else rule_parameters.actual_value)
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

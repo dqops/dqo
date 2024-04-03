@@ -16,6 +16,8 @@
 package com.dqops.core.filesystem.virtual;
 
 import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -30,7 +32,7 @@ import java.util.*;
  */
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = false)
-public class FolderTreeNode {
+public class FolderTreeNode implements Cloneable {
     private HomeFolderPath folderPath;
     private List<FolderTreeNode> subFolders = new ArrayList<>();
     private List<FileTreeNode> files = new ArrayList<>();
@@ -72,7 +74,7 @@ public class FolderTreeNode {
      * @return Folder tree node (empty)
      */
     public static FolderTreeNode createRootFolderNode() {
-        FolderTreeNode folderTreeNode = new FolderTreeNode(new HomeFolderPath());
+        FolderTreeNode folderTreeNode = new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN));
         folderTreeNode.loadOnce();
         return folderTreeNode;
     }
@@ -98,7 +100,7 @@ public class FolderTreeNode {
      * List all folders and deeply nested subfolders (at any depth) that contain any file with a given file extension.
      * Every folder (also deeply nested) that has at least one file whose name ends with the fileNameExtension is returned.
      * @param fileNameExtension File extension pattern, should be like ".dqoconn.yaml".
-     * @param includeCurrentFolder True when the current folder should be also added to the results if it has files with a matching pattern.
+     * @param includeCurrentFolder True when the current folder should also be added to the results if it has files with a matching pattern.
      * @return List of subfolders with a file that match the file name extension.
      */
     public List<FolderTreeNode> findNestedSubFoldersWithFiles(String fileNameExtension, boolean includeCurrentFolder) {
@@ -223,15 +225,41 @@ public class FolderTreeNode {
                 else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.CHECKS)) {
                     return FolderKind.CHECKS;
                 }
+                else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.SETTINGS)) {
+                    return FolderKind.SETTINGS;
+                }
+                else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.CREDENTIALS)) {
+                    return FolderKind.CREDENTIALS;
+                }
+                else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.DICTIONARIES)) {
+                    return FolderKind.DICTIONARIES;
+                }
+                else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.PATTERNS)) {
+                    return FolderKind.PATTERNS;
+                }
                 return FolderKind.FOREIGN;
             case CHECKS:
+            case CHECK_SUBFOLDER:
                 return FolderKind.CHECK_SUBFOLDER;
             case SOURCES:
                 return FolderKind.SOURCE;
             case SOURCE:
+            case SOURCE_SUBFOLDER:
                 return FolderKind.SOURCE_SUBFOLDER;
             case RULES:
+            case RULES_SUBFOLDER:
                 return FolderKind.RULES_SUBFOLDER;
+            case SETTINGS:
+                return FolderKind.SETTINGS_SUBFOLDER;
+            case CREDENTIALS:
+            case CREDENTIALS_SUBFOLDER:
+                return FolderKind.CREDENTIALS_SUBFOLDER;
+            case DICTIONARIES:
+            case DICTIONARIES_SUBFOLDER:
+                return FolderKind.DICTIONARIES_SUBFOLDER;
+            case PATTERNS:
+            case PATTERNS_SUBFOLDER:
+                return FolderKind.PATTERNS_SUBFOLDER;
             default:
                 return FolderKind.UNKNOWN;
         }
@@ -473,5 +501,34 @@ public class FolderTreeNode {
         return "FolderTreeNode{" +
                 "folderPath=" + folderPath +
                 '}';
+    }
+
+    /**
+     * Creates and returns a copy of this object.
+     */
+    @Override
+    public FolderTreeNode clone() {
+        try {
+            FolderTreeNode cloned = (FolderTreeNode) super.clone();
+            cloned.files = new ArrayList<>();
+
+            if (this.files != null && this.files.size() > 0) {
+                for (FileTreeNode fileNode : this.files) {
+                    cloned.files.add(fileNode.clone());
+                }
+            }
+
+            cloned.subFolders = new ArrayList<>();
+            if (this.subFolders != null && this.subFolders.size() > 0) {
+                for (FolderTreeNode folderTreeNode : this.subFolders) {
+                    cloned.subFolders.add(folderTreeNode.clone());
+                }
+            }
+
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new DqoRuntimeException("Clone not supported", ex);
+        }
     }
 }

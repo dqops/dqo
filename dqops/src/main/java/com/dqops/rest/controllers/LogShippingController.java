@@ -15,14 +15,18 @@
  */
 package com.dqops.rest.controllers;
 
+import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.rest.models.platform.ExternalLogEntry;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.core.principal.DqoUserPrincipal;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.parquet.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -32,7 +36,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/api/logs")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "LogShipping", description = "Log shipping controller that accepts logs sent from a web application or external tools and aggregates them in the local DQO instance logs.")
+@Api(value = "LogShipping", description = "Log shipping controller that accepts logs sent from a web application or external tools and aggregates them in the local DQOps instance logs.")
 @Slf4j
 public class LogShippingController {
     public LogShippingController() {
@@ -44,13 +48,18 @@ public class LogShippingController {
      * @return Empty response.
      */
     @PostMapping(value = "/debug", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "logDebug", notes = "Logs an information message in the server's logs as a debug severity log entry.", response = Void.class)
+    @ApiOperation(value = "logDebug", notes = "Logs an information message in the server's logs as a debug severity log entry.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Log entry was logged on the server", response = Void.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> logDebug(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<Void>> logDebug(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Log entry")
             @RequestBody ExternalLogEntry logEntry) {
         if (log.isDebugEnabled()) {
@@ -67,13 +76,18 @@ public class LogShippingController {
      * @return Empty response.
      */
     @PostMapping(value = "/info",consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "logInfo", notes = "Logs an information message in the server's logs as an info severity log entry.", response = Void.class)
+    @ApiOperation(value = "logInfo", notes = "Logs an information message in the server's logs as an info severity log entry.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Log entry was logged on the server", response = Void.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> logInfo(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<Void>> logInfo(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Log entry")
             @RequestBody ExternalLogEntry logEntry) {
         if (log.isInfoEnabled()) {
@@ -90,13 +104,18 @@ public class LogShippingController {
      * @return Empty response.
      */
     @PostMapping(value = "/warn", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "logWarn", notes = "Logs an information message in the server's logs as a warn severity log entry.", response = Void.class)
+    @ApiOperation(value = "logWarn", notes = "Logs an information message in the server's logs as a warn severity log entry.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Log entry was logged on the server", response = Void.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> logWarn(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<Void>> logWarn(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Log entry")
             @RequestBody ExternalLogEntry logEntry) {
         if (log.isWarnEnabled()) {
@@ -113,13 +132,18 @@ public class LogShippingController {
      * @return Empty response.
      */
     @PostMapping(value = "/error", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "logError", notes = "Logs an information message in the server's logs as an error severity log entry.", response = Void.class)
+    @ApiOperation(value = "logError", notes = "Logs an information message in the server's logs as an error severity log entry.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Log entry was logged on the server", response = Void.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> logError(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<Void>> logError(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Log entry")
             @RequestBody ExternalLogEntry logEntry) {
         if (log.isErrorEnabled()) {

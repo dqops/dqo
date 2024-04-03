@@ -25,8 +25,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,8 +60,8 @@ public class FieldModel implements Cloneable {
     @JsonPropertyDescription("Field value for a double field.")
     private Double doubleValue;
 
-    @JsonPropertyDescription("Field value for a datetime field.")
-    private Instant dateTimeValue;
+    @JsonPropertyDescription("Field value for a date time field.")
+    private LocalDateTime datetimeValue;
 
     @JsonPropertyDescription("Field value for a column name field.")
     private String columnNameValue;
@@ -134,8 +134,8 @@ public class FieldModel implements Cloneable {
                 this.doubleValue = Double.valueOf(sampleValues.get(0));
                 return;
 
-            case instant_type:
-                this.dateTimeValue = Instant.parse(sampleValues.get(0));
+            case datetime_type:
+                this.datetimeValue = LocalDateTime.parse(sampleValues.get(0));
                 return;
 
             case date_type:
@@ -182,8 +182,8 @@ public class FieldModel implements Cloneable {
             case double_type:
                 return this.doubleValue;
 
-            case instant_type:
-                return this.dateTimeValue;
+            case datetime_type:
+                return this.datetimeValue;
 
             case date_type:
                 return this.dateValue;
@@ -232,8 +232,8 @@ public class FieldModel implements Cloneable {
                 this.doubleValue = value == null || value instanceof Double ? (Double)value : Double.valueOf(value.toString());
                 return;
 
-            case instant_type:
-                this.dateTimeValue = value == null || value instanceof Instant ? (Instant)value : Instant.parse(value.toString());
+            case datetime_type:
+                this.datetimeValue = value == null || value instanceof LocalDateTime ? (LocalDateTime)value : LocalDateTime.parse(value.toString());
                 return;
 
             case date_type:

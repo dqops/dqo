@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: sensor
+spec:
+  fields:
+  - field_name: regex
+    display_name: regex
+    help_text: "This field can be used to define custom regex. In order to define\
+      \ custom regex, user should write correct regex as a string. If regex is not\
+      \ defined by user then default regex is null"
+    data_type: string
+    required: true

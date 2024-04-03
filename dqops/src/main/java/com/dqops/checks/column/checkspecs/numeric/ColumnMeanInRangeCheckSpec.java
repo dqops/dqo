@@ -32,7 +32,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the average (mean) of values in a monitored column is in a set range.
+ * This check calculates a mean (average) value in a numeric column. It verifies that the average value is within the range of accepted values
+ * and raises a data quality issue when it is not within a valid range.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

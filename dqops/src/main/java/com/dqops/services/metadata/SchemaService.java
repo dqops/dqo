@@ -19,6 +19,7 @@ package com.dqops.services.metadata;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.metadata.sources.TableWrapper;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.check.CheckTemplate;
@@ -49,6 +50,7 @@ public interface SchemaService {
      * @param checkTarget    (Optional) Check target.
      * @param checkCategory  (Optional) Check category.
      * @param checkName      (Optional) Check name.
+     * @param principal      User principal.
      * @return List of check templates in the requested schema, matching the optional filters. Null if schema doesn't exist.
      */
     List<CheckTemplate> getCheckTemplates(String connectionName,
@@ -57,7 +59,8 @@ public interface SchemaService {
                                           CheckTimeScale checkTimeScale,
                                           CheckTarget checkTarget,
                                           String checkCategory,
-                                          String checkName);
+                                          String checkName,
+                                          DqoUserPrincipal principal);
 
     /**
      * Retrieves a UI friendly data quality profiling check configuration list on a requested schema.
@@ -72,6 +75,7 @@ public interface SchemaService {
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @param checkConfigured   (Optional) Filter on check configured status.
+     * @param principal         User principal.
      * @return UI friendly data quality profiling check configuration list on a requested schema.
      */
     List<CheckConfigurationModel> getCheckConfigurationsOnSchema(
@@ -85,5 +89,7 @@ public interface SchemaService {
             String checkCategory,
             String checkName,
             Boolean checkEnabled,
-            Boolean checkConfigured);
+            Boolean checkConfigured,
+            int limit,
+            DqoUserPrincipal principal);
 }

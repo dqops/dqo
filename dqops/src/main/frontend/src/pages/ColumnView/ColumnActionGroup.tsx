@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
-import Button from '../../components/Button';
-import ConfirmDialog from './ConfirmDialog';
-import { ColumnApiClient } from '../../services/apiClient';
-import { useParams } from 'react-router-dom';
-import { CheckTypes } from '../../shared/routes';
 import clsx from 'clsx';
-import Loader from '../../components/Loader';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import Button from '../../components/Button';
 import AddColumnDialog from '../../components/CustomTree/AddColumnDialog';
+import SvgIcon from '../../components/SvgIcon';
+import { IRootState } from '../../redux/reducers';
+import { ColumnApiClient } from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
+import ConfirmDialog from './ConfirmDialog';
+import { useDecodedParams } from '../../utils';
 
 interface IActionGroupProps {
   isDisabled?: boolean;
@@ -14,10 +16,9 @@ interface IActionGroupProps {
   isUpdating?: boolean;
   isUpdated?: boolean;
   shouldDelete?: boolean;
-
   isStatistics?: boolean;
   onCollectStatistics?: () => void;
-  runningStatistics?: boolean;
+  collectStatisticsSpinner?: boolean
 }
 
 const ColumnActionGroup = ({
@@ -28,12 +29,13 @@ const ColumnActionGroup = ({
   shouldDelete = true,
   isStatistics,
   onCollectStatistics,
-  runningStatistics
+  collectStatisticsSpinner
 }: IActionGroupProps) => {
-  const { checkTypes, connection, schema, table, column }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
+  const { checkTypes, connection, schema, table, column }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useDecodedParams();
   const [isOpen, setIsOpen] = useState(false);
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const removeColumn = async () => {
     await ColumnApiClient.deleteColumn(
       connection ?? '',
@@ -44,41 +46,53 @@ const ColumnActionGroup = ({
   };
 
   const columnPath = `${connection}.${schema}.${table}.${column}`
+
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {isSourceScreen && (
         <Button
           className="!h-10"
-          color="primary"
-          variant="outlined"
+          color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+          variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
           label="Add Column"
           onClick={() => setIsAddColumnDialogOpen(true)}
+          disabled={userProfile.can_manage_data_sources !== true}
         />
       )}
       {shouldDelete && (
         <Button
           className="!h-10"
-          color="primary"
-          variant="outlined"
+          color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+          variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
           label="Delete Column"
           onClick={() => setIsOpen(true)}
+          disabled={userProfile.can_manage_data_sources !== true}
         />
       )}
 
       {isStatistics ? (
         <div className="flex items-center space-x-4">
-          {runningStatistics && (
-            <Loader isFull={false} className="w-8 h-8 !text-primary" />
-          )}
           <Button
-            color="primary"
-            variant="outlined"
-            label="Collect Statistics"
+          color={
+          collectStatisticsSpinner
+          ? 'secondary'
+          : 'primary'
+            }           
+            label={collectStatisticsSpinner
+              ? 'Collecting...'
+              : "Collect statistics"}
             className={clsx(
-              '!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap'
+              '!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap gap-x-2 '
             )}
+            leftIcon={
+              collectStatisticsSpinner? (
+                <SvgIcon name="sync" className="w-4 h-4 animate-spin" />
+              ) : (
+                ''
+              )
+            }
             onClick={onCollectStatistics}
-            disabled={runningStatistics}
+            disabled={ userProfile.can_collect_statistics  !== true || collectStatisticsSpinner}
           />
         </div>
       ) : (
@@ -89,7 +103,8 @@ const ColumnActionGroup = ({
           className="w-40 !h-10"
           onClick={onUpdate}
           loading={isUpdating}
-          disabled={isDisabled}
+          disabled={isDisabled || userProfile.can_manage_data_sources !== true}
+          
         />
       )}
       <ConfirmDialog

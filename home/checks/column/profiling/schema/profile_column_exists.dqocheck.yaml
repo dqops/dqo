@@ -1,8 +1,9 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/schema/column_exists
-  rule_name: comparison/equals_integer
+  rule_name: comparison/equals_1
   help_text: Checks the metadata of the monitored table and verifies if the column
     exists.
+  standard: true

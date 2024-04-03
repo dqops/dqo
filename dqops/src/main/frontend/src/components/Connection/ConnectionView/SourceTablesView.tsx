@@ -1,43 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { JobApiClient, DataSourcesApi } from '../../../services/apiClient';
-import { TableRemoteBasicModel } from '../../../api';
-import SvgIcon from '../../SvgIcon';
-import Loader from '../../Loader';
-import ConnectionActionGroup from './ConnectionActionGroup';
-import Checkbox from '../../Checkbox';
-import Button from '../../Button';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { toggleAdvisor } from '../../../redux/actions/job.actions';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
+import { RemoteTableListModel } from '../../../api';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import {
+  setAdvisorJobId,
+  toggleAdvisor
+} from '../../../redux/actions/job.actions';
 import { setCurrentJobId } from '../../../redux/actions/source.actions';
-import { useParams } from 'react-router-dom';
-import { CheckTypes } from '../../../shared/routes';
+import { IRootState } from '../../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
+import { DataSourcesApi, JobApiClient } from '../../../services/apiClient';
+import { CheckTypes } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
+import Button from '../../Button';
+import Checkbox from '../../Checkbox';
+import Loader from '../../Loader';
+import SvgIcon from '../../SvgIcon';
 
-interface ISourceSchemasViewProps {
-  connectionName: string;
-  schemaName: string;
-  onBack: () => void;
-}
-
-const SourceTablesView = ({
-  connectionName,
-  schemaName,
-  onBack
-}: ISourceSchemasViewProps) => {
+const SourceTablesView = () => {
   const {
     checkTypes,
+    connection,
+    schema
   }: {
     checkTypes: CheckTypes;
-  } = useParams();
+    connection: string;
+    schema: string;
+  } = useDecodedParams();
   const [loading, setLoading] = useState(false);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
-  const [tables, setTables] = useState<TableRemoteBasicModel[]>([]);
- 
+  const [tables, setTables] = useState<RemoteTableListModel[]>([]);
+
   const dispatch = useActionDispatch();
-  const { job_dictionary_state } =
-  useSelector((state: IRootState) => state.job);
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job
+  );
   const [jobId, setJobId] = useState<number>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -45,7 +42,7 @@ const SourceTablesView = ({
   const fetchSourceTables = async () => {
     setLoading(true);
     setSelectedTables([]);
-    DataSourcesApi.getRemoteDataSourceTables(connectionName, schemaName)
+    DataSourcesApi.getRemoteDataSourceTables(connection, schema)
       .then((res) => {
         setTables(res.data);
       })
@@ -56,7 +53,7 @@ const SourceTablesView = ({
 
   useEffect(() => {
     fetchSourceTables();
-  }, [connectionName, schemaName]);
+  }, [connection, schema]);
 
   const selectAll = () => {
     setSelectedTables(tables.map((item) => item.tableName ?? ''));
@@ -67,36 +64,40 @@ const SourceTablesView = ({
   };
 
   const importSelectedTables = async () => {
-    const res = await JobApiClient.importTables({
-      connectionName,
-      schemaName,
+    const res = await JobApiClient.importTables(undefined, false, undefined, {
+      connectionName: connection,
+      schemaName: schema,
       tableNames: selectedTables
-    })
-      dispatch(
-        setCurrentJobId(
-          checkTypes,
-          firstLevelActiveTab,
-          (res.data as any)?.jobId?.jobId
-        )
-      );
-      setJobId((res.data as any)?.jobId);
-    dispatch(toggleAdvisor(true)); 
-  };
+    });
 
-  const importAllTables = async () => {
-    const res = await JobApiClient.importTables({
-      connectionName,
-      schemaName,
-      tableNames: tables.map((item) => item.tableName ?? '')
-    })
     dispatch(
       setCurrentJobId(
         checkTypes,
         firstLevelActiveTab,
-        (res.data as any)?.jobId?.jobId
+        res.data?.jobId?.jobId ?? 0
       )
     );
-    setJobId((res.data as any)?.jobId);
+    dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0));
+    setJobId(res.data?.jobId?.jobId);
+    dispatch(toggleAdvisor(true));
+  };
+
+  const importAllTables = async () => {
+    const res = await JobApiClient.importTables(undefined, false, undefined, {
+      connectionName: connection,
+      schemaName: schema,
+      tableNames: tables.map((item) => item.tableName ?? '')
+    });
+
+    dispatch(
+      setCurrentJobId(
+        checkTypes,
+        firstLevelActiveTab,
+        res.data?.jobId?.jobId ?? 0
+      )
+    );
+    setJobId(res.data?.jobId?.jobId);
+    dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0));
     dispatch(toggleAdvisor(true));
   };
 
@@ -109,35 +110,39 @@ const SourceTablesView = ({
   };
 
   useEffect(() => {
-    if(jobId !== 0 && jobId!== undefined && job?.status==="succeeded"){
-      fetchSourceTables()
+    if (jobId !== 0 && jobId !== undefined && job?.status === 'finished') {
+      fetchSourceTables();
     }
-  }, [job?.status])
+  }, [job?.status]);
 
   return (
     <div className="py-4 px-8">
-      <ConnectionActionGroup onImport={onBack} />
+      {/* <ConnectionActionGroup onImport={onBack} /> */}
       <div className="flex justify-end space-x-4 mb-4">
         <Button
           color="primary"
-          label="Select All"
+          className="text-sm"
+          label="Select all"
           onClick={selectAll}
           disabled={selectedTables.length === tables.length}
         />
         <Button
           color="primary"
-          label="Unselect All"
+          className="text-sm"
+          label="Unselect all"
           onClick={unselectAll}
           disabled={selectedTables.length === 0}
         />
         <Button
           color="primary"
+          className="text-sm"
           label="Import selected tables"
           onClick={importSelectedTables}
           disabled={selectedTables.length === 0}
         />
         <Button
           color="primary"
+          className="text-sm"
           label="Import all tables"
           onClick={importAllTables}
         />
@@ -147,12 +152,12 @@ const SourceTablesView = ({
           <Loader isFull={false} className="w-8 h-8 fill-green-700" />
         </div>
       ) : (
-        <table className="w-full">
+        <table className="max-w-300">
           <thead>
-            <tr className="border-b border-gray-300">
+            <tr className="border-b border-gray-300 text-sm">
               <th />
-              <th className="py-2 px-4 text-left">Source Table Name</th>
-              <th className="py-2 px-4 text-left">Is already imported</th>
+              <th className="py-2 px-4 text-left">Source table name</th>
+              <th className="py-2 px-4 text-left">Import status</th>
             </tr>
           </thead>
           <tbody>
@@ -161,7 +166,7 @@ const SourceTablesView = ({
                 key={item.tableName}
                 className="border-b border-gray-300 last:border-b-0"
               >
-                <td className="py-2 px-4 text-left">
+                <td className="py-2 px-2 text-left">
                   <div className="flex">
                     <Checkbox
                       onChange={() => onSelectChange(item.tableName ?? '')}
@@ -172,13 +177,13 @@ const SourceTablesView = ({
                   </div>
                 </td>
                 <td className="py-2 px-4 text-left">{item.tableName}</td>
-                <td className="py-2 px-4 text-left">
+                <td className="py-2 pl-14">
                   <SvgIcon
                     name={item.alreadyImported ? 'check' : 'close'}
                     className={
                       item.alreadyImported ? 'text-primary' : 'text-red-700'
                     }
-                    width={30}
+                    width={22}
                     height={22}
                   />
                 </td>

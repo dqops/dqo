@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -12,16 +12,12 @@ spec:
   fields:
   - field_name: from_percent
     display_name: from_percent
-    help_text: Minimal accepted change relative to the previous readout (inclusive).
+    help_text: Minimum accepted change relative to the previous readout (inclusive).
     data_type: double
-    sample_values:
-    - 10
   - field_name: to_percent
     display_name: to_percent
-    help_text: Maximal accepted change relative to the previous readout (inclusive).
+    help_text: Maximum accepted change relative to the previous readout (inclusive).
     data_type: double
-    sample_values:
-    - 20
   - field_name: exact_day
     display_name: exact_day
     help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -30,5 +26,4 @@ spec:
       \ with the results from the past 30 days. If no results are found from that\
       \ time, no results or errors will be generated."
     data_type: boolean
-    sample_values:
-    - "false"
+    default_value: "false"

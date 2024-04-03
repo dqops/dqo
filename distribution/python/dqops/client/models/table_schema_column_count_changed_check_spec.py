@@ -1,53 +1,56 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.comment_spec import CommentSpec
-    from ..models.recurring_schedule_spec import RecurringScheduleSpec
+    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
     from ..models.table_column_count_sensor_parameters_spec import (
         TableColumnCountSensorParametersSpec,
     )
-    from ..models.value_changed_parameters_spec import ValueChangedParametersSpec
+    from ..models.value_changed_rule_parameters_spec import (
+        ValueChangedRuleParametersSpec,
+    )
 
 
 T = TypeVar("T", bound="TableSchemaColumnCountChangedCheckSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableSchemaColumnCountChangedCheckSpec:
     """
     Attributes:
-        schedule_override (Union[Unset, RecurringScheduleSpec]):
+        schedule_override (Union[Unset, MonitoringScheduleSpec]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
             deserialization will remove non tracked comments).
-        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and recurrings
+        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and monitorings
             are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules
             should be preserved in the configuration.
         exclude_from_kpi (Union[Unset, bool]): Data quality check results (alerts) are included in the data quality KPI
             calculation by default. Set this field to true in order to exclude this data quality check from the data quality
             KPI calculation.
-        include_in_sla (Union[Unset, bool]): Marks the data quality check as part of a data quality SLA. The data
-            quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract
-            for the dataset.
+        include_in_sla (Union[Unset, bool]): Marks the data quality check as part of a data quality SLA (Data Contract).
+            The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data
+            Contract for the dataset.
         quality_dimension (Union[Unset, str]): Configures a custom data quality dimension name that is different than
             the built-in dimensions (Timeliness, Validity, etc.).
-        display_name (Union[Unset, str]): Data quality check display name that could be assigned to the check, otherwise
+        display_name (Union[Unset, str]): Data quality check display name that can be assigned to the check, otherwise
             the check_display_name stored in the parquet result files is the check_name.
         data_grouping (Union[Unset, str]): Data grouping configuration name that should be applied to this data quality
             check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, TableColumnCountSensorParametersSpec]):
-        warning (Union[Unset, ValueChangedParametersSpec]):
-        error (Union[Unset, ValueChangedParametersSpec]):
-        fatal (Union[Unset, ValueChangedParametersSpec]):
+        warning (Union[Unset, ValueChangedRuleParametersSpec]):
+        error (Union[Unset, ValueChangedRuleParametersSpec]):
+        fatal (Union[Unset, ValueChangedRuleParametersSpec]):
     """
 
-    schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
+    schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     disabled: Union[Unset, bool] = UNSET
     exclude_from_kpi: Union[Unset, bool] = UNSET
@@ -56,10 +59,10 @@ class TableSchemaColumnCountChangedCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[Unset, "TableColumnCountSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "ValueChangedParametersSpec"] = UNSET
-    error: Union[Unset, "ValueChangedParametersSpec"] = UNSET
-    fatal: Union[Unset, "ValueChangedParametersSpec"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    warning: Union[Unset, "ValueChangedRuleParametersSpec"] = UNSET
+    error: Union[Unset, "ValueChangedRuleParametersSpec"] = UNSET
+    fatal: Union[Unset, "ValueChangedRuleParametersSpec"] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         schedule_override: Union[Unset, Dict[str, Any]] = UNSET
@@ -129,19 +132,21 @@ class TableSchemaColumnCountChangedCheckSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.comment_spec import CommentSpec
-        from ..models.recurring_schedule_spec import RecurringScheduleSpec
+        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
         from ..models.table_column_count_sensor_parameters_spec import (
             TableColumnCountSensorParametersSpec,
         )
-        from ..models.value_changed_parameters_spec import ValueChangedParametersSpec
+        from ..models.value_changed_rule_parameters_spec import (
+            ValueChangedRuleParametersSpec,
+        )
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
-        schedule_override: Union[Unset, RecurringScheduleSpec]
+        schedule_override: Union[Unset, MonitoringScheduleSpec]
         if isinstance(_schedule_override, Unset):
             schedule_override = UNSET
         else:
-            schedule_override = RecurringScheduleSpec.from_dict(_schedule_override)
+            schedule_override = MonitoringScheduleSpec.from_dict(_schedule_override)
 
         comments = []
         _comments = d.pop("comments", UNSET)
@@ -170,25 +175,25 @@ class TableSchemaColumnCountChangedCheckSpec:
             parameters = TableColumnCountSensorParametersSpec.from_dict(_parameters)
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, ValueChangedParametersSpec]
+        warning: Union[Unset, ValueChangedRuleParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = ValueChangedParametersSpec.from_dict(_warning)
+            warning = ValueChangedRuleParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, ValueChangedParametersSpec]
+        error: Union[Unset, ValueChangedRuleParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = ValueChangedParametersSpec.from_dict(_error)
+            error = ValueChangedRuleParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, ValueChangedParametersSpec]
+        fatal: Union[Unset, ValueChangedRuleParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = ValueChangedParametersSpec.from_dict(_fatal)
+            fatal = ValueChangedRuleParametersSpec.from_dict(_fatal)
 
         table_schema_column_count_changed_check_spec = cls(
             schedule_override=schedule_override,

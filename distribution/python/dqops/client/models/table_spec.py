@@ -1,24 +1,28 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.comment_spec import CommentSpec
+    from ..models.default_schedules_spec import DefaultSchedulesSpec
+    from ..models.file_format_spec import FileFormatSpec
     from ..models.partition_incremental_time_window_spec import (
         PartitionIncrementalTimeWindowSpec,
     )
-    from ..models.recurring_schedules_spec import RecurringSchedulesSpec
     from ..models.table_incident_grouping_spec import TableIncidentGroupingSpec
+    from ..models.table_monitoring_check_categories_spec import (
+        TableMonitoringCheckCategoriesSpec,
+    )
     from ..models.table_owner_spec import TableOwnerSpec
-    from ..models.table_partitioned_checks_root_spec import (
-        TablePartitionedChecksRootSpec,
+    from ..models.table_partitioned_check_categories_spec import (
+        TablePartitionedCheckCategoriesSpec,
     )
     from ..models.table_profiling_check_categories_spec import (
         TableProfilingCheckCategoriesSpec,
     )
-    from ..models.table_recurring_checks_spec import TableRecurringChecksSpec
     from ..models.table_spec_columns import TableSpecColumns
     from ..models.table_spec_groupings import TableSpecGroupings
     from ..models.table_spec_table_comparisons import TableSpecTableComparisons
@@ -31,17 +35,17 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableSpec:
     """
     Attributes:
         disabled (Union[Unset, bool]): Disables all data quality checks on the table. Data quality checks will not be
             executed.
         stage (Union[Unset, str]): Stage name.
-        priority (Union[Unset, int]): Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level.
-            The table priority is copied into each data quality check result and a sensor result, enabling efficient
-            grouping of more and less important tables during a data quality improvement project, when the data quality
-            issues on higher priority tables are fixed before data quality issues on less important tables.
+        priority (Union[Unset, int]): Table priority (1, 2, 3, 4, ...). The tables can be assigned a priority level. The
+            table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of
+            more and less important tables during a data quality improvement project, when the data quality issues on higher
+            priority tables are fixed before data quality issues on less important tables.
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor queries. Use replacement tokens {table} to
             replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed
             table or {column} to replace the content with the analyzed column name.
@@ -58,21 +62,21 @@ class TableSpec:
             level hierarchy), when the data is segmented at a table level (similar tables store the same information, but
             for different countries, etc.).
         table_comparisons (Union[Unset, TableSpecTableComparisons]): Dictionary of data comparison configurations. Data
-            comparison configurations are used for cross data-source comparisons to compare this table (called the compared
-            table) with other reference tables (the source of truth). The reference table's metadata must be imported into
-            DQO, but the reference table could be located on a different data source. DQO will compare metrics calculated
-            for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data
-            grouping. The number of data grouping dimensions on the parent table and the reference table defined in selected
-            data grouping configurations must match. DQO will run the same data quality sensors on both the parent table
-            (tested table) and the reference table (the source of truth), comparing the measures (sensor readouts) captured
-            from both the tables.
+            comparison configurations are used for comparisons between data sources to compare this table (called the
+            compared table) with other reference tables (the source of truth). The reference table's metadata must be
+            imported into DQOps, but the reference table may be located in another data source. DQOps will compare metrics
+            calculated for groups of rows (using the GROUP BY clause). For each comparison, the user must specify a name of
+            a data grouping. The number of data grouping dimensions in the parent table and the reference table defined in
+            the selected data grouping configurations must match. DQOps will run the same data quality sensors on both the
+            parent table (table under test) and the reference table (the source of truth), comparing the measures (sensor
+            readouts) captured from both tables.
         incident_grouping (Union[Unset, TableIncidentGroupingSpec]):
         owner (Union[Unset, TableOwnerSpec]):
         profiling_checks (Union[Unset, TableProfilingCheckCategoriesSpec]):
-        recurring_checks (Union[Unset, TableRecurringChecksSpec]):
-        partitioned_checks (Union[Unset, TablePartitionedChecksRootSpec]):
+        monitoring_checks (Union[Unset, TableMonitoringCheckCategoriesSpec]):
+        partitioned_checks (Union[Unset, TablePartitionedCheckCategoriesSpec]):
         statistics (Union[Unset, TableStatisticsCollectorsRootCategoriesSpec]):
-        schedules_override (Union[Unset, RecurringSchedulesSpec]):
+        schedules_override (Union[Unset, DefaultSchedulesSpec]):
         columns (Union[Unset, TableSpecColumns]): Dictionary of columns, indexed by a physical column name. Column
             specification contains the expected column data type and a list of column level data quality checks that are
             enabled for a column.
@@ -80,6 +84,7 @@ class TableSpec:
             for tables when filtered data quality checks are executed.
         comments (Union[Unset, List['CommentSpec']]): Comments used for change tracking and documenting changes directly
             in the table data quality specification file.
+        file_format (Union[Unset, FileFormatSpec]):
     """
 
     disabled: Union[Unset, bool] = UNSET
@@ -94,14 +99,15 @@ class TableSpec:
     incident_grouping: Union[Unset, "TableIncidentGroupingSpec"] = UNSET
     owner: Union[Unset, "TableOwnerSpec"] = UNSET
     profiling_checks: Union[Unset, "TableProfilingCheckCategoriesSpec"] = UNSET
-    recurring_checks: Union[Unset, "TableRecurringChecksSpec"] = UNSET
-    partitioned_checks: Union[Unset, "TablePartitionedChecksRootSpec"] = UNSET
+    monitoring_checks: Union[Unset, "TableMonitoringCheckCategoriesSpec"] = UNSET
+    partitioned_checks: Union[Unset, "TablePartitionedCheckCategoriesSpec"] = UNSET
     statistics: Union[Unset, "TableStatisticsCollectorsRootCategoriesSpec"] = UNSET
-    schedules_override: Union[Unset, "RecurringSchedulesSpec"] = UNSET
+    schedules_override: Union[Unset, "DefaultSchedulesSpec"] = UNSET
     columns: Union[Unset, "TableSpecColumns"] = UNSET
     labels: Union[Unset, List[str]] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    file_format: Union[Unset, "FileFormatSpec"] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         disabled = self.disabled
@@ -137,9 +143,9 @@ class TableSpec:
         if not isinstance(self.profiling_checks, Unset):
             profiling_checks = self.profiling_checks.to_dict()
 
-        recurring_checks: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.recurring_checks, Unset):
-            recurring_checks = self.recurring_checks.to_dict()
+        monitoring_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monitoring_checks, Unset):
+            monitoring_checks = self.monitoring_checks.to_dict()
 
         partitioned_checks: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.partitioned_checks, Unset):
@@ -169,6 +175,10 @@ class TableSpec:
 
                 comments.append(comments_item)
 
+        file_format: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.file_format, Unset):
+            file_format = self.file_format.to_dict()
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -196,8 +206,8 @@ class TableSpec:
             field_dict["owner"] = owner
         if profiling_checks is not UNSET:
             field_dict["profiling_checks"] = profiling_checks
-        if recurring_checks is not UNSET:
-            field_dict["recurring_checks"] = recurring_checks
+        if monitoring_checks is not UNSET:
+            field_dict["monitoring_checks"] = monitoring_checks
         if partitioned_checks is not UNSET:
             field_dict["partitioned_checks"] = partitioned_checks
         if statistics is not UNSET:
@@ -210,25 +220,30 @@ class TableSpec:
             field_dict["labels"] = labels
         if comments is not UNSET:
             field_dict["comments"] = comments
+        if file_format is not UNSET:
+            field_dict["file_format"] = file_format
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.comment_spec import CommentSpec
+        from ..models.default_schedules_spec import DefaultSchedulesSpec
+        from ..models.file_format_spec import FileFormatSpec
         from ..models.partition_incremental_time_window_spec import (
             PartitionIncrementalTimeWindowSpec,
         )
-        from ..models.recurring_schedules_spec import RecurringSchedulesSpec
         from ..models.table_incident_grouping_spec import TableIncidentGroupingSpec
+        from ..models.table_monitoring_check_categories_spec import (
+            TableMonitoringCheckCategoriesSpec,
+        )
         from ..models.table_owner_spec import TableOwnerSpec
-        from ..models.table_partitioned_checks_root_spec import (
-            TablePartitionedChecksRootSpec,
+        from ..models.table_partitioned_check_categories_spec import (
+            TablePartitionedCheckCategoriesSpec,
         )
         from ..models.table_profiling_check_categories_spec import (
             TableProfilingCheckCategoriesSpec,
         )
-        from ..models.table_recurring_checks_spec import TableRecurringChecksSpec
         from ..models.table_spec_columns import TableSpecColumns
         from ..models.table_spec_groupings import TableSpecGroupings
         from ..models.table_spec_table_comparisons import TableSpecTableComparisons
@@ -301,19 +316,21 @@ class TableSpec:
                 _profiling_checks
             )
 
-        _recurring_checks = d.pop("recurring_checks", UNSET)
-        recurring_checks: Union[Unset, TableRecurringChecksSpec]
-        if isinstance(_recurring_checks, Unset):
-            recurring_checks = UNSET
+        _monitoring_checks = d.pop("monitoring_checks", UNSET)
+        monitoring_checks: Union[Unset, TableMonitoringCheckCategoriesSpec]
+        if isinstance(_monitoring_checks, Unset):
+            monitoring_checks = UNSET
         else:
-            recurring_checks = TableRecurringChecksSpec.from_dict(_recurring_checks)
+            monitoring_checks = TableMonitoringCheckCategoriesSpec.from_dict(
+                _monitoring_checks
+            )
 
         _partitioned_checks = d.pop("partitioned_checks", UNSET)
-        partitioned_checks: Union[Unset, TablePartitionedChecksRootSpec]
+        partitioned_checks: Union[Unset, TablePartitionedCheckCategoriesSpec]
         if isinstance(_partitioned_checks, Unset):
             partitioned_checks = UNSET
         else:
-            partitioned_checks = TablePartitionedChecksRootSpec.from_dict(
+            partitioned_checks = TablePartitionedCheckCategoriesSpec.from_dict(
                 _partitioned_checks
             )
 
@@ -327,11 +344,11 @@ class TableSpec:
             )
 
         _schedules_override = d.pop("schedules_override", UNSET)
-        schedules_override: Union[Unset, RecurringSchedulesSpec]
+        schedules_override: Union[Unset, DefaultSchedulesSpec]
         if isinstance(_schedules_override, Unset):
             schedules_override = UNSET
         else:
-            schedules_override = RecurringSchedulesSpec.from_dict(_schedules_override)
+            schedules_override = DefaultSchedulesSpec.from_dict(_schedules_override)
 
         _columns = d.pop("columns", UNSET)
         columns: Union[Unset, TableSpecColumns]
@@ -349,6 +366,13 @@ class TableSpec:
 
             comments.append(comments_item)
 
+        _file_format = d.pop("file_format", UNSET)
+        file_format: Union[Unset, FileFormatSpec]
+        if isinstance(_file_format, Unset):
+            file_format = UNSET
+        else:
+            file_format = FileFormatSpec.from_dict(_file_format)
+
         table_spec = cls(
             disabled=disabled,
             stage=stage,
@@ -362,13 +386,14 @@ class TableSpec:
             incident_grouping=incident_grouping,
             owner=owner,
             profiling_checks=profiling_checks,
-            recurring_checks=recurring_checks,
+            monitoring_checks=monitoring_checks,
             partitioned_checks=partitioned_checks,
             statistics=statistics,
             schedules_override=schedules_override,
             columns=columns,
             labels=labels,
             comments=comments,
+            file_format=file_format,
         )
 
         table_spec.additional_properties = d

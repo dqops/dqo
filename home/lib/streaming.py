@@ -62,8 +62,13 @@ def stream_json_objects(file_obj: TextIO, buf_size=1024):
     started_at = None
     while True:
         block = file_obj.read(buf_size)
+
+        if file_obj.closed:
+            break
+
         if not block:
             break
+
         if not started_at:
             started_at = datetime.now()
         buf += block
@@ -93,15 +98,20 @@ def stream_json_objects(file_obj: TextIO, buf_size=1024):
         raise ex
 
 
-def stream_json_dicts(file_obj: TextIO, buf_size=1024):
+def stream_json_dicts(file_obj: TextIO, buf_size=512):
     decoder = JSONDecoder()
     buf = ""
     ex = None
     started_at = None
     while True:
         block = file_obj.read(buf_size)
+
+        if file_obj.closed:
+            break
+
         if not block:
             break
+
         if not started_at:
             started_at = datetime.now()
         buf += block

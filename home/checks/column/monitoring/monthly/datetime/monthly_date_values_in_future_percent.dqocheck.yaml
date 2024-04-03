@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/datetime/date_values_in_future_percent
+  rule_name: comparison/max_percent
+  help_text: "Detects dates in the future in date, datetime and timestamp columns.\
+    \ Measures a percentage of dates in the future. Raises a data quality issue when\
+    \ too many future dates are found. Stores the most recent check result for each\
+    \ month when the data quality check was evaluated."
+  standard: true

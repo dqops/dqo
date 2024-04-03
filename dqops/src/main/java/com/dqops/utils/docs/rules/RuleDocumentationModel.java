@@ -56,4 +56,14 @@ public class RuleDocumentationModel {
      * Rule definition wrapper.
      */
     private RuleDefinitionWrapper definition;
+
+    /**
+     * The source code of the rule (Python).
+     */
+    private String pythonSourceCode;
+
+    /**
+     * The name of the first rule parameter, if the rule has any parameters. Used to generate CLI examples of activating the rule.
+     */
+    private String firstRuleParameterName;
 }

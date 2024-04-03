@@ -1,25 +1,26 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="TableSqlConditionPassedPercentSensorParametersSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableSqlConditionPassedPercentSensorParametersSpec:
     """
     Attributes:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
             sensor query filter are added, separated by an AND operator.
         sql_condition (Union[Unset, str]): SQL condition (expression) that returns true or false. The condition is
-            evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.
+            evaluated for each row. The expression can use a {table} placeholder that is replaced with a full table name.
     """
 
     filter_: Union[Unset, str] = UNSET
     sql_condition: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         filter_ = self.filter_

@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import CommentsView from '../CommentsView';
-import ConnectionActionGroup from './ConnectionActionGroup';
 import { useSelector } from 'react-redux';
 import { CommentSpec } from '../../../api';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getConnectionComments,
   setIsUpdatedComments,
   setUpdatedComments,
   updateConnectionComments
 } from '../../../redux/actions/connection.actions';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { useParams } from "react-router-dom";
-import { CheckTypes } from "../../../shared/routes";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
+import { CheckTypes } from "../../../shared/routes";
+import CommentsView from '../CommentsView';
+import ConnectionActionGroup from './ConnectionActionGroup';
+import { useDecodedParams } from '../../../utils';
 
 const ConnectionCommentView = () => {
-  const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
+  const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useDecodedParams();
   const { isUpdating, updatedComments, isUpdatedComments }: {
     isUpdating: boolean,
     updatedComments: CommentSpec[],

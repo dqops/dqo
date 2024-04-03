@@ -1,8 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/numeric/percentile
-  rule_name: percentile/anomaly_stationary_percentile_moving_average_30_days
-  help_text: Verifies that the median in a column is within a percentile from measurements
-    made during the last 30 days.

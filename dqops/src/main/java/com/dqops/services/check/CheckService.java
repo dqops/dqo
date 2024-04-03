@@ -15,13 +15,14 @@
  */
 package com.dqops.services.check;
 
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.services.check.mapping.models.AllChecksModel;
 import com.dqops.services.check.models.AllChecksPatchParameters;
-import com.dqops.services.check.models.BulkCheckDisableParameters;
+import com.dqops.services.check.models.BulkCheckDeactivateParameters;
 
 import java.util.List;
 
@@ -35,24 +36,36 @@ public interface CheckService {
      * @param timeWindowFilterParameters Optional user provided time window parameters, limits the time period that is analyzed.
      * @param checkExecutionProgressListener Progress listener that will report the progress.
      * @param dummyRun Run the sensors in a dummy mode (sensors are not executed).
+     * @param principal Principal that will be used to run the job.
      * @return Check execution summary.
      */
     CheckExecutionSummary runChecks(CheckSearchFilters checkSearchFilters,
                                     TimeWindowFilterParameters timeWindowFilterParameters,
                                     CheckExecutionProgressListener checkExecutionProgressListener,
-                                    boolean dummyRun);
+                                    boolean dummyRun,
+                                    DqoUserPrincipal principal);
+
+    /**
+     * Deletes existing checks matching the provided filters.
+     *
+     * @param parameters Bulk check disable parameters.
+     * @param principal User principal who called the operation.
+     */
+    void deleteChecks(BulkCheckDeactivateParameters parameters, DqoUserPrincipal principal);
 
     /**
      * Disable existing checks matching the provided filters.
      *
      * @param parameters Bulk check disable parameters.
+     * @param principal User principal who called the operation.
      */
-    void disableChecks(BulkCheckDisableParameters parameters);
+    void disableChecks(BulkCheckDeactivateParameters parameters, DqoUserPrincipal principal);
 
     /**
      * Update checks configuration based on provided parameters.
      * @param parameters Parameters for creating the patches and updating.
+     * @param principal  User principal.
      * @return List of patches (by connections) of the updated configuration of all checks.
      */
-    List<AllChecksModel> updateAllChecksPatch(AllChecksPatchParameters parameters);
+    List<AllChecksModel> activateOrUpdateAllChecks(AllChecksPatchParameters parameters, DqoUserPrincipal principal);
 }

@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/numeric/mean
+  rule_name: change/change_percent_30_days
+  help_text: Verifies that the mean value in a column changed in a fixed rate since
+    last readout from last month.

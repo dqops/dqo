@@ -21,7 +21,7 @@ package com.dqops.data.normalization;
  */
 public final class CommonColumnNames {
     /**
-     * The row's primary key, it is a uuid of the check hash, time period and the data stream id. This value identifies a single row.
+     * The row's primary key, it is a uuid of the connection_name, table_name, column_name, check_hash, time_period, and the data_group_hash. This value identifies a single row.
      */
     public static final String ID_COLUMN_NAME = "id";
 
@@ -116,7 +116,7 @@ public final class CommonColumnNames {
     public static final String SENSOR_NAME_COLUMN_NAME = "sensor_name";
 
     /**
-     * Column for a time series id (uuid). Identifies a single time series. A time series is a combination of the check_hash and data_stream_hash.
+     * Column for a time series id (uuid). Identifies a single time series. A time series is a combination of the check_hash and data_group_hash.
      */
     public static final String TIME_SERIES_ID_COLUMN_NAME = "time_series_id";
 

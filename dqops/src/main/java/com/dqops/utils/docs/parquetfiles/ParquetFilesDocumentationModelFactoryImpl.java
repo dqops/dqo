@@ -29,6 +29,7 @@ import com.github.therapi.runtimejavadoc.ClassJavadoc;
 import com.github.therapi.runtimejavadoc.CommentFormatter;
 import com.github.therapi.runtimejavadoc.FieldJavadoc;
 import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
+import tech.tablesaw.api.ColumnType;
 import tech.tablesaw.api.Table;
 
 import java.lang.reflect.Field;
@@ -40,6 +41,20 @@ import java.util.*;
  */
 public class ParquetFilesDocumentationModelFactoryImpl implements ParquetFilesDocumentationModelFactory {
     private static final CommentFormatter commentFormatter = new CommentFormatter();
+    private static final Map<ColumnType, String> columnTypeToHiveTypeMapping = new LinkedHashMap<>() {{
+        put(ColumnType.BOOLEAN, "BOOLEAN");
+        put(ColumnType.STRING, "STRING");
+        put(ColumnType.TEXT, "STRING");
+        put(ColumnType.DOUBLE, "DOUBLE");
+        put(ColumnType.FLOAT, "FLOAT");
+        put(ColumnType.INSTANT, "TIMESTAMP");
+        put(ColumnType.INTEGER, "INTEGER");
+        put(ColumnType.LOCAL_DATE, "DATE");
+        put(ColumnType.LOCAL_DATE_TIME, "TIMESTAMP");
+        put(ColumnType.LOCAL_TIME, "INTERVAL");
+        put(ColumnType.LONG, "BIGINT");
+        put(ColumnType.SHORT, "SMALLINT");
+    }};
 
     /**
      * Create a parquet file documentation models.
@@ -95,7 +110,9 @@ public class ParquetFilesDocumentationModelFactoryImpl implements ParquetFilesDo
         for (String columnName : columnsNames) {
             ParquetColumnDetailsDocumentationModel parquetColumnDetailsDocumentationModel = new ParquetColumnDetailsDocumentationModel();
             parquetColumnDetailsDocumentationModel.setColumnName(columnName);
-            parquetColumnDetailsDocumentationModel.setColumnType(table.column(columnName).type().toString());
+            ColumnType columnType = table.column(columnName).type();
+            String hiveColumnTypeName = columnTypeToHiveTypeMapping.get(columnType);
+            parquetColumnDetailsDocumentationModel.setColumnType(hiveColumnTypeName);
             String columnDescription = columnsDescriptions.get(columnName);
             if (columnDescription != null) {
                 parquetColumnDetailsDocumentationModel.setColumnDescription(columnDescription);
@@ -125,6 +142,7 @@ public class ParquetFilesDocumentationModelFactoryImpl implements ParquetFilesDo
             if (classJavadoc.getComment() != null) {
                 String formattedClassComment = commentFormatter.format(classJavadoc.getComment());
                 parquetFileDocumentationModel.setParquetFileDescription(formattedClassComment);
+                parquetFileDocumentationModel.setParquetFileShortDescription(getShortDescription(formattedClassComment));
             }
             while (classWithDetails != null) {
                 for (Field field : classWithDetails.getDeclaredFields()) {
@@ -145,6 +163,11 @@ public class ParquetFilesDocumentationModelFactoryImpl implements ParquetFilesDo
             }
         }
         return columnsDescriptions;
+    }
+
+    private String getShortDescription(String description) {
+        String[] splitDescription = description.split("\\.");
+        return splitDescription[0] + ".";
     }
 }
 

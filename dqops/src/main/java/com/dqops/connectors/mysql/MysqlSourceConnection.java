@@ -15,16 +15,18 @@
  */
 package com.dqops.connectors.mysql;
 
-import com.dqops.connectors.*;
+import com.dqops.connectors.ConnectionProviderSpecificParameters;
+import com.dqops.connectors.ConnectorOperationFailedException;
+import com.dqops.connectors.SourceSchemaModel;
+import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
-import com.dqops.connectors.jdbc.JdbcQueryFailedException;
-import com.dqops.core.jobqueue.JobCancellationListenerHandle;
+import com.dqops.connectors.mysql.singlestore.SingleStoreDbSourceConnection;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
-import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +34,14 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.columns.Column;
 
 import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * MySQL source connection.
@@ -66,7 +68,7 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName) {
+    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
         ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
 
         StringBuilder sqlBuilder = new StringBuilder();
@@ -117,21 +119,40 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
 
     /**
      * Creates a hikari connection pool config for the connection specification.
-     *
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      * @return Hikari config.
      */
     @Override
-    public HikariConfig createHikariConfig() {
+    public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
+        MysqlParametersSpec mysqlParametersSpec = this.getConnectionSpec().getMysql();
+
+        if (mysqlParametersSpec.getMysqlEngineType() == MysqlEngineType.singlestoredb) {
+            return SingleStoreDbSourceConnection.createHikariConfig(
+                    secretValueLookupContext,
+                    mysqlParametersSpec,
+                    this.getSecretValueProvider());
+        } else {
+            return createHikariConfigForMysql(secretValueLookupContext);
+        }
+    }
+
+    /**
+     * Creates a hikari connection pool config for the connection specification for mysql.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
+     * @return Hikari config.
+     */
+    private HikariConfig createHikariConfigForMysql(SecretValueLookupContext secretValueLookupContext) {
+
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
         MysqlParametersSpec mysqlParametersSpec = connectionSpec.getMysql();
 
-        String host = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getHost());
+        String host = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getHost(), secretValueLookupContext);
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
         jdbcConnectionBuilder.append("jdbc:mysql://");
         jdbcConnectionBuilder.append(host);
 
-        String port = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getPort());
+        String port = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getPort(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(port)) {
             try {
                 int portNumber = Integer.parseInt(port);
@@ -143,7 +164,7 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
             }
         }
         jdbcConnectionBuilder.append('/');
-        String database = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getDatabase());
+        String database = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getDatabase(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(database)) {
             jdbcConnectionBuilder.append(database);
         } else {
@@ -159,70 +180,50 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
         }
 
         if (mysqlParametersSpec.getProperties() != null) {
-            dataSourceProperties.putAll(mysqlParametersSpec.getProperties());
+            dataSourceProperties.putAll(mysqlParametersSpec.getProperties()
+                    .entrySet().stream()
+                    .filter(x -> !x.getKey().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
         }
 
-        String userName = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getUser());
+        String userName = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getUser(), secretValueLookupContext);
         hikariConfig.setUsername(userName);
 
-        String password = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getPassword());
+        String password = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getPassword(), secretValueLookupContext);
         hikariConfig.setPassword(password);
-
-        String options =  this.getSecretValueProvider().expandValue(mysqlParametersSpec.getOptions());
-        if (!Strings.isNullOrEmpty(options)) {
-            dataSourceProperties.put("options", options);
-        }
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
     }
 
     /**
-     * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
-     *
-     * @param sqlQueryStatement       SQL statement that returns a row set.
-     * @param jobCancellationToken    Job cancellation token, enables cancelling a running query.
-     * @param maxRows                 Maximum rows limit.
-     * @param failWhenMaxRowsExceeded Throws an exception if the maximum number of rows is exceeded.
+     * Creates the tablesaw's Table from the ResultSet for the query execution
+     * @param results               ResultSet object that contains the data produced by a query
+     * @param sqlQueryStatement     SQL statement that returns a row set.
      * @return Tabular result captured from the query.
+     * @throws SQLException
      */
     @Override
-    public Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken, Integer maxRows, boolean failWhenMaxRowsExceeded) {
-        try {
-            try (Statement statement = this.getJdbcConnection().createStatement()) {
-                if (maxRows != null) {
-                    statement.setMaxRows(failWhenMaxRowsExceeded ? maxRows + 1 : maxRows);
-                }
-
-                try (JobCancellationListenerHandle cancellationListenerHandle =
-                             jobCancellationToken.registerCancellationListener(
-                                     cancellationToken -> RunSilently.run(statement::cancel))) {
-                    try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
-                        try (MysqlResultSet mysqlResultSet = new MysqlResultSet(results)) {
-                            Table resultTable = Table.read().db(mysqlResultSet, sqlQueryStatement);
-                            if (maxRows != null && resultTable.rowCount() > maxRows) {
-                                throw new RowCountLimitExceededException(maxRows);
-                            }
-
-                            for (Column<?> column : resultTable.columns()) {
-                                if (column.name() != null) {
-                                    column.setName(column.name().toLowerCase(Locale.ROOT));
-                                }
-                            }
-                            return resultTable;
-                        }
-                    }
-                }
-                finally {
-                    jobCancellationToken.throwIfCancelled();
-                }
-            }
+    protected Table rawTableResultFromResultSet(ResultSet results, String sqlQueryStatement) throws SQLException {
+        try (MysqlResultSet mysqlResultSet = new MysqlResultSet(results)) {
+            Table resultTable = Table.read().db(mysqlResultSet, sqlQueryStatement);
+            return resultTable;
         }
-        catch (Exception ex) {
-            String connectionName = this.getConnectionSpec().getConnectionName();
-            throw new JdbcQueryFailedException(
-                    String.format("SQL query failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlQueryStatement),
-                    ex, sqlQueryStatement, connectionName);
+    }
+
+    /**
+     * Creates an SQL for listing columns in the given tables.
+     * @param schemaName Schema name (bigquery dataset name).
+     * @param tableNames Table names to list.
+     * @return SQL of the INFORMATION_SCHEMA query.
+     */
+    public String buildListColumnsSql(String schemaName, List<String> tableNames) {
+        MysqlParametersSpec mysqlParametersSpec = getConnectionSpec().getMysql();
+        if (mysqlParametersSpec.getMysqlEngineType() == MysqlEngineType.singlestoredb) {
+            return SingleStoreDbSourceConnection.buildListColumnsSql(getConnectionSpec(), schemaName, tableNames, this.getInformationSchemaName());
+        } else {
+            return super.buildListColumnsSql(schemaName, tableNames);
         }
     }
 }

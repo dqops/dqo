@@ -1,61 +1,56 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.between_percent_rule_parameters_spec import (
+        BetweenPercentRuleParametersSpec,
+    )
     from ..models.column_bool_false_percent_sensor_parameters_spec import (
         ColumnBoolFalsePercentSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.min_percent_rule_95_parameters_spec import (
-        MinPercentRule95ParametersSpec,
-    )
-    from ..models.min_percent_rule_99_parameters_spec import (
-        MinPercentRule99ParametersSpec,
-    )
-    from ..models.min_percent_rule_100_parameters_spec import (
-        MinPercentRule100ParametersSpec,
-    )
-    from ..models.recurring_schedule_spec import RecurringScheduleSpec
+    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
 
 T = TypeVar("T", bound="ColumnFalsePercentCheckSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnFalsePercentCheckSpec:
     """
     Attributes:
-        schedule_override (Union[Unset, RecurringScheduleSpec]):
+        schedule_override (Union[Unset, MonitoringScheduleSpec]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
             deserialization will remove non tracked comments).
-        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and recurrings
+        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and monitorings
             are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules
             should be preserved in the configuration.
         exclude_from_kpi (Union[Unset, bool]): Data quality check results (alerts) are included in the data quality KPI
             calculation by default. Set this field to true in order to exclude this data quality check from the data quality
             KPI calculation.
-        include_in_sla (Union[Unset, bool]): Marks the data quality check as part of a data quality SLA. The data
-            quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract
-            for the dataset.
+        include_in_sla (Union[Unset, bool]): Marks the data quality check as part of a data quality SLA (Data Contract).
+            The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data
+            Contract for the dataset.
         quality_dimension (Union[Unset, str]): Configures a custom data quality dimension name that is different than
             the built-in dimensions (Timeliness, Validity, etc.).
-        display_name (Union[Unset, str]): Data quality check display name that could be assigned to the check, otherwise
+        display_name (Union[Unset, str]): Data quality check display name that can be assigned to the check, otherwise
             the check_display_name stored in the parquet result files is the check_name.
         data_grouping (Union[Unset, str]): Data grouping configuration name that should be applied to this data quality
             check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnBoolFalsePercentSensorParametersSpec]):
-        warning (Union[Unset, MinPercentRule100ParametersSpec]):
-        error (Union[Unset, MinPercentRule99ParametersSpec]):
-        fatal (Union[Unset, MinPercentRule95ParametersSpec]):
+        warning (Union[Unset, BetweenPercentRuleParametersSpec]):
+        error (Union[Unset, BetweenPercentRuleParametersSpec]):
+        fatal (Union[Unset, BetweenPercentRuleParametersSpec]):
     """
 
-    schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
+    schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     disabled: Union[Unset, bool] = UNSET
     exclude_from_kpi: Union[Unset, bool] = UNSET
@@ -64,10 +59,10 @@ class ColumnFalsePercentCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[Unset, "ColumnBoolFalsePercentSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "MinPercentRule100ParametersSpec"] = UNSET
-    error: Union[Unset, "MinPercentRule99ParametersSpec"] = UNSET
-    fatal: Union[Unset, "MinPercentRule95ParametersSpec"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    warning: Union[Unset, "BetweenPercentRuleParametersSpec"] = UNSET
+    error: Union[Unset, "BetweenPercentRuleParametersSpec"] = UNSET
+    fatal: Union[Unset, "BetweenPercentRuleParametersSpec"] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         schedule_override: Union[Unset, Dict[str, Any]] = UNSET
@@ -136,28 +131,22 @@ class ColumnFalsePercentCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.between_percent_rule_parameters_spec import (
+            BetweenPercentRuleParametersSpec,
+        )
         from ..models.column_bool_false_percent_sensor_parameters_spec import (
             ColumnBoolFalsePercentSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.min_percent_rule_95_parameters_spec import (
-            MinPercentRule95ParametersSpec,
-        )
-        from ..models.min_percent_rule_99_parameters_spec import (
-            MinPercentRule99ParametersSpec,
-        )
-        from ..models.min_percent_rule_100_parameters_spec import (
-            MinPercentRule100ParametersSpec,
-        )
-        from ..models.recurring_schedule_spec import RecurringScheduleSpec
+        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
-        schedule_override: Union[Unset, RecurringScheduleSpec]
+        schedule_override: Union[Unset, MonitoringScheduleSpec]
         if isinstance(_schedule_override, Unset):
             schedule_override = UNSET
         else:
-            schedule_override = RecurringScheduleSpec.from_dict(_schedule_override)
+            schedule_override = MonitoringScheduleSpec.from_dict(_schedule_override)
 
         comments = []
         _comments = d.pop("comments", UNSET)
@@ -188,25 +177,25 @@ class ColumnFalsePercentCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MinPercentRule100ParametersSpec]
+        warning: Union[Unset, BetweenPercentRuleParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MinPercentRule100ParametersSpec.from_dict(_warning)
+            warning = BetweenPercentRuleParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MinPercentRule99ParametersSpec]
+        error: Union[Unset, BetweenPercentRuleParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MinPercentRule99ParametersSpec.from_dict(_error)
+            error = BetweenPercentRuleParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, MinPercentRule95ParametersSpec]
+        fatal: Union[Unset, BetweenPercentRuleParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = MinPercentRule95ParametersSpec.from_dict(_fatal)
+            fatal = BetweenPercentRuleParametersSpec.from_dict(_fatal)
 
         column_false_percent_check_spec = cls(
             schedule_override=schedule_override,

@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.run_checks_parameters import RunChecksParameters
 from ...models.run_checks_queue_job_result import RunChecksQueueJobResult
 from ...types import UNSET, Response, Unset
@@ -12,17 +12,16 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    client: Client,
     json_body: RunChecksParameters,
+    job_business_key: Union[Unset, None, str] = UNSET,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}api/jobs/runchecks".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
+    params["jobBusinessKey"] = job_business_key
+
     params["wait"] = wait
 
     params["waitTimeout"] = wait_timeout
@@ -33,18 +32,14 @@ def _get_kwargs(
 
     return {
         "method": "post",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/jobs/runchecks",
         "json": json_json_body,
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[RunChecksQueueJobResult]:
     if response.status_code == HTTPStatus.OK:
         response_200 = RunChecksQueueJobResult.from_dict(response.json())
@@ -57,7 +52,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[RunChecksQueueJobResult]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -69,8 +64,9 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: RunChecksParameters,
+    job_business_key: Union[Unset, None, str] = UNSET,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Response[RunChecksQueueJobResult]:
@@ -79,6 +75,7 @@ def sync_detailed(
      Starts a new background job that will run selected data quality checks
 
     Args:
+        job_business_key (Union[Unset, None, str]):
         wait (Union[Unset, None, bool]):
         wait_timeout (Union[Unset, None, int]):
         json_body (RunChecksParameters): Run checks configuration, specifies the target checks
@@ -93,14 +90,13 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         json_body=json_body,
+        job_business_key=job_business_key,
         wait=wait,
         wait_timeout=wait_timeout,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -109,8 +105,9 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: RunChecksParameters,
+    job_business_key: Union[Unset, None, str] = UNSET,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Optional[RunChecksQueueJobResult]:
@@ -119,6 +116,7 @@ def sync(
      Starts a new background job that will run selected data quality checks
 
     Args:
+        job_business_key (Union[Unset, None, str]):
         wait (Union[Unset, None, bool]):
         wait_timeout (Union[Unset, None, int]):
         json_body (RunChecksParameters): Run checks configuration, specifies the target checks
@@ -135,6 +133,7 @@ def sync(
     return sync_detailed(
         client=client,
         json_body=json_body,
+        job_business_key=job_business_key,
         wait=wait,
         wait_timeout=wait_timeout,
     ).parsed
@@ -142,8 +141,9 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: RunChecksParameters,
+    job_business_key: Union[Unset, None, str] = UNSET,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Response[RunChecksQueueJobResult]:
@@ -152,6 +152,7 @@ async def asyncio_detailed(
      Starts a new background job that will run selected data quality checks
 
     Args:
+        job_business_key (Union[Unset, None, str]):
         wait (Union[Unset, None, bool]):
         wait_timeout (Union[Unset, None, int]):
         json_body (RunChecksParameters): Run checks configuration, specifies the target checks
@@ -166,22 +167,22 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         json_body=json_body,
+        job_business_key=job_business_key,
         wait=wait,
         wait_timeout=wait_timeout,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: RunChecksParameters,
+    job_business_key: Union[Unset, None, str] = UNSET,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Optional[RunChecksQueueJobResult]:
@@ -190,6 +191,7 @@ async def asyncio(
      Starts a new background job that will run selected data quality checks
 
     Args:
+        job_business_key (Union[Unset, None, str]):
         wait (Union[Unset, None, bool]):
         wait_timeout (Union[Unset, None, int]):
         json_body (RunChecksParameters): Run checks configuration, specifies the target checks
@@ -207,6 +209,7 @@ async def asyncio(
         await asyncio_detailed(
             client=client,
             json_body=json_body,
+            job_business_key=job_business_key,
             wait=wait,
             wait_timeout=wait_timeout,
         )

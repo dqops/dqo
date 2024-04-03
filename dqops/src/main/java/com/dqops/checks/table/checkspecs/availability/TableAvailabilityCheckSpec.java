@@ -20,10 +20,12 @@ import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MaxFailuresRule0ParametersSpec;
+import com.dqops.rules.comparison.MaxFailuresRule1ParametersSpec;
 import com.dqops.rules.comparison.MaxFailuresRule5ParametersSpec;
 import com.dqops.rules.comparison.MaxFailuresRule10ParametersSpec;
 import com.dqops.sensors.table.availability.TableAvailabilitySensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -34,18 +36,20 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that verifies that a query can be executed on a table and that the server does not return errors, that the table exists, and that the table is accessible (queryable).
+ * A table-level check that ensures a query can be successfully executed on a table without server errors. It also verifies that the table exists and is accessible (queryable).
+ * The actual value (the result of the check) indicates the number of failures. If the table is accessible and a simple query can be executed without errors, the result will be 0.0.
+ * A sensor result (the actual value) of 1.0 indicates that there is a failure. Any value greater than 1.0 is stored only in the check result table and represents the number of consecutive failures in the following days.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabilitySensorParametersSpec, MaxFailuresRule0ParametersSpec, MaxFailuresRule5ParametersSpec, MaxFailuresRule10ParametersSpec> {
+public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabilitySensorParametersSpec, MaxFailuresRule0ParametersSpec, MaxFailuresRule1ParametersSpec, MaxFailuresRule5ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableAvailabilityCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Row count sensor parameters")
+    @JsonPropertyDescription("Table availability sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableAvailabilitySensorParametersSpec parameters = new TableAvailabilitySensorParametersSpec();
@@ -55,15 +59,15 @@ public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabil
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxFailuresRule0ParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting threshold with the maximum number of consecutive table availability issues that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxFailuresRule5ParametersSpec error;
+    private MaxFailuresRule1ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxFailuresRule10ParametersSpec fatal;
+    private MaxFailuresRule5ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -110,7 +114,7 @@ public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabil
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxFailuresRule5ParametersSpec getError() {
+    public MaxFailuresRule1ParametersSpec getError() {
         return this.error;
     }
 
@@ -118,7 +122,7 @@ public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabil
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxFailuresRule5ParametersSpec error) {
+    public void setError(MaxFailuresRule1ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -130,7 +134,7 @@ public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabil
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxFailuresRule10ParametersSpec getFatal() {
+    public MaxFailuresRule5ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -138,7 +142,7 @@ public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabil
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxFailuresRule10ParametersSpec fatal) {
+    public void setFatal(MaxFailuresRule5ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -152,6 +156,18 @@ public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabil
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns true if this is a standard data quality check that is always shown on the data quality checks editor screen.
+     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
+     *
+     * @return True when it is a standard check, false when it is an advanced check. The default value is 'false' (all checks are non-standard, advanced checks).
+     */
+    @Override
+    @JsonIgnore
+    public boolean isStandard() {
+        return true;
     }
 
     /**

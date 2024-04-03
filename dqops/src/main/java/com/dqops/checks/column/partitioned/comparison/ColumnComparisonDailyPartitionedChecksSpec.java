@@ -15,12 +15,16 @@
  */
 package com.dqops.checks.column.partitioned.comparison;
 
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.comparison.*;
 import com.dqops.checks.comparison.AbstractColumnComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.ColumnCompareCheckType;
 import com.dqops.checks.comparison.ComparisonCheckRules;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -285,6 +289,28 @@ public class ColumnComparisonDailyPartitionedChecksSpec extends AbstractColumnCo
     }
 
     /**
+     * Gets the check type appropriate for all checks in this category.
+     *
+     * @return Corresponding check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.partitioned;
+    }
+
+    /**
+     * Gets the check timescale appropriate for all checks in this category.
+     *
+     * @return Corresponding check timescale.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return CheckTimeScale.daily;
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -292,5 +318,16 @@ public class ColumnComparisonDailyPartitionedChecksSpec extends AbstractColumnCo
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.ANY;
     }
 }

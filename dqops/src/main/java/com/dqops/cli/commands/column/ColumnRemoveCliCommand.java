@@ -26,6 +26,8 @@ import com.dqops.cli.completion.completers.ConnectionNameCompleter;
 import com.dqops.cli.completion.completers.FullTableNameCompleter;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -40,6 +42,7 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "remove", header = "Remove the column(s) that match a given condition", description = "Remove one or more columns from a table that match a specified condition. Users can filter the column.")
 public class ColumnRemoveCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
 	private ColumnCliService columnCliService;
+	private DqoUserPrincipalProvider principalProvider;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 
@@ -48,22 +51,25 @@ public class ColumnRemoveCliCommand extends BaseCommand implements ICommand, ICo
 
 	@Autowired
 	public ColumnRemoveCliCommand(TerminalReader terminalReader,
-							   TerminalWriter terminalWriter,
-							   ColumnCliService columnCliService) {
+								  TerminalWriter terminalWriter,
+								  ColumnCliService columnCliService,
+								  DqoUserPrincipalProvider principalProvider) {
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 		this.columnCliService = columnCliService;
+		this.principalProvider = principalProvider;
 	}
-
-	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name", required = false,
-			completionCandidates = FullTableNameCompleter.class)
-	private String fullTableName;
 
 	@CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name", required = false,
 			completionCandidates = ConnectionNameCompleter.class)
 	private String connectionName;
 
-	@CommandLine.Option(names = {"-C", "--column"}, description = "Column name", required = false,
+	@CommandLine.Option(names = {"-t", "--table", "--full-table-name"},
+			description = "Full table name filter in the form \"schema.table\", but also supporting patterns: public.*, *.customers, landing*.customer*.", required = false,
+			completionCandidates = FullTableNameCompleter.class)
+	private String fullTableName;
+
+	@CommandLine.Option(names = {"-C", "--column"}, description = "Column name, supports patterns: c_*, *_id, prefix*suffix.", required = false,
 			completionCandidates = ColumnNameCompleter.class)
 	private String columnName;
 
@@ -123,7 +129,8 @@ public class ColumnRemoveCliCommand extends BaseCommand implements ICommand, ICo
 	 */
 	@Override
 	public Integer call() throws Exception {
-		CliOperationStatus cliOperationStatus = columnCliService.removeColumn(connectionName, fullTableName, columnName);
+		DqoUserPrincipal principal = this.principalProvider.getLocalUserPrincipal();
+		CliOperationStatus cliOperationStatus = columnCliService.removeColumn(connectionName, fullTableName, columnName, principal);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

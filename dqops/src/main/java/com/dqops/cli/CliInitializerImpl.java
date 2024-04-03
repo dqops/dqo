@@ -21,11 +21,14 @@ import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.connectors.jdbc.JdbcTypeColumnMapping;
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
 import com.dqops.core.configuration.DqoSchedulerConfigurationProperties;
+import com.dqops.core.configuration.RootConfigurationProperties;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.jobqueue.DqoJobQueue;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.core.synchronization.status.FileSynchronizationChangeDetectionService;
 import com.dqops.data.storage.TablesawParquetSupportFix;
@@ -42,7 +45,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Initializes the local instance, configures a DQO user home, logs the user to the cloud dqo instance.
+ * Initializes the local instance, configures a DQOps user home, logs the user to the cloud dqo instance.
  * Component called by the CLI command runner just before the first command is executed.
  */
 @Component
@@ -62,6 +65,8 @@ public class CliInitializerImpl implements CliInitializer {
     private TerminalWriter terminalWriter;
     private LocalUrlAddresses localUrlAddresses;
     private PythonVirtualEnvService pythonVirtualEnvService;
+    private RootConfigurationProperties rootConfigurationProperties;
+    private DqoUserPrincipalProvider dqoUserPrincipalProvider;
 
     /**
      * Called by the dependency injection container to provide dependencies.
@@ -70,16 +75,18 @@ public class CliInitializerImpl implements CliInitializer {
      * @param terminalReader Terminal reader - used to ask the user to log in.
      * @param cloudLoginService Cloud login service - used to log the user to dqo cloud.
      * @param dqoSchedulerConfigurationProperties Scheduler configuration parameters, decide if the scheduler should be started instantly.
-     * @param dqoCloudConfigurationProperties DQO Cloud configuration parameters.
+     * @param dqoCloudConfigurationProperties DQOps Cloud configuration parameters.
      * @param jobSchedulerService Job scheduler service, may be started when the dqo.scheduler.start property is true.
-     * @param jobQueueMonitoringService DQO job queue monitoring service that tracks the statuses of jobs.
+     * @param jobQueueMonitoringService DQOps job queue monitoring service that tracks the statuses of jobs.
      * @param dqoJobQueue Job queue service, used to start the job queue when the application starts.
      * @param parentDqoJobQueue Job queue service that queues and executes only parent jobs, must be started when the application starts.
-     * @param fileSynchronizationChangeDetectionService File synchronization changes detection service, compares the dates, sizes and existence of all files that could be synchronized to DQO Cloud with the index of previously synchronized files.
+     * @param fileSynchronizationChangeDetectionService File synchronization changes detection service compares the dates, sizes and existence of all files that can be synchronized to the DQOps Cloud with an index of previously synchronized files.
      * @param defaultTimeZoneProvider Default time zone provider, used to configure the default time zone.
      * @param terminalWriter Terminal writer - used for displaying additional handy information during the init process.
      * @param localUrlAddresses Local URL addresses - used to store centralized information regarding URLs.
      * @param pythonVirtualEnvService Python virtual environment service. Used to initialize a private python venv.
+     * @param rootConfigurationProperties Root configuration parameters that are mapped to parameters not configured without any prefix, such as --silent.
+     * @param dqoUserPrincipalProvider User principal provider.
      */
     @Autowired
     public CliInitializerImpl(LocalUserHomeCreator localUserHomeCreator,
@@ -96,7 +103,9 @@ public class CliInitializerImpl implements CliInitializer {
                               DefaultTimeZoneProvider defaultTimeZoneProvider,
                               TerminalWriter terminalWriter,
                               LocalUrlAddresses localUrlAddresses,
-                              PythonVirtualEnvService pythonVirtualEnvService) {
+                              PythonVirtualEnvService pythonVirtualEnvService,
+                              RootConfigurationProperties rootConfigurationProperties,
+                              DqoUserPrincipalProvider dqoUserPrincipalProvider) {
         this.localUserHomeCreator = localUserHomeCreator;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.terminalReader = terminalReader;
@@ -112,20 +121,23 @@ public class CliInitializerImpl implements CliInitializer {
         this.terminalWriter = terminalWriter;
         this.localUrlAddresses = localUrlAddresses;
         this.pythonVirtualEnvService = pythonVirtualEnvService;
+        this.rootConfigurationProperties = rootConfigurationProperties;
+        this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
     }
 
     /**
-     * Attempts to log in to DQO Cloud. Retrieves the ApiKey for future use.
+     * Attempts to log in to DQOps Cloud. Retrieves the ApiKey for future use.
      * @param headless Is application running in headless mode.
      */
     protected void tryLoginToDqoCloud(boolean headless) {
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
         try {
-            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
+            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipal.getDataDomainIdentity());
             if (apiKey != null) {
                 return; // api key is provided somehow (by an environment variable or in the local settings)
             }
         } catch (Exception ex) {
-            System.err.println("Cannot retrieve the API Key, the key is probably invalid: " + ex.getMessage());
+            System.err.println("Cannot retrieve the DQOps Cloud Pairing API Key, the key is probably invalid: " + ex.getMessage());
 //            ex.printStackTrace(System.err);
         }
 
@@ -137,19 +149,30 @@ public class CliInitializerImpl implements CliInitializer {
             return;
         }
 
-        if (!this.terminalReader.promptBoolean("Log in to DQO Cloud?", true)) {
+        if (this.dqoCloudApiKeyProvider.isCloudSynchronizationDisabled(userPrincipal.getDataDomainIdentity())) {
+            return; // user intentionally disabled cloud sync using 'cloud sync disable' command
+        }
+
+        if (!this.terminalReader.promptBoolean("Log in to DQOps Cloud?", true)) {
+            if (this.terminalReader.promptBoolean("Disable synchronization with DQOps Cloud and run in an offline mode?", false)) {
+                this.cloudLoginService.disableCloudSync();
+            }
             return;
         }
 
         this.cloudLoginService.logInToDqoCloud();
     }
 
+    /**
+     * Shows the initial information with the links to the UI.
+     */
     protected void displayUiLinks() {
-        String dqoUiHome = this.localUrlAddresses.getDqoUiUrl();
-        String swaggerUi = this.localUrlAddresses.getSwaggerUiUrl();
+        String dqoUiHome = this.localUrlAddresses.getDqopsUiUrl();
         this.terminalWriter.writeLine("Press CTRL and click the link to open it in the browser:");
-        this.terminalWriter.writeUrl(dqoUiHome, "- DQO User Interface Console (" + dqoUiHome + ")\n");
-        this.terminalWriter.writeUrl(swaggerUi, "- DQO API Reference (" + swaggerUi + ")\n");
+        this.terminalWriter.writeUrl(dqoUiHome, "- DQOps User Interface Console (" + dqoUiHome + ")\n");
+
+//        String swaggerUi = this.localUrlAddresses.getSwaggerUiUrl();
+//        this.terminalWriter.writeUrl(swaggerUi, "- DQOps API Reference (" + swaggerUi + ")\n");
     }
 
     /**
@@ -166,7 +189,7 @@ public class CliInitializerImpl implements CliInitializer {
         this.defaultTimeZoneProvider.invalidate();
 
         if (!this.pythonVirtualEnvService.isVirtualEnvInitialized()) {
-            this.terminalWriter.writeLine("Please wait, checking Python installation. This may take 30 seconds for the first time if DQO needs to initialize a Python virtual environment in DQO home directory.");
+            this.terminalWriter.writeLine("Please wait, checking Python installation. This may take 30 seconds for the first time if DQOps needs to initialize a Python virtual environment in DQOps system home directory.");
             PythonVirtualEnv virtualEnv = this.pythonVirtualEnvService.getVirtualEnv();
             if (virtualEnv == null) {
                 throw new PythonExecutionException("Cannot find any python executable instance. Make sure that Python is installed and could be found on the path (defined in PATH) or the --dqo.python.interpreter parameter points to a python executable.");
@@ -181,20 +204,23 @@ public class CliInitializerImpl implements CliInitializer {
         }
         finally {
             this.jobQueueMonitoringService.start();
-            this.fileSynchronizationChangeDetectionService.detectNotSynchronizedChangesInBackground();
             this.dqoJobQueue.start();
             this.parentDqoJobQueue.start();
 
-            if (this.dqoSchedulerConfigurationProperties.getStart() != null &&
-                    this.dqoSchedulerConfigurationProperties.getStart()) {
-                this.jobSchedulerService.start(
-                        this.dqoSchedulerConfigurationProperties.getSynchronizationMode(),
-                        this.dqoSchedulerConfigurationProperties.getCheckRunMode());
-                this.jobSchedulerService.triggerMetadataSynchronization();
-            }
-
             if (CliApplication.isRequiredWebServer()) {
-                this.displayUiLinks();
+                this.fileSynchronizationChangeDetectionService.detectNotSynchronizedChangesAllDomains();
+
+                if (this.dqoSchedulerConfigurationProperties.getStart() != null &&
+                        this.dqoSchedulerConfigurationProperties.getStart()) {
+                    this.jobSchedulerService.start(
+                            this.dqoSchedulerConfigurationProperties.getSynchronizationMode(),
+                            this.dqoSchedulerConfigurationProperties.getCheckRunMode());
+                    this.jobSchedulerService.triggerMetadataSynchronization();
+                }
+
+                if (!this.rootConfigurationProperties.isSilent()) {
+                    this.displayUiLinks();
+                }
             }
         }
     }

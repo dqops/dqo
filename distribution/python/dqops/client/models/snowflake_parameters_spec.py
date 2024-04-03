@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="SnowflakeParametersSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class SnowflakeParametersSpec:
     """
     Attributes:
@@ -30,7 +31,8 @@ class SnowflakeParametersSpec:
             format to use dynamic substitution.
         role (Union[Unset, str]): Snowflake role name. Supports also ${SNOWFLAKE_ROLE} configuration with a custom
             environment variable.
-        properties (Union[Unset, SnowflakeParametersSpecProperties]):
+        properties (Union[Unset, SnowflakeParametersSpecProperties]): A dictionary of custom JDBC parameters that are
+            added to the JDBC connection string, a key/value dictionary.
     """
 
     account: Union[Unset, str] = UNSET
@@ -40,7 +42,7 @@ class SnowflakeParametersSpec:
     password: Union[Unset, str] = UNSET
     role: Union[Unset, str] = UNSET
     properties: Union[Unset, "SnowflakeParametersSpecProperties"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         account = self.account

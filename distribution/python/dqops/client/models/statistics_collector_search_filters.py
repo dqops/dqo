@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.statistics_collector_search_filters_target import (
-    StatisticsCollectorSearchFiltersTarget,
-)
+from ..models.statistics_collector_target import StatisticsCollectorTarget
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -14,39 +13,56 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="StatisticsCollectorSearchFilters")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class StatisticsCollectorSearchFilters:
-    """
+    r"""
     Attributes:
-        connection_name (Union[Unset, str]):
-        schema_table_name (Union[Unset, str]):
-        enabled (Union[Unset, bool]):
-        tags (Union[Unset, List[str]]):
-        labels (Union[Unset, List[str]]):
-        column_name (Union[Unset, str]):
-        collector_name (Union[Unset, str]):
-        sensor_name (Union[Unset, str]):
-        collector_category (Union[Unset, str]):
-        target (Union[Unset, StatisticsCollectorSearchFiltersTarget]):
+        connection (Union[Unset, str]): The connection (data source) name. Supports search patterns in the format:
+            'source\*', '\*_prod', 'prefix\*suffix'.
+        full_table_name (Union[Unset, str]): The schema and table name. It is provided as *<schema_name>.<table_name>*,
+            for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table
+            name parts. Sample patterns are: 'schema_name.tab_prefix_\*', 'schema_name.*', '*.*', 'schema_name.\*_customer',
+            'schema_name.tab_\*_suffix'.
+        enabled (Union[Unset, bool]): A boolean flag to target enabled tables, columns or checks. When the value of this
+            field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are
+            not implicitly disabled.
+        tags (Union[Unset, List[str]]): An array of tags assigned to the table. All tags must be present on a table to
+            match. The tags can use patterns:  'prefix\*', '\*suffix', 'prefix\*suffix'. The tags are assigned to the table
+            on the data grouping screen when any of the data grouping hierarchy level is assigned a static value, which is a
+            tag.
+        labels (Union[Unset, List[str]]): An array of labels assigned to the table. All labels must be present on a
+            table to match. The labels can use patterns:  'prefix\*', '\*suffix', 'prefix\*suffix'. The labels are assigned
+            on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.
+        column_names (Union[Unset, List[str]]): The list of column names or column name patters. This field accepts
+            search patterns in the format: 'fk_\*', '\*_id', 'prefix\*suffix'.
+        collector_name (Union[Unset, str]): The target statistics collector name to capture only selected statistics.
+            Uses the short collector nameThis field supports search patterns such as: 'prefix\*', '\*suffix',
+            'prefix_\*_suffix'. In order to collect only top 10 most common column samples, use 'column_samples'.
+        sensor_name (Union[Unset, str]): The target sensor name to run only data quality checks that are using this
+            sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports
+            search patterns such as: 'table/volume/row_\*', '\*_count', 'table/volume/prefix_\*_suffix'.
+        collector_category (Union[Unset, str]): The target statistics collector category, for example: *nulls*,
+            *volume*, *sampling*.
+        target (Union[Unset, StatisticsCollectorTarget]):
         collectors_hierarchy_ids_models (Union[Unset, List['HierarchyIdModel']]):
     """
 
-    connection_name: Union[Unset, str] = UNSET
-    schema_table_name: Union[Unset, str] = UNSET
+    connection: Union[Unset, str] = UNSET
+    full_table_name: Union[Unset, str] = UNSET
     enabled: Union[Unset, bool] = UNSET
     tags: Union[Unset, List[str]] = UNSET
     labels: Union[Unset, List[str]] = UNSET
-    column_name: Union[Unset, str] = UNSET
+    column_names: Union[Unset, List[str]] = UNSET
     collector_name: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
     collector_category: Union[Unset, str] = UNSET
-    target: Union[Unset, StatisticsCollectorSearchFiltersTarget] = UNSET
+    target: Union[Unset, StatisticsCollectorTarget] = UNSET
     collectors_hierarchy_ids_models: Union[Unset, List["HierarchyIdModel"]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        connection_name = self.connection_name
-        schema_table_name = self.schema_table_name
+        connection = self.connection
+        full_table_name = self.full_table_name
         enabled = self.enabled
         tags: Union[Unset, List[str]] = UNSET
         if not isinstance(self.tags, Unset):
@@ -56,7 +72,10 @@ class StatisticsCollectorSearchFilters:
         if not isinstance(self.labels, Unset):
             labels = self.labels
 
-        column_name = self.column_name
+        column_names: Union[Unset, List[str]] = UNSET
+        if not isinstance(self.column_names, Unset):
+            column_names = self.column_names
+
         collector_name = self.collector_name
         sensor_name = self.sensor_name
         collector_category = self.collector_category
@@ -81,18 +100,18 @@ class StatisticsCollectorSearchFilters:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if connection_name is not UNSET:
-            field_dict["connectionName"] = connection_name
-        if schema_table_name is not UNSET:
-            field_dict["schemaTableName"] = schema_table_name
+        if connection is not UNSET:
+            field_dict["connection"] = connection
+        if full_table_name is not UNSET:
+            field_dict["fullTableName"] = full_table_name
         if enabled is not UNSET:
             field_dict["enabled"] = enabled
         if tags is not UNSET:
             field_dict["tags"] = tags
         if labels is not UNSET:
             field_dict["labels"] = labels
-        if column_name is not UNSET:
-            field_dict["columnName"] = column_name
+        if column_names is not UNSET:
+            field_dict["columnNames"] = column_names
         if collector_name is not UNSET:
             field_dict["collectorName"] = collector_name
         if sensor_name is not UNSET:
@@ -111,9 +130,9 @@ class StatisticsCollectorSearchFilters:
         from ..models.hierarchy_id_model import HierarchyIdModel
 
         d = src_dict.copy()
-        connection_name = d.pop("connectionName", UNSET)
+        connection = d.pop("connection", UNSET)
 
-        schema_table_name = d.pop("schemaTableName", UNSET)
+        full_table_name = d.pop("fullTableName", UNSET)
 
         enabled = d.pop("enabled", UNSET)
 
@@ -121,7 +140,7 @@ class StatisticsCollectorSearchFilters:
 
         labels = cast(List[str], d.pop("labels", UNSET))
 
-        column_name = d.pop("columnName", UNSET)
+        column_names = cast(List[str], d.pop("columnNames", UNSET))
 
         collector_name = d.pop("collectorName", UNSET)
 
@@ -130,11 +149,11 @@ class StatisticsCollectorSearchFilters:
         collector_category = d.pop("collectorCategory", UNSET)
 
         _target = d.pop("target", UNSET)
-        target: Union[Unset, StatisticsCollectorSearchFiltersTarget]
+        target: Union[Unset, StatisticsCollectorTarget]
         if isinstance(_target, Unset):
             target = UNSET
         else:
-            target = StatisticsCollectorSearchFiltersTarget(_target)
+            target = StatisticsCollectorTarget(_target)
 
         collectors_hierarchy_ids_models = []
         _collectors_hierarchy_ids_models = d.pop("collectorsHierarchyIdsModels", UNSET)
@@ -148,12 +167,12 @@ class StatisticsCollectorSearchFilters:
             collectors_hierarchy_ids_models.append(collectors_hierarchy_ids_models_item)
 
         statistics_collector_search_filters = cls(
-            connection_name=connection_name,
-            schema_table_name=schema_table_name,
+            connection=connection,
+            full_table_name=full_table_name,
             enabled=enabled,
             tags=tags,
             labels=labels,
-            column_name=column_name,
+            column_names=column_names,
             collector_name=collector_name,
             sensor_name=sensor_name,
             collector_category=collector_category,

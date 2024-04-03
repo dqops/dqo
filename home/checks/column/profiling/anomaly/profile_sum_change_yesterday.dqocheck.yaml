@@ -1,8 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/numeric/sum
-  rule_name: change/change_percent_1_day
-  help_text: Verifies that the sum in a column changed in a fixed rate since last
-    readout from yesterday.

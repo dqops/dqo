@@ -22,6 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.BetweenFloatsRuleParametersSpec;
 import com.dqops.sensors.column.numeric.ColumnNumericMaxSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -32,7 +33,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the maximal values are in a set range in a monitored column.
+ * This check finds a maximum value in a numeric column. It verifies that the maximum value is within the range of accepted values
+ * and raises a data quality issue when it is not within a valid range.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -54,7 +56,7 @@ public class ColumnMaxInRangeCheckSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private BetweenFloatsRuleParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a maximal values in range in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a maximum values in range in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private BetweenFloatsRuleParametersSpec error;

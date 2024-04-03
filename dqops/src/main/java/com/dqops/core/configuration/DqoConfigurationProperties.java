@@ -22,21 +22,22 @@ import org.springframework.context.annotation.Configuration;
 import java.util.TimeZone;
 
 /**
- * Configuration POJO with the configuration for Dqo.ai. Properties are mapped to the root "dqo." prefix.
+ * Configuration POJO with the configuration for DQOps. Properties are mapped to the root "dqo." prefix.
  */
 @Configuration
 @ConfigurationProperties(prefix = "dqo")
 @EqualsAndHashCode(callSuper = false)
 public class DqoConfigurationProperties implements Cloneable {
     private String home;
-    private String yamlSchemaServer = "https://cloud.dqo.ai/dqo-yaml-schema/";
+    private String yamlSchemaServer = "https://cloud.dqops.com/dqo-yaml-schema/";
     private String defaultTimeZone = TimeZone.getDefault().getID();
+    private String javaOpts;
 
     /**
      * Returns the location of the dqo.io home folder (installation folder). The installation folder contains
      * the default templates and libraries. The folder may be changed by changing the dqo.home configuration property
      * or setting a DQO_HOME environment variable.
-     * @return Dqo home folder poth.
+     * @return DQOps home folder path.
      */
     public String getHome() {
         return home;
@@ -68,7 +69,7 @@ public class DqoConfigurationProperties implements Cloneable {
 
     /**
      * Returns the default server time zone used when the time zone is not configured in the user settings.
-     * The default value of this parameter is the time zone of the DQO instance (host data zone).
+     * The default value of this parameter is the time zone of the DQOps instance (host data zone).
      * @return Default server time zone.
      */
     public String getDefaultTimeZone() {
@@ -81,6 +82,22 @@ public class DqoConfigurationProperties implements Cloneable {
      */
     public void setDefaultTimeZone(String defaultTimeZone) {
         this.defaultTimeZone = defaultTimeZone;
+    }
+
+    /**
+     * Returns the value that was passed as the DQO_JAVA_OPTS environment variable.
+     * @return The value of the DQO_JAVA_OPTS env value.
+     */
+    public String getJavaOpts() {
+        return javaOpts;
+    }
+
+    /**
+     * Sets the parameter captured from the DQO_JAVA_OPTS environment variable, just to allow previewing it in the settings popup as a DQOps configuration parameter.
+     * @param javaOpts DQO_JAVA_OPTS value.
+     */
+    public void setJavaOpts(String javaOpts) {
+        this.javaOpts = javaOpts;
     }
 
     /**

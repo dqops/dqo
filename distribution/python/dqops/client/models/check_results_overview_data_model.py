@@ -1,24 +1,24 @@
 import datetime
 from typing import Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
-from ..models.check_results_overview_data_model_statuses_item import (
-    CheckResultsOverviewDataModelStatusesItem,
-)
+from ..models.check_result_status import CheckResultStatus
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="CheckResultsOverviewDataModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class CheckResultsOverviewDataModel:
     """
     Attributes:
         check_hash (Union[Unset, int]): Check hash.
         check_category (Union[Unset, str]): Check category name.
         check_name (Union[Unset, str]): Check name.
+        comparison_name (Union[Unset, str]): Optional table comparison name for table comparison checks only.
         time_periods (Union[Unset, List[datetime.datetime]]): List of time periods for the results, returned as a local
             time, sorted from the newest to the oldest.
         time_periods_utc (Union[Unset, List[int]]): List of time periods for the results, returned as absolute UTC time.
@@ -26,8 +26,8 @@ class CheckResultsOverviewDataModel:
             or an error was raised.
         time_period_display_texts (Union[Unset, List[str]]): List of time periods, sorted descending, returned as a text
             with a possible time zone.
-        statuses (Union[Unset, List[CheckResultsOverviewDataModelStatusesItem]]): List of check severity levels or an
-            error status, indexes with the severity levels match the time periods.
+        statuses (Union[Unset, List[CheckResultStatus]]): List of check severity levels or an error status, indexes with
+            the severity levels match the time periods.
         data_groups (Union[Unset, List[str]]): List of data group names. Identifies the data group with the highest
             severity or error result.
         results (Union[Unset, List[float]]): List of sensor results. Returns the data quality result readout for the
@@ -37,19 +37,21 @@ class CheckResultsOverviewDataModel:
     check_hash: Union[Unset, int] = UNSET
     check_category: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
+    comparison_name: Union[Unset, str] = UNSET
     time_periods: Union[Unset, List[datetime.datetime]] = UNSET
     time_periods_utc: Union[Unset, List[int]] = UNSET
     executed_at_timestamps: Union[Unset, List[int]] = UNSET
     time_period_display_texts: Union[Unset, List[str]] = UNSET
-    statuses: Union[Unset, List[CheckResultsOverviewDataModelStatusesItem]] = UNSET
+    statuses: Union[Unset, List[CheckResultStatus]] = UNSET
     data_groups: Union[Unset, List[str]] = UNSET
     results: Union[Unset, List[float]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         check_hash = self.check_hash
         check_category = self.check_category
         check_name = self.check_name
+        comparison_name = self.comparison_name
         time_periods: Union[Unset, List[str]] = UNSET
         if not isinstance(self.time_periods, Unset):
             time_periods = []
@@ -95,6 +97,8 @@ class CheckResultsOverviewDataModel:
             field_dict["checkCategory"] = check_category
         if check_name is not UNSET:
             field_dict["checkName"] = check_name
+        if comparison_name is not UNSET:
+            field_dict["comparisonName"] = comparison_name
         if time_periods is not UNSET:
             field_dict["timePeriods"] = time_periods
         if time_periods_utc is not UNSET:
@@ -121,6 +125,8 @@ class CheckResultsOverviewDataModel:
 
         check_name = d.pop("checkName", UNSET)
 
+        comparison_name = d.pop("comparisonName", UNSET)
+
         time_periods = []
         _time_periods = d.pop("timePeriods", UNSET)
         for time_periods_item_data in _time_periods or []:
@@ -139,9 +145,7 @@ class CheckResultsOverviewDataModel:
         statuses = []
         _statuses = d.pop("statuses", UNSET)
         for statuses_item_data in _statuses or []:
-            statuses_item = CheckResultsOverviewDataModelStatusesItem(
-                statuses_item_data
-            )
+            statuses_item = CheckResultStatus(statuses_item_data)
 
             statuses.append(statuses_item)
 
@@ -153,6 +157,7 @@ class CheckResultsOverviewDataModel:
             check_hash=check_hash,
             check_category=check_category,
             check_name=check_name,
+            comparison_name=comparison_name,
             time_periods=time_periods,
             time_periods_utc=time_periods_utc,
             executed_at_timestamps=executed_at_timestamps,

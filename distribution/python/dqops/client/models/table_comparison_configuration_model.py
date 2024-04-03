@@ -1,13 +1,10 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.table_comparison_configuration_model_check_type import (
-    TableComparisonConfigurationModelCheckType,
-)
-from ..models.table_comparison_configuration_model_time_scale import (
-    TableComparisonConfigurationModelTimeScale,
-)
+from ..models.check_time_scale import CheckTimeScale
+from ..models.check_type import CheckType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -20,10 +17,10 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableComparisonConfigurationModel")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableComparisonConfigurationModel:
     """Model that contains the basic information about a table comparison configuration that specifies how the current
-    table could be compared to another table that is a source of truth for comparison.
+    table can be compared with another table that is a source of truth for comparison.
 
         Attributes:
             table_comparison_configuration_name (Union[Unset, str]): The name of the table comparison configuration that is
@@ -34,16 +31,18 @@ class TableComparisonConfigurationModel:
             reference_connection (Union[Unset, str]): Reference connection name - the connection name to the data source
                 that has the reference data to compare to.
             reference_table (Union[Unset, PhysicalTableName]):
-            check_type (Union[Unset, TableComparisonConfigurationModelCheckType]): The type of checks (profiling, recurring,
-                partitioned) that this check comparison configuration is applicable. The default value is 'profiling'.
-            time_scale (Union[Unset, TableComparisonConfigurationModelTimeScale]): The time scale that this check comparison
-                configuration is applicable. Supported values are 'daily' and 'monthly' for recurring and partitioned checks or
-                an empty value for profiling checks.
+            check_type (Union[Unset, CheckType]):
+            time_scale (Union[Unset, CheckTimeScale]):
             grouping_columns (Union[Unset, List['TableComparisonGroupingColumnPairModel']]): List of column pairs from both
                 the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared
                 table and the reference table (the source of truth). The columns are used in the next of the table comparison to
                 join the results of data groups (row counts, sums of columns) between the compared table and the reference table
                 to compare the differences.
+            can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete the table
+                comparison.
+            can_run_compare_checks (Union[Unset, bool]): Boolean flag that decides if the current user can run comparison
+                checks.
+            can_delete_data (Union[Unset, bool]): Boolean flag that decides if the current user can delete data (results).
     """
 
     table_comparison_configuration_name: Union[Unset, str] = UNSET
@@ -51,12 +50,15 @@ class TableComparisonConfigurationModel:
     compared_table: Union[Unset, "PhysicalTableName"] = UNSET
     reference_connection: Union[Unset, str] = UNSET
     reference_table: Union[Unset, "PhysicalTableName"] = UNSET
-    check_type: Union[Unset, TableComparisonConfigurationModelCheckType] = UNSET
-    time_scale: Union[Unset, TableComparisonConfigurationModelTimeScale] = UNSET
+    check_type: Union[Unset, CheckType] = UNSET
+    time_scale: Union[Unset, CheckTimeScale] = UNSET
     grouping_columns: Union[
         Unset, List["TableComparisonGroupingColumnPairModel"]
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    can_edit: Union[Unset, bool] = UNSET
+    can_run_compare_checks: Union[Unset, bool] = UNSET
+    can_delete_data: Union[Unset, bool] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         table_comparison_configuration_name = self.table_comparison_configuration_name
@@ -86,6 +88,10 @@ class TableComparisonConfigurationModel:
 
                 grouping_columns.append(grouping_columns_item)
 
+        can_edit = self.can_edit
+        can_run_compare_checks = self.can_run_compare_checks
+        can_delete_data = self.can_delete_data
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -107,6 +113,12 @@ class TableComparisonConfigurationModel:
             field_dict["time_scale"] = time_scale
         if grouping_columns is not UNSET:
             field_dict["grouping_columns"] = grouping_columns
+        if can_edit is not UNSET:
+            field_dict["can_edit"] = can_edit
+        if can_run_compare_checks is not UNSET:
+            field_dict["can_run_compare_checks"] = can_run_compare_checks
+        if can_delete_data is not UNSET:
+            field_dict["can_delete_data"] = can_delete_data
 
         return field_dict
 
@@ -141,18 +153,18 @@ class TableComparisonConfigurationModel:
             reference_table = PhysicalTableName.from_dict(_reference_table)
 
         _check_type = d.pop("check_type", UNSET)
-        check_type: Union[Unset, TableComparisonConfigurationModelCheckType]
+        check_type: Union[Unset, CheckType]
         if isinstance(_check_type, Unset):
             check_type = UNSET
         else:
-            check_type = TableComparisonConfigurationModelCheckType(_check_type)
+            check_type = CheckType(_check_type)
 
         _time_scale = d.pop("time_scale", UNSET)
-        time_scale: Union[Unset, TableComparisonConfigurationModelTimeScale]
+        time_scale: Union[Unset, CheckTimeScale]
         if isinstance(_time_scale, Unset):
             time_scale = UNSET
         else:
-            time_scale = TableComparisonConfigurationModelTimeScale(_time_scale)
+            time_scale = CheckTimeScale(_time_scale)
 
         grouping_columns = []
         _grouping_columns = d.pop("grouping_columns", UNSET)
@@ -163,6 +175,12 @@ class TableComparisonConfigurationModel:
 
             grouping_columns.append(grouping_columns_item)
 
+        can_edit = d.pop("can_edit", UNSET)
+
+        can_run_compare_checks = d.pop("can_run_compare_checks", UNSET)
+
+        can_delete_data = d.pop("can_delete_data", UNSET)
+
         table_comparison_configuration_model = cls(
             table_comparison_configuration_name=table_comparison_configuration_name,
             compared_connection=compared_connection,
@@ -172,6 +190,9 @@ class TableComparisonConfigurationModel:
             check_type=check_type,
             time_scale=time_scale,
             grouping_columns=grouping_columns,
+            can_edit=can_edit,
+            can_run_compare_checks=can_run_compare_checks,
+            can_delete_data=can_delete_data,
         )
 
         table_comparison_configuration_model.additional_properties = d

@@ -17,6 +17,7 @@ package com.dqops.services.check.models;
 
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -45,4 +46,15 @@ public class AllChecksPatchParameters {
 
     @JsonPropertyDescription("Override existing configurations if they're present. If false, apply updates only to the fields for which no configuration exists.")
     boolean overrideConflicts;
+
+    public static class AllChecksPatchParametersSampleFactory implements SampleValueFactory<AllChecksPatchParameters> {
+        @Override
+        public AllChecksPatchParameters createSample() {
+            return new AllChecksPatchParameters() {{
+                setCheckSearchFilters(new CheckSearchFilters.CheckSearchFiltersSampleFactory().createSample());
+                setCheckModelPatch(new CheckModel.CheckModelSampleFactory().createSample());
+                setOverrideConflicts(true);
+            }};
+        }
+    }
 }

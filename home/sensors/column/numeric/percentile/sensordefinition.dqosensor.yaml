@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/SensorDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: sensor
 spec:
@@ -7,3 +7,5 @@ spec:
     display_name: percentile_value
     help_text: "Median (50th percentile), must equal 0.5"
     data_type: double
+    required: true
+    default_value: 0.5

@@ -90,6 +90,8 @@ public class CliCommandDocumentationGeneratorImpl implements CliCommandDocumenta
         for (Map.Entry<String, CommandLine> subcommand : firstLevelCommands.entrySet()) {
             CliRootCommandDocumentationModel rootCommandModel = new CliRootCommandDocumentationModel();
             rootCommandModel.setRootCommandName(subcommand.getKey());
+            rootCommandModel.setRootCommandHeader(extractRootCommandHeader(subcommand.getValue()));
+            rootCommandModel.setRootCommandDescription(extractRootCommandDescription(subcommand.getValue()));
             rootCommands.add(rootCommandModel);
 
             collectSubCommands(rootCommandModel, subcommand.getValue());
@@ -99,15 +101,52 @@ public class CliCommandDocumentationGeneratorImpl implements CliCommandDocumenta
     }
 
     /**
+     * Retrieves the header from the root command.
+     * @param commandLine Command line.
+     * @return Command header.
+     */
+    public String extractRootCommandHeader(CommandLine commandLine) {
+        CommandLine.Model.CommandSpec commandSpec = commandLine.getCommandSpec();
+
+        CommandLine.Model.UsageMessageSpec usageMessageSpec = commandSpec.usageMessage();
+        String[] header = usageMessageSpec.header();
+        if (header == null) {
+            return null;
+        }
+
+        return String.join(" ", header);
+    }
+
+    /**
+     * Retrieves the description from the root command.
+     * @param commandLine Command line.
+     * @return Command description.
+     */
+    public String extractRootCommandDescription(CommandLine commandLine) {
+        CommandLine.Model.CommandSpec commandSpec = commandLine.getCommandSpec();
+
+        CommandLine.Model.UsageMessageSpec usageMessageSpec = commandSpec.usageMessage();
+        String[] description = usageMessageSpec.description();
+        if (description == null) {
+            return null;
+        }
+
+        return String.join(" ", description);
+    }
+
+    /**
      * Create 'dqo' root command used for the documentation.
      * @return Root commands and their subcommands.
      */
     private CliRootCommandDocumentationModel createRootDqoCommandModel(CommandLine commandLine) {
         CliRootCommandDocumentationModel rootDqoCommandModel = new CliRootCommandDocumentationModel();
         rootDqoCommandModel.setRootCommandName("dqo");
+        rootDqoCommandModel.setRootCommandHeader(extractRootCommandHeader(commandLine));
+        rootDqoCommandModel.setRootCommandDescription(extractRootCommandDescription(commandLine));
         CliCommandDocumentationModel myCommandModel = this.commandDocumentationModelFactory.makeDocumentationForCommand(commandLine);
-        myCommandModel.setHeader(new String[]{"Root command that permit control on CLI mode"});
-        myCommandModel.setDescription(new String[]{"A root command that allows the user to access all the features and functionalities of the application from the command-line interface (CLI) level. It is the first command to be used before accessing any other commands of the application."});
+        myCommandModel.setHeader(new String[]{"DQOps command-line entry point script"});
+        myCommandModel.setDescription(new String[]{"*dqo* is an executable script installed in the Python scripts local folder when DQOps is installed locally by installing the *dqops* package from PyPi. " +
+                "When the python environment Scripts folder is in the path, running *dqo* from the command line (bash, etc.) will start a DQOps local instance."});
         rootDqoCommandModel.getCommands().add(myCommandModel);
 
         return rootDqoCommandModel;

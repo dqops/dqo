@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: table/volume/row_count
+  rule_name: percentile/anomaly_stationary_percentile_moving_average
+  help_text: Detects outstanding partitions whose volume (the row count) differs too
+    much from the average daily partition size. It uses time series anomaly detection
+    to find the outliers in the partition volume during the last 90 days.
+  standard: true

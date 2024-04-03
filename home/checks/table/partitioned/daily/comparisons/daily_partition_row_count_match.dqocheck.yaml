@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: check
 spec:
@@ -8,3 +8,4 @@ spec:
     row count of the reference table. Compares each group of data with a GROUP BY
     clause on the time period (the daily partition) and all other data grouping columns.
     Stores the most recent captured value for each daily partition that was analyzed.
+  standard: true

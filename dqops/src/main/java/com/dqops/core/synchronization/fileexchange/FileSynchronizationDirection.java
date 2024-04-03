@@ -18,23 +18,23 @@ package com.dqops.core.synchronization.fileexchange;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Data synchronization direction between a local DQO Home and DQO Cloud data quality data warehouse.
+ * Data synchronization direction between a local DQOps Home and DQOps Cloud data quality data warehouse.
  */
 public enum FileSynchronizationDirection {
     /**
-     * Full synchronization that both uploads local changes to the DQO Cloud and downloads changes from DQO Cloud.
+     * Full synchronization that both uploads local changes to the DQOps Cloud and downloads changes from DQOps Cloud.
      */
     @JsonProperty("full")
     full,
 
     /**
-     * Only download new changes from DQO Cloud.
+     * Only download new changes from DQOps Cloud.
      */
     @JsonProperty("download")
     download,
 
     /**
-     * Only upload new local changes to DQO Cloud.
+     * Only upload new local changes to DQOps Cloud.
      */
     @JsonProperty("upload")
     upload

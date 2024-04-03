@@ -17,6 +17,7 @@ package com.dqops.execution.checks.scheduled;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.metadata.id.HierarchyId;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TableWrapper;
 
 import java.util.Collections;
@@ -28,14 +29,14 @@ import java.util.Set;
  * Collection of checks inside a single table that should be executed as part of a schedule.
  */
 public class ScheduledTableChecksCollection {
-    private TableWrapper targetTable;
-    private HashSet<HierarchyId> checks = new LinkedHashSet<>();
+    private TableSpec targetTable;
+    private Set<HierarchyId> checks = new LinkedHashSet<>();
 
     /**
      * Creates an object for a given target table.
      * @param targetTable Target table.
      */
-    public ScheduledTableChecksCollection(TableWrapper targetTable) {
+    public ScheduledTableChecksCollection(TableSpec targetTable) {
         this.targetTable = targetTable;
     }
 
@@ -43,7 +44,7 @@ public class ScheduledTableChecksCollection {
      * Returns a target table wrapper.
      * @return Target table.
      */
-    public TableWrapper getTargetTable() {
+    public TableSpec getTargetTable() {
         return targetTable;
     }
 

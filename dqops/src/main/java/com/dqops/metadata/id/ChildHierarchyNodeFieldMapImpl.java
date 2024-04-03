@@ -28,7 +28,7 @@ import java.util.*;
  * @param <T>
  */
 public class ChildHierarchyNodeFieldMapImpl<T extends HierarchyNode>
-        extends HashMap<String, GetHierarchyChildNodeFunc<T>> implements ChildHierarchyNodeFieldMap {
+        extends LinkedHashMap<String, GetHierarchyChildNodeFunc<T>> implements ChildHierarchyNodeFieldMap {
     private final ClassInfo reflectionClassInfo;
 
     /**
@@ -133,6 +133,34 @@ public class ChildHierarchyNodeFieldMapImpl<T extends HierarchyNode>
         T castedNode = (T)node;
         for (final Map.Entry<String, GetHierarchyChildNodeFunc<T>> childFieldGetter : entrySet()) {
             final String fieldName = childFieldGetter.getKey();
+            final GetHierarchyChildNodeFunc<T> accessor = childFieldGetter.getValue();
+            final HierarchyNode childNode = accessor.apply(castedNode);
+            if (childNode != null) {
+                childNode.setHierarchyId(new HierarchyId(newHierarchyId, fieldName));
+            }
+        }
+    }
+
+    /**
+     * Assigns a parent hierarchy ID on all child nodes, skipping the <code>ignoredChild</code> node.
+     *
+     * @param node Hierarchy node whose Hierarchy ID was recently changed and should be propagated to all children.
+     * @param newHierarchyId New hierarchy ID on the node.
+     * @param ignoredChild The child node name to ignore.
+     */
+    @Override
+    public void propagateHierarchyIdToChildrenExcept(HierarchyNode node, HierarchyId newHierarchyId, String ignoredChild) {
+        if (this.size() == 0) {
+            return;
+        }
+
+        T castedNode = (T)node;
+        for (final Map.Entry<String, GetHierarchyChildNodeFunc<T>> childFieldGetter : entrySet()) {
+            final String fieldName = childFieldGetter.getKey();
+            if (Objects.equals(fieldName, ignoredChild)) {
+                continue;
+            }
+
             final GetHierarchyChildNodeFunc<T> accessor = childFieldGetter.getValue();
             final HierarchyNode childNode = accessor.apply(castedNode);
             if (childNode != null) {

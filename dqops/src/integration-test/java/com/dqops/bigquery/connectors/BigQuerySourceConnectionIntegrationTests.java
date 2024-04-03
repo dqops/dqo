@@ -22,6 +22,7 @@ import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.bigquery.*;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.sources.ConnectionSpec;
@@ -44,6 +45,7 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
     private BigQuerySourceConnection sut;
     private ConnectionSpec connectionSpec;
     private BigQuerySqlRunnerImpl bigQuerySqlRunner;
+    private SecretValueLookupContext secretValueLookupContext;
 
     @BeforeEach
     void setUp() {
@@ -54,6 +56,7 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
 		this.sut = new BigQuerySourceConnection(bigQuerySqlRunner, secretValueProvider, connectionProvider, bigQueryConnectionPool);
 		connectionSpec = BigQueryConnectionSpecObjectMother.create();
 		this.sut.setConnectionSpec(connectionSpec);
+        secretValueLookupContext = new SecretValueLookupContext(null);
     }
 
     @AfterEach
@@ -63,22 +66,22 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
 
     @Test
     void open_whenCalled_thenJustReturns() {
-		this.sut.open();
+		this.sut.open(this.secretValueLookupContext);
     }
 
     @Test
     void getBigQueryService_whenOpenWasCalledBefore_thenReturnsBigQueryConnectionObject() {
-		this.sut.open();
+		this.sut.open(this.secretValueLookupContext);
         Assertions.assertNotNull(this.sut.getBigQueryInternalConnection());
     }
 
     @Test
     void listSchemas_whenSchemasPresent_thenReturnsKnownSchemas() {
-		this.sut.open();
+		this.sut.open(this.secretValueLookupContext);
         List<SourceSchemaModel> schemas = this.sut.listSchemas();
 
         Assertions.assertTrue(schemas.size() >= 1);
-        String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(ProviderType.bigquery);
+        String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(connectionSpec);
         Assertions.assertTrue(schemas.stream().anyMatch(m -> Objects.equals(m.getSchemaName(), expectedSchema)));
     }
 
@@ -87,7 +90,9 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
         this.connectionSpec.getBigquery().setBillingProjectId(null);
         this.connectionSpec.getBigquery().setQuotaProjectId(null);
         this.connectionSpec.getBigquery().setSourceProjectId("bigquery-public-data");
-        this.sut.open();
+        this.connectionSpec.getBigquery().setJobsCreateProject(BigQueryJobsCreateProject.create_jobs_in_default_project_from_credentials);
+
+        this.sut.open(this.secretValueLookupContext);
         List<SourceSchemaModel> schemas = this.sut.listSchemas();
 
         Assertions.assertTrue(schemas.size() >= 100);
@@ -96,22 +101,22 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
 
     @Test
     void listTables_whenSchemaListed_thenReturnsTables() {
-		this.sut.open();
-        String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(ProviderType.bigquery);
-        List<SourceTableModel> tables = this.sut.listTables(expectedSchema);
+		this.sut.open(this.secretValueLookupContext);
+        String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(connectionSpec);
+        List<SourceTableModel> tables = this.sut.listTables(expectedSchema, secretValueLookupContext);
 
         Assertions.assertTrue(tables.size() > 0);
     }
 
     @Test
     void retrieveTableMetadata_whenFirstTableInSchemaIntrospected_thenReturnsTable() {
-		this.sut.open();
-        String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(ProviderType.bigquery);
-        List<SourceTableModel> tables = this.sut.listTables(expectedSchema);
+		this.sut.open(this.secretValueLookupContext);
+        String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(connectionSpec);
+        List<SourceTableModel> tables = this.sut.listTables(expectedSchema, secretValueLookupContext);
         ArrayList<String> tableNames = new ArrayList<>();
         tableNames.add(tables.get(0).getTableName().getTableName());
 
-        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata(expectedSchema, tableNames);
+        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata(expectedSchema, tableNames, null, null);
 
         Assertions.assertEquals(1, tableSpecs.size());
         TableSpec tableSpec = tableSpecs.get(0);
@@ -120,13 +125,13 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
 
     @Test
     void retrieveTableMetadata_whenRetrievingMetadataOfAllTablesInPUBLICSchema_thenReturnsTables() {
-		this.sut.open();
-        String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(ProviderType.bigquery);
-        List<SourceTableModel> tables = this.sut.listTables(expectedSchema);
+		this.sut.open(this.secretValueLookupContext);
+        String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(connectionSpec);
+        List<SourceTableModel> tables = this.sut.listTables(expectedSchema, secretValueLookupContext);
         List<String> tableNames = tables.stream()
                 .map(m -> m.getTableName().getTableName())
                 .collect(Collectors.toList());
-        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata(expectedSchema, tableNames);
+        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata(expectedSchema, tableNames, null, null);
 
         Assertions.assertTrue(tableSpecs.size() > 0);
     }
@@ -136,7 +141,8 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
         this.connectionSpec.getBigquery().setBillingProjectId(null);
         this.connectionSpec.getBigquery().setQuotaProjectId(null);
         this.connectionSpec.getBigquery().setSourceProjectId("bigquery-public-data");
-        this.sut.open();
+        this.connectionSpec.getBigquery().setJobsCreateProject(BigQueryJobsCreateProject.create_jobs_in_default_project_from_credentials);
+        this.sut.open(this.secretValueLookupContext);
         Table results = this.sut.executeQuery("select count(*) from `bigquery-public-data.austin_crime.crime`",
                 JobCancellationToken.createDummyJobCancellationToken(), null, false);
 

@@ -38,6 +38,11 @@ public class JdbcTypeColumnMapping {
             SqlResultSetReader.mapJdbcTypeToColumnType(-155, ColumnType.INSTANT);
             SqlResultSetReader.mapJdbcTypeToColumnType(-101, ColumnType.INSTANT);
 
+            // Timestamp with time zone -> LocalDateTime (https://github.com/tlabs-data/tablesaw-parquet#data-type-conversion)
+            SqlResultSetReader.mapJdbcTypeToColumnType(2014, ColumnType.LOCAL_DATE_TIME);
+
+            SqlResultSetReader.mapJdbcTypeToColumnType(2000, ColumnType.LONG);
+
             isInitializedJdbc = true;
         }
     }

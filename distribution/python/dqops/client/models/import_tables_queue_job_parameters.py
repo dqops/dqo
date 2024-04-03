@@ -1,25 +1,27 @@
 from typing import Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ImportTablesQueueJobParameters")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ImportTablesQueueJobParameters:
     """
     Attributes:
-        connection_name (Union[Unset, str]):
-        schema_name (Union[Unset, str]):
-        table_names (Union[Unset, List[str]]):
+        connection_name (Union[Unset, str]): Connection name
+        schema_name (Union[Unset, str]): Schema name
+        table_names (Union[Unset, List[str]]): Optional list of table names inside the schema. When the list of tables
+            is empty, all tables are imported.
     """
 
     connection_name: Union[Unset, str] = UNSET
     schema_name: Union[Unset, str] = UNSET
     table_names: Union[Unset, List[str]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name

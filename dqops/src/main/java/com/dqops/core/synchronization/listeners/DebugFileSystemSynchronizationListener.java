@@ -17,6 +17,7 @@ package com.dqops.core.synchronization.listeners;
 
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.filesystem.metadata.FileDifference;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.SynchronizationRoot;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,14 +43,19 @@ public class DebugFileSystemSynchronizationListener extends SummaryFileSystemSyn
     /**
      * Called when a local change (from the source) was applied on the target file system.
      *
-     * @param dqoRoot          DQO User home folder that will be synchronized.
+     * @param dqoRoot          DQOps User home folder that will be synchronized.
+     * @param userDomainIdentity Identity of the user who started synchronization and the data domain that is synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      * @param fileDifference   Change in the source file system that was applied (uploaded, deleted, etc.)
      */
     @Override
-    public void onSourceChangeAppliedToTarget(DqoRoot dqoRoot, SynchronizationRoot sourceFileSystem, SynchronizationRoot targetFileSystem, FileDifference fileDifference) {
-        super.onSourceChangeAppliedToTarget(dqoRoot, sourceFileSystem, targetFileSystem, fileDifference);
+    public void onSourceChangeAppliedToTarget(DqoRoot dqoRoot,
+                                              UserDomainIdentity userDomainIdentity,
+                                              SynchronizationRoot sourceFileSystem,
+                                              SynchronizationRoot targetFileSystem,
+                                              FileDifference fileDifference) {
+        super.onSourceChangeAppliedToTarget(dqoRoot, userDomainIdentity, sourceFileSystem, targetFileSystem, fileDifference);
 
         StringBuilder sb = new StringBuilder();
         sb.append(dqoRoot.toString());
@@ -73,14 +79,19 @@ public class DebugFileSystemSynchronizationListener extends SummaryFileSystemSyn
     /**
      * Called when a remote change (from the target system) was applied on the source file system (downloaded).
      *
-     * @param dqoRoot          DQO User home folder that will be synchronized.
+     * @param dqoRoot          DQOps User home folder that will be synchronized.
+     * @param userDomainIdentity Identity of the user who started synchronization and the data domain that is synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      * @param fileDifference   Change in the target (remote) file system that was applied (uploaded, deleted, etc.) on the source system (downloaded).
      */
     @Override
-    public void onTargetChangeAppliedToSource(DqoRoot dqoRoot, SynchronizationRoot sourceFileSystem, SynchronizationRoot targetFileSystem, FileDifference fileDifference) {
-        super.onTargetChangeAppliedToSource(dqoRoot, sourceFileSystem, targetFileSystem, fileDifference);
+    public void onTargetChangeAppliedToSource(DqoRoot dqoRoot,
+                                              UserDomainIdentity userDomainIdentity,
+                                              SynchronizationRoot sourceFileSystem,
+                                              SynchronizationRoot targetFileSystem,
+                                              FileDifference fileDifference) {
+        super.onTargetChangeAppliedToSource(dqoRoot, userDomainIdentity, sourceFileSystem, targetFileSystem, fileDifference);
 
         StringBuilder sb = new StringBuilder();
         sb.append(dqoRoot.toString());

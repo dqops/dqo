@@ -30,7 +30,7 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
     @JsonIgnore
     private List<V> list = new ArrayList<>();
     @JsonIgnore
-    private Map<K, V> index = new HashMap<>();
+    private Map<K, V> index = new LinkedHashMap<>();
     @JsonIgnore
     private List<V> deleted = new ArrayList<>();
     @JsonIgnore
@@ -39,19 +39,21 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
     private HierarchyId hierarchyId;
     @JsonIgnore
     private boolean dirty;
+    @JsonIgnore
+    private final Object lock = new Object();
 
     /**
      * Finds an existing object given the object name.
-     * @param connectionName Object name.
+     * @param key Object name.
      * @param loadAllWhenMissing Forces loading all elements from the persistence store when the element is missing. When false, then simply checks if the element is in the dictionary.
      * @return Existing object (model wrapper) or null when the object was not found.
      */
-    public V getByObjectName(K connectionName, boolean loadAllWhenMissing) {
-        V result = this.index.get(connectionName);
+    public V getByObjectName(K key, boolean loadAllWhenMissing) {
+        V result = this.index.get(key);
         if (result == null) {
             if (loadAllWhenMissing) {
 				loadOnce();
-                result = this.index.get(connectionName);
+                result = this.index.get(key);
             }
         }
         return result;
@@ -291,11 +293,13 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
      * Loads the list once, only when it was not loaded yet.
      */
     protected void loadOnce() {
-        if (this.loaded) {
-            return;
+        synchronized (this.lock) {
+            if (this.loaded) {
+                return;
+            }
+            this.loaded = true; // this will avoid calling the load from an iterator again
+            this.load();
         }
-		this.loaded = true; // this will avoid calling the load from an iterator again
-		this.load();
     }
 
     /**
@@ -308,7 +312,7 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
      * Flushes all changes to the persistence store (file store or the database).
      */
     public void flush() {
-        for(V modelWrapper : this.list) {
+        for (V modelWrapper : this.list) {
             modelWrapper.flush();
         }
 		this.clearDirty(false);
@@ -373,7 +377,7 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
         try {
             AbstractIndexingList<K,V> cloned = (AbstractIndexingList<K,V>) super.clone();
             cloned.list = new ArrayList<>();
-            cloned.index = new HashMap<>();
+            cloned.index = new LinkedHashMap<>();
             cloned.deleted = new ArrayList<>();
             cloned.dirty = false;
 

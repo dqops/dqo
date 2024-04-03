@@ -24,13 +24,15 @@ import com.dqops.core.filesystem.cache.LocalFileSystemCache;
 import com.dqops.core.filesystem.cache.LocalFileSystemCacheObjectMother;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindServiceImpl;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.core.synchronization.status.SynchronizationStatusTrackerStub;
 import com.dqops.core.locks.UserHomeLockManager;
 import com.dqops.core.locks.UserHomeLockManagerObjectMother;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.local.LocalDqoUserHomePathProvider;
 import com.dqops.data.local.LocalDqoUserHomePathProviderObjectMother;
-import com.dqops.data.models.DataDeleteResult;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.statistics.factory.StatisticsColumnNames;
 import com.dqops.data.statistics.factory.StatisticsResultsTableFactory;
 import com.dqops.data.statistics.factory.StatisticsResultsTableFactoryImpl;
@@ -131,11 +133,13 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         String tableName1 = "tab1";
         LocalDate month = LocalDate.of(2023, 1, 1);
         LocalDateTime startDate = month.atStartOfDay().plusDays(14);
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         Table table1 = prepareSimplePartitionTable(tableName1, startDate, "");
         PhysicalTableName physicalTableName1 = new PhysicalTableName("sch", tableName1);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
+                userIdentity.getDataDomainFolder(),
                 this.statisticsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName1,
@@ -144,21 +148,22 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId1),
                 new TableDataChanges(table1),
-                this.statisticsStorageSettings);
+                this.statisticsStorageSettings,
+                userIdentity);
 
         StatisticsResultsFragmentFilter filter = new StatisticsResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName1.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName1.toTableSearchFilter());
             }});
             setDateStart(startDate.plusDays(1).toLocalDate());
             setDateEnd(startDate.plusDays(1).toLocalDate());
         }};
 
-        this.sut.deleteSelectedStatisticsResultsFragment(filter);
+        this.sut.deleteSelectedStatisticsResultsFragment(filter, userIdentity);
 
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId1, this.statisticsStorageSettings, null);
+                partitionId1, this.statisticsStorageSettings, null, userIdentity);
 
         Assertions.assertNotNull(partitionAfterDelete.getData());
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
@@ -173,11 +178,13 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         String tableName1 = "tab1";
         LocalDate month = LocalDate.of(2023, 1, 1);
         LocalDateTime startDate = month.atStartOfDay().plusDays(14);
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         Table table1 = prepareSimplePartitionTable(tableName1, startDate, "");
         PhysicalTableName physicalTableName1 = new PhysicalTableName("sch", tableName1);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
+                userIdentity.getDataDomainFolder(),
                 this.statisticsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName1,
@@ -186,21 +193,22 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId1),
                 new TableDataChanges(table1),
-                this.statisticsStorageSettings);
+                this.statisticsStorageSettings,
+                userIdentity);
 
         StatisticsResultsFragmentFilter filter = new StatisticsResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName1.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName1.toTableSearchFilter());
             }});
             setDateStart(startDate.withDayOfMonth(1).toLocalDate());
             setDateEnd(startDate.withDayOfMonth(1).toLocalDate().plusMonths(1).minusDays(1));
         }};
 
-        this.sut.deleteSelectedStatisticsResultsFragment(filter);
+        this.sut.deleteSelectedStatisticsResultsFragment(filter, userIdentity);
 
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId1, this.statisticsStorageSettings, null);
+                partitionId1, this.statisticsStorageSettings, null, userIdentity);
 
         Assertions.assertNull(partitionAfterDelete.getData());
         Assertions.assertEquals(0L, partitionAfterDelete.getLastModified());
@@ -213,6 +221,7 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         String id_prefix1 = "1";
         String id_prefix2 = "2";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month1 = LocalDate.of(2023, 1, 1);
         LocalDate month2 = LocalDate.of(2023, 2, 1);
@@ -223,11 +232,13 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
+                userIdentity.getDataDomainFolder(),
                 this.statisticsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month1);
         ParquetPartitionId partitionId2 = new ParquetPartitionId(
+                userIdentity.getDataDomainFolder(),
                 this.statisticsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -236,30 +247,32 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId1),
                 new TableDataChanges(table1),
-                this.statisticsStorageSettings);
+                this.statisticsStorageSettings,
+                userIdentity);
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId2),
                 new TableDataChanges(table2),
-                this.statisticsStorageSettings);
+                this.statisticsStorageSettings,
+                userIdentity);
 
         StatisticsResultsFragmentFilter filter = new StatisticsResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
             }});
             setDateStart(startDate1.withDayOfMonth(1).toLocalDate());
             setDateEnd(startDate1.withDayOfMonth(1).toLocalDate().plusMonths(1).minusDays(1));
         }};
 
-        this.sut.deleteSelectedStatisticsResultsFragment(filter);
+        this.sut.deleteSelectedStatisticsResultsFragment(filter, userIdentity);
 
         LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId1, this.statisticsStorageSettings, null);
+                partitionId1, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNull(partition1AfterDelete.getData());
         Assertions.assertEquals(0L, partition1AfterDelete.getLastModified());
 
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId2, this.statisticsStorageSettings, null);
+                partitionId2, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partition2AfterDelete.getData());
         Assertions.assertTrue(partition2AfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
         Assertions.assertTrue(partition2AfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
@@ -274,6 +287,7 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         String id_prefix1 = "1";
         String id_prefix2 = "2";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month1 = LocalDate.of(2023, 1, 1);
         LocalDate month2 = LocalDate.of(2023, 2, 1);
@@ -284,11 +298,13 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
+                userIdentity.getDataDomainFolder(),
                 this.statisticsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month1);
         ParquetPartitionId partitionId2 = new ParquetPartitionId(
+                userIdentity.getDataDomainFolder(),
                 this.statisticsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -297,30 +313,32 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId1),
                 new TableDataChanges(table1),
-                this.statisticsStorageSettings);
+                this.statisticsStorageSettings,
+                userIdentity);
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId2),
                 new TableDataChanges(table2),
-                this.statisticsStorageSettings);
+                this.statisticsStorageSettings,
+                userIdentity);
 
         StatisticsResultsFragmentFilter filter = new StatisticsResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
             }});
             setDateStart(startDate1.toLocalDate());
             setDateEnd(startDate2.toLocalDate());
         }};
 
-        this.sut.deleteSelectedStatisticsResultsFragment(filter);
+        this.sut.deleteSelectedStatisticsResultsFragment(filter, userIdentity);
 
         LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId1, this.statisticsStorageSettings, null);
+                partitionId1, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNull(partition1AfterDelete.getData());
         Assertions.assertEquals(0L, partition1AfterDelete.getLastModified());
 
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId2, this.statisticsStorageSettings, null);
+                partitionId2, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partition2AfterDelete.getData());
         Assertions.assertFalse(partition2AfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
         Assertions.assertTrue(partition2AfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
@@ -335,6 +353,7 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         String id_prefix1 = "1";
         String id_prefix2 = "2";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month1 = LocalDate.of(2023, 1, 1);
         LocalDate month2 = LocalDate.of(2023, 2, 1);
@@ -345,11 +364,13 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
+                userIdentity.getDataDomainFolder(),
                 this.statisticsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month1);
         ParquetPartitionId partitionId2 = new ParquetPartitionId(
+                userIdentity.getDataDomainFolder(),
                 this.statisticsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -358,24 +379,26 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId1),
                 new TableDataChanges(table1),
-                this.statisticsStorageSettings);
+                this.statisticsStorageSettings,
+                userIdentity);
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId2),
                 new TableDataChanges(table2),
-                this.statisticsStorageSettings);
+                this.statisticsStorageSettings,
+                userIdentity);
 
         StatisticsResultsFragmentFilter filter = new StatisticsResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName("sch.nonexistent_table");
+                setConnection(connectionName);
+                setFullTableName("sch.nonexistent_table");
             }});
         }};
 
-        DataDeleteResult result = this.sut.deleteSelectedStatisticsResultsFragment(filter);
+        DeleteStoredDataResult result = this.sut.deleteSelectedStatisticsResultsFragment(filter, userIdentity);
         Assertions.assertTrue(result.getPartitionResults().isEmpty());
 
         LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId1, this.statisticsStorageSettings, null);
+                partitionId1, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partition1AfterDelete.getData());
         Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id1"));
         Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id2"));
@@ -383,7 +406,7 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         Assertions.assertNotEquals(0L, partition1AfterDelete.getLastModified());
 
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId2, this.statisticsStorageSettings, null);
+                partitionId2, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partition2AfterDelete.getData());
         Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
         Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
@@ -398,6 +421,7 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         String tableName2 = "tab2";
         PhysicalTableName physicalTableName1 = new PhysicalTableName("sch", tableName1);
         PhysicalTableName physicalTableName2 = new PhysicalTableName("sch", tableName2);
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month1 = LocalDate.of(2023, 1, 1);
         LocalDate month2 = LocalDate.of(2023, 2, 1);
@@ -408,11 +432,13 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         Table table2 = prepareSimplePartitionTable(tableName2, startDate2, "");
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
+                userIdentity.getDataDomainFolder(),
                 this.statisticsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName1,
                 month1);
         ParquetPartitionId partitionId2 = new ParquetPartitionId(
+                userIdentity.getDataDomainFolder(),
                 this.statisticsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName2,
@@ -421,29 +447,31 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId1),
                 new TableDataChanges(table1),
-                this.statisticsStorageSettings);
+                this.statisticsStorageSettings,
+                userIdentity);
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId2),
                 new TableDataChanges(table2),
-                this.statisticsStorageSettings);
+                this.statisticsStorageSettings,
+                userIdentity);
 
         StatisticsResultsFragmentFilter filter = new StatisticsResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName("*ch.*tab1");
+                setConnection(connectionName);
+                setFullTableName("*ch.*tab1");
             }});
         }};
 
-        DataDeleteResult result = this.sut.deleteSelectedStatisticsResultsFragment(filter);
+        DeleteStoredDataResult result = this.sut.deleteSelectedStatisticsResultsFragment(filter, userIdentity);
         Assertions.assertFalse(result.getPartitionResults().isEmpty());
 
         LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId1, this.statisticsStorageSettings, null);
+                partitionId1, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNull(partition1AfterDelete.getData());
         Assertions.assertEquals(0L, partition1AfterDelete.getLastModified());
 
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId2, this.statisticsStorageSettings, null);
+                partitionId2, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partition2AfterDelete.getData());
         Assertions.assertTrue(partition2AfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
         Assertions.assertTrue(partition2AfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
@@ -503,11 +531,13 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         String connectionName = "connection";
         String tableName = "tab1";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month = LocalDate.of(2023, 1, 1);
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
+                userIdentity.getDataDomainFolder(),
                 this.statisticsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -516,22 +546,23 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId),
                 new TableDataChanges(table),
-                this.statisticsStorageSettings);
+                this.statisticsStorageSettings,
+                userIdentity);
 
         StatisticsResultsFragmentFilter filter = new StatisticsResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
             }});
             setDateStart(month);
             setDateEnd(month.plusMonths(1).minusDays(1));
             setCollectorCategory("cat1");
         }};
 
-        this.sut.deleteSelectedStatisticsResultsFragment(filter);
+        this.sut.deleteSelectedStatisticsResultsFragment(filter, userIdentity);
 
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId, this.statisticsStorageSettings, null);
+                partitionId, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partitionAfterDelete.getData());
         Assertions.assertFalse(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
@@ -546,11 +577,13 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         String connectionName = "connection";
         String tableName = "tab1";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month = LocalDate.of(2023, 1, 1);
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
+                userIdentity.getDataDomainFolder(),
                 this.statisticsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -559,12 +592,13 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId),
                 new TableDataChanges(table),
-                this.statisticsStorageSettings);
+                this.statisticsStorageSettings,
+                userIdentity);
 
         StatisticsResultsFragmentFilter filter = new StatisticsResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
             }});
             setDateStart(month);
             setDateEnd(month.plusMonths(1).minusDays(1));
@@ -572,10 +606,10 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
             setCollectorTarget("type1");
         }};
 
-        this.sut.deleteSelectedStatisticsResultsFragment(filter);
+        this.sut.deleteSelectedStatisticsResultsFragment(filter, userIdentity);
 
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId, this.statisticsStorageSettings, null);
+                partitionId, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partitionAfterDelete.getData());
         Assertions.assertFalse(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
@@ -590,11 +624,13 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         String connectionName = "connection";
         String tableName = "tab1";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month = LocalDate.of(2023, 1, 1);
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
+                userIdentity.getDataDomainFolder(),
                 this.statisticsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -603,12 +639,13 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId),
                 new TableDataChanges(table),
-                this.statisticsStorageSettings);
+                this.statisticsStorageSettings,
+                userIdentity);
 
         StatisticsResultsFragmentFilter filter = new StatisticsResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
             }});
             setDateStart(month);
             setDateEnd(month.plusMonths(1).minusDays(1));
@@ -617,10 +654,10 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
             setSensorName("s2");
         }};
 
-        this.sut.deleteSelectedStatisticsResultsFragment(filter);
+        this.sut.deleteSelectedStatisticsResultsFragment(filter, userIdentity);
 
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId, this.statisticsStorageSettings, null);
+                partitionId, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partitionAfterDelete.getData());
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
         Assertions.assertFalse(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
@@ -635,11 +672,13 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         String connectionName = "connection";
         String tableName = "tab1";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month = LocalDate.of(2023, 1, 1);
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
+                userIdentity.getDataDomainFolder(),
                 this.statisticsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -648,22 +687,23 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId),
                 new TableDataChanges(table),
-                this.statisticsStorageSettings);
+                this.statisticsStorageSettings,
+                userIdentity);
 
         StatisticsResultsFragmentFilter filter = new StatisticsResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
             }});
             setDateStart(month);
             setDateEnd(month.plusDays(3));
             setSensorName("s1");
         }};
 
-        this.sut.deleteSelectedStatisticsResultsFragment(filter);
+        this.sut.deleteSelectedStatisticsResultsFragment(filter, userIdentity);
 
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId, this.statisticsStorageSettings, null);
+                partitionId, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partitionAfterDelete.getData());
         Assertions.assertFalse(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));
@@ -678,11 +718,13 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         String connectionName = "connection";
         String tableName = "tab1";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month = LocalDate.of(2023, 1, 1);
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
+                userIdentity.getDataDomainFolder(),
                 this.statisticsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -691,20 +733,21 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId),
                 new TableDataChanges(table),
-                this.statisticsStorageSettings);
+                this.statisticsStorageSettings,
+                userIdentity);
 
         StatisticsResultsFragmentFilter filter = new StatisticsResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
             }});
             setSensorName("s1");
         }};
 
-        this.sut.deleteSelectedStatisticsResultsFragment(filter);
+        this.sut.deleteSelectedStatisticsResultsFragment(filter, userIdentity);
 
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId, this.statisticsStorageSettings, null);
+                partitionId, this.statisticsStorageSettings, null, userIdentity);
         Assertions.assertNotNull(partitionAfterDelete.getData());
         Assertions.assertFalse(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id1"));
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(StatisticsColumnNames.ID_COLUMN_NAME).contains("id2"));

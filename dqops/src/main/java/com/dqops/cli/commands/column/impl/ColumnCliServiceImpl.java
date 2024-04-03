@@ -21,7 +21,9 @@ import com.dqops.cli.output.OutputFormatService;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalTableWritter;
 import com.dqops.core.jobqueue.PushJobResult;
-import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.search.ColumnSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
 import com.dqops.metadata.sources.ColumnSpec;
@@ -51,18 +53,21 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 	private TerminalFactory terminalFactory;
 	private final TerminalTableWritter terminalTableWritter;
 	private final OutputFormatService outputFormatService;
+	private final DqoUserPrincipalProvider userPrincipalProvider;
 
 	@Autowired
 	public ColumnCliServiceImpl(ColumnService columnService,
 								UserHomeContextFactory userHomeContextFactory,
 								TerminalFactory terminalFactory,
 								TerminalTableWritter terminalTableWritter,
-								OutputFormatService outputFormatService) {
+								OutputFormatService outputFormatService,
+								DqoUserPrincipalProvider userPrincipalProvider) {
 		this.columnService = columnService;
 		this.userHomeContextFactory = userHomeContextFactory;
 		this.terminalFactory = terminalFactory;
 		this.terminalTableWritter = terminalTableWritter;
 		this.outputFormatService = outputFormatService;
+		this.userPrincipalProvider = userPrincipalProvider;
 	}
 
 	/**
@@ -75,7 +80,12 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 	 * @return CLI operation status.
 	 */
 	@Override
-	public CliOperationStatus loadColumns(String connectionName, String tableName, String columnName, TabularOutputFormat tabularOutputFormat, String[] tags, String[] labels) {
+	public CliOperationStatus loadColumns(String connectionName,
+										  String tableName,
+										  String columnName,
+										  TabularOutputFormat tabularOutputFormat,
+										  String[] tags,
+										  String[] labels) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		ColumnSearchFilters columnSearchFilters = new ColumnSearchFilters();
@@ -88,10 +98,13 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 		HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
 		HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(hierarchyNodeTreeWalker);
 
+		DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
+		UserHome userHome = userHomeContext.getUserHome();
 		Collection <ColumnSpec> columnSpecs = hierarchyNodeTreeSearcher.findColumns(
-				userHomeContextFactory.openLocalUserHome().getUserHome(), columnSearchFilters);
+				userHome, columnSearchFilters);
 
-		if (columnSpecs.size() == 0) {
+		if (columnSpecs.isEmpty()) {
 			setColumnsNotFoundStatusMessage(cliOperationStatus);
 			return cliOperationStatus;
 		}
@@ -106,8 +119,8 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 
 		for (ColumnSpec columnSpec: columnSpecs) {
 			Row row = resultTable.appendRow();
-			ConnectionWrapper currentConnection = userHomeContextFactory.openLocalUserHome().getUserHome().findConnectionFor(columnSpec.getHierarchyId());
-			TableWrapper currentTable = userHomeContextFactory.openLocalUserHome().getUserHome().findTableFor(columnSpec.getHierarchyId());
+			ConnectionWrapper currentConnection = userHome.findConnectionFor(columnSpec.getHierarchyId());
+			TableWrapper currentTable = userHome.findTableFor(columnSpec.getHierarchyId());
 			row.setLong(0, columnSpec.getHierarchyId().hashCode64());
 			row.setString(1, currentConnection.getName());
 			row.setString(2, currentTable.getPhysicalTableName().toBaseFileName());
@@ -148,7 +161,8 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 	public CliOperationStatus addColumn(String connectionName, String tableName, String columnName, ColumnSpec columnSpec) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 
 		ConnectionWrapper connection = userHome.getConnections().getByObjectName(connectionName, true);
@@ -180,13 +194,15 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 	 * @param connectionName Connection name.
 	 * @param tableName Table name.
 	 * @param columnName Column name.
+	 * @param principal Principal that will be used to run the job.
 	 * @return CLI operation status.
 	 */
 	@Override
-	public CliOperationStatus removeColumn(String connectionName, String tableName, String columnName) {
+	public CliOperationStatus removeColumn(String connectionName, String tableName, String columnName, DqoUserPrincipal principal) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 
 		ColumnSearchFilters columnSearchFilters = new ColumnSearchFilters();
@@ -213,11 +229,11 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 			return cliOperationStatus;
 		}
 
-		List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.columnService.deleteColumns(
-				this.convertColumnSpecsToHierarchyMapping(userHome, columnSpecs));
+		List<PushJobResult<DeleteStoredDataResult>> backgroundJobs = this.columnService.deleteColumns(
+				this.convertColumnSpecsToHierarchyMapping(userHome, columnSpecs), principal);
 
 		try {
-			for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
+			for (PushJobResult<DeleteStoredDataResult> job : backgroundJobs) {
 				job.getFinishedFuture().get();
 			}
 		} catch (InterruptedException e) {
@@ -245,13 +261,13 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 	 */
 	protected Map<String, Map<PhysicalTableName, Iterable<String>>> convertColumnSpecsToHierarchyMapping(
 			UserHome userHome, Iterable<ColumnSpec> columnSpecs) {
-		Map<String, Map<PhysicalTableName, List<String>>> connectionToTableToColumnsMapping = new HashMap<>();
+		Map<String, Map<PhysicalTableName, List<String>>> connectionToTableToColumnsMapping = new LinkedHashMap<>();
 		for (ColumnSpec columnSpec: columnSpecs) {
 			TableWrapper tableWrapper = userHome.findTableFor(columnSpec.getHierarchyId());
 
 			String connectionName = userHome.findConnectionFor(tableWrapper.getHierarchyId()).getName();
 			if (!connectionToTableToColumnsMapping.containsKey(connectionName)) {
-				connectionToTableToColumnsMapping.put(connectionName, new HashMap<>());
+				connectionToTableToColumnsMapping.put(connectionName, new LinkedHashMap<>());
 			}
 
 			Map<PhysicalTableName, List<String>> tableToColumnsMapping = connectionToTableToColumnsMapping.get(connectionName);
@@ -262,10 +278,10 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 			tableToColumnsMapping.get(tableName).add(columnSpec.getColumnName());
 		}
 
-		Map<String, Map<PhysicalTableName, Iterable<String>>> result = new HashMap<>();
+		Map<String, Map<PhysicalTableName, Iterable<String>>> result = new LinkedHashMap<>();
 		for (Map.Entry<String, Map<PhysicalTableName, List<String>>> connectionMapping: connectionToTableToColumnsMapping.entrySet()) {
 			// Convert Map<PhysicalTableName, List<String>> to Map<PhysicalTableName, Iterable<String>>.
-			result.put(connectionMapping.getKey(), new HashMap<>(connectionMapping.getValue()));
+			result.put(connectionMapping.getKey(), new LinkedHashMap<>(connectionMapping.getValue()));
 		}
 
 		return result;
@@ -283,7 +299,8 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 	public CliOperationStatus updateColumn(String connectionName, String tableName, String columnName, ColumnSpec columnSpec) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 
 		ColumnSearchFilters columnSearchFilters = new ColumnSearchFilters();
@@ -330,7 +347,8 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 	public CliOperationStatus renameColumn(String connectionName, String tableName, String columnName, String newColumnName) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 
 		ColumnSearchFilters columnSearchFilters = new ColumnSearchFilters();
@@ -378,7 +396,8 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 	public CliOperationStatus setDisableTo(String connectionName, String tableName, String columnName, boolean disable) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 
 		ColumnSearchFilters columnSearchFilters = new ColumnSearchFilters();

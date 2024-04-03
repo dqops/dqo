@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/pii/contains_ip6_percent
+  rule_name: comparison/max_percent
+  help_text: Detects IP6 addresses in text columns. Verifies that the percentage of
+    rows that contains valid IP6 address values in a column does not fall below the
+    minimum accepted percentage. Stores the most recent captured value for each day
+    when the data quality check was evaluated.

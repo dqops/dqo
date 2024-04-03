@@ -115,4 +115,12 @@ public interface DqoJobQueueMonitoringService {
      * @return Job history entry model (with the most recent job's status) or null, when the job is no longer tracked or is missing.
      */
     DqoJobHistoryEntryModel getJob(DqoQueueJobId jobId);
+
+    /**
+     * Tries to find a job id of a job that was assigned also a business key (a user assigned job id).
+     * If there is a known (tracked) job with that business key, this method will return the job id. Otherwise, when not found, returns null.
+     * @param jobBusinessKey Job business key to look up.
+     * @return Job id or null when not found.
+     */
+    DqoQueueJobId lookupJobIdByBusinessKey(String jobBusinessKey);
 }

@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: check
 spec:
@@ -6,3 +6,4 @@ spec:
   rule_name: comparison/diff_percent
   help_text: Verifies that the total row count of the tested table matches the total
     row count of another (reference) table.
+  standard: true

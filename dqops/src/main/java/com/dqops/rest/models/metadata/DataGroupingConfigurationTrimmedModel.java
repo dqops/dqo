@@ -16,6 +16,8 @@
 package com.dqops.rest.models.metadata;
 
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -36,4 +38,32 @@ public class DataGroupingConfigurationTrimmedModel {
 
     @JsonPropertyDescription("Data grouping configuration specification.")
     private DataGroupingConfigurationSpec spec;
+
+    /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
+
+    /**
+     * Optional parsing error that was captured when parsing the YAML file.
+     * This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.
+     */
+    @JsonPropertyDescription("Optional parsing error that was captured when parsing the YAML file. " +
+            "This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.")
+    private String yamlParsingError;
+
+    public DataGroupingConfigurationTrimmedModel() {
+    }
+
+    public static class DataGroupingConfigurationTrimmedModelSampleFactory implements SampleValueFactory<DataGroupingConfigurationTrimmedModel> {
+        @Override
+        public DataGroupingConfigurationTrimmedModel createSample() {
+            return new DataGroupingConfigurationTrimmedModel() {{
+                setDataGroupingConfigurationName(SampleStringsRegistry.getDataGrouping());
+                setSpec(new DataGroupingConfigurationSpec.DataGroupingConfigurationSpecSampleFactory().createSample());
+                setCanEdit(true);
+            }};
+        }
+    }
 }

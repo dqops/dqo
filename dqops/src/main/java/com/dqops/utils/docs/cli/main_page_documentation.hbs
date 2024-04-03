@@ -1,10 +1,13 @@
-# Command-line interface
-___
-**This is a list of the CLI commands in DQO broken down by category and a brief description of what they do.**
+# DQOps command-line interface
+All command-line commands supported from the DQOps shell or directly from the system command prompt are listed below.
+
+
 {{#each allCommands}}
 ## {{rootCommandName}}
 | Command&nbsp;name | Description |
 |--------------|-------------|
-{{#each commands}} | {{#if (eq qualifiedName "dqo")}} [dqo](./{{rootCommandName}}/#dqo){{else}}[dqo {{qualifiedName}}](./{{rootCommandName}}/#dqo-{{qualifiedName}}){{/if}} | {{#each description}}{{this}}{{else}}For this command description is not added yet.{{/each}} |
+{{#each commands}} | {{#if (or (eq qualifiedName "") (eq qualifiedName "dqo"))}} [`dqo`](./{{rootCommandName}}.md#dqo){{else}}<span class="no-wrap-code">[`dqo {{qualifiedName}}`](./{{rootCommandName}}.md#dqo-{{slugify qualifiedName}})</span>{{/if}} | {{#each description}}{{this}}{{else}}For this command description is not added yet.{{/each}} |
 {{/each}}
+
+
 {{/each}}

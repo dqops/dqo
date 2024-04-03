@@ -98,18 +98,10 @@ public class TableAvailabilitySensorRunner extends AbstractSensorRunner {
                 groupedSensorExecutionResult, sensorPrepareResult, progressListener, jobCancellationToken);
 
         if (sensorExecutionResult.isSuccess()) {
-            try {
-                if (sensorExecutionResult.getResultTable().column(0).get(0) == null) {
-                    Table resultTableWithResult = GenericSensorResultsFactory.createResultTableWithResult(0.0,
-                            this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorRunParameters.getTimePeriodGradient());
-                    return new SensorExecutionResult(sensorRunParameters, resultTableWithResult);
-                }
-            } catch (Exception exception) {
-                Table resultTable = GenericSensorResultsFactory.createResultTableWithResult(1.0,
-                        this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorRunParameters.getTimePeriodGradient());
-                return new SensorExecutionResult(sensorRunParameters, resultTable);
-            }
-            return sensorExecutionResult;
+            // query was executed, even if it did not return any rows... to detect that a table is empty, we have different checks
+            Table resultTableWithResult = GenericSensorResultsFactory.createResultTableWithResult(0.0,
+                    this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorRunParameters.getTimePeriodGradient());
+            return new SensorExecutionResult(sensorRunParameters, resultTableWithResult);
         }
 
         Table resultTable = GenericSensorResultsFactory.createResultTableWithResult(1.0,

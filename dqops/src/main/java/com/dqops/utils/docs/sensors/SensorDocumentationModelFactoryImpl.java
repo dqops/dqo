@@ -43,7 +43,7 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
 
     /**
      * Creates a sensor documentation model factory.
-     * @param dqoHomeContext DQO User home context.
+     * @param dqoHomeContext DQOps User home context.
      * @param specToModelCheckMappingService Specification to the model factory, used to get documentation of the sensor parameters.
      */
     public SensorDocumentationModelFactoryImpl(DqoHomeContext dqoHomeContext,
@@ -102,7 +102,7 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
      * @return Sql templates.
      */
     private Map<ProviderTypeModel, List<String>> createSqlTemplates(SensorDefinitionWrapper sensorDefinition) {
-        Map<ProviderTypeModel, List<String>> sqlTemplates = new HashMap<>();
+        Map<ProviderTypeModel, List<String>> sqlTemplates = new LinkedHashMap<>();
         for (ProviderSensorDefinitionWrapper providerSensor : sensorDefinition.getProviderSensors()) {
             ProviderType provider = providerSensor.getProvider();
             String sqlTemplate = providerSensor.getSqlTemplate();

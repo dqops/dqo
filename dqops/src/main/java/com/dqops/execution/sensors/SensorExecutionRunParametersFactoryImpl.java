@@ -20,11 +20,15 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.custom.CustomCheckSpec;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.execution.checks.EffectiveSensorRuleNames;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
+import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
+import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapper;
+import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
@@ -34,6 +38,7 @@ import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.PartitionIncrementalTimeWindowSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.userhome.UserHome;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
 import com.google.common.base.Strings;
@@ -63,22 +68,24 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
     /**
      * Creates a sensor parameters object. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
      * specifications for the target connection, table, column, check.
+     * @param userHome User home used to look up credentials.
      * @param connection Connection specification.
      * @param table Table specification.
      * @param column Optional column specification for column sensors.
      * @param check Check specification.
      * @param customCheckDefinition Optional custom check definition, required when the check is a custom check.
-     * @param checkType Check type (profiling, recurring, partitioned).
+     * @param checkType Check type (profiling, monitoring, partitioned).
      * @param dataGroupingConfigurationOverride Data grouping configuration override. Used when not null. We need to assign a custom data grouping configuration for table comparison checks.
      * @param tableComparisonConfigurationSpec Table comparison configuration - only for comparison checks.
-     * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (profiling, recurring, partitioned).
+     * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (profiling, monitoring, partitioned).
      * @param userTimeWindowFilters Optional user provided time window filters to analyze a time range of data or recent months/days.
      *                             When not provided, the defaults are copied from the table's incremental time window configuration for a matching partition time scale.
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
      */
     @Override
-    public SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
+    public SensorExecutionRunParameters createSensorParameters(UserHome userHome,
+                                                               ConnectionSpec connection,
                                                                TableSpec table,
                                                                ColumnSpec column,
                                                                AbstractCheckSpec<?,?,?,?> check,
@@ -89,10 +96,12 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
                                                                TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
                                                                TimeWindowFilterParameters userTimeWindowFilters,
                                                                ProviderDialectSettings dialectSettings) {
-        ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
-        TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider);
-        ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider) : null;
-        AbstractSensorParametersSpec sensorParameters = check.getParameters().expandAndTrim(this.secretValueProvider);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
+
+        ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
+        TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
+        ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider, secretValueLookupContext) : null;
+        AbstractSensorParametersSpec sensorParameters = check.getParameters().expandAndTrim(this.secretValueProvider, secretValueLookupContext);
 
         TimeSeriesConfigurationSpec timeSeries = timeSeriesConfigurationSpec; // TODO: for very custom checks, we can extract the time series override from the check
         DataGroupingConfigurationSpec dataGroupingConfiguration =
@@ -121,9 +130,9 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         }
 
         CheckSearchFilters exactCheckSearchFilters = new CheckSearchFilters();
-        exactCheckSearchFilters.setConnectionName(connection.getConnectionName());
-        exactCheckSearchFilters.setSchemaTableName(table.getPhysicalTableName().toTableSearchFilter());
-        exactCheckSearchFilters.setColumnName(column == null ? null : column.getColumnName());
+        exactCheckSearchFilters.setConnection(connection.getConnectionName());
+        exactCheckSearchFilters.setFullTableName(table.getPhysicalTableName().toTableSearchFilter());
+        exactCheckSearchFilters.setColumn(column == null ? null : column.getColumnName());
         exactCheckSearchFilters.setCheckCategory(check.getCategoryName());
         exactCheckSearchFilters.setCheckName(check.getCheckName());
         exactCheckSearchFilters.setSensorName(effectiveSensorRuleNames.getSensorName());
@@ -139,6 +148,8 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
     /**
      * Creates a sensor parameters object for a statistics collector. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
      * specifications for the target connection, table, column, check.
+     * @param dqoHome DQO home.
+     * @param userHome User home used to look up credentials.
      * @param connection Connection specification.
      * @param table Table specification.
      * @param column Optional column specification for column sensors.
@@ -149,25 +160,38 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
      * @return Sensor execution run parameters.
      */
     @Override
-    public SensorExecutionRunParameters createStatisticsSensorParameters(ConnectionSpec connection,
+    public SensorExecutionRunParameters createStatisticsSensorParameters(DqoHome dqoHome,
+                                                                         UserHome userHome,
+                                                                         ConnectionSpec connection,
                                                                          TableSpec table,
                                                                          ColumnSpec column,
                                                                          AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec,
                                                                          TimeWindowFilterParameters userTimeWindowFilters,
                                                                          StatisticsDataScope statisticsDataScope,
                                                                          ProviderDialectSettings dialectSettings) {
-        ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
-        TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider);
-        ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider) : null;
-        AbstractSensorParametersSpec sensorParameters = statisticsCollectorSpec.getParameters().expandAndTrim(this.secretValueProvider);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
+        ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
+        TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
+        ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider, secretValueLookupContext) : null;
+        AbstractSensorParametersSpec sensorParameters = statisticsCollectorSpec.getParameters().expandAndTrim(this.secretValueProvider, secretValueLookupContext);
 
         TimeSeriesConfigurationSpec timeSeries = TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds();
         DataGroupingConfigurationSpec dataGroupingConfigurationSpec = statisticsDataScope == StatisticsDataScope.table ? null :
                 expandedTable.getDefaultDataGroupingConfiguration();
         TimeWindowFilterParameters timeWindowFilterParameters =
                 this.makeEffectiveIncrementalFilter(table, timeSeries, userTimeWindowFilters);
+        String sensorDefinitionName = statisticsCollectorSpec.getParameters().getSensorDefinitionName();
         EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames(
-                statisticsCollectorSpec.getParameters().getSensorDefinitionName(), null);
+                sensorDefinitionName, null);
+        SensorDefinitionWrapper sensorDefinitionWrapper = dqoHome.getSensors().getByObjectName(sensorDefinitionName, true);
+        if (sensorDefinitionWrapper == null) {
+            return null;
+        }
+
+        ProviderSensorDefinitionWrapper providerSpecificSensor = sensorDefinitionWrapper.getProviderSensors().getByObjectName(connection.getProviderType(), true);
+        if (providerSpecificSensor == null) {
+            return null; // not supported on this data source (percentile on mysql for example)
+        }
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 null, statisticsCollectorSpec, effectiveSensorRuleNames, null, timeSeries, timeWindowFilterParameters,
@@ -189,8 +213,12 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
             TableSpec tableSpec,
             TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
             TimeWindowFilterParameters userTimeWindowFilters) {
+        if (userTimeWindowFilters != null && userTimeWindowFilters.hasAnyParametersApplied()) {
+            return userTimeWindowFilters;
+        }
+
         if (timeSeriesConfigurationSpec.getMode() == TimeSeriesMode.current_time) {
-            return userTimeWindowFilters != null ? userTimeWindowFilters : new TimeWindowFilterParameters();
+            return new TimeWindowFilterParameters();
         }
 
         PartitionIncrementalTimeWindowSpec tableTimeWindowSpec = tableSpec.getIncrementalTimeWindow();

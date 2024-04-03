@@ -18,25 +18,31 @@ package com.dqops.rest.controllers;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
-import com.dqops.data.checkresults.services.CheckResultsDataServiceImpl;
 import com.dqops.data.checkresults.services.CheckResultsDetailedFilterParameters;
-import com.dqops.data.checkresults.services.models.CheckResultsDetailedDataModel;
-import com.dqops.data.checkresults.services.models.TableDataQualityStatusModel;
+import com.dqops.data.checkresults.services.models.CheckResultsListModel;
+import com.dqops.data.checkresults.services.models.currentstatus.TableCurrentDataQualityStatusFilterParameters;
+import com.dqops.data.checkresults.services.models.currentstatus.TableCurrentDataQualityStatusModel;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
@@ -45,21 +51,25 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "CheckResults", description = "Returns the complete results of executed checks on tables and columns.")
+@Api(value = "CheckResults", description = "Returns all the data quality check results of executed checks on tables and columns.")
 public class CheckResultsController {
     private UserHomeContextFactory userHomeContextFactory;
     private CheckResultsDataService checkResultsDataService;
+    private DefaultTimeZoneProvider defaultTimeZoneProvider;
 
     /**
      * Dependency injection constructor.
      * @param userHomeContextFactory User home context factory.
      * @param checkResultsDataService Rule results data service.
+     * @param defaultTimeZoneProvider Default time zone provider.
      */
     @Autowired
     public CheckResultsController(UserHomeContextFactory userHomeContextFactory,
-                                  CheckResultsDataService checkResultsDataService) {
+                                  CheckResultsDataService checkResultsDataService,
+                                  DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.checkResultsDataService = checkResultsDataService;
+        this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
 
     /**
@@ -70,7 +80,9 @@ public class CheckResultsController {
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param months         The number of months to load.
-     * @param checkType      Optional check type filter.
+     * @param profiling      Optional check type filter to return profiling checks.
+     * @param monitoring     Optional check type filter to return monitoring checks.
+     * @param partitioned    Optional check type filter to return partitioned checks.
      * @param checkTimeScale Optional check time scale filter.
      * @return The most recent table's data quality status.
      */
@@ -78,25 +90,53 @@ public class CheckResultsController {
     @ApiOperation(value = "getTableDataQualityStatus", notes = "Read the most recent results of executed data quality checks on the table and return the current table's data quality status - the number of failed data quality " +
             "checks if the table has active data quality issues. Also returns the names of data quality checks that did not pass most recently. " +
             "This operation verifies only the status of the most recently executed data quality checks. Previous data quality issues are not counted.",
-            response = TableDataQualityStatusModel.class)
+            response = TableCurrentDataQualityStatusModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The most recent data quality status of the requested table",
-                    response = TableDataQualityStatusModel.class),
+                    response = TableCurrentDataQualityStatusModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableDataQualityStatusModel>> getTableDataQualityStatus(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<TableCurrentDataQualityStatusModel>> getTableDataQualityStatus(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam(name = "months", value = "Optional filter - the number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).", required = false)
             @RequestParam(required = false) Optional<Integer> months,
-            @ApiParam(name = "checkType", value = "Optional check type filter (profiling, recurring, partitioned).", required = false)
-            @RequestParam(required = false) Optional<CheckType> checkType,
-            @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for recurring and partitioned checks (values: daily or monthly).", required = false)
-            @RequestParam(required = false) Optional<CheckTimeScale> checkTimeScale) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+            @ApiParam(name = "since", value = "Optional filter that accepts an UTC timestamp to read only data quality check results captured since that timestamp.", required = false)
+            @RequestParam(required = false) Optional<LocalDateTime> since,
+            @ApiParam(name = "profiling", value = "Optional check type filter to detect the current status of the profiling checks results. " +
+                    "The default value is false, excluding profiling checks from the current table status detection. " +
+                    "If enabled, only the status of the most recent check result is retrieved.", required = false)
+            @RequestParam(required = false) Optional<Boolean> profiling,
+            @ApiParam(name = "monitoring", value = "Optional check type filter to detect the current status of the monitoring checks results. " +
+                    "The default value is true, including monitoring checks in the current table status detection. " +
+                    "If enabled, only the status of the most recent check result is retrieved.", required = false)
+            @RequestParam(required = false) Optional<Boolean> monitoring,
+            @ApiParam(name = "partitioned", value = "Optional check type filter to detect the current status of the partitioned checks results. " +
+                    "The default value is true, including partitioned checks in the current table status detection. " +
+                    "Detection of the status of partitioned checks is different. When enabled, DQOps checks the highest severity status of all partitions since the **since** date or within the last **months**.", required = false)
+            @RequestParam(required = false) Optional<Boolean> partitioned,
+            @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for monitoring and partitioned checks (values: daily or monthly).", required = false)
+            @RequestParam(required = false) Optional<CheckTimeScale> checkTimeScale,
+            @ApiParam(name = "dataGroup", value = "Optional data group", required = false)
+            @RequestParam(required = false) Optional<String> dataGroup,
+            @ApiParam(name = "checkName", value = "Optional check name", required = false)
+            @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "category", value = "Optional check category name", required = false)
+            @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "tableComparison", value = "Optional table comparison name", required = false)
+            @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "qualityDimension", value = "Optional data quality dimension", required = false)
+            @RequestParam(required = false) Optional<String> qualityDimension) {
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -117,11 +157,26 @@ public class CheckResultsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableDataQualityStatusModel tableDataQualityStatusModel = this.checkResultsDataService.analyzeTableMostRecentQualityStatus(
-                connectionName, physicalTableName,
-                months.orElse(1), checkType.orElse(null), checkTimeScale.orElse(null));
+        TableCurrentDataQualityStatusFilterParameters tableCurrentDataQualityStatusFilterParameters = TableCurrentDataQualityStatusFilterParameters.builder()
+                .connectionName(connectionName)
+                .physicalTableName(physicalTableName)
+                .lastMonths(months.orElse(1))
+                .profiling(profiling.orElse(false))
+                .monitoring(monitoring.orElse(true))
+                .partitioned(partitioned.orElse(true))
+                .checkTimeScale(checkTimeScale.orElse(null))
+                .dataGroup(dataGroup.orElse(null))
+                .checkName(checkName.orElse(null))
+                .category(category.orElse(null))
+                .tableComparison(tableComparison.orElse(null))
+                .qualityDimension(qualityDimension.orElse(null))
+                .since(since.isPresent() ? since.get().toInstant(this.defaultTimeZoneProvider.getDefaultTimeZoneId().getRules().getOffset(since.get())) : null)
+                .build();
 
-        return new ResponseEntity<>(Mono.just(tableDataQualityStatusModel), HttpStatus.OK); // 200
+        TableCurrentDataQualityStatusModel tableCurrentDataQualityStatusModel = this.checkResultsDataService
+                .analyzeTableMostRecentQualityStatus(tableCurrentDataQualityStatusFilterParameters, principal.getDataDomainIdentity());
+
+        return new ResponseEntity<>(Mono.just(tableCurrentDataQualityStatusModel), HttpStatus.OK); // 200
     }
 
     /**
@@ -136,15 +191,20 @@ public class CheckResultsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/results", produces = "application/json")
     @ApiOperation(value = "getTableProfilingChecksResults", notes = "Returns the complete results of the most recent check executions for all table level data quality profiling checks on a table",
-            response = CheckResultsDetailedDataModel[].class)
+            response = CheckResultsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Complete view of the most recent check runs for table level data quality profiling checks on a table returned",
-                    response = CheckResultsDetailedDataModel[].class),
+                    response = CheckResultsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getTableProfilingChecksResults(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<CheckResultsListModel>> getTableProfilingChecksResults(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -156,7 +216,7 @@ public class CheckResultsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -186,13 +246,13 @@ public class CheckResultsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
-                checks, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
+        CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
+                checks, loadParams, principal.getDataDomainIdentity());
+        return new ResponseEntity<>(Flux.fromArray(checkResultsListModels), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the complete results of the most recent recurring executions on a table given a connection name, table name and a time scale.
+     * Retrieves the complete results of the most recent monitoring executions on a table given a connection name, table name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -200,19 +260,24 @@ public class CheckResultsController {
      * @param dataGroup Data group.
      * @param monthStart     Month start boundary.
      * @param monthEnd       Month end boundary.
-     * @return View of the recent recurring results.
+     * @return View of the recent monitoring results.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/results", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksResults", notes = "Returns the complete results of the most recent table level recurring executions for the recurring at a requested time scale",
-            response = CheckResultsDetailedDataModel[].class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/results", produces = "application/json")
+    @ApiOperation(value = "getTableMonitoringChecksResults", notes = "Returns the complete results of the most recent table level monitoring executions for the monitoring at a requested time scale",
+            response = CheckResultsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Complete view of the most recent recurring executions for the recurring at a requested time scale on a table returned",
-                    response = CheckResultsDetailedDataModel[].class),
+            @ApiResponse(code = 200, message = "Complete view of the most recent monitoring executions for the monitoring at a requested time scale on a table returned",
+                    response = CheckResultsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getTableRecurringChecksResults(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<CheckResultsListModel>> getTableMonitoringChecksResults(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -225,7 +290,7 @@ public class CheckResultsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -245,7 +310,7 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec recurringPartition = tableSpec.getTableCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec monitoringPartition = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
         CheckResultsDetailedFilterParameters loadParams = new CheckResultsDetailedFilterParameters();
         checkName.ifPresent(loadParams::setCheckName);
         category.ifPresent(loadParams::setCheckCategory);
@@ -255,9 +320,9 @@ public class CheckResultsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
-                recurringPartition, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
+        CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
+                monitoringPartition, loadParams, principal.getDataDomainIdentity());
+        return new ResponseEntity<>(Flux.fromArray(checkResultsListModels), HttpStatus.OK); // 200
     }
 
     /**
@@ -272,15 +337,21 @@ public class CheckResultsController {
      * @return View of the most recent partitioned checks results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/results", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedChecksResults", notes = "Returns a complete view of the recent table level partitioned checks executions for a requested time scale", response = CheckResultsDetailedDataModel[].class)
+    @ApiOperation(value = "getTablePartitionedChecksResults", notes = "Returns a complete view of the recent table level partitioned checks executions for a requested time scale",
+            response = CheckResultsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The complete view of the most recent partitioned check executions for a requested time scale on a table returned",
-                    response = CheckResultsDetailedDataModel[].class),
+                    response = CheckResultsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getTablePartitionedChecksResults(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<CheckResultsListModel>> getTablePartitionedChecksResults(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -293,7 +364,7 @@ public class CheckResultsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -323,9 +394,9 @@ public class CheckResultsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
-                partitionedCheckPartition, new CheckResultsDetailedFilterParameters());
-        return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
+        CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
+                partitionedCheckPartition, loadParams, principal.getDataDomainIdentity());
+        return new ResponseEntity<>(Flux.fromArray(checkResultsListModels), HttpStatus.OK); // 200
     }
 
 
@@ -342,15 +413,20 @@ public class CheckResultsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/results", produces = "application/json")
     @ApiOperation(value = "getColumnProfilingChecksResults", notes = "Returns an overview of the most recent check executions for all column level data quality profiling checks on a column",
-            response = CheckResultsDetailedDataModel[].class)
+            response = CheckResultsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Complete view of the most recent check runs for column level data quality profiling checks on a column returned",
-                    response = CheckResultsDetailedDataModel[].class),
+                    response = CheckResultsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getColumnProfilingChecksResults(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<CheckResultsListModel>> getColumnProfilingChecksResults(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -363,7 +439,7 @@ public class CheckResultsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -398,13 +474,13 @@ public class CheckResultsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
-                checks, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
+        CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
+                checks, loadParams, principal.getDataDomainIdentity());
+        return new ResponseEntity<>(Flux.fromArray(checkResultsListModels), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the complete view of the most recent recurring executions on a column given a connection name, table name, column name and a time scale.
+     * Retrieves the complete view of the most recent monitoring executions on a column given a connection name, table name, column name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -413,19 +489,24 @@ public class CheckResultsController {
      * @param dataGroup Data group.
      * @param monthStart     Month start boundary.
      * @param monthEnd       Month end boundary.
-     * @return View of the recent recurring results.
+     * @return View of the recent monitoring results.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/results", produces = "application/json")
-    @ApiOperation(value = "getColumnRecurringChecksResults", notes = "Returns a complete view of the recent column level recurring executions for the recurring at a requested time scale",
-            response = CheckResultsDetailedDataModel[].class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/results", produces = "application/json")
+    @ApiOperation(value = "getColumnMonitoringChecksResults", notes = "Returns a complete view of the recent column level monitoring executions for the monitoring at a requested time scale",
+            response = CheckResultsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "View of the recent recurring executions for the recurring at a requested time scale on a column returned",
-                    response = CheckResultsDetailedDataModel[].class),
+            @ApiResponse(code = 200, message = "View of the recent monitoring executions for the monitoring at a requested time scale on a column returned",
+                    response = CheckResultsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getColumnRecurringChecksResults(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<CheckResultsListModel>> getColumnMonitoringChecksResults(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -439,7 +520,7 @@ public class CheckResultsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -464,7 +545,7 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        AbstractRootChecksContainerSpec recurringPartition = columnSpec.getColumnCheckRootContainer(CheckType.recurring, timeScale, false);
+        AbstractRootChecksContainerSpec monitoringPartition = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
         CheckResultsDetailedFilterParameters loadParams = new CheckResultsDetailedFilterParameters();
         checkName.ifPresent(loadParams::setCheckName);
         category.ifPresent(loadParams::setCheckCategory);
@@ -474,9 +555,9 @@ public class CheckResultsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
-                recurringPartition, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
+        CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
+                monitoringPartition, loadParams, principal.getDataDomainIdentity());
+        return new ResponseEntity<>(Flux.fromArray(checkResultsListModels), HttpStatus.OK); // 200
     }
 
     /**
@@ -493,15 +574,20 @@ public class CheckResultsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/results", produces = "application/json")
     @ApiOperation(value = "getColumnPartitionedChecksResults", notes = "Returns an overview of the most recent column level partitioned checks executions for a requested time scale",
-            response = CheckResultsDetailedDataModel[].class)
+            response = CheckResultsListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "View of the recent partitioned check executions for a requested time scale on a column returned",
-                    response = CheckResultsDetailedDataModel[].class),
+                    response = CheckResultsListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getColumnPartitionedChecksResults(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<CheckResultsListModel>> getColumnPartitionedChecksResults(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -515,7 +601,7 @@ public class CheckResultsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -550,8 +636,8 @@ public class CheckResultsController {
         monthEnd.ifPresent(loadParams::setEndMonth);
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
-                partitionedCheckPartition, loadParams);
-        return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
+        CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
+                partitionedCheckPartition, loadParams, principal.getDataDomainIdentity());
+        return new ResponseEntity<>(Flux.fromArray(checkResultsListModels), HttpStatus.OK); // 200
     }
 }

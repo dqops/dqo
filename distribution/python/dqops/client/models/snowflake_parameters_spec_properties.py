@@ -1,15 +1,16 @@
 from typing import Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 T = TypeVar("T", bound="SnowflakeParametersSpecProperties")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class SnowflakeParametersSpecProperties:
-    """ """
+    """A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary."""
 
-    additional_properties: Dict[str, str] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, str] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         field_dict: Dict[str, Any] = {}

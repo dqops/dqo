@@ -21,5 +21,5 @@ import com.dqops.metadata.basespecs.ObjectName;
 /**
  * Settings spec wrapper.
  */
-public interface SettingsWrapper extends ElementWrapper<SettingsSpec>, ObjectName<String> {
+public interface SettingsWrapper extends ElementWrapper<LocalSettingsSpec>, ObjectName<String> {
 }

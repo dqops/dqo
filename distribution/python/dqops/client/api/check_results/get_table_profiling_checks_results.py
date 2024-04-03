@@ -5,8 +5,8 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
-from ...models.check_results_detailed_data_model import CheckResultsDetailedDataModel
+from ...client import AuthenticatedClient, Client
+from ...models.check_results_list_model import CheckResultsListModel
 from ...types import UNSET, Response, Unset
 
 
@@ -15,7 +15,6 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -24,15 +23,7 @@ def _get_kwargs(
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/results".format(
-        client.base_url,
-        connectionName=connection_name,
-        schemaName=schema_name,
-        tableName=table_name,
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     params["dataGroup"] = data_group
@@ -61,25 +52,23 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/results".format(
+            connectionName=connection_name,
+            schemaName=schema_name,
+            tableName=table_name,
+        ),
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[List["CheckResultsDetailedDataModel"]]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[List["CheckResultsListModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
         for response_200_item_data in _response_200:
-            response_200_item = CheckResultsDetailedDataModel.from_dict(
-                response_200_item_data
-            )
+            response_200_item = CheckResultsListModel.from_dict(response_200_item_data)
 
             response_200.append(response_200_item)
 
@@ -91,8 +80,8 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[List["CheckResultsDetailedDataModel"]]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[List["CheckResultsListModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -106,7 +95,7 @@ def sync_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -114,7 +103,7 @@ def sync_detailed(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Response[List["CheckResultsDetailedDataModel"]]:
+) -> Response[List["CheckResultsListModel"]]:
     """getTableProfilingChecksResults
 
      Returns the complete results of the most recent check executions for all table level data quality
@@ -137,14 +126,13 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['CheckResultsDetailedDataModel']]
+        Response[List['CheckResultsListModel']]
     """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
         schema_name=schema_name,
         table_name=table_name,
-        client=client,
         data_group=data_group,
         month_start=month_start,
         month_end=month_end,
@@ -154,8 +142,7 @@ def sync_detailed(
         max_results_per_check=max_results_per_check,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -167,7 +154,7 @@ def sync(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -175,7 +162,7 @@ def sync(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Optional[List["CheckResultsDetailedDataModel"]]:
+) -> Optional[List["CheckResultsListModel"]]:
     """getTableProfilingChecksResults
 
      Returns the complete results of the most recent check executions for all table level data quality
@@ -198,7 +185,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['CheckResultsDetailedDataModel']
+        List['CheckResultsListModel']
     """
 
     return sync_detailed(
@@ -221,7 +208,7 @@ async def asyncio_detailed(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -229,7 +216,7 @@ async def asyncio_detailed(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Response[List["CheckResultsDetailedDataModel"]]:
+) -> Response[List["CheckResultsListModel"]]:
     """getTableProfilingChecksResults
 
      Returns the complete results of the most recent check executions for all table level data quality
@@ -252,14 +239,13 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['CheckResultsDetailedDataModel']]
+        Response[List['CheckResultsListModel']]
     """
 
     kwargs = _get_kwargs(
         connection_name=connection_name,
         schema_name=schema_name,
         table_name=table_name,
-        client=client,
         data_group=data_group,
         month_start=month_start,
         month_end=month_end,
@@ -269,8 +255,7 @@ async def asyncio_detailed(
         max_results_per_check=max_results_per_check,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -280,7 +265,7 @@ async def asyncio(
     schema_name: str,
     table_name: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     data_group: Union[Unset, None, str] = UNSET,
     month_start: Union[Unset, None, datetime.date] = UNSET,
     month_end: Union[Unset, None, datetime.date] = UNSET,
@@ -288,7 +273,7 @@ async def asyncio(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
-) -> Optional[List["CheckResultsDetailedDataModel"]]:
+) -> Optional[List["CheckResultsListModel"]]:
     """getTableProfilingChecksResults
 
      Returns the complete results of the most recent check executions for all table level data quality
@@ -311,7 +296,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['CheckResultsDetailedDataModel']
+        List['CheckResultsListModel']
     """
 
     return (

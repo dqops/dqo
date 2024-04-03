@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -11,5 +11,5 @@ spec:
     help_text: The maximum number of values from the expected_values list that were
       not found in the column (inclusive).
     data_type: long
-    sample_values:
-    - 1
+    required: true
+    default_value: 0

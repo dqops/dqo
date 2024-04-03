@@ -16,10 +16,11 @@
 package com.dqops.checks;
 
 import com.dqops.metadata.timeseries.TimePeriodGradient;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Enumeration of time scale of recurring and partitioned data quality checks (daily, monthly, etc.)
+ * Enumeration of time scale of monitoring and partitioned data quality checks (daily, monthly, etc.)
  */
 public enum CheckTimeScale {
     @JsonProperty("daily")
@@ -41,6 +42,13 @@ public enum CheckTimeScale {
         }
         else {
             throw new UnsupportedOperationException("Time scale " + this + " mapping missing, add it here.");
+        }
+    }
+
+    public static class CheckTimeScaleSampleFactory implements SampleValueFactory<CheckTimeScale> {
+        @Override
+        public CheckTimeScale createSample() {
+            return daily;
         }
     }
 }

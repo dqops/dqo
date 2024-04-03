@@ -1,17 +1,29 @@
-# Quick start with DQO
-This guide contains a quick tutorial on how to get started with DQO using the graphical interface. 
+# Getting started with DQOps
+This guide provides a quick tutorial on how to get started with DQOps using the web interface. You will add a data source, analyze it, and review the data quality results. 
 
-In our example, we add connection to the [BigQuery public dataset Austin Crime Data](https://console.cloud.google.com/marketplace/details/city-of-austin/austin-crime), 
-run 2 types of [data quality checks](../dqo-concepts/checks/index.md) and review the results on the [data quality dashboards](../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md). 
+## Sample data
+In the example, we will import a CSV file with a sample [public dataset Austin Crime Data](https://console.cloud.google.com/marketplace/details/city-of-austin/austin-crime). 
 
-## Overview
+Next, we will run and review [basic statistics](../working-with-dqo/collecting-basic-data-statistics.md), 
+and automatically added profiling and monitoring [data quality checks](../dqo-concepts/definition-of-data-quality-checks/index.md). 
 
-1. [Installation](./installation/installation.md)
+Finally, we will review the data quality results on the [data quality dashboards](../dqo-concepts/types-of-data-quality-dashboards.md). 
 
-2. [Connect to a data source](./adding-data-source-connection/adding-data-source-connection.md)
+!!! note "DQOps offers a wide range of connection options"
 
-3. [Run data quality checks](./run-data-quality-checks/run-data-quality-checks.md)
+    In this getting started guide, we use the CSV file connection since there is no need for additional database configuration.
 
-4. [Review the results on data quality dashboards](./review-results-on-dashboards/review-results-on-dashboards.md) 
+    However, DQOps supports [integration with different types of data sources](../data-sources/index.md) for monitoring the data quality.
+
+
+## Steps
+
+1. [Local installation](installation.md)
+
+2. [Connect to a data source](add-data-source-connection.md)
+
+3. [Review the initial results and run monitoring checks](review-results-and-run-monitoring-checks.md)
+
+4. [Review the results on data quality dashboards](review-results-on-dashboards.md) 
 
  

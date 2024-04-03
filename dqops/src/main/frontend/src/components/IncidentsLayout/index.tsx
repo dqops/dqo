@@ -1,34 +1,48 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { ReactNode, useEffect, useMemo } from 'react';
 
-import Header from '../Header';
-import IncidentsTree from './IncidentsTree';
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import PageTabs from '../PageTabs';
 import { useHistory } from 'react-router-dom';
+import { useTree } from '../../contexts/treeContext';
+import IncidentConnection from '../../pages/IncidentConnection';
+import IncidentDetail from '../../pages/IncidentDetail';
+import Incidents from '../../pages/Incidents';
 import {
   closeFirstLevelTab,
   setActiveFirstLevelTab
 } from '../../redux/actions/incidents.actions';
+import { IRootState } from '../../redux/reducers';
+import { ROUTES } from '../../shared/routes';
+import { urlencodeDecoder } from '../../utils';
+import ConfirmDialog from '../CustomTree/ConfirmDialog';
+import Header from '../Header';
+import PageTabs from '../PageTabs';
 import { TabOption } from '../PageTabs/tab';
+import IncidentsTree from './IncidentsTree';
 
 interface LayoutProps {
-  children?: any;
+  route: string;
 }
 
-const IncidentsLayout = ({ children }: LayoutProps) => {
+const IncidentsLayout = ({ route }: LayoutProps) => {
+  const { objectNotFound, setObjectNotFound } = useTree()
+  
   const { tabs: pageTabs, activeTab } = useSelector(
     (state: IRootState) => state.incidents
   );
+  
   const dispatch = useDispatch();
   const history = useHistory();
 
+
   const handleChange = (tab: TabOption) => {
     dispatch(setActiveFirstLevelTab(tab.value));
-    history.push(tab?.url ?? '');
+    history.push(urlencodeDecoder(tab?.url ?? ''));
   };
 
   const closeTab = (value: string) => {
+    if (pageTabs.length === 1) {
+      history.push(`/incidents`)
+    }
     dispatch(closeFirstLevelTab(value));
   };
 
@@ -44,19 +58,35 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
 
   useEffect(() => {
     if (activeTab) {
+      dispatch(setActiveFirstLevelTab(activeTab));
       history.push(activeTab);
     }
   }, [activeTab]);
 
+  const getComponent = () => {
+    switch (route) {
+      case ROUTES.PATTERNS.INCIDENT_DETAIL:
+        return <IncidentDetail/>;
+      case ROUTES.PATTERNS.INCIDENTS:
+        return <Incidents/>;
+      case ROUTES.PATTERNS.INCIDENT_CONNECTION:
+        return <IncidentConnection/>;  
+      default:
+        return null;
+    }
+  };
+
+  const renderComponent: ReactNode = getComponent();
+
   return (
     <div
-      className="flex min-h-screen overflow-hidden"
+      className="flex min-h-screen h-full overflow-hidden "
       style={{ height: '100%', overflowY: 'hidden' }}
     >
       <Header />
       <IncidentsTree />
       <div
-        className="flex flex-1 h-full"
+        className="flex min-h-screen flex-1 "
         style={{ height: '100%', overflowY: 'hidden' }}
       >
         <div
@@ -66,20 +96,26 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
             maxWidth: `calc(100vw - 320px)`
           }}
         >
-          <div className="flex-1 h-full flex flex-col">
+          <div className="flex-1 h-full flex flex-col ">
             <PageTabs
               tabs={tabOptions}
               activeTab={activeTab}
               onChange={handleChange}
               onRemoveTab={closeTab}
-              limit={10}
+              limit={7}
             />
             <div className="bg-white border border-gray-300 flex-auto min-h-0 overflow-auto">
-              {!!activeTab && <div>{children}</div>}
+              {!!activeTab && activeTab !== '/incidents/new-tab' && <>{renderComponent}</>}
             </div>
           </div>
         </div>
       </div>
+      <ConfirmDialog
+      open={objectNotFound}
+      onConfirm={() => new Promise(() => {dispatch(closeFirstLevelTab(activeTab)), setObjectNotFound(false)})}
+      isCancelExcluded={true} 
+      onClose={() => {dispatch(closeFirstLevelTab(activeTab)), setObjectNotFound(false)}}
+      message='The definition of this object was deleted in the DQOps user home. The tab will be closed.'/>
     </div>
   );
 };

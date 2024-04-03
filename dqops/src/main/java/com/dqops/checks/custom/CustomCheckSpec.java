@@ -18,11 +18,14 @@ package com.dqops.checks.custom;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.rules.CustomRuleParametersSpec;
 import com.dqops.sensors.CustomSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -45,7 +48,7 @@ public class CustomCheckSpec extends AbstractCheckSpec<CustomSensorParametersSpe
         }
     };
 
-    @JsonPropertyDescription("Optional custom sensor name. It is a folder name inside the user's home 'sensors' folder or the DQO Home (DQO distribution) home/sensors folder. Sample sensor name: table/volume/row_count. When this value is set, it overrides the default sensor definition defined for the named check definition.")
+    @JsonPropertyDescription("Optional custom sensor name. It is a folder name inside the user's home 'sensors' folder or the DQOps Home (DQOps distribution) home/sensors folder. Sample sensor name: table/volume/row_count. When this value is set, it overrides the default sensor definition defined for the named check definition.")
     private String sensorName;
 
     @JsonPropertyDescription("Optional custom rule name. It is a path to a custom rule python module that starts at the user's home 'rules' folder. The path should not end with the .py file extension. Sample rule: myrules/my_custom_rule. When this value is set, it overrides the default rule definition defined for the named check definition.")
@@ -61,7 +64,7 @@ public class CustomCheckSpec extends AbstractCheckSpec<CustomSensorParametersSpe
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private CustomRuleParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting thresholdthat raises a data quality issue at an error severity level")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private CustomRuleParametersSpec error;
@@ -202,5 +205,24 @@ public class CustomCheckSpec extends AbstractCheckSpec<CustomSensorParametersSpe
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Validity; // this is just the default
+    }
+
+    /**
+     * Returns the data quality category name retrieved from the category field name used to store a container of check categories
+     * in the metadata.
+     * @return Check category name.
+     */
+    @JsonIgnore
+    public String getCategoryName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+
+        if (Objects.equals(hierarchyId.get(hierarchyId.size() - 2), "custom_checks")) {
+            return hierarchyId.get(hierarchyId.size() - 3).toString();
+        }
+
+        return super.getCategoryName();
     }
 }

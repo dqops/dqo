@@ -15,8 +15,7 @@
  */
 package com.dqops.rules;
 
-import com.dqops.checks.AbstractCheckSpec;
-import com.dqops.checks.custom.CustomCheckSpec;
+import com.dqops.checks.custom.CustomParametersSpecObject;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.utils.schema.JsonAdditionalProperties;
@@ -37,7 +36,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @JsonAdditionalProperties
-public class CustomRuleParametersSpec extends AbstractRuleParametersSpec {
+public class CustomRuleParametersSpec extends AbstractRuleParametersSpec implements CustomParametersSpecObject {
     private static final ChildHierarchyNodeFieldMapImpl<CustomRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }

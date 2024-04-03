@@ -15,85 +15,37 @@
  */
 package com.dqops.services.check.matching;
 
-import java.util.Objects;
+import com.dqops.checks.AbstractCheckSpec;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 /**
  * Key object that stores a sensor name and rule names. It is used to find similar checks in other check types.
  * It supports equals and hashcode.
  */
-public class SimilarCheckSensorRuleKey {
+@Deprecated
+@AllArgsConstructor
+@Getter
+@EqualsAndHashCode
+public class SimilarCheckSensorRuleKey implements SimilarCheckGroupingKey {
     private String sensorName;
+    private Class<?> sensorParametersClass;
     private String warningRuleName;
     private String errorRuleName;
     private String fatalRuleName;
 
     /**
-     * Creates a check sensor and rule names object.
-     * @param sensorName Sensor name.
-     * @param warningRuleName Rule name for the warning rule.
-     * @param errorRuleName Rule name for the error rule.
-     * @param fatalRuleName Rule name for the fatal rule.
+     * Predicate method to determine whether the check belongs to the similar check group identified by this key.
+     * @param checkSpec Check spec to match to the group.
+     * @return True if provided check matches the group.
      */
-    public SimilarCheckSensorRuleKey(String sensorName, String warningRuleName, String errorRuleName, String fatalRuleName) {
-        this.sensorName = sensorName;
-        this.warningRuleName = warningRuleName;
-        this.errorRuleName = errorRuleName;
-        this.fatalRuleName = fatalRuleName;
-    }
-
-    /**
-     * Returns the sensor name.
-     * @return Sensor name.
-     */
-    public String getSensorName() {
-        return sensorName;
-    }
-
-    /**
-     * Returns the rule name used for the "warning" severity.
-     * @return Warning rule name.
-     */
-    public String getWarningRuleName() {
-        return warningRuleName;
-    }
-
-    /**
-     * Returns the rule name fo the error severity.
-     * @return Rule name for the error severity.
-     */
-    public String getErrorRuleName() {
-        return errorRuleName;
-    }
-
-    /**
-     * Return the rule name for the fatal severity.
-     * @return Rule name for the fatal severity.
-     */
-    public String getFatalRuleName() {
-        return fatalRuleName;
-    }
-
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        SimilarCheckSensorRuleKey that = (SimilarCheckSensorRuleKey) o;
-
-        if (!Objects.equals(sensorName, that.sensorName)) return false;
-        if (!Objects.equals(warningRuleName, that.warningRuleName))
-            return false;
-        if (!Objects.equals(errorRuleName, that.errorRuleName))
-            return false;
-        return Objects.equals(fatalRuleName, that.fatalRuleName);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = sensorName != null ? sensorName.hashCode() : 0;
-        result = 31 * result + (warningRuleName != null ? warningRuleName.hashCode() : 0);
-        result = 31 * result + (errorRuleName != null ? errorRuleName.hashCode() : 0);
-        result = 31 * result + (fatalRuleName != null ? fatalRuleName.hashCode() : 0);
-        return result;
+    public boolean matches(AbstractCheckSpec<?, ?, ?, ?> checkSpec) {
+        return sensorName.equals(checkSpec.getParameters().getSensorDefinitionName())
+                && sensorParametersClass.equals(checkSpec.getParameters().getClass())
+                && warningRuleName.equals(checkSpec.getRuleDefinitionName())
+                && errorRuleName.equals(checkSpec.getRuleDefinitionName())
+                && fatalRuleName.equals(checkSpec.getRuleDefinitionName());
     }
 }

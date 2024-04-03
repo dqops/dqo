@@ -16,12 +16,18 @@
 package com.dqops.checks.column.partitioned.nulls;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNotNullsCountCheckSpec;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNotNullsPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsPercentCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.utils.docs.generators.SampleValueFactory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -46,16 +52,16 @@ public class ColumnNullsMonthlyPartitionedChecksSpec extends AbstractCheckCatego
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Detects incomplete columns that contain any null values. Counts the number of rows having a null value. Raises a data quality issue when the count of null values is above a max_count threshold. Stores a separate data quality check result for each monthly partition.")
     private ColumnNullsCountCheckSpec monthlyPartitionNullsCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Detects incomplete columns that contain any null values. Measures the percentage of rows having a null value. Raises a data quality issue when the percentage of null values is above a max_percent threshold. Stores a separate data quality check result for each monthly partition.")
     private ColumnNullsPercentCheckSpec monthlyPartitionNullsPercent;
 
-    @JsonPropertyDescription("Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count. Stores a separate data quality check result for each monthly partition.")
     private ColumnNotNullsCountCheckSpec monthlyPartitionNotNullsCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of not null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnNotNullsPercentCheckSpec monthlyPartitionNotNullsPercent;
 
     /**
@@ -138,5 +144,58 @@ public class ColumnNullsMonthlyPartitionedChecksSpec extends AbstractCheckCatego
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Gets the check target appropriate for all checks in this category.
+     *
+     * @return Corresponding check target.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return CheckTarget.column;
+    }
+
+    /**
+     * Gets the check type appropriate for all checks in this category.
+     *
+     * @return Corresponding check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.partitioned;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.ANY;
+    }
+
+    /**
+     * Gets the check timescale appropriate for all checks in this category.
+     *
+     * @return Corresponding check timescale.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return CheckTimeScale.monthly;
+    }
+
+    public static class ColumnNullsMonthlyPartitionedChecksSpecSampleFactory implements SampleValueFactory<ColumnNullsMonthlyPartitionedChecksSpec> {
+        @Override
+        public ColumnNullsMonthlyPartitionedChecksSpec createSample() {
+            return new ColumnNullsMonthlyPartitionedChecksSpec() {{
+                setMonthlyPartitionNullsCount(new ColumnNullsCountCheckSpec.ColumnNullsCountCheckSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

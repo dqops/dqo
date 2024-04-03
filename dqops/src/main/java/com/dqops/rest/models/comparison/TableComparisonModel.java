@@ -28,7 +28,8 @@ import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
-import com.dqops.metadata.timeseries.TimePeriodGradient;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -99,6 +100,18 @@ public class TableComparisonModel {
     private CompareThresholdsModel compareRowCount;
 
     /**
+     * The column count comparison configuration.
+     */
+    @JsonPropertyDescription("The column count comparison configuration.")
+    private CompareThresholdsModel compareColumnCount;
+
+    /**
+     * Boolean flag that decides if this comparison type supports comparing the column count between tables. Partitioned table comparisons do not support comparing the column counts.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if this comparison type supports comparing the column count between tables. Partitioned table comparisons do not support comparing the column counts.")
+    private boolean supportsCompareColumnCount;
+
+    /**
      * The list of compared columns, their matching reference column and the enabled comparisons.
      */
     @JsonPropertyDescription("The list of compared columns, their matching reference column and the enabled comparisons.")
@@ -117,19 +130,39 @@ public class TableComparisonModel {
     private DeleteStoredDataQueueJobParameters compareTableCleanDataJobTemplate;
 
     /**
+     * Boolean flag that decides if the current user can update or delete the table comparison.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete the table comparison.")
+    private boolean canEdit;
+
+    /**
+     * Boolean flag that decides if the current user can run comparison checks.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can run comparison checks.")
+    private boolean canRunCompareChecks;
+
+    /**
+     * Boolean flag that decides if the current user can delete data (results).
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
+    private boolean canDeleteData;
+
+    /**
      * Creates a table comparison model, copying the configuration of all comparison checks on the table level and on the column level.
      * @param comparedTableSpec Source table specification (the compared table).
      * @param referenceTableSpec Reference table specification.
      * @param tableComparisonConfigurationName The table comparison name (the reference table configuration name).
-     * @param checkType Check type (profiling, recurring, partitioned).
-     * @param checkTimeScale Check time scale for recurring and partitioned checks.
+     * @param checkType Check type (profiling, monitoring, partitioned).
+     * @param checkTimeScale Check time scale for monitoring and partitioned checks.
+     * @param canCompareTables True if the user can edit, compare tables, delete data.
      * @return Table comparison mode.
      */
     public static TableComparisonModel fromTableSpec(TableSpec comparedTableSpec,
                                                      TableSpec referenceTableSpec,
                                                      String tableComparisonConfigurationName,
                                                      CheckType checkType,
-                                                     CheckTimeScale checkTimeScale) {
+                                                     CheckTimeScale checkTimeScale,
+                                                     boolean canCompareTables) {
         TableComparisonModel tableComparisonModel = new TableComparisonModel();
         HierarchyId comparedTableHierarchyId = comparedTableSpec.getHierarchyId();
         if (comparedTableHierarchyId == null) {
@@ -146,6 +179,9 @@ public class TableComparisonModel {
         tableComparisonModel.comparedTable = comparedTableHierarchyId.getPhysicalTableName();
         tableComparisonModel.referenceConnection = comparisonSpec.getReferenceTableConnectionName();
         tableComparisonModel.referenceTable = new PhysicalTableName(comparisonSpec.getReferenceTableSchemaName(), comparisonSpec.getReferenceTableName());
+        tableComparisonModel.setCanEdit(canCompareTables);
+        tableComparisonModel.setCanRunCompareChecks(canCompareTables);
+        tableComparisonModel.setCanDeleteData(canCompareTables);
 
         for (TableComparisonGroupingColumnsPairSpec groupingColumnsPairSpec : comparisonSpec.getGroupingColumns()) {
             TableComparisonGroupingColumnPairModel tableComparisonGroupingColumnPairModel =
@@ -156,6 +192,7 @@ public class TableComparisonModel {
         AbstractRootChecksContainerSpec tableCheckRootContainer = comparedTableSpec.getTableCheckRootContainer(
                 checkType, checkTimeScale, false);
         AbstractComparisonCheckCategorySpecMap<?> comparisons = tableCheckRootContainer.getComparisons();
+        tableComparisonModel.supportsCompareColumnCount = tableCheckRootContainer.getCheckType() != CheckType.partitioned;
 
         if (comparisons instanceof AbstractTableComparisonCheckCategorySpecMap) {
             AbstractTableComparisonCheckCategorySpecMap<? extends AbstractTableComparisonCheckCategorySpec> tableCheckComparisonsMap =
@@ -165,6 +202,11 @@ public class TableComparisonModel {
             if (tableCheckComparisonChecks != null) {
                 ComparisonCheckRules rowCountMatch = tableCheckComparisonChecks.getCheckSpec(TableCompareCheckType.row_count_match, false);
                 tableComparisonModel.setCompareRowCount(CompareThresholdsModel.fromComparisonCheckSpec(rowCountMatch));
+
+                if (tableCheckComparisonChecks.supportsColumnComparisonCheck()) {
+                    ComparisonCheckRules columnCountMatch = tableCheckComparisonChecks.getCheckSpec(TableCompareCheckType.column_count_match, false);
+                    tableComparisonModel.setCompareColumnCount(CompareThresholdsModel.fromComparisonCheckSpec(columnCountMatch));
+                }
             }
         }
 
@@ -184,8 +226,8 @@ public class TableComparisonModel {
         }
 
         tableComparisonModel.compareTableRunChecksJobTemplate = new CheckSearchFilters() {{
-           setConnectionName(comparedTableHierarchyId.getConnectionName());
-           setSchemaTableName(comparedTableSpec.getPhysicalTableName().toTableSearchFilter());
+           setConnection(comparedTableHierarchyId.getConnectionName());
+           setFullTableName(comparedTableSpec.getPhysicalTableName().toTableSearchFilter());
            setCheckType(checkType);
            setTimeScale(checkTimeScale);
            setCheckCategory(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME);
@@ -194,7 +236,7 @@ public class TableComparisonModel {
         }};
 
         tableComparisonModel.compareTableCleanDataJobTemplate =
-                DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(tableComparisonModel.compareTableRunChecksJobTemplate);
+                DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(tableComparisonModel.compareTableRunChecksJobTemplate, false);
 
         return tableComparisonModel;
     }
@@ -203,7 +245,7 @@ public class TableComparisonModel {
      * Copies the configuration of table comparison on the table level and columns level to correct checks, creating these checks when comparison checks are not enabled.
      * @param targetTableSpec Target table specification to update.
      * @param referenceTableConfigurationName Table comparison name (the reference table configuration name).
-     * @param checkType Check type (profiling, recurring, partitioned).
+     * @param checkType Check type (profiling, monitoring, partitioned).
      * @param checkTimeScale Check time scale.
      */
     public void copyToTableSpec(TableSpec targetTableSpec,
@@ -230,7 +272,7 @@ public class TableComparisonModel {
         groupingColumnsSpecList.clear();
         for (TableComparisonGroupingColumnPairModel groupingColumnPairModel : this.groupingColumns) {
             if (groupingColumnsSpecList.size() >= 9) {
-                throw new DqoRuntimeException("Too many data grouping columns. DQO supports up to 9 columns.");
+                throw new DqoRuntimeException("Too many data grouping columns. DQOps supports up to 9 columns.");
             }
             TableComparisonGroupingColumnsPairSpec groupingColumnsPairSpec = groupingColumnPairModel.createColumnsPairSpec();
             groupingColumnsSpecList.add(groupingColumnsPairSpec);
@@ -249,6 +291,15 @@ public class TableComparisonModel {
             tableCheckComparisonChecks.removeCheckSpec(TableCompareCheckType.row_count_match);
         }
 
+        if (tableCheckComparisonChecks.supportsColumnComparisonCheck()) {
+            if (this.compareColumnCount != null) {
+                ComparisonCheckRules columnCountMatch = tableCheckComparisonChecks.getCheckSpec(TableCompareCheckType.column_count_match, true);
+                this.compareColumnCount.copyToComparisonCheckSpec(columnCountMatch);
+            } else {
+                tableCheckComparisonChecks.removeCheckSpec(TableCompareCheckType.column_count_match);
+            }
+        }
+
         for (ColumnComparisonModel columnComparisonModel : this.columns) {
             String comparedColumnName = columnComparisonModel.getComparedColumnName();
             if (comparedColumnName == null) {
@@ -261,6 +312,25 @@ public class TableComparisonModel {
             }
 
             columnComparisonModel.copyToColumnSpec(columnSpec, referenceTableConfigurationName, checkType, checkTimeScale);
+        }
+    }
+
+    public static class TableComparisonModelSampleFactory implements SampleValueFactory<TableComparisonModel> {
+        @Override
+        public TableComparisonModel createSample() {
+            TableSpec.TableSpecSampleFactory tableSpecSampleFactory = new TableSpec.TableSpecSampleFactory();
+            TableSpec tableSpec1 = tableSpecSampleFactory.createSample();
+            TableSpec tableSpec2 = tableSpecSampleFactory.createSample();
+            String tableComparisonName = SampleStringsRegistry.getTableComparison();
+            TableComparisonConfigurationSpec tableComparisonConfigurationSpec = new TableComparisonConfigurationSpec.TableComparisonConfigurationSpecSampleFactory().createSample();
+            tableSpec1.getTableComparisons().put(tableComparisonName, tableComparisonConfigurationSpec);
+            return fromTableSpec(
+                    tableSpec1,
+                    tableSpec2,
+                    tableComparisonName,
+                    new CheckType.CheckTypeSampleFactory().createSample(),
+                    new CheckTimeScale.CheckTimeScaleSampleFactory().createSample(),
+                    true);
         }
     }
 }

@@ -16,6 +16,8 @@
 
 package com.dqops.rest.models.common;
 
+import com.dqops.utils.docs.generators.SampleValueFactory;
+
 /**
  * REST api model sort direction.
  */
@@ -29,4 +31,11 @@ public enum SortDirection {
      * Descending sort order.
      */
     desc;
+
+    public static class SortDirectionSampleFactory implements SampleValueFactory<SortDirection> {
+        @Override
+        public SortDirection createSample() {
+            return desc;
+        }
+    }
 }

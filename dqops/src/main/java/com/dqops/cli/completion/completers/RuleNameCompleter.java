@@ -28,10 +28,7 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.StaticBeanFactory;
 import org.springframework.beans.factory.BeanFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Rule list CLI parameter autocompletion source that should be applied on CLI command parameters
@@ -60,7 +57,7 @@ public class RuleNameCompleter implements Iterable<String> {
 
 						RuleDefinitionList userHomeRules = userHome.getRules();
 						RuleDefinitionList localDqoRules = dqoHome.getRules();
-						HashSet<String> ruleNames = new HashSet<>();
+						Set<String> ruleNames = new LinkedHashSet<>();
 
 						for (RuleDefinitionWrapper rule : userHomeRules) {
 							ruleNames.add(rule.getRuleName());

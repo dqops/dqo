@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/whitespace/empty_text_count
+  rule_name: comparison/max_count
+  help_text: "Detects empty texts (not null, zero-length texts). This check counts\
+    \ empty and raises a data quality issue when their count exceeds a *max_count*\
+    \ parameter value. Stores a separate data quality check result for each daily\
+    \ partition."
+  standard: true

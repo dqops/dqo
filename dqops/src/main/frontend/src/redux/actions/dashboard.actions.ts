@@ -1,5 +1,5 @@
 ///
-/// Copyright © 2021 DQOps (support@dqops.com)
+/// Copyright © 2024 DQOps (support@dqops.com)
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import { DashboardsApi } from '../../services/apiClient';
 import { DASHBOARD_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
 import { DashboardsFolderSpec } from "../../api";
+import { TDashboardTootlipProps } from '../reducers/dashboard.reducer';
 
 export const getDashboardsRequest = () => ({
   type: DASHBOARD_ACTION.GET_DASHBOARDS
@@ -45,4 +46,9 @@ export const getAllDashboards = () => async (dispatch: Dispatch) => {
     dispatch(getDashboardsFailed(err));
   }
 };
+
+export const getDashboardTooltipState = (dashboardTooltipState: TDashboardTootlipProps) => ({
+  type: DASHBOARD_ACTION.TOGGLE_DASHBOARD_TOOLTIP,
+  dashboardTooltipState
+})
 

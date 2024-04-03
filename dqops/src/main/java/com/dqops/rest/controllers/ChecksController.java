@@ -15,8 +15,10 @@
  */
 package com.dqops.rest.controllers;
 
-import com.dqops.core.jobqueue.DqoQueueJobId;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.definitions.checks.CheckDefinitionList;
+import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapper;
 import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
@@ -24,16 +26,19 @@ import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rest.models.metadata.CheckSpecFolderBasicModel;
-import com.dqops.rest.models.metadata.CheckSpecBasicModel;
-import com.dqops.rest.models.metadata.CheckSpecModel;
+import com.dqops.rest.models.metadata.CheckDefinitionFolderModel;
+import com.dqops.rest.models.metadata.CheckDefinitionListModel;
+import com.dqops.rest.models.metadata.CheckDefinitionModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import autovalue.shaded.com.google.common.base.Strings;
+import com.dqops.core.principal.DqoUserPrincipal;
 import io.swagger.annotations.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -47,9 +52,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Checks", description = "Data quality check definition management")
+@Api(value = "Checks", description = "Data quality check definition management operations for adding/removing/changing custom data quality checks.")
 public class ChecksController {
-
     private DqoHomeContextFactory dqoHomeContextFactory;
     private UserHomeContextFactory userHomeContextFactory;
 
@@ -65,26 +69,56 @@ public class ChecksController {
     }
 
     /**
+     * Returns a flat list of all checks
+     * @return List of all checks
+     */
+    @GetMapping(value = "/checks", produces = "application/json")
+    @ApiOperation(value = "getAllChecks", notes = "Returns a flat list of all checks available in DQOps, both built-in checks and user defined or customized checks.",
+            response = CheckDefinitionListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = CheckDefinitionListModel[].class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<CheckDefinitionListModel>> getAllChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
+        CheckDefinitionFolderModel checkDefinitionFolderModel = createCheckTreeModel(principal);
+        List<CheckDefinitionListModel> allChecks = checkDefinitionFolderModel.getAllChecks();
+        allChecks.sort(Comparator.comparing(model -> model.getFullCheckName()));
+
+        return new ResponseEntity<>(Flux.fromStream(allChecks.stream()), HttpStatus.OK);
+    }
+
+    /**
      * Returns the configuration of a check, first looking up if it is a custom check, then looking up if it is a built-in check.
      * @param fullCheckName Full check name.
      * @return Model of the check with specific check name.
      */
     @GetMapping(value = "/checks/{fullCheckName}", produces = "application/json")
-    @ApiOperation(value = "getCheck", notes = "Returns a check definition", response = CheckSpecModel.class)
+    @ApiOperation(value = "getCheck", notes = "Returns a check definition", response = CheckDefinitionModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = CheckSpecModel.class),
+            @ApiResponse(code = 200, message = "OK", response = CheckDefinitionModel.class),
             @ApiResponse(code = 404, message = "Check name not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckSpecModel>> getCheck(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckDefinitionModel>> getCheck(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full check name") @PathVariable String fullCheckName) {
 
         if (Strings.isNullOrEmpty(fullCheckName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         CheckDefinitionWrapper userCheckDefinitionWrapper = userHome.getChecks().getByObjectName(fullCheckName, true);
 
@@ -100,35 +134,46 @@ public class ChecksController {
 
         boolean isCustom = userCheckDefinitionWrapper != null;
         boolean isBuiltIn = builtinCheckDefinitionWrapper != null;
-        CheckSpecModel checkSpecModel = new CheckSpecModel(effectiveCheckDefinition, isCustom, isBuiltIn);
+        boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+        CheckDefinitionModel checkDefinitionModel = new CheckDefinitionModel(effectiveCheckDefinition, isCustom, isBuiltIn, canEdit);
 
-        return new ResponseEntity<>(Mono.just(checkSpecModel), HttpStatus.OK);
+        return new ResponseEntity<>(Mono.just(checkDefinitionModel), HttpStatus.OK);
     }
 
     /**
      * Creates (adds) a new custom check given the check information (a sensor and a rule pair).
-     * @param checkSpecModel Check model to save.
+     * @param checkDefinitionModel Check model to save.
      * @param fullCheckName Full check name.
      * @return Empty response.
      */
     @PostMapping(value = "/checks/{fullCheckName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createCheck", notes = "Creates (adds) a new custom check that is a pair of a sensor name and a rule name.")
+    @ApiOperation(value = "createCheck", notes = "Creates (adds) a new custom check that is a pair of a sensor name and a rule name.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New custom check successfully created"),
+            @ApiResponse(code = 201, message = "New custom check successfully created", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 409, message = "Custom check with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> createCheck(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> createCheck(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full check name") @PathVariable String fullCheckName,
-            @ApiParam("Check model") @RequestBody CheckSpecModel checkSpecModel) {
-        if (checkSpecModel == null || Strings.isNullOrEmpty(fullCheckName)) {
+            @ApiParam("Check model") @RequestBody CheckDefinitionModel checkDefinitionModel) {
+        if (checkDefinitionModel == null || Strings.isNullOrEmpty(fullCheckName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        String[] fullCheckNameSplit = fullCheckName.split("/");
+        if (!fullCheckNameSplit[fullCheckNameSplit.length - 1].equals(checkDefinitionModel.getCheckName())) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST);
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         CheckDefinitionList userCheckDefinitionList = userHome.getChecks();
@@ -138,8 +183,8 @@ public class ChecksController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
         }
 
-        CheckDefinitionWrapper checkDefinitionWrapper = userCheckDefinitionList.createAndAddNew(checkSpecModel.getRuleName());
-        checkDefinitionWrapper.setSpec(checkSpecModel.toCheckDefinitionSpec());
+        CheckDefinitionWrapper checkDefinitionWrapper = userCheckDefinitionList.createAndAddNew(fullCheckName);
+        checkDefinitionWrapper.setSpec(checkDefinitionModel.toCheckDefinitionSpec());
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
@@ -147,29 +192,34 @@ public class ChecksController {
 
     /**
      * Updates an existing check, creating possibly a custom check.
-     * @param checkSpecModel Check definition model.
+     * @param checkDefinitionModel Check definition model.
      * @param fullCheckName Full check name.
      * @return Empty response.
      */
     @PutMapping(value = "/checks/{fullCheckName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateCheck", notes = "Updates an existing check, making a custom check definition if it is not present")
+    @ApiOperation(value = "updateCheck", notes = "Updates an existing check, making a custom check definition if it is not present", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Custom check successfully updated"),
+            @ApiResponse(code = 204, message = "Custom check successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 404, message = "Check not found"),
             @ApiResponse(code = 409, message = "Cannot change a check definition of a built-in check"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateCheck(
-            @ApiParam("List of check definitions") @RequestBody CheckSpecModel checkSpecModel,
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateCheck(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("List of check definitions") @RequestBody CheckDefinitionModel checkDefinitionModel,
             @ApiParam("Full check name") @PathVariable String fullCheckName) {
 
-        if (Strings.isNullOrEmpty(fullCheckName) || checkSpecModel == null) {
+        if (Strings.isNullOrEmpty(fullCheckName) || checkDefinitionModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         CheckDefinitionList userCheckDefinitionList = userHome.getChecks();
         CheckDefinitionWrapper existingUserCheckDefinitionWrapper = userCheckDefinitionList.getByObjectName(fullCheckName, true);
@@ -186,7 +236,7 @@ public class ChecksController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
         }
 
-        if (checkSpecModel.equalsBuiltInCheck(builtinCheckDefinitionWrapper)) {
+        if (checkDefinitionModel.equalsBuiltInCheck(builtinCheckDefinitionWrapper)) {
             if (existingUserCheckDefinitionWrapper != null) {
                 existingUserCheckDefinitionWrapper.markForDeletion(); // remove customization
             }
@@ -196,12 +246,14 @@ public class ChecksController {
             }
         }
 
+        CheckDefinitionSpec newCheckDefinitionSpec = checkDefinitionModel.toCheckDefinitionSpec();
         if (existingUserCheckDefinitionWrapper == null) {
             CheckDefinitionWrapper checkDefinitionWrapper = userCheckDefinitionList.createAndAddNew(fullCheckName);
-            checkDefinitionWrapper.setSpec(checkSpecModel.toCheckDefinitionSpec());
+            checkDefinitionWrapper.setSpec(newCheckDefinitionSpec);
         }
         else {
-            existingUserCheckDefinitionWrapper.setSpec(checkSpecModel.toCheckDefinitionSpec());
+            CheckDefinitionSpec oldCheckDefinitionSpec = existingUserCheckDefinitionWrapper.getSpec();  // loading
+            existingUserCheckDefinitionWrapper.setSpec(newCheckDefinitionSpec);
         }
 
         userHomeContext.flush();
@@ -215,21 +267,26 @@ public class ChecksController {
      * @return Empty response.
      */
     @DeleteMapping(value = "/checks/{fullCheckName}", produces = "application/json")
-    @ApiOperation(value = "deleteCheck", notes = "Deletes a custom check definition")
+    @ApiOperation(value = "deleteCheck", notes = "Deletes a custom check definition", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Custom check definition successfully deleted", response = DqoQueueJobId.class),
+            @ApiResponse(code = 200, message = "Custom check definition successfully deleted", response = Void.class),
             @ApiResponse(code = 404, message = "Custom check not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> deleteCheck(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> deleteCheck(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full check name") @PathVariable String fullCheckName) {
 
         if (Strings.isNullOrEmpty(fullCheckName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         CheckDefinitionList userCheckDefinitionList = userHome.getChecks();
@@ -250,17 +307,22 @@ public class ChecksController {
      * @return check basic tree model.
      */
     @GetMapping(value = "/definitions/checks", produces = "application/json")
-    @ApiOperation(value = "getCheckFolderTree", notes = "Returns a tree of all checks available in DQO, both built-in checks and user defined or customized checks.",
-            response = CheckSpecFolderBasicModel.class)
+    @ApiOperation(value = "getCheckFolderTree", notes = "Returns a tree of all checks available in DQOps, both built-in checks and user defined or customized checks.",
+            response = CheckDefinitionFolderModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = CheckSpecFolderBasicModel.class),
+            @ApiResponse(code = 200, message = "OK", response = CheckDefinitionFolderModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
-    public ResponseEntity<Mono<CheckSpecFolderBasicModel>> getCheckFolderTree() {
-        CheckSpecFolderBasicModel checkSpecFolderBasicModel = createCheckTreeModel();
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckDefinitionFolderModel>> getCheckFolderTree(
+            @AuthenticationPrincipal DqoUserPrincipal principal) {
+        CheckDefinitionFolderModel checkDefinitionFolderModel = createCheckTreeModel(principal);
 
-        return new ResponseEntity<>(Mono.just(checkSpecFolderBasicModel), HttpStatus.OK);
+        return new ResponseEntity<>(Mono.just(checkDefinitionFolderModel), HttpStatus.OK);
     }
 
     /**
@@ -268,54 +330,45 @@ public class ChecksController {
      * @return Check tree.
      */
     @NotNull
-    private CheckSpecFolderBasicModel createCheckTreeModel() {
-        CheckSpecFolderBasicModel checkSpecFolderBasicModel = new CheckSpecFolderBasicModel();
+    private CheckDefinitionFolderModel createCheckTreeModel(DqoUserPrincipal principal) {
+        CheckDefinitionFolderModel checkDefinitionFolderModel = new CheckDefinitionFolderModel();
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
         List<CheckDefinitionWrapper> checkDefinitionWrapperListDqoHome = new ArrayList<>(dqoHome.getChecks().toList());
-        checkDefinitionWrapperListDqoHome.sort(Comparator.comparing(rw -> rw.getCheckName()));
-        Set<String> builtInCheckNames = checkDefinitionWrapperListDqoHome.stream().map(rw -> rw.getCheckName()).collect(Collectors.toSet());
+        checkDefinitionWrapperListDqoHome.sort(Comparator.comparing((CheckDefinitionWrapper rw) -> !rw.getSpec().isStandard())
+                        .thenComparing(rw -> rw.getCheckName()));
+        List<String> builtInCheckNames = checkDefinitionWrapperListDqoHome.stream().map(rw -> rw.getCheckName()).collect(Collectors.toList());
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         List<CheckDefinitionWrapper> checkDefinitionWrapperListUserHome = new ArrayList<>(userHome.getChecks().toList());
-        checkDefinitionWrapperListUserHome.sort(Comparator.comparing(rw -> rw.getCheckName()));
-        Set<String> customCheckNames = checkDefinitionWrapperListUserHome.stream().map(rw -> rw.getCheckName()).collect(Collectors.toSet());
-
-        for (CheckDefinitionWrapper checkDefinitionWrapperUserHome : checkDefinitionWrapperListUserHome) {
-            String checkNameUserHome = checkDefinitionWrapperUserHome.getCheckName();
-            checkSpecFolderBasicModel.addCheck(checkNameUserHome, true, builtInCheckNames.contains(checkNameUserHome));
-        }
+        checkDefinitionWrapperListUserHome.sort(Comparator.comparing((CheckDefinitionWrapper rw) -> !rw.getSpec().isStandard())
+                .thenComparing(rw -> rw.getCheckName()));
+        List<String> customCheckNames = checkDefinitionWrapperListUserHome.stream().map(rw -> rw.getCheckName()).collect(Collectors.toList());
+        boolean canEditDefinitions = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
 
         for (CheckDefinitionWrapper checkDefinitionWrapperDqoHome : checkDefinitionWrapperListDqoHome) {
             String checkNameDqoHome = checkDefinitionWrapperDqoHome.getCheckName();
-            checkSpecFolderBasicModel.addCheck(checkNameDqoHome, customCheckNames.contains(checkNameDqoHome), true);
+            checkDefinitionFolderModel.addCheck(checkNameDqoHome, customCheckNames.contains(checkNameDqoHome), true, canEditDefinitions, checkDefinitionWrapperDqoHome.getSpec().getYamlParsingError());
         }
 
-        if (!checkSpecFolderBasicModel.getFolders().containsKey("custom")) {
-            checkSpecFolderBasicModel.getFolders().put("custom", new CheckSpecFolderBasicModel());
+        for (CheckDefinitionWrapper checkDefinitionWrapperUserHome : checkDefinitionWrapperListUserHome) {
+            String checkNameUserHome = checkDefinitionWrapperUserHome.getCheckName();
+            checkDefinitionFolderModel.addCheck(checkNameUserHome, true, builtInCheckNames.contains(checkNameUserHome), canEditDefinitions, checkDefinitionWrapperUserHome.getSpec().getYamlParsingError());
         }
 
-        return checkSpecFolderBasicModel;
-    }
+        checkDefinitionFolderModel.addFolderIfMissing("table/profiling/custom");
+        checkDefinitionFolderModel.addFolderIfMissing("column/profiling/custom");
+        checkDefinitionFolderModel.addFolderIfMissing("table/monitoring/daily/custom");
+        checkDefinitionFolderModel.addFolderIfMissing("column/monitoring/daily/custom");
+        checkDefinitionFolderModel.addFolderIfMissing("table/monitoring/monthly/custom");
+        checkDefinitionFolderModel.addFolderIfMissing("column/monitoring/monthly/custom");
+        checkDefinitionFolderModel.addFolderIfMissing("table/partitioned/daily/custom");
+        checkDefinitionFolderModel.addFolderIfMissing("column/partitioned/daily/custom");
+        checkDefinitionFolderModel.addFolderIfMissing("table/partitioned/monthly/custom");
+        checkDefinitionFolderModel.addFolderIfMissing("column/partitioned/monthly/custom");
 
-    /**
-     * Returns a flat list of all checks
-     * @return List of all checks
-     */
-    @GetMapping(value = "/checks", produces = "application/json")
-    @ApiOperation(value = "getAllChecks", notes = "Returns a flat list of all checks available in DQO, both built-in checks and user defined or customized checks.",
-            response = CheckSpecBasicModel[].class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = CheckSpecBasicModel[].class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
-    })
-    public ResponseEntity<Flux<CheckSpecBasicModel>> getAllChecks() {
-        CheckSpecFolderBasicModel checkSpecFolderBasicModel = createCheckTreeModel();
-        List<CheckSpecBasicModel> allChecks = checkSpecFolderBasicModel.getAllChecks();
-
-        return new ResponseEntity<>(Flux.fromStream(allChecks.stream()), HttpStatus.OK);
+        return checkDefinitionFolderModel;
     }
 }

@@ -24,7 +24,7 @@ import com.dqops.cli.commands.check.impl.CheckCliService;
 import com.dqops.cli.completion.completedcommands.ITableNameCommand;
 import com.dqops.cli.completion.completers.*;
 import com.dqops.cli.output.OutputFormatService;
-import com.dqops.cli.terminal.FileWritter;
+import com.dqops.cli.terminal.FileWriter;
 import com.dqops.cli.terminal.TablesawDatasetTableModel;
 import com.dqops.cli.terminal.TerminalTableWritter;
 import com.dqops.cli.terminal.TerminalWriter;
@@ -35,7 +35,6 @@ import com.dqops.execution.checks.progress.CheckExecutionProgressListenerProvide
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
-import com.dqops.services.check.CheckService;
 import com.dqops.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -58,7 +57,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
     private JsonSerializer jsonSerializer;
     private OutputFormatService outputFormatService;
-    private FileWritter fileWritter;
+    private FileWriter fileWriter;
 
     public CheckRunCliCommand() {
     }
@@ -76,21 +75,21 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
                               CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
                               JsonSerializer jsonSerializer,
                               OutputFormatService outputFormatService,
-                              FileWritter fileWritter) {
+                              FileWriter fileWriter) {
         this.terminalWriter = terminalWriter;
         this.terminalTableWritter = terminalTableWritter;
         this.checkService = checkService;
         this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
         this.jsonSerializer = jsonSerializer;
         this.outputFormatService = outputFormatService;
-        this.fileWritter = fileWritter;
+        this.fileWriter = fileWriter;
     }
 
     @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name, supports patterns like 'conn*'",
             completionCandidates = ConnectionNameCompleter.class)
     private String connection;
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'",
+    @CommandLine.Option(names = {"-t", "--table", "--full-table-name"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'",
             completionCandidates = FullTableNameCompleter.class)
     private String table;
 
@@ -109,10 +108,10 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-e", "--enabled"}, description = "Runs only enabled or only disabled sensors, by default only enabled sensors are executed", defaultValue = "true")
     private Boolean enabled = true;
 
-    @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (profiling, recurring, partitioned)")
+    @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (profiling, monitoring, partitioned)")
     private CheckType checkType;
 
-    @CommandLine.Option(names = {"-ts", "--time-scale"}, description = "Time scale for recurring and partitioned checks (daily, monthly, etc.)")
+    @CommandLine.Option(names = {"-ts", "--time-scale"}, description = "Time scale for monitoring and partitioned checks (daily, monthly, etc.)")
     private CheckTimeScale timeScale;
 
     @CommandLine.Option(names = {"-cat", "--category"}, description = "Check category name (volume, nulls, numeric, etc.)")
@@ -121,10 +120,13 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-d", "--dummy"}, description = "Runs data quality check in a dummy mode, sensors are not executed on the target database, but the rest of the process is performed", defaultValue = "false")
     private boolean dummyRun;
 
+    @CommandLine.Option(names = {"-fe", "--fail-on-execution-errors"}, description = "Returns a command status code 4 (when called from the command line) if any execution errors were raised during the execution, the default value is true.", defaultValue = "true")
+    private boolean failOnExecutionErrors = true;
+
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, info, debug)", defaultValue = "summary")
     private CheckRunReportingMode mode = CheckRunReportingMode.summary;
 
-    @CommandLine.Option(names = {"-tag", "--data-stream-level-tag"}, description = "Data stream hierarchy level filter (tag)",
+    @CommandLine.Option(names = {"-tag", "--data-grouping-level-tag"}, description = "Data grouping hierarchy level filter (tag)",
             required = false)
     private String[] tags;
 
@@ -250,7 +252,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     }
 
     /**
-     * Gets the time scale filter for recurring and partitioned checks.
+     * Gets the time scale filter for monitoring and partitioned checks.
      * @return Time scale filter.
      */
     public CheckTimeScale getTimeScale() {
@@ -258,7 +260,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     }
 
     /**
-     * Sets the time scale filter for recurring and partitioned checks.
+     * Sets the time scale filter for monitoring and partitioned checks.
      * @param timeScale Time scale filter.
      */
     public void setTimeScale(CheckTimeScale timeScale) {
@@ -370,9 +372,9 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @Override
     public Integer call() throws Exception {
         CheckSearchFilters filters = new CheckSearchFilters();
-        filters.setConnectionName(this.connection);
-        filters.setSchemaTableName(this.table);
-        filters.setColumnName(this.column);
+        filters.setConnection(this.connection);
+        filters.setFullTableName(this.table);
+        filters.setColumn(this.column);
         filters.setCheckName(this.check);
         filters.setSensorName(this.sensor);
         filters.setCheckType(this.checkType);
@@ -397,7 +399,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
                 case CSV: {
                     String csvContent = this.outputFormatService.tableToCsv(tablesawDatasetTableModel);
                     if (this.isWriteToFile()) {
-                        CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(csvContent);
+                        CliOperationStatus cliOperationStatus = this.fileWriter.writeStringToFile(csvContent);
                         this.terminalWriter.writeLine(cliOperationStatus.getMessage());
                     }
                     else {
@@ -408,7 +410,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
                 case JSON: {
                     String jsonContent = this.outputFormatService.tableToJson(tablesawDatasetTableModel);
                     if (this.isWriteToFile()) {
-                        CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(jsonContent);
+                        CliOperationStatus cliOperationStatus = this.fileWriter.writeStringToFile(jsonContent);
                         this.terminalWriter.writeLine(cliOperationStatus.getMessage());
                     }
                     else {
@@ -422,7 +424,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
                         tableBuilder.addInnerBorder(BorderStyle.oldschool);
                         tableBuilder.addHeaderBorder(BorderStyle.oldschool);
                         String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
-                        CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(renderedTable);
+                        CliOperationStatus cliOperationStatus = this.fileWriter.writeStringToFile(renderedTable);
                         this.terminalWriter.writeLine(cliOperationStatus.getMessage());
                     }
                     else {
@@ -440,6 +442,11 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
                     this.terminalWriter.writeLine(checkExecutionErrorSummary.getSummaryMessage());
                 }
             }
+        }
+
+        int executionErrorsCount = checkExecutionSummary.getTotalExecutionErrorsCount();
+        if (this.failOnExecutionErrors && executionErrorsCount > 0) {
+            return 4;
         }
 
         int fatalIssuesCount = checkExecutionSummary.getFatalSeverityIssuesCount();

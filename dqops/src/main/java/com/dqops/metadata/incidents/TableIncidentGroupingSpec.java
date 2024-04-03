@@ -21,6 +21,7 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -161,5 +162,17 @@ public class TableIncidentGroupingSpec extends AbstractSpec implements Cloneable
     public TableIncidentGroupingSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         TableIncidentGroupingSpec cloned = this.deepClone();
         return cloned;
+    }
+
+    public static class TableIncidentGroupingSpecSampleFactory implements SampleValueFactory<TableIncidentGroupingSpec> {
+        @Override
+        public TableIncidentGroupingSpec createSample() {
+            return new TableIncidentGroupingSpec() {{
+                setGroupingLevel(IncidentGroupingLevel.table_dimension);
+                setMinimumSeverity(MinimumGroupingSeverityLevel.warning);
+                setDivideByDataGroup(true);
+                setDisabled(false);
+            }};
+        }
     }
 }

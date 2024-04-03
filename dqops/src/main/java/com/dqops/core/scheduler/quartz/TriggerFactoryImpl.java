@@ -16,7 +16,7 @@
 package com.dqops.core.scheduler.quartz;
 
 import com.dqops.core.scheduler.JobSchedulerException;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.cronutils.mapper.CronMapper;
 import com.cronutils.model.Cron;
@@ -46,8 +46,8 @@ public class TriggerFactoryImpl implements TriggerFactory {
     private CronParser unixCronParser = new CronParser(unixCronDefinition);
 
     /**
-     * Creates a Quartz trigger factory that converts DQO schedules to Quartz cron triggers.
-     * @param jobDataMapAdapter DQO Job data adapter that stores and retrieves additional objects in jobs.
+     * Creates a Quartz trigger factory that converts DQOps schedules to Quartz cron triggers.
+     * @param jobDataMapAdapter DQOps Job data adapter that stores and retrieves additional objects in jobs.
      * @param defaultTimeZoneProvider Default time zone provider.
      */
     @Autowired
@@ -81,7 +81,7 @@ public class TriggerFactoryImpl implements TriggerFactory {
      * @return Trigger.
      */
     @Override
-    public Trigger createTrigger(RecurringScheduleSpec schedule, JobKey jobKey) {
+    public Trigger createTrigger(MonitoringScheduleSpec schedule, JobKey jobKey) {
         JobDataMap triggerJobData = new JobDataMap();
         jobDataMapAdapter.setSchedule(triggerJobData, schedule);
 

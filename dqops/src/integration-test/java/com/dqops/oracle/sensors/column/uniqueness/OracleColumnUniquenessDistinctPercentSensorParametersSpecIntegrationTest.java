@@ -17,7 +17,6 @@ package com.dqops.oracle.sensors.column.uniqueness;
  */
 
 
-import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.uniqueness.ColumnDistinctPercentCheckSpec;
 import com.dqops.connectors.ProviderType;
@@ -70,8 +69,8 @@ public class OracleColumnUniquenessDistinctPercentSensorParametersSpecIntegratio
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+    void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "correct", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -83,8 +82,8 @@ public class OracleColumnUniquenessDistinctPercentSensorParametersSpecIntegratio
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+    void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "correct", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

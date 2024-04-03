@@ -49,11 +49,29 @@ public interface TerminalTableWritter {
 	void writeTable(Table table, boolean addBorder);
 
 	/**
+	 * Writes a table dataset with paging with a header that is extracted from the column names.
+	 * @param table Table (dataset).
+	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 * @param noHeader Whether the header should be rendered.
+	 */
+	void writeTable(Table table, boolean addBorder, boolean noHeader);
+
+	/**
 	 * Renders a table with paging using a given table model.
 	 * @param tableModel Table model for the spring shell table.
 	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
 	 */
 	void writeTable(TableModel tableModel, boolean addBorder);
+
+	/**
+	 * Renders a table with paging using a given table model.
+	 * @param tableModel Table model for the spring shell table.
+	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 * @param noHeader Whether to push the first line as a row or only as a header.
+	 *                 If set to true, the first row is pushed as a header providing a valid number of columns.
+	 *                 Then the header values should be treated as placeholders.
+	 */
+	void writeTable(TableModel tableModel, boolean addBorder, boolean noHeader);
 
 	/**
 	 * Renders a table model.

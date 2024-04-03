@@ -1,10 +1,14 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_accepted_values_profiling_checks_spec import (
+        ColumnAcceptedValuesProfilingChecksSpec,
+    )
     from ..models.column_accuracy_profiling_checks_spec import (
         ColumnAccuracyProfilingChecksSpec,
     )
@@ -12,6 +16,12 @@ if TYPE_CHECKING:
         ColumnAnomalyProfilingChecksSpec,
     )
     from ..models.column_bool_profiling_checks_spec import ColumnBoolProfilingChecksSpec
+    from ..models.column_conversions_profiling_checks_spec import (
+        ColumnConversionsProfilingChecksSpec,
+    )
+    from ..models.column_custom_sql_profiling_checks_spec import (
+        ColumnCustomSqlProfilingChecksSpec,
+    )
     from ..models.column_datatype_profiling_checks_spec import (
         ColumnDatatypeProfilingChecksSpec,
     )
@@ -27,6 +37,9 @@ if TYPE_CHECKING:
     from ..models.column_numeric_profiling_checks_spec import (
         ColumnNumericProfilingChecksSpec,
     )
+    from ..models.column_patterns_profiling_checks_spec import (
+        ColumnPatternsProfilingChecksSpec,
+    )
     from ..models.column_pii_profiling_checks_spec import ColumnPiiProfilingChecksSpec
     from ..models.column_profiling_check_categories_spec_comparisons import (
         ColumnProfilingCheckCategoriesSpecComparisons,
@@ -37,36 +50,40 @@ if TYPE_CHECKING:
     from ..models.column_schema_profiling_checks_spec import (
         ColumnSchemaProfilingChecksSpec,
     )
-    from ..models.column_sql_profiling_checks_spec import ColumnSqlProfilingChecksSpec
-    from ..models.column_strings_profiling_checks_spec import (
-        ColumnStringsProfilingChecksSpec,
-    )
+    from ..models.column_text_profiling_checks_spec import ColumnTextProfilingChecksSpec
     from ..models.column_uniqueness_profiling_checks_spec import (
         ColumnUniquenessProfilingChecksSpec,
+    )
+    from ..models.column_whitespace_profiling_checks_spec import (
+        ColumnWhitespaceProfilingChecksSpec,
     )
 
 
 T = TypeVar("T", bound="ColumnProfilingCheckCategoriesSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnProfilingCheckCategoriesSpec:
     """
     Attributes:
         custom (Union[Unset, ColumnProfilingCheckCategoriesSpecCustom]): Dictionary of custom checks. The keys are check
-            names.
+            names within this category.
         nulls (Union[Unset, ColumnNullsProfilingChecksSpec]):
-        numeric (Union[Unset, ColumnNumericProfilingChecksSpec]):
-        strings (Union[Unset, ColumnStringsProfilingChecksSpec]):
         uniqueness (Union[Unset, ColumnUniquenessProfilingChecksSpec]):
-        datetime_ (Union[Unset, ColumnDatetimeProfilingChecksSpec]):
+        accepted_values (Union[Unset, ColumnAcceptedValuesProfilingChecksSpec]):
+        text (Union[Unset, ColumnTextProfilingChecksSpec]):
+        whitespace (Union[Unset, ColumnWhitespaceProfilingChecksSpec]):
+        conversions (Union[Unset, ColumnConversionsProfilingChecksSpec]):
+        patterns (Union[Unset, ColumnPatternsProfilingChecksSpec]):
         pii (Union[Unset, ColumnPiiProfilingChecksSpec]):
-        sql (Union[Unset, ColumnSqlProfilingChecksSpec]):
+        numeric (Union[Unset, ColumnNumericProfilingChecksSpec]):
+        anomaly (Union[Unset, ColumnAnomalyProfilingChecksSpec]):
+        datetime_ (Union[Unset, ColumnDatetimeProfilingChecksSpec]):
         bool_ (Union[Unset, ColumnBoolProfilingChecksSpec]):
         integrity (Union[Unset, ColumnIntegrityProfilingChecksSpec]):
         accuracy (Union[Unset, ColumnAccuracyProfilingChecksSpec]):
+        custom_sql (Union[Unset, ColumnCustomSqlProfilingChecksSpec]):
         datatype (Union[Unset, ColumnDatatypeProfilingChecksSpec]):
-        anomaly (Union[Unset, ColumnAnomalyProfilingChecksSpec]):
         schema (Union[Unset, ColumnSchemaProfilingChecksSpec]):
         comparisons (Union[Unset, ColumnProfilingCheckCategoriesSpecComparisons]): Dictionary of configuration of checks
             for table comparisons at a column level. The key that identifies each comparison must match the name of a data
@@ -75,20 +92,24 @@ class ColumnProfilingCheckCategoriesSpec:
 
     custom: Union[Unset, "ColumnProfilingCheckCategoriesSpecCustom"] = UNSET
     nulls: Union[Unset, "ColumnNullsProfilingChecksSpec"] = UNSET
-    numeric: Union[Unset, "ColumnNumericProfilingChecksSpec"] = UNSET
-    strings: Union[Unset, "ColumnStringsProfilingChecksSpec"] = UNSET
     uniqueness: Union[Unset, "ColumnUniquenessProfilingChecksSpec"] = UNSET
-    datetime_: Union[Unset, "ColumnDatetimeProfilingChecksSpec"] = UNSET
+    accepted_values: Union[Unset, "ColumnAcceptedValuesProfilingChecksSpec"] = UNSET
+    text: Union[Unset, "ColumnTextProfilingChecksSpec"] = UNSET
+    whitespace: Union[Unset, "ColumnWhitespaceProfilingChecksSpec"] = UNSET
+    conversions: Union[Unset, "ColumnConversionsProfilingChecksSpec"] = UNSET
+    patterns: Union[Unset, "ColumnPatternsProfilingChecksSpec"] = UNSET
     pii: Union[Unset, "ColumnPiiProfilingChecksSpec"] = UNSET
-    sql: Union[Unset, "ColumnSqlProfilingChecksSpec"] = UNSET
+    numeric: Union[Unset, "ColumnNumericProfilingChecksSpec"] = UNSET
+    anomaly: Union[Unset, "ColumnAnomalyProfilingChecksSpec"] = UNSET
+    datetime_: Union[Unset, "ColumnDatetimeProfilingChecksSpec"] = UNSET
     bool_: Union[Unset, "ColumnBoolProfilingChecksSpec"] = UNSET
     integrity: Union[Unset, "ColumnIntegrityProfilingChecksSpec"] = UNSET
     accuracy: Union[Unset, "ColumnAccuracyProfilingChecksSpec"] = UNSET
+    custom_sql: Union[Unset, "ColumnCustomSqlProfilingChecksSpec"] = UNSET
     datatype: Union[Unset, "ColumnDatatypeProfilingChecksSpec"] = UNSET
-    anomaly: Union[Unset, "ColumnAnomalyProfilingChecksSpec"] = UNSET
     schema: Union[Unset, "ColumnSchemaProfilingChecksSpec"] = UNSET
     comparisons: Union[Unset, "ColumnProfilingCheckCategoriesSpecComparisons"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         custom: Union[Unset, Dict[str, Any]] = UNSET
@@ -99,29 +120,45 @@ class ColumnProfilingCheckCategoriesSpec:
         if not isinstance(self.nulls, Unset):
             nulls = self.nulls.to_dict()
 
-        numeric: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.numeric, Unset):
-            numeric = self.numeric.to_dict()
-
-        strings: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.strings, Unset):
-            strings = self.strings.to_dict()
-
         uniqueness: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.uniqueness, Unset):
             uniqueness = self.uniqueness.to_dict()
 
-        datetime_: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.datetime_, Unset):
-            datetime_ = self.datetime_.to_dict()
+        accepted_values: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.accepted_values, Unset):
+            accepted_values = self.accepted_values.to_dict()
+
+        text: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.text, Unset):
+            text = self.text.to_dict()
+
+        whitespace: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.whitespace, Unset):
+            whitespace = self.whitespace.to_dict()
+
+        conversions: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.conversions, Unset):
+            conversions = self.conversions.to_dict()
+
+        patterns: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.patterns, Unset):
+            patterns = self.patterns.to_dict()
 
         pii: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.pii, Unset):
             pii = self.pii.to_dict()
 
-        sql: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.sql, Unset):
-            sql = self.sql.to_dict()
+        numeric: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.numeric, Unset):
+            numeric = self.numeric.to_dict()
+
+        anomaly: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.anomaly, Unset):
+            anomaly = self.anomaly.to_dict()
+
+        datetime_: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.datetime_, Unset):
+            datetime_ = self.datetime_.to_dict()
 
         bool_: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.bool_, Unset):
@@ -135,13 +172,13 @@ class ColumnProfilingCheckCategoriesSpec:
         if not isinstance(self.accuracy, Unset):
             accuracy = self.accuracy.to_dict()
 
+        custom_sql: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_sql, Unset):
+            custom_sql = self.custom_sql.to_dict()
+
         datatype: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.datatype, Unset):
             datatype = self.datatype.to_dict()
-
-        anomaly: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.anomaly, Unset):
-            anomaly = self.anomaly.to_dict()
 
         schema: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.schema, Unset):
@@ -158,28 +195,36 @@ class ColumnProfilingCheckCategoriesSpec:
             field_dict["custom"] = custom
         if nulls is not UNSET:
             field_dict["nulls"] = nulls
-        if numeric is not UNSET:
-            field_dict["numeric"] = numeric
-        if strings is not UNSET:
-            field_dict["strings"] = strings
         if uniqueness is not UNSET:
             field_dict["uniqueness"] = uniqueness
-        if datetime_ is not UNSET:
-            field_dict["datetime"] = datetime_
+        if accepted_values is not UNSET:
+            field_dict["accepted_values"] = accepted_values
+        if text is not UNSET:
+            field_dict["text"] = text
+        if whitespace is not UNSET:
+            field_dict["whitespace"] = whitespace
+        if conversions is not UNSET:
+            field_dict["conversions"] = conversions
+        if patterns is not UNSET:
+            field_dict["patterns"] = patterns
         if pii is not UNSET:
             field_dict["pii"] = pii
-        if sql is not UNSET:
-            field_dict["sql"] = sql
+        if numeric is not UNSET:
+            field_dict["numeric"] = numeric
+        if anomaly is not UNSET:
+            field_dict["anomaly"] = anomaly
+        if datetime_ is not UNSET:
+            field_dict["datetime"] = datetime_
         if bool_ is not UNSET:
             field_dict["bool"] = bool_
         if integrity is not UNSET:
             field_dict["integrity"] = integrity
         if accuracy is not UNSET:
             field_dict["accuracy"] = accuracy
+        if custom_sql is not UNSET:
+            field_dict["custom_sql"] = custom_sql
         if datatype is not UNSET:
             field_dict["datatype"] = datatype
-        if anomaly is not UNSET:
-            field_dict["anomaly"] = anomaly
         if schema is not UNSET:
             field_dict["schema"] = schema
         if comparisons is not UNSET:
@@ -189,6 +234,9 @@ class ColumnProfilingCheckCategoriesSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_accepted_values_profiling_checks_spec import (
+            ColumnAcceptedValuesProfilingChecksSpec,
+        )
         from ..models.column_accuracy_profiling_checks_spec import (
             ColumnAccuracyProfilingChecksSpec,
         )
@@ -197,6 +245,12 @@ class ColumnProfilingCheckCategoriesSpec:
         )
         from ..models.column_bool_profiling_checks_spec import (
             ColumnBoolProfilingChecksSpec,
+        )
+        from ..models.column_conversions_profiling_checks_spec import (
+            ColumnConversionsProfilingChecksSpec,
+        )
+        from ..models.column_custom_sql_profiling_checks_spec import (
+            ColumnCustomSqlProfilingChecksSpec,
         )
         from ..models.column_datatype_profiling_checks_spec import (
             ColumnDatatypeProfilingChecksSpec,
@@ -213,6 +267,9 @@ class ColumnProfilingCheckCategoriesSpec:
         from ..models.column_numeric_profiling_checks_spec import (
             ColumnNumericProfilingChecksSpec,
         )
+        from ..models.column_patterns_profiling_checks_spec import (
+            ColumnPatternsProfilingChecksSpec,
+        )
         from ..models.column_pii_profiling_checks_spec import (
             ColumnPiiProfilingChecksSpec,
         )
@@ -225,14 +282,14 @@ class ColumnProfilingCheckCategoriesSpec:
         from ..models.column_schema_profiling_checks_spec import (
             ColumnSchemaProfilingChecksSpec,
         )
-        from ..models.column_sql_profiling_checks_spec import (
-            ColumnSqlProfilingChecksSpec,
-        )
-        from ..models.column_strings_profiling_checks_spec import (
-            ColumnStringsProfilingChecksSpec,
+        from ..models.column_text_profiling_checks_spec import (
+            ColumnTextProfilingChecksSpec,
         )
         from ..models.column_uniqueness_profiling_checks_spec import (
             ColumnUniquenessProfilingChecksSpec,
+        )
+        from ..models.column_whitespace_profiling_checks_spec import (
+            ColumnWhitespaceProfilingChecksSpec,
         )
 
         d = src_dict.copy()
@@ -250,20 +307,6 @@ class ColumnProfilingCheckCategoriesSpec:
         else:
             nulls = ColumnNullsProfilingChecksSpec.from_dict(_nulls)
 
-        _numeric = d.pop("numeric", UNSET)
-        numeric: Union[Unset, ColumnNumericProfilingChecksSpec]
-        if isinstance(_numeric, Unset):
-            numeric = UNSET
-        else:
-            numeric = ColumnNumericProfilingChecksSpec.from_dict(_numeric)
-
-        _strings = d.pop("strings", UNSET)
-        strings: Union[Unset, ColumnStringsProfilingChecksSpec]
-        if isinstance(_strings, Unset):
-            strings = UNSET
-        else:
-            strings = ColumnStringsProfilingChecksSpec.from_dict(_strings)
-
         _uniqueness = d.pop("uniqueness", UNSET)
         uniqueness: Union[Unset, ColumnUniquenessProfilingChecksSpec]
         if isinstance(_uniqueness, Unset):
@@ -271,12 +314,42 @@ class ColumnProfilingCheckCategoriesSpec:
         else:
             uniqueness = ColumnUniquenessProfilingChecksSpec.from_dict(_uniqueness)
 
-        _datetime_ = d.pop("datetime", UNSET)
-        datetime_: Union[Unset, ColumnDatetimeProfilingChecksSpec]
-        if isinstance(_datetime_, Unset):
-            datetime_ = UNSET
+        _accepted_values = d.pop("accepted_values", UNSET)
+        accepted_values: Union[Unset, ColumnAcceptedValuesProfilingChecksSpec]
+        if isinstance(_accepted_values, Unset):
+            accepted_values = UNSET
         else:
-            datetime_ = ColumnDatetimeProfilingChecksSpec.from_dict(_datetime_)
+            accepted_values = ColumnAcceptedValuesProfilingChecksSpec.from_dict(
+                _accepted_values
+            )
+
+        _text = d.pop("text", UNSET)
+        text: Union[Unset, ColumnTextProfilingChecksSpec]
+        if isinstance(_text, Unset):
+            text = UNSET
+        else:
+            text = ColumnTextProfilingChecksSpec.from_dict(_text)
+
+        _whitespace = d.pop("whitespace", UNSET)
+        whitespace: Union[Unset, ColumnWhitespaceProfilingChecksSpec]
+        if isinstance(_whitespace, Unset):
+            whitespace = UNSET
+        else:
+            whitespace = ColumnWhitespaceProfilingChecksSpec.from_dict(_whitespace)
+
+        _conversions = d.pop("conversions", UNSET)
+        conversions: Union[Unset, ColumnConversionsProfilingChecksSpec]
+        if isinstance(_conversions, Unset):
+            conversions = UNSET
+        else:
+            conversions = ColumnConversionsProfilingChecksSpec.from_dict(_conversions)
+
+        _patterns = d.pop("patterns", UNSET)
+        patterns: Union[Unset, ColumnPatternsProfilingChecksSpec]
+        if isinstance(_patterns, Unset):
+            patterns = UNSET
+        else:
+            patterns = ColumnPatternsProfilingChecksSpec.from_dict(_patterns)
 
         _pii = d.pop("pii", UNSET)
         pii: Union[Unset, ColumnPiiProfilingChecksSpec]
@@ -285,12 +358,26 @@ class ColumnProfilingCheckCategoriesSpec:
         else:
             pii = ColumnPiiProfilingChecksSpec.from_dict(_pii)
 
-        _sql = d.pop("sql", UNSET)
-        sql: Union[Unset, ColumnSqlProfilingChecksSpec]
-        if isinstance(_sql, Unset):
-            sql = UNSET
+        _numeric = d.pop("numeric", UNSET)
+        numeric: Union[Unset, ColumnNumericProfilingChecksSpec]
+        if isinstance(_numeric, Unset):
+            numeric = UNSET
         else:
-            sql = ColumnSqlProfilingChecksSpec.from_dict(_sql)
+            numeric = ColumnNumericProfilingChecksSpec.from_dict(_numeric)
+
+        _anomaly = d.pop("anomaly", UNSET)
+        anomaly: Union[Unset, ColumnAnomalyProfilingChecksSpec]
+        if isinstance(_anomaly, Unset):
+            anomaly = UNSET
+        else:
+            anomaly = ColumnAnomalyProfilingChecksSpec.from_dict(_anomaly)
+
+        _datetime_ = d.pop("datetime", UNSET)
+        datetime_: Union[Unset, ColumnDatetimeProfilingChecksSpec]
+        if isinstance(_datetime_, Unset):
+            datetime_ = UNSET
+        else:
+            datetime_ = ColumnDatetimeProfilingChecksSpec.from_dict(_datetime_)
 
         _bool_ = d.pop("bool", UNSET)
         bool_: Union[Unset, ColumnBoolProfilingChecksSpec]
@@ -313,19 +400,19 @@ class ColumnProfilingCheckCategoriesSpec:
         else:
             accuracy = ColumnAccuracyProfilingChecksSpec.from_dict(_accuracy)
 
+        _custom_sql = d.pop("custom_sql", UNSET)
+        custom_sql: Union[Unset, ColumnCustomSqlProfilingChecksSpec]
+        if isinstance(_custom_sql, Unset):
+            custom_sql = UNSET
+        else:
+            custom_sql = ColumnCustomSqlProfilingChecksSpec.from_dict(_custom_sql)
+
         _datatype = d.pop("datatype", UNSET)
         datatype: Union[Unset, ColumnDatatypeProfilingChecksSpec]
         if isinstance(_datatype, Unset):
             datatype = UNSET
         else:
             datatype = ColumnDatatypeProfilingChecksSpec.from_dict(_datatype)
-
-        _anomaly = d.pop("anomaly", UNSET)
-        anomaly: Union[Unset, ColumnAnomalyProfilingChecksSpec]
-        if isinstance(_anomaly, Unset):
-            anomaly = UNSET
-        else:
-            anomaly = ColumnAnomalyProfilingChecksSpec.from_dict(_anomaly)
 
         _schema = d.pop("schema", UNSET)
         schema: Union[Unset, ColumnSchemaProfilingChecksSpec]
@@ -346,17 +433,21 @@ class ColumnProfilingCheckCategoriesSpec:
         column_profiling_check_categories_spec = cls(
             custom=custom,
             nulls=nulls,
-            numeric=numeric,
-            strings=strings,
             uniqueness=uniqueness,
-            datetime_=datetime_,
+            accepted_values=accepted_values,
+            text=text,
+            whitespace=whitespace,
+            conversions=conversions,
+            patterns=patterns,
             pii=pii,
-            sql=sql,
+            numeric=numeric,
+            anomaly=anomaly,
+            datetime_=datetime_,
             bool_=bool_,
             integrity=integrity,
             accuracy=accuracy,
+            custom_sql=custom_sql,
             datatype=datatype,
-            anomaly=anomaly,
             schema=schema,
             comparisons=comparisons,
         )

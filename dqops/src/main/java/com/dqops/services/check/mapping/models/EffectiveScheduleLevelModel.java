@@ -18,7 +18,7 @@ package com.dqops.services.check.mapping.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Enumeration of possible levels at which a schedule could be configured.
+ * Enumeration of possible levels at which a schedule can be configured.
  */
 public enum EffectiveScheduleLevelModel {
     /**

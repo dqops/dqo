@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/nulls/not_null_count
+  rule_name: comparison/min_count
+  help_text: Detects empty columns that contain only null values. Counts the number
+    of rows that have non-null values. Raises a data quality issue when the count
+    of non-null values is below min_count. Stores the most recent captured value for
+    each day when the data quality check was evaluated.
+  friendly_name: empty column
+  standard: true

@@ -1,28 +1,30 @@
-import SvgIcon from '../SvgIcon';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
+  CheckContainerModel,
   DqoJobHistoryEntryModelStatusEnum,
   SimilarCheckModelCheckTypeEnum,
-  TimeWindowFilterParameters,
-  CheckContainerModel
+  TimeWindowFilterParameters
 } from '../../api';
-import { JobApiClient, TableApiClient } from '../../services/apiClient';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
-import CategoryMenu from './CategoryMenu';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useHistory, useParams } from 'react-router-dom';
-import Button from '../Button';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   addFirstLevelTab,
   setCurrentJobId
 } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../redux/selectors';
+import { ColumnApiClient, JobApiClient, TableApiClient } from '../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
+import Button from '../Button';
+import Checkbox from '../Checkbox';
+import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
+import SvgIcon from '../SvgIcon';
+import CategoryMenu from './CategoryMenu';
 
 interface TableHeaderProps {
   checksUI: CheckContainerModel;
@@ -33,6 +35,10 @@ interface TableHeaderProps {
   copyUI?: CheckContainerModel;
   setCopyUI: (ui: CheckContainerModel) => void;
   onUpdate: () => void;
+  isDefaultEditing?: boolean;
+  showAdvanced?: boolean;
+  setShowAdvanced: (showAdvanced: boolean) => void;
+  isFiltered?: boolean
 }
 
 const TableHeader = ({
@@ -42,7 +48,11 @@ const TableHeader = ({
   setMode,
   copyUI,
   setCopyUI,
-  onUpdate
+  onUpdate,
+  isDefaultEditing,
+  showAdvanced,
+  setShowAdvanced,
+  isFiltered
 }: TableHeaderProps) => {
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
@@ -52,13 +62,15 @@ const TableHeader = ({
     checkTypes,
     connection,
     schema,
-    table
+    table,
+    column
   }: {
     checkTypes: CheckTypes;
     connection: string;
     schema: string;
     table: string;
-  } = useParams();
+    column: string
+  } = useDecodedParams();
   const dispatch = useActionDispatch();
   const history = useHistory();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -67,17 +79,17 @@ const TableHeader = ({
 
   const onRunChecks = async () => {
     await onUpdate();
-    const res = await JobApiClient.runChecks(false, undefined, {
-      checkSearchFilters: checksUI?.run_checks_job_template,
+    const res = await JobApiClient.runChecks(undefined, false, undefined, {
+      check_search_filters: checksUI?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
-        ? { timeWindowFilter }
+        ? { time_window_filter: timeWindowFilter }
         : {})
     });
     dispatch(
       setCurrentJobId(
         checkTypes,
         firstLevelActiveTab,
-        (res.data as any)?.jobId?.jobId
+        res.data?.jobId?.jobId ?? 0
       )
     );
   };
@@ -88,7 +100,7 @@ const TableHeader = ({
     setCopyUI(newCheckUI);
   };
 
-  const copyRecurringCheck = async (timeScale: 'daily' | 'monthly') => {
+  const copyMonitoringCheck = async (timeScale: 'daily' | 'monthly') => {
     const newUI = {
       ...copyUI,
       categories: copyUI?.categories
@@ -101,7 +113,7 @@ const TableHeader = ({
               check_name: item.similar_checks?.find(
                 (item) =>
                   item.check_type ===
-                    SimilarCheckModelCheckTypeEnum.recurring &&
+                    SimilarCheckModelCheckTypeEnum.monitoring &&
                   item.time_scale === timeScale
               )?.check_name
             }))
@@ -109,35 +121,67 @@ const TableHeader = ({
         }))
         .filter((item) => item.checks?.length)
     };
-
-    await TableApiClient.updateTableRecurringChecksModel(
+    let url; 
+    let value;
+    
+    if (column) {
+      await ColumnApiClient.updateColumnMonitoringChecksModel(
+        connection,
+        schema,
+        table,
+        column,
+        timeScale,
+        newUI
+      );
+  
+      url = ROUTES.COLUMN_MONITORING(
+        CheckTypes.MONITORING,
+        connection,
+        schema,
+        table,
+        column,
+        timeScale
+      );
+      value = ROUTES.COLUMN_MONITORING_VALUE(
+        CheckTypes.MONITORING,
+        connection,
+        schema,
+        table,
+        column
+      );
+    }
+    else {
+      await TableApiClient.updateTableMonitoringChecksModel(
       connection,
       schema,
       table,
       timeScale,
       newUI
-    );
+      );
 
-    const url = ROUTES.TABLE_RECURRING(
-      CheckTypes.RECURRING,
+    url = ROUTES.TABLE_MONITORING(
+      CheckTypes.MONITORING,
       connection,
       schema,
       table,
       timeScale
-    );
-    const value = ROUTES.TABLE_RECURRING_VALUE(
-      CheckTypes.RECURRING,
+      );
+    value = ROUTES.TABLE_MONITORING_VALUE(
+      CheckTypes.MONITORING,
       connection,
       schema,
       table
-    );
+      );
+    }
 
     dispatch(
-      addFirstLevelTab(CheckTypes.RECURRING, {
+      addFirstLevelTab(CheckTypes.MONITORING, {
         url,
         value,
         state: {},
-        label: `${timeScale === 'daily' ? 'Daily' : 'Monthly'} recurring checks`
+        label: `${
+          timeScale === 'daily' ? 'Daily' : 'Monthly'
+        } monitoring checks`
       })
     );
     history.push(url);
@@ -165,36 +209,67 @@ const TableHeader = ({
         .filter((item) => item.checks?.length)
     };
 
-    await TableApiClient.updateTablePartitionedChecksModel(
-      connection,
-      schema,
-      table,
-      timeScale,
-      newUI
-    );
-
-    const url = ROUTES.TABLE_PARTITIONED(
+    let url; 
+    let value;
+    
+    if (column) {
+      await ColumnApiClient.updateColumnPartitionedChecksModel(
+        connection,
+        schema,
+        table,
+        column,
+        timeScale,
+        newUI
+      );
+  
+      url = ROUTES.COLUMN_PARTITIONED(
+        CheckTypes.PARTITIONED,
+        connection,
+        schema,
+        table,
+        column,
+        timeScale
+      );
+      value = ROUTES.COLUMN_PARTITIONED_VALUE(
+        CheckTypes.PARTITIONED,
+        connection,
+        schema,
+        table,
+        column
+      );
+    }
+    else {
+      await TableApiClient.updateTablePartitionedChecksModel(
+        connection,
+        schema,
+        table,
+        timeScale,
+        newUI
+        );
+        
+    url = ROUTES.TABLE_PARTITIONED(
       CheckTypes.PARTITIONED,
       connection,
       schema,
       table,
       timeScale
-    );
-    const value = ROUTES.TABLE_PARTITIONED_VALUE(
+      );
+    value = ROUTES.TABLE_PARTITIONED_VALUE(
       CheckTypes.PARTITIONED,
       connection,
       schema,
       table
-    );
+      );
+    }
 
-    dispatch(
+      dispatch(
       addFirstLevelTab(CheckTypes.PARTITIONED, {
         url,
         value,
         state: {},
         label: `${
           timeScale === 'daily' ? 'Daily' : 'Monthly'
-        } partitioned checks`
+        } partition checks`
       })
     );
     history.push(url);
@@ -208,16 +283,24 @@ const TableHeader = ({
             colSpan={2}
             className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
           >
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center font-normal text-gray-950">
+              {isFiltered !== true ? 
+              <Checkbox
+                label="Show advanced checks"
+                labelPosition="right"
+                checked={showAdvanced}
+                onChange={(value) => setShowAdvanced(value)}
+              /> 
+              : null}
               {!mode && (
                 <>
                   <Button
                     color="primary"
-                    label="Set up recurring checks"
+                    label="Set up monitoring checks"
                     textSize="sm"
                     className="font-medium px-1 py-1"
                     variant="outlined"
-                    onClick={() => onChangeMode('recurring')}
+                    onClick={() => onChangeMode('monitoring')}
                   />
                   <Button
                     color="primary"
@@ -229,22 +312,22 @@ const TableHeader = ({
                   />
                 </>
               )}
-              {mode === 'recurring' && (
+              {mode === 'monitoring' && (
                 <>
                   <div className="text-sm">Copy selected checks to:</div>
                   <Button
                     color="primary"
-                    label="Daily recurring checks"
+                    label="Daily monitoring checks"
                     textSize="sm"
                     className="font-medium px-1 py-1"
-                    onClick={() => copyRecurringCheck('daily')}
+                    onClick={() => copyMonitoringCheck('daily')}
                   />
                   <Button
                     color="primary"
-                    label="Monthly recurring checks"
+                    label="Monthly monitoring checks"
                     textSize="sm"
                     className="font-medium px-1 py-1"
-                    onClick={() => copyRecurringCheck('monthly')}
+                    onClick={() => copyMonitoringCheck('monthly')}
                   />
                   <Button
                     color="primary"
@@ -287,18 +370,30 @@ const TableHeader = ({
           </td>
         ) : (
           <>
-            <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400" />
+            <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
+              <div className="flex gap-2 items-center font-normal text-gray-950">
+                {isFiltered !== true ? 
+                <Checkbox
+                  label="Show advanced checks"
+                  labelPosition="right"
+                  checked={showAdvanced}
+                  onChange={(value) => setShowAdvanced(value)}
+                /> 
+                : null}
+              </div>
+            </td>
             <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400" />
           </>
         )}
-        <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
-          Passing check
+        <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400 relative pl-1">
+          Passing rule (KPI met)
+          <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
         </td>
         <td
           className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
           colSpan={2}
         >
-          Failing check
+          Failing rule (KPI not met)
         </td>
       </tr>
       <tr>
@@ -306,13 +401,14 @@ const TableHeader = ({
           <div className="flex space-x-1 items-center">
             <span className="mr-1">Data quality check</span>
             {(!job ||
-              job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
-              job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
-              <CategoryMenu
-                onRunChecks={onRunChecks}
-                onDeleteChecks={() => setDeleteDataDialogOpened(true)}
-              />
-            )}
+              job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
+              job?.status === DqoJobHistoryEntryModelStatusEnum.failed) &&
+              isDefaultEditing !== true && (
+                <CategoryMenu
+                  onRunChecks={onRunChecks}
+                  onDeleteChecks={() => setDeleteDataDialogOpened(true)}
+                />
+              )}
             {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
               <SvgIcon
                 name="hourglass"
@@ -328,11 +424,11 @@ const TableHeader = ({
             )}
           </div>
         </td>
-        <td className="text-right whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
-          Sensor parameters
-        </td>
-        <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-yellow-100">
+        <td className="text-right whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"></td>
+        <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-yellow-100 relative pl-1 min-w-44">
           Warning threshold
+          <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
+
         </td>
         <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-orange-100">
           Error threshold
@@ -346,7 +442,11 @@ const TableHeader = ({
         onClose={() => setDeleteDataDialogOpened(false)}
         onDelete={(params) => {
           setDeleteDataDialogOpened(false);
-          JobApiClient.deleteStoredData({
+          JobApiClient.deleteStoredData(
+            undefined,
+            false,
+            undefined,
+            {
             ...checksUI.data_clean_job_template,
             ...params
           });

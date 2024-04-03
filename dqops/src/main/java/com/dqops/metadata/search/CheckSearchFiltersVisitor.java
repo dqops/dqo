@@ -19,9 +19,22 @@ import com.dqops.checks.*;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.custom.CustomCheckSpec;
-import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
+import com.dqops.checks.custom.CustomCheckSpecMap;
+import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
+import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
+import com.dqops.metadata.credentials.SharedCredentialList;
+import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
+import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
+import com.dqops.metadata.definitions.rules.RuleDefinitionList;
+import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionList;
+import com.dqops.metadata.dictionaries.DictionaryListImpl;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.HierarchyId;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import com.dqops.sensors.AbstractSensorParametersSpec;
@@ -52,7 +65,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      */
     @Override
     public TreeNodeTraversalResult accept(ConnectionList connectionList, SearchParameterObject parameter) {
-        String connectionNameFilter = this.filters.getConnectionName();
+        String connectionNameFilter = this.filters.getConnection();
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -79,7 +92,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      */
     @Override
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
-        String connectionNameFilter = this.filters.getConnectionName();
+        String connectionNameFilter = this.filters.getConnection();
 
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
         labelsSearcherObject.setConnectionLabels(connectionWrapper.getSpec().getLabels());
@@ -104,7 +117,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      */
     @Override
     public TreeNodeTraversalResult accept(TableList tableList, SearchParameterObject parameter) {
-        String schemaTableName = this.filters.getSchemaTableName();
+        String schemaTableName = this.filters.getFullTableName();
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -131,7 +144,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      */
     @Override
     public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
-        String schemaTableName = this.filters.getSchemaTableName();
+        String schemaTableName = this.filters.getFullTableName();
 
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -189,7 +202,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             return TreeNodeTraversalResult.SKIP_CHILDREN; // column checks don't concern us
         }
 
-        String columnNameFilter = this.filters.getColumnName();
+        String columnNameFilter = this.filters.getColumn();
         if (Strings.isNullOrEmpty(columnNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -240,7 +253,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
-        String columnNameFilter = this.filters.getColumnName();
+        String columnNameFilter = this.filters.getColumn();
         if (Strings.isNullOrEmpty(columnNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -301,8 +314,16 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
 
         String checkNameFilter = this.filters.getCheckName();
         if (!Strings.isNullOrEmpty(checkNameFilter)) {
-            String checkName = abstractCheckSpec.getHierarchyId().getLast().toString();
+            String checkName = abstractCheckSpec.getCheckName();
             if (!StringPatternComparer.matchSearchPattern(checkName, checkNameFilter)) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+
+        String qualityDimensionFilter = this.filters.getQualityDimension();
+        if (!Strings.isNullOrEmpty(qualityDimensionFilter)) {
+            String qualityDimension = abstractCheckSpec.getQualityDimension();
+            if (!StringPatternComparer.matchSearchPattern(qualityDimension, qualityDimensionFilter)) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
         }
@@ -363,7 +384,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             }
         }
 
-        CheckTarget checkTarget = this.filters.getColumnName() == null ? null : CheckTarget.column;
+        CheckTarget checkTarget = Strings.isNullOrEmpty(this.filters.getColumn()) ? null : CheckTarget.column;
         if (checkTarget != null && checkTarget != checksContainerSpec.getCheckTarget()) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
@@ -403,6 +424,24 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
     }
 
     /**
+     * Accepts a dictionary of custom checks. The keys must be names of configured custom checks.
+     *
+     * @param customCheckSpecMap Dictionary of custom checks.
+     * @param parameter          Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(CustomCheckSpecMap customCheckSpecMap, SearchParameterObject parameter) {
+        String checkCategoryFilter = this.filters.getCheckCategory();
+        if (!Strings.isNullOrEmpty(checkCategoryFilter)) {
+            if (!StringPatternComparer.matchSearchPattern("custom", checkCategoryFilter)) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+        return super.accept(customCheckSpecMap, parameter);
+    }
+
+    /**
      * Accepts a map of comparison checks for a named comparison.
      *
      * @param abstractComparisonCheckCategorySpecMap Comparison map with checks.
@@ -437,14 +476,158 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
     }
 
     /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
+     * Accepts a list of sensor definitions for different providers.
      *
-     * @param defaultObservabilityCheckSettingsSpec Default configuration of observability checks.
-     * @param parameter                             Visitor's parameter.
+     * @param providerSensorDefinitionList List of sensor definitions per provider.
+     * @param parameter                    Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DefaultObservabilityCheckSettingsSpec defaultObservabilityCheckSettingsSpec, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.SKIP_CHILDREN;  // we don't want to look for checks here, because there are checks.. but only templates, they cannot be run
+    public TreeNodeTraversalResult accept(ProviderSensorDefinitionList providerSensorDefinitionList, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a custom rule definition wrapper list that stores a list of custom rules.
+     *
+     * @param ruleDefinitionList Custom rule list.
+     * @param parameter          Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(RuleDefinitionList ruleDefinitionList, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a settings specific specification.
+     *
+     * @param localSettingsSpec Settings specific configuration.
+     * @param parameter         Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(LocalSettingsSpec localSettingsSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of dashboards list.
+     *
+     * @param dashboardDefinitionWrapper List of dashboards list.
+     * @param parameter                  Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DashboardFolderListSpecWrapperImpl dashboardDefinitionWrapper, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of custom checks.
+     *
+     * @param checkDefinitionWrappers Custom check list.
+     * @param parameter               Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(CheckDefinitionListImpl checkDefinitionWrappers, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a dictionary of reference table comparisons.
+     *
+     * @param tableComparisonConfigurationSpecMap Dictionary of reference table comparisons.
+     * @param parameter                           Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of a pair of column names that are used for joining and grouping.
+     *
+     * @param tableComparisonGroupingColumnsPairSpecs A list of a pairs of columns used for grouping and joining in table comparison checks.
+     * @param parameter                               Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableComparisonGroupingColumnsPairsListSpec tableComparisonGroupingColumnsPairSpecs, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a shared credential list.
+     *
+     * @param sharedCredentialWrappers Shared credentials list.
+     * @param parameter                Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(SharedCredentialList sharedCredentialWrappers, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a default monitoring schedule wrapper instance.
+     *
+     * @param monitoringSchedulesWrapper Default monitoring schedule wrapper instance.
+     * @param parameter                  Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(MonitoringSchedulesWrapper monitoringSchedulesWrapper, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a default incident webhook notification wrapper instance.
+     *
+     * @param defaultIncidentWebhookNotificationsWrapper Default incident webhook notification wrapper instance.
+     * @param parameter                                  Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DefaultIncidentWebhookNotificationsWrapper defaultIncidentWebhookNotificationsWrapper, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a data dictionary list.
+     *
+     * @param dictionaryWrappers Data dictionary list.
+     * @param parameter          Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DictionaryListImpl dictionaryWrappers, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of default configuration of table observability checks wrappers.
+     *
+     * @param tableDefaultChecksPatternWrappers Table observability default checks list.
+     * @param parameter                         Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableDefaultChecksPatternList tableDefaultChecksPatternWrappers, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a default configuration of column observability checks wrapper.
+     *
+     * @param columnDefaultChecksPatternWrappers Column observability default checks specification.
+     * @param parameter                          Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ColumnDefaultChecksPatternList columnDefaultChecksPatternWrappers, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 }

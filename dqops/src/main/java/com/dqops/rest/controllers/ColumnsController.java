@@ -18,16 +18,20 @@ package com.dqops.rest.controllers;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
-import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import com.dqops.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
-import com.dqops.checks.column.recurring.ColumnMonthlyRecurringCheckCategoriesSpec;
-import com.dqops.checks.column.recurring.ColumnRecurringChecksRootSpec;
+import com.dqops.checks.defaults.DefaultObservabilityConfigurationService;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.PushJobResult;
-import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.statistics.services.StatisticsDataService;
 import com.dqops.data.statistics.services.models.StatisticsResultsForColumnModel;
@@ -41,19 +45,24 @@ import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rest.models.metadata.*;
+import com.dqops.rest.models.metadata.ColumnListModel;
+import com.dqops.rest.models.metadata.ColumnModel;
+import com.dqops.rest.models.metadata.ColumnStatisticsModel;
+import com.dqops.rest.models.metadata.TableColumnsStatisticsModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
-import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
-import com.dqops.services.check.mapping.basicmodels.CheckContainerBasicModel;
+import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
+import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
+import com.dqops.services.locking.RestApiLockService;
 import com.dqops.services.metadata.ColumnService;
-import com.dqops.statistics.StatisticsCollectorTarget;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -61,7 +70,6 @@ import reactor.core.publisher.Mono;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -71,7 +79,7 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Columns", description = "Manages columns inside a table")
+@Api(value = "Columns", description = "Operations related to manage the metadata of columns, and managing the configuration of column-level data quality checks.")
 public class ColumnsController {
     private final ColumnService columnService;
     private UserHomeContextFactory userHomeContextFactory;
@@ -79,15 +87,19 @@ public class ColumnsController {
     private SpecToModelCheckMappingService specToModelCheckMappingService;
     private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
     private StatisticsDataService statisticsDataService;
+    private DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
+    private RestApiLockService lockService;
 
     /**
      * Creates a columns rest controller.
      * @param columnService               Column logic service.
      * @param userHomeContextFactory      User home context factory.
-     * @param dqoHomeContextFactory       DQO home context factory, used to find built-in sensors.
+     * @param dqoHomeContextFactory       DQOps home context factory, used to find built-in sensors.
      * @param specToModelCheckMappingService Check mapper to convert the check specification to a model.
      * @param modelToSpecCheckMappingService Check mapper to convert the check model to a check specification.
      * @param statisticsDataService       Statistics data service.
+     * @param defaultObservabilityConfigurationService The service that applies default observability checks.
+     * @param lockService Object lock service.
      */
     @Autowired
     public ColumnsController(ColumnService columnService,
@@ -95,13 +107,17 @@ public class ColumnsController {
                              DqoHomeContextFactory dqoHomeContextFactory,
                              SpecToModelCheckMappingService specToModelCheckMappingService,
                              ModelToSpecCheckMappingService modelToSpecCheckMappingService,
-                             StatisticsDataService statisticsDataService) {
+                             StatisticsDataService statisticsDataService,
+                             DefaultObservabilityConfigurationService defaultObservabilityConfigurationService,
+                             RestApiLockService lockService) {
         this.columnService = columnService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.specToModelCheckMappingService = specToModelCheckMappingService;
         this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
         this.statisticsDataService = statisticsDataService;
+        this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
+        this.lockService = lockService;
     }
 
     /**
@@ -112,30 +128,38 @@ public class ColumnsController {
      * @return List of columns inside a table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns", produces = "application/json")
-    @ApiOperation(value = "getColumns", notes = "Returns a list of columns inside a table", response = ColumnBasicModel[].class)
+    @ApiOperation(value = "getColumns", notes = "Returns a list of columns inside a table", response = ColumnListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = ColumnBasicModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = ColumnListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<ColumnBasicModel>> getColumns(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Flux<ColumnListModel>> getColumns(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
 
         TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
         if (tableWrapper == null) {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND);
         }
 
-        Stream<ColumnBasicModel> columnSpecs = tableWrapper.getSpec().getColumns()
+        boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+        boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
+        Stream<ColumnListModel> columnSpecs = tableWrapper.getSpec().getColumns()
                 .entrySet()
                 .stream()
                 .sorted(Comparator.comparing(kv -> kv.getKey()))
-                .map(kv -> ColumnBasicModel.fromColumnSpecificationForListEntry(
-                        connectionName, tableWrapper.getPhysicalTableName(), kv.getKey(), kv.getValue()));
+                .map(kv -> ColumnListModel.fromColumnSpecificationForListEntry(
+                        connectionName, tableWrapper.getPhysicalTableName(), kv.getKey(), kv.getValue(), isEditor, isOperator));
 
         return new ResponseEntity<>(Flux.fromStream(columnSpecs), HttpStatus.OK);
     }
@@ -150,18 +174,23 @@ public class ColumnsController {
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/statistics", produces = "application/json")
     @ApiOperation(value = "getColumnsStatistics",
             notes = "Returns a list of columns inside a table with the metrics captured by the most recent statistics collection.",
-            response = TableColumnsStatisticsModel.class)
+            response = TableColumnsStatisticsModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = TableColumnsStatisticsModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<TableColumnsStatisticsModel>> getColumnsStatistics(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -179,7 +208,8 @@ public class ColumnsController {
 
         StatisticsResultsForTableModel mostRecentStatisticsMetricsForTable =
                 this.statisticsDataService.getMostRecentStatisticsForTable(connectionName, physicalTableName,
-                        CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME, true);
+                        CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME, true, principal.getDataDomainIdentity());
+        boolean canCollectStatistics = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
         List<ColumnStatisticsModel> columnModels = tableWrapper.getSpec().getColumns()
                 .entrySet()
@@ -189,19 +219,21 @@ public class ColumnsController {
                         connectionName, tableWrapper.getPhysicalTableName(),
                         kv.getKey(), // column name
                         kv.getValue(), // column specification
-                        mostRecentStatisticsMetricsForTable.getColumns().get(kv.getKey())))
+                        mostRecentStatisticsMetricsForTable.getColumns().get(kv.getKey()),
+                        canCollectStatistics))
                 .collect(Collectors.toList());
 
         TableColumnsStatisticsModel resultModel = new TableColumnsStatisticsModel();
         resultModel.setConnectionName(connectionName);
         resultModel.setTable(physicalTableName);
         resultModel.setColumnStatistics(columnModels);
+        resultModel.setCanCollectStatistics(canCollectStatistics);
 
         resultModel.setCollectColumnStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
         {{
-            setConnectionName(connectionName);
-            setSchemaTableName(physicalTableName.toTableSearchFilter());
-            setTarget(StatisticsCollectorTarget.column);
+            setConnection(connectionName);
+            setFullTableName(physicalTableName.toTableSearchFilter());
+//            setTarget(StatisticsCollectorTarget.column);
             setEnabled(true);
         }});
 
@@ -217,19 +249,24 @@ public class ColumnsController {
      * @return Column full specification for the requested column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}", produces = "application/json")
-    @ApiOperation(value = "getColumn", notes = "Returns the full column specification", response = ColumnModel.class)
+    @ApiOperation(value = "getColumn", notes = "Returns the full column specification", response = ColumnModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Column returned", response = ColumnModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<ColumnModel>> getColumn(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
 
         TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
         if (tableWrapper == null) {
@@ -248,6 +285,8 @@ public class ColumnsController {
             setColumnName(columnName);
             setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
             setSpec(columnSpec);
+            setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            setYamlParsingError(tableSpec.getYamlParsingError());
         }};
 
         return new ResponseEntity<>(Mono.just(columnModel), HttpStatus.OK); // 200
@@ -262,19 +301,24 @@ public class ColumnsController {
      * @return Basic column details for the requested column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basic", produces = "application/json")
-    @ApiOperation(value = "getColumnBasic", notes = "Returns the column specification", response = ColumnBasicModel.class)
+    @ApiOperation(value = "getColumnBasic", notes = "Returns the column specification", response = ColumnListModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Column basic details returned", response = ColumnBasicModel.class),
+            @ApiResponse(code = 200, message = "Column basic details returned", response = ColumnListModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<ColumnBasicModel>> getColumnBasic(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<ColumnListModel>> getColumnBasic(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
 
         TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
         if (tableWrapper == null) {
@@ -287,10 +331,12 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnBasicModel columnBasicModel = ColumnBasicModel.fromColumnSpecification(
-                connectionName, tableWrapper.getPhysicalTableName(), columnName, columnSpec);
+        ColumnListModel columnListModel = ColumnListModel.fromColumnSpecification(
+                connectionName, tableWrapper.getPhysicalTableName(), columnName, columnSpec,
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(columnBasicModel), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Mono.just(columnListModel), HttpStatus.OK); // 200
     }
 
     /**
@@ -304,19 +350,24 @@ public class ColumnsController {
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/statistics", produces = "application/json")
     @ApiOperation(value = "getColumnStatistics",
             notes = "Returns the column specification with the metrics captured by the most recent statistics collection.",
-            response = ColumnStatisticsModel.class)
+            response = ColumnStatisticsModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Column statistics returned", response = ColumnStatisticsModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<ColumnStatisticsModel>> getColumnStatistics(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
 
         TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
         if (tableWrapper == null) {
@@ -332,11 +383,14 @@ public class ColumnsController {
         StatisticsResultsForColumnModel mostRecentStatisticsMetricsForColumn =
                 this.statisticsDataService.getMostRecentStatisticsForColumn(
                         connectionName, tableWrapper.getPhysicalTableName(), columnName,
-                        CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+                        CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME,
+                        principal.getDataDomainIdentity());
+
+        boolean canRunStatisticsJob = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
         ColumnStatisticsModel columnModel = ColumnStatisticsModel.fromColumnSpecificationAndStatistic(
                 connectionName, tableWrapper.getPhysicalTableName(), columnName, columnSpec,
-                mostRecentStatisticsMetricsForColumn);
+                mostRecentStatisticsMetricsForColumn, canRunStatisticsJob);
 
         return new ResponseEntity<>(Mono.just(columnModel), HttpStatus.OK); // 200
     }
@@ -350,19 +404,24 @@ public class ColumnsController {
      * @return List of labels assigned to a column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/labels", produces = "application/json")
-    @ApiOperation(value = "getColumnLabels", notes = "Return the list of labels assigned to a column", response = LabelSetSpec.class)
+    @ApiOperation(value = "getColumnLabels", notes = "Return the list of labels assigned to a column", response = LabelSetSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of labels assigned to a column returned", response = LabelSetSpec.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<LabelSetSpec>> getColumnLabels(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
         if (columnSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -381,19 +440,24 @@ public class ColumnsController {
      * @return List of comments assigned to a column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/comments", produces = "application/json")
-    @ApiOperation(value = "getColumnComments", notes = "Return the list of comments assigned to a column", response = CommentsListSpec.class)
+    @ApiOperation(value = "getColumnComments", notes = "Return the list of comments assigned to a column", response = CommentsListSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of comments assigned to a column returned", response = CommentsListSpec.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CommentsListSpec>> getColumnComments(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
         if (columnSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -412,19 +476,25 @@ public class ColumnsController {
      * @return Data quality profiling checks on a requested column of the table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling", produces = "application/json")
-    @ApiOperation(value = "getColumnProfilingChecks", notes = "Return the configuration of column level data quality profiling checks on a column", response = ColumnProfilingCheckCategoriesSpec.class)
+    @ApiOperation(value = "getColumnProfilingChecks", notes = "Return the configuration of column level data quality profiling checks on a column",
+            response = ColumnProfilingCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of column level data quality profiling checks on a column returned", response = ColumnProfilingCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<ColumnProfilingCheckCategoriesSpec>> getColumnProfilingChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
         if (columnSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -435,75 +505,87 @@ public class ColumnsController {
     }
 
     /**
-     * Retrieves the configuration of daily column level data quality recurring on a column given a connection, table name, and column name.
+     * Retrieves the configuration of daily column level data quality monitoring on a column given a connection, table name, and column name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @return Daily data quality recurring on a requested column of the table.
+     * @return Daily data quality monitoring on a requested column of the table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/daily", produces = "application/json")
-    @ApiOperation(value = "getColumnRecurringChecksDaily", notes = "Return the configuration of daily column level data quality recurring on a column", response = ColumnRecurringChecksRootSpec.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/daily", produces = "application/json")
+    @ApiOperation(value = "getColumnMonitoringChecksDaily", notes = "Return the configuration of daily column level data quality monitoring on a column",
+            response = ColumnMonitoringCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of daily column level data quality recurring on a column returned", response = ColumnDailyRecurringCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of daily column level data quality monitoring on a column returned", response = ColumnDailyMonitoringCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<ColumnDailyRecurringCheckCategoriesSpec>> getColumnRecurringChecksDaily(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<ColumnDailyMonitoringCheckCategoriesSpec>> getColumnMonitoringChecksDaily(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
         if (columnSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnRecurringChecksRootSpec recurringSpec = columnSpec.getRecurringChecks();
-        if (recurringSpec == null) {
+        ColumnMonitoringCheckCategoriesSpec monitoringSpec = columnSpec.getMonitoringChecks();
+        if (monitoringSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
 
-        ColumnDailyRecurringCheckCategoriesSpec dailyRecurring = recurringSpec.getDaily();
-        return new ResponseEntity<>(Mono.justOrEmpty(dailyRecurring), HttpStatus.OK); // 200
+        ColumnDailyMonitoringCheckCategoriesSpec dailyMonitoring = monitoringSpec.getDaily();
+        return new ResponseEntity<>(Mono.justOrEmpty(dailyMonitoring), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the configuration of monthly column level data quality recurring on a column given a connection, table name, and column name.
+     * Retrieves the configuration of monthly column level data quality monitoring on a column given a connection, table name, and column name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @return Monthly data quality recurring on a requested column of the table.
+     * @return Monthly data quality monitoring on a requested column of the table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/monthly", produces = "application/json")
-    @ApiOperation(value = "getColumnRecurringChecksMonthly", notes = "Return the configuration of monthly column level data quality recurring on a column", response = ColumnRecurringChecksRootSpec.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/monthly", produces = "application/json")
+    @ApiOperation(value = "getColumnMonitoringChecksMonthly", notes = "Return the configuration of monthly column level data quality monitoring on a column",
+            response = ColumnMonitoringCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of monthly column level data quality recurring on a column returned", response = ColumnMonthlyRecurringCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of monthly column level data quality monitoring on a column returned", response = ColumnMonthlyMonitoringCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<ColumnMonthlyRecurringCheckCategoriesSpec>> getColumnRecurringChecksMonthly(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<ColumnMonthlyMonitoringCheckCategoriesSpec>> getColumnMonitoringChecksMonthly(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
         if (columnSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnRecurringChecksRootSpec recurringSpec = columnSpec.getRecurringChecks();
-        if (recurringSpec == null) {
+        ColumnMonitoringCheckCategoriesSpec monitoringSpec = columnSpec.getMonitoringChecks();
+        if (monitoringSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
 
-        ColumnMonthlyRecurringCheckCategoriesSpec monthlyRecurring = recurringSpec.getMonthly();
-        return new ResponseEntity<>(Mono.justOrEmpty(monthlyRecurring), HttpStatus.OK); // 200
+        ColumnMonthlyMonitoringCheckCategoriesSpec monthlyMonitoring = monitoringSpec.getMonthly();
+        return new ResponseEntity<>(Mono.justOrEmpty(monthlyMonitoring), HttpStatus.OK); // 200
     }
     
     /**
@@ -515,25 +597,31 @@ public class ColumnsController {
      * @return Daily data quality partitioned checks on a requested column of the table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/daily", produces = "application/json")
-    @ApiOperation(value = "getColumnPartitionedChecksDaily", notes = "Return the configuration of daily column level data quality partitioned checks on a column", response = ColumnDailyPartitionedCheckCategoriesSpec.class)
+    @ApiOperation(value = "getColumnPartitionedChecksDaily", notes = "Return the configuration of daily column level data quality partitioned checks on a column",
+            response = ColumnDailyPartitionedCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of daily column level data quality partitioned checks on a column returned", response = ColumnDailyPartitionedCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<ColumnDailyPartitionedCheckCategoriesSpec>> getColumnPartitionedChecksDaily(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
         if (columnSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnPartitionedChecksRootSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+        ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
         if (partitionedChecksSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
@@ -551,25 +639,32 @@ public class ColumnsController {
      * @return Monthly data quality partitioned checks on a requested column of the table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly", produces = "application/json")
-    @ApiOperation(value = "getColumnPartitionedChecksMonthly", notes = "Return the configuration of monthly column level data quality partitioned checks on a column", response = ColumnMonthlyPartitionedCheckCategoriesSpec.class)
+    @ApiOperation(value = "getColumnPartitionedChecksMonthly", notes = "Return the configuration of monthly column level data quality partitioned checks on a column",
+            response = ColumnMonthlyPartitionedCheckCategoriesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of monthly column level data quality partitioned checks on a column returned", response = ColumnMonthlyPartitionedCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of monthly column level data quality partitioned checks on a column returned",
+                    response = ColumnMonthlyPartitionedCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<ColumnMonthlyPartitionedCheckCategoriesSpec>> getColumnPartitionedChecksMonthly(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
         if (columnSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnPartitionedChecksRootSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+        ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
         if (partitionedChecksSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
@@ -588,19 +683,25 @@ public class ColumnsController {
      * @return UI friendly model of data quality profiling checks on a requested column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model", produces = "application/json")
-    @ApiOperation(value = "getColumnProfilingChecksModel", notes = "Return a UI friendly model of data quality profiling checks on a column", response = CheckContainerModel.class)
+    @ApiOperation(value = "getColumnProfilingChecksModel", notes = "Return a UI friendly model of data quality profiling checks on a column",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Model of column level data quality profiling checks on a column returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CheckContainerModel>> getColumnProfilingChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -621,12 +722,15 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumnName(columnName);
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setColumn(columnName);
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setEnabled(true);
@@ -638,35 +742,42 @@ public class ColumnsController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves a UI friendly model of column level data quality recurring on a column given a connection, table name, column name, and time scale.
+     * Retrieves a UI friendly model of column level data quality monitoring on a column given a connection, table name, column name, and time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
      * @param timeScale  Time scale.
-     * @return UI friendly model of data quality recurring on a requested column for a requested time scale.
+     * @return UI friendly model of data quality monitoring on a requested column for a requested time scale.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getColumnRecurringChecksModel", notes = "Return a UI friendly model of column level data quality recurring on a column", response = CheckContainerModel.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model", produces = "application/json")
+    @ApiOperation(value = "getColumnMonitoringChecksModel", notes = "Return a UI friendly model of column level data quality monitoring on a column",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Model of column level data quality recurring on a column returned", response = CheckContainerModel.class),
+            @ApiResponse(code = 200, message = "Model of column level data quality monitoring on a column returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getColumnRecurringChecksModel(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerModel>> getColumnMonitoringChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -687,11 +798,15 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.recurring, timeScale, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumnName(columnName);
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setColumn(columnName);
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setEnabled(true);
@@ -703,7 +818,8 @@ public class ColumnsController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
@@ -718,20 +834,26 @@ public class ColumnsController {
      * @return UI friendly model of data quality partitioned checks on a requested column for a requested time scale.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model", produces = "application/json")
-    @ApiOperation(value = "getColumnPartitionedChecksModel", notes = "Return a UI friendly model of column level data quality partitioned checks on a column", response = CheckContainerModel.class)
+    @ApiOperation(value = "getColumnPartitionedChecksModel", notes = "Return a UI friendly model of column level data quality partitioned checks on a column",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Model of column level data quality partitioned checks on a column returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CheckContainerModel>> getColumnPartitionedChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -752,12 +874,15 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumnName(columnName);
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setColumn(columnName);
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setEnabled(true);
@@ -769,7 +894,8 @@ public class ColumnsController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
@@ -784,19 +910,25 @@ public class ColumnsController {
      * @return Simplistic UI friendly data quality profiling check list on a requested column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model/basic", produces = "application/json")
-    @ApiOperation(value = "getColumnProfilingChecksBasicModel", notes = "Return a simplistic UI friendly model of column level data quality profiling checks on a column", response = CheckContainerBasicModel.class)
+    @ApiOperation(value = "getColumnProfilingChecksBasicModel", notes = "Return a simplistic UI friendly model of column level data quality profiling checks on a column",
+            response = CheckContainerListModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Simplistic model of column level data quality profiling checks on a column returned", response = CheckContainerBasicModel.class),
+            @ApiResponse(code = 200, message = "Simplistic model of column level data quality profiling checks on a column returned", response = CheckContainerListModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerBasicModel>> getColumnProfilingChecksBasicModel(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerListModel>> getColumnProfilingChecksBasicModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -818,38 +950,45 @@ public class ColumnsController {
         }
 
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
-        CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
+        CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves a simplistic UI friendly model of column level data quality recurring on a column given a connection, table name, column name, and time scale.
+     * Retrieves a simplistic UI friendly model of column level data quality monitoring on a column given a connection, table name, column name, and time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
      * @param timeScale  Time scale.
-     * @return Simplistic UI friendly data quality recurring list on a requested column for a requested time scale.
+     * @return Simplistic UI friendly data quality monitoring list on a requested column for a requested time scale.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/model/basic", produces = "application/json")
-    @ApiOperation(value = "getColumnRecurringChecksBasicModel", notes = "Return a simplistic UI friendly model of column level data quality recurring on a column", response = CheckContainerBasicModel.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model/basic", produces = "application/json")
+    @ApiOperation(value = "getColumnMonitoringChecksBasicModel", notes = "Return a simplistic UI friendly model of column level data quality monitoring on a column",
+            response = CheckContainerListModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Simplistic model of column level data quality recurring on a column returned", response = CheckContainerBasicModel.class),
+            @ApiResponse(code = 200, message = "Simplistic model of column level data quality monitoring on a column returned", response = CheckContainerListModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerBasicModel>> getColumnRecurringChecksBasicModel(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerListModel>> getColumnMonitoringChecksBasicModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -870,11 +1009,12 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.recurring, timeScale, false);
-        CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
+        CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
     }
@@ -889,20 +1029,26 @@ public class ColumnsController {
      * @return Simplistic UI friendly data quality partitioned checks list on a requested column for a requested time scale.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model/basic", produces = "application/json")
-    @ApiOperation(value = "getColumnPartitionedChecksBasicModel", notes = "Return a simplistic UI friendly model of column level data quality partitioned checks on a column", response = CheckContainerBasicModel.class)
+    @ApiOperation(value = "getColumnPartitionedChecksBasicModel", notes = "Return a simplistic UI friendly model of column level data quality partitioned checks on a column",
+            response = CheckContainerListModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Simplistic model of column level data quality partitioned checks on a column returned", response = CheckContainerBasicModel.class),
+            @ApiResponse(code = 200, message = "Simplistic model of column level data quality partitioned checks on a column returned", response = CheckContainerListModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerBasicModel>> getColumnPartitionedChecksBasicModel(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerListModel>> getColumnPartitionedChecksBasicModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -924,10 +1070,11 @@ public class ColumnsController {
         }
 
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
-        CheckContainerBasicModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
+        CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
     }
@@ -943,21 +1090,27 @@ public class ColumnsController {
      * @return UI friendly model of data quality profiling checks on a requested column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model/filter/{checkCategory}/{checkName}", produces = "application/json")
-    @ApiOperation(value = "getColumnProfilingChecksModelFilter", notes = "Return a UI friendly model of data quality profiling checks on a column filtered by category and check name", response = CheckContainerModel.class)
+    @ApiOperation(value = "getColumnProfilingChecksModelFilter", notes = "Return a UI friendly model of data quality profiling checks on a column filtered by category and check name",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Model of column level data quality profiling checks on a column returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CheckContainerModel>> getColumnProfilingChecksModelFilter(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Check category") @PathVariable String checkCategory,
             @ApiParam("Check name") @PathVariable String checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -978,12 +1131,15 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumnName(columnName);
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setColumn(columnName);
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setCheckCategory(checkCategory);
@@ -997,13 +1153,14 @@ public class ColumnsController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves a UI friendly model of column level data quality recurring on a column given a connection, table name, column name, and time scale, filtered by category and check name.
+     * Retrieves a UI friendly model of column level data quality monitoring on a column given a connection, table name, column name, and time scale, filtered by category and check name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -1011,17 +1168,23 @@ public class ColumnsController {
      * @param timeScale  Time scale.
      * @param checkCategory  Check category.
      * @param checkName      Check name.
-     * @return UI friendly model of data quality recurring on a requested column for a requested time scale, filtered by category and check name.
+     * @return UI friendly model of data quality monitoring on a requested column for a requested time scale, filtered by category and check name.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/model/filter/{checkCategory}/{checkName}", produces = "application/json")
-    @ApiOperation(value = "getColumnRecurringChecksModelFilter", notes = "Return a UI friendly model of column level data quality recurring on a column filtered by category and check name", response = CheckContainerModel.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model/filter/{checkCategory}/{checkName}", produces = "application/json")
+    @ApiOperation(value = "getColumnMonitoringChecksModelFilter", notes = "Return a UI friendly model of column level data quality monitoring on a column filtered by category and check name",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Model of column level data quality recurring on a column returned", response = CheckContainerModel.class),
+            @ApiResponse(code = 200, message = "Model of column level data quality monitoring on a column returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<CheckContainerModel>> getColumnRecurringChecksModelFilter(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CheckContainerModel>> getColumnMonitoringChecksModelFilter(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1029,7 +1192,7 @@ public class ColumnsController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Check category") @PathVariable String checkCategory,
             @ApiParam("Check name") @PathVariable String checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -1050,11 +1213,15 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.recurring, timeScale, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumnName(columnName);
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setColumn(columnName);
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setCheckCategory(checkCategory);
@@ -1068,7 +1235,8 @@ public class ColumnsController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
@@ -1085,14 +1253,20 @@ public class ColumnsController {
      * @return UI friendly model of data quality partitioned checks on a requested column for a requested time scale, filtered by category and check name.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model/filter/{checkCategory}/{checkName}", produces = "application/json")
-    @ApiOperation(value = "getColumnPartitionedChecksModelFilter", notes = "Return a UI friendly model of column level data quality partitioned checks on a column, filtered by category and check name", response = CheckContainerModel.class)
+    @ApiOperation(value = "getColumnPartitionedChecksModelFilter", notes = "Return a UI friendly model of column level data quality partitioned checks on a column, filtered by category and check name",
+            response = CheckContainerModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Model of column level data quality partitioned checks on a column returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CheckContainerModel>> getColumnPartitionedChecksModelFilter(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1100,7 +1274,7 @@ public class ColumnsController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Check category") @PathVariable String checkCategory,
             @ApiParam("Check name") @PathVariable String checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -1121,11 +1295,15 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumnName(columnName);
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setColumn(columnName);
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setCheckCategory(checkCategory);
@@ -1139,7 +1317,8 @@ public class ColumnsController {
                 connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType());
+                connectionWrapper.getSpec().getProviderType(),
+                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
         return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
     }
@@ -1153,16 +1332,21 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createColumn", notes = "Creates a new column (adds a column metadata to the table)")
+    @ApiOperation(value = "createColumn", notes = "Creates a new column (adds a column metadata to the table)", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New column successfully created"),
+            @ApiResponse(code = 201, message = "New column successfully created", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 409, message = "Column with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> createColumn(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> createColumn(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1175,23 +1359,26 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+            () -> {
+                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                if (tableWrapper == null) {
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpecMap columns = tableSpec.getColumns();
-        ColumnSpec existingColumnSpec = columns.get(columnName);
-        if (existingColumnSpec != null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409
-        }
+                TableSpec tableSpec = tableWrapper.getSpec();
+                ColumnSpecMap columns = tableSpec.getColumns();
+                ColumnSpec existingColumnSpec = columns.get(columnName);
+                if (existingColumnSpec != null) {
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409
+                }
 
-        columns.put(columnName, columnSpec);
-        userHomeContext.flush();
+                columns.put(columnName, columnSpec);
+                userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+            });
     }
 
     /**
@@ -1204,16 +1391,21 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumn", notes = "Updates an existing column specification, changing all the fields (even the column level data quality checks).")
+    @ApiOperation(value = "updateColumn", notes = "Updates an existing column specification, changing all the fields (even the column level data quality checks).", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Column successfully updated"),
+            @ApiResponse(code = 204, message = "Column successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateColumn(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateColumn(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1226,24 +1418,27 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+            () -> {
+                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                if (tableWrapper == null) {
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpecMap columns = tableSpec.getColumns();
-        ColumnSpec existingColumnSpec = columns.get(columnName);
-        if (existingColumnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
-        }
+                TableSpec tableSpec = tableWrapper.getSpec();
+                ColumnSpecMap columns = tableSpec.getColumns();
+                ColumnSpec existingColumnSpec = columns.get(columnName);
+                if (existingColumnSpec == null) {
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
+                }
 
-        // TODO: validate the columnSpec
-        columns.replace(columnName, columnSpec);
-        userHomeContext.flush();
+                // TODO: validate the columnSpec
+                columns.replace(columnName, columnSpec);
+                userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            });
     }
 
     /**
@@ -1252,25 +1447,30 @@ public class ColumnsController {
      * @param schemaName       Schema name.
      * @param tableName        Table name.
      * @param columnName       Column name.
-     * @param columnBasicModel New column basic information to store.
+     * @param columnListModel New column basic information to store.
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basic", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnBasic", notes = "Updates an existing column, changing only the basic information like the expected data type (the data type snapshot).")
+    @ApiOperation(value = "updateColumnBasic", notes = "Updates an existing column, changing only the basic information like the expected data type (the data type snapshot).", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Column basic information successfully updated"),
+            @ApiResponse(code = 204, message = "Column basic information successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateColumnBasic(
+    @Secured({DqoPermissionNames.EDIT})
+    public ResponseEntity<Mono<Void>> updateColumnBasic(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("Basic column information to store") @RequestBody ColumnBasicModel columnBasicModel) {
+            @ApiParam("Basic column information to store") @RequestBody ColumnListModel columnListModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1278,30 +1478,33 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        if (!Objects.equals(connectionName, columnBasicModel.getConnectionName()) ||
-                !Objects.equals(columnName, columnBasicModel.getColumnName())) {
-            return new ResponseEntity<>(Mono.just("Connection name and column name in the model must match the connection name and the column name in the url"),
+        if (!Objects.equals(connectionName, columnListModel.getConnectionName()) ||
+                !Objects.equals(columnName, columnListModel.getColumnName())) {
+            return new ResponseEntity<>(Mono.empty(),
                     HttpStatus.NOT_ACCEPTABLE); // 406 - wrong values
         }
 
-        if (columnBasicModel.getTable() == null ||
-                !Objects.equals(schemaName, columnBasicModel.getTable().getSchemaName()) ||
-                !Objects.equals(tableName, columnBasicModel.getTable().getTableName())) {
-            return new ResponseEntity<>(Mono.just("Target schema and table name in the table model must match the schema and table name in the url"),
+        if (columnListModel.getTable() == null ||
+                !Objects.equals(schemaName, columnListModel.getTable().getSchemaName()) ||
+                !Objects.equals(tableName, columnListModel.getTable().getTableName())) {
+            return new ResponseEntity<>(Mono.empty(),
                     HttpStatus.NOT_ACCEPTABLE); // 406 - wrong values
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        // TODO: validate the columnSpec
-        columnBasicModel.copyToColumnSpecification(columnSpec);
-        userHomeContext.flush();
+                    // TODO: validate the columnSpec
+                    columnListModel.copyToColumnSpecification(columnSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -1314,22 +1517,27 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/labels", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnLabels", notes = "Updates the list of labels assigned to a column.")
+    @ApiOperation(value = "updateColumnLabels", notes = "Updates the list of labels assigned to a column.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Column's list of labels successfully updated"),
+            @ApiResponse(code = 204, message = "Column's list of labels successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateColumnLabels(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateColumnLabels(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("List of labels to stored (replaced) on the column or an empty object to clear the list of assigned labels on the column")
-            @RequestBody Optional<LabelSetSpec> labelSetSpec) {
+            @RequestBody LabelSetSpec labelSetSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1337,21 +1545,19 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        // TODO: validate the columnSpec
-        if (labelSetSpec.isPresent()) {
-            columnSpec.setLabels(labelSetSpec.get());
-        } else {
-            columnSpec.setLabels(null);
-        }
-        userHomeContext.flush();
+                    columnSpec.setLabels(labelSetSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -1364,22 +1570,27 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/comments", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnComments", notes = "Updates the list of comments assigned to a column.")
+    @ApiOperation(value = "updateColumnComments", notes = "Updates the list of comments assigned to a column.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Column's list of comments successfully updated"),
+            @ApiResponse(code = 204, message = "Column's list of comments successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateColumnComments(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateColumnComments(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("List of comments to stored (replaced) on the column or an empty object to clear the list of assigned comments on the column")
-            @RequestBody Optional<CommentsListSpec> commentsListSpec) {
+            @RequestBody CommentsListSpec commentsListSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1387,21 +1598,19 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
+                    }
 
-        // TODO: validate the columnSpec
-        if (commentsListSpec.isPresent()) {
-            columnSpec.setComments(commentsListSpec.get());
-        } else {
-            columnSpec.setComments(null);
-        }
-        userHomeContext.flush();
+                    columnSpec.setComments(commentsListSpec);
+                    userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -1414,22 +1623,27 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnProfilingChecks", notes = "Updates configuration of column level data quality profiling checks on a column.")
+    @ApiOperation(value = "updateColumnProfilingChecks", notes = "Updates configuration of column level data quality profiling checks on a column.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Column level data quality profiling checks successfully updated"),
+            @ApiResponse(code = 204, message = "Column level data quality profiling checks successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateColumnProfilingChecks(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateColumnProfilingChecks(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of column level data quality profiling checks to configure on a column or an empty object to clear the list of assigned data quality profiling checks on the column")
-            @RequestBody Optional<ColumnProfilingCheckCategoriesSpec> columnCheckCategoriesSpec) {
+            @RequestBody ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1437,48 +1651,52 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        if (columnCheckCategoriesSpec.isPresent()) {
-            columnSpec.setProfilingChecks(columnCheckCategoriesSpec.get());
-        } else {
-            columnSpec.setProfilingChecks(null);
-        }
+                    columnSpec.setProfilingChecks(columnCheckCategoriesSpec);
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
-     * Updates the configuration of daily column level data quality recurring checks configured on a column.
+     * Updates the configuration of daily column level data quality monitoring checks configured on a column.
      * @param connectionName             Connection name.
      * @param schemaName                 Schema name.
      * @param tableName                  Table name.
      * @param columnName                 Column name.
-     * @param columnDailyRecurringSpec New configuration of the daily column level data quality recurring checks to configure on a column or an empty optional to clear the list of daily recurring.
+     * @param columnDailyMonitoringSpec New configuration of the daily column level data quality monitoring checks to configure on a column or an empty optional to clear the list of daily monitoring.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnRecurringChecksDaily", notes = "Updates configuration of daily column level data quality recurring on a column.")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/daily", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateColumnMonitoringChecksDaily", notes = "Updates configuration of daily column level data quality monitoring on a column.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Daily column level data quality recurring successfully updated"),
+            @ApiResponse(code = 204, message = "Daily column level data quality monitoring successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateColumnRecurringChecksDaily(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateColumnMonitoringChecksDaily(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("Configuration of daily column level data quality recurring to configure on a column or an empty object to clear the list of assigned daily data quality recurring on the column")
-            @RequestBody Optional<ColumnDailyRecurringCheckCategoriesSpec> columnDailyRecurringSpec) {
+            @ApiParam("Configuration of daily column level data quality monitoring to configure on a column or an empty object to clear the list of assigned daily data quality monitoring on the column")
+            @RequestBody ColumnDailyMonitoringCheckCategoriesSpec columnDailyMonitoringSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)  ||
@@ -1486,57 +1704,65 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-        
-        ColumnRecurringChecksRootSpec recurringChecksSpec = columnSpec.getRecurringChecks();
-        if (recurringChecksSpec == null) {
-            recurringChecksSpec = new ColumnRecurringChecksRootSpec();
-        }
-        
-        if (columnDailyRecurringSpec.isPresent()) {
-            recurringChecksSpec.setDaily(columnDailyRecurringSpec.get());
-            columnSpec.setRecurringChecks(recurringChecksSpec);
-        } else if (recurringChecksSpec.getMonthly() == null) {
-            // If there is no monthly recurring checks, and it's been requested to delete daily recurring checks, then delete all.
-            columnSpec.setRecurringChecks(null);
-        } else {
-            recurringChecksSpec.setDaily(null);
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    ColumnMonitoringCheckCategoriesSpec monitoringChecksSpec = columnSpec.getMonitoringChecks();
+                    if (monitoringChecksSpec == null) {
+                        monitoringChecksSpec = new ColumnMonitoringCheckCategoriesSpec();
+                    }
+
+                    if (columnDailyMonitoringSpec != null) {
+                        monitoringChecksSpec.setDaily(columnDailyMonitoringSpec);
+                        columnSpec.setMonitoringChecks(monitoringChecksSpec);
+                    } else if (monitoringChecksSpec.getMonthly() == null) {
+                        // If there is no monthly monitoring checks, and it's been requested to delete daily monitoring checks, then delete all.
+                        columnSpec.setMonitoringChecks(null);
+                    } else {
+                        monitoringChecksSpec.setDaily(null);
+                    }
+
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
-     * Updates the configuration of monthly column level data quality recurring checks configured on a column.
+     * Updates the configuration of monthly column level data quality monitoring checks configured on a column.
      * @param connectionName               Connection name.
      * @param schemaName                   Schema name.
      * @param tableName                    Table name.
      * @param columnName                   Column name.
-     * @param columnMonthlyRecurringSpec New configuration of the monthly column level data quality recurring checks to configure on a column or an empty optional to clear the list of monthly recurring.
+     * @param columnMonthlyMonitoringSpec New configuration of the monthly column level data quality monitoring checks to configure on a column or an empty optional to clear the list of monthly monitoring.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnRecurringChecksMonthly", notes = "Updates configuration of monthly column level data quality recurring checks on a column.")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/monthly", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateColumnMonitoringChecksMonthly", notes = "Updates configuration of monthly column level data quality monitoring checks on a column.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Monthly column level data quality recurring checks successfully updated"),
+            @ApiResponse(code = 204, message = "Monthly column level data quality monitoring checks successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateColumnRecurringChecksMonthly(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateColumnMonitoringChecksMonthly(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("Configuration of monthly column level data quality recurring to configure on a column or an empty object to clear the list of assigned monthly data quality recurring on the column")
-            @RequestBody Optional<ColumnMonthlyRecurringCheckCategoriesSpec> columnMonthlyRecurringSpec) {
+            @ApiParam("Configuration of monthly column level data quality monitoring to configure on a column or an empty object to clear the list of assigned monthly data quality monitoring on the column")
+            @RequestBody ColumnMonthlyMonitoringCheckCategoriesSpec columnMonthlyMonitoringSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1544,29 +1770,32 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        ColumnRecurringChecksRootSpec recurringChecksSpec = columnSpec.getRecurringChecks();
-        if (recurringChecksSpec == null) {
-            recurringChecksSpec = new ColumnRecurringChecksRootSpec();
-        }
+                    ColumnMonitoringCheckCategoriesSpec monitoringChecksSpec = columnSpec.getMonitoringChecks();
+                    if (monitoringChecksSpec == null) {
+                        monitoringChecksSpec = new ColumnMonitoringCheckCategoriesSpec();
+                    }
 
-        if (columnMonthlyRecurringSpec.isPresent()) {
-            recurringChecksSpec.setMonthly(columnMonthlyRecurringSpec.get());
-            columnSpec.setRecurringChecks(recurringChecksSpec);
-        } else if (recurringChecksSpec.getDaily() == null) {
-            // If there is no daily recurring checks, and it's been requested to delete monthly recurring checks, then delete all.
-            columnSpec.setRecurringChecks(null);
-        } else {
-            recurringChecksSpec.setMonthly(null);
-        }
+                    if (columnMonthlyMonitoringSpec != null) {
+                        monitoringChecksSpec.setMonthly(columnMonthlyMonitoringSpec);
+                        columnSpec.setMonitoringChecks(monitoringChecksSpec);
+                    } else if (monitoringChecksSpec.getDaily() == null) {
+                        // If there is no daily monitoring checks, and it's been requested to delete monthly monitoring checks, then delete all.
+                        columnSpec.setMonitoringChecks(null);
+                    } else {
+                        monitoringChecksSpec.setMonthly(null);
+                    }
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -1579,22 +1808,27 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnPartitionedChecksDaily", notes = "Updates configuration of daily column level data quality partitioned checks on a column.")
+    @ApiOperation(value = "updateColumnPartitionedChecksDaily", notes = "Updates configuration of daily column level data quality partitioned checks on a column.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Daily column level data quality partitioned checks successfully updated"),
+            @ApiResponse(code = 204, message = "Daily column level data quality partitioned checks successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateColumnPartitionedChecksDaily(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateColumnPartitionedChecksDaily(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of daily column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column")
-            @RequestBody Optional<ColumnDailyPartitionedCheckCategoriesSpec> columnDailyPartitionedSpec) {
+            @RequestBody ColumnDailyPartitionedCheckCategoriesSpec columnDailyPartitionedSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1602,29 +1836,32 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        ColumnPartitionedChecksRootSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
-        if (partitionedChecksSpec == null) {
-            partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
-        }
+                    ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+                    if (partitionedChecksSpec == null) {
+                        partitionedChecksSpec = new ColumnPartitionedCheckCategoriesSpec();
+                    }
 
-        if (columnDailyPartitionedSpec.isPresent()) {
-            partitionedChecksSpec.setDaily(columnDailyPartitionedSpec.get());
-            columnSpec.setPartitionedChecks(partitionedChecksSpec);
-        } else if (partitionedChecksSpec.getMonthly() == null) {
-            // If there is no monthly partitioned checks, and it's been requested to delete daily partitioned checks, then delete all.
-            columnSpec.setPartitionedChecks(null);
-        } else {
-            partitionedChecksSpec.setDaily(null);
-        }
+                    if (columnDailyPartitionedSpec != null) {
+                        partitionedChecksSpec.setDaily(columnDailyPartitionedSpec);
+                        columnSpec.setPartitionedChecks(partitionedChecksSpec);
+                    } else if (partitionedChecksSpec.getMonthly() == null) {
+                        // If there is no monthly partitioned checks, and it's been requested to delete daily partitioned checks, then delete all.
+                        columnSpec.setPartitionedChecks(null);
+                    } else {
+                        partitionedChecksSpec.setDaily(null);
+                    }
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -1637,22 +1874,27 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnPartitionedChecksMonthly", notes = "Updates configuration of monthly column level data quality partitioned checks on a column.")
+    @ApiOperation(value = "updateColumnPartitionedChecksMonthly", notes = "Updates configuration of monthly column level data quality partitioned checks on a column.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Monthly column level data quality partitioned checks successfully updated"),
+            @ApiResponse(code = 204, message = "Monthly column level data quality partitioned checks successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateColumnPartitionedChecksMonthly(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateColumnPartitionedChecksMonthly(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of monthly column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column")
-            @RequestBody Optional<ColumnMonthlyPartitionedCheckCategoriesSpec> columnMonthlyPartitionedSpec) {
+            @RequestBody ColumnMonthlyPartitionedCheckCategoriesSpec columnMonthlyPartitionedSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1660,29 +1902,32 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        ColumnPartitionedChecksRootSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
-        if (partitionedChecksSpec == null) {
-            partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
-        }
+                    ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+                    if (partitionedChecksSpec == null) {
+                        partitionedChecksSpec = new ColumnPartitionedCheckCategoriesSpec();
+                    }
 
-        if (columnMonthlyPartitionedSpec.isPresent()) {
-            partitionedChecksSpec.setMonthly(columnMonthlyPartitionedSpec.get());
-            columnSpec.setPartitionedChecks(partitionedChecksSpec);
-        } else if (partitionedChecksSpec.getMonthly() == null) {
-            // If there is no daily partitioned checks, and it's been requested to delete monthly partitioned checks, then delete all.
-            columnSpec.setPartitionedChecks(null);
-        } else {
-            partitionedChecksSpec.setMonthly(null);
-        }
+                    if (columnMonthlyPartitionedSpec != null) {
+                        partitionedChecksSpec.setMonthly(columnMonthlyPartitionedSpec);
+                        columnSpec.setPartitionedChecks(partitionedChecksSpec);
+                    } else if (partitionedChecksSpec.getMonthly() == null) {
+                        // If there is no daily partitioned checks, and it's been requested to delete monthly partitioned checks, then delete all.
+                        columnSpec.setPartitionedChecks(null);
+                    } else {
+                        partitionedChecksSpec.setMonthly(null);
+                    }
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
 
@@ -1696,22 +1941,27 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnProfilingChecksModel", notes = "Updates configuration of column level data quality profiling checks on a column from a UI friendly model.")
+    @ApiOperation(value = "updateColumnProfilingChecksModel", notes = "Updates configuration of column level data quality profiling checks on a column from a UI friendly model.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Column level data quality profiling checks successfully updated"),
+            @ApiResponse(code = 204, message = "Column level data quality profiling checks successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table or column not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateColumnProfilingChecksModel(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateColumnProfilingChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
-            @RequestBody Optional<CheckContainerModel> checkContainerModel) {
+            @RequestBody CheckContainerModel checkContainerModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1719,56 +1969,69 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        // TODO: validate the columnSpec
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, true);
+                    TableSpec tableSpec = tableWrapper.getSpec();
+                    ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checksToUpdate);
-            if (!checksToUpdate.isDefault()) {
-                columnSpec.setColumnCheckRootContainer(checksToUpdate);
-            }
-        } else {
-            // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
-        }
+                    AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, true);
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    if (checkContainerModel != null) {
+                        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checksToUpdate, tableSpec);
+                        if (!checksToUpdate.isDefault()) {
+                            columnSpec.setColumnCheckRootContainer(checksToUpdate);
+                        }
+                    } else {
+                        // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
+                    }
+
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
-     * Updates the configuration of column level data quality recurring configured on a column, for a given time scale, from a UI friendly model.
+     * Updates the configuration of column level data quality monitoring configured on a column, for a given time scale, from a UI friendly model.
      * @param connectionName            Connection name.
      * @param schemaName                Schema name.
      * @param tableName                 Table name.
      * @param columnName                Column name.
      * @param timeScale                 Time scale.
-     * @param checkContainerModel       Model of the column level data quality checks to be applied on the configuration of the data quality recurring on a column, for a given time scale. Only data quality dimensions and data quality checks that are present in the model are updated (patched).
+     * @param checkContainerModel       Model of the column level data quality checks to be applied on the configuration of the data quality monitoring on a column, for a given time scale. Only data quality dimensions and data quality checks that are present in the model are updated (patched).
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/model", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnRecurringChecksModel", notes = "Updates configuration of column level data quality recurring on a column, for a given time scale, from a UI friendly model.")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateColumnMonitoringChecksModel", notes = "Updates configuration of column level data quality monitoring on a column, for a given time scale, from a UI friendly model.",response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Column level data quality recurring successfully updated"),
+            @ApiResponse(code = 204, message = "Column level data quality monitoring successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table or column not found, or invalid time scale"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateColumnRecurringChecksModel(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateColumnMonitoringChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam("Model with the changes to be applied to the data quality recurring configuration")
-            @RequestBody Optional<CheckContainerModel> checkContainerModel) {
+            @ApiParam("Model with the changes to be applied to the data quality monitoring configuration")
+            @RequestBody CheckContainerModel checkContainerModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1776,26 +2039,34 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        // TODO: validate the columnSpec
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.recurring, timeScale, true);
+                    TableSpec tableSpec = tableWrapper.getSpec();
+                    ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checksToUpdate);
-            if (!checksToUpdate.isDefault()) {
-                columnSpec.setColumnCheckRootContainer(checksToUpdate);
-            }
-        } else {
-            // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
-        }
+                    AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, true);
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    if (checkContainerModel != null) {
+                        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checksToUpdate, tableSpec);
+                        if (!checksToUpdate.isDefault()) {
+                            columnSpec.setColumnCheckRootContainer(checksToUpdate);
+                        }
+                    } else {
+                        // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
+                    }
+
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -1809,23 +2080,29 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateColumnPartitionedChecksModel", notes = "Updates configuration of column level data quality partitioned checks on a column, for a given time scale, from a UI friendly model.")
+    @ApiOperation(value = "updateColumnPartitionedChecksModel",
+            notes = "Updates configuration of column level data quality partitioned checks on a column, for a given time scale, from a UI friendly model.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Column level data quality partitioned checks successfully updated"),
+            @ApiResponse(code = 204, message = "Column level data quality partitioned checks successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table or column not found, or invalid time scale"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateColumnPartitionedChecksModel(
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> updateColumnPartitionedChecksModel(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Model with the changes to be applied to the data quality partitioned checks configuration")
-            @RequestBody Optional<CheckContainerModel> allChecksModel) {
+            @RequestBody CheckContainerModel allChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1833,26 +2110,34 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        // TODO: validate the columnSpec
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, true);
+                    TableSpec tableSpec = tableWrapper.getSpec();
+                    ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+                    if (columnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-        if (allChecksModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel.get(), checksToUpdate);
-            if (!checksToUpdate.isDefault()) {
-                columnSpec.setColumnCheckRootContainer(checksToUpdate);
-            }
-        } else {
-            // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
-        }
+                    AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, true);
 
-        userHomeContext.flush();
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    if (allChecksModel != null) {
+                        this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checksToUpdate, tableSpec);
+                        if (!checksToUpdate.isDefault()) {
+                            columnSpec.setColumnCheckRootContainer(checksToUpdate);
+                        }
+                    } else {
+                        // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
+                    }
+
+                    userHomeContext.flush();
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
     }
 
     /**
@@ -1864,32 +2149,40 @@ public class ColumnsController {
      * @return Deferred operations job id.
      */
     @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}", produces = "application/json")
-    @ApiOperation(value = "deleteColumn", notes = "Deletes a column from the table")
+    @ApiOperation(value = "deleteColumn", notes = "Deletes a column from the table",
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Column successfully deleted", response = DqoQueueJobId.class),
             @ApiResponse(code = 404, message = "Column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.OPERATE})
     public ResponseEntity<Mono<DqoQueueJobId>> deleteColumn(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-        }
+        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                    }
 
-        ColumnSpec existingColumnSpec = tableWrapper.getSpec().getColumns().get(columnName);
-        if (existingColumnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
-        }
+                    ColumnSpec existingColumnSpec = tableWrapper.getSpec().getColumns().get(columnName);
+                    if (existingColumnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
+                    }
 
-        PushJobResult<DeleteStoredDataQueueJobResult> backgroundJob = this.columnService.deleteColumn(
-                connectionName, tableWrapper.getPhysicalTableName(), columnName);
-        return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
+                    PushJobResult<DeleteStoredDataResult> backgroundJob = this.columnService.deleteColumn(
+                            connectionName, tableWrapper.getPhysicalTableName(), columnName, principal);
+                    return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
+                });
     }
 
 

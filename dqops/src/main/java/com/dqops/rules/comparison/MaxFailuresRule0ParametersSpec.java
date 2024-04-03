@@ -18,6 +18,7 @@ package com.dqops.rules.comparison;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -38,7 +39,8 @@ public class MaxFailuresRule0ParametersSpec extends AbstractRuleParametersSpec {
         }
     };
 
-    @JsonPropertyDescription("Maximum number of consecutive check failures, a check is failed when the sensor's query failed to execute due to a connection error, missing table or a corrupted table.")
+    @JsonPropertyDescription("Maximum number of consecutive days with check failures. A check is failed when a sensor query fails due to a connection error, missing or corrupted table.")
+    @RequiredField
     private Long maxFailures = 0L;
 
     /**

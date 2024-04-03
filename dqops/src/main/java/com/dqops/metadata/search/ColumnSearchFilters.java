@@ -17,18 +17,42 @@ package com.dqops.metadata.search;
 
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import org.apache.parquet.Strings;
 
 /**
- * Hierarchy node search filters.
+ * Connection search filters used to provide search parameters to find target columns.
  */
 public class ColumnSearchFilters {
+    @JsonPropertyDescription("The connection (data source) name. Supports search patterns in the format: 'source\\*', '\\*_prod', 'prefix\\*suffix'.")
     private String connectionName;
+
+    @JsonPropertyDescription("The schema and table name. It is provided as *&lt;schema_name&gt.&lt;table_name&gt;*, for example *public.fact_sales*. " +
+            "The schema and table name accept patterns both in the schema name and table name parts. " +
+            "Sample patterns are: 'schema_name.tab_prefix_\\*', 'schema_name.*', '*.*', 'schema_name.\\*_customer', 'schema_name.tab_\\*_suffix'.")
     private String schemaTableName;
+
+    @JsonPropertyDescription("The column name. This field accepts search patterns in the format: 'fk_\\*', '\\*_id', 'prefix\\*suffix'.")
     private String columnName;
+
+    @JsonPropertyDescription("A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, " +
+            "the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.")
     private Boolean enabled = true;
+
+    @JsonPropertyDescription("The column data type that was imported from the data source and is stored in the " +
+            "[columns -> column_name -> type_snapshot -> column_type](/docs/reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
     private String columnDataType;
+
+    @JsonPropertyDescription("Optional filter to find only nullable (when the value is *true*) or not nullable (when the value is *false*) columns, based on the value of the " +
+            "[columns -> column_name -> type_snapshot -> nullable](/docs/reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
     private Boolean nullable;
+
+    @JsonPropertyDescription("An array of tags assigned to the table. All tags must be present on a table to match. The tags can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. " +
+            "The tags are assigned to the table on the data grouping screen when any of the data grouping hierarchy level is assigned a static value, which is a tag.")
     private String[] tags;
+
+    @JsonPropertyDescription("An array of labels assigned to the table or a column. All labels must be present on a table or a column to match. The labels can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. " +
+            "The labels are assigned on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.")
     private String[] labels;
 
     @JsonIgnore
@@ -185,8 +209,9 @@ public class ColumnSearchFilters {
      * Lazy getter, parses <code>connectionName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>connectionName</code>.
      */
+    @JsonIgnore
     public SearchPattern getConnectionNameSearchPattern() {
-        if (connectionNameSearchPattern == null && connectionName != null) {
+        if (connectionNameSearchPattern == null && !Strings.isNullOrEmpty(connectionName)) {
             connectionNameSearchPattern = SearchPattern.create(false, connectionName);
         }
 
@@ -198,8 +223,9 @@ public class ColumnSearchFilters {
      * Lazy getter, parses <code>schemaTableName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>schemaTableName</code>.
      */
+    @JsonIgnore
     public SearchPattern getSchemaTableNameSearchPattern() {
-        if (schemaTableNameSearchPattern == null && schemaTableName != null) {
+        if (schemaTableNameSearchPattern == null && !Strings.isNullOrEmpty(schemaTableName)) {
             schemaTableNameSearchPattern = SearchPattern.create(false, schemaTableName);
         }
 
@@ -211,8 +237,9 @@ public class ColumnSearchFilters {
      * Lazy getter, parses <code>columnName</code> as a search pattern and returns parsed object.
      * @return {@link SearchPattern} related to <code>columnName</code>.
      */
+    @JsonIgnore
     public SearchPattern getColumnNameSearchPattern() {
-        if (columnNameSearchPattern == null && columnName != null) {
+        if (columnNameSearchPattern == null && !Strings.isNullOrEmpty(columnName)) {
             columnNameSearchPattern = SearchPattern.create(false, columnName);
         }
 

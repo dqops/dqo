@@ -42,7 +42,7 @@ public class TableComparisonGroupingColumnsPairsListSpec extends AbstractDirtyTr
     public TableComparisonGroupingColumnsPairsListSpec deepClone() {
         TableComparisonGroupingColumnsPairsListSpec cloned = new TableComparisonGroupingColumnsPairsListSpec();
         if (this.getHierarchyId() != null) {
-            cloned.setHierarchyId(cloned.getHierarchyId().clone());
+            cloned.setHierarchyId(this.getHierarchyId().clone());
         }
 
         for (TableComparisonGroupingColumnsPairSpec columnsPairSpec : this) {

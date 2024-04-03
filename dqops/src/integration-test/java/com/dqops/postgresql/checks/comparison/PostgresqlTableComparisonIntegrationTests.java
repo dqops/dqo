@@ -24,6 +24,8 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.core.configuration.DqoIncidentsConfigurationProperties;
 import com.dqops.core.configuration.DqoIncidentsConfigurationPropertiesObjectMother;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.data.checkresults.factory.CheckResultsTableFactoryImpl;
 import com.dqops.data.checkresults.services.CheckResultsDataServiceImpl;
 import com.dqops.data.checkresults.services.models.ComparisonCheckResultModel;
@@ -76,6 +78,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
     private TableWrapper comparedTableWrapper;
     private CheckSearchFilters checkSearchFilters;
     private CheckResultsDataServiceImpl checkResultsDataService;
+    private UserDomainIdentity userDomainIdentity;
 
     @BeforeEach
     void setUp() {
@@ -88,9 +91,10 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
         referenceSampleTable.getTableSpec().setTimestampColumns(TimestampColumnsSpec.createForPartitionByColumn("date"));
         comparedSampleTable.getTableSpec().setIncrementalTimeWindow(PartitionIncrementalTimeWindowSpecObjectMother.createLongTermTimeWindow());
         referenceSampleTable.getTableSpec().setIncrementalTimeWindow(PartitionIncrementalTimeWindowSpecObjectMother.createLongTermTimeWindow());
+        userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithEmptyTemporaryContext();
-        userHomeContext = userHomeContextFactory.openLocalUserHome();
+        userHomeContext = userHomeContextFactory.openLocalUserHome(userDomainIdentity);
         UserHomeContextObjectMother.addSampleTable(userHomeContext, comparedSampleTable);
         UserHomeContextObjectMother.addSampleTable(userHomeContext, referenceSampleTable);
         userHome = userHomeContext.getUserHome();
@@ -108,6 +112,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
         this.tableCheckExecutionService = TableCheckExecutionServiceObjectMother.createCheckExecutionServiceOnUserHomeContext(userHomeContext);
 
         checkSearchFilters = new CheckSearchFilters();
+        checkSearchFilters.setCheckCategory("comparisons");
 
         ParquetPartitionStorageServiceImpl parquetPartitionStorageService = ParquetPartitionStorageServiceObjectMother.create(userHomeContext);
         DefaultTimeZoneProvider defaultTimeZoneProvider = DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider();
@@ -152,10 +157,48 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
 
         TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
                 comparedConnectionWrapper.getName(), comparedTableWrapper.getPhysicalTableName(),
-                tableCheckRootContainer.getCheckType(), tableCheckRootContainer.getCheckTimeScale(), COMPARISON_NAME);
+                tableCheckRootContainer.getCheckType(), tableCheckRootContainer.getCheckTimeScale(), COMPARISON_NAME, userDomainIdentity);
         Assertions.assertEquals(1, tableComparisonResultsModel.getTableComparisonResults().size());
-        ComparisonCheckResultModel rowCountMatchResultsModel = tableComparisonResultsModel.getTableComparisonResults().get("row_count_match");
+        ComparisonCheckResultModel rowCountMatchResultsModel = tableComparisonResultsModel.getTableComparisonResults().get("profile_row_count_match");
         Assertions.assertEquals(1, rowCountMatchResultsModel.getValidResults());
+    }
+
+    @Test
+    void profiling_whenComparingColumnCountNoGroupingSameTable_thenValuesMatch() {
+        AbstractRootChecksContainerSpec tableCheckRootContainer = this.comparedSampleTable.getTableSpec()
+                .getTableCheckRootContainer(CheckType.profiling, null, true);
+        AbstractTableComparisonCheckCategorySpec tableComparisonChecks =
+                (AbstractTableComparisonCheckCategorySpec) tableCheckRootContainer.getComparisons().getOrAdd(COMPARISON_NAME);
+        ComparisonCheckRules rowCountMatch = tableComparisonChecks.getCheckSpec(TableCompareCheckType.column_count_match, true);
+        rowCountMatch.setError(new MaxDiffPercentRule1ParametersSpec());
+
+        CheckExecutionSummary checkExecutionSummary = this.tableCheckExecutionService.executeChecksOnTable(this.executionContext,
+                this.userHomeContext.getUserHome(),
+                comparedConnectionWrapper,
+                comparedTableWrapper,
+                checkSearchFilters,
+                null,
+                new CheckExecutionProgressListenerStub(),
+                false,
+                JobCancellationToken.createDummyJobCancellationToken());
+
+        Assertions.assertNull(checkExecutionSummary.getCheckExecutionErrorSummary(),
+                checkExecutionSummary.getCheckExecutionErrorSummary() != null ?
+                        checkExecutionSummary.getCheckExecutionErrorSummary().getDebugMessage() : null);
+        Assertions.assertEquals(1, checkExecutionSummary.getTotalChecksExecutedCount());
+        Assertions.assertEquals(1, checkExecutionSummary.getTotalCheckResultsCount());
+        Assertions.assertEquals(1, checkExecutionSummary.getValidResultsCount());
+        Assertions.assertEquals(0, checkExecutionSummary.getWarningSeverityIssuesCount());
+        Assertions.assertEquals(0, checkExecutionSummary.getErrorSeverityIssuesCount());
+        Assertions.assertEquals(0, checkExecutionSummary.getFatalSeverityIssuesCount());
+        Assertions.assertEquals(0, checkExecutionSummary.getTotalExecutionErrorsCount());
+
+        TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
+                comparedConnectionWrapper.getName(), comparedTableWrapper.getPhysicalTableName(),
+                tableCheckRootContainer.getCheckType(), tableCheckRootContainer.getCheckTimeScale(), COMPARISON_NAME, userDomainIdentity);
+        Assertions.assertEquals(1, tableComparisonResultsModel.getTableComparisonResults().size());
+        ComparisonCheckResultModel columnCountMatchResultsModel = tableComparisonResultsModel.getTableComparisonResults().get("profile_column_count_match");
+        Assertions.assertEquals(1, columnCountMatchResultsModel.getValidResults());
     }
 
     @Test
@@ -186,6 +229,40 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
         Assertions.assertEquals(1, checkExecutionSummary.getTotalChecksExecutedCount());
         Assertions.assertEquals(2, checkExecutionSummary.getTotalCheckResultsCount());
         Assertions.assertEquals(2, checkExecutionSummary.getValidResultsCount());
+        Assertions.assertEquals(0, checkExecutionSummary.getWarningSeverityIssuesCount());
+        Assertions.assertEquals(0, checkExecutionSummary.getErrorSeverityIssuesCount());
+        Assertions.assertEquals(0, checkExecutionSummary.getFatalSeverityIssuesCount());
+        Assertions.assertEquals(0, checkExecutionSummary.getTotalExecutionErrorsCount());
+    }
+
+    @Test
+    void profiling_whenComparingColumnCountGroupingOnBooleanAndComparingToSameTable_thenValuesMatchButOnlyOneResultIsGenerated() {
+        this.tableComparisonConfigurationSpec.getGroupingColumns().add(
+                new TableComparisonGroupingColumnsPairSpec("null_placeholder_ok", "null_placeholder_ok"));
+
+        AbstractRootChecksContainerSpec tableCheckRootContainer = this.comparedSampleTable.getTableSpec()
+                .getTableCheckRootContainer(CheckType.profiling, null, true);
+        AbstractTableComparisonCheckCategorySpec tableComparisonChecks =
+                (AbstractTableComparisonCheckCategorySpec) tableCheckRootContainer.getComparisons().getOrAdd(COMPARISON_NAME);
+        ComparisonCheckRules rowCountMatch = tableComparisonChecks.getCheckSpec(TableCompareCheckType.column_count_match, true);
+        rowCountMatch.setError(new MaxDiffPercentRule1ParametersSpec());
+
+        CheckExecutionSummary checkExecutionSummary = this.tableCheckExecutionService.executeChecksOnTable(this.executionContext,
+                this.userHomeContext.getUserHome(),
+                comparedConnectionWrapper,
+                comparedTableWrapper,
+                checkSearchFilters,
+                null,
+                new CheckExecutionProgressListenerStub(),
+                false,
+                JobCancellationToken.createDummyJobCancellationToken());
+
+        Assertions.assertNull(checkExecutionSummary.getCheckExecutionErrorSummary(),
+                checkExecutionSummary.getCheckExecutionErrorSummary() != null ?
+                        checkExecutionSummary.getCheckExecutionErrorSummary().getDebugMessage() : null);
+        Assertions.assertEquals(1, checkExecutionSummary.getTotalChecksExecutedCount());
+        Assertions.assertEquals(1, checkExecutionSummary.getTotalCheckResultsCount());
+        Assertions.assertEquals(1, checkExecutionSummary.getValidResultsCount());
         Assertions.assertEquals(0, checkExecutionSummary.getWarningSeverityIssuesCount());
         Assertions.assertEquals(0, checkExecutionSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(0, checkExecutionSummary.getFatalSeverityIssuesCount());

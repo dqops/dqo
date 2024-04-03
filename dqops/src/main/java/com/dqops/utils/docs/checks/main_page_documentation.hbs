@@ -1,33 +1,25 @@
-# Checks
+# {{header}}
 
-**This is a list of the checks in DQO broken down by category and a brief description of what they do.**
+{{helpText}}
 
-## **Table checks**
+{{#each checkTargets}}
 {{#each checks}}
-{{#if ( eq target "table")}}
-###{{categoryName}}{{#with "  "}}{{.}}{{/with}}
+{{#if (eq target ../this)}}
+## {{../this}}-level {{categoryName}} checks
 {{categoryHelp}}
 {{#each checkGroups}}
-| Check name | Check type | Description |
-|------------|------------|-------------|
-{{#each allChecks}}|[{{checkName}}](./{{target}}/{{categoryName}}/{{replace primaryCheckName " " "-"}}/#{{replace checkName "_" "-"}})|{{checkType}}|{{checkHelp}}|
+### [{{primaryCheckName}}](/docs/checks/{{target}}/{{categoryName}}/{{replace primaryCheckName " " "-"}})
+{{checkSpecClassJavaDoc}}
+
+{{#if (eq checks.length 1)}}
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+{{#each allChecks}}|[<span class="no-wrap-code">`{{checkName}}`</span>](/docs/checks/{{target}}/{{categoryName}}/{{replace primaryCheckName " " "-"}}.md#{{replace checkName "_" "-"}})|[{{checkType}}](/docs/dqo-concepts/definition-of-data-quality-checks/{{checkTypeConceptPage}})|{{checkHelp}}|{{checkmark standard}}|
 {{/each}}
+{{/if}}
 {{/each}}
 {{else}}
 {{/if}}
 {{/each}}
 
-## **Column checks**
-{{#each checks}}
-{{#if ( eq target "column")}}
-###{{categoryName}}{{#with "  "}}{{.}}{{/with}}
-{{categoryHelp}}
-{{#each checkGroups}}
-| Check name | Check type | Description |
-|------------|------------|-------------|
-{{#each allChecks}}|[{{checkName}}](./{{target}}/{{categoryName}}/{{replace primaryCheckName " " "-"}}/#{{replace checkName "_" "-"}})|{{checkType}}|{{checkHelp}}|
-{{/each}}
-{{/each}}
-{{else}}
-{{/if}}
 {{/each}}

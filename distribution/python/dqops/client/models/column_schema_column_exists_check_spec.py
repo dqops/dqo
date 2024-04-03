@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -9,47 +10,45 @@ if TYPE_CHECKING:
         ColumnColumnExistsSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.equals_integer_1_rule_parameters_spec import (
-        EqualsInteger1RuleParametersSpec,
-    )
-    from ..models.recurring_schedule_spec import RecurringScheduleSpec
+    from ..models.equals_1_rule_parameters_spec import Equals1RuleParametersSpec
+    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
 
 T = TypeVar("T", bound="ColumnSchemaColumnExistsCheckSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnSchemaColumnExistsCheckSpec:
     """
     Attributes:
-        schedule_override (Union[Unset, RecurringScheduleSpec]):
+        schedule_override (Union[Unset, MonitoringScheduleSpec]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
             deserialization will remove non tracked comments).
-        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and recurrings
+        disabled (Union[Unset, bool]): Disables the data quality check. Only enabled data quality checks and monitorings
             are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules
             should be preserved in the configuration.
         exclude_from_kpi (Union[Unset, bool]): Data quality check results (alerts) are included in the data quality KPI
             calculation by default. Set this field to true in order to exclude this data quality check from the data quality
             KPI calculation.
-        include_in_sla (Union[Unset, bool]): Marks the data quality check as part of a data quality SLA. The data
-            quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract
-            for the dataset.
+        include_in_sla (Union[Unset, bool]): Marks the data quality check as part of a data quality SLA (Data Contract).
+            The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data
+            Contract for the dataset.
         quality_dimension (Union[Unset, str]): Configures a custom data quality dimension name that is different than
             the built-in dimensions (Timeliness, Validity, etc.).
-        display_name (Union[Unset, str]): Data quality check display name that could be assigned to the check, otherwise
+        display_name (Union[Unset, str]): Data quality check display name that can be assigned to the check, otherwise
             the check_display_name stored in the parquet result files is the check_name.
         data_grouping (Union[Unset, str]): Data grouping configuration name that should be applied to this data quality
             check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnColumnExistsSensorParametersSpec]):
-        warning (Union[Unset, EqualsInteger1RuleParametersSpec]):
-        error (Union[Unset, EqualsInteger1RuleParametersSpec]):
-        fatal (Union[Unset, EqualsInteger1RuleParametersSpec]):
+        warning (Union[Unset, Equals1RuleParametersSpec]):
+        error (Union[Unset, Equals1RuleParametersSpec]):
+        fatal (Union[Unset, Equals1RuleParametersSpec]):
     """
 
-    schedule_override: Union[Unset, "RecurringScheduleSpec"] = UNSET
+    schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     disabled: Union[Unset, bool] = UNSET
     exclude_from_kpi: Union[Unset, bool] = UNSET
@@ -58,10 +57,10 @@ class ColumnSchemaColumnExistsCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[Unset, "ColumnColumnExistsSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "EqualsInteger1RuleParametersSpec"] = UNSET
-    error: Union[Unset, "EqualsInteger1RuleParametersSpec"] = UNSET
-    fatal: Union[Unset, "EqualsInteger1RuleParametersSpec"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    warning: Union[Unset, "Equals1RuleParametersSpec"] = UNSET
+    error: Union[Unset, "Equals1RuleParametersSpec"] = UNSET
+    fatal: Union[Unset, "Equals1RuleParametersSpec"] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         schedule_override: Union[Unset, Dict[str, Any]] = UNSET
@@ -134,18 +133,16 @@ class ColumnSchemaColumnExistsCheckSpec:
             ColumnColumnExistsSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.equals_integer_1_rule_parameters_spec import (
-            EqualsInteger1RuleParametersSpec,
-        )
-        from ..models.recurring_schedule_spec import RecurringScheduleSpec
+        from ..models.equals_1_rule_parameters_spec import Equals1RuleParametersSpec
+        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
-        schedule_override: Union[Unset, RecurringScheduleSpec]
+        schedule_override: Union[Unset, MonitoringScheduleSpec]
         if isinstance(_schedule_override, Unset):
             schedule_override = UNSET
         else:
-            schedule_override = RecurringScheduleSpec.from_dict(_schedule_override)
+            schedule_override = MonitoringScheduleSpec.from_dict(_schedule_override)
 
         comments = []
         _comments = d.pop("comments", UNSET)
@@ -174,25 +171,25 @@ class ColumnSchemaColumnExistsCheckSpec:
             parameters = ColumnColumnExistsSensorParametersSpec.from_dict(_parameters)
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, EqualsInteger1RuleParametersSpec]
+        warning: Union[Unset, Equals1RuleParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = EqualsInteger1RuleParametersSpec.from_dict(_warning)
+            warning = Equals1RuleParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, EqualsInteger1RuleParametersSpec]
+        error: Union[Unset, Equals1RuleParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = EqualsInteger1RuleParametersSpec.from_dict(_error)
+            error = Equals1RuleParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, EqualsInteger1RuleParametersSpec]
+        fatal: Union[Unset, Equals1RuleParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = EqualsInteger1RuleParametersSpec.from_dict(_fatal)
+            fatal = Equals1RuleParametersSpec.from_dict(_fatal)
 
         column_schema_column_exists_check_spec = cls(
             schedule_override=schedule_override,

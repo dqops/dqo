@@ -1,5 +1,5 @@
-import React from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
+import React from 'react';
 import Button from '../../Button';
 
 interface ConfirmDialogProps {
@@ -21,23 +21,25 @@ const SetDefaultDialog = ({
   };
 
   return (
-    <Dialog open={open} handler={onClose} className='bg-yellow-100'>
+    <Dialog open={open} handler={onClose}>
       <DialogBody className="pt-10 pb-2 px-8">
-        <div className="text-xl text-gray-700 text-center whitespace-normal ">
+        <div className="text-lg text-red-500 text-center">
+          Warning <br />
+          <br />
+        </div>
+        <div className="text-lg text-gray-700 text-center whitespace-normal ">
           {message}
-          <br></br><br></br>
-          Please review DQO documentation before turning on a custom data grouping configuration.
-          <br></br><br></br>
+          <br></br>
+          <br></br>
+          Please review DQOps documentation before turning on a custom data
+          grouping configuration.
+          <br></br>
+          <br></br>
           Do you want to enable data grouping?
         </div>
       </DialogBody>
       <DialogFooter className="justify-center space-x-6 pb-8">
-        <Button
-          color="primary"
-          className="px-8"
-          onClick={onClose}
-          label="No"
-        />
+        <Button color="primary" className="px-8" onClick={onClose} label="No" />
         <Button
           color="primary"
           variant="outlined"

@@ -16,6 +16,7 @@
 package com.dqops.core.synchronization.fileexchange;
 
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationListener;
 
@@ -26,9 +27,10 @@ import com.dqops.core.synchronization.listeners.FileSystemSynchronizationListene
 public interface FileSystemSynchronizationService {
     /**
      * Synchronizes changes between two file systems.
-     * @param local Source file system, the changes on the source (the local files) will overwrite changes in the target (remote DQO Cloud or similar).
+     * @param local Source file system, the changes on the source (the local files) will overwrite changes in the target (remote DQOps Cloud or similar).
      * @param remote Target file system to send the changes in the source and download new changes.
      * @param dqoRoot User Home folder type to synchronize.
+     * @param userIdentity User identity, also specifies the data domain.
      * @param synchronizationDirection File synchronization direction (full, download, upload).
      * @param apiKey API key with the license limits.
      * @param synchronizationListener Synchronization listener that is informed about the progress.
@@ -37,6 +39,7 @@ public interface FileSystemSynchronizationService {
     SynchronizationResult synchronize(FileSystemChangeSet local,
                                       FileSystemChangeSet remote,
                                       DqoRoot dqoRoot,
+                                      UserDomainIdentity userIdentity,
                                       FileSynchronizationDirection synchronizationDirection,
                                       DqoCloudApiKey apiKey,
                                       FileSystemSynchronizationListener synchronizationListener);

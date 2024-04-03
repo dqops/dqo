@@ -16,7 +16,11 @@
 
 package com.dqops.checks.comparison;
 
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -47,4 +51,23 @@ public abstract class AbstractTableComparisonCheckCategorySpec extends AbstractC
      * @param tableCompareCheckType Check type.
      */
     public abstract void removeCheckSpec(TableCompareCheckType tableCompareCheckType);
+
+    /**
+     * Returns true if this type of comparison checks support a column count comparison.
+     * Profiling and monitoring checks that compare the whole table support also comparing the column count.
+     * Partitioned checks do not support comparing row count and their comparison check containers return false.
+     * @return True - the column count match check is supported for this type of checks, false when it is not supported.
+     */
+    public abstract boolean supportsColumnComparisonCheck();
+
+    /**
+     * Gets the check target appropriate for all checks in this category.
+     *
+     * @return Corresponding check target.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return CheckTarget.table;
+    }
 }

@@ -1,16 +1,14 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  recurring_checks:
+  monitoring_checks:
     daily:
       availability:
         daily_table_availability:
-          schedule_override:
-            cron_expression: '*/30 * * * *'
           warning:
             max_failures: 1
           error:
@@ -22,12 +20,10 @@ spec:
       type_snapshot:
         column_type: INT64
         nullable: true
-      recurring_checks:
+      monitoring_checks:
         daily:
           uniqueness:
             daily_distinct_percent:
-              schedule_override:
-                cron_expression: 15 * * * *
               warning:
                 min_percent: 99.0
               error:
@@ -46,7 +42,7 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
-      recurring_checks:
+      monitoring_checks:
         daily:
           uniqueness:
             daily_distinct_percent:
@@ -57,23 +53,21 @@ spec:
               fatal:
                 min_percent: 95.0
           pii:
-            daily_valid_email_percent:
+            daily_contains_email_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 0.0
               error:
-                min_percent: 98.0
+                max_percent: 1.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
     age:
       type_snapshot:
         column_type: INT64
         nullable: true
-      recurring_checks:
+      monitoring_checks:
         daily:
           numeric:
-            daily_values_in_range_numeric_percent:
-              schedule_override:
-                disabled: true
+            daily_number_in_range_percent:
               parameters:
                 min_value: 10.0
                 max_value: 80.0
@@ -87,14 +81,10 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
-      recurring_checks:
+      monitoring_checks:
         daily:
-          strings:
-            daily_string_value_in_set_percent:
-              parameters:
-                values:
-                - F
-                - M
+          accepted_values:
+            daily_text_found_in_set_percent:
               warning:
                 min_percent: 99.0
               error:

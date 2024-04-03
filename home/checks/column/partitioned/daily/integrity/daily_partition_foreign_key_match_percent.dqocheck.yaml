@@ -1,9 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/integrity/foreign_key_match_percent
-  rule_name: comparison/min_percent
-  help_text: Verifies that the percentage of values in a column that matches values
-    in another table column does not exceed the set count. Creates a separate data
-    quality check (and an alert) for each daily partition.

@@ -17,10 +17,9 @@ package com.dqops.metadata.basespecs;
 
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.id.*;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
-import com.dqops.utils.reflection.ReflectionService;
-import com.dqops.utils.reflection.ReflectionServiceSingleton;
 import com.dqops.utils.serialization.DeserializationAware;
 import com.dqops.utils.serialization.YamlNotRenderWhenDefault;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -37,6 +36,8 @@ import java.util.*;
 @EqualsAndHashCode(callSuper = true)
 public abstract class AbstractSpec extends BaseDirtyTrackingSpec
         implements HierarchyNode, YamlNotRenderWhenDefault, DeserializationAware, Cloneable {
+    public static boolean VALIDATE_FIELD_MAP_ON_WRITE = false;
+
     /**
      * Default empty field map.
      */
@@ -109,6 +110,16 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
     }
 
     /**
+     * Assigns the new hierarchy ID on child nodes, ignoring one child node.
+     * @param hierarchyId New hierarchy id of the current node that should be propagated to the field getter map.
+     * @param ignoredNode Child node name to ignore.
+     */
+    protected void propagateHierarchyIdToFieldsExcept(HierarchyId hierarchyId, String ignoredNode) {
+        ChildHierarchyNodeFieldMap childFieldMap = this.getChildMap();
+        childFieldMap.propagateHierarchyIdToChildrenExcept(this, hierarchyId, ignoredNode);
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      * @return Return the field map.
      */
@@ -131,11 +142,34 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
     }
 
     /**
+     * Clears the child node, setting a null value.
+     * @param childName Child name.
+     */
+    public void detachChildNode(Object childName) {
+        ChildHierarchyNodeFieldMap childFieldMap = this.getChildMap();
+        FieldInfo fieldInfo = childFieldMap.getReflectionClassInfo().getFieldByYamlName(childName.toString());
+        if (fieldInfo != null) {
+            Object hasValue = fieldInfo.getFieldValue(this);
+            if (hasValue != null) {
+                setDirtyIf(true);
+                fieldInfo.setFieldValue(null, this);
+            }
+        }
+    }
+
+    /**
      * Propagates a hierarchy ID to a child node, creating a child hierarchy ID that is the hierarchy ID of this node with an extra element, the field name.
      * @param childNode Child node.
      * @param fieldName Field name.
      */
     protected void propagateHierarchyIdToField(HierarchyNode childNode, Object fieldName) {
+        if (VALIDATE_FIELD_MAP_ON_WRITE) {
+            if (childNode != getChild(fieldName)) {
+                throw new DqoRuntimeException("Child node " + fieldName + " on the class " + this.getClass().getSimpleName() +
+                        " uses a wrong name when accessing the field map, update the names of fields.");
+            }
+        }
+
         if (childNode == null || this.hierarchyId == null) {
             return;
         }
@@ -144,6 +178,15 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
         childNode.setHierarchyId(childHierarchyId);
 
         assert getChild(fieldName) != null && getChild(fieldName).getHierarchyId().equals(childHierarchyId);
+    }
+
+
+    /**
+     * Returns the child map and the reflection info. It is a public method to be used when reflection is used by different classses.
+     * @return Child node information.
+     */
+    public final ChildHierarchyNodeFieldMap childMap() {
+        return getChildMap();
     }
 
     /**
@@ -168,9 +211,31 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
             return true;
         }
 
-        for(HierarchyNode child : this.children()) {
+        for (HierarchyNode child : this.children()) {
             if (child.isDirty()) {
                 return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the object is dirty (has changes), but the <code>checkAlsoChildren</code> parameter wil decide if we want to iterate also over child items (which could trigger loading them).
+     *
+     * @return True when the object is dirty and has modifications.
+     */
+    @JsonIgnore
+    public boolean isDirty(boolean checkAlsoChildren) {
+        if (super.isDirty()) {
+            return true;
+        }
+
+        if (checkAlsoChildren) {
+            for(HierarchyNode child : this.children()) {
+                if (child.isDirty()) {
+                    return true;
+                }
             }
         }
 

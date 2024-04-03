@@ -1,56 +1,76 @@
+import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
-import Button from '../../Button';
-import Input from '../../Input';
 import {
-  ConnectionBasicModel,
-  ConnectionBasicModelProviderTypeEnum,
-  ConnectionRemoteModel,
-  ConnectionRemoteModelConnectionStatusEnum
+  ConnectionModel,
+  ConnectionModelProviderTypeEnum,
+  ConnectionTestModel,
+  ConnectionTestModelConnectionTestResultEnum,
+  SharedCredentialListModel
 } from '../../../api';
+import { useTree } from '../../../contexts/treeContext';
 import {
   ConnectionApiClient,
-  DataSourcesApi
+  DataSourcesApi,
+  SharedCredentialsApi
 } from '../../../services/apiClient';
-import { useTree } from '../../../contexts/treeContext';
+import { filterPropertiesDirectories } from '../../../utils';
+import Button from '../../Button';
+import Input from '../../Input';
 import Loader from '../../Loader';
-import ErrorModal from './ErrorModal';
-import ConfirmErrorModal from './ConfirmErrorModal';
-import BigqueryConnection from './BigqueryConnection';
-import BigqueryLogo from '../../SvgIcon/svg/bigquery.svg';
-import SnowflakeConnection from './SnowflakeConnection';
-import SnowflakeLogo from '../../SvgIcon/svg/snowflake.svg';
-import PostgreSQLConnection from './PostgreSQLConnection';
-import PostgreSQLLogo from '../../SvgIcon/svg/postgresql.svg';
-import RedshiftConnection from './RedshiftConnection';
-import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
-import SqlServerConnection from './SqlServerConnection';
-import SqlServerLogo from '../../SvgIcon/svg/mssql-server.svg';
-import MySQLConnection from './MySQLConnection';
-import MySQLLogo from '../../SvgIcon/svg/mysql.svg';
-import OracleConnection from './OracleConnection';
-import OracleLogo from '../../SvgIcon/svg/oracle.svg';
 import SvgIcon from '../../SvgIcon';
+import BigqueryLogo from '../../SvgIcon/svg/bigquery.svg';
+import DatabricksLogo from '../../SvgIcon/svg/databricks.svg';
+import SqlServerLogo from '../../SvgIcon/svg/mssql-server.svg';
+import MySQLLogo from '../../SvgIcon/svg/mysql.svg';
+import OracleLogo from '../../SvgIcon/svg/oracle.svg';
+import PostgreSQLLogo from '../../SvgIcon/svg/postgresql.svg';
+import PrestoLogo from '../../SvgIcon/svg/presto.svg';
+import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
+import SnowflakeLogo from '../../SvgIcon/svg/snowflake.svg';
+import SparkLogo from '../../SvgIcon/svg/spark.svg';
+import TrinoLogo from '../../SvgIcon/svg/trino.svg';
+import BigqueryConnection from './BigqueryConnection';
+import ConfirmErrorModal from './ConfirmErrorModal';
+import DatabricksConnection from './DatabricksConnection';
+import DuckDBConnection from './DuckDBConnection';
+import ErrorModal from './ErrorModal';
+import MySQLConnection from './MySQLConnection';
+import OracleConnection from './OracleConnection';
+import PostgreSQLConnection from './PostgreSQLConnection';
+import PrestoConnection from './PrestoConnection';
+import RedshiftConnection from './RedshiftConnection';
+import SnowflakeConnection from './SnowflakeConnection';
+import SparkConnection from './SparkConnection';
+import SqlServerConnection from './SqlServerConnection';
+import TrinoConnection from './TrinoConnection';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
-  database: ConnectionBasicModel;
-  onChange: (db: ConnectionBasicModel) => void;
-  nameOfdatabase?: string;
+  database: ConnectionModel;
+  onChange: (db: ConnectionModel) => void;
+  nameOfDatabase?: string;
+  onBack: () => void;
+  onNameOfDatabaseChange: (newName: string) => void;
 }
 
 const DatabaseConnection = ({
   database,
   onChange,
-  nameOfdatabase
+  nameOfDatabase,
+  onBack,
+  onNameOfDatabaseChange
 }: IDatabaseConnectionProps) => {
   const { addConnection } = useTree();
   const [isTesting, setIsTesting] = useState(false);
-  const [testResult, setTestResult] = useState<ConnectionRemoteModel>();
+  const [testResult, setTestResult] = useState<ConnectionTestModel>();
   const [showError, setShowError] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [message, setMessage] = useState<string>();
   const [nameError, setNameError] = useState('');
+  const [sharedCredentials, setSharedCredentials] = useState<
+    SharedCredentialListModel[]
+  >([]);
 
   const onConfirmSave = async () => {
     if (!database.connection_name) {
@@ -60,7 +80,7 @@ const DatabaseConnection = ({
     setIsSaving(true);
     await ConnectionApiClient.createConnectionBasic(
       database?.connection_name ?? '',
-      database
+ filterPropertiesDirectories(database)
     );
     const res = await ConnectionApiClient.getConnectionBasic(
       database.connection_name
@@ -85,7 +105,7 @@ const DatabaseConnection = ({
 
   const onSave = async () => {
     if (!database.connection_name) {
-      setNameError('Connection Name is required');
+      setNameError('Connection name is required');
       return;
     }
     if (nameError) {
@@ -93,21 +113,35 @@ const DatabaseConnection = ({
     }
 
     setIsTesting(true);
-    let testRes;
+    let testRes: ConnectionTestModel | null = null;
     try {
-      testRes = await DataSourcesApi.testConnection(true, database);
+      testRes = (
+        await DataSourcesApi.testConnection(
+          true,
+filterPropertiesDirectories(database)
+        )
+      ).data;
       setIsTesting(false);
     } catch (err) {
       setIsTesting(false);
     } finally {
       if (
-        testRes?.data?.connectionStatus ===
-        ConnectionRemoteModelConnectionStatusEnum.SUCCESS
+        testRes?.connectionTestResult ===
+        ConnectionTestModelConnectionTestResultEnum.SUCCESS
       ) {
         await onConfirmSave();
-      } else {
-        setShowConfirm(true);
-        setMessage(testRes?.data?.errorMessage);
+      } else if (
+        testRes?.connectionTestResult ===
+        ConnectionTestModelConnectionTestResultEnum.CONNECTION_ALREADY_EXISTS
+      ) {
+        setMessage(testRes?.errorMessage);
+      }
+      else if (
+        testRes?.connectionTestResult ===
+        ConnectionTestModelConnectionTestResultEnum.FAILURE
+      ) {
+        setMessage(testRes?.errorMessage);
+        setShowConfirm(true)
       }
     }
   };
@@ -115,7 +149,9 @@ const DatabaseConnection = ({
   const onTestConnection = async () => {
     try {
       setIsTesting(true);
-      const res = await DataSourcesApi.testConnection(true, database);
+      const res = await DataSourcesApi.testConnection(
+        true, filterPropertiesDirectories(database)
+      );
       setTestResult(res.data);
     } catch (err) {
       console.error(err);
@@ -128,88 +164,184 @@ const DatabaseConnection = ({
     setShowError(true);
   };
 
-  const getTitle = (provider?: ConnectionBasicModelProviderTypeEnum) => {
-    switch (provider) {
-      case ConnectionBasicModelProviderTypeEnum.bigquery:
+  const getTitle = (database?: ConnectionModel): string => {
+    if (nameOfDatabase) {
+      return nameOfDatabase + ' Connection Settings';
+    }
+
+    switch (database?.provider_type) {
+      case ConnectionModelProviderTypeEnum.bigquery:
         return 'Google BigQuery Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.snowflake:
+      case ConnectionModelProviderTypeEnum.snowflake:
         return 'Snowflake Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.postgresql:
+      case ConnectionModelProviderTypeEnum.postgresql:
         return 'PostgreSQL Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.redshift:
+      case ConnectionModelProviderTypeEnum.redshift:
         return 'Amazon Redshift Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.sqlserver:
+      case ConnectionModelProviderTypeEnum.sqlserver:
         return 'Microsoft SQL Server Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.mysql:
+      case ConnectionModelProviderTypeEnum.presto:
+        return 'PrestoDB Connection Settings';
+      case ConnectionModelProviderTypeEnum.trino:
+        return 'Trino Connection Settings';
+      case ConnectionModelProviderTypeEnum.mysql:
         return 'MySQL Connection Settings';
-      case ConnectionBasicModelProviderTypeEnum.oracle:
+      case ConnectionModelProviderTypeEnum.oracle:
         return 'Oracle Database Connection Settings';
+      case ConnectionModelProviderTypeEnum.spark:
+        return 'Spark Connection Settings';
+      case ConnectionModelProviderTypeEnum.databricks:
+        return 'Databricks Connection Settings';
       default:
         return 'Database Connection Settings';
     }
   };
 
+  const getIcon = () => {
+    if (nameOfDatabase) {
+      return (
+        <SvgIcon
+          name={nameOfDatabase?.toLowerCase().replace(/\s/g, '')}
+          className={clsx(
+            'mb-3 w-20 text-blue-500',
+            nameOfDatabase === 'Spark' && 'w-35',
+            nameOfDatabase === 'Trino' && 'max-w-11'
+          )}
+        />
+      );
+    }
+    return <img src={dbImage} className="h-16" alt="db logo" />;
+  };
+
+  const getSharedCredentials = async () => {
+    await SharedCredentialsApi.getAllSharedCredentials().then((res) =>
+      setSharedCredentials(res.data)
+    );
+  };
+
+  useEffect(() => {
+    getSharedCredentials();
+  }, []);
   const components = {
-    [ConnectionBasicModelProviderTypeEnum.bigquery]: (
+    [ConnectionModelProviderTypeEnum.bigquery]: (
       <BigqueryConnection
         bigquery={database.bigquery}
         onChange={(bigquery) => onChange({ ...database, bigquery })}
+        sharedCredentials={sharedCredentials}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.snowflake]: (
+    [ConnectionModelProviderTypeEnum.snowflake]: (
       <SnowflakeConnection
         snowflake={database.snowflake}
         onChange={(snowflake) => onChange({ ...database, snowflake })}
+        sharedCredentials={sharedCredentials}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.postgresql]: (
+    [ConnectionModelProviderTypeEnum.postgresql]: (
       <PostgreSQLConnection
         postgresql={database.postgresql}
         onChange={(postgresql) => onChange({ ...database, postgresql })}
+        sharedCredentials={sharedCredentials}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.redshift]: (
+    [ConnectionModelProviderTypeEnum.duckdb]: (
+      <DuckDBConnection
+        duckdb={database.duckdb}
+        onChange={(duckdb) => onChange({ ...database, duckdb })}
+        sharedCredentials={sharedCredentials}
+        freezeFileType={
+          nameOfDatabase === 'CSV' ||
+          nameOfDatabase === 'Parquet' ||
+          nameOfDatabase === 'JSON'
+        }
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.redshift]: (
       <RedshiftConnection
         redshift={database.redshift}
         onChange={(redshift) => onChange({ ...database, redshift })}
+        sharedCredentials={sharedCredentials}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.sqlserver]: (
+    [ConnectionModelProviderTypeEnum.sqlserver]: (
       <SqlServerConnection
         sqlserver={database.sqlserver}
         onChange={(sqlserver) => onChange({ ...database, sqlserver })}
+        sharedCredentials={sharedCredentials}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.mysql]: (
+    [ConnectionModelProviderTypeEnum.presto]: (
+      <PrestoConnection
+        presto={database.presto}
+        onChange={(presto) => onChange({ ...database, presto })}
+        sharedCredentials={sharedCredentials}
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.trino]: (
+      <TrinoConnection
+        trino={database.trino}
+        onChange={(trino) => onChange({ ...database, trino })}
+        sharedCredentials={sharedCredentials}
+        nameOfDatabase={nameOfDatabase ? nameOfDatabase : ''}
+        onNameOfDatabaseChange={onNameOfDatabaseChange}
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.mysql]: (
       <MySQLConnection
         mysql={database.mysql}
         onChange={(mysql) => onChange({ ...database, mysql })}
+        sharedCredentials={sharedCredentials}
+        nameOfDatabase={nameOfDatabase ? nameOfDatabase : ''}
+        onNameOfDatabaseChange={onNameOfDatabaseChange}
       />
     ),
-    [ConnectionBasicModelProviderTypeEnum.oracle]: (
+    [ConnectionModelProviderTypeEnum.oracle]: (
       <OracleConnection
-          oracle={database.oracle}
-          onChange={(oracle) => onChange({ ...database, oracle })}
+        oracle={database.oracle}
+        onChange={(oracle) => onChange({ ...database, oracle })}
+        sharedCredentials={sharedCredentials}
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.spark]: (
+      <SparkConnection
+        spark={database.spark}
+        onChange={(spark) => onChange({ ...database, spark })}
+        sharedCredentials={sharedCredentials}
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.databricks]: (
+      <DatabricksConnection
+        databricks={database.databricks}
+        onChange={(databricks) => onChange({ ...database, databricks })}
+        sharedCredentials={sharedCredentials}
       />
     )
   };
 
   const dbImage = useMemo(() => {
     switch (database.provider_type) {
-      case ConnectionBasicModelProviderTypeEnum.bigquery:
+      case ConnectionModelProviderTypeEnum.bigquery:
         return BigqueryLogo;
-      case ConnectionBasicModelProviderTypeEnum.snowflake:
+      case ConnectionModelProviderTypeEnum.snowflake:
         return SnowflakeLogo;
-      case ConnectionBasicModelProviderTypeEnum.postgresql:
+      case ConnectionModelProviderTypeEnum.postgresql:
         return PostgreSQLLogo;
-      case ConnectionBasicModelProviderTypeEnum.redshift:
+      case ConnectionModelProviderTypeEnum.redshift:
         return RedshiftLogo;
-      case ConnectionBasicModelProviderTypeEnum.sqlserver:
+      case ConnectionModelProviderTypeEnum.sqlserver:
         return SqlServerLogo;
-      case ConnectionBasicModelProviderTypeEnum.mysql:
+      case ConnectionModelProviderTypeEnum.presto:
+        return PrestoLogo;
+      case ConnectionModelProviderTypeEnum.trino:
+        return TrinoLogo;
+      case ConnectionModelProviderTypeEnum.mysql:
         return MySQLLogo;
-      case ConnectionBasicModelProviderTypeEnum.oracle:
+      case ConnectionModelProviderTypeEnum.oracle:
         return OracleLogo;
+      case ConnectionModelProviderTypeEnum.spark:
+        return SparkLogo;
+      case ConnectionModelProviderTypeEnum.databricks:
+        return DatabricksLogo;
       default:
         return '';
     }
@@ -217,28 +349,31 @@ const DatabaseConnection = ({
 
   return (
     <div>
+      <div
+        className="mb-4 flex items-center text-teal-500 cursor-pointer"
+        onClick={onBack}
+      >
+        {' '}
+        <SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />
+        Back
+      </div>
       <div className="flex justify-between mb-4">
         <div>
           <div className="text-2xl font-semibold mb-3">Connect a database</div>
-          <div>
-            {nameOfdatabase
-              ? nameOfdatabase + ' Connection Settings'
-              : getTitle(database.provider_type)}
-          </div>
+          <div>{getTitle(database)}</div>
         </div>
-        {nameOfdatabase ? (
-          <SvgIcon
-            name={nameOfdatabase.toLowerCase().replace(/\s/g, '')}
-            className="mb-3 w-20 text-blue-500"
-          />
-        ) : (
-          <img src={dbImage} className="h-16" alt="db logo" />
-        )}
+        {getIcon()}
       </div>
 
       <div className="bg-white rounded-lg px-4 py-6 border border-gray-100">
         <Input
-          label="Connection Name"
+          label="Connection name"
+          className={clsx(
+            'mb-4',
+            (database.connection_name?.length === 0 ||
+              !database.connection_name) &&
+              'border border-red-500'
+          )}
           value={database.connection_name}
           onChange={(e) =>
             onChange({ ...database, connection_name: e.target.value })
@@ -246,7 +381,21 @@ const DatabaseConnection = ({
           error={!!nameError}
           helperText={nameError}
         />
-
+        <Input
+          label="Parallel jobs limit"
+          value={database.parallel_jobs_limit}
+          onChange={(e) => {
+            if (!isNaN(Number(e.target.value))) {
+              onChange({
+                ...database,
+                parallel_jobs_limit:
+                  String(e.target.value).length === 0
+                    ? undefined
+                    : Number(e.target.value)
+              });
+            }
+          }}
+        />
         <div className="mt-6">
           {database.provider_type ? components[database.provider_type] : ''}
         </div>
@@ -255,12 +404,18 @@ const DatabaseConnection = ({
           {isTesting && (
             <Loader isFull={false} className="w-8 h-8 !text-primary" />
           )}
-          {testResult?.connectionStatus ===
-            ConnectionRemoteModelConnectionStatusEnum.SUCCESS && (
+          {testResult?.connectionTestResult ===
+            ConnectionTestModelConnectionTestResultEnum.SUCCESS && (
             <div className="text-primary text-sm">Connection successful</div>
           )}
-          {testResult?.connectionStatus ===
-            ConnectionRemoteModelConnectionStatusEnum.FAILURE && (
+          {testResult?.connectionTestResult ===
+            ConnectionTestModelConnectionTestResultEnum.CONNECTION_ALREADY_EXISTS && (
+            <div className="text-red-700 text-sm">
+              <span>Connection already exists</span>
+            </div>
+          )}
+          {testResult?.connectionTestResult ===
+            ConnectionTestModelConnectionTestResultEnum.FAILURE && (
             <div className="text-red-700 text-sm">
               <span>Connection failed</span>
               <span

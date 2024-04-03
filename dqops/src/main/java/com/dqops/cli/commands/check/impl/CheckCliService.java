@@ -42,10 +42,10 @@ public interface CheckCliService {
                                     boolean dummyRun);
 
     /**
-     * Disable existing checks matching the provided filters.
+     * Deactivates existing checks matching the provided filters.
      * @param filters Check search filters to find checks to disable.
      */
-    void disableChecks(CheckSearchFilters filters);
+    void deactivateChecks(CheckSearchFilters filters);
 
     /**
      * Update checks configuration based on provided parameters.

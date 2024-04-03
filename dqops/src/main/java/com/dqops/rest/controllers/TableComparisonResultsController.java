@@ -17,6 +17,7 @@ package com.dqops.rest.controllers;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.checkresults.services.models.TableComparisonResultsModel;
 import com.dqops.metadata.sources.*;
@@ -24,10 +25,13 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.core.principal.DqoUserPrincipal;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -37,7 +41,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "TableComparisonResults", description = "Controller that returns the results of the most recent table comparison that was performed between the compared table and the reference table (the source of truth).")
+@Api(value = "TableComparisonResults", description = "Operations that returns the results of the most recent table comparison that was performed between the compared table and the reference table (the source of truth).")
 public class TableComparisonResultsController {
     private UserHomeContextFactory userHomeContextFactory;
     private CheckResultsDataService checkResultsDataService;
@@ -55,7 +59,7 @@ public class TableComparisonResultsController {
     }
 
     /**
-     * Retrieves the results of the most table comparison performed using the advanced profiling comparison checks.
+     * Retrieves the results of the most table comparison performed using the profiling checks comparison checks.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -63,21 +67,26 @@ public class TableComparisonResultsController {
      * @return The results of the most recent table comparison.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/comparisons/{tableComparisonConfigurationName}/results", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonProfilingResults", notes = "Retrieves the results of the most table comparison performed using the advanced profiling comparison checks.",
-            response = TableComparisonResultsModel.class)
+    @ApiOperation(value = "getTableComparisonProfilingResults", notes = "Retrieves the results of the most table comparison performed using the profiling checks comparison checks.",
+            response = TableComparisonResultsModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The results of the most recent table comparison using the advanced profiling checks on a table returned",
+            @ApiResponse(code = 200, message = "The results of the most recent table comparison using the profiling checks on a table returned",
                     response = TableComparisonResultsModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<TableComparisonResultsModel>> getTableComparisonProfilingResults(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -99,12 +108,13 @@ public class TableComparisonResultsController {
         }
 
         TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
-                connectionName, physicalTableName, CheckType.profiling, null, tableComparisonConfigurationName);
+                connectionName, physicalTableName, CheckType.profiling, null,
+                tableComparisonConfigurationName, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Mono.just(tableComparisonResultsModel), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the results of the most table comparison performed using the recurring comparison checks.
+     * Retrieves the results of the most table comparison performed using the monitoring comparison checks.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -112,23 +122,28 @@ public class TableComparisonResultsController {
      * @param tableComparisonConfigurationName Table comparison configuration name.
      * @return The results of the most recent table comparison.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/comparisons/{tableComparisonConfigurationName}/results", produces = "application/json")
-    @ApiOperation(value = "getTableComparisonRecurringResults", notes = "Retrieves the results of the most table comparison performed using the recurring comparison checks.",
-            response = TableComparisonResultsModel.class)
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/comparisons/{tableComparisonConfigurationName}/results", produces = "application/json")
+    @ApiOperation(value = "getTableComparisonMonitoringResults", notes = "Retrieves the results of the most table comparison performed using the monitoring comparison checks.",
+            response = TableComparisonResultsModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The results of the most recent table comparison using the recurring checks on a table returned",
+            @ApiResponse(code = 200, message = "The results of the most recent table comparison using the monitoring checks on a table returned",
                     response = TableComparisonResultsModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableComparisonResultsModel>> getTableComparisonRecurringResults(
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<TableComparisonResultsModel>> getTableComparisonMonitoringResults(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -150,7 +165,8 @@ public class TableComparisonResultsController {
         }
 
         TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
-                connectionName, physicalTableName, CheckType.recurring, timeScale, tableComparisonConfigurationName);
+                connectionName, physicalTableName, CheckType.monitoring, timeScale,
+                tableComparisonConfigurationName, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Mono.just(tableComparisonResultsModel), HttpStatus.OK); // 200
     }
 
@@ -165,7 +181,10 @@ public class TableComparisonResultsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/comparisons/{tableComparisonConfigurationName}/results", produces = "application/json")
     @ApiOperation(value = "getTableComparisonPartitionedResults", notes = "Retrieves the results of the most table comparison performed using the partitioned comparison checks, comparing days or months of data.",
-            response = TableComparisonResultsModel.class)
+            response = TableComparisonResultsModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The results of the most recent table comparison using the partitioned checks on a table returned",
@@ -173,13 +192,15 @@ public class TableComparisonResultsController {
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
+    @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<TableComparisonResultsModel>> getTableComparisonPartitionedResults(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -201,7 +222,8 @@ public class TableComparisonResultsController {
         }
 
         TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
-                connectionName, physicalTableName, CheckType.partitioned, timeScale, tableComparisonConfigurationName);
+                connectionName, physicalTableName, CheckType.partitioned, timeScale,
+                tableComparisonConfigurationName, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Mono.just(tableComparisonResultsModel), HttpStatus.OK); // 200
     }
 }

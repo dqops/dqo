@@ -15,11 +15,13 @@
  */
 package com.dqops.metadata.sources;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -29,8 +31,10 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
 import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Stores the column data type captured at the time of the table metadata import.
@@ -306,14 +310,15 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
     /**
      * Creates a clone of the object that will be passed to the sensor runner. Configurable variables are expanded.
      * @param secretValueProvider Secret value provider.
+     * @param lookupContext Secret lookup context.
      * @return Cloned and expanded copy of the object.
      */
-    public ColumnTypeSnapshotSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public ColumnTypeSnapshotSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         ColumnTypeSnapshotSpec cloned = this.deepClone();
         if (cloned.columnType != null) {
             cloned.columnType = cloned.columnType.toUpperCase(Locale.ROOT);
         }
-        cloned.columnType = secretValueProvider.expandValue(cloned.columnType);
+        cloned.columnType = secretValueProvider.expandValue(cloned.columnType, lookupContext);
         return cloned;
     }
 
@@ -324,6 +329,13 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
+        }
+    }
+
+    public static class ColumnTypeSnapshotSpecSampleFactory implements SampleValueFactory<ColumnTypeSnapshotSpec> {
+        @Override
+        public ColumnTypeSnapshotSpec createSample() {
+            return new ColumnTypeSnapshotSpec("string", false, 256);
         }
     }
 }

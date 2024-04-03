@@ -39,7 +39,7 @@ public class CopyVersionToFilesPostProcessor {
      */
     public static void main(String[] args) throws Exception {
         if (args.length != 1) {
-            System.out.println("DQO version configure utility");
+            System.out.println("DQOps version configure utility");
             System.out.println("Missing required parameter: <project root path>");
             return;
         }
@@ -75,7 +75,7 @@ public class CopyVersionToFilesPostProcessor {
      * @throws Exception
      */
     public static void updateVersionInPomXml(Path pathToPomXml, String version) throws Exception {
-        final String markerComment = "<!-- DQO Version, do not touch (changed automatically) -->";
+        final String markerComment = "<!-- DQOps Version, do not touch (changed automatically) -->";
 
         List<String> lines = Files.readAllLines(pathToPomXml, StandardCharsets.UTF_8);
         for (int i = 0; i < lines.size(); i++) {
@@ -191,10 +191,11 @@ public class CopyVersionToFilesPostProcessor {
     public static void updateVersionInIntelliJRunConfig(Path pathToRunConfig, String version) throws Exception {
         List<String> lines = Files.readAllLines(pathToRunConfig, StandardCharsets.UTF_8);
         for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            String jarReferenceLinePrefix = "    <option name=\"JAR_PATH\" value=\"$PROJECT_DIR$/dqops/target/dqo-dqops-";
+            String originalLine = lines.get(i);
+            String line = originalLine.trim();
+            String jarReferenceLinePrefix = "<option name=\"JAR_PATH\" value=\"$PROJECT_DIR$/dqops/target/dqo-dqops-";
             if (line.startsWith(jarReferenceLinePrefix)) {
-                String correctLine = jarReferenceLinePrefix + version + ".jar\" />";
+                String correctLine = " ".repeat(originalLine.indexOf('<')) + jarReferenceLinePrefix + version + ".jar\" />";
                 if (!Objects.equals(line, correctLine)) {
                     lines.set(i, correctLine);
                     Files.write(pathToRunConfig, lines, StandardCharsets.UTF_8);

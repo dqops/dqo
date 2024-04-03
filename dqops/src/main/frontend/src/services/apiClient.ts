@@ -1,5 +1,5 @@
 ///
-/// Copyright © 2021 DQOps (support@dqops.com)
+/// Copyright © 2024 DQOps (support@dqops.com)
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
@@ -38,7 +38,13 @@ import {
   EnvironmentApiFactory,
   ChecksApiFactory,
   TableComparisonsApiFactory,
-  TableComparisonResultsApiFactory
+  TableComparisonResultsApiFactory,
+  DefaultsApiFactory,
+  UsersApiFactory,
+  SharedCredentialsApiFactory,
+  DictionariesApiFactory,
+  DefaultTableCheckPatternsApiFactory,
+  DefaultColumnCheckPatternsApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -131,3 +137,15 @@ export const TableComparisonResultsApi = TableComparisonResultsApiFactory(
   '',
   axios
 );
+
+export const SettingsApi = DefaultsApiFactory(new Configuration(), '', axios);
+
+export const UsersApi = UsersApiFactory(new Configuration(), '', axios);
+
+export const SharedCredentialsApi = SharedCredentialsApiFactory(new Configuration(), '', axios);
+
+export const DataDictionaryApiClient = DictionariesApiFactory(new Configuration(), '', axios);
+
+export const DefaultTableCheckPatternsApiClient = DefaultTableCheckPatternsApiFactory(new Configuration(), '', axios);
+
+export const DefaultColumnCheckPatternsApiClient = DefaultColumnCheckPatternsApiFactory(new Configuration(), '', axios);

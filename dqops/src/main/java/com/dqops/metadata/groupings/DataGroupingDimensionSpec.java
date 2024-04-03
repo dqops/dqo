@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.groupings;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.fields.ControlType;
@@ -22,6 +23,8 @@ import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -45,10 +48,10 @@ public class DataGroupingDimensionSpec extends AbstractSpec {
         }
     };
 
-    @JsonPropertyDescription("The source of the data grouping dimension value. The default grouping dimension source is a tag. Assign a tag when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.")
+    @JsonPropertyDescription("The source of the data grouping dimension value. The default source of the grouping dimension is a tag. The tag should be assigned when there are many similar tables that store the same data for different areas (countries, etc.). It can be the name of the country if the table or partition stores information for that country.")
     private DataGroupingDimensionSource source = DataGroupingDimensionSource.tag;
 
-    @JsonPropertyDescription("The value assigned to a data quality grouping dimension when the source is 'tag'. Assign a hardcoded (static) data grouping dimension value (tag) when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.")
+    @JsonPropertyDescription("The value assigned to the data quality grouping dimension when the source is 'tag'. Assign a hard-coded (static) value to the data grouping dimension (tag) when there are multiple similar tables storing the same data for different areas (countries, etc.). This can be the name of the country if the table or partition stores information for that country.")
     private String tag;
 
     @JsonPropertyDescription("Column name that contains a dynamic data grouping dimension value (for dynamic data-driven data groupings). Sensor queries will be extended with a GROUP BY {data group level colum name}, sensors (and alerts) will be calculated for each unique value of the specified column. Also a separate time series will be tracked for each value.")
@@ -91,7 +94,7 @@ public class DataGroupingDimensionSpec extends AbstractSpec {
     }
 
     /**
-     * Sets the source of the data grouping dimension values. A data grouping dimension could be a static value or a dynamic value, returned from the data.
+     * Sets the source of the data grouping dimension values. A data grouping dimension can be a static value or a dynamic value, returned from the data.
      * @param source Data grouping dimension source type.
      */
     public void setSource(DataGroupingDimensionSource source) {
@@ -183,18 +186,19 @@ public class DataGroupingDimensionSpec extends AbstractSpec {
     /**
      * Creates a cloned and expanded version of the objects. All parameters are changed to the values expanded from variables like ${ENV_VAR}.
      * @param secretValueProvider Secret value provider.
+     * @param lookupContext Secret value lookup context.
      * @return Cloned and expanded copy of the object.
      */
-    public DataGroupingDimensionSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public DataGroupingDimensionSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         DataGroupingDimensionSpec cloned = this.deepClone();
-        cloned.tag = cloned.source == DataGroupingDimensionSource.tag ? secretValueProvider.expandValue(cloned.tag) : null;
-        cloned.column = cloned.source == DataGroupingDimensionSource.column_value ? secretValueProvider.expandValue(cloned.column) : null;
+        cloned.tag = cloned.source == DataGroupingDimensionSource.tag ? secretValueProvider.expandValue(cloned.tag, lookupContext) : null;
+        cloned.column = cloned.source == DataGroupingDimensionSource.column_value ? secretValueProvider.expandValue(cloned.column, lookupContext) : null;
         return cloned;
     }
 
     /**
      * Creates a clone of this data grouping dimension configuration to be used by the Jinja2 renderer, but only if the data grouping mapping references a column and the column is not empty.
-     * @return A clone of this object when it is a valid data grouping dimension configuration that could be used in a Jinja2 template or null when the data grouping configuration
+     * @return A clone of this object if it is a valid data grouping dimension configuration that can be used in a Jinja2 template or a null value if the data grouping configuration
      * is a tag or the column name is not provided.
      */
     public DataGroupingDimensionSpec truncateForSqlRendering() {
@@ -203,5 +207,12 @@ public class DataGroupingDimensionSpec extends AbstractSpec {
         }
 
         return this.deepClone();
+    }
+
+    public static class DataGroupingDimensionSpecSampleFactory implements SampleValueFactory<DataGroupingDimensionSpec> {
+        @Override
+        public DataGroupingDimensionSpec createSample() {
+            return createForColumn(SampleStringsRegistry.getColumnName());
+        }
     }
 }

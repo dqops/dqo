@@ -19,8 +19,8 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.comparison.MaxPercentRule1ParametersSpec;
-import com.dqops.rules.comparison.MaxPercentRule2ParametersSpec;
+import com.dqops.rules.comparison.MaxPercentRule0ErrorParametersSpec;
+import com.dqops.rules.comparison.MaxPercentRule0WarningParametersSpec;
 import com.dqops.rules.comparison.MaxPercentRule5ParametersSpec;
 import com.dqops.sensors.column.uniqueness.ColumnUniquenessDuplicatePercentSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -34,13 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.
+ * This check measures the percentage of duplicate values in all non-null values. It raises a data quality issue when the percentage of duplicates is above an accepted threshold.
+ * The default threshold is 0% duplicate values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnDuplicatePercentCheckSpec
-        extends AbstractCheckSpec<ColumnUniquenessDuplicatePercentSensorParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule5ParametersSpec> {
+        extends AbstractCheckSpec<ColumnUniquenessDuplicatePercentSensorParametersSpec, MaxPercentRule0WarningParametersSpec, MaxPercentRule0ErrorParametersSpec, MaxPercentRule5ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDuplicatePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,12 +55,12 @@ public class ColumnDuplicatePercentCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule1ParametersSpec warning;
+    private MaxPercentRule0WarningParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule2ParametersSpec error;
+    private MaxPercentRule0ErrorParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -91,7 +92,7 @@ public class ColumnDuplicatePercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxPercentRule1ParametersSpec getWarning() {
+    public MaxPercentRule0WarningParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -99,7 +100,7 @@ public class ColumnDuplicatePercentCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxPercentRule1ParametersSpec warning) {
+    public void setWarning(MaxPercentRule0WarningParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -111,7 +112,7 @@ public class ColumnDuplicatePercentCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxPercentRule2ParametersSpec getError() {
+    public MaxPercentRule0ErrorParametersSpec getError() {
         return this.error;
     }
 
@@ -119,7 +120,7 @@ public class ColumnDuplicatePercentCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxPercentRule2ParametersSpec error) {
+    public void setError(MaxPercentRule0ErrorParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");

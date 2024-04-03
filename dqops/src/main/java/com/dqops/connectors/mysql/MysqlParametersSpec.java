@@ -16,6 +16,8 @@
 package com.dqops.connectors.mysql;
 
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
+import com.dqops.connectors.mysql.singlestore.SingleStoreDbParametersSpec;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -64,15 +66,20 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String password;
 
-    @CommandLine.Option(names = {"--mysql-options"}, description = "MySQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
-    @JsonPropertyDescription("MySQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS} configuration with a custom environment variable.")
-    private String options;
-
     @CommandLine.Option(names = {"--mysql-sslmode"}, description = "SslMode MySQL connection parameter")
     @JsonPropertyDescription("SslMode MySQL connection parameter.")
     private MySqlSslMode sslmode;
 
+    @CommandLine.Option(names = {"--single-store-parameters-spec"}, description = "Single Store DB parameters spec.")
+    @JsonPropertyDescription("Single Store DB parameters spec.")
+    private SingleStoreDbParametersSpec singleStoreDbParametersSpec;
+
+    @CommandLine.Option(names = {"--mysql-engine"}, description = "MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration with a custom environment variable.")
+    @JsonPropertyDescription("MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration with a custom environment variable.")
+    private MysqlEngineType mysqlEngineType;
+
     @CommandLine.Option(names = {"-M"}, description = "MySQL additional properties that are added to the JDBC connection string")
+    @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
 
@@ -115,7 +122,11 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
      * @return Physical database name.
      */
     public String getDatabase() {
-        return database;
+        if (mysqlEngineType == MysqlEngineType.singlestoredb) {
+            return SingleStoreDbParametersSpec.DEFAULT_CATALOG_NAME; // database and schema is the same thing for the single store db
+        } else {
+            return database;
+        }
     }
 
     /**
@@ -162,23 +173,6 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the custom connection initialization options.
-     * @return Connection initialization options.
-     */
-    public String getOptions() {
-        return options;
-    }
-
-    /**
-     * Sets the connection initialization options.
-     * @param options Connection initialization options.
-     */
-    public void setOptions(String options) {
-        setDirtyIf(!Objects.equals(this.options, options));
-        this.options = options;
-    }
-
-    /**
      * Returns the flag to require SSL connection.
      * @return True - require an SSL connection.
      */
@@ -213,6 +207,41 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Returns the SingleStoreDbParametersSpec
+     * @return SingleStoreDbParametersSpec
+     */
+    public SingleStoreDbParametersSpec getSingleStoreDbParametersSpec() {
+        return singleStoreDbParametersSpec;
+    }
+
+    /**
+     * Sets a SingleStoreDbParametersSpec
+     * @param singleStoreDbParametersSpec SingleStoreDbParametersSpec
+     */
+    public void setSingleStoreDbParametersSpec(SingleStoreDbParametersSpec singleStoreDbParametersSpec) {
+        setDirtyIf(!Objects.equals(this.singleStoreDbParametersSpec, singleStoreDbParametersSpec));
+        this.singleStoreDbParametersSpec = singleStoreDbParametersSpec;
+    }
+
+
+    /**
+     * Returns the MySQL engine type.
+     * @return MySQL engine type.
+     */
+    public MysqlEngineType getMysqlEngineType() {
+        return mysqlEngineType;
+    }
+
+    /**
+     * Sets a MySQL engine type.
+     * @param mysqlEngineType MySQL engine type.
+     */
+    public void setMysqlEngineType(MysqlEngineType mysqlEngineType) {
+        setDirtyIf(!Objects.equals(this.mysqlEngineType, mysqlEngineType));
+        this.mysqlEngineType = mysqlEngineType;
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -233,17 +262,22 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
 
     /**
      * Creates a trimmed and expanded version of the object without unwanted properties, but with all variables like ${ENV_VAR} expanded.
+     * @param secretValueProvider Secret value provider.
+     * @param lookupContext Secret lookup context.
      * @return Trimmed and expanded version of this object.
      */
-    public MysqlParametersSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public MysqlParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         MysqlParametersSpec cloned = this.deepClone();
-        cloned.host = secretValueProvider.expandValue(cloned.host);
-        cloned.port = secretValueProvider.expandValue(cloned.port);
-        cloned.database = secretValueProvider.expandValue(cloned.database);
-        cloned.user = secretValueProvider.expandValue(cloned.user);
-        cloned.password = secretValueProvider.expandValue(cloned.password);
-        cloned.options = secretValueProvider.expandValue(cloned.options);
-        cloned.properties = secretValueProvider.expandProperties(cloned.properties);
+        cloned.host = secretValueProvider.expandValue(cloned.host, lookupContext);
+        cloned.port = secretValueProvider.expandValue(cloned.port, lookupContext);
+        cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
+        cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
+        cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
+        cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
+
+        if (cloned.singleStoreDbParametersSpec != null) {
+            cloned.singleStoreDbParametersSpec = cloned.singleStoreDbParametersSpec.expandAndTrim(secretValueProvider, lookupContext);
+        }
 
         return cloned;
     }

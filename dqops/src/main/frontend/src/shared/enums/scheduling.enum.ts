@@ -1,5 +1,5 @@
 ///
-/// Copyright © 2021 DQOps (support@dqops.com)
+/// Copyright © 2024 DQOps (support@dqops.com)
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
 /// limitations under the License.
 ///
 
-export enum CheckRunRecurringScheduleGroup {
+export enum CheckRunMonitoringScheduleGroup {
   profiling = "profiling",
-  recurring_daily = "recurring_daily",
-  recurring_monthly = "recurring_monthly",
+  monitoring_daily = "monitoring_daily",
+  monitoring_monthly = "monitoring_monthly",
   partitioned_daily = "partitioned_daily",
   partitioned_monthly = "partitioned_monthly",
 }

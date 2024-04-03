@@ -15,13 +15,15 @@
  */
 package com.dqops.data.errors.services;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.errors.models.ErrorsFragmentFilter;
 import com.dqops.data.errors.snapshot.ErrorsSnapshot;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactory;
-import com.dqops.data.models.DataDeleteResult;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.storage.FileStorageSettings;
 import com.dqops.data.storage.ParquetPartitionMetadataService;
+import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,30 +47,31 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
     /**
      * Deletes the errors from a table, applying specific filters to get the fragment (if necessary).
      * @param filter Filter for the errors fragment that is of interest.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Data delete operation summary.
      */
     @Override
-    public DataDeleteResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter) {
+    public DeleteStoredDataResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter, UserDomainIdentity userIdentity) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
-        Map<String, Set<String>> conditions = new HashMap<>();
+        Map<String, Set<String>> conditions = new LinkedHashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
             String columnName = kv.getKey();
             String columnValue = kv.getValue();
-            Set<String> wrappedValue = new HashSet<>(){{add(columnValue);}};
+            Set<String> wrappedValue = new LinkedHashSet<>(){{add(columnValue);}};
             conditions.put(columnName, wrappedValue);
         }
 
         if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
-            conditions.put(ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
+            conditions.put(ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME, new LinkedHashSet<>(filter.getColumnNames()));
         }
 
-        DataDeleteResult dataDeleteResult = new DataDeleteResult();
+        DeleteStoredDataResult deleteStoredDataResult = new DeleteStoredDataResult();
 
         FileStorageSettings fileStorageSettings = ErrorsSnapshot.createErrorsStorageSettings();
-        List<String> connections = this.parquetPartitionMetadataService.listConnections(fileStorageSettings);
+        List<String> connections = this.parquetPartitionMetadataService.listConnections(fileStorageSettings, userIdentity);
         if (connections == null) {
             // No connections present.
-            return dataDeleteResult;
+            return deleteStoredDataResult;
         }
 
         List<String> filteredConnections = connections.stream()
@@ -77,7 +80,7 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
 
         for (String connectionName: filteredConnections) {
             List<PhysicalTableName> tables = this.parquetPartitionMetadataService.listTablesForConnection(
-                    connectionName, fileStorageSettings);
+                    connectionName, fileStorageSettings, userIdentity);
 
             if (tables == null) {
                 // No tables present for this connection.
@@ -86,11 +89,17 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
 
             Collection<ErrorsSnapshot> errorsSnapshots = tables.stream()
                     .filter(schemaTableName ->
-                            filter.getTableSearchFilters().getSchemaNameSearchPattern().match(schemaTableName.getSchemaName())
-                                    && filter.getTableSearchFilters().gettableNameSearchPattern().match(schemaTableName.getTableName()))
+                            {
+                                SearchPattern schemaNameSearchPattern = filter.getTableSearchFilters().getSchemaNameSearchPattern();
+                                SearchPattern tableNameSearchPattern = filter.getTableSearchFilters().getTableNameSearchPattern();
+
+                                return (schemaNameSearchPattern == null || schemaNameSearchPattern.match(schemaTableName.getSchemaName())) &&
+                                        (tableNameSearchPattern == null || tableNameSearchPattern.match(schemaTableName.getTableName()));
+                            })
                     .map(tableName -> this.errorsSnapshotFactory.createSnapshot(
-                            filter.getTableSearchFilters().getConnectionName(),
-                            tableName
+                            filter.getTableSearchFilters().getConnection(),
+                            tableName,
+                            userIdentity
                     ))
                     .collect(Collectors.toList());
 
@@ -104,13 +113,13 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
                     continue;
                 }
 
-                DataDeleteResult snapshotDataDeleteResult = currentSnapshot.getDeleteResults();
-                dataDeleteResult.concat(snapshotDataDeleteResult);
+                DeleteStoredDataResult snapshotDeleteStoredDataResult = currentSnapshot.getDeleteResults();
+                deleteStoredDataResult.concat(snapshotDeleteStoredDataResult);
 
                 currentSnapshot.save();
             }
         }
 
-        return dataDeleteResult;
+        return deleteStoredDataResult;
     }
 }

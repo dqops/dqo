@@ -32,7 +32,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the median of values in a monitored column is in a set range.
+ * This check finds a median value in a numeric column. It verifies that the median value is within the range of accepted values
+ * and raises a data quality issue when it is not within a valid range.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

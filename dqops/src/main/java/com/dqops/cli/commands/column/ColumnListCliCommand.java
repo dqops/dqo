@@ -25,7 +25,7 @@ import com.dqops.cli.completion.completedcommands.ITableNameCommand;
 import com.dqops.cli.completion.completers.ColumnNameCompleter;
 import com.dqops.cli.completion.completers.ConnectionNameCompleter;
 import com.dqops.cli.completion.completers.FullTableNameCompleter;
-import com.dqops.cli.terminal.FileWritter;
+import com.dqops.cli.terminal.FileWriter;
 import com.dqops.cli.terminal.TablesawDatasetTableModel;
 import com.dqops.cli.terminal.TerminalTableWritter;
 import com.dqops.cli.terminal.TerminalWriter;
@@ -47,7 +47,7 @@ public class ColumnListCliCommand extends BaseCommand implements ICommand, IConn
 	private ColumnCliService columnCliService;
 	private TerminalWriter terminalWriter;
 	private TerminalTableWritter terminalTableWritter;
-	private FileWritter fileWritter;
+	private FileWriter fileWriter;
 
 	public ColumnListCliCommand() {
 	}
@@ -56,26 +56,27 @@ public class ColumnListCliCommand extends BaseCommand implements ICommand, IConn
 	public ColumnListCliCommand(TerminalWriter terminalWriter,
 							   ColumnCliService columnCliService,
 								TerminalTableWritter terminalTableWritter,
-								FileWritter fileWritter) {
+								FileWriter fileWriter) {
 		this.terminalWriter = terminalWriter;
 		this.columnCliService = columnCliService;
 		this.terminalTableWritter = terminalTableWritter;
-		this.fileWritter = fileWritter;
+		this.fileWriter = fileWriter;
 	}
-
-	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name filter", required = false,
-			completionCandidates = FullTableNameCompleter.class)
-	private String fullTableName = "*";
 
 	@CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name filter", required = false,
 			completionCandidates = ConnectionNameCompleter.class)
 	private String connectionName = "*";
 
+	@CommandLine.Option(names = {"-t", "--table", "--full-table-name"},
+			description = "Full table name filter in the form \"schema.table\", but also supporting patterns: public.*, *.customers, landing*.customer*.", required = false,
+			completionCandidates = FullTableNameCompleter.class)
+	private String fullTableName = "*.*";
+
 	@CommandLine.Option(names = {"-C", "--column"}, description = "Connection name filter", required = false,
 			completionCandidates = ColumnNameCompleter.class)
 	private String columnName = "*";
 
-	@CommandLine.Option(names = {"-tg", "--tags"}, description = "Data stream tag filter",
+	@CommandLine.Option(names = {"-tg", "--tags"}, description = "Data grouping static tag filter",
 			required = false)
 	private String[] tags;
 
@@ -164,14 +165,14 @@ public class ColumnListCliCommand extends BaseCommand implements ICommand, IConn
 					tableBuilder.addInnerBorder(BorderStyle.oldschool);
 					tableBuilder.addHeaderBorder(BorderStyle.oldschool);
 					String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
-					CliOperationStatus cliOperationStatus2 = this.fileWritter.writeStringToFile(renderedTable);
+					CliOperationStatus cliOperationStatus2 = this.fileWriter.writeStringToFile(renderedTable);
 					this.terminalWriter.writeLine(cliOperationStatus2.getMessage());
 				} else {
 					this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
 				}
 			} else {
 				if (this.isWriteToFile()) {
-					CliOperationStatus cliOperationStatus2 = this.fileWritter.writeStringToFile(cliOperationStatus.getMessage());
+					CliOperationStatus cliOperationStatus2 = this.fileWriter.writeStringToFile(cliOperationStatus.getMessage());
 					this.terminalWriter.writeLine(cliOperationStatus2.getMessage());
 				}
 				else {

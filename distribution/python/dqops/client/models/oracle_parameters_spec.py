@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="OracleParametersSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class OracleParametersSpec:
     """
     Attributes:
@@ -27,12 +28,10 @@ class OracleParametersSpec:
             dynamic substitution.
         password (Union[Unset, str]): Oracle database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
             format to use dynamic substitution.
-        options (Union[Unset, str]): Oracle connection 'options' initialization parameter. For example setting this to
-            -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also
-            a ${ORACLE_OPTIONS} configuration with a custom environment variable.
         initialization_sql (Union[Unset, str]): Custom SQL that is executed after connecting to Oracle. This SQL script
             can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS'
-        properties (Union[Unset, OracleParametersSpecProperties]):
+        properties (Union[Unset, OracleParametersSpecProperties]): A dictionary of custom JDBC parameters that are added
+            to the JDBC connection string, a key/value dictionary.
     """
 
     host: Union[Unset, str] = UNSET
@@ -40,10 +39,9 @@ class OracleParametersSpec:
     database: Union[Unset, str] = UNSET
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
-    options: Union[Unset, str] = UNSET
     initialization_sql: Union[Unset, str] = UNSET
     properties: Union[Unset, "OracleParametersSpecProperties"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         host = self.host
@@ -51,7 +49,6 @@ class OracleParametersSpec:
         database = self.database
         user = self.user
         password = self.password
-        options = self.options
         initialization_sql = self.initialization_sql
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
@@ -70,8 +67,6 @@ class OracleParametersSpec:
             field_dict["user"] = user
         if password is not UNSET:
             field_dict["password"] = password
-        if options is not UNSET:
-            field_dict["options"] = options
         if initialization_sql is not UNSET:
             field_dict["initialization_sql"] = initialization_sql
         if properties is not UNSET:
@@ -96,8 +91,6 @@ class OracleParametersSpec:
 
         password = d.pop("password", UNSET)
 
-        options = d.pop("options", UNSET)
-
         initialization_sql = d.pop("initialization_sql", UNSET)
 
         _properties = d.pop("properties", UNSET)
@@ -113,7 +106,6 @@ class OracleParametersSpec:
             database=database,
             user=user,
             password=password,
-            options=options,
             initialization_sql=initialization_sql,
             properties=properties,
         )

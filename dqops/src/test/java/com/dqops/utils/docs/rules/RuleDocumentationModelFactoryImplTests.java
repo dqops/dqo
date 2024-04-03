@@ -16,6 +16,7 @@
 package com.dqops.utils.docs.rules;
 
 import com.dqops.BaseTest;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
@@ -40,7 +41,7 @@ public class RuleDocumentationModelFactoryImplTests extends BaseTest {
         Path dqoHomePath = Path.of(System.getenv("DQO_HOME"));
         DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         this.sut = new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToUiCheckMappingService);
     }
 
@@ -50,7 +51,7 @@ public class RuleDocumentationModelFactoryImplTests extends BaseTest {
         RuleDocumentationModel ruleDocumentation = this.sut.createRuleDocumentation(parametersSpec);
 
         Assertions.assertNotNull(ruleDocumentation);
-        Assertions.assertEquals("Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.", ruleDocumentation.getRuleParametersJavaDoc());
+        Assertions.assertEquals("Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average within a time window.", ruleDocumentation.getRuleParametersJavaDoc());
         Assertions.assertEquals("averages", ruleDocumentation.getCategory());
         Assertions.assertEquals("between_percent_moving_average_7_days", ruleDocumentation.getRuleName());
         Assertions.assertEquals("averages/between_percent_moving_average_7_days", ruleDocumentation.getFullRuleName());

@@ -25,8 +25,14 @@ public interface UserHomeContextCache {
     void invalidateCache();
 
     /**
-     * Returns a cached user home context.
+     * Returns a cached user home context for the CLI user.
      * @return Cached user home context.
      */
     UserHomeContext getCachedLocalUserHome();
+
+    /**
+     * Attaches a reference to a DQOps user home context factory used by this cache.
+     * @param userHomeContextFactory User home context factory.
+     */
+    void setUserHomeContextFactory(UserHomeContextFactory userHomeContextFactory);
 }

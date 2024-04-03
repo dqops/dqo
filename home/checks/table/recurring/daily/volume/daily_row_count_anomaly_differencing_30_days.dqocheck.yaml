@@ -1,8 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: table/volume/row_count
-  rule_name: percentile/anomaly_differencing_percentile_moving_average_30_days
-  help_text: Verifies that the total row count of the tested table changes in a rate
-    within a percentile boundary during last 30 days.

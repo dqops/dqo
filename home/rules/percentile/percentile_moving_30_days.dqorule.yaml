@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -20,8 +20,6 @@ spec:
       \ is a 30 time periods (days, etc.) time window, but at least 10 readouts must\
       \ exist to run the calculation."
     data_type: double
-    sample_values:
-    - 5
   - field_name: percentile_below
     display_name: percentile_below
     help_text: "Probability that the current sensor readout will achieve values lesser\
@@ -32,5 +30,3 @@ spec:
       \ is a 30 time periods (days, etc.) time window, but at least 10 readouts must\
       \ exist to run the calculation."
     data_type: double
-    sample_values:
-    - 5

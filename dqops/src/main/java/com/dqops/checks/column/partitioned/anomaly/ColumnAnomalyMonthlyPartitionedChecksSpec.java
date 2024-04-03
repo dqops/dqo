@@ -16,11 +16,16 @@
 package com.dqops.checks.column.partitioned.anomaly;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
-import com.dqops.checks.column.checkspecs.anomaly.ColumnChangeMeanCheckSpec;
-import com.dqops.checks.column.checkspecs.anomaly.ColumnChangeMedianCheckSpec;
-import com.dqops.checks.column.checkspecs.anomaly.ColumnChangeSumCheckSpec;
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
+import com.dqops.checks.column.checkspecs.anomaly.ColumnMeanChangeCheckSpec;
+import com.dqops.checks.column.checkspecs.anomaly.ColumnMedianChangeCheckSpec;
+import com.dqops.checks.column.checkspecs.anomaly.ColumnSumChangeCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -38,26 +43,44 @@ import java.util.Objects;
 public class ColumnAnomalyMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("monthly_partition_sum_change", o -> o.monthlyPartitionSumChange);
             put("monthly_partition_mean_change", o -> o.monthlyPartitionMeanChange);
             put("monthly_partition_median_change", o -> o.monthlyPartitionMedianChange);
-            put("monthly_partition_sum_change", o -> o.monthlyPartitionSumChange);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout.")
-    private ColumnChangeMeanCheckSpec monthlyPartitionMeanChange;
+    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since the last readout.")
+    private ColumnSumChangeCheckSpec monthlyPartitionSumChange;
 
-    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since last readout.")
-    private ColumnChangeMedianCheckSpec monthlyPartitionMedianChange;
+    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since the last readout.")
+    private ColumnMeanChangeCheckSpec monthlyPartitionMeanChange;
 
-    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since last readout.")
-    private ColumnChangeSumCheckSpec monthlyPartitionSumChange;
+    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since the last readout.")
+    private ColumnMedianChangeCheckSpec monthlyPartitionMedianChange;
+
+    /**
+     * Returns the sum change check.
+     * @return Sum change check.
+     */
+    public ColumnSumChangeCheckSpec getMonthlyPartitionSumChange() {
+        return monthlyPartitionSumChange;
+    }
+
+    /**
+     * Sets a new sum change check.
+     * @param monthlyPartitionSumChange Sum change check.
+     */
+    public void setMonthlyPartitionSumChange(ColumnSumChangeCheckSpec monthlyPartitionSumChange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSumChange, monthlyPartitionSumChange));
+        this.monthlyPartitionSumChange = monthlyPartitionSumChange;
+        propagateHierarchyIdToField(monthlyPartitionSumChange, "monthly_partition_sum_change");
+    }
 
     /**
      * Returns the mean value change check.
      * @return Mean value change check.
      */
-    public ColumnChangeMeanCheckSpec getMonthlyPartitionMeanChange() {
+    public ColumnMeanChangeCheckSpec getMonthlyPartitionMeanChange() {
         return monthlyPartitionMeanChange;
     }
 
@@ -65,7 +88,7 @@ public class ColumnAnomalyMonthlyPartitionedChecksSpec extends AbstractCheckCate
      * Sets a new mean value change check.
      * @param monthlyPartitionMeanChange Mean value change check.
      */
-    public void setMonthlyPartitionMeanChange(ColumnChangeMeanCheckSpec monthlyPartitionMeanChange) {
+    public void setMonthlyPartitionMeanChange(ColumnMeanChangeCheckSpec monthlyPartitionMeanChange) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMeanChange, monthlyPartitionMeanChange));
         this.monthlyPartitionMeanChange = monthlyPartitionMeanChange;
         propagateHierarchyIdToField(monthlyPartitionMeanChange, "monthly_partition_mean_change");
@@ -75,7 +98,7 @@ public class ColumnAnomalyMonthlyPartitionedChecksSpec extends AbstractCheckCate
      * Returns the median change check.
      * @return Median change check.
      */
-    public ColumnChangeMedianCheckSpec getMonthlyPartitionMedianChange() {
+    public ColumnMedianChangeCheckSpec getMonthlyPartitionMedianChange() {
         return monthlyPartitionMedianChange;
     }
 
@@ -83,30 +106,13 @@ public class ColumnAnomalyMonthlyPartitionedChecksSpec extends AbstractCheckCate
      * Sets a new median change check.
      * @param monthlyPartitionMedianChange Median change check.
      */
-    public void setMonthlyPartitionMedianChange(ColumnChangeMedianCheckSpec monthlyPartitionMedianChange) {
+    public void setMonthlyPartitionMedianChange(ColumnMedianChangeCheckSpec monthlyPartitionMedianChange) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMedianChange, monthlyPartitionMedianChange));
         this.monthlyPartitionMedianChange = monthlyPartitionMedianChange;
         propagateHierarchyIdToField(monthlyPartitionMedianChange, "monthly_partition_median_change");
     }
 
-    /**
-     * Returns the sum change check.
-     * @return Sum change check.
-     */
-    public ColumnChangeSumCheckSpec getMonthlyPartitionSumChange() {
-        return monthlyPartitionSumChange;
-    }
 
-    /**
-     * Sets a new sum change check.
-     * @param monthlyPartitionSumChange Sum change check.
-     */
-    public void setMonthlyPartitionSumChange(ColumnChangeSumCheckSpec monthlyPartitionSumChange) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSumChange, monthlyPartitionSumChange));
-        this.monthlyPartitionSumChange = monthlyPartitionSumChange;
-        propagateHierarchyIdToField(monthlyPartitionSumChange, "monthly_partition_sum_change");
-    }
-    
     /**
      * Returns the child map on the spec class with all fields.
      *
@@ -115,5 +121,49 @@ public class ColumnAnomalyMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Gets the check target appropriate for all checks in this category.
+     *
+     * @return Corresponding check target.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return CheckTarget.column;
+    }
+
+    /**
+     * Gets the check type appropriate for all checks in this category.
+     *
+     * @return Corresponding check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.partitioned;
+    }
+
+    /**
+     * Gets the check timescale appropriate for all checks in this category.
+     *
+     * @return Corresponding check timescale.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return CheckTimeScale.monthly;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.NUMERIC;
     }
 }

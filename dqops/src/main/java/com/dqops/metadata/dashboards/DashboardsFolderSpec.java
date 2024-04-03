@@ -63,6 +63,10 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Folder name")
     private String folderName;
 
+    @JsonPropertyDescription("Always shows this schema tree node because it contains standard dashboards. Set the value to false to show this folder only when advanced dashboards are enabled.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean standard;
+
     @JsonPropertyDescription("List of data quality dashboard at this level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
@@ -88,6 +92,23 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
     public void setFolderName(String folderName) {
         this.setDirtyIf(!Objects.equals(this.folderName, folderName));
         this.folderName = folderName;
+    }
+
+    /**
+     * Returns the flag if the folder contains standard dashboard and should be always shown.
+     * @return True when the folder contains standard dashboards.
+     */
+    public boolean isStandard() {
+        return standard;
+    }
+
+    /**
+     * Set the flag to show this folder always, not only when advanced dashboards are enabled.
+     * @param standard Folder is shown always.
+     */
+    public void setStandard(boolean standard) {
+        this.setDirtyIf(this.standard != standard);
+        this.standard = standard;
     }
 
     /**
@@ -178,7 +199,7 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Adds a DQO Cloud dashboard using a fluent interface.
+     * Adds a DQOps Cloud dashboard using a fluent interface.
      * @param dashboardName Dashboard name.
      * @param url Looker studio dashboard url.
      * @param width Width in pixels.
@@ -202,7 +223,7 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Adds a DQO Cloud dashboard using a fluent interface.
+     * Adds a DQOps Cloud dashboard using a fluent interface.
      * @param dashboardName Dashboard name.
      * @param url Looker studio dashboard url.
      * @param width Width in pixels.
@@ -250,6 +271,7 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
      */
     public DashboardsFolderSpec createExpandedDashboardFolder() {
         DashboardsFolderSpec expandedFolder = new DashboardsFolderSpec(this.folderName);
+        expandedFolder.setStandard(this.standard);
         expandedFolder.setFolders(this.getFolders().createExpandedDashboardTree()); // replacing with an expanded list
         expandedFolder.getFolders().setFileLastModified(this.getFolders().getFileLastModified());
 
@@ -272,6 +294,10 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
      * @param defaultParameters A list of default parameters (using just the first parameter value for all other parameters.
      */
     protected void addExpandedDashboards(DashboardsFolderSpec targetFolder, DashboardSpec templatedDashboardSpec, LinkedHashMap<String, String> defaultParameters) {
+        if (templatedDashboardSpec.getParameters() == null || templatedDashboardSpec.getParameters().size() == 0) {
+            return;
+        }
+
         for (Map.Entry<String, String> templatedDashboardParameterEntry : templatedDashboardSpec.getParameters().entrySet()) {
             String parameterName = templatedDashboardParameterEntry.getKey();
             String templateParameterValue = templatedDashboardParameterEntry.getValue();
@@ -323,6 +349,11 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
      */
     protected LinkedHashMap<String, String> createDefaultParameters(DashboardSpec templatedDashboardSpec) {
         LinkedHashMap<String, String> defaultParameters = new LinkedHashMap<>();
+
+        if (templatedDashboardSpec.getParameters() == null || templatedDashboardSpec.getParameters().size() == 0) {
+            return defaultParameters;
+        }
+
         for (Map.Entry<String, String> templatedDashboardParameterEntry : templatedDashboardSpec.getParameters().entrySet()) {
             String parameterName = templatedDashboardParameterEntry.getKey();
             String templateParameterValue = templatedDashboardParameterEntry.getValue();
@@ -353,5 +384,24 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
     public void sort() {
         this.folders.sort();
         this.dashboards.sort();
+    }
+
+    /**
+     * Merges the current folder with the <code>otherFolder</code>, adding or overriding dashboard configuration.
+     * @param otherFolder The other dashboard configuration, from the DQOps user home, containing user overwritten dashboards.
+     * @return Merged folder that includes current folders and dashboards, merged with the other dashboards.
+     */
+    public DashboardsFolderSpec merge(DashboardsFolderSpec otherFolder) {
+        DashboardsFolderSpec cloned = new DashboardsFolderSpec();
+        cloned.setFolderName(this.folderName);
+        cloned.setStandard(this.standard || otherFolder.standard);
+        if (this.getHierarchyId() != null) {
+            cloned.setHierarchyId(this.getHierarchyId());
+        }
+
+        cloned.setFolders(this.folders.merge(otherFolder.folders));
+        cloned.setDashboards(this.dashboards.merge(otherFolder.dashboards));
+
+        return cloned;
     }
 }

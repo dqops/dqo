@@ -16,9 +16,15 @@
 package com.dqops.checks.column.partitioned.nulls;
 
 import com.dqops.checks.AbstractCheckCategorySpec;
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.nulls.*;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.utils.docs.generators.SampleValueFactory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -39,54 +45,47 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
         {
             put("daily_partition_nulls_count", o -> o.dailyPartitionNullsCount);
             put("daily_partition_nulls_percent", o -> o.dailyPartitionNullsPercent);
-
-            put("daily_partition_nulls_percent_anomaly_stationary_30_days", o ->o.dailyPartitionNullsPercentAnomalyStationary30Days);
-            put("daily_partition_nulls_percent_anomaly_stationary", o ->o.dailyPartitionNullsPercentAnomalyStationary);
-
-            put("daily_partition_nulls_percent_change", o ->o.dailyPartitionNullsPercentChange);
-            put("daily_partition_nulls_percent_change_yesterday", o ->o.dailyPartitionNullsPercentChangeYesterday);
-            put("daily_partition_nulls_percent_change_7_days", o ->o.dailyPartitionNullsPercentChange7Days);
-            put("daily_partition_nulls_percent_change_30_days", o ->o.dailyPartitionNullsPercentChange30Days);
+            put("daily_partition_nulls_percent_anomaly", o ->o.dailyPartitionNullsPercentAnomaly);
 
             put("daily_partition_not_nulls_count", o -> o.dailyPartitionNotNullsCount);
             put("daily_partition_not_nulls_percent", o -> o.dailyPartitionNotNullsPercent);
 
+            put("daily_partition_nulls_percent_change", o ->o.dailyPartitionNullsPercentChange);
+            put("daily_partition_nulls_percent_change_1_day", o ->o.dailyPartitionNullsPercentChange1Day);
+            put("daily_partition_nulls_percent_change_7_days", o ->o.dailyPartitionNullsPercentChange7Days);
+            put("daily_partition_nulls_percent_change_30_days", o ->o.dailyPartitionNullsPercentChange30Days);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Detects incomplete columns that contain any null values. Counts the number of rows having a null value. Raises a data quality issue when the count of null values is above a max_count threshold. Stores a separate data quality check result for each daily partition.")
     private ColumnNullsCountCheckSpec dailyPartitionNullsCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Detects incomplete columns that contain any null values. Measures the percentage of rows having a null value. Raises a data quality issue when the percentage of null values is above a max_percent threshold. Stores a separate data quality check result for each daily partition.")
     private ColumnNullsPercentCheckSpec dailyPartitionNullsPercent;
 
-    @JsonProperty("daily_partition_nulls_percent_anomaly_stationary_30_days")
-    @JsonPropertyDescription("Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 30 days.")
-    private ColumnAnomalyStationaryNullPercent30DaysCheckSpec dailyPartitionNullsPercentAnomalyStationary30Days;
+    @JsonPropertyDescription("Detects day-to-day anomalies in the percentage of null values. Raises a data quality issue when the rate of null values increases or decreases too much during the last 90 days.")
+    private ColumnNullPercentAnomalyStationaryCheckSpec dailyPartitionNullsPercentAnomaly;
 
-    @JsonPropertyDescription("Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.")
-    private ColumnAnomalyStationaryNullPercentCheckSpec dailyPartitionNullsPercentAnomalyStationary;
-
-    @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout.")
-    private ColumnChangeNullPercentCheckSpec dailyPartitionNullsPercentChange;
-
-    @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.")
-    private ColumnChangeNullPercentSinceYesterdayCheckSpec dailyPartitionNullsPercentChangeYesterday;
-
-    @JsonProperty("daily_partition_nulls_percent_change_7_days")
-    @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.")
-    private ColumnChangeNullPercentSince7DaysCheckSpec dailyPartitionNullsPercentChange7Days;
-
-    @JsonProperty("daily_partition_nulls_percent_change_30_days")
-    @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.")
-    private ColumnChangeNullPercentSince30DaysCheckSpec dailyPartitionNullsPercentChange30Days;
-
-
-    @JsonPropertyDescription("Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count. Stores a separate data quality check result for each daily partition.")
     private ColumnNotNullsCountCheckSpec dailyPartitionNotNullsCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of not null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnNotNullsPercentCheckSpec dailyPartitionNotNullsPercent;
+
+    @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout.")
+    private ColumnNullPercentChangeCheckSpec dailyPartitionNullsPercentChange;
+
+    @JsonProperty("daily_partition_nulls_percent_change_1_day")
+    @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since the last readout from yesterday.")
+    private ColumnNullPercentChange1DayCheckSpec dailyPartitionNullsPercentChange1Day;
+
+    @JsonProperty("daily_partition_nulls_percent_change_7_days")
+    @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last week.")
+    private ColumnNullPercentChange7DaysCheckSpec dailyPartitionNullsPercentChange7Days;
+
+    @JsonProperty("daily_partition_nulls_percent_change_30_days")
+    @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last month.")
+    private ColumnNullPercentChange30DaysCheckSpec dailyPartitionNullsPercentChange30Days;
 
     /**
      * Returns a nulls count check.
@@ -125,111 +124,21 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
     }
 
     /**
-     * Returns a null percent value anomaly 30 days check specification.
-     * @return Null percent value anomaly 30 days check specification.
-     */
-    public ColumnAnomalyStationaryNullPercent30DaysCheckSpec getDailyPartitionNullsPercentAnomalyStationary30Days() {
-        return dailyPartitionNullsPercentAnomalyStationary30Days;
-    }
-
-    /**
-     * Sets a new specification of a null percent value anomaly 30 days check.
-     * @param dailyPartitionNullsPercentAnomalyStationary30Days Null percent value anomaly 30 days check specification.
-     */
-    public void setDailyPartitionNullsPercentAnomalyStationary30Days(ColumnAnomalyStationaryNullPercent30DaysCheckSpec dailyPartitionNullsPercentAnomalyStationary30Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullsPercentAnomalyStationary30Days, dailyPartitionNullsPercentAnomalyStationary30Days));
-        this.dailyPartitionNullsPercentAnomalyStationary30Days = dailyPartitionNullsPercentAnomalyStationary30Days;
-        propagateHierarchyIdToField(dailyPartitionNullsPercentAnomalyStationary30Days, "daily_partition_nulls_percent_anomaly_stationary_30_days");
-    }
-
-    /**
      * Returns a null percent value anomaly 90 days check specification.
      * @return Null percent value anomaly 90 days check specification.
      */
-    public ColumnAnomalyStationaryNullPercentCheckSpec getDailyPartitionNullsPercentAnomalyStationary() {
-        return dailyPartitionNullsPercentAnomalyStationary;
+    public ColumnNullPercentAnomalyStationaryCheckSpec getDailyPartitionNullsPercentAnomaly() {
+        return dailyPartitionNullsPercentAnomaly;
     }
 
     /**
      * Sets a new specification of a null percent value anomaly 90 days check.
-     * @param dailyPartitionNullsPercentAnomalyStationary Null percent value anomaly 90 days check specification.
+     * @param dailyPartitionNullsPercentAnomaly Null percent value anomaly 90 days check specification.
      */
-    public void setDailyPartitionNullsPercentAnomalyStationary(ColumnAnomalyStationaryNullPercentCheckSpec dailyPartitionNullsPercentAnomalyStationary) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullsPercentAnomalyStationary, dailyPartitionNullsPercentAnomalyStationary));
-        this.dailyPartitionNullsPercentAnomalyStationary = dailyPartitionNullsPercentAnomalyStationary;
-        propagateHierarchyIdToField(dailyPartitionNullsPercentAnomalyStationary, "daily_partition_nulls_percent_anomaly_stationary");
-    }
-
-    /**
-     * Returns the null percent value change check.
-     * @return Null percent value change check.
-     */
-    public ColumnChangeNullPercentCheckSpec getDailyPartitionNullsPercentChange() {
-        return dailyPartitionNullsPercentChange;
-    }
-
-    /**
-     * Sets a new null percent value change check.
-     * @param dailyPartitionNullsPercentChange Null percent value change check.
-     */
-    public void setDailyPartitionNullsPercentChange(ColumnChangeNullPercentCheckSpec dailyPartitionNullsPercentChange) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullsPercentChange, dailyPartitionNullsPercentChange));
-        this.dailyPartitionNullsPercentChange = dailyPartitionNullsPercentChange;
-        propagateHierarchyIdToField(dailyPartitionNullsPercentChange, "daily_partition_nulls_percent_change");
-    }
-
-    /**
-     * Returns the null percent value change yesterday check.
-     * @return Null percent value change yesterday check.
-     */
-    public ColumnChangeNullPercentSinceYesterdayCheckSpec getDailyPartitionNullsPercentChangeYesterday() {
-        return dailyPartitionNullsPercentChangeYesterday;
-    }
-
-    /**
-     * Sets a new null percent value change yesterday check.
-     * @param dailyPartitionNullsPercentChangeYesterday Null percent value change yesterday check.
-     */
-    public void setDailyPartitionNullsPercentChangeYesterday(ColumnChangeNullPercentSinceYesterdayCheckSpec dailyPartitionNullsPercentChangeYesterday) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullsPercentChangeYesterday, dailyPartitionNullsPercentChangeYesterday));
-        this.dailyPartitionNullsPercentChangeYesterday = dailyPartitionNullsPercentChangeYesterday;
-        propagateHierarchyIdToField(dailyPartitionNullsPercentChangeYesterday, "daily_partition_nulls_percent_change_yesterday");
-    }
-
-    /**
-     * Returns the null percent value change 7 days check.
-     * @return Null percent value change 7 days check.
-     */
-    public ColumnChangeNullPercentSince7DaysCheckSpec getDailyPartitionNullsPercentChange7Days() {
-        return dailyPartitionNullsPercentChange7Days;
-    }
-
-    /**
-     * Sets a new null percent value change 7 days check.
-     * @param dailyPartitionNullsPercentChange7Days Null percent value change 7 days check.
-     */
-    public void setDailyPartitionNullsPercentChange7Days(ColumnChangeNullPercentSince7DaysCheckSpec dailyPartitionNullsPercentChange7Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullsPercentChange7Days, dailyPartitionNullsPercentChange7Days));
-        this.dailyPartitionNullsPercentChange7Days = dailyPartitionNullsPercentChange7Days;
-        propagateHierarchyIdToField(dailyPartitionNullsPercentChange7Days, "daily_partition_nulls_percent_change_7_days");
-    }
-
-    /**
-     * Returns the null percent value change 30 days check.
-     * @return Null percent value change 30 days check.
-     */
-    public ColumnChangeNullPercentSince30DaysCheckSpec getDailyPartitionNullsPercentChange30Days() {
-        return dailyPartitionNullsPercentChange30Days;
-    }
-
-    /**
-     * Sets a new null percent value change 30 days check.
-     * @param dailyPartitionNullsPercentChange30Days Null percent value change 30 days check.
-     */
-    public void setDailyPartitionNullsPercentChange30Days(ColumnChangeNullPercentSince30DaysCheckSpec dailyPartitionNullsPercentChange30Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullsPercentChange30Days, dailyPartitionNullsPercentChange30Days));
-        this.dailyPartitionNullsPercentChange30Days = dailyPartitionNullsPercentChange30Days;
-        propagateHierarchyIdToField(dailyPartitionNullsPercentChange30Days, "daily_partition_nulls_percent_change_30_days");
+    public void setDailyPartitionNullsPercentAnomaly(ColumnNullPercentAnomalyStationaryCheckSpec dailyPartitionNullsPercentAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullsPercentAnomaly, dailyPartitionNullsPercentAnomaly));
+        this.dailyPartitionNullsPercentAnomaly = dailyPartitionNullsPercentAnomaly;
+        propagateHierarchyIdToField(dailyPartitionNullsPercentAnomaly, "daily_partition_nulls_percent_anomaly");
     }
 
     /**
@@ -269,6 +178,78 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
     }
 
     /**
+     * Returns the null percent value change check.
+     * @return Null percent value change check.
+     */
+    public ColumnNullPercentChangeCheckSpec getDailyPartitionNullsPercentChange() {
+        return dailyPartitionNullsPercentChange;
+    }
+
+    /**
+     * Sets a new null percent value change check.
+     * @param dailyPartitionNullsPercentChange Null percent value change check.
+     */
+    public void setDailyPartitionNullsPercentChange(ColumnNullPercentChangeCheckSpec dailyPartitionNullsPercentChange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullsPercentChange, dailyPartitionNullsPercentChange));
+        this.dailyPartitionNullsPercentChange = dailyPartitionNullsPercentChange;
+        propagateHierarchyIdToField(dailyPartitionNullsPercentChange, "daily_partition_nulls_percent_change");
+    }
+
+    /**
+     * Returns the null percent value change yesterday check.
+     * @return Null percent value change yesterday check.
+     */
+    public ColumnNullPercentChange1DayCheckSpec getDailyPartitionNullsPercentChange1Day() {
+        return dailyPartitionNullsPercentChange1Day;
+    }
+
+    /**
+     * Sets a new null percent value change yesterday check.
+     * @param dailyPartitionNullsPercentChange1Day Null percent value change yesterday check.
+     */
+    public void setDailyPartitionNullsPercentChange1Day(ColumnNullPercentChange1DayCheckSpec dailyPartitionNullsPercentChange1Day) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullsPercentChange1Day, dailyPartitionNullsPercentChange1Day));
+        this.dailyPartitionNullsPercentChange1Day = dailyPartitionNullsPercentChange1Day;
+        propagateHierarchyIdToField(dailyPartitionNullsPercentChange1Day, "daily_partition_nulls_percent_change_1_day");
+    }
+
+    /**
+     * Returns the null percent value change 7 days check.
+     * @return Null percent value change 7 days check.
+     */
+    public ColumnNullPercentChange7DaysCheckSpec getDailyPartitionNullsPercentChange7Days() {
+        return dailyPartitionNullsPercentChange7Days;
+    }
+
+    /**
+     * Sets a new null percent value change 7 days check.
+     * @param dailyPartitionNullsPercentChange7Days Null percent value change 7 days check.
+     */
+    public void setDailyPartitionNullsPercentChange7Days(ColumnNullPercentChange7DaysCheckSpec dailyPartitionNullsPercentChange7Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullsPercentChange7Days, dailyPartitionNullsPercentChange7Days));
+        this.dailyPartitionNullsPercentChange7Days = dailyPartitionNullsPercentChange7Days;
+        propagateHierarchyIdToField(dailyPartitionNullsPercentChange7Days, "daily_partition_nulls_percent_change_7_days");
+    }
+
+    /**
+     * Returns the null percent value change 30 days check.
+     * @return Null percent value change 30 days check.
+     */
+    public ColumnNullPercentChange30DaysCheckSpec getDailyPartitionNullsPercentChange30Days() {
+        return dailyPartitionNullsPercentChange30Days;
+    }
+
+    /**
+     * Sets a new null percent value change 30 days check.
+     * @param dailyPartitionNullsPercentChange30Days Null percent value change 30 days check.
+     */
+    public void setDailyPartitionNullsPercentChange30Days(ColumnNullPercentChange30DaysCheckSpec dailyPartitionNullsPercentChange30Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullsPercentChange30Days, dailyPartitionNullsPercentChange30Days));
+        this.dailyPartitionNullsPercentChange30Days = dailyPartitionNullsPercentChange30Days;
+        propagateHierarchyIdToField(dailyPartitionNullsPercentChange30Days, "daily_partition_nulls_percent_change_30_days");
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -276,5 +257,58 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Gets the check target appropriate for all checks in this category.
+     *
+     * @return Corresponding check target.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return CheckTarget.column;
+    }
+
+    /**
+     * Gets the check type appropriate for all checks in this category.
+     *
+     * @return Corresponding check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.partitioned;
+    }
+
+    /**
+     * Gets the check timescale appropriate for all checks in this category.
+     *
+     * @return Corresponding check timescale.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return CheckTimeScale.daily;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.ANY;
+    }
+
+    public static class ColumnNullsDailyPartitionedChecksSpecSampleFactory implements SampleValueFactory<ColumnNullsDailyPartitionedChecksSpec> {
+        @Override
+        public ColumnNullsDailyPartitionedChecksSpec createSample() {
+            return new ColumnNullsDailyPartitionedChecksSpec() {{
+                setDailyPartitionNullsCount(new ColumnNullsCountCheckSpec.ColumnNullsCountCheckSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

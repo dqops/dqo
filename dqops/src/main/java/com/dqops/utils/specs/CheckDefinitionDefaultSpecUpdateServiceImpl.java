@@ -33,7 +33,7 @@ import java.util.*;
 
 /**
  * Built-in check definition update service that updates the list of supported built-in checks as check specification files
- * stored in the DQO Home folder.
+ * stored in the DQOps Home folder.
  */
 @Component
 public class CheckDefinitionDefaultSpecUpdateServiceImpl implements CheckDefinitionDefaultSpecUpdateService {
@@ -45,15 +45,15 @@ public class CheckDefinitionDefaultSpecUpdateServiceImpl implements CheckDefinit
     }
 
     /**
-     * Updates the definitions of built-in checks in the DQO Home's checks folder.
-     * @param dqoHomeContext DQO Home context.
+     * Updates the definitions of built-in checks in the DQOps Home's checks folder.
+     * @param dqoHomeContext DQOps Home context.
      */
     @Override
     public void updateCheckSpecifications(DqoHomeContext dqoHomeContext) {
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
         CheckDefinitionList dqoHomeChecksList = dqoHome.getChecks();
 
-        HashSet<String> foundChecks = new HashSet<>();
+        Set<String> foundChecks = new LinkedHashSet<>();
         ArrayList<SimilarChecksGroup> allCheckGroups = new ArrayList<>();
         SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarTableChecks();
         allCheckGroups.addAll(similarTableChecks.getSimilarCheckGroups());
@@ -71,12 +71,16 @@ public class CheckDefinitionDefaultSpecUpdateServiceImpl implements CheckDefinit
                 String sensorName = checkModel.getSensorName();
                 String ruleName = checkModel.getRule().getError().getRuleName();
                 String helpText = checkModel.getHelpText();
+                String friendlyName = checkModel.getFriendlyName();
+                boolean isStandard = checkModel.isStandard();
 
                 CheckDefinitionWrapper checkDefinitionWrapper = dqoHomeChecksList.getByObjectName(fullCheckName, true);
                 if (checkDefinitionWrapper != null) {
                     checkDefinitionWrapper.getSpec().setSensorName(sensorName);
                     checkDefinitionWrapper.getSpec().setRuleName(ruleName);
                     checkDefinitionWrapper.getSpec().setHelpText(helpText);
+                    checkDefinitionWrapper.getSpec().setFriendlyName(friendlyName);
+                    checkDefinitionWrapper.getSpec().setStandard(isStandard);
                 } else {
                     CheckDefinitionSpec checkDefinitionSpec = new CheckDefinitionSpec(sensorName, ruleName, helpText);
                     checkDefinitionWrapper = dqoHomeChecksList.createAndAddNew(fullCheckName);

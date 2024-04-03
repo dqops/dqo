@@ -18,6 +18,7 @@ package com.dqops.sensors.table.timeliness;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.AbstractSensorParametersSpec;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -54,5 +55,27 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpec extends Abstr
     @Override
     public String getSensorDefinitionName() {
         return "table/timeliness/data_ingestion_delay";
+    }
+
+    /**
+     * Returns true if the sensor is a timeliness sensor that requires an event timestamp column. The default value is false.
+     *
+     * @return True the sensor requires an event timestamp column.
+     */
+    @Override
+    @JsonIgnore
+    public boolean getRequiresEventTimestampColumn() {
+        return true;
+    }
+
+    /**
+     * Returns true if the sensor is a timeliness sensor that requires an ingestion timestamp column. The default value is false.
+     *
+     * @return True the sensor requires an ingestion timestamp column.
+     */
+    @Override
+    @JsonIgnore
+    public boolean getRequiresIngestionTimestampColumn() {
+        return true;
     }
 }

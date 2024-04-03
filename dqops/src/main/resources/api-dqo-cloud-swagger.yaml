@@ -1,22 +1,24 @@
 ---
 swagger: "2.0"
 info:
-  description: "DQO Cloud API"
+  description: "DQOps Cloud API"
   version: "v1"
-  title: "DQO Cloud"
+  title: "DQOps Cloud"
   termsOfService: "https://dqops.com/terms-of-service"
   contact:
-    name: "DQO Cloud Support"
+    name: "DQOps Cloud Support"
     url: "https://dqops.com/"
     email: "support@dqops.com"
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "api.dqo.ai"
+host: "api.dqops.com"
 basePath: "/"
 tags:
 - name: "AccessTokenIssue"
+- name: "AccountUsers"
 - name: "ApiKeyRequest"
+- name: "DataDomains"
 - name: "LookerStudioKeyRequest"
 - name: "RefreshTokenIssue"
 - name: "TenantDataWarehouse"
@@ -31,7 +33,17 @@ paths:
       description: "Issues a read-only Google access token used by the DQO Looker\
         \ Studio Community Connector to query the tenant's data quality data warehouse."
       operationId: "issueTenantDataROQueryAccessToken"
-      parameters: []
+      parameters:
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -47,7 +59,22 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with rule results"
       operationId: "issueBucketCheckResultsRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -63,7 +90,84 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with custom check definitions"
       operationId: "issueBucketChecksRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/credentials:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketCredentialsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with credentials (.credentials folder)"
+      operationId: "issueBucketCredentialsRWAccessToken"
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/dictionaries:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketDictionariesRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with custom term dictionaries (dictionaries folder)"
+      operationId: "issueBucketDictionariesRWAccessToken"
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -79,7 +183,22 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with error samples"
       operationId: "issueBucketErrorSamplesRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -95,7 +214,22 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with errors"
       operationId: "issueBucketErrorsRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -111,7 +245,54 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with incidents"
       operationId: "issueBucketIncidentsRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/patterns:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketPatternsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with the configuration of default checks as check patterns (patterns\
+        \ folder)"
+      operationId: "issueBucketPatternsRWAccessToken"
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -127,7 +308,22 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with custom rule definitions"
       operationId: "issueBucketRulesRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -143,7 +339,22 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with sensor readouts"
       operationId: "issueBucketSensorReadoutsRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -159,7 +370,53 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with custom sensor definitions"
       operationId: "issueBucketSensorsRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/settings:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketSettingsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with settings"
+      operationId: "issueBucketSettingsRWAccessToken"
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -175,7 +432,22 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with sources and the data quality check configuration"
       operationId: "issueBucketSourcesRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -191,7 +463,22 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with statistics"
       operationId: "issueBucketStatisticsRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -199,21 +486,24 @@ paths:
             $ref: "#/definitions/TenantAccessTokenModel"
       security:
       - api_key: []
-  /api/v1/apikey/issued/{apiKeyRequest}:
-    put:
+  /api/v1/apikey/issueapikey:
+    post:
       tags:
       - "ApiKeyRequest"
       summary: "issueApiKey"
       description: "Issues an API Key by the DQO Cloud UI, this operation can also\
         \ generate a new fresh API key."
       operationId: "issueApiKey"
+      consumes:
+      - "text/plain"
       produces:
       - "text/plain"
       parameters:
-      - name: "apiKeyRequest"
-        in: "path"
-        required: true
-        type: "string"
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          type: "string"
       responses:
         200:
           description: "successful operation"
@@ -287,17 +577,120 @@ paths:
           description: "successful operation"
           schema:
             type: "string"
+  /api/v1/datadomains:
+    get:
+      tags:
+      - "DataDomains"
+      summary: "getDataDomainsList"
+      description: "Returns a list of data domains. Only a user with an ADMIN role\
+        \ can call this operation."
+      operationId: "getDataDomainsList"
+      parameters:
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/DataDomainModel"
+      security:
+      - api_key: []
+  /api/v1/datadomains/{dataDomain}:
+    post:
+      tags:
+      - "DataDomains"
+      summary: "createDataDomain"
+      description: "Adds a new data domain. Only accounts onan ENTERPRISE license\
+        \ can add new data domains."
+      operationId: "createDataDomain"
+      parameters:
+      - name: "dataDomain"
+        in: "path"
+        description: "Data domain name"
+        required: true
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/DataDomainModel"
+      security:
+      - api_key: []
+    delete:
+      tags:
+      - "DataDomains"
+      summary: "deleteDataDomain"
+      description: "Deletes a data domain. Only a user with an ADMIN right for an\
+        \ ENTERPRISE edition can perform this operation. A deleted data domain cannot\
+        \ be recreated under the same name."
+      operationId: "deleteDataDomain"
+      parameters:
+      - name: "dataDomain"
+        in: "path"
+        description: "Data domain name"
+        required: true
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - api_key: []
   /api/v1/lookerstudiokey/issue:
     get:
       tags:
       - "LookerStudioKeyRequest"
       summary: "issueLookerStudioApiKey"
-      description: "Issues an API key for accessing DQO data quality dashboards from\
-        \ Looker Studio"
+      description: "Issues an API key for accessing DQOps data quality dashboards\
+        \ from Looker Studio"
       operationId: "issueLookerStudioApiKey"
       produces:
       - "text/plain"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -310,8 +703,8 @@ paths:
       tags:
       - "RefreshTokenIssue"
       summary: "issueLoginTicketGrantingTicketToken"
-      description: "Issues a ticket granting ticket that authorizes DQO Cloud to issue\
-        \ a DQO instance refresh token for a user that logs into DQO Cloud."
+      description: "Issues a ticket granting ticket that authorizes DQOps Cloud to\
+        \ issue a DQOps instance refresh token for a user that logs into DQOps Cloud."
       operationId: "issueLoginTicketGrantingTicketToken"
       produces:
       - "text/plain"
@@ -322,6 +715,16 @@ paths:
         required: false
         schema:
           $ref: "#/definitions/UserLoginTicketGrantingTicketRequest"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -343,11 +746,212 @@ paths:
         required: false
         schema:
           $ref: "#/definitions/RefreshTableRequest"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
+      - name: "table"
+        in: "query"
+        description: "Table"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
           schema:
             type: "string"
+      security:
+      - api_key: []
+  /api/v1/users:
+    get:
+      tags:
+      - "AccountUsers"
+      summary: "listAccountUsers"
+      description: "Returns a list of users for the current account. Only a user with\
+        \ an ADMIN role can call this operation."
+      operationId: "listAccountUsers"
+      parameters:
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/DqoUserModel"
+      security:
+      - api_key: []
+    post:
+      tags:
+      - "AccountUsers"
+      summary: "createAccountUser"
+      description: "Adds a new user to a multi-user account. Only accounts on a TEAM\
+        \ or ENTERPRISE license can add new users."
+      operationId: "createAccountUser"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "New user model"
+        required: false
+        schema:
+          $ref: "#/definitions/DqoUserModel"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - api_key: []
+  /api/v1/users/{email}:
+    get:
+      tags:
+      - "AccountUsers"
+      summary: "getAccountUser"
+      description: "Returns the information about a single user."
+      operationId: "getAccountUser"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "User's email"
+        required: true
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/DqoUserModel"
+      security:
+      - api_key: []
+    put:
+      tags:
+      - "AccountUsers"
+      summary: "updateAccountUser"
+      description: "Updates a new user in a multi-user account. Supports changing\
+        \ the account role and/or updating the password. For a free user account,\
+        \ only the password is changed if it is provided."
+      operationId: "updateAccountUser"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Updated user model with a new role and possibly a new password"
+        required: false
+        schema:
+          $ref: "#/definitions/DqoUserModel"
+      - name: "email"
+        in: "path"
+        description: "User's email"
+        required: true
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - api_key: []
+    delete:
+      tags:
+      - "AccountUsers"
+      summary: "deleteAccountUser"
+      description: "Deletes a user from a multi-user account. Only a user with an\
+        \ ADMIN right for a multi-user account (TEAM or ENTERPRISE edition) can perform\
+        \ this operation."
+      operationId: "deleteAccountUser"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "User's email"
+        required: true
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - api_key: []
+  /api/v1/users/{email}/password:
+    post:
+      tags:
+      - "AccountUsers"
+      summary: "changeAccountUserPassword"
+      description: "Changes the password of the given user. The user can change his\
+        \ own password."
+      operationId: "changeAccountUserPassword"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "New password"
+        required: false
+        schema:
+          type: "string"
+      - name: "email"
+        in: "path"
+        description: "User's email"
+        required: true
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
       security:
       - api_key: []
 securityDefinitions:
@@ -362,9 +966,61 @@ securityDefinitions:
     authorizationUrl: ""
     flow: "implicit"
 definitions:
+  DataDomainModel:
+    type: "object"
+    properties:
+      dataDomainName:
+        type: "string"
+        description: "Data domain name (technical name)"
+      displayName:
+        type: "string"
+        description: "Data domain display name, returns (default) for the default\
+          \ data domain that is identified by an empty string"
+      createdAt:
+        type: "string"
+        format: "date-time"
+        description: "The data domain creation timestamp."
+    description: "DQOps Cloud data domain model that describes a data domain that\
+      \ was created in an ENTERPRISE DQOps Cloud account."
+  DqoUserModel:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "Email that identifies the user."
+      accountRole:
+        type: "string"
+        description: "Global account role assigned to the user."
+        enum:
+        - "admin"
+        - "editor"
+        - "operator"
+        - "viewer"
+        - "none"
+      newPassword:
+        type: "string"
+        description: "Write-only property used to update the password. This field\
+          \ does not return the current password."
+      dataDomainRoles:
+        type: "object"
+        description: "Dictionary of roles assigned at a data domain level."
+        additionalProperties:
+          type: "string"
+          enum:
+          - "admin"
+          - "editor"
+          - "operator"
+          - "viewer"
+          - "none"
+    description: "DQOps Cloud user model that describes a user in multi-user SaaS\
+      \ deployments."
   RefreshTableRequest:
     type: "object"
     properties:
+      dataDomain:
+        type: "string"
+        description: "Data domain name for ENTERPRISE accounts that support multiple\
+          \ data domain."
       table:
         type: "string"
         description: "Target table to be refreshed."
@@ -379,6 +1035,10 @@ definitions:
         - "sensors"
         - "rules"
         - "checks"
+        - "settings"
+        - "credentials"
+        - "dictionaries"
+        - "patterns"
       connections:
         type: "array"
         description: "Optional list of connection names that were modified and the\
@@ -398,8 +1058,28 @@ definitions:
         items:
           type: "string"
           format: "date"
+      partitions:
+        type: "array"
+        description: "Optional list of partitions that should be loaded from parquet\
+          \ files to the native tables in the data warehouse."
+        items:
+          $ref: "#/definitions/RefreshedPartitionModel"
     description: "Request object for refreshing a native table in the data quality\
       \ data warehouse."
+  RefreshedPartitionModel:
+    type: "object"
+    properties:
+      connection:
+        type: "string"
+        description: "Connection name that should be refreshed."
+      schemaTableName:
+        type: "string"
+        description: "Full table name (schema.table) that should be refreshed."
+      month:
+        type: "string"
+        format: "date"
+        description: "The date of the first day of the month that should be refreshed. "
+    description: "Identifies a partition that should be refreshed."
   TenantAccessTokenModel:
     type: "object"
     properties:
@@ -421,7 +1101,7 @@ definitions:
       billingProjectId:
         type: "string"
         description: "GCP project id holding the data of the tenant."
-    description: "Model returned by the DQO Cloud with an AccessToken for accessing\
+    description: "Model returned by the DQOps Cloud with an AccessToken for accessing\
       \ a folder within the landing zone of the tenant's data quality data warehouse."
   TenantQueryAccessTokenModel:
     type: "object"

@@ -1,38 +1,38 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="PartitionIncrementalTimeWindowSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class PartitionIncrementalTimeWindowSpec:
     """
     Attributes:
-        daily_partitioning_recent_days (Union[Unset, int]): Number of recent days that are analyzed by daily partitioned
-            checks in incremental mode. The default value is 7 days back.
-        daily_partitioning_include_today (Union[Unset, bool]): Analyze also today's data by daily partitioned checks in
+        daily_partitioning_recent_days (Union[Unset, int]): The number of recent days analyzed by daily partition checks
+            in incremental mode. The default value is 7 last days.
+        daily_partitioning_include_today (Union[Unset, bool]): Analyze also today's data by daily partition checks in
             incremental mode. The default value is false, which means that the today's and the future partitions are not
-            analyzed, only yesterday's partition and earlier daily partitions are analyzed because today's data could be
-            still incomplete. Change the value to 'true' if the current day should be also analyzed. The change may require
-            configuring the schedule for daily checks correctly, to run after the data load.
-        monthly_partitioning_recent_months (Union[Unset, int]): Number of recent months that are analyzed by monthly
-            partitioned checks in incremental mode. The default value is 1 month back which means the previous calendar
-            month.
+            analyzed. Only yesterday's partition and previous daily partitions are analyzed because today's data may still
+            be incomplete. Change the value to 'true' if the current day should also be analyzed. This change may require
+            you to configure the schedule for daily checks correctly. The checks must run after the data load.
+        monthly_partitioning_recent_months (Union[Unset, int]): The number of recent days analyzed by monthly partition
+            checks in incremental mode. The default value is the previous calendar month.
         monthly_partitioning_include_current_month (Union[Unset, bool]): Analyze also this month's data by monthly
-            partitioned checks in incremental mode. The default value is false, which means that the current month is not
-            analyzed and future data is also filtered out because the current month could be incomplete. Set the value to
-            'true' if the current month should be analyzed before the end of the month. The schedule for running monthly
-            checks should be also configured to run more frequently (daily, hourly, etc.).
+            partition checks in incremental mode. The default value is false, which means that the current month is not
+            analyzed. Future data is also filtered out because the current month may be incomplete. Change the value to
+            'true' if the current month should also be analyzed before the end of the month. This change may require you to
+            configure the schedule to run monthly checks more frequently (daily, hourly, etc.).
     """
 
     daily_partitioning_recent_days: Union[Unset, int] = UNSET
     daily_partitioning_include_today: Union[Unset, bool] = UNSET
     monthly_partitioning_recent_months: Union[Unset, int] = UNSET
     monthly_partitioning_include_current_month: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         daily_partitioning_recent_days = self.daily_partitioning_recent_days

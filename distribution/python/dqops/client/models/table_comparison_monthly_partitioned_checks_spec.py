@@ -1,10 +1,14 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.table_comparison_monthly_partitioned_checks_spec_custom_checks import (
+        TableComparisonMonthlyPartitionedChecksSpecCustomChecks,
+    )
     from ..models.table_comparison_row_count_match_check_spec import (
         TableComparisonRowCountMatchCheckSpec,
     )
@@ -13,19 +17,29 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="TableComparisonMonthlyPartitionedChecksSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class TableComparisonMonthlyPartitionedChecksSpec:
     """
     Attributes:
+        custom_checks (Union[Unset, TableComparisonMonthlyPartitionedChecksSpecCustomChecks]): Dictionary of additional
+            custom checks within this category. The keys are check names defined in the definition section. The sensor
+            parameters and rules should match the type of the configured sensor and rule for the custom check.
         monthly_partition_row_count_match (Union[Unset, TableComparisonRowCountMatchCheckSpec]):
     """
 
+    custom_checks: Union[
+        Unset, "TableComparisonMonthlyPartitionedChecksSpecCustomChecks"
+    ] = UNSET
     monthly_partition_row_count_match: Union[
         Unset, "TableComparisonRowCountMatchCheckSpec"
     ] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        custom_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_checks, Unset):
+            custom_checks = self.custom_checks.to_dict()
+
         monthly_partition_row_count_match: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_partition_row_count_match, Unset):
             monthly_partition_row_count_match = (
@@ -35,6 +49,8 @@ class TableComparisonMonthlyPartitionedChecksSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if custom_checks is not UNSET:
+            field_dict["custom_checks"] = custom_checks
         if monthly_partition_row_count_match is not UNSET:
             field_dict[
                 "monthly_partition_row_count_match"
@@ -44,11 +60,27 @@ class TableComparisonMonthlyPartitionedChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.table_comparison_monthly_partitioned_checks_spec_custom_checks import (
+            TableComparisonMonthlyPartitionedChecksSpecCustomChecks,
+        )
         from ..models.table_comparison_row_count_match_check_spec import (
             TableComparisonRowCountMatchCheckSpec,
         )
 
         d = src_dict.copy()
+        _custom_checks = d.pop("custom_checks", UNSET)
+        custom_checks: Union[
+            Unset, TableComparisonMonthlyPartitionedChecksSpecCustomChecks
+        ]
+        if isinstance(_custom_checks, Unset):
+            custom_checks = UNSET
+        else:
+            custom_checks = (
+                TableComparisonMonthlyPartitionedChecksSpecCustomChecks.from_dict(
+                    _custom_checks
+                )
+            )
+
         _monthly_partition_row_count_match = d.pop(
             "monthly_partition_row_count_match", UNSET
         )
@@ -65,6 +97,7 @@ class TableComparisonMonthlyPartitionedChecksSpec:
             )
 
         table_comparison_monthly_partitioned_checks_spec = cls(
+            custom_checks=custom_checks,
             monthly_partition_row_count_match=monthly_partition_row_count_match,
         )
 

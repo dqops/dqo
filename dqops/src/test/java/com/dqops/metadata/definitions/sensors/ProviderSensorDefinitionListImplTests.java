@@ -38,7 +38,7 @@ public class ProviderSensorDefinitionListImplTests extends BaseTest {
     void createNewElement_whenCalled_createsElementWithEmptyModel() {
         ProviderSensorDefinitionWrapper wrapper = this.sut.createNewElement(ProviderType.bigquery);
         Assertions.assertEquals(ProviderType.bigquery, wrapper.getProvider());
-        Assertions.assertEquals(InstanceStatus.UNCHANGED, wrapper.getStatus());
+        Assertions.assertEquals(InstanceStatus.ADDED, wrapper.getStatus());
         Assertions.assertNotNull(wrapper.getSpec());
         Assertions.assertEquals(0, this.sut.size());
     }

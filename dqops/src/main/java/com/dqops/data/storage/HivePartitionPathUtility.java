@@ -15,7 +15,10 @@
  */
 package com.dqops.data.storage;
 
+import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.metadata.sources.PhysicalTableName;
+import org.apache.parquet.Strings;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -30,7 +33,7 @@ public class HivePartitionPathUtility {
     private static final Pattern HIVE_PARTITION_CONNECTION_PATTERN =
             Pattern.compile(ParquetPartitioningKeys.CONNECTION + "=(.*)");
     private static final Pattern HIVE_PARTITION_TABLE_PATTERN =
-            Pattern.compile(ParquetPartitioningKeys.TARGET + "=(.*)");
+            Pattern.compile(ParquetPartitioningKeys.SCHEMA_TABLE + "=(.*)");
     private static final Pattern HIVE_PARTITION_MONTH_PATTERN =
             Pattern.compile(ParquetPartitioningKeys.MONTH + "=(\\d{4}-(0\\d|1[0-2])-([0-2]\\d|3[0-1]))");
 
@@ -47,6 +50,13 @@ public class HivePartitionPathUtility {
         // TODO: HivePartitionPaths should be refactored from the ground-up, to make easily serializable and deserializable.
         StringBuilder stringBuilder = new StringBuilder();
 
+        if (!Strings.isNullOrEmpty(partitionId.getDataDomain())) {
+            stringBuilder.append(BuiltInFolderNames.DATA_DOMAINS);
+            stringBuilder.append('/');
+            stringBuilder.append(FileNameSanitizer.encodeForFileSystem(partitionId.getDataDomain()));
+            stringBuilder.append('/');
+        }
+
         String connectionName = partitionId.getConnectionName();
         if (connectionName == null) {
             return stringBuilder.toString();
@@ -60,7 +70,7 @@ public class HivePartitionPathUtility {
 
         PhysicalTableName tableName = partitionId.getTableName();
         if (tableName != null) {
-            stringBuilder.append(ParquetPartitioningKeys.TARGET);
+            stringBuilder.append(ParquetPartitioningKeys.SCHEMA_TABLE);
             stringBuilder.append('=');
             String encodedTable = URLEncoder.encode(tableName.toString(), StandardCharsets.UTF_8);
             stringBuilder.append(encodedTable);
@@ -119,7 +129,8 @@ public class HivePartitionPathUtility {
             return null;
         }
         String connectionNameString = matcher.group(1);
-        return connectionNameString;
+        String decodedName = FileNameSanitizer.decodeFileSystemName(connectionNameString);
+        return decodedName;
     }
 
     /**
@@ -133,7 +144,8 @@ public class HivePartitionPathUtility {
             return null;
         }
         String tableNameString = matcher.group(1);
-        return PhysicalTableName.fromSchemaTableFilter(tableNameString);
+        String decodedName = FileNameSanitizer.decodeFileSystemName(tableNameString);
+        return PhysicalTableName.fromBaseFileName(decodedName);
     }
 
     /**

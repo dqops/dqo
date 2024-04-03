@@ -20,7 +20,8 @@ import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
-import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -32,7 +33,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -68,14 +68,15 @@ public class ConnectionServiceImpl implements ConnectionService {
      * Deletes connection from metadata and flushes user context.
      * Cleans all stored data from .data folder related to this connection.
      * @param connectionName Connection name.
+     * @param principal Principal that will be used to run the job.
      * @return Asynchronous job result object for deferred background operations.
      */
     @Override
-    public PushJobResult<DeleteStoredDataQueueJobResult> deleteConnection(String connectionName) {
+    public PushJobResult<DeleteStoredDataResult> deleteConnection(String connectionName, DqoUserPrincipal principal) {
         List<String> connectionNameList = new LinkedList<>();
         connectionNameList.add(connectionName);
 
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> jobResultList = this.deleteConnections(connectionNameList);
+        List<PushJobResult<DeleteStoredDataResult>> jobResultList = this.deleteConnections(connectionNameList, principal);
         return jobResultList.isEmpty() ? null : jobResultList.get(0);
     }
 
@@ -83,11 +84,12 @@ public class ConnectionServiceImpl implements ConnectionService {
      * Deletes connections from metadata and flushes user context.
      * Cleans all stored data from .data folder related to these connections.
      * @param connectionNames Iterable of connection names.
+     * @param principal Principal that will be used to run the job.
      * @return List of asynchronous job result objects for deferred background operations.
      */
     @Override
-    public List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteConnections(Iterable<String> connectionNames) {
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
+    public List<PushJobResult<DeleteStoredDataResult>> deleteConnections(Iterable<String> connectionNames, DqoUserPrincipal principal) {
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         List<DeleteStoredDataQueueJobParameters> deleteStoredDataParameters = new ArrayList<>();
@@ -101,7 +103,7 @@ public class ConnectionServiceImpl implements ConnectionService {
             connectionWrapper.markForDeletion();
 
             DeleteStoredDataQueueJobParameters param = new DeleteStoredDataQueueJobParameters() {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
                 setDeleteStatistics(true);
                 setDeleteCheckResults(true);
                 setDeleteSensorReadouts(true);
@@ -110,11 +112,11 @@ public class ConnectionServiceImpl implements ConnectionService {
             deleteStoredDataParameters.add(param);
         }
 
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> results = new ArrayList<>();
+        List<PushJobResult<DeleteStoredDataResult>> results = new ArrayList<>();
         for (DeleteStoredDataQueueJobParameters param : deleteStoredDataParameters) {
             DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
             deleteStoredDataJob.setDeletionParameters(param);
-            PushJobResult<DeleteStoredDataQueueJobResult> jobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob);
+            PushJobResult<DeleteStoredDataResult> jobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob, principal);
             results.add(jobResult);
         }
 

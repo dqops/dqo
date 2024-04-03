@@ -1,8 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/strings/string_match_date_regex_percent
-  rule_name: comparison/min_percent
-  help_text: Verifies that the percentage of strings matching the date format regex
-    in a column does not fall below the minimum accepted percentage.

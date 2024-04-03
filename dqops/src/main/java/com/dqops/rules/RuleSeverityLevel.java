@@ -15,6 +15,8 @@
  */
 package com.dqops.rules;
 
+import com.dqops.data.checkresults.services.models.CheckResultStatus;
+
 /**
  * Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.
  */
@@ -34,6 +36,14 @@ public enum RuleSeverityLevel {
     }
 
     /**
+     * Returns the severity level as a number.
+     * @return Severity level as a number.
+     */
+    public int getSeverity() {
+        return level;
+    }
+
+    /**
      * Creates a rule severity level from a numeric severity level.
      * @param severity Rule severity level.
      * @return Severity level enum instance.
@@ -48,9 +58,24 @@ public enum RuleSeverityLevel {
                 return error;
             case 3:
                 return fatal;
+            case 4:
+                return null; // execution error is excluded
 
             default:
                 throw new IllegalArgumentException("Invalid severity level: " + severity);
         }
+    }
+
+    /**
+     * Converts the check result status (that includes also an execution error status) to a rule severity status. Null values and an execution error are returned as null.
+     * @param checkResultStatus Check execution status.
+     * @return Matching rule severity status or null for an execution error or a null check status.
+     */
+    public static RuleSeverityLevel fromCheckSeverity(CheckResultStatus checkResultStatus) {
+        if (checkResultStatus == null) {
+            return null;
+        }
+
+        return fromSeverityLevel(checkResultStatus.getSeverity());
     }
 }

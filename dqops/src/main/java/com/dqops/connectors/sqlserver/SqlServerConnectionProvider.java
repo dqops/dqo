@@ -20,6 +20,7 @@ import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.connectors.AbstractSqlConnectionProvider;
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import org.apache.parquet.Strings;
@@ -59,15 +60,16 @@ public class SqlServerConnectionProvider extends AbstractSqlConnectionProvider {
      *
      * @param connectionSpec Connection specification.
      * @param openConnection Open the connection after creating.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Connection object.
      */
     @Override
-    public SqlServerSourceConnection createConnection(ConnectionSpec connectionSpec, boolean openConnection) {
+    public SqlServerSourceConnection createConnection(ConnectionSpec connectionSpec, boolean openConnection, SecretValueLookupContext secretValueLookupContext) {
         assert connectionSpec != null;
         SqlServerSourceConnection connection = this.beanFactory.getBean(SqlServerSourceConnection.class);
         connection.setConnectionSpec(connectionSpec);
         if (openConnection) {
-            connection.open();
+            connection.open(secretValueLookupContext);
         }
         return connection;
     }
@@ -154,11 +156,12 @@ public class SqlServerConnectionProvider extends AbstractSqlConnectionProvider {
     /**
      * Proposes a physical (provider specific) column type that is able to store the data of the given Tablesaw column.
      *
+     * @param connectionSpec Connection specification if the settings are database version specific.
      * @param dataColumn Tablesaw column with data that should be stored.
      * @return Column type snapshot.
      */
     @Override
-    public ColumnTypeSnapshotSpec proposePhysicalColumnType(Column<?> dataColumn) {
+    public ColumnTypeSnapshotSpec proposePhysicalColumnType(ConnectionSpec connectionSpec, Column<?> dataColumn) {
         ColumnType columnType = dataColumn.type();
 
         if (columnType == ColumnType.SHORT) {

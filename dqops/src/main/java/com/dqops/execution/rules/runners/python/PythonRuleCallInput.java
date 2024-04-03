@@ -21,6 +21,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.time.Instant;
+
 /**
  * Object passed to the python rule evaluation module. Specifies the path to the python file with the rule implementation and the parameters.
  */
@@ -28,8 +30,27 @@ import lombok.EqualsAndHashCode;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = false)
 public class PythonRuleCallInput {
+    private String dataDomainModule;
     private String ruleModulePath;
+    private String homePath;
+    private Instant ruleModuleLastModified;
     private RuleExecutionRunParameters ruleParameters;
+
+    /**
+     * Returns the data domain name.
+     * @return Data domain name.
+     */
+    public String getDataDomainModule() {
+        return dataDomainModule;
+    }
+
+    /**
+     * Sets the data domain name.
+     * @param dataDomainModule Data domain name.
+     */
+    public void setDataDomainModule(String dataDomainModule) {
+        this.dataDomainModule = dataDomainModule;
+    }
 
     /**
      * Returns the path to a rule module (python file).
@@ -45,6 +66,38 @@ public class PythonRuleCallInput {
      */
     public void setRuleModulePath(String ruleModulePath) {
         this.ruleModulePath = ruleModulePath;
+    }
+
+    /**
+     * Returns the path to the home (user home or DQOps system home) where the rule is defined.
+     * @return Home folder path.
+     */
+    public String getHomePath() {
+        return homePath;
+    }
+
+    /**
+     * Sets a path to the DQOps home (user home or dqo system home) where the rule is defined.
+     * @param homePath A full path to the correct home path.
+     */
+    public void setHomePath(String homePath) {
+        this.homePath = homePath;
+    }
+
+    /**
+     * Returns the timestamp when the Python rule file was last modified.
+     * @return The last modification timestamp of the rule module.
+     */
+    public Instant getRuleModuleLastModified() {
+        return ruleModuleLastModified;
+    }
+
+    /**
+     * Sets the timestamp when the rule module was modified for the last time.
+     * @param ruleModuleLastModified Rule module last modification timestamp.
+     */
+    public void setRuleModuleLastModified(Instant ruleModuleLastModified) {
+        this.ruleModuleLastModified = ruleModuleLastModified;
     }
 
     /**

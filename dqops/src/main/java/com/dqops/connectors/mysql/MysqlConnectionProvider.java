@@ -20,6 +20,8 @@ import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.connectors.AbstractSqlConnectionProvider;
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.connectors.mysql.singlestore.SingleStoreDbConnectionProvider;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import org.apache.parquet.Strings;
@@ -59,15 +61,16 @@ public class MysqlConnectionProvider extends AbstractSqlConnectionProvider {
      *
      * @param connectionSpec Connection specification.
      * @param openConnection Open the connection after creating.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Connection object.
      */
     @Override
-    public MysqlSourceConnection createConnection(ConnectionSpec connectionSpec, boolean openConnection) {
+    public MysqlSourceConnection createConnection(ConnectionSpec connectionSpec, boolean openConnection, SecretValueLookupContext secretValueLookupContext) {
         assert connectionSpec != null;
         MysqlSourceConnection connection = this.beanFactory.getBean(MysqlSourceConnection.class);
         connection.setConnectionSpec(connectionSpec);
         if (openConnection) {
-            connection.open();
+            connection.open(secretValueLookupContext);
         }
         return connection;
     }
@@ -100,36 +103,23 @@ public class MysqlConnectionProvider extends AbstractSqlConnectionProvider {
             connectionSpec.setMysql(mysqlParametersSpec);
         }
 
-        if (Strings.isNullOrEmpty(mysqlParametersSpec.getHost())) {
+        if (mysqlParametersSpec.getMysqlEngineType() == null) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--mysql-host");
+                throw new CliRequiredParameterMissingException("--mysql-engine");
             }
-
-            mysqlParametersSpec.setHost(terminalReader.prompt("MySQL host name (--mysql-host)", "${MYSQL_HOST}", false));
+            mysqlParametersSpec.setMysqlEngineType(terminalReader.promptEnum("MySQL engine type (--mysql-engine)", MysqlEngineType.class,null, false));
         }
 
-        if (Strings.isNullOrEmpty(mysqlParametersSpec.getPort())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--mysql-port");
-            }
-
-            mysqlParametersSpec.setPort(terminalReader.prompt("MySQL port number (--mysql-port)", "${MYSQL_PORT}", false));
-        }
-
-
-        if (Strings.isNullOrEmpty(mysqlParametersSpec.getDatabase())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--mysql-database");
-            }
-
-            mysqlParametersSpec.setDatabase(terminalReader.prompt("MySQL database name (--mysql-database)", "${MYSQL_DATABASE}", false));
+        if (mysqlParametersSpec.getMysqlEngineType() == MysqlEngineType.singlestoredb) {
+            SingleStoreDbConnectionProvider.promptForConnectionParameters(connectionSpec, isHeadless, terminalReader);
+        } else {
+            promptForConnectionParametersForMysql(connectionSpec, isHeadless, terminalReader);
         }
 
         if (Strings.isNullOrEmpty(mysqlParametersSpec.getUser())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--mysql-user");
             }
-
             mysqlParametersSpec.setUser(terminalReader.prompt("MySQL user name (--mysql-user)", "${MYSQL_USER}", false));
         }
 
@@ -137,8 +127,40 @@ public class MysqlConnectionProvider extends AbstractSqlConnectionProvider {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--mysql-password");
             }
-
             mysqlParametersSpec.setPassword(terminalReader.prompt("MySQL user password (--mysql-password)", "${MYSQL_PASSWORD}", false));
+        }
+    }
+
+    /**
+     * Delegates the connection configuration to the provider for mysql engine type.
+     *
+     * @param connectionSpec Connection specification to fill.
+     * @param isHeadless     When true and some required parameters are missing then throws an exception {@link CliRequiredParameterMissingException},
+     *                       otherwise prompts the user to fill the answer.
+     * @param terminalReader Terminal reader that may be used to prompt the user.
+     */
+    private void promptForConnectionParametersForMysql(ConnectionSpec connectionSpec, boolean isHeadless, TerminalReader terminalReader) {
+        MysqlParametersSpec mysqlParametersSpec = connectionSpec.getMysql();
+
+        if (Strings.isNullOrEmpty(mysqlParametersSpec.getHost())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--mysql-host");
+            }
+            mysqlParametersSpec.setHost(terminalReader.prompt("MySQL host name (--mysql-host)", "${MYSQL_HOST}", false));
+        }
+
+        if (Strings.isNullOrEmpty(mysqlParametersSpec.getPort())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--mysql-port");
+            }
+            mysqlParametersSpec.setPort(terminalReader.prompt("MySQL port number (--mysql-port)", "${MYSQL_PORT}", false));
+        }
+
+        if (Strings.isNullOrEmpty(mysqlParametersSpec.getDatabase())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--mysql-database");
+            }
+            mysqlParametersSpec.setDatabase(terminalReader.prompt("MySQL database name (--mysql-database)", "${MYSQL_DATABASE}", false));
         }
     }
 
@@ -161,11 +183,12 @@ public class MysqlConnectionProvider extends AbstractSqlConnectionProvider {
     /**
      * Proposes a physical (provider specific) column type that is able to store the data of the given Tablesaw column.
      *
+     * @param connectionSpec Connection specification if the settings are database version specific.
      * @param dataColumn Tablesaw column with data that should be stored.
      * @return Column type snapshot.
      */
     @Override
-    public ColumnTypeSnapshotSpec proposePhysicalColumnType(Column<?> dataColumn) {
+    public ColumnTypeSnapshotSpec proposePhysicalColumnType(ConnectionSpec connectionSpec, Column<?> dataColumn) {
         ColumnType columnType = dataColumn.type();
 
         if (columnType == ColumnType.SHORT) {

@@ -20,6 +20,7 @@ import com.dqops.core.filesystem.virtual.HomeFolderPath;
 import com.dqops.core.filesystem.virtual.utility.HomeFolderPathUtility;
 import com.dqops.core.locks.AcquiredSharedReadLock;
 import com.dqops.core.locks.UserHomeLockManager;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,25 +59,24 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
      * Lists all connections present in the directory under specific storage settings.
      *
      * @param storageSettings Storage settings that identify the target partition type.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Returns a list of connection names that are currently stored for this storage type.
      */
     @Override
-    public List<String> listConnections(FileStorageSettings storageSettings) {
+    public List<String> listConnections(FileStorageSettings storageSettings, UserDomainIdentity userIdentity) {
         Path homeRelativeStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
 
-        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
-            List<HomeFolderPath> storageStoredFolders = this.localUserHomeFileStorageService.listFolders(
-                    HomeFolderPathUtility.createFromFilesystemPath(homeRelativeStoragePath));
-            if (storageStoredFolders == null) {
-                return new ArrayList<>();
-            }
-
-            return storageStoredFolders.stream()
-                    .map(homeFolderPath -> homeFolderPath.getTopFolder().getFileSystemName())
-                    .filter(HivePartitionPathUtility::validHivePartitionConnectionFolderName)
-                    .map(HivePartitionPathUtility::connectionFromHivePartitionFolderName)
-                    .collect(Collectors.toList());
+        List<HomeFolderPath> storageStoredFolders = this.localUserHomeFileStorageService.listFolders(
+                HomeFolderPathUtility.createFromFilesystemPath(homeRelativeStoragePath), true);
+        if (storageStoredFolders == null) {
+            return new ArrayList<>();
         }
+
+        return storageStoredFolders.stream()
+                .map(homeFolderPath -> homeFolderPath.getTopFolder().getFileSystemName())
+                .filter(HivePartitionPathUtility::validHivePartitionConnectionFolderName)
+                .map(HivePartitionPathUtility::connectionFromHivePartitionFolderName)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -84,28 +84,27 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
      *
      * @param connectionName  Connection name.
      * @param storageSettings Storage settings that identify the target partition type.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Returns a list of physical table names that are currently stored for the connection. Null if connection not found.
      */
     @Override
-    public List<PhysicalTableName> listTablesForConnection(String connectionName, FileStorageSettings storageSettings) {
+    public List<PhysicalTableName> listTablesForConnection(String connectionName, FileStorageSettings storageSettings, UserDomainIdentity userIdentity) {
         Path homeRelativeStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
-        ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, null, null);
+        ParquetPartitionId partitionId = new ParquetPartitionId(userIdentity.getDataDomainFolder(), storageSettings.getTableType(), connectionName, null, null);
         String hivePartitionFolderName = HivePartitionPathUtility.makeHivePartitionPath(partitionId);
         Path homeRelativePartitionPath = homeRelativeStoragePath.resolve(hivePartitionFolderName);
 
-        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
-            List<HomeFolderPath> connectionStoredFolders = this.localUserHomeFileStorageService.listFolders(
-                    HomeFolderPathUtility.createFromFilesystemPath(homeRelativePartitionPath));
-            if (connectionStoredFolders == null) {
-                return null;
-            }
-
-            return connectionStoredFolders.stream()
-                    .map(homeFolderPath -> homeFolderPath.getTopFolder().getFileSystemName())
-                    .filter(HivePartitionPathUtility::validHivePartitionTableFolderName)
-                    .map(HivePartitionPathUtility::tableFromHivePartitionFolderName)
-                    .collect(Collectors.toList());
+        List<HomeFolderPath> connectionStoredFolders = this.localUserHomeFileStorageService.listFolders(
+                HomeFolderPathUtility.createFromFilesystemPath(homeRelativePartitionPath), true);
+        if (connectionStoredFolders == null) {
+            return null;
         }
+
+        return connectionStoredFolders.stream()
+                .map(homeFolderPath -> homeFolderPath.getTopFolder().getFileSystemName())
+                .filter(HivePartitionPathUtility::validHivePartitionTableFolderName)
+                .map(HivePartitionPathUtility::tableFromHivePartitionFolderName)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -113,56 +112,56 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
      * @param connectionName  Connection name.
      * @param tableName       Table name.
      * @param storageSettings File storage settings.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Optional with the oldest month as local date, if it exists. If not, <code>Optional.empty()</code>.
      */
     @Override
     public Optional<LocalDate> getOldestStoredPartitionMonth(String connectionName,
                                                              PhysicalTableName tableName,
-                                                             FileStorageSettings storageSettings) {
-        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
-            List<ParquetPartitionId> storedPartitions = getStoredPartitionsIds(connectionName, tableName, storageSettings);
-            if (storedPartitions == null) {
-                return Optional.empty();
-            }
-
-            return storedPartitions.stream()
-                    .map(ParquetPartitionId::getMonth)
-                    .min(LocalDate::compareTo);
+                                                             FileStorageSettings storageSettings,
+                                                             UserDomainIdentity userIdentity) {
+        List<ParquetPartitionId> storedPartitions = getStoredPartitionsIds(connectionName, tableName, storageSettings, userIdentity);
+        if (storedPartitions == null) {
+            return Optional.empty();
         }
+
+        return storedPartitions.stream()
+                .map(ParquetPartitionId::getMonth)
+                .min(LocalDate::compareTo);
     }
 
     /**
      * Gets ids of partitions that are currently stored for a given connection name, provided storage settings to know where to look.
      * @param connectionName  Connection name.
      * @param storageSettings File storage settings.
+     * @param userIdentity User identity that specifies the data domain.
      * @return List of partition ids. Null if parameters are invalid (e.g. target directory doesn't exist).
      */
     @Override
     public List<ParquetPartitionId> getStoredPartitionsIds(String connectionName,
-                                                           FileStorageSettings storageSettings) {
-        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
-            if (storageSettings.getPartitioningPattern() == TablePartitioningPattern.CTM) {
-                List<PhysicalTableName> tablesForConnection = listTablesForConnection(connectionName, storageSettings);
-                if (tablesForConnection == null) {
-                    return null;
-                }
+                                                           FileStorageSettings storageSettings,
+                                                           UserDomainIdentity userIdentity) {
+        if (storageSettings.getPartitioningPattern() == TablePartitioningPattern.CTM) {
+            List<PhysicalTableName> tablesForConnection = listTablesForConnection(connectionName, storageSettings, userIdentity);
+            if (tablesForConnection == null) {
+                return null;
+            }
 
-                List<ParquetPartitionId> result = new ArrayList<>();
-                for (PhysicalTableName tableName: tablesForConnection) {
-                    List<ParquetPartitionId> tablePartitions = getStoredPartitionsIds(connectionName, tableName, storageSettings);
-                    if (tablePartitions == null) {
-                        continue;
-                    }
-                    result.addAll(tablePartitions);
+            List<ParquetPartitionId> result = new ArrayList<>();
+            for (PhysicalTableName tableName: tablesForConnection) {
+                List<ParquetPartitionId> tablePartitions = getStoredPartitionsIds(connectionName, tableName, storageSettings, userIdentity);
+                if (tablePartitions == null) {
+                    continue;
                 }
-                return result;
+                result.addAll(tablePartitions);
             }
-            else if (storageSettings.getPartitioningPattern() == TablePartitioningPattern.CM) {
-                List<ParquetPartitionId> tablePartitions = getStoredPartitionsIds(connectionName, null, storageSettings);
-                return tablePartitions;
-            } else {
-                throw new IllegalArgumentException("Partitioning pattern " + storageSettings.getPartitioningPattern() + "  not supported.");
-            }
+            return result;
+        }
+        else if (storageSettings.getPartitioningPattern() == TablePartitioningPattern.CM) {
+            List<ParquetPartitionId> tablePartitions = getStoredPartitionsIds(connectionName, null, storageSettings, userIdentity);
+            return tablePartitions;
+        } else {
+            throw new IllegalArgumentException("Partitioning pattern " + storageSettings.getPartitioningPattern() + "  not supported.");
         }
     }
 
@@ -171,31 +170,31 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
      * @param connectionName  Connection name.
      * @param tableName       Table name.
      * @param storageSettings File storage settings.
+     * @param userIdentity User identity that specifies the data domain.
      * @return List of partition ids. Null if parameters are invalid (e.g. target directory doesn't exist).
      */
     @Override
     public List<ParquetPartitionId> getStoredPartitionsIds(String connectionName,
                                                            PhysicalTableName tableName,
-                                                           FileStorageSettings storageSettings) {
-        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
-            Path homeRelativeStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
+                                                           FileStorageSettings storageSettings,
+                                                           UserDomainIdentity userIdentity) {
+        Path homeRelativeStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
 
-            String hivePartitionFolderName = HivePartitionPathUtility.makeHivePartitionPath(
-                    new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, null));
-            Path tablePartitionsPath = homeRelativeStoragePath.resolve(hivePartitionFolderName);
+        String hivePartitionFolderName = HivePartitionPathUtility.makeHivePartitionPath(
+                new ParquetPartitionId(userIdentity.getDataDomainFolder(), storageSettings.getTableType(), connectionName, tableName, null));
+        Path tablePartitionsPath = homeRelativeStoragePath.resolve(hivePartitionFolderName);
 
-            List<HomeFolderPath> tableStoredFolders = this.localUserHomeFileStorageService.listFolders(
-                    HomeFolderPathUtility.createFromFilesystemPath(tablePartitionsPath));
-            if (tableStoredFolders == null) {
-                return null;
-            }
-
-            return tableStoredFolders.stream()
-                    .map(homeFolderPath -> homeFolderPath.getTopFolder().getFileSystemName())
-                    .filter(HivePartitionPathUtility::validHivePartitionMonthFolderName)
-                    .map(HivePartitionPathUtility::monthFromHivePartitionFolderName)
-                    .map(month -> new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, month))
-                    .collect(Collectors.toList());
+        List<HomeFolderPath> tableStoredFolders = this.localUserHomeFileStorageService.listFolders(
+                HomeFolderPathUtility.createFromFilesystemPath(tablePartitionsPath), true);
+        if (tableStoredFolders == null) {
+            return null;
         }
+
+        return tableStoredFolders.stream()
+                .map(homeFolderPath -> homeFolderPath.getTopFolder().getFileSystemName())
+                .filter(HivePartitionPathUtility::validHivePartitionMonthFolderName)
+                .map(HivePartitionPathUtility::monthFromHivePartitionFolderName)
+                .map(month -> new ParquetPartitionId(userIdentity.getDataDomainFolder(), storageSettings.getTableType(), connectionName, tableName, month))
+                .collect(Collectors.toList());
     }
 }

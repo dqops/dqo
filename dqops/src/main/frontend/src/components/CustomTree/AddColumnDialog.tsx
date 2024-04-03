@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
-import Button from '../Button';
-import Input from '../Input';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useTree } from '../../contexts/treeContext';
+import { IRootState } from '../../redux/reducers';
 import { ColumnApiClient } from '../../services/apiClient';
 import { CustomTreeNode } from '../../shared/interfaces';
-import { useTree } from '../../contexts/treeContext';
-import { useParams } from 'react-router-dom';
+import { urlencodeEncoder, useDecodedParams } from '../../utils';
+import Button from '../Button';
+import Input from '../Input';
+import TextArea from '../TextArea';
 
 interface AddColumnDialogProps {
   open: boolean;
@@ -22,14 +25,21 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
     connection,
     table,
     schema
-  }: { connection: string; schema: string; table: string } = useParams();
+  }: { connection: string; schema: string; table: string } = useDecodedParams();
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
+
+  const onCloseCleanPrevState = () => {
+    onClose();
+    setName('');
+    setSqlExpression('');
+  };
 
   const handleSubmit = async () => {
     try {
       setLoading(true);
       if (node) {
         const args = node.id.toString().split('.');
-        await ColumnApiClient.createColumn(args[0], args[1], args[2], name, {
+        await ColumnApiClient.createColumn(urlencodeEncoder(args[0]), urlencodeEncoder(args[1]), urlencodeEncoder(args[2]), name, {
           sql_expression: sqlExpression
         });
         refreshNode(node);
@@ -38,14 +48,14 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
           sql_expression: sqlExpression
         });
       }
-      onClose();
+      onCloseCleanPrevState();
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Dialog open={open} handler={onClose} size="xs">
+    <Dialog open={open} handler={onCloseCleanPrevState} size="xs">
       <DialogBody className="pt-6 pb-2 px-8">
         <div className="flex flex-col">
           <h1 className="text-center mb-4 text-gray-700 text-2xl">
@@ -59,10 +69,11 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
             />
           </div>
           <div>
-            <Input
-              label="SQL Expression for a calculated column"
+            <TextArea
+              label="SQL expression for a calculated column"
               value={sqlExpression}
               onChange={(e) => setSqlExpression(e.target.value)}
+              className='min-h-25'
             />
           </div>
         </div>
@@ -72,7 +83,7 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
           color="primary"
           variant="outlined"
           className="px-8"
-          onClick={onClose}
+          onClick={onCloseCleanPrevState}
           label="Cancel"
         />
         <Button
@@ -81,6 +92,7 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
           onClick={handleSubmit}
           label="Save"
           loading={loading}
+          disabled={userProfile.can_manage_data_sources !== true}
         />
       </DialogFooter>
     </Dialog>

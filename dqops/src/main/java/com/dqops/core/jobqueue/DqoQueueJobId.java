@@ -15,12 +15,16 @@
  */
 package com.dqops.core.jobqueue;
 
+import com.dqops.utils.docs.generators.SampleLongsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.swagger.annotations.ApiModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 /**
  * Identifies a single job.
@@ -30,6 +34,9 @@ import java.time.Instant;
 public class DqoQueueJobId implements Comparable<DqoQueueJobId> {
     @JsonPropertyDescription("Job id.")
     private long jobId;
+
+    @JsonPropertyDescription("Optional job business key that was assigned to the job. A business key is an alternative user assigned unique job identifier used to find the status of a job finding it by the business key.")
+    private String jobBusinessKey;
 
     @JsonPropertyDescription("Parent job id. Filled only for nested jobs, for example a sub-job that runs data quality checks on a single table.")
     private DqoQueueJobId parentJobId;
@@ -67,6 +74,22 @@ public class DqoQueueJobId implements Comparable<DqoQueueJobId> {
      */
     public void setJobId(long jobId) {
         this.jobId = jobId;
+    }
+
+    /**
+     * Returns an optional business key that is an alternative, user assigned unique job identifier.
+     * @return Job business key.
+     */
+    public String getJobBusinessKey() {
+        return jobBusinessKey;
+    }
+
+    /**
+     * Sets a job business key.
+     * @param jobBusinessKey Job business key.
+     */
+    public void setJobBusinessKey(String jobBusinessKey) {
+        this.jobBusinessKey = jobBusinessKey;
     }
 
     /**
@@ -130,7 +153,24 @@ public class DqoQueueJobId implements Comparable<DqoQueueJobId> {
     public String toString() {
         return "DqoQueueJobId{" +
                 "jobId=" + jobId +
+                ", jobBusinessKey=" + jobBusinessKey +
                 ", createdAt=" + createdAt +
                 '}';
+    }
+
+    public static class DqoQueueJobIdSampleFactory implements SampleValueFactory<DqoQueueJobId> {
+        @Override
+        public DqoQueueJobId createSample() {
+            return new DqoQueueJobId() {{
+                setJobId(SampleLongsRegistry.getJobId());
+                setCreatedAt(LocalDateTime.of((int)SampleLongsRegistry.getYear(),
+                        (int)SampleLongsRegistry.getMonth(),
+                        11,
+                        13,
+                        42,
+                        0
+                ).toInstant(ZoneOffset.UTC));
+            }};
+        }
     }
 }

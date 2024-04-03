@@ -16,8 +16,10 @@
 
 package com.dqops.data.checkresults.services.models;
 
+import com.dqops.utils.docs.generators.SampleValueFactory;
+
 /**
- * Enumeration of columns names on a {@link CheckResultDetailedSingleModel} that could be sorted.
+ * Enumeration of columns names on a {@link CheckResultEntryModel} that can be sorted.
  */
 public enum CheckResultSortOrder {
     executedAt,
@@ -35,4 +37,11 @@ public enum CheckResultSortOrder {
     timePeriod,
     qualityDimension,
     sensorName;
+
+    public static class CheckResultSortOrderSampleFactory implements SampleValueFactory<CheckResultSortOrder> {
+        @Override
+        public CheckResultSortOrder createSample() {
+            return executedAt;
+        }
+    }
 }

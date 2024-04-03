@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: table/volume/row_count
+  rule_name: change/change_percent_7_days
+  help_text: This check verifies that the percentage of change in the table's volume
+    (row count) since seven days ago is below the maximum accepted percentage. Verifying
+    a volume change since a value a week ago overcomes the effect of weekly seasonability.

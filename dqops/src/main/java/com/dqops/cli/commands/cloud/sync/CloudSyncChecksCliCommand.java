@@ -17,11 +17,13 @@ package com.dqops.cli.commands.cloud.sync;
 
 import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.ICommand;
-import com.dqops.cli.commands.cloud.sync.impl.CloudSynchronizationService;
+import com.dqops.cli.commands.cloud.sync.impl.CloudSynchronizationCliService;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.dqocloud.accesskey.DqoCloudCredentialsException;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobExecutionException;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.fileexchange.FileSynchronizationDirection;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
@@ -32,23 +34,27 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * 3st level CLI command "cloud sync checks" to synchronize the "checks" folder with custom checks in the DQO user home.
+ * 3st level CLI command "cloud sync checks" to synchronize the "checks" folder with custom checks in the DQOps user home.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "checks", header = "Synchronize local \"checks\" folder with custom check definitions with DQO Cloud", description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"checks\" folder.")
+@CommandLine.Command(name = "checks", header = "Synchronize local \"checks\" folder with custom check definitions with DQOps Cloud",
+        description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"checks\" folder.")
 public class CloudSyncChecksCliCommand extends BaseCommand implements ICommand {
-    private CloudSynchronizationService cloudSynchronizationService;
+    private CloudSynchronizationCliService cloudSynchronizationCliService;
     private TerminalFactory terminalFactory;
+    private DqoUserPrincipalProvider principalProvider;
 
     public CloudSyncChecksCliCommand() {
     }
 
     @Autowired
-    public CloudSyncChecksCliCommand(CloudSynchronizationService cloudSynchronizationService,
-                                     TerminalFactory terminalFactory) {
-        this.cloudSynchronizationService = cloudSynchronizationService;
+    public CloudSyncChecksCliCommand(CloudSynchronizationCliService cloudSynchronizationCliService,
+                                     TerminalFactory terminalFactory,
+                                     DqoUserPrincipalProvider principalProvider) {
+        this.cloudSynchronizationCliService = cloudSynchronizationCliService;
         this.terminalFactory = terminalFactory;
+        this.principalProvider = principalProvider;
     }
 
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, debug)", defaultValue = "summary")
@@ -98,13 +104,14 @@ public class CloudSyncChecksCliCommand extends BaseCommand implements ICommand {
     @Override
     public Integer call() throws Exception {
         try {
-            return this.cloudSynchronizationService.synchronizeRoot(
-                    DqoRoot.checks, this.mode, this.direction, false, this.isHeadless(), true);
+            DqoUserPrincipal principal = this.principalProvider.getLocalUserPrincipal();
+            return this.cloudSynchronizationCliService.synchronizeRoot(
+                    DqoRoot.checks, this.mode, this.direction, false, this.isHeadless(), true, principal);
         }
         catch (DqoQueueJobExecutionException cex) {
             if (cex.getRealCause() instanceof DqoCloudCredentialsException) {
                 TerminalWriter terminalWriter = this.terminalFactory.getWriter();
-                terminalWriter.writeLine("Invalid DQO Cloud credentials, please run \"cloud login\" to get a new DQO Cloud API Key.");
+                terminalWriter.writeLine(CloudSyncCliCommand.API_KEY_INVALID_MESSAGE);
                 return -1;
             }
 

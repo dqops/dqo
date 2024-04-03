@@ -1,20 +1,24 @@
+import { clsx } from 'clsx';
 import React, { Fragment, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import {
+  CheckModel,
+  CheckResultsOverviewDataModel,
+  QualityCategoryModel,
+  TimeWindowFilterParameters,
+} from '../../api';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setCurrentJobId } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
+import { JobApiClient } from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
+import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
 import SvgIcon from '../SvgIcon';
 import CheckListItem from './CheckListItem';
-import {
-  CheckResultsOverviewDataModel,
-  TimeWindowFilterParameters,
-  CheckModel,
-  QualityCategoryModel
-} from '../../api';
-import { useSelector } from 'react-redux';
-import { JobApiClient } from '../../services/apiClient';
-import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
-import { useParams } from 'react-router-dom';
-import { CheckTypes } from '../../shared/routes';
-import { setCurrentJobId } from '../../redux/actions/source.actions';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { getFirstLevelActiveTab } from '../../redux/selectors';
+import { useDecodedParams } from '../../utils';
+
+type CheckIndexTuple = [check: CheckModel, index: number];
 
 interface CheckCategoriesViewProps {
   category: QualityCategoryModel;
@@ -29,6 +33,10 @@ interface CheckCategoriesViewProps {
   mode?: string;
   changeCopyUI: (category: string, checkName: string, checked: boolean) => void;
   copyCategory?: QualityCategoryModel;
+  isDefaultEditing?: boolean;
+  isFiltered?: boolean;
+  showAdvanced?: boolean,
+  isAlreadyDeleted?: boolean
 }
 const CheckCategoriesView = ({
   mode,
@@ -39,33 +47,39 @@ const CheckCategoriesView = ({
   getCheckOverview,
   timeWindowFilter,
   changeCopyUI,
-  copyCategory
+  copyCategory,
+  isDefaultEditing,
+  isFiltered,
+  showAdvanced,
+  isAlreadyDeleted
 }: CheckCategoriesViewProps) => {
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [isExtended, setIsExtended] = useState(false);
 
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
+
   const shouldExtend = () => {
-    if (category.checks?.some((x) => x.configured === true)) {
+    if (category.checks?.some((x) => x.configured === true || x.default_check === true)) {
       setIsExtended(true);
     }
   };
 
   const onRunChecks = async () => {
     await onUpdate();
-    const res = await JobApiClient.runChecks(false, undefined, {
-      checkSearchFilters: category?.run_checks_job_template,
+    const res = await JobApiClient.runChecks(undefined, false, undefined, {
+      check_search_filters: category?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
-        ? { timeWindowFilter }
+        ? { time_window_filter: timeWindowFilter }
         : {})
     });
     dispatch(
       setCurrentJobId(
         checkTypes,
         firstLevelActiveTab,
-        (res.data as any)?.jobId?.jobId
+        res.data?.jobId?.jobId ?? 0
       )
     );
 
@@ -85,7 +99,7 @@ const CheckCategoriesView = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div
-                className="font-semibold text-gray-700 capitalize flex items-center justify-center gap-x-3 cursor-pointer"
+                className="font-semibold text-gray-700 flex items-center justify-center gap-x-3 cursor-pointer"
                 onClick={() => setIsExtended(!isExtended)}
               >
                 {isExtended === false ? (
@@ -99,7 +113,13 @@ const CheckCategoriesView = ({
                     className="w-5 h-5 text-gray-700"
                   />
                 )}
-                {category.category}
+                { 
+                  category.category === 'pii' ? 'PII' :
+                  category.category === 'custom_sql' ? "Custom SQL" :
+                  category.category === 'datatype' ? "Detected data type" :
+                  category.category === 'datetime' ? "Date and time" :
+                    category.category?.replace(/_/g, ' ').replace(/^\w/, (c) => c.toUpperCase())
+                }
               </div>
             </div>
             <div> </div>
@@ -108,64 +128,77 @@ const CheckCategoriesView = ({
         <td className="py-2 px-4 bg-gray-50 border-b border-t" />
         <td className="py-2 px-4 bg-gray-50 border-b border-t" />
         <td className="py-2 px-4 bg-gray-50 border-b border-t">
-          <div className="flex justify-end gap-x-3">
-            <div className="group relative">
-              <SvgIcon
-                name="delete"
-                width={20}
-                className="cursor-pointer"
-                onClick={() => setDeleteDataDialogOpened(true)}
-              />
-              <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
-                Delete data for the category
+          {isDefaultEditing !== true && (
+            <div className="flex justify-end gap-x-3">
+              <div className="group relative">
+                <SvgIcon
+                  name="delete"
+                  width={20}
+                  className="cursor-pointer"
+                  onClick={() => setDeleteDataDialogOpened(true)}
+                />
+                <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
+                  Delete data quality results for the category
+                </div>
+              </div>
+              <div className="group relative">
+                <SvgIcon
+                  name="play"
+                  width={20}
+                  className={clsx(
+                    'text-primary',
+                    userProfile.can_run_checks !== true
+                      ? 'pointer-events-none cursor-not-allowed'
+                      : 'cursor-pointer'
+                  )}
+                  onClick={onRunChecks}
+                />
+                <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
+                  Run checks for the category
+                </div>
               </div>
             </div>
-            <div className="group relative">
-              <SvgIcon
-                name="play"
-                width={20}
-                className="text-primary cursor-pointer"
-                onClick={onRunChecks}
-              />
-              <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
-                Run checks for the category
-              </div>
-            </div>
-          </div>
+          )}
         </td>
       </tr>
       {category.checks &&
         isExtended &&
-        category.checks.map((check, index) => (
+          category.checks.map((check, index) => {
+            const checkIndexPair: CheckIndexTuple = [check, index];
+            return checkIndexPair;
+          })
+          .filter((tuple) => showAdvanced || tuple[0].standard || tuple[0].configured || isAlreadyDeleted || isFiltered)
+          .map((tuple) => (
           <CheckListItem
-            check={check}
-            key={index}
+            check={tuple[0]}
+            key={tuple[1]}
             onChange={(item) =>
-              handleChangeDataGroupingConfiguration(item, index)
+              handleChangeDataGroupingConfiguration(item, tuple[1])
             }
             checkResult={checkResultsOverview.find(
-              (item) =>
-                item.checkName === check.check_name &&
-                category.category === item.checkCategory
+              (item) => item.checkHash === tuple[0].check_hash
             )}
             getCheckOverview={getCheckOverview}
             onUpdate={onUpdate}
             timeWindowFilter={timeWindowFilter}
             mode={mode}
-            changeCopyUI={(value: boolean) =>
+            changeCopyUI={(value) =>
               changeCopyUI(
                 category.category ?? '',
-                check.check_name ?? '',
+                tuple[0].check_name ?? '',
                 value
               )
             }
             checkedCopyUI={
               copyCategory?.checks?.find(
-                (item) => item.check_name === check.check_name
+                (item) => item.check_name === tuple[0].check_name
               )?.configured
             }
             category={category.category}
             comparisonName={category.comparison_name}
+            isDefaultEditing={isDefaultEditing}
+            canUserRunChecks={userProfile.can_run_checks}
+            isAlreadyDeleted={isAlreadyDeleted}
           />
         ))}
       <DeleteOnlyDataDialog
@@ -173,7 +206,7 @@ const CheckCategoriesView = ({
         onClose={() => setDeleteDataDialogOpened(false)}
         onDelete={(params) => {
           setDeleteDataDialogOpened(false);
-          JobApiClient.deleteStoredData({
+          JobApiClient.deleteStoredData(undefined, false, undefined, {
             ...category.data_clean_job_template,
             ...params
           });

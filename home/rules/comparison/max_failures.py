@@ -28,6 +28,7 @@ class HistoricDataPoint:
     local_datetime: datetime
     back_periods_index: int
     sensor_readout: float
+    expected_value: float
 
 
 class RuleTimeWindowSettingsSpec:
@@ -53,7 +54,7 @@ class RuleExecutionResult:
     lower_bound: float
     upper_bound: float
 
-    def __init__(self, passed=True, new_actual_value=None, expected_value=None, lower_bound=None, upper_bound=None):
+    def __init__(self, passed=None, new_actual_value=None, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
         self.new_actual_value = new_actual_value
         self.expected_value = expected_value
@@ -64,10 +65,10 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
     if not hasattr(rule_parameters, 'previous_readouts'):
-        return RuleExecutionResult()
+        return RuleExecutionResult(True, None, None, None)
 
     filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
     filtered.append(rule_parameters.actual_value)

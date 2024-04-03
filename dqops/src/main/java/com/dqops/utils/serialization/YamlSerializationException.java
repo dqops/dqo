@@ -18,7 +18,7 @@ package com.dqops.utils.serialization;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 
 /**
- * YAML serialization and deserialization exception thrown when the YAML file is invalid.
+ * YAML serialization exception thrown when the YAML file is invalid.
  */
 public class YamlSerializationException extends DqoRuntimeException {
     /**

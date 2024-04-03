@@ -22,6 +22,8 @@ import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.checks.CheckExecutionService;
@@ -74,11 +76,14 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
      * Job internal implementation method that should be implemented by derived jobs.
      * @param jobExecutionContext Job execution context.
      *
-     * @return Optional result value that could be returned by the job.
+     * @return Optional result value that can be returned by the job.
      */
     @Override
     public CheckExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
-        ExecutionContext executionContext = this.executionContextFactory.create();
+        this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
+        UserDomainIdentity userDomainIdentity = this.getPrincipal().getDataDomainIdentity();
+        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeSelectedChecksOnTable(
                 executionContext,
                 this.parameters.getConnection(),
@@ -89,7 +94,7 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
                 this.parameters.isDummyExecution(),
                 jobExecutionContext.getCancellationToken());
 
-        RunChecksJobResult jobResultSummary = RunChecksJobResult.fromCheckExecutionSummary(checkExecutionSummary);
+        RunChecksResult jobResultSummary = RunChecksResult.fromCheckExecutionSummary(checkExecutionSummary);
         RunChecksOnTableParameters clonedParameters = this.getParameters().clone();
         clonedParameters.setRunChecksResult(jobResultSummary);
         this.setParameters(clonedParameters);
@@ -104,7 +109,7 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.RUN_CHECKS_ON_TABLE;
+        return DqoJobType.run_checks_on_table;
     }
 
     /**
@@ -117,7 +122,7 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
     public JobConcurrencyConstraint[] getConcurrencyConstraints() {
         Integer maxJobsPerConnection = this.parameters.getMaxJobsPerConnection();
 
-        if (maxJobsPerConnection == null) {
+        if (maxJobsPerConnection == null || maxJobsPerConnection <= 0) {
             return null; // no limits
         }
 
@@ -129,7 +134,7 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
     }
 
     /**
-     * Creates a typed parameters model that could be sent back to the UI.
+     * Creates a typed parameters model that can be sent back to the UI.
      * The parameters model could contain a subset of parameters.
      *
      * @return Job queue parameters that are easy to serialize and shown in the UI.

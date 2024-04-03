@@ -19,6 +19,8 @@ import com.dqops.metadata.sources.PartitionIncrementalTimeWindowSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TimestampColumnsSpec;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -47,17 +49,25 @@ public class TablePartitioningModel {
     private PartitionIncrementalTimeWindowSpec incrementalTimeWindow;
 
     /**
+     * Boolean flag that decides if the current user can update or delete this object.
+     */
+    @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
+    private boolean canEdit;
+
+    /**
      * Creates a table partitioning model from a table specification by cherry-picking relevant fields.
      * @param connectionName Connection name to store in the model.
      * @param tableSpec      Source table specification.
+     * @param allowEdit        The calling user can edit table partitioning.
      * @return Table partitioning model.
      */
-    public static TablePartitioningModel fromTableSpecification(String connectionName, TableSpec tableSpec) {
+    public static TablePartitioningModel fromTableSpecification(String connectionName, TableSpec tableSpec, boolean allowEdit) {
         return new TablePartitioningModel() {{
             setConnectionName(connectionName);
             setTarget(tableSpec.getPhysicalTableName());
             setTimestampColumns(tableSpec.getTimestampColumns());
             setIncrementalTimeWindow(tableSpec.getIncrementalTimeWindow());
+            setCanEdit(allowEdit);
         }};
     }
 
@@ -78,6 +88,16 @@ public class TablePartitioningModel {
         }
         else {
             targetTableSpec.setIncrementalTimeWindow(new PartitionIncrementalTimeWindowSpec()); // default configuration because the object is not null
+        }
+    }
+
+    public static class TablePartitioningModelSampleFactory implements SampleValueFactory<TablePartitioningModel> {
+        @Override
+        public TablePartitioningModel createSample() {
+            return fromTableSpecification(
+                    SampleStringsRegistry.getConnectionName(),
+                    new TableSpec.TableSpecSampleFactory().createSample(),
+                    true);
         }
     }
 }

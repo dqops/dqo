@@ -15,6 +15,7 @@
  */
 package com.dqops.services.remote.schemas;
 
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.rest.models.remote.SchemaRemoteModel;
 
 import java.util.List;
@@ -27,7 +28,8 @@ public interface SourceSchemasService {
     /**
      * Returns a list of schemas for local connection.
      * @param connectionName     Connection name.
+     * @param principal          Calling user principal.
      * @return Schema list acquired remotely.
      */
-    List<SchemaRemoteModel> showSchemas(String connectionName);
+    List<SchemaRemoteModel> showSchemas(String connectionName, DqoUserPrincipal principal);
 }

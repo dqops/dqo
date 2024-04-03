@@ -20,6 +20,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.nio.file.Path;
+
 @SpringBootTest
 public class FileNameSanitizerTests extends BaseTest {
     @Test
@@ -29,13 +31,13 @@ public class FileNameSanitizerTests extends BaseTest {
     }
 
     @Test
-    void encodeForFileSystem_whenSpacePresent_thenIsEncoded() {
-        Assertions.assertEquals("a+b", FileNameSanitizer.encodeForFileSystem("a b"));
+    void encodeForFileSystem_whenSpacePresent_thenIsNotEncoded() {
+        Assertions.assertEquals("a b", FileNameSanitizer.encodeForFileSystem("a b"));
     }
 
     @Test
     void encodeForFileSystem_whenSpecialCharacterPresent_thenIsEncoded() {
-        Assertions.assertEquals("a%2B", FileNameSanitizer.encodeForFileSystem("a+"));
+        Assertions.assertEquals("a+", FileNameSanitizer.encodeForFileSystem("a+"));
         Assertions.assertEquals("a%2F", FileNameSanitizer.encodeForFileSystem("a/"));
         Assertions.assertEquals("a%5C", FileNameSanitizer.encodeForFileSystem("a\\"));
         Assertions.assertEquals("a%26", FileNameSanitizer.encodeForFileSystem("a&"));
@@ -66,5 +68,13 @@ public class FileNameSanitizerTests extends BaseTest {
         String sanitized = FileNameSanitizer.encodeForFileSystem(original);
         String decoded = FileNameSanitizer.decodeFileSystemName(sanitized);
         Assertions.assertEquals(original, decoded);
+    }
+
+    @Test
+    void convertEncodedPathToFullyUrlEncodedPath_whenPathHasEqualsSign_thenEqualsSignsAreNotEncoded() {
+        final String original = ".data/check_results/c=bigquery-public-data/t=austin_311.311_service_requests/m=2024-02-01/check_results.0.parquet";
+        String sanitized = FileNameSanitizer.convertEncodedLocalPathToFullyUrlEncodedBucketPath(Path.of(original)).toString()
+                .replace('\\', '/');
+        Assertions.assertEquals(original, sanitized);
     }
 }

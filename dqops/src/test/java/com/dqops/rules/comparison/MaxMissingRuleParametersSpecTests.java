@@ -25,11 +25,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class MaxMissingRuleParametersSpecTests extends BaseTest {
-    private MaxMissingRule0ParametersSpec sut;
+    private MaxMissingRule0WarningParametersSpec sut;
 
     @BeforeEach
     void setUp() {
-		this.sut = new MaxMissingRule0ParametersSpec();
+		this.sut = new MaxMissingRule0WarningParametersSpec();
     }
 
     @Test
@@ -44,7 +44,7 @@ public class MaxMissingRuleParametersSpecTests extends BaseTest {
     @Test
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertNull(ruleExecutionResult.getExpectedValue());
         Assertions.assertNull(ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
@@ -54,7 +54,7 @@ public class MaxMissingRuleParametersSpecTests extends BaseTest {
     void executeRule_whenMaxMissing0AndNoneMissing_thenReturnsPassed() {
         this.sut.setMaxMissing(0L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(5.0, 5.0, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(5.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(5.0, ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
@@ -64,7 +64,7 @@ public class MaxMissingRuleParametersSpecTests extends BaseTest {
     void executeRule_whenMaxMissing1AndNoneMissing_thenReturnsPassed() {
         this.sut.setMaxMissing(1L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(5.0, 5.0, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(5.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(4.0, ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
@@ -74,7 +74,7 @@ public class MaxMissingRuleParametersSpecTests extends BaseTest {
     void executeRule_whenMaxMissing1AndOneMissing_thenReturnsPassed() {
         this.sut.setMaxMissing(1L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(4.0, 5.0, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(5.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(4.0, ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
@@ -84,7 +84,7 @@ public class MaxMissingRuleParametersSpecTests extends BaseTest {
     void executeRule_whenMaxMissing1And2Missing_thenReturnsPassed() {
         this.sut.setMaxMissing(1L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(3.0, 5.0, this.sut);
-        Assertions.assertFalse(ruleExecutionResult.isPassed());
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(5.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(4.0, ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());

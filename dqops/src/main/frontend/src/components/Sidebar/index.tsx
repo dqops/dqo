@@ -1,20 +1,26 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-import Button from '../Button';
-import SvgIcon from '../SvgIcon';
+import { useSelector } from 'react-redux';
 import { useTree } from '../../contexts/treeContext';
-import Tree from '../MainLayout/Tree';
+import { IRootState } from '../../redux/reducers';
 import { CheckTypes } from "../../shared/routes";
+import { useDecodedParams } from '../../utils';
+import Button from '../Button';
+import Tree from '../MainLayout/Tree';
+import SvgIcon from '../SvgIcon';
 
 const Sidebar = () => {
   const history = useHistory();
   const sidebarRef = useRef<HTMLDivElement>(null);
+ 
   const [isResizing, setIsResizing] = useState(false);
-  const { sidebarWidth, setSidebarWidth } = useTree();
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
-
+  const { sidebarWidth, setSidebarWidth, treeData } = useTree();
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
+  const { userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const startResizing = useCallback(() => {
     setIsResizing(true);
   }, []);
@@ -54,13 +60,14 @@ const Sidebar = () => {
       style={{ width: sidebarWidth, maxHeight: 'calc(100vh - 64px)' }}
     >
       <div className="px-4 flex mb-0">
-        {checkTypes === 'sources' ? (
+        {(checkTypes === 'sources' || Object.keys(treeData).length === 0) ? (
           <Button
             label="Add connection"
             color="primary"
             className="px-4"
             leftIcon={<SvgIcon name="add" className="text-white mr-2 w-5" />}
-            onClick={() => history.push('/create')}
+            onClick={() => history.push('/sources/create')}
+            disabled={userProfile.can_manage_data_sources !== true}
           />
         ) : (
           <div />
@@ -70,7 +77,7 @@ const Sidebar = () => {
       <div
         className="cursor-ew-resize fixed bottom-0 w-2 transform -translate-x-1/2 z-50 top-16"
         onMouseDown={startResizing}
-        style={{ left: sidebarWidth }}
+        style={{ left: sidebarWidth, userSelect: 'none' }}
       />
     </div>
   );

@@ -20,8 +20,8 @@ import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MinPercentRule95ParametersSpec;
-import com.dqops.rules.comparison.MinPercentRule99ParametersSpec;
-import com.dqops.rules.comparison.MinPercentRule100ParametersSpec;
+import com.dqops.rules.comparison.MinPercentRule100ErrorParametersSpec;
+import com.dqops.rules.comparison.MinPercentRule100WarningParametersSpec;
 import com.dqops.sensors.column.numeric.ColumnNumericValidLongitudePercentSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -34,13 +34,15 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a set percentage of valid longitude values in a monitored column.
+ * This check verifies that numeric values are valid longitude coordinates. A valid longitude coordinate is in the range --180...180.
+ * It measures the percentage of values within a valid range for a longitude.
+ * This check raises a data quality issue when the rate of valid values is below the minimum accepted percentage.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnValidLongitudePercentCheckSpec
-        extends AbstractCheckSpec<ColumnNumericValidLongitudePercentSensorParametersSpec, MinPercentRule100ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+        extends AbstractCheckSpec<ColumnNumericValidLongitudePercentSensorParametersSpec, MinPercentRule100WarningParametersSpec, MinPercentRule100ErrorParametersSpec, MinPercentRule95ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnValidLongitudePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,12 +56,12 @@ public class ColumnValidLongitudePercentCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule100ParametersSpec warning;
+    private MinPercentRule100WarningParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set percentage of rows with valid longitude value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule99ParametersSpec error;
+    private MinPercentRule100ErrorParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -93,7 +95,7 @@ public class ColumnValidLongitudePercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinPercentRule100ParametersSpec getWarning() {
+    public MinPercentRule100WarningParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -102,7 +104,7 @@ public class ColumnValidLongitudePercentCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinPercentRule100ParametersSpec warning) {
+    public void setWarning(MinPercentRule100WarningParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -114,7 +116,7 @@ public class ColumnValidLongitudePercentCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public MinPercentRule99ParametersSpec getError() {
+    public MinPercentRule100ErrorParametersSpec getError() {
         return this.error;
     }
 
@@ -123,7 +125,7 @@ public class ColumnValidLongitudePercentCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinPercentRule99ParametersSpec error) {
+    public void setError(MinPercentRule100ErrorParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");

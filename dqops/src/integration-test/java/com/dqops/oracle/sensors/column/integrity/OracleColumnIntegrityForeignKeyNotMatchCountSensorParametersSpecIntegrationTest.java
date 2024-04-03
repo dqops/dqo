@@ -16,7 +16,7 @@
 package com.dqops.oracle.sensors.column.integrity;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyNotMatchCountCheckSpec;
+import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityLookupKeyNotFoundCountCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -41,7 +41,7 @@ import tech.tablesaw.api.Table;
 public class OracleColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecIntegrationTest extends BaseOracleIntegrationTest {
     private ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec checkSpec;
+    private ColumnIntegrityLookupKeyNotFoundCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
     private SampleTableMetadata sampleTableMetadataForeign;
 
@@ -53,7 +53,7 @@ public class OracleColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecInt
         IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadataForeign);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec();
-        this.checkSpec = new ColumnIntegrityForeignKeyNotMatchCountCheckSpec();
+        this.checkSpec = new ColumnIntegrityLookupKeyNotFoundCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -74,11 +74,11 @@ public class OracleColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecInt
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
         this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -90,11 +90,11 @@ public class OracleColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecInt
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
         this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

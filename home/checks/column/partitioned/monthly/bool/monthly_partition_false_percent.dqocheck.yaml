@@ -1,9 +1,10 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/bool/false_percent
-  rule_name: comparison/min_percent
-  help_text: Verifies that the percentage of false values in a column does not exceed
-    the minimum accepted percentage. Creates a separate data quality check (and an
-    alert) for each monthly partition.
+  rule_name: comparison/between_percent
+  help_text: Measures the percentage of **false** values in a boolean column and verifies
+    that it is within the accepted range. Stores a separate data quality check result
+    for each monthly partition.
+  standard: true

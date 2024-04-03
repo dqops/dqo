@@ -15,6 +15,7 @@
  */
 package com.dqops.execution;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -43,10 +44,13 @@ public class ExecutionContextFactoryImpl implements ExecutionContextFactory {
 
     /**
      * Creates a new execution context by opening the user home context and the dqo system home context.
+     * @param userDomainIdentity Calling user identity, with the name of the data domain whose user home is opened.
      * @return Execution context.
      */
-    public ExecutionContext create() {
-        return new ExecutionContext(this.userHomeContextFactory.openLocalUserHome(), this.dqoHomeContextFactory.openLocalDqoHome());
+    @Override
+    public ExecutionContext create(UserDomainIdentity userDomainIdentity) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userDomainIdentity);
+        return new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome());
     }
 
     /**

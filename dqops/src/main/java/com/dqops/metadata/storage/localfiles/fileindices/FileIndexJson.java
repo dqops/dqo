@@ -18,13 +18,22 @@ package com.dqops.metadata.storage.localfiles.fileindices;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.fileindices.FileIndexSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.reflection.DefaultFieldValue;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
- * File index definition file that defines a tree of files that were synchronized with the DQO Cloud.
+ * File index definition file that defines a tree of files that were synchronized with the DQOps Cloud.
  */
 public class FileIndexJson {
+    @JsonPropertyDescription("DQOps YAML schema version")
+    @DefaultFieldValue(ApiVersion.CURRENT_API_VERSION)
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
-    private SpecificationKind kind = SpecificationKind.FILE_INDEX;
+
+    @JsonPropertyDescription("File type")
+    @DefaultFieldValue("file_index")
+    private SpecificationKind kind = SpecificationKind.file_index;
+
+    @JsonPropertyDescription("File index")
     private FileIndexSpec spec = new FileIndexSpec();
 
     public FileIndexJson() {

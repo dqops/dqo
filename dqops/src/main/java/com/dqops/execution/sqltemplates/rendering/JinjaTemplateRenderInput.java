@@ -21,6 +21,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.time.Instant;
+
 /**
  * Json object that is sent to the python script that renders sql templates.
  */
@@ -29,6 +31,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class JinjaTemplateRenderInput {
     private String templateText;
+    private Instant templateLastModified;
     private String userHomePath;
     private HomeType homeType;
     private String templateHomePath;
@@ -48,6 +51,23 @@ public class JinjaTemplateRenderInput {
      */
     public void setTemplateText(String templateText) {
         this.templateText = templateText;
+    }
+
+    /**
+     * Returns the file timestamp when the template was modified for the last time.
+     * This timestamp is used by the rendering engine to decide if the cached template is still valid.
+     * @return Returns the timestamp when the template was last modified.
+     */
+    public Instant getTemplateLastModified() {
+        return templateLastModified;
+    }
+
+    /**
+     * Sets the timestamp when the template was last modified.
+     * @param templateLastModified Timestamp when the template was last modified.
+     */
+    public void setTemplateLastModified(Instant templateLastModified) {
+        this.templateLastModified = templateLastModified;
     }
 
     /**

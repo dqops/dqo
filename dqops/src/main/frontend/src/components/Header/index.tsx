@@ -1,17 +1,19 @@
-import React, { useEffect } from 'react';
-import NotificationMenu from '../NotificationMenu';
-import Logo from '../Logo';
+import { Tooltip, tab } from '@material-tailwind/react';
 import clsx from 'clsx';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import {
   useHistory,
   useLocation,
-  useParams,
   useRouteMatch
 } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import HelpMenu from '../HelpMenu';
-import { useSelector } from 'react-redux';
+import { DqoJobChangeModelStatusEnum } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
+import {
+  setAdvisorJobId,
+  setAdvisorObject,
+  toggleAdvisor
+} from '../../redux/actions/job.actions';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
 import {
@@ -20,14 +22,14 @@ import {
   PageTab,
   TABLE_LEVEL_TABS
 } from '../../shared/constants';
-import { SynchronizeButton } from './SynchronizeButton';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
+import HelpMenu from '../HelpMenu';
+import Logo from '../Logo';
+import NotificationMenu from '../NotificationMenu';
 import UserProfile from '../UserProfile';
 import { HeaderBanner } from './HeaderBanner';
-import {
-  toggleAdvisor,
-  setAdvisorObject,
-  setAdvisorJobId
-} from '../../redux/actions/job.actions';
+import { SynchronizeButton } from './SynchronizeButton';
 
 const Header = () => {
   const history = useHistory();
@@ -49,7 +51,7 @@ const Header = () => {
     timePartitioned: 'daily' | 'monthly';
     category: string;
     checkName: string;
-  } = useParams();
+  } = useDecodedParams();
 
   const dispatch = useActionDispatch();
   const { tabs, activeTab } = useSelector(
@@ -57,7 +59,7 @@ const Header = () => {
   );
   const selectedTab = tabs?.find((item) => item.value === activeTab);
   const match = useRouteMatch();
-  const { isAdvisorOpen, job_dictionary_state, advisorObject, advisorJobId } =
+  const { isAdvisorOpen, job_dictionary_state, advisorJobId } =
     useSelector((state: IRootState) => state.job);
 
   const onClick = (newCheckTypes: CheckTypes) => () => {
@@ -164,56 +166,19 @@ const Header = () => {
 
   const onCloseAdvisor = () => {
     dispatch(toggleAdvisor(false));
-  };
-
-  useEffect(() => {
-    if (
-      Object.values(job_dictionary_state)
-        .filter((x) => x.jobType === 'import selected tables')
-        .find(
-          (y) =>
-            y.status === 'queued' ||
-            y.status === 'waiting' ||
-            y.status === 'running'
-        )
-    ) {
-      dispatch(
-        setAdvisorJobId(
-          Number(
-            Object.keys(job_dictionary_state).find(
-              (key) =>
-                job_dictionary_state[key] ===
-                Object.values(job_dictionary_state)
-                  .filter((x) => x.jobType === 'import selected tables')
-                  ?.find(
-                    (y) =>
-                      y.status === 'queued' ||
-                      y.status === 'waiting' ||
-                      y.status === 'running'
-                  )
-            )
-          )
-        )
-      );
-      dispatch(
-        setAdvisorObject(
-          Object.values(job_dictionary_state).find(
-            (x) => x.jobType === 'import selected tables'
-          )?.parameters?.importTableParameters ?? {}
-        )
-      );
-    }
-  }, [job_dictionary_state]);
+    dispatch(setAdvisorJobId(0));
+    dispatch(setAdvisorObject({}));
+  }
 
   useEffect(() => {
     if (
       advisorJobId !== 0 &&
-      job_dictionary_state[advisorJobId].status === 'succeeded'
+      job_dictionary_state[advisorJobId]?.status === DqoJobChangeModelStatusEnum.finished
     ) {
-      dispatch(setAdvisorJobId(0));
+      dispatch(setAdvisorObject(job_dictionary_state[advisorJobId]?.parameters?.importTableParameters ?? {}));
       dispatch(toggleAdvisor(true));
     }
-  }, [advisorObject]);
+  }, [job_dictionary_state[advisorJobId]]);
 
   return (
     <div className="fixed top-0 left-0 right-0 min-h-16 max-h-16 bg-white shadow-header flex items-center justify-between z-10 border-b border-gray-300 px-4">
@@ -227,77 +192,98 @@ const Header = () => {
           <Logo className="w-30 cursor-pointer" />
         </div>
         <div className="flex items-center">
+          <Tooltip content={"Add a new connection and manage its settings"}
+              className="max-w-80 py-4 px-4 bg-gray-800 delay-700" >
           <div
             className={clsx(
               'px-4 cursor-pointer',
               location.pathname.startsWith(`/${CheckTypes.SOURCES}`)
-                ? 'font-bold'
-                : ''
-            )}
-            onClick={onClick(CheckTypes.SOURCES)}
-          >
+              ? 'font-bold'
+              : ''
+              )}
+              onClick={onClick(CheckTypes.SOURCES)}
+              >
             Data Sources
           </div>
+          </Tooltip>
+          <Tooltip content={"Measure basic data statistics and experiment with various types of data quality checks"}
+              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
           <div
             className={clsx(
               'px-4 cursor-pointer',
               location.pathname.startsWith(`/${CheckTypes.PROFILING}`)
-                ? 'font-bold'
-                : ''
-            )}
-            onClick={onClick(CheckTypes.PROFILING)}
-          >
+              ? 'font-bold'
+              : ''
+              )}
+              onClick={onClick(CheckTypes.PROFILING)}
+              >
             Profiling
           </div>
+          </Tooltip>
+          <Tooltip content={"Run standard checks that monitor the data quality"}
+              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
           <div
             className={clsx(
               'px-4 cursor-pointer',
-              location.pathname.startsWith(`/${CheckTypes.RECURRING}`)
-                ? 'font-bold'
-                : ''
-            )}
-            onClick={onClick(CheckTypes.RECURRING)}
-          >
-            Recurring Checks
+              location.pathname.startsWith(`/${CheckTypes.MONITORING}`)
+              ? 'font-bold'
+              : ''
+              )}
+              onClick={onClick(CheckTypes.MONITORING)}
+              >
+            Monitoring Checks
           </div>
+            </Tooltip>
+            <Tooltip content={"Run checks designed to monitor the data quality of partitioned data"}
+              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
           <div
             className={clsx(
               'px-4 cursor-pointer',
               location.pathname.startsWith(`/${CheckTypes.PARTITIONED}`)
-                ? 'font-bold'
-                : ''
-            )}
-            onClick={onClick(CheckTypes.PARTITIONED)}
-          >
+              ? 'font-bold'
+              : ''
+              )}
+              onClick={onClick(CheckTypes.PARTITIONED)}
+              >
             Partition Checks
           </div>
+            </Tooltip>
+            <Tooltip content={"Review the summaries of data quality monitoring"}
+              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
           <div
             className={clsx(
               'px-4 cursor-pointer',
               location.pathname === '/dashboards' ? 'font-bold' : ''
-            )}
-            onClick={() => history.push('/dashboards')}
-          >
+              )}
+              onClick={() => history.push('/dashboards')}
+              >
             Data Quality Dashboards
           </div>
+            </Tooltip>
+            <Tooltip content={"Review and manage the issues that arise during data quality monitoring"}
+              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
           <div
             className={clsx(
               'px-4 cursor-pointer',
               location.pathname.startsWith('/incidents') ? 'font-bold' : ''
-            )}
-            onClick={() => history.push('/incidents')}
-          >
+              )}
+              onClick={() => history.push('/incidents')}
+              >
             Incidents
           </div>
-          <div
-            className={clsx(
+            </Tooltip>
+          <Tooltip content={"Customize built-in data quality sensors and rules"}
+              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
+            <div
+            className={clsx(  
               'px-4 cursor-pointer',
               location.pathname.startsWith('/definitions') ? 'font-bold' : ''
-            )}
-            onClick={() => history.push('/definitions')}
-          >
-            Definitions
-          </div>
+              )}
+              onClick={() => location.pathname.startsWith('/definitions') ? undefined : history.push('/definitions')}
+              >
+            Configuration
+            </div>
+          </Tooltip>
         </div>
       </div>
       <div className="flex">

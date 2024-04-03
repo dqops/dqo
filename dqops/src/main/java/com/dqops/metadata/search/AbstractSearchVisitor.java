@@ -18,21 +18,27 @@ package com.dqops.metadata.search;
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
-import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
-import com.dqops.checks.column.recurring.ColumnRecurringChecksRootSpec;
+import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
+import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
 import com.dqops.checks.custom.CustomCheckSpecMap;
-import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultDailyRecurringObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultMonthlyRecurringObservabilityCheckSettingsSpec;
-import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import com.dqops.checks.table.partitioned.TablePartitionedCheckCategoriesSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
+import com.dqops.metadata.credentials.SharedCredentialList;
+import com.dqops.metadata.credentials.SharedCredentialWrapper;
+import com.dqops.metadata.defaultchecks.column.*;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
+import com.dqops.metadata.defaultchecks.table.TargetTablePatternSpec;
+import com.dqops.metadata.dictionaries.DictionaryListImpl;
+import com.dqops.metadata.dictionaries.DictionaryWrapperImpl;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.checks.table.recurring.TableRecurringChecksSpec;
+import com.dqops.checks.table.monitoring.TableMonitoringCheckCategoriesSpec;
 import com.dqops.metadata.comments.CommentSpec;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.dashboards.*;
@@ -52,13 +58,16 @@ import com.dqops.metadata.fileindices.FileIndexWrapperImpl;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
+import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.sources.fileformat.*;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
-import com.dqops.metadata.scheduling.RecurringScheduleSpec;
-import com.dqops.metadata.scheduling.RecurringSchedulesSpec;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import com.dqops.metadata.userhome.UserHome;
@@ -447,12 +456,12 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
 
     /**
      * Accepts a settings specific specification.
-     * @param settingsSpec Settings specific configuration.
+     * @param localSettingsSpec Settings specific configuration.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(SettingsSpec settingsSpec, T parameter) {
+    public TreeNodeTraversalResult accept(LocalSettingsSpec localSettingsSpec, T parameter) {
         return TreeNodeTraversalResult.SKIP_CHILDREN;//we don't want to enter SettingSpec anymore
     }
 
@@ -493,14 +502,14 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     }
 
     /**
-     * Accepts a recurring schedule specification, it is the cron expression how to schedule the job.
+     * Accepts a monitoring schedule specification, it is the cron expression how to schedule the job.
      *
-     * @param recurringScheduleSpec Recurring schedule.
+     * @param monitoringScheduleSpec Monitoring schedule.
      * @param parameter             Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(RecurringScheduleSpec recurringScheduleSpec, T parameter) {
+    public TreeNodeTraversalResult accept(MonitoringScheduleSpec monitoringScheduleSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -565,50 +574,50 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     }
 
     /**
-     * Accepts a container of table level recurring checks (daily, monthly, etc.)
+     * Accepts a container of table level monitoring checks (daily, monthly, etc.)
      *
-     * @param tableRecurringChecksSpec Table level recurring checks container.
+     * @param tableMonitoringCheckCategoriesSpec Table level monitoring checks container.
      * @param parameter            Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableRecurringChecksSpec tableRecurringChecksSpec, T parameter) {
+    public TreeNodeTraversalResult accept(TableMonitoringCheckCategoriesSpec tableMonitoringCheckCategoriesSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**
      * Accepts a container of table level partitioned checks (daily, monthly, etc.)
      *
-     * @param tablePartitionedChecksRootSpec Table level partitioned checks container.
+     * @param tablePartitionedCheckCategoriesSpec Table level partitioned checks container.
      * @param parameter                      Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TablePartitionedChecksRootSpec tablePartitionedChecksRootSpec, T parameter) {
+    public TreeNodeTraversalResult accept(TablePartitionedCheckCategoriesSpec tablePartitionedCheckCategoriesSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**
-     * Accepts a container of column level recurring checks (daily, monthly, etc.)
+     * Accepts a container of column level monitoring checks (daily, monthly, etc.)
      *
-     * @param columnRecurringChecksRootSpec Column level recurring checks container.
+     * @param columnMonitoringCheckCategoriesSpec Column level monitoring checks container.
      * @param parameter             Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnRecurringChecksRootSpec columnRecurringChecksRootSpec, T parameter) {
+    public TreeNodeTraversalResult accept(ColumnMonitoringCheckCategoriesSpec columnMonitoringCheckCategoriesSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**
      * Accepts a container of column level partitioned checks (daily, monthly, etc.)
      *
-     * @param columnPartitionedChecksRootSpec Column level partitioned checks container.
+     * @param columnPartitionedCheckCategoriesSpec Column level partitioned checks container.
      * @param parameter                       Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnPartitionedChecksRootSpec columnPartitionedChecksRootSpec, T parameter) {
+    public TreeNodeTraversalResult accept(ColumnPartitionedCheckCategoriesSpec columnPartitionedCheckCategoriesSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -735,12 +744,12 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     /**
      * Accepts a container of schedules, divided by the time range.
      *
-     * @param recurringSchedulesSpec Container of schedule categories.
+     * @param defaultSchedulesSpec Container of schedule categories.
      * @param parameter                     Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(RecurringSchedulesSpec recurringSchedulesSpec, T parameter) {
+    public TreeNodeTraversalResult accept(DefaultSchedulesSpec defaultSchedulesSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -765,6 +774,18 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(CustomCheckSpecMap customCheckSpecMap, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a dictionary of custom checks configured as a child of a category.
+     *
+     * @param customCategoryCheckSpecMap Dictionary of custom checks at a category level.
+     * @param parameter                  Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(CustomCategoryCheckSpecMap customCategoryCheckSpecMap, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -877,54 +898,6 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     }
 
     /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultObservabilityCheckSettingsSpec Default configuration of observability checks.
-     * @param parameter                             Visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(DefaultObservabilityCheckSettingsSpec defaultObservabilityCheckSettingsSpec, T parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultProfilingObservabilityCheckSettingsSpec Default configuration of observability checks.
-     * @param parameter                                      Visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(DefaultProfilingObservabilityCheckSettingsSpec defaultProfilingObservabilityCheckSettingsSpec, T parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultDailyRecurringObservabilityCheckSettingsSpec Default configuration of observability checks.
-     * @param parameter                                           Visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(DefaultDailyRecurringObservabilityCheckSettingsSpec defaultDailyRecurringObservabilityCheckSettingsSpec, T parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultMonthlyRecurringObservabilityCheckSettingsSpec Default configuration of observability checks.
-     * @param parameter                                             Visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(DefaultMonthlyRecurringObservabilityCheckSettingsSpec defaultMonthlyRecurringObservabilityCheckSettingsSpec, T parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
      * Accepts a configuration of a pair of column names that are used for joining and grouping.
      *
      * @param tableComparisonGroupingColumnsPairSpec Configuration of grouping columns.
@@ -945,6 +918,222 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(TableComparisonGroupingColumnsPairsListSpec tableComparisonGroupingColumnsPairSpecs, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a shared credential wrapper instance.
+     *
+     * @param sharedCredentialWrapper Shared credential wrapper.
+     * @param parameter               Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(SharedCredentialWrapper sharedCredentialWrapper, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a shared credential list.
+     *
+     * @param sharedCredentialWrappers Shared credentials list.
+     * @param parameter                Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(SharedCredentialList sharedCredentialWrappers, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a default monitoring schedule wrapper instance.
+     *
+     * @param monitoringSchedulesWrapper Default monitoring schedule wrapper instance.
+     * @param parameter                  Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(MonitoringSchedulesWrapper monitoringSchedulesWrapper, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a default incident webhook notification wrapper instance.
+     *
+     * @param defaultIncidentWebhookNotificationsWrapper Default incident webhook notification wrapper instance.
+     * @param parameter                Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DefaultIncidentWebhookNotificationsWrapper defaultIncidentWebhookNotificationsWrapper, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a data dictionary list.
+     *
+     * @param dictionaryWrappers Data dictionary list.
+     * @param parameter          Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DictionaryListImpl dictionaryWrappers, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a single data dictionary wrapper.
+     *
+     * @param dictionaryWrapper Data dictionary wrapper.
+     * @param parameter         Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DictionaryWrapperImpl dictionaryWrapper, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a file format specification.
+     *
+     * @param fileFormatSpec File format specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(FileFormatSpec fileFormatSpec, T parameter){
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a csv file format specification.
+     *
+     * @param csvFileFormatSpec Csv file format specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(CsvFileFormatSpec csvFileFormatSpec, T parameter){
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a json file format specification.
+     *
+     * @param jsonFileFormatSpec Json file format specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(JsonFileFormatSpec jsonFileFormatSpec, T parameter){
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a parquet file format specification.
+     *
+     * @param parquetFileFormatSpec Parquet file format specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ParquetFileFormatSpec parquetFileFormatSpec, T parameter){
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a file path list spec
+     *
+     * @param filePathListSpec   File path list spec
+     * @param parameter          Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(FilePathListSpec filePathListSpec, T parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a default configuration of column observability checks specification.
+     *
+     * @param columnDefaultChecksPatternSpec Column observability default checks specification.
+     * @param parameter                                Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ColumnDefaultChecksPatternSpec columnDefaultChecksPatternSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a default configuration of table observability checks specification.
+     *
+     * @param tableDefaultChecksPatternSpec Table observability default checks specification.
+     * @param parameter                               Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableDefaultChecksPatternSpec tableDefaultChecksPatternSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a default configuration of table observability checks wrapper.
+     *
+     * @param tableDefaultChecksPatternWrapper Table observability default checks specification.
+     * @param parameter                        Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableDefaultChecksPatternWrapper tableDefaultChecksPatternWrapper, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of default configuration of table observability checks wrappers.
+     *
+     * @param tableDefaultChecksPatternWrappers Table observability default checks list.
+     * @param parameter                         Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableDefaultChecksPatternList tableDefaultChecksPatternWrappers, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a default configuration of column observability checks wrapper.
+     *
+     * @param columnDefaultChecksPatternWrapper Column observability default checks specification.
+     * @param parameter                         Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ColumnDefaultChecksPatternWrapper columnDefaultChecksPatternWrapper, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a default configuration of column observability checks wrapper.
+     *
+     * @param columnDefaultChecksPatternWrappers Column observability default checks specification.
+     * @param parameter                          Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ColumnDefaultChecksPatternList columnDefaultChecksPatternWrappers, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accept a table filter for a default check pattern.
+     *
+     * @param targetTablePatternSpec Table pattern specification.
+     * @param parameter        Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TargetTablePatternSpec targetTablePatternSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

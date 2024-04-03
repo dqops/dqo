@@ -20,6 +20,7 @@ import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.RowCountLimitExceededException;
 import com.dqops.core.jobqueue.JobCancellationListenerHandle;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
@@ -29,6 +30,7 @@ import tech.tablesaw.columns.Column;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Locale;
 
@@ -53,7 +55,7 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
     }
 
     /**
-     * Returns an open JDBC connection (if the {@link AbstractJdbcSourceConnection#open()} was called.
+     * Returns an open JDBC connection (if the {@link AbstractJdbcSourceConnection#open(SecretValueLookupContext)} ()} was called.
      * @return Jdbc connection object.
      */
     public Connection getJdbcConnection() {
@@ -62,21 +64,23 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
 
     /**
      * Creates a hikari connection pool config for the connection specification.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      * @return Hikari config.
      */
-    public abstract HikariConfig createHikariConfig();
+    public abstract HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext);
 
     /**
      * Opens a connection before it can be used for executing any statements.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      */
     @Override
-    public void open() {
+    public void open(SecretValueLookupContext secretValueLookupContext) {
         if (this.jdbcConnection != null) {
             throw new JdbcConnectionFailedException("Cannot open a connection again");
         }
 
         try {
-            HikariDataSource dataSource = this.jdbcConnectionPool.getDataSource(this.getConnectionSpec(), () -> createHikariConfig());
+            HikariDataSource dataSource = this.jdbcConnectionPool.getDataSource(this.getConnectionSpec(), () -> createHikariConfig(secretValueLookupContext));
 			this.jdbcConnection = dataSource.getConnection();
             this.jdbcConnection.setAutoCommit(true);
         }
@@ -120,15 +124,25 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
     public Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken, Integer maxRows, boolean failWhenMaxRowsExceeded) {
         try {
             try (Statement statement = this.jdbcConnection.createStatement()) {
+                boolean maxRowsSupported = true;
+
                 if (maxRows != null) {
-                    statement.setMaxRows(failWhenMaxRowsExceeded ? maxRows + 1 : maxRows);
+                    try {
+                        statement.setMaxRows(failWhenMaxRowsExceeded ? maxRows + 1 : maxRows);
+                    }
+                    catch (Exception ex) {
+                        maxRowsSupported = false;
+                    }
                 }
 
                 try (JobCancellationListenerHandle cancellationListenerHandle =
                              jobCancellationToken.registerCancellationListener(
                                      cancellationToken -> RunSilently.run(statement::cancel))) {
                     try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
-                        Table resultTable = Table.read().db(results, sqlQueryStatement);
+                        ResultSet rowCountLimitedResultSet = maxRows != null ?
+                                new MaxRowsLimitingResultSet(results, maxRows + 1) : results;
+
+                        Table resultTable = rawTableResultFromResultSet(rowCountLimitedResultSet, sqlQueryStatement);
                         if (maxRows != null && resultTable.rowCount() > maxRows) {
                             throw new RowCountLimitExceededException(maxRows);
                         }
@@ -152,6 +166,18 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
                     String.format("SQL query failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlQueryStatement),
                     ex, sqlQueryStatement, connectionName);
         }
+    }
+
+    /**
+     * Creates the tablesaw's Table from the ResultSet for the query execution
+     * @param results               ResultSet object that contains the data produced by a query
+     * @param sqlQueryStatement     SQL statement that returns a row set.
+     * @return Tabular result captured from the query.
+     * @throws SQLException
+     */
+    protected Table rawTableResultFromResultSet(ResultSet results, String sqlQueryStatement) throws SQLException {
+        Table resultTable = Table.read().db(results, sqlQueryStatement);
+        return resultTable;
     }
 
     /**

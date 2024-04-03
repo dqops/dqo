@@ -77,7 +77,7 @@ public class FileFileIndexWrapperImpl extends FileIndexWrapperImpl {
             if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
                 throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
             }
-            if (deserialized.getKind() != SpecificationKind.FILE_INDEX) {
+            if (deserialized.getKind() != SpecificationKind.file_index) {
                 throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
             }
 
@@ -94,8 +94,12 @@ public class FileFileIndexWrapperImpl extends FileIndexWrapperImpl {
      */
     @Override
     public void flush() {
-        if (this.getStatus() == InstanceStatus.DELETED) {
+        if (this.getStatus() == InstanceStatus.DELETED || this.getStatus() == InstanceStatus.NOT_TOUCHED) {
             return; // do nothing
+        }
+
+        if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() == null) {
+            return; // nothing to do, the instance is empty (no file)
         }
 
         if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() != null && super.getSpec().isDirty() ) {
@@ -112,11 +116,14 @@ public class FileFileIndexWrapperImpl extends FileIndexWrapperImpl {
             case ADDED:
 				this.indicesFolderNode.addChildFile(fileNameWithExt, newFileContent);
 				this.getSpec().clearDirty(true);
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.indicesFolderNode.getChildFileByFileName(fileNameWithExt);
                 modifiedFileNode.changeContent(newFileContent);
 				this.getSpec().clearDirty(true);
                 break;
+
             case TO_BE_DELETED:
 				this.indicesFolderNode.deleteChildFile(fileNameWithExt);
                 break;

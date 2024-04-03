@@ -1,22 +1,25 @@
-
-## DashboardsFolderSpec  
-Description of a folder with multiple dashboards or other folders.  
-  
+# DQOps YAML file definitions
+The definition of YAML files used by DQOps to configure the data sources, monitored tables, and the configuration of activated data quality checks.
 
 
-
-
+## DashboardYaml
+Data quality dashboard definition YAML schema for a data quality dashboards list specification.
 
 
 
 
-**The structure of this object is described below**  
-  
+
+
+
+
+
+The structure of this object is described below
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|folder_name|Folder name|string| | | |
-|[dashboards](#dashboardlistspec)|List of data quality dashboard at this level.|[DashboardListSpec](#dashboardlistspec)| | | |
-|[folders](#dashboardsfolderlistspec)|List of data quality dashboard folders at this level.|[DashboardsFolderListSpec](#dashboardsfolderlistspec)| | | |
+|<span class="no-wrap-code ">`api_version`</span>|DQOps YAML schema version|*string*| |dqo/v1| |
+|<span class="no-wrap-code ">`kind`</span>|File type|*enum*|*source*<br/>*table*<br/>*sensor*<br/>*provider_sensor*<br/>*rule*<br/>*check*<br/>*settings*<br/>*file_index*<br/>*dashboards*<br/>*default_schedules*<br/>*default_checks*<br/>*default_table_checks*<br/>*default_column_checks*<br/>*default_notifications*<br/>|dashboards| |
+|<span class="no-wrap-code ">[`spec`](./DashboardYaml.md#dashboardsfolderlistspec)</span>|The data quality dashboards folder tree with the definition of custom dashboards|*[DashboardsFolderListSpec](./DashboardYaml.md#dashboardsfolderlistspec)*| | | |
 
 
 
@@ -26,27 +29,40 @@ Description of a folder with multiple dashboards or other folders.
 
 
 
-___  
-
-## DashboardSpec  
-Description of a single dashboard that is available in the platform.  
-  
+___
 
 
+## DashboardsFolderListSpec
+List of dashboard folders.
 
 
 
 
 
 
-**The structure of this object is described below**  
-  
+
+___
+
+
+## DashboardsFolderSpec
+Description of a folder with multiple dashboards or other folders.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|dashboard_name|Dashboard name|string| | | |
-|url|Dashboard url|string| | | |
-|width|Dashboard width (px)|integer| | | |
-|height|Dashboard height (px)|integer| | | |
+|<span class="no-wrap-code ">`folder_name`</span>|Folder name|*string*| | | |
+|<span class="no-wrap-code ">`standard`</span>|Always shows this schema tree node because it contains standard dashboards. Set the value to false to show this folder only when advanced dashboards are enabled.|*boolean*| | | |
+|<span class="no-wrap-code ">[`dashboards`](./DashboardYaml.md#dashboardlistspec)</span>|List of data quality dashboard at this level.|*[DashboardListSpec](./DashboardYaml.md#dashboardlistspec)*| | | |
+|<span class="no-wrap-code ">[`folders`](./DashboardYaml.md#dashboardsfolderlistspec)</span>|List of data quality dashboard folders at this level.|*[DashboardsFolderListSpec](./DashboardYaml.md#dashboardsfolderlistspec)*| | | |
 
 
 
@@ -56,26 +72,53 @@ Description of a single dashboard that is available in the platform.
 
 
 
-___  
-
-## DashboardYaml  
-Data quality dashboard definition YAML schema for a data quality dashboards list specification.  
-  
+___
 
 
+## DashboardListSpec
+List of dashboards.
 
 
 
 
 
 
-**The structure of this object is described below**  
-  
+
+
+
+
+
+
+
+
+
+
+
+___
+
+
+## DashboardSpec
+Description of a single dashboard that is available in the platform.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|table<br/>dashboards<br/>source<br/>sensor<br/>check<br/>rule<br/>file_index<br/>settings<br/>provider_sensor<br/>| | |
-|[spec](#dashboardsfolderlistspec)||[DashboardsFolderListSpec](#dashboardsfolderlistspec)| | | |
+|<span class="no-wrap-code ">`dashboard_name`</span>|Dashboard name|*string*| | | |
+|<span class="no-wrap-code ">`url`</span>|Dashboard url|*string*| | | |
+|<span class="no-wrap-code ">`width`</span>|Dashboard width (px)|*integer*| | | |
+|<span class="no-wrap-code ">`height`</span>|Dashboard height (px)|*integer*| | | |
+|<span class="no-wrap-code ">`standard`</span>|Shows the dashboard always in the data quality dashboard section. The dashboards that are not &#x27;standard&#x27; are advanced dashboards, hidden initially.|*boolean*| | | |
+|<span class="no-wrap-code ">`disable_thumbnail`</span>|Disables showing a thumbnail. A thumbnail url for Looker Studio dashboards is generated by adding /thumbnail to the end of the dashboard&#x27;s url. It is a Google generated thumbnail of the dashboard.|*boolean*| | | |
+|<span class="no-wrap-code ">`parameters`</span>|Key/value dictionary of additional parameters to be passed to the dashboard|*Dict[string, string]*| | | |
 
 
 
@@ -85,37 +128,6 @@ Data quality dashboard definition YAML schema for a data quality dashboards list
 
 
 
-___  
+___
 
-## DashboardsFolderListSpec  
-List of dashboard folders.  
-  
-
-
-
-
-
-
-___  
-
-## DashboardListSpec  
-List of dashboards.  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-___  
 

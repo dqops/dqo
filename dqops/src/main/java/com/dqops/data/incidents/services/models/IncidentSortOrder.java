@@ -16,6 +16,8 @@
 
 package com.dqops.data.incidents.services.models;
 
+import com.dqops.utils.docs.generators.SampleValueFactory;
+
 /**
  * Incident sort order columns.
  */
@@ -29,4 +31,11 @@ public enum IncidentSortOrder {
     checkName,
     highestSeverity,
     failedChecksCount;
+
+    public static class IncidentSortOrderSampleFactory implements SampleValueFactory<IncidentSortOrder> {
+        @Override
+        public IncidentSortOrder createSample() {
+            return firstSeen;
+        }
+    }
 }

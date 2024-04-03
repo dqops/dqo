@@ -1,13 +1,10 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-from ..models.connection_incident_grouping_spec_grouping_level import (
-    ConnectionIncidentGroupingSpecGroupingLevel,
-)
-from ..models.connection_incident_grouping_spec_minimum_severity import (
-    ConnectionIncidentGroupingSpecMinimumSeverity,
-)
+from ..models.incident_grouping_level import IncidentGroupingLevel
+from ..models.minimum_grouping_severity_level import MinimumGroupingSeverityLevel
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -19,17 +16,12 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ConnectionIncidentGroupingSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ConnectionIncidentGroupingSpec:
     """
     Attributes:
-        grouping_level (Union[Unset, ConnectionIncidentGroupingSpecGroupingLevel]): Grouping level of failed data
-            quality checks for creating higher level data quality incidents. The default grouping level is by a table, a
-            data quality dimension and a check category (i.e. a datatype data quality incident detected on a table X in the
-            numeric checks category).
-        minimum_severity (Union[Unset, ConnectionIncidentGroupingSpecMinimumSeverity]): Minimum severity level of data
-            quality issues that are grouped into incidents. The default minimum severity level is 'warning'. Other supported
-            severity levels are 'error' and 'fatal'.
+        grouping_level (Union[Unset, IncidentGroupingLevel]):
+        minimum_severity (Union[Unset, MinimumGroupingSeverityLevel]):
         divide_by_data_groups (Union[Unset, bool]): Create separate data quality incidents for each data group, creating
             different incidents for different groups of rows. By default, data groups are ignored for grouping data quality
             issues into data quality incidents.
@@ -44,16 +36,14 @@ class ConnectionIncidentGroupingSpec:
         webhooks (Union[Unset, IncidentWebhookNotificationsSpec]):
     """
 
-    grouping_level: Union[Unset, ConnectionIncidentGroupingSpecGroupingLevel] = UNSET
-    minimum_severity: Union[
-        Unset, ConnectionIncidentGroupingSpecMinimumSeverity
-    ] = UNSET
+    grouping_level: Union[Unset, IncidentGroupingLevel] = UNSET
+    minimum_severity: Union[Unset, MinimumGroupingSeverityLevel] = UNSET
     divide_by_data_groups: Union[Unset, bool] = UNSET
     max_incident_length_days: Union[Unset, int] = UNSET
     mute_for_days: Union[Unset, int] = UNSET
     disabled: Union[Unset, bool] = UNSET
     webhooks: Union[Unset, "IncidentWebhookNotificationsSpec"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         grouping_level: Union[Unset, str] = UNSET
@@ -100,22 +90,18 @@ class ConnectionIncidentGroupingSpec:
 
         d = src_dict.copy()
         _grouping_level = d.pop("grouping_level", UNSET)
-        grouping_level: Union[Unset, ConnectionIncidentGroupingSpecGroupingLevel]
+        grouping_level: Union[Unset, IncidentGroupingLevel]
         if isinstance(_grouping_level, Unset):
             grouping_level = UNSET
         else:
-            grouping_level = ConnectionIncidentGroupingSpecGroupingLevel(
-                _grouping_level
-            )
+            grouping_level = IncidentGroupingLevel(_grouping_level)
 
         _minimum_severity = d.pop("minimum_severity", UNSET)
-        minimum_severity: Union[Unset, ConnectionIncidentGroupingSpecMinimumSeverity]
+        minimum_severity: Union[Unset, MinimumGroupingSeverityLevel]
         if isinstance(_minimum_severity, Unset):
             minimum_severity = UNSET
         else:
-            minimum_severity = ConnectionIncidentGroupingSpecMinimumSeverity(
-                _minimum_severity
-            )
+            minimum_severity = MinimumGroupingSeverityLevel(_minimum_severity)
 
         divide_by_data_groups = d.pop("divide_by_data_groups", UNSET)
 

@@ -1,10 +1,12 @@
-import React, { useMemo } from 'react';
-import { CheckTypes, ROUTES } from '../../shared/routes';
 import clsx from 'clsx';
-import SvgIcon from '../SvgIcon';
-import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import React, { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
+import IconButton from '../IconButton';
+import SvgIcon from '../SvgIcon';
 
 type NavigationMenu = {
   label: string;
@@ -21,8 +23,8 @@ const navigations: NavigationMenu[] = [
     value: CheckTypes.PROFILING
   },
   {
-    label: 'Recurring checks',
-    value: CheckTypes.RECURRING
+    label: 'Monitoring checks',
+    value: CheckTypes.MONITORING
   },
   {
     label: 'Partition checks',
@@ -40,15 +42,17 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
     connection,
     schema,
     table,
-    checkTypes
+    checkTypes,
+    tab
   }: {
     connection: string;
     schema: string;
     table: string;
     tab: string;
     checkTypes: CheckTypes;
-  } = useParams();
+  } = useDecodedParams();
   const history = useHistory();
+  const [showNavigation, setShowNavigation] = useState(false)
 
   const activeIndex = useMemo(() => {
     return navigations.findIndex((item) => item.value === checkTypes);
@@ -63,20 +67,30 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
       connection,
       schema,
       table,
-      'detail'
+      'statistics'
     );
+    if(checkTypes === CheckTypes.SOURCES){
+      url = ROUTES.TABLE_LEVEL_PAGE(
+        item.value,
+        connection,
+        schema,
+        table,
+        'detail'
+      );
+    }
+
     let value = ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table);
 
     if (defaultTab) {
-      if (item.value === CheckTypes.RECURRING) {
-        url = ROUTES.TABLE_RECURRING(
+      if (item.value === CheckTypes.MONITORING) {
+        url = ROUTES.TABLE_MONITORING(
           item.value,
           connection,
           schema,
           table,
           defaultTab
         );
-        value = ROUTES.TABLE_RECURRING_VALUE(
+        value = ROUTES.TABLE_MONITORING_VALUE(
           item.value,
           connection,
           schema,
@@ -107,15 +121,15 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
         value = ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table);
       }
     } else {
-      const tab =
-        item.value === CheckTypes.RECURRING ||
-        item.value === CheckTypes.PARTITIONED
-          ? 'daily'
-          : item.value === CheckTypes.PROFILING
-          ? 'statistics'
-          : 'detail';
-      url = ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, tab);
-    }
+        const tab =
+          item.value === CheckTypes.MONITORING ||
+          item.value === CheckTypes.PARTITIONED
+            ? 'table-quality-status-daily'
+            : item.value === CheckTypes.PROFILING
+            ? 'statistics'
+            : 'detail';
+        url = ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, tab);
+    } 
     dispatch(
       addFirstLevelTab(item.value, {
         url,
@@ -127,8 +141,9 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
     history.push(url);
   };
 
-  return (
-    <div className="flex space-x-3 px-4 pt-2 border-b border-gray-300 pb-4 mb-2">
+  const renderNavigation = () => {
+    return(
+      <div className="flex space-x-3 px-4 pt-2 border-b border-gray-300 pb-4 mb-2">
       {navigations.map((item, index) => (
         <div
           className={clsx(
@@ -139,7 +154,7 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
           onClick={() => onChangeNavigation(item)}
         >
           {activeIndex > index ? (
-            <SvgIcon name="chevron-left" className="w-3 mr-2" />
+            <SvgIcon name="chevron-left" className="w-6 mr-2" />
           ) : (
             ''
           )}
@@ -152,6 +167,17 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
         </div>
       ))}
     </div>
+    )
+  }
+
+
+  return (
+    <>
+    <IconButton className='absolute right-0 top-7'>
+      <SvgIcon name={showNavigation ? "chevron-down" : "chevron-left"} className='ml-3 w-6 h-6' onClick={() => setShowNavigation(prev => !prev)}/>
+    </IconButton>
+    {showNavigation ? renderNavigation() : null}
+    </>
   );
 };
 

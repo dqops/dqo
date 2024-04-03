@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/bool/true_percent
+  rule_name: comparison/between_percent
+  help_text: Measures the percentage of **true** values in a boolean column and verifies
+    that it is within the accepted range. Stores the most recent check result for
+    each month when the data quality check was evaluated.
+  standard: true

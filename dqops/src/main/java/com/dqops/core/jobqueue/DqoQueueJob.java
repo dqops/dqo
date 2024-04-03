@@ -19,12 +19,13 @@ import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobExecutionException;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import com.dqops.core.principal.DqoUserPrincipal;
 
 import java.util.concurrent.*;
 import java.util.function.BiConsumer;
 
 /**
- * Base class for DQO jobs.
+ * Base class for DQOps jobs.
  */
 public abstract class DqoQueueJob<T> {
     private final CompletableFuture<T> finishedFuture = new CompletableFuture<T>();
@@ -33,7 +34,9 @@ public abstract class DqoQueueJob<T> {
     private final JobCancellationToken cancellationToken;
     private final Object lock = new Object();
     private DqoQueueJobId jobId;
+    private String jobBusinessKey;
     private Throwable jobExecutionException;
+    private DqoUserPrincipal principal;
 
     /**
      * Creates and configures a new job.
@@ -82,7 +85,7 @@ public abstract class DqoQueueJob<T> {
             return DqoJobCompletionStatus.CANCELLED;
         }
 
-        return DqoJobCompletionStatus.SUCCEEDED;
+        return DqoJobCompletionStatus.FINISHED;
     }
 
     /**
@@ -166,11 +169,43 @@ public abstract class DqoQueueJob<T> {
     }
 
     /**
-     * Sets (assigns) a job ID. This method is called by a DQO job queue when the job is accepted on a queue and queued for execution.
+     * Sets (assigns) a job ID. This method is called by a DQOps job queue when the job is accepted on a queue and queued for execution.
      * @param jobId Job id.
      */
     public void setJobId(DqoQueueJobId jobId) {
         this.jobId = jobId;
+    }
+
+    /**
+     * Returns a user assigned job business key that is a unique identifier of a job used to find the job.
+     * @return Job business key or null.
+     */
+    public String getJobBusinessKey() {
+        return jobBusinessKey;
+    }
+
+    /**
+     * Sets a job business key that is a user assigned job unique identifier.
+     * @param jobBusinessKey Job business key.
+     */
+    public void setJobBusinessKey(String jobBusinessKey) {
+        this.jobBusinessKey = jobBusinessKey;
+    }
+
+    /**
+     * Returns the user principal associated with the job.
+     * @return User principal stored on the job.
+     */
+    public DqoUserPrincipal getPrincipal() {
+        return principal;
+    }
+
+    /**
+     * Sets a reference to the user principal that will be associated with the job.
+     * @param principal User principal to use within the job evaluation.
+     */
+    public void setPrincipal(DqoUserPrincipal principal) {
+        this.principal = principal;
     }
 
     /**

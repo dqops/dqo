@@ -20,7 +20,7 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapperImpl;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
@@ -47,23 +47,23 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 	}
 
 	/**
-	 * Loads the table spec with the table details.
-	 * @return Loaded table specification.
+	 * Loads the settings specification.
+	 * @return Loaded settings specification.
 	 */
 	@Override
-	public SettingsSpec getSpec() {
-		SettingsSpec spec = super.getSpec();
-		if (spec == null) {
-			FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML);
+	public LocalSettingsSpec getSpec() {
+		LocalSettingsSpec spec = super.getSpec();
+		if (spec == null && this.getStatus() == InstanceStatus.LOAD_IN_PROGRESS) {
+			FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML);
 			if (fileNode != null) {
 				FileContent fileContent = fileNode.getContent();
 				String textContent = fileContent.getTextContent();
-				SettingsSpec deserializedSpec = (SettingsSpec) fileContent.getCachedObjectInstance();
+				LocalSettingsSpec deserializedSpec = (LocalSettingsSpec) fileContent.getCachedObjectInstance();
 
 				if (deserializedSpec == null) {
-					SettingsYaml deserialized = this.yamlSerializer.deserialize(textContent, SettingsYaml.class, fileNode.getPhysicalAbsolutePath());
+					LocalSettingsYaml deserialized = this.yamlSerializer.deserialize(textContent, LocalSettingsYaml.class, fileNode.getPhysicalAbsolutePath());
 					deserializedSpec = deserialized.getSpec();
-					if (deserialized.getKind() != SpecificationKind.SETTINGS) {
+					if (deserialized.getKind() != SpecificationKind.settings) {
 						throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
 					}
 					if (deserializedSpec != null) {
@@ -76,6 +76,8 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 				deserializedSpec.clearDirty(true);
 				this.clearDirty(false);
 				return deserializedSpec;
+			} else {
+				this.setSpec(null);
 			}
 		}
 		return spec;
@@ -87,8 +89,12 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 	 */
 	@Override
 	public void flush() {
-		if (this.getStatus() == InstanceStatus.DELETED) {
+		if (this.getStatus() == InstanceStatus.DELETED || this.getStatus() == InstanceStatus.NOT_TOUCHED) {
 			return; // do nothing
+		}
+
+		if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() == null) {
+			return; // nothing to do, the instance is empty (no file)
 		}
 
 		if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() != null && super.getSpec().isDirty() ) {
@@ -96,15 +102,17 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 			this.setStatus(InstanceStatus.MODIFIED);
 		}
 
-		SettingsYaml settingsYaml = new SettingsYaml(this.getSpec());
-		String specAsYaml = this.yamlSerializer.serialize(settingsYaml);
+		LocalSettingsYaml localSettingsYaml = new LocalSettingsYaml(this.getSpec());
+		String specAsYaml = this.yamlSerializer.serialize(localSettingsYaml);
 		FileContent newFileContent = new FileContent(specAsYaml);
-		String fileNameWithExt = SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML;
+		String fileNameWithExt = SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML;
 
 		switch (this.getStatus()) {
 			case ADDED:
 				this.settingsFolderNode.addChildFile(fileNameWithExt, newFileContent);
 				this.getSpec().clearDirty(true);
+				break;
+
 			case MODIFIED:
 				FileTreeNode modifiedFileNode = this.settingsFolderNode.getChildFileByFileName(fileNameWithExt);
 				if (modifiedFileNode != null) {
@@ -115,6 +123,7 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 				}
 				this.getSpec().clearDirty(true);
 				break;
+
 			case TO_BE_DELETED:
 				this.settingsFolderNode.deleteChildFile(fileNameWithExt);
 				break;

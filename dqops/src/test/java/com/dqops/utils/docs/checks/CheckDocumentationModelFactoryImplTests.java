@@ -16,6 +16,7 @@
 package com.dqops.utils.docs.checks;
 
 import com.dqops.BaseTest;
+import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderServiceObjectMother;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
@@ -24,11 +25,13 @@ import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingServiceImpl;
+import com.dqops.services.check.matching.SimilarCheckGroupingKeyFactoryImpl;
 import com.dqops.services.check.matching.SimilarCheckMatchingServiceImpl;
-import com.dqops.utils.docs.HandledClassesLinkageStore;
+import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.rules.RuleDocumentationModelFactoryImpl;
 import com.dqops.utils.docs.sensors.SensorDocumentationModelFactoryImpl;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
+import com.dqops.utils.serialization.JsonSerializerObjectMother;
 import com.dqops.utils.serialization.YamlSerializerObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,10 +54,10 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
         Path projectRoot = Path.of(".");
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         SpecToModelCheckMappingService specToModelCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                reflectionService, new SensorDefinitionFindServiceImpl());
+                reflectionService, new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
         SimilarCheckMatchingServiceImpl similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToModelCheckMappingService,
-                DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory());
+                DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory(), new SimilarCheckGroupingKeyFactoryImpl());
         ModelToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new ModelToSpecCheckMappingServiceImpl(reflectionService);
         this.sut = new CheckDocumentationModelFactoryImpl(
                 similarCheckMatchingService,
@@ -62,8 +65,9 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
                 new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToModelCheckMappingService),
                 uiToSpecCheckMappingService,
                 YamlSerializerObjectMother.getDefault(),
+                JsonSerializerObjectMother.getDefault(),
                 JinjaTemplateRenderServiceObjectMother.getDefault(),
-                new HandledClassesLinkageStore());
+                new LinkageStore<>());
 
         try {
             String mavenTargetFolderPath = System.getenv("DQO_TEST_TEMPORARY_FOLDER");

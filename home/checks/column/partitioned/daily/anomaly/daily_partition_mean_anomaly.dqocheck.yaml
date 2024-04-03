@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/numeric/mean
+  rule_name: percentile/anomaly_stationary_percentile_moving_average
+  help_text: Verifies that the mean value in a column is within a percentile from
+    measurements made during the last 90 days. Calculates the mean (average) of each
+    daily partition and detect anomalies between daily partitions.
+  standard: true

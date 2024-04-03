@@ -21,7 +21,7 @@ import com.dqops.cli.commands.ICommand;
 import com.dqops.cli.commands.connection.impl.ConnectionCliService;
 import com.dqops.cli.commands.connection.impl.models.ConnectionListModel;
 import com.dqops.cli.output.OutputFormatService;
-import com.dqops.cli.terminal.FileWritter;
+import com.dqops.cli.terminal.FileWriter;
 import com.dqops.cli.terminal.FormattedTableDto;
 import com.dqops.cli.terminal.TerminalTableWritter;
 import com.dqops.cli.terminal.TerminalWriter;
@@ -47,7 +47,7 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
     private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWritter;
     private OutputFormatService outputFormatService;
-    private FileWritter fileWritter;
+    private FileWriter fileWriter;
 
     public ConnectionListCliCommand() {
     }
@@ -57,12 +57,12 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
                                     TerminalWriter terminalWriter,
                                     TerminalTableWritter terminalTableWritter,
                                     OutputFormatService outputFormatService,
-                                    FileWritter fileWritter) {
+                                    FileWriter fileWriter) {
         this.connectionCliService = connectionCliService;
         this.terminalWriter = terminalWriter;
         this.terminalTableWritter = terminalTableWritter;
         this.outputFormatService = outputFormatService;
-        this.fileWritter = fileWritter;
+        this.fileWriter = fileWriter;
     }
 
     @CommandLine.Option(names = {"-n", "--name"}, description = "Connection name filter", required = false)
@@ -106,7 +106,7 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
             case CSV: {
                 String csvContent = this.outputFormatService.tableToCsv(formattedTable);
                 if (this.isWriteToFile()) {
-                    CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(csvContent);
+                    CliOperationStatus cliOperationStatus = this.fileWriter.writeStringToFile(csvContent);
                     this.terminalWriter.writeLine(cliOperationStatus.getMessage());
                 }
                 else {
@@ -117,7 +117,7 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
             case JSON: {
                 String jsonContent = this.outputFormatService.tableToJson(formattedTable);
                 if (this.isWriteToFile()) {
-                    CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(jsonContent);
+                    CliOperationStatus cliOperationStatus = this.fileWriter.writeStringToFile(jsonContent);
                     this.terminalWriter.writeLine(cliOperationStatus.getMessage());
                 }
                 else {
@@ -132,7 +132,7 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
                     tableBuilder.addInnerBorder(BorderStyle.oldschool);
                     tableBuilder.addHeaderBorder(BorderStyle.oldschool);
                     String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
-                    CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(renderedTable);
+                    CliOperationStatus cliOperationStatus = this.fileWriter.writeStringToFile(renderedTable);
                     this.terminalWriter.writeLine(cliOperationStatus.getMessage());
                 }
                 else {

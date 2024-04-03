@@ -30,6 +30,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.numeric.ColumnNumericNonNegativePercentSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,12 +65,12 @@ public class OracleColumnNumericNonNegativePercentSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(64.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(64.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+    void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -77,12 +78,12 @@ public class OracleColumnNumericNonNegativePercentSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(64.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(64.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+    void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -90,7 +91,7 @@ public class OracleColumnNumericNonNegativePercentSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(64.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(64.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -103,7 +104,7 @@ public class OracleColumnNumericNonNegativePercentSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -116,6 +117,6 @@ public class OracleColumnNumericNonNegativePercentSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(64.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(64.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 }

@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
@@ -11,3 +11,5 @@ spec:
     help_text: Minimum accepted value for the actual_value returned by the sensor
       (inclusive).
     data_type: double
+    required: true
+    default_value: 100.0

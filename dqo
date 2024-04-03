@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 #
-# Copyright © 2021 DQOps (support@dqops.com)
+# Copyright © 2021-2024 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-export DQO_VERSION=0.2.1
+export DQO_VERSION=1.1.0
 
 # Configure local development environment overrides
 if [ -f $(dirname $0)/set-dqo-envs.sh ]; then
@@ -23,7 +23,7 @@ if [ -f $(dirname $0)/set-dqo-envs.sh ]; then
 
     returnedValue=$?
     if [ $returnedValue -ne 0 ]; then
-        echo "DQO cannot be started"
+        echo "DQOps cannot be started"
         exit $returnedValue
     fi
 fi
@@ -32,7 +32,7 @@ fi
 . $(dirname $0)/find-dqo-home.sh
 returnedValue=$?
 if [ $returnedValue -ne 0 ]; then
-    echo "DQO cannot be started"
+    echo "DQOps cannot be started"
     exit $returnedValue
 fi
 
@@ -41,8 +41,8 @@ fi
 
 returnedValue=$?
 if [ $returnedValue -ne 0 ]; then
-    echo "DQO cannot be started"
+    echo "DQOps cannot be started"
     exit $returnedValue
 fi
 
-$DQO_RUNNER $DQO_JAVA_OPTS --add-opens java.base/java.nio=ALL-UNNAMED -cp "$DQO_LAUNCH_CLASSPATH" org.springframework.boot.loader.JarLauncher $*
+$DQO_RUNNER $DQO_JAVA_OPTS --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/java.util.concurrent=ALL-UNNAMED -cp "$DQO_LAUNCH_CLASSPATH" org.springframework.boot.loader.JarLauncher $*

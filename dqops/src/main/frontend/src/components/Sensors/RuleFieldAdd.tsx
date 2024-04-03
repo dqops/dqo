@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   ParameterDefinitionSpec,
   ParameterDefinitionSpecDataTypeEnum,
   ParameterDefinitionSpecDisplayHintEnum
-} from "../../api";
-import Input from "../Input";
-import TextArea from "../TextArea";
-import Select from "../Select";
-import Checkbox from "../Checkbox";
-import StringListField from "../StringListField";
-import { IconButton } from "@material-tailwind/react";
-import SvgIcon from "../SvgIcon";
+} from '../../api';
+import Input from '../Input';
+import TextArea from '../TextArea';
+import Select from '../Select';
+import Checkbox from '../Checkbox';
+import StringListField from '../StringListField';
+import { IconButton } from '@material-tailwind/react';
+import SvgIcon from '../SvgIcon';
 
 type RuleFieldAddProps = {
   onAdd: (field: ParameterDefinitionSpec) => void;
-}
+};
 
 const emptyOption = {
   label: 'None',
-  value: undefined,
+  value: undefined
 };
 
 const dataTypeOptions = [
@@ -33,14 +33,12 @@ const displayHintOptions = [
   emptyOption,
   ...Object.values(ParameterDefinitionSpecDisplayHintEnum).map((item) => ({
     label: item,
-    value: item,
+    value: item
   }))
 ];
 
 const RuleFieldAdd = ({ onAdd }: RuleFieldAddProps) => {
-  const [field, setField] = useState<ParameterDefinitionSpec>({
-
-  });
+  const [field, setField] = useState<ParameterDefinitionSpec>({});
 
   const onChange = (obj: Partial<ParameterDefinitionSpec>) => {
     setField({
@@ -52,33 +50,39 @@ const RuleFieldAdd = ({ onAdd }: RuleFieldAddProps) => {
   const handleAdd = () => {
     onAdd(field);
     setField({});
-  }
+  };
 
   return (
     <tr>
       <td className="pr-4 py-2  align-top w-40">
         <Input
           value={field.field_name}
-          onChange={(e) => onChange({
-            field_name: e.target.value
-          })}
+          onChange={(e) =>
+            onChange({
+              field_name: e.target.value
+            })
+          }
         />
       </td>
       <td className="px-4 py-2  align-top w-40">
         <Input
           value={field.display_name}
-          onChange={(e) => onChange({
-            display_name: e.target.value
-          })}
+          onChange={(e) =>
+            onChange({
+              display_name: e.target.value
+            })
+          }
         />
       </td>
       <td className="px-4 py-2  align-top">
         <TextArea
-          className="h-9 !py-1.5"
-          value={field.help_text ?? ""}
-          onChange={(e) => onChange({
-            help_text: e.target.value
-          })}
+          className="h-9 min-h-15 !py-1.5"
+          value={field.help_text ?? ''}
+          onChange={(e) =>
+            onChange({
+              help_text: e.target.value
+            })
+          }
         />
       </td>
       <td className="px-4 py-2  align-top w-40">

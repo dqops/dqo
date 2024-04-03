@@ -20,6 +20,8 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableWrapper;
 import com.dqops.metadata.userhome.UserHome;
@@ -53,6 +55,7 @@ public interface TableService {
      * @param checkTimeScale (Optional) Check time-scale.
      * @param checkCategory  (Optional) Check category.
      * @param checkName      (Optional) Check name.
+     * @param principal      User principal.
      * @return List of column level check templates on the requested table, matching the optional filters. Null if table doesn't exist.
      */
     List<CheckTemplate> getCheckTemplates(String connectionName,
@@ -60,7 +63,8 @@ public interface TableService {
                                           CheckType checkType,
                                           CheckTimeScale checkTimeScale,
                                           String checkCategory,
-                                          String checkName);
+                                          String checkName,
+                                          DqoUserPrincipal principal);
 
     /**
      * Retrieves a UI friendly data quality profiling check configuration list on a requested table.
@@ -74,6 +78,8 @@ public interface TableService {
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @param checkConfigured   (Optional) Filter on check configured status.
+     * @param limit             The limit of results.
+     * @param principal         User principal.
      * @return UI friendly data quality profiling check configuration list on a requested table.
      */
     List<CheckConfigurationModel> getCheckConfigurationsOnTable(
@@ -86,22 +92,28 @@ public interface TableService {
             String checkCategory,
             String checkName,
             Boolean checkEnabled,
-            Boolean checkConfigured);
+            Boolean checkConfigured,
+            int limit,
+            DqoUserPrincipal principal);
 
     /**
      * Deletes table from metadata and flushes user context.
      * Cleans all stored data from .data folder related to this table.
      * @param connectionName Connection name
      * @param tableName      Physical table name.
+     * @param principal Principal that will be used to run the job.
      * @return Asynchronous job result object for deferred background operations.
      */
-    PushJobResult<DeleteStoredDataQueueJobResult> deleteTable(String connectionName, PhysicalTableName tableName);
+    PushJobResult<DeleteStoredDataResult> deleteTable(
+            String connectionName, PhysicalTableName tableName, DqoUserPrincipal principal);
 
     /**
      * Deletes tables from metadata and flushes user context.
      * Cleans all stored data from .data folder related to these tables.
      * @param connectionToTables Connection name to tables on that connection mapping.
+     * @param principal Principal that will be used to run the job.
      * @return Asynchronous job result objects for deferred background operations.
      */
-    List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteTables(Map<String, Iterable<PhysicalTableName>> connectionToTables);
+    List<PushJobResult<DeleteStoredDataResult>> deleteTables(
+            Map<String, Iterable<PhysicalTableName>> connectionToTables, DqoUserPrincipal principal);
 }

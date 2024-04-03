@@ -27,14 +27,16 @@
 	</parent>
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-dqops</artifactId>
-    <version>0.2.1</version>  <!-- DQO Version, do not touch (changed automatically) -->
+    <version>1.1.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<packaging>jar</packaging>
 	<name>dqo-dqops</name>
-	<description>DQO Data Quality Operations Center</description>
+	<description>DQOps Data Quality Operations Center</description>
 	<properties>
 		<java.version>15</java.version>
 		<tablesaw.version>0.43.1</tablesaw.version>
 		<license.licenseName>apache_v2</license.licenseName>
+		<npm.build.script>build</npm.build.script>
+		<duckdb.version>0.10.0</duckdb.version>
 	</properties>
 
 	<licenses>
@@ -52,328 +54,6 @@
 	</organization>
 
 	<inceptionYear>2021</inceptionYear>
-
-	<profiles>
-		<profile>
-			<id>generate-docs</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<version>3.1.0</version>
-						<executions>
-							<execution>
-								<id>generate-mkdocs</id>
-								<goals>
-									<goal>java</goal>
-								</goals>
-								<phase>compile</phase>
-								<configuration>
-									<mainClass>com.dqops.utils.docs.GenerateDocumentationPostProcessor</mainClass>
-									<arguments>
-										<argument>${project.basedir}</argument>
-									</arguments>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-		<profile>
-			<id>generate-python-client</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<version>3.1.0</version>
-						<executions>
-							<execution>
-								<id>generate-python-client</id>
-								<goals>
-									<goal>java</goal>
-								</goals>
-								<phase>compile</phase>
-								<configuration>
-									<mainClass>com.dqops.rest.server.client.GeneratePythonClientPostProcessor</mainClass>
-									<arguments>
-										<argument>${project.basedir}/target/swagger/dqo-ui-swagger-2.json</argument>
-										<argument>${project.basedir}/target/swagger/dqo-ui-swagger-3-python-client.json</argument>
-										<argument>${project.basedir}</argument>
-									</arguments>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-		<profile>
-			<id>update-dqo-home-specs</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<version>3.1.0</version>
-						<executions>
-							<execution>
-								<id>update-dqo-home-specs</id>
-								<goals>
-									<goal>java</goal>
-								</goals>
-								<phase>compile</phase>
-								<configuration>
-									<mainClass>com.dqops.utils.specs.DqoHomeDefinitionFillPostProcessor</mainClass>
-									<arguments>
-										<argument>${project.basedir}</argument>
-									</arguments>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-		<profile>
-			<id>update-package-version-numbers</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<version>3.1.0</version>
-						<executions>
-							<execution>
-								<id>update-package-version-numbers</id>
-								<goals>
-									<goal>java</goal>
-								</goals>
-								<phase>compile</phase>
-								<configuration>
-									<mainClass>com.dqops.utils.version.CopyVersionToFilesPostProcessor</mainClass>
-									<arguments>
-										<argument>${project.basedir}</argument>
-									</arguments>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-		<profile>
-			<id>run-npm</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>com.github.eirslett</groupId>
-						<artifactId>frontend-maven-plugin</artifactId>
-						<version>1.12.1</version>
-						<configuration>
-							<workingDirectory>src/main/frontend</workingDirectory>
-							<nodeVersion>v18.16.0</nodeVersion>
-							<npmVersion>9.6.7</npmVersion>
-						</configuration>
-						<executions>
-							<execution>
-								<id>install-node</id>
-								<goals>
-									<goal>install-node-and-npm</goal>
-								</goals>
-							</execution>
-							<execution>
-								<id>npm-install</id>
-								<goals>
-									<goal>npm</goal>
-								</goals>
-								<phase>generate-resources</phase>
-								<configuration>
-									<arguments>install --legacy-peer-deps</arguments>
-								</configuration>
-							</execution>
-							<execution>
-								<id>npm-test</id>
-								<goals>
-									<goal>npm</goal>
-								</goals>
-								<phase>test</phase>
-								<configuration>
-									<arguments>test</arguments>
-									<environmentVariables>
-										<CI>true</CI>
-									</environmentVariables>
-								</configuration>
-							</execution>
-							<execution>
-								<id>npm-build</id>
-								<goals>
-									<goal>npm</goal>
-								</goals>
-								<phase>compile</phase>
-								<configuration>
-									<arguments>run-script build</arguments>
-									<environmentVariables>
-										<CI>false</CI> <!-- Allow warning on CI builds, temporary solution until we remove the last few warnings -->
-									</environmentVariables>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>3.1.0</version>
-						<executions>
-							<execution>
-								<id>copy-resources</id>
-								<phase>process-classes</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>${project.basedir}/target/classes/static</outputDirectory>
-									<resources>
-										<resource>
-											<directory>src/main/frontend/build</directory>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-							<execution>
-								<id>copy-swagger-json</id>
-								<phase>process-classes</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>${project.basedir}/target/classes/static</outputDirectory>
-									<resources>
-										<resource>
-											<directory>${project.basedir}/target/swagger</directory>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>integration-tests</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<version>3.1.0</version>
-						<executions>
-							<execution>
-								<phase>integration-test</phase>
-								<goals>
-									<goal>test</goal>
-								</goals>
-								<configuration>
-									<excludes>
-										<exclude>none</exclude>
-									</excludes>
-									<includes>
-										<include>**/*IntegrationTest</include>
-										<include>**/*IntegrationTests</include>
-									</includes>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>publish-yaml-dev-schema</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<version>3.1.0</version>
-						<configuration>
-							<executable>gsutil</executable>
-							<mainClass>none</mainClass>
-							<arguments>
-								<argument>-m</argument>
-								<argument>cp</argument>
-								<argument>${project.basedir}/src/main/resources/schemas/*.json</argument>
-								<argument>gs://dqo-ai-dev-yaml-schemas/yaml</argument>
-							</arguments>
-						</configuration>
-						<executions>
-							<execution>
-								<id>upload-yaml-schemata</id>
-								<phase>package</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>build-with-jdk-11</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<properties>
-				<java.version>11</java.version>
-			</properties>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<version>3.1.0</version>
-						<configuration>
-							<skipTests>true</skipTests>
-						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<version>3.11.0</version>
-						<executions>
-							<execution>
-								<id>default-testCompile</id>
-								<phase>test-compile</phase>
-								<goals>
-									<goal>testCompile</goal>
-								</goals>
-								<configuration>
-									<skip>true</skip>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 
 	<dependencyManagement>
 		<dependencies>
@@ -393,6 +73,13 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<repositories>
+		<repository>
+			<id>local-repository</id>
+			<url>file://${project.basedir}/../lib/repository/</url>
+		</repository>
+	</repositories>
 
 	<dependencies>
 		<dependency>
@@ -502,6 +189,12 @@
 			<groupId>org.springframework.shell</groupId>
 			<artifactId>spring-shell-starter</artifactId>
 			<version>3.1.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.tomcat.embed</groupId>
+					<artifactId>tomcat-embed-el</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.shell</groupId>
@@ -624,6 +317,11 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.httpcomponents.client5</groupId>
+			<artifactId>httpclient5</artifactId>
+			<version>5.3.1</version>
+		</dependency>
+		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
 			<version>5.0.1</version>
@@ -651,7 +349,7 @@
 		<dependency>
 			<groupId>org.apache.avro</groupId>
 			<artifactId>avro</artifactId>
-			<version>1.11.1</version>
+			<version>1.11.3</version>
 		</dependency>
 		<dependency>
 			<groupId>io.swagger</groupId>
@@ -685,7 +383,7 @@
 		<dependency>
 			<groupId>org.webjars.npm</groupId>
 			<artifactId>swagger-ui-dist</artifactId>
-			<version>4.18.2</version> <!-- When upgrading the package version, remember to change the version number in SwaggerConfiguration class -->
+			<version>5.9.2</version> <!-- When upgrading the package version, remember to change the version number in SwaggerConfiguration class -->
 		</dependency>
 		<dependency>
 			<groupId>com.github.jknack</groupId>
@@ -724,56 +422,232 @@
 			<artifactId>annotations</artifactId>
 			<version>24.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jodd</groupId>
+			<artifactId>jodd-util</artifactId>
+			<version>6.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>2.0.9</version>
+		</dependency>
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>7.4</version>
+		</dependency>
 
 		<!-- JDBC driver dependencies, make sure that they are the same as those in the lib/pom.xml file, because they are distributed in a separate folder -->
-		<dependency>
-			<groupId>com.ibm.db2</groupId>
-			<artifactId>jcc</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.ibm.db2</groupId>-->
+<!--			<artifactId>jcc</artifactId>-->
+<!--			<scope>runtime</scope>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
+		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.mariadb.jdbc</groupId>-->
+<!--			<artifactId>mariadb-java-client</artifactId>-->
+<!--			<scope>provided</scope>-->
+<!--			<exclusions>-->
+<!--				<exclusion>-->
+<!--					<groupId>org.slf4j</groupId>-->
+<!--					<artifactId>slf4j-api</artifactId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<groupId>org.slf4j</groupId>-->
+<!--					<artifactId>jcl-over-slf4j</artifactId>-->
+<!--				</exclusion>-->
+<!--			</exclusions>-->
+<!--		</dependency>-->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.mariadb.jdbc</groupId>
-			<artifactId>mariadb-java-client</artifactId>
-			<scope>runtime</scope>
+			<groupId>com.amazon.redshift</groupId>
+			<artifactId>redshift-jdbc42</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.snowflake</groupId>
+			<artifactId>snowflake-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.facebook.presto</groupId>
+			<artifactId>presto-jdbc</artifactId>
+			<version>0.284</version>
+		</dependency>
+		<dependency>
+			<groupId>io.trino</groupId>
+			<artifactId>trino-jdbc</artifactId>
+			<version>434</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<version>12.4.1.jre11</version>
+		</dependency>
+		<!-- Allows the mssql-jdbc to connect with different Azure authentication methods -->
+		<dependency>
+			<groupId>com.microsoft.azure</groupId>
+			<artifactId>msal4j</artifactId>
+			<version>1.14.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.identity</groupId>
+			<artifactId>common</artifactId>
+			<version>17.0.0</version>
+			<type>pom</type>
+			<exclusions>
+				<exclusion>
+					<groupId>androidx.appcompat</groupId>
+					<artifactId>appcompat</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.annotation</groupId>
+					<artifactId>annotation</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.legacy</groupId>
+					<artifactId>legacy-support-v4</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.constraintlayout</groupId>
+					<artifactId>constraintlayout</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.datastore</groupId>
+					<artifactId>datastore-preferences</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.microsoft.device.display</groupId>
+					<artifactId>display-mask</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.browser</groupId>
+					<artifactId>browser</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.yubico.yubikit</groupId>
+					<artifactId>android</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.fragment</groupId>
+					<artifactId>fragment</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.lifecycle</groupId>
+					<artifactId>lifecycle-runtime-ktx</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.credentials</groupId>
+					<artifactId>credentials</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.credentials</groupId>
+					<artifactId>credentials-play-services-auth</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.aad</groupId>
+			<artifactId>adal</artifactId>
+			<version>4.7.1</version>
+			<type>pom</type>
+			<exclusions>
+				<exclusion>
+					<groupId>com.microsoft.identity</groupId>
+				    <artifactId>common</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.appcompat</groupId>
+					<artifactId>appcompat</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.annotation</groupId>
+					<artifactId>annotation</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.legacy</groupId>
+					<artifactId>legacy-support-v4</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.constraintlayout</groupId>
+					<artifactId>constraintlayout</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hive</groupId>
+			<artifactId>hive-jdbc</artifactId>
+			<version>3.1.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-reload4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.parquet</groupId>
+					<artifactId>parquet-hadoop-bundle</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hive</groupId>
+					<artifactId>hive-metastore</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hive</groupId>
+					<artifactId>hadoop-yarn-server-common</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hive</groupId>
+					<artifactId>hadoop-yarn-server-web-proxy</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hive</groupId>
+					<artifactId>hive-shims</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hive</groupId>
+					<artifactId>hive-llap-server</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.databricks</groupId>
+			<artifactId>databricks-jdbc</artifactId>
+			<version>2.6.25</version>
+		</dependency>
+		<dependency>
+			<groupId>com-amazon-athena</groupId>
+			<artifactId>athena-jdbc</artifactId>
+			<version>3.0.0</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>jcl-over-slf4j</artifactId>
-				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
+			<groupId>com.singlestore</groupId>
+			<artifactId>singlestore-jdbc-client</artifactId>
+			<version>1.2.1</version>
 		</dependency>
 		<dependency>
-			<groupId>com.amazon.redshift</groupId>
-			<artifactId>redshift-jdbc42</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.snowflake</groupId>
-			<artifactId>snowflake-jdbc</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.database.jdbc</groupId>
-			<artifactId>ojdbc8</artifactId>
-			<version>23.2.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.microsoft.sqlserver</groupId>
-			<artifactId>mssql-jdbc</artifactId>
+			<groupId>org.duckdb</groupId>
+			<artifactId>duckdb_jdbc</artifactId>
+			<version>${duckdb.version}</version>
 		</dependency>
 
 		<!-- test dependencies -->
@@ -830,6 +704,16 @@
 			<artifactId>mssqlserver</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>presto</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>trino</artifactId>
+			<scope>test</scope>
+		</dependency>
     </dependencies>
 
 	<build>
@@ -852,9 +736,9 @@
 						</path>
 					</annotationProcessorPaths>
 					<compilerArgs>
-						<arg>-Ajavadoc.packages=com.dqops.sensors,com.dqops.rules,com.dqops.checks,com.dqops.metadata,com.dqops.data,com.dqops.rest,com.dqops.connectors</arg>
+						<arg>-Ajavadoc.packages=com.dqops.services,com.dqops.sensors,com.dqops.rules,com.dqops.checks,com.dqops.metadata,com.dqops.data,com.dqops.rest,com.dqops.connectors,com.dqops.core</arg>
 					</compilerArgs>
-				</configuration>
+                </configuration>
 			</plugin>
 			<plugin>
 				<groupId>com.github.kongchen</groupId>
@@ -866,8 +750,8 @@
 							<springmvc>true</springmvc>
 							<locations>com.dqops.rest.controllers</locations>
 							<basePath>/</basePath>
-							<swaggerDirectory>${project.basedir}/target/swagger</swaggerDirectory>
-							<swaggerFileName>dqo-ui-swagger-2</swaggerFileName>
+							<swaggerDirectory>${project.basedir}/src/main/resources/static/swagger-api</swaggerDirectory>
+							<swaggerFileName>dqops-api-swagger-2</swaggerFileName>
 							<outputFormats>JSON,YAML</outputFormats>
 							<info>
 								<title>DQOps</title>
@@ -914,7 +798,7 @@
 						</goals>
 						<phase>compile</phase>
 						<configuration>
-							<inputSpec>${project.build.directory}/swagger/dqo-ui-swagger-2.json</inputSpec>
+							<inputSpec>${project.basedir}/src/main/resources/static/swagger-api/dqops-api-swagger-2.json</inputSpec>
 							<generatorName>typescript-axios</generatorName>
 							<output>${project.basedir}/src/main/frontend/src/api</output>
 							<configOptions>
@@ -1057,28 +941,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.3.0</version>
-				<executions>
-					<execution>
-						<id>copy-swagger-json</id>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/classes/static</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/target/swagger</directory>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>com.github.victools</groupId>
 				<artifactId>jsonschema-maven-plugin</artifactId>
 				<version>4.31.1</version>
@@ -1139,6 +1001,388 @@
 					</licenseSets>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<!-- set the plugin property to use the variable -->
+								<property name="duckdb.version" value="${duckdb.version}"/>
+								<property name="project.basedir" value="${project.basedir}"/>
+
+								<!-- the definitions of platforms only - open duckdb-extensions-ant-build.xml to edit extensions -->
+								<ant antfile="${project.basedir}/duckdb-extensions-ant-build.xml">
+									<property name="duckdb.platform_name" value="linux_amd64"/>
+								</ant>
+								<ant antfile="${project.basedir}/duckdb-extensions-ant-build.xml">
+									<property name="duckdb.platform_name" value="linux_arm64"/>
+								</ant>
+								<ant antfile="${project.basedir}/duckdb-extensions-ant-build.xml">
+									<property name="duckdb.platform_name" value="osx_amd64"/>
+								</ant>
+								<ant antfile="${project.basedir}/duckdb-extensions-ant-build.xml">
+									<property name="duckdb.platform_name" value="osx_arm64"/>
+								</ant>
+								<ant antfile="${project.basedir}/duckdb-extensions-ant-build.xml">
+									<property name="duckdb.platform_name" value="windows_amd64"/>
+								</ant>
+
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>generate-docs</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>generate-mkdocs</id>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<mainClass>com.dqops.utils.docs.GenerateDocumentationPostProcessor</mainClass>
+									<arguments>
+										<argument>${project.basedir}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>generate-python-client</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>generate-python-client</id>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<mainClass>com.dqops.rest.server.client.GeneratePythonClientPostProcessor</mainClass>
+									<arguments>
+										<argument>${project.basedir}/src/main/resources/static/swagger-api/dqops-api-swagger-2.json</argument>
+										<argument>${project.basedir}/src/main/resources/static/swagger-api/dqops-api-openapi-3.json</argument>
+										<argument>${project.basedir}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>generate-python-docs</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>generate-python-docs</id>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<mainClass>com.dqops.utils.docs.client.GeneratePythonDocumentationPostProcessor</mainClass>
+									<arguments>
+										<argument>${project.basedir}</argument>
+										<argument>${project.basedir}/src/main/resources/static/swagger-api/dqops-api-openapi-3.json</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>update-dqo-home-specs</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>update-dqo-home-specs</id>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<mainClass>com.dqops.utils.specs.DqoHomeDefinitionFillPostProcessor</mainClass>
+									<arguments>
+										<argument>${project.basedir}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>update-package-version-numbers</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>update-package-version-numbers</id>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<mainClass>com.dqops.utils.version.CopyVersionToFilesPostProcessor</mainClass>
+									<arguments>
+										<argument>${project.basedir}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>run-npm</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<version>1.14.0</version>
+						<configuration>
+							<workingDirectory>src/main/frontend</workingDirectory>
+							<nodeVersion>v18.16.0</nodeVersion>
+							<npmVersion>9.6.7</npmVersion>
+						</configuration>
+						<executions>
+							<execution>
+								<id>install-node</id>
+								<goals>
+									<goal>install-node-and-npm</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>npm-install</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<phase>generate-resources</phase>
+								<configuration>
+									<arguments>install --legacy-peer-deps</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>npm-test</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<phase>test</phase>
+								<configuration>
+									<arguments>test</arguments>
+									<environmentVariables>
+										<CI>true</CI>
+									</environmentVariables>
+								</configuration>
+							</execution>
+							<execution>
+								<id>npm-build</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<arguments>run-script ${npm.build.script}</arguments>
+									<environmentVariables>
+										<CI>false</CI> <!-- Allow warning on CI builds, temporary solution until we remove the last few warnings -->
+									</environmentVariables>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>copy-resources</id>
+								<phase>process-classes</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.basedir}/target/classes/static</outputDirectory>
+									<resources>
+										<resource>
+											<directory>src/main/frontend/build</directory>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>integration-tests</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<phase>integration-test</phase>
+								<goals>
+									<goal>test</goal>
+								</goals>
+								<configuration>
+									<excludes>
+										<exclude>none</exclude>
+									</excludes>
+									<includes>
+										<include>**/*IntegrationTest</include>
+										<include>**/*IntegrationTests</include>
+									</includes>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>publish-yaml-dev-schema</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<configuration>
+							<executable>gsutil</executable>
+							<mainClass>none</mainClass>
+							<arguments>
+								<argument>-m</argument>
+								<argument>cp</argument>
+								<argument>${project.basedir}/src/main/resources/schemas/*.json</argument>
+								<argument>gs://dqo-ai-dev-yaml-schemas/yaml</argument>
+							</arguments>
+						</configuration>
+						<executions>
+							<execution>
+								<id>upload-yaml-schemata</id>
+								<phase>package</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>build-with-jdk-11</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<java.version>11</java.version>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>3.1.0</version>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>3.11.0</version>
+						<executions>
+							<execution>
+								<id>default-testCompile</id>
+								<phase>test-compile</phase>
+								<goals>
+									<goal>testCompile</goal>
+								</goals>
+								<configuration>
+									<skip>true</skip>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>development-build</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<npm.build.script>build:profile</npm.build.script>
+			</properties>
+		</profile>
+	</profiles>
 </project>

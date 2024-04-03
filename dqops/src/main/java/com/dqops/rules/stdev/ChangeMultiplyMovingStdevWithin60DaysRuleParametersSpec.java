@@ -19,6 +19,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -42,11 +43,12 @@ public class ChangeMultiplyMovingStdevWithin60DaysRuleParametersSpec extends Abs
 
 
     @JsonPropertyDescription("How many multiples of the estimated standard deviation within the moving average" +
-            " the current sensor readout could be, with regards to the time window. Set" +
+            " can the current sensor readout be with regard to the time window. Set" +
             " the time window at the threshold level for all severity levels (warning, error," +
-            " fatal) at once. The default is a 60 time periods (days, etc.) time window," +
-            " but at least 20 readouts must exist to run the calculation.")
+            " fatal) at once. The default is a time window of 60 periods (days, etc.)," +
+            " but there must be at least 20 readouts to run the calculation.")
     @SampleValues(values = "1.5")
+    @RequiredField
     private Double multiplyStdev;
 
     /**

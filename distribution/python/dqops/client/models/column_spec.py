@@ -1,17 +1,20 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_partitioned_checks_root_spec import (
-        ColumnPartitionedChecksRootSpec,
+    from ..models.column_monitoring_check_categories_spec import (
+        ColumnMonitoringCheckCategoriesSpec,
+    )
+    from ..models.column_partitioned_check_categories_spec import (
+        ColumnPartitionedCheckCategoriesSpec,
     )
     from ..models.column_profiling_check_categories_spec import (
         ColumnProfilingCheckCategoriesSpec,
     )
-    from ..models.column_recurring_checks_root_spec import ColumnRecurringChecksRootSpec
     from ..models.column_statistics_collectors_root_categories_spec import (
         ColumnStatisticsCollectorsRootCategoriesSpec,
     )
@@ -22,23 +25,23 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ColumnSpec")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ColumnSpec:
     """
     Attributes:
         disabled (Union[Unset, bool]): Disables all data quality checks on the column. Data quality checks will not be
             executed.
         sql_expression (Union[Unset, str]): SQL expression used for calculated fields or when additional column value
-            transformation is required before the column could be used analyzed in data quality checks (data type
-            conversion, transformation). It should be an SQL expression using the SQL language of the analyzed database
-            type. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the
-            content with the table alias of an analyzed table or {column} to replace the content with the analyzed column
-            name. An example to extract a value from a string column that stores a JSON in PostgreSQL:
+            transformation is required before the column can be used for analysis with data quality checks (data type
+            conversion, transformation). It should be an SQL expression that uses the SQL language of the analyzed database
+            type. Use the replacement tokens {table} to replace the content with the full table name, {alias} to replace the
+            content with the table alias of the table under analysis, or {column} to replace the content with the analyzed
+            column name. An example of extracting a value from a string column storing JSON in PostgreSQL:
             "{column}::json->'address'->'zip'".
         type_snapshot (Union[Unset, ColumnTypeSnapshotSpec]):
         profiling_checks (Union[Unset, ColumnProfilingCheckCategoriesSpec]):
-        recurring_checks (Union[Unset, ColumnRecurringChecksRootSpec]):
-        partitioned_checks (Union[Unset, ColumnPartitionedChecksRootSpec]):
+        monitoring_checks (Union[Unset, ColumnMonitoringCheckCategoriesSpec]):
+        partitioned_checks (Union[Unset, ColumnPartitionedCheckCategoriesSpec]):
         statistics (Union[Unset, ColumnStatisticsCollectorsRootCategoriesSpec]):
         labels (Union[Unset, List[str]]): Custom labels that were assigned to the column. Labels are used for searching
             for columns when filtered data quality checks are executed.
@@ -51,12 +54,12 @@ class ColumnSpec:
     sql_expression: Union[Unset, str] = UNSET
     type_snapshot: Union[Unset, "ColumnTypeSnapshotSpec"] = UNSET
     profiling_checks: Union[Unset, "ColumnProfilingCheckCategoriesSpec"] = UNSET
-    recurring_checks: Union[Unset, "ColumnRecurringChecksRootSpec"] = UNSET
-    partitioned_checks: Union[Unset, "ColumnPartitionedChecksRootSpec"] = UNSET
+    monitoring_checks: Union[Unset, "ColumnMonitoringCheckCategoriesSpec"] = UNSET
+    partitioned_checks: Union[Unset, "ColumnPartitionedCheckCategoriesSpec"] = UNSET
     statistics: Union[Unset, "ColumnStatisticsCollectorsRootCategoriesSpec"] = UNSET
     labels: Union[Unset, List[str]] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         disabled = self.disabled
@@ -69,9 +72,9 @@ class ColumnSpec:
         if not isinstance(self.profiling_checks, Unset):
             profiling_checks = self.profiling_checks.to_dict()
 
-        recurring_checks: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.recurring_checks, Unset):
-            recurring_checks = self.recurring_checks.to_dict()
+        monitoring_checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monitoring_checks, Unset):
+            monitoring_checks = self.monitoring_checks.to_dict()
 
         partitioned_checks: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.partitioned_checks, Unset):
@@ -104,8 +107,8 @@ class ColumnSpec:
             field_dict["type_snapshot"] = type_snapshot
         if profiling_checks is not UNSET:
             field_dict["profiling_checks"] = profiling_checks
-        if recurring_checks is not UNSET:
-            field_dict["recurring_checks"] = recurring_checks
+        if monitoring_checks is not UNSET:
+            field_dict["monitoring_checks"] = monitoring_checks
         if partitioned_checks is not UNSET:
             field_dict["partitioned_checks"] = partitioned_checks
         if statistics is not UNSET:
@@ -119,14 +122,14 @@ class ColumnSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_partitioned_checks_root_spec import (
-            ColumnPartitionedChecksRootSpec,
+        from ..models.column_monitoring_check_categories_spec import (
+            ColumnMonitoringCheckCategoriesSpec,
+        )
+        from ..models.column_partitioned_check_categories_spec import (
+            ColumnPartitionedCheckCategoriesSpec,
         )
         from ..models.column_profiling_check_categories_spec import (
             ColumnProfilingCheckCategoriesSpec,
-        )
-        from ..models.column_recurring_checks_root_spec import (
-            ColumnRecurringChecksRootSpec,
         )
         from ..models.column_statistics_collectors_root_categories_spec import (
             ColumnStatisticsCollectorsRootCategoriesSpec,
@@ -155,21 +158,21 @@ class ColumnSpec:
                 _profiling_checks
             )
 
-        _recurring_checks = d.pop("recurring_checks", UNSET)
-        recurring_checks: Union[Unset, ColumnRecurringChecksRootSpec]
-        if isinstance(_recurring_checks, Unset):
-            recurring_checks = UNSET
+        _monitoring_checks = d.pop("monitoring_checks", UNSET)
+        monitoring_checks: Union[Unset, ColumnMonitoringCheckCategoriesSpec]
+        if isinstance(_monitoring_checks, Unset):
+            monitoring_checks = UNSET
         else:
-            recurring_checks = ColumnRecurringChecksRootSpec.from_dict(
-                _recurring_checks
+            monitoring_checks = ColumnMonitoringCheckCategoriesSpec.from_dict(
+                _monitoring_checks
             )
 
         _partitioned_checks = d.pop("partitioned_checks", UNSET)
-        partitioned_checks: Union[Unset, ColumnPartitionedChecksRootSpec]
+        partitioned_checks: Union[Unset, ColumnPartitionedCheckCategoriesSpec]
         if isinstance(_partitioned_checks, Unset):
             partitioned_checks = UNSET
         else:
-            partitioned_checks = ColumnPartitionedChecksRootSpec.from_dict(
+            partitioned_checks = ColumnPartitionedCheckCategoriesSpec.from_dict(
                 _partitioned_checks
             )
 
@@ -196,7 +199,7 @@ class ColumnSpec:
             sql_expression=sql_expression,
             type_snapshot=type_snapshot,
             profiling_checks=profiling_checks,
-            recurring_checks=recurring_checks,
+            monitoring_checks=monitoring_checks,
             partitioned_checks=partitioned_checks,
             statistics=statistics,
             labels=labels,

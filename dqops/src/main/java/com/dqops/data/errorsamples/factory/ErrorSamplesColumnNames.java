@@ -19,11 +19,11 @@ import com.dqops.data.normalization.CommonColumnNames;
 
 /**
  * The error samples table that stores sample column values that failed data quality checks that operate on rows (mostly Validity and Consistency checks).
- * The error samples are stored in the errors table is located in the $DQO_USER_HOME/.data/error_samples folder that contains uncompressed parquet files.
- * The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQO was started (the DQO user's home folder).
+ * The error samples are stored in the errors table is located in the *$DQO_USER_HOME/.data/error_samples* folder that contains uncompressed parquet files.
+ * The table is partitioned using a Hive compatible partitioning folder structure. When the *$DQO_USER_HOME* is not configured, it is the folder where DQOps was started (the DQOps user's home folder).
  *
  * The folder partitioning structure for this table is:
- * c=[connection_name]/t=[schema_name.table_name]/m=[first_day_of_month]/, for example: c=myconnection/t=public.analyzedtable/m=2023-01-01/.
+ * *c=[connection_name]/t=[schema_name.table_name]/m=[first_day_of_month]/*, for example: *c=myconnection/t=public.analyzedtable/m=2023-01-01/*.
  */
 public class ErrorSamplesColumnNames {
     /**
@@ -77,12 +77,12 @@ public class ErrorSamplesColumnNames {
     public static final String TABLE_NAME_COLUMN_NAME = CommonColumnNames.TABLE_NAME_COLUMN_NAME;
 
     /**
-     * The stage name of the table. It is a free-form text configured on the table level that could identify the layers of the data warehouse or a data lake, for example: "landing", "staging", "cleansing", etc.
+     * The stage name of the table. This is a free-form text configured at the table level that can identify  the layers of the data warehouse or a data lake, for example: "landing", "staging", "cleansing", etc.
      */
     public static final String TABLE_STAGE_COLUMN_NAME = CommonColumnNames.TABLE_STAGE_COLUMN_NAME;
 
     /**
-     * The table priority value copied from the table's definition. The table priority could be used for sorting tables by their importance.
+     * The table priority value copied from the table's definition. The table priority can be used to sort tables according to their importance.
      */
     public static final String TABLE_PRIORITY_COLUMN_NAME = CommonColumnNames.TABLE_PRIORITY_COLUMN_NAME;
 
@@ -112,7 +112,7 @@ public class ErrorSamplesColumnNames {
     public static final String CHECK_DISPLAY_NAME_COLUMN_NAME = "check_display_name";
 
     /**
-     * The data quality check type (profiling, recurring, partitioned).
+     * The data quality check type (profiling, monitoring, partitioned).
      */
     public static final String CHECK_TYPE_COLUMN_NAME = "check_type";
 
@@ -132,7 +132,7 @@ public class ErrorSamplesColumnNames {
     public static final String SENSOR_NAME_COLUMN_NAME = CommonColumnNames.SENSOR_NAME_COLUMN_NAME;
 
     /**
-     * The time series id (uuid). Identifies a single time series. A time series is a combination of the check_hash and data_stream_hash.
+     * The time series id (uuid). Identifies a single time series. A time series is a combination of the check_hash and data_group_hash.
      */
     public static final String TIME_SERIES_ID_COLUMN_NAME = CommonColumnNames.TIME_SERIES_ID_COLUMN_NAME;
 

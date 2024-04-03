@@ -1,13 +1,14 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/SensorDefinitionYaml-schema.json
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: sensor
 spec:
   fields:
   - field_name: referenced_table
     display_name: referenced_table
-    help_text: "This field can be used to define the name of the table to be compared\
-      \ to. In order to define the name of the table, user should write correct name\
-      \ as a String."
+    help_text: "The name of the reference table. DQOps accepts the name in two forms:\
+      \ a fully qualified name including the schema name, for example landing_zone.customer_raw,\
+      \ or only a table name. When only a table name is used, DQOps assumes that the\
+      \ table is in the same schema as the analyzed table, and prefixes the name with\
+      \ the schema and optionally database name."
     data_type: string
-    sample_values:
-    - dim_customer
+    required: true
