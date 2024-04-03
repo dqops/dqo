@@ -33,7 +33,6 @@ import java.time.Instant;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Data
-@ToString
 public class IncidentNotificationMessage {
     /**
      * Incident id (primary key).

@@ -75,7 +75,8 @@ public class TableCurrentDataQualityStatusFilterParameters {
      * Boolean flag to enable detecting the current status of partitioned checks. The default value is true, so the current status depends on the statu of partitioned checks.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    @JsonPropertyDescription("Boolean flag to enable detecting the current status of partitioned checks. The default value is true, so the current status depends on the statu of partitioned checks.")
+    @JsonPropertyDescription("Boolean flag to enable detecting the current status of partitioned checks. The default value is true, so the current status depends on the status of partitioned checks.")
+    @Builder.Default
     private boolean partitioned = true;
 
     /**
