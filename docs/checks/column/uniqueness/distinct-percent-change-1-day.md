@@ -1,3 +1,6 @@
+---
+title: distinct percent change 1 day data quality checks
+---
 # distinct percent change 1 day data quality checks
 
 This check monitors the percentage of distinct values and compares it to the measure from the previous day. It raises a data quality issue when the change exceeds an accepted threshold.

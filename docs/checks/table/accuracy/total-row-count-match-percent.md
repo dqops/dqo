@@ -1,3 +1,6 @@
+---
+title: total row count match percent data quality checks
+---
 # total row count match percent data quality checks
 
 A table-level check that compares the row count of the current (tested) table with the row count of another table that is referenced. This check ensures that the difference between the row counts is below the maximum accepted percentage of difference.

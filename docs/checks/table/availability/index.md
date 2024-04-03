@@ -1,3 +1,6 @@
+---
+title: table level availability data quality checks
+---
 # table level availability data quality checks
 
 This is a list of availability table data quality checks supported by DQOps and a brief description of what data quality issued they detect.

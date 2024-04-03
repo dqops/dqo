@@ -1,4 +1,7 @@
-# Monitoring data volume and detecting empty tables
+---
+title: How to monitor data volume and detect empty tables
+---
+# How to monitor data volume and detect empty tables
 Read this guide to learn how to monitor the number of rows in tables, detect empty tables, and detect unexpected increases or decreases in the volume.
 
 The table volume monitoring checks are configured in the `volume` category in DQOps.

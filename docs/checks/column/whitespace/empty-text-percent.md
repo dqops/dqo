@@ -1,3 +1,6 @@
+---
+title: empty text percent data quality checks
+---
 # empty text percent data quality checks
 
 This check detects empty texts that are not null. Empty texts have a length of zero.

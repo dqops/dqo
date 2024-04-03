@@ -1,3 +1,6 @@
+---
+title: column count data quality checks
+---
 # column count data quality checks
 
 A table-level check that retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns.

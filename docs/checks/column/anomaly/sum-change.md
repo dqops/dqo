@@ -1,3 +1,6 @@
+---
+title: sum change data quality checks
+---
 # sum change data quality checks
 
 This check detects that the sum of numeric values has changed more than *max_percent* from the last measured sum.

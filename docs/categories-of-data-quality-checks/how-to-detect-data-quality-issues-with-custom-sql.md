@@ -1,4 +1,7 @@
-# Detecting data quality issues with custom SQL expressions
+---
+title: How to detect data quality issues with custom SQL expressions
+---
+# How to detect data quality issues with custom SQL expressions
 Read this guide to learn how to use custom SQL expressions in data quality checks, assert custom conditions, and evaluate multi-column expressions.
 
 The data quality checks that support custom SQL expressions are configured in the `custom_sql` category in DQOps.

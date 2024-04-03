@@ -1,3 +1,6 @@
+---
+title: contains ip6 percent data quality checks
+---
 # contains ip6 percent data quality checks
 
 This check detects IP6 addresses inside text columns. It measures the percentage of columns containing an IP6 address and raises a data quality issue when too many rows contain IP6 addresses.

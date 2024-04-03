@@ -1,3 +1,6 @@
+---
+title: reload lag data quality checks
+---
 # reload lag data quality checks
 
 A table-level check that calculates the maximum difference in days between ingestion timestamp and event timestamp values on any row.

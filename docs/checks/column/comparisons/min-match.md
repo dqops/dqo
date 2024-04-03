@@ -1,3 +1,6 @@
+---
+title: min match data quality checks
+---
 # min match data quality checks
 
 A column-level check that ensures that compares the minimum value in the tested column to the minimum value in a reference column from the reference table.

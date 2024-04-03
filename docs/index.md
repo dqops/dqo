@@ -1,7 +1,8 @@
 ---
 description: DQOps is an open-source data quality platform for data quality and DataOps teams, providing customizable data quality checks and data quality dashboards.
+title: What is DQOps Data Quality Operations Center
 ---
-# DQOps overview
+# DQOps Data Quality Operations Center overview
 
 ## What is DQOps Data Quality Operations Center?
 

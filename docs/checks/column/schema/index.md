@@ -1,3 +1,6 @@
+---
+title: column level schema data quality checks
+---
 # column level schema data quality checks
 
 This is a list of schema column data quality checks supported by DQOps and a brief description of what data quality issued they detect.

@@ -1,3 +1,6 @@
+---
+title: invalid longitude data quality checks
+---
 # invalid longitude data quality checks
 
 This check finds numeric values that are not valid longitude coordinates. A valid longitude coordinate is in the range -180...180. It counts the values outside a valid range for a longitude.

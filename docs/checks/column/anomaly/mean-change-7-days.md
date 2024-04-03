@@ -1,3 +1,6 @@
+---
+title: mean change 7 days data quality checks
+---
 # mean change 7 days data quality checks
 
 This check detects that the mean (average) value of numeric values has changed more than *max_percent* from the mean value measured seven days ago.

@@ -1,3 +1,6 @@
+---
+title: contains email percent data quality checks
+---
 # contains email percent data quality checks
 
 This check detects emails inside text columns. It measures the percentage of columns containing an email and raises a data quality issue when too many rows contain emails.

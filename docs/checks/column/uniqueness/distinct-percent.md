@@ -1,3 +1,6 @@
+---
+title: distinct percent data quality checks
+---
 # distinct percent data quality checks
 
 This check measures the percentage of distinct values in all non-null values. It verifies that the percentage of distinct values meets a minimum value.

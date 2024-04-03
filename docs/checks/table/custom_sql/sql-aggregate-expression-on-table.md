@@ -1,3 +1,6 @@
+---
+title: sql aggregate expression on table data quality checks
+---
 # sql aggregate expression on table data quality checks
 
 A table-level check that calculates a given SQL aggregate expression on a table and verifies if the value is within a range of accepted values.

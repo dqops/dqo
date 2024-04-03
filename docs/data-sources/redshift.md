@@ -1,5 +1,8 @@
-# Redshift
-Read this guide to learn how to connect DQOps to AWS Redshift from the UI, command-line interface, or directly in YAML files. All parameters are documented.
+---
+title: How to activate data observability for Amazon Redshift
+---
+# How to activate data observability for Amazon Redshift
+Read this guide to learn how to connect DQOps to AWS Redshift from the UI, command-line interface, or directly in YAML files, and activate monitoring.
 
 ## Overview
 

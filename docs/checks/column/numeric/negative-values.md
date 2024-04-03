@@ -1,3 +1,6 @@
+---
+title: negative values data quality checks
+---
 # negative values data quality checks
 
 This check finds and counts negative values in a numeric column. It raises a data quality issue when the count of negative values is above the maximum accepted count.

@@ -1,3 +1,6 @@
+---
+title: mean in range data quality checks
+---
 # mean in range data quality checks
 
 This check calculates a mean (average) value in a numeric column. It verifies that the average value is within the range of accepted values

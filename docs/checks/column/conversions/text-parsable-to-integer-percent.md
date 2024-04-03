@@ -1,3 +1,6 @@
+---
+title: text parsable to integer percent data quality checks
+---
 # text parsable to integer percent data quality checks
 
 Verifies that values in a text column can be parsed and converted to an integer type.

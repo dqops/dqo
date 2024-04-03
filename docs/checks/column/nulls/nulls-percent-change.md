@@ -1,3 +1,6 @@
+---
+title: nulls percent change data quality checks
+---
 # nulls percent change data quality checks
 
 Detects relative increases or decreases in the percentage of null values since the last measured percentage.

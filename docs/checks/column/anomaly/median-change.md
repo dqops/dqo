@@ -1,3 +1,6 @@
+---
+title: median change data quality checks
+---
 # median change data quality checks
 
 This check detects that the median of numeric values has changed more than *max_percent* from the last measured median.

@@ -1,4 +1,7 @@
-# Data quality custom sql sensors
+---
+title: DQOps data quality custom sql sensors
+---
+# DQOps data quality custom sql sensors
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **custom sql** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
 ---

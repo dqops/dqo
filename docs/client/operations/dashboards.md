@@ -1,3 +1,6 @@
+---
+title: DQOps REST API dashboards operations
+---
 # DQOps REST API dashboards operations
 Operations for retrieving the list of data quality dashboards supported by DQOps and issuing short-term access keys to open a dashboard.
 

@@ -1,4 +1,7 @@
-# Testing if a text value is convertible to a target type
+---
+title: How to test if a text value is convertible to a target data type
+---
+# How to test if a text value is convertible to a target data type
 Read this guide to learn if values in text columns can be safely parsed and converted to boolean, integer, numeric, and date types.
 
 The data type conversion checks are configured in the `conversions` category in DQOps.

@@ -1,3 +1,6 @@
+---
+title: non negative values percent data quality checks
+---
 # non negative values percent data quality checks
 
 This check finds non-negative values in a numeric column.

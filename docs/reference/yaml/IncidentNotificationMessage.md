@@ -1,3 +1,6 @@
+---
+title: DQOps YAML file definitions
+---
 # DQOps YAML file definitions
 The definition of YAML files used by DQOps to configure the data sources, monitored tables, and the configuration of activated data quality checks.
 

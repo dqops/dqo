@@ -1,3 +1,6 @@
+---
+title: percentile 25 in range data quality checks
+---
 # percentile 25 in range data quality checks
 
 This check finds the 25th percentile value in a numeric column. The 10th percentile is a value greater than 25% of the smallest values and smaller than the remaining 75% of other values.

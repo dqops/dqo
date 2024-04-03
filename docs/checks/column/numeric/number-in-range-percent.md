@@ -1,3 +1,6 @@
+---
+title: number in range percent data quality checks
+---
 # number in range percent data quality checks
 
 This check verifies that values in a numeric column are within an accepted range.

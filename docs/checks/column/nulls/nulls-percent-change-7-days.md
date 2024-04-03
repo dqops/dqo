@@ -1,3 +1,6 @@
+---
+title: nulls percent change 7 days data quality checks
+---
 # nulls percent change 7 days data quality checks
 
 Detects relative increases or decreases in the percentage of null values since the last week (seven days ago).

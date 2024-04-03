@@ -1,3 +1,6 @@
+---
+title: data freshness data quality checks
+---
 # data freshness data quality checks
 
 A table-level check that calculates the time difference between the most recent row in the table and the current time.

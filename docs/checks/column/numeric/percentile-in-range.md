@@ -1,3 +1,6 @@
+---
+title: percentile in range data quality checks
+---
 # percentile in range data quality checks
 
 This check finds a requested percentile value of numeric values. The percentile is configured as a value in the range [0, 1]. This check verifies that the given percentile is within the range of accepted values

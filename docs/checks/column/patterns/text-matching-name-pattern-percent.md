@@ -1,3 +1,6 @@
+---
+title: text matching name pattern percent data quality checks
+---
 # text matching name pattern percent data quality checks
 
 This check verifies if values stored in a text column contain only letters and are usable as literal identifiers.

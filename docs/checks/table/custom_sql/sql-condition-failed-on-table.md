@@ -1,3 +1,6 @@
+---
+title: sql condition failed on table data quality checks
+---
 # sql condition failed on table data quality checks
 
 A table-level check that uses a custom SQL expression on each row to verify (assert) that all rows pass a custom condition defined as an SQL condition.

@@ -1,3 +1,6 @@
+---
+title: integer in range percent data quality checks
+---
 # integer in range percent data quality checks
 
 This check verifies that numeric values are within a range of accepted values.

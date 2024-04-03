@@ -1,3 +1,6 @@
+---
+title: population stddev in range data quality checks
+---
 # population stddev in range data quality checks
 
 This check calculates the population standard deviation of numeric values. It verifies that the population standard deviation is within the range of accepted values

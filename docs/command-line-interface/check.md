@@ -1,4 +1,7 @@
-# dqo check command
+---
+title: dqo check command-line command
+---
+# dqo check command-line command
 The reference of the **check** command in DQOps. Commands related to checks and rules
 
 

@@ -1,3 +1,6 @@
+---
+title: valid latitude percent data quality checks
+---
 # valid latitude percent data quality checks
 
 This check verifies that numeric values are valid latitude coordinates.

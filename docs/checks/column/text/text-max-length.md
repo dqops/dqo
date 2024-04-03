@@ -1,3 +1,6 @@
+---
+title: text max length data quality checks
+---
 # text max length data quality checks
 
 This check finds the length of the longest text in a column. DQOps validates the maximum length using a range rule.

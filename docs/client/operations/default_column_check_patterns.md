@@ -1,3 +1,6 @@
+---
+title: DQOps REST API default_column_check_patterns operations
+---
 # DQOps REST API default_column_check_patterns operations
 Operations for managing the configuration of the default column-level checks for columns matching a pattern.
 

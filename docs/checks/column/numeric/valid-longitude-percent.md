@@ -1,3 +1,6 @@
+---
+title: valid longitude percent data quality checks
+---
 # valid longitude percent data quality checks
 
 This check verifies that numeric values are valid longitude coordinates. A valid longitude coordinate is in the range --180...180.

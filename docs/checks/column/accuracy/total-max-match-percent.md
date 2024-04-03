@@ -1,3 +1,6 @@
+---
+title: total max match percent data quality checks
+---
 # total max match percent data quality checks
 
 A column-level check that ensures that the difference between the maximum value in the tested column and the maximum value in another column in a referenced table is below a maximum accepted percentage of difference.

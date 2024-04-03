@@ -1,3 +1,6 @@
+---
+title: text not matching regex found data quality checks
+---
 # text not matching regex found data quality checks
 
 This check validates text values using a pattern defined as a regular expression.

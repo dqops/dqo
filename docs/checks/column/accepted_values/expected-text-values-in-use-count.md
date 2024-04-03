@@ -1,3 +1,6 @@
+---
+title: expected text values in use count data quality checks
+---
 # expected text values in use count data quality checks
 
 A column-level check that counts unique values in a text column and counts how many values out of a list of expected string values were found in the column.

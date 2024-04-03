@@ -1,3 +1,6 @@
+---
+title: sum in range data quality checks
+---
 # sum in range data quality checks
 
 This check calculates a sum of numeric values. It verifies that the sum is within the range of accepted values

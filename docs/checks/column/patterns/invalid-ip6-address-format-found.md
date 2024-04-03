@@ -1,3 +1,6 @@
+---
+title: invalid ip6 address format found data quality checks
+---
 # invalid ip6 address format found data quality checks
 
 This check detects invalid IP6 internet addresses in text columns using a regular expression.

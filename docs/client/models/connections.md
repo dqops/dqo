@@ -1,3 +1,6 @@
+---
+title: DQOps REST API connections models reference
+---
 # DQOps REST API connections models reference
 The references of all objects used by [connections](../operations/connections.md) REST API operations are listed below.
 

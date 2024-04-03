@@ -1,3 +1,6 @@
+---
+title: DQOps REST API common models reference
+---
 # DQOps REST API common models reference
 The references of all objects used as shared REST API models in all operations are listed below.
 
@@ -255,6 +258,7 @@ Target data quality checks filter, identifies which checks on which tables and c
 |<span class="no-wrap-code">[`check_type`](./table_comparisons.md#checktype)</span>|The target type of checks to run. Supported values are *profiling*, *monitoring* and *partitioned*.|*[CheckType](./table_comparisons.md#checktype)*|
 |<span class="no-wrap-code">[`time_scale`](./common.md#checktimescale)</span>|The time scale of *monitoring* or *partitioned* checks to run. Supports running only *daily* or *monthly* checks. Daily monitoring checks will replace today's value for all captured check results.|*[CheckTimeScale](./common.md#checktimescale)*|
 |<span class="no-wrap-code">`check_category`</span>|The target check category, for example: *nulls*, *volume*, *anomaly*.|*string*|
+|<span class="no-wrap-code">`quality_dimension`</span>|The target data quality dimension, for example: *Completeness*, *Accuracy*, *Consistency*, *Timeliness*, *Availability*.|*string*|
 |<span class="no-wrap-code">`table_comparison_name`</span>|The name of a configured table comparison. When the table comparison is provided, DQOps will only perform table comparison checks that compare data between tables.|*string*|
 |<span class="no-wrap-code">`check_name`</span>|The target check name to run only this named check. Uses the short check name which is the name of the deepest folder in the *checks* folder. This field supports search patterns such as: 'profiling_\*', '\*_count', 'profiling_\*_percent'.|*string*|
 |<span class="no-wrap-code">`sensor_name`</span>|The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports search patterns such as: 'table/volume/row_\*', '\*_count', 'table/volume/prefix_\*_suffix'.|*string*|
@@ -307,6 +311,8 @@ Model that returns the form definition and the form data to edit a single data q
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`check_name`</span>|Data quality check name that is used in YAML.|*string*|
 |<span class="no-wrap-code">`help_text`</span>|Help text that describes the data quality check.|*string*|
+|<span class="no-wrap-code">`display_name`</span>|User assigned display name that is shown instead of the original data quality check name.|*string*|
+|<span class="no-wrap-code">`friendly_name`</span>|An alternative check's name that is shown on the check editor as a hint.|*string*|
 |<span class="no-wrap-code">`sensor_parameters`</span>|List of fields for editing the sensor parameters.|*List[[FieldModel](./common.md#fieldmodel)]*|
 |<span class="no-wrap-code">`sensor_name`</span>|Full sensor name. This field is for information purposes and can be used to create additional custom checks that reuse the same data quality sensor.|*string*|
 |<span class="no-wrap-code">`quality_dimension`</span>|Data quality dimension used for tagging the results of this data quality checks.|*string*|

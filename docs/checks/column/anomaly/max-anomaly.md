@@ -1,3 +1,6 @@
+---
+title: max anomaly data quality checks
+---
 # max anomaly data quality checks
 
 This check finds a maximum value in a numeric column and detects anomalies in a time series of previous maximum values.

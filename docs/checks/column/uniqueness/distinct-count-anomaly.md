@@ -1,3 +1,6 @@
+---
+title: distinct count anomaly data quality checks
+---
 # distinct count anomaly data quality checks
 
 This check monitors the count of distinct values and detects anomalies in the changes of the distinct count. It monitors a 90-day time window.

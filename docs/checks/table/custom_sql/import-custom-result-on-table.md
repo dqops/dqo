@@ -1,3 +1,6 @@
+---
+title: import custom result on table data quality checks
+---
 # import custom result on table data quality checks
 
 A table-level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check that was hardcoded

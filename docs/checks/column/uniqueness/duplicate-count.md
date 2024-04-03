@@ -1,3 +1,6 @@
+---
+title: duplicate count data quality checks
+---
 # duplicate count data quality checks
 
 This check counts duplicate values. It raises a data quality issue when the number of duplicates is above a minimum accepted value.

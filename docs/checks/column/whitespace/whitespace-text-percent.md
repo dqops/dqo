@@ -1,3 +1,6 @@
+---
+title: whitespace text percent data quality checks
+---
 # whitespace text percent data quality checks
 
 This check detects empty texts containing only spaces and other whitespace characters.

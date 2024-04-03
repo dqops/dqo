@@ -1,3 +1,6 @@
+---
+title: column type changed data quality checks
+---
 # column type changed data quality checks
 
 A column-level check that detects if the data type of the column has changed since the last retrieval.

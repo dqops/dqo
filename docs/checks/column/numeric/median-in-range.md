@@ -1,3 +1,6 @@
+---
+title: median in range data quality checks
+---
 # median in range data quality checks
 
 This check finds a median value in a numeric column. It verifies that the median value is within the range of accepted values

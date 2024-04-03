@@ -1,4 +1,7 @@
-# Detecting referential integrity issues and missing keys
+---
+title: How to detect referential integrity issues and missing keys
+---
+# How to detect referential integrity issues and missing keys
 Read this guide to learn how to detect referential integrity issues, such as missing keys in dictionary tables or wrong foreign keys.
 
 The data quality checks that detect missing keys are configured in the `integrity` category in DQOps.

@@ -1,3 +1,6 @@
+---
+title: import custom result on column data quality checks
+---
 # import custom result on column data quality checks
 
 Column level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check on a column by a custom

@@ -1,3 +1,6 @@
+---
+title: percentile 10 in range data quality checks
+---
 # percentile 10 in range data quality checks
 
 This check finds the 10th percentile value in a numeric column. The 10th percentile is a value greater than 10% of the smallest values and smaller than the remaining 90% of other values.

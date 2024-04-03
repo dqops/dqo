@@ -1,3 +1,6 @@
+---
+title: total average match percent data quality checks
+---
 # total average match percent data quality checks
 
 A column-level check that ensures that the difference between the average value in the tested column and the average value of another column in the referenced table is below the maximum accepted percentage of difference.

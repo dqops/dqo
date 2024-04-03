@@ -1,3 +1,6 @@
+---
+title: invalid uuid format found data quality checks
+---
 # invalid uuid format found data quality checks
 
 This check detects invalid UUID identifiers in text columns using a regular expression.

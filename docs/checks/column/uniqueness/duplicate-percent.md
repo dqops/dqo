@@ -1,3 +1,6 @@
+---
+title: duplicate percent data quality checks
+---
 # duplicate percent data quality checks
 
 This check measures the percentage of duplicate values in all non-null values. It raises a data quality issue when the percentage of duplicates is above an accepted threshold.

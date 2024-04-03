@@ -1,3 +1,6 @@
+---
+title: number below min value percent data quality checks
+---
 # number below min value percent data quality checks
 
 This check finds numeric values smaller than the minimum accepted value. It measures the percentage of values that are too small.

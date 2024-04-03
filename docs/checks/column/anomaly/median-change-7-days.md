@@ -1,3 +1,6 @@
+---
+title: median change 7 days data quality checks
+---
 # median change 7 days data quality checks
 
 This check detects that the median of numeric values has changed more than *max_percent* from the median value measured seven days ago.

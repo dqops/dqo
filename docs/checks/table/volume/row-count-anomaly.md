@@ -1,3 +1,6 @@
+---
+title: row count anomaly data quality checks
+---
 # row count anomaly data quality checks
 
 This check detects anomalies in the day-to-day changes to the table volume (the row count).

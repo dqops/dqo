@@ -1,3 +1,6 @@
+---
+title: DQOps REST API jobs models reference
+---
 # DQOps REST API jobs models reference
 The references of all objects used by [jobs](../operations/jobs.md) REST API operations are listed below.
 

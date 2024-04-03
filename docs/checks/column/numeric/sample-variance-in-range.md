@@ -1,3 +1,6 @@
+---
+title: sample variance in range data quality checks
+---
 # sample variance in range data quality checks
 
 This check calculates a sample variance of numeric values. It verifies that the sample variance is within the range of accepted values

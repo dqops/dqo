@@ -1,3 +1,6 @@
+---
+title: text matching date pattern percent data quality checks
+---
 # text matching date pattern percent data quality checks
 
 This check validates the date format of dates stored in text columns.

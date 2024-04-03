@@ -1,3 +1,6 @@
+---
+title: Sensors/table
+---
 # Sensors/table
 
 **This is a list of table sensors in DQOps broken down by category and a brief description of what they do.**

@@ -1,3 +1,6 @@
+---
+title: data staleness data quality checks
+---
 # data staleness data quality checks
 
 A table-level check that calculates the time difference between the last timestamp when any data was loaded into a table and the current time.

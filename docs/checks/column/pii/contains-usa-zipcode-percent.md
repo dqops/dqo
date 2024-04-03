@@ -1,3 +1,6 @@
+---
+title: contains usa zipcode percent data quality checks
+---
 # contains usa zipcode percent data quality checks
 
 This check detects USA zip code inside text columns. It measures the percentage of columns containing a zip code and raises a data quality issue when too many rows contain zip codes.

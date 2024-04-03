@@ -1,3 +1,6 @@
+---
+title: date values in future percent data quality checks
+---
 # date values in future percent data quality checks
 
 Detects dates in the future in date, datetime and timestamp columns. Measures a percentage of dates in the future. Raises a data quality issue when too many future dates are found.

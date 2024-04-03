@@ -1,3 +1,6 @@
+---
+title: Reference of all models used by DQOps REST API
+---
 # Reference of all models used by DQOps REST API
 
 This is a list of the models in DQOps REST API Python client broken down by individual controllers.

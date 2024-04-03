@@ -1,4 +1,7 @@
-# dqo dqo command
+---
+title: dqo dqo command-line command
+---
+# dqo dqo command-line command
 The reference of the **dqo** command in DQOps. DQOps Data Quality Operations Center Interactive Shell Hit @|yellow &lt;TAB&gt;|@ to see available commands. Hit @|yellow ALT-S|@ to toggle tailtips. 
 
 

@@ -1,3 +1,6 @@
+---
+title: median change 1 day data quality checks
+---
 # median change 1 day data quality checks
 
 This check detects that the median of numeric values has changed more than *max_percent* from the median value measured one day ago (yesterday).

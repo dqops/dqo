@@ -1,3 +1,6 @@
+---
+title: texts matching regex percent data quality checks
+---
 # texts matching regex percent data quality checks
 
 This check validates text values using a pattern defined as a regular expression.

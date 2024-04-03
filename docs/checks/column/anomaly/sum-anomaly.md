@@ -1,3 +1,6 @@
+---
+title: sum anomaly data quality checks
+---
 # sum anomaly data quality checks
 
 This check calculates a sum of values in a numeric column and detects anomalies in a time series of previous sums.

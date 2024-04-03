@@ -1,3 +1,6 @@
+---
+title: whitespace text found data quality checks
+---
 # whitespace text found data quality checks
 
 This check detects empty texts containing only spaces and other whitespace characters.

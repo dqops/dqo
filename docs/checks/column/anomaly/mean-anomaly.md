@@ -1,3 +1,6 @@
+---
+title: mean anomaly data quality checks
+---
 # mean anomaly data quality checks
 
 This check calculates a mean (average) of values in a numeric column and detects anomalies in a time series of previous averages.

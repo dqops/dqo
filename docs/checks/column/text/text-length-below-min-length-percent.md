@@ -1,3 +1,6 @@
+---
+title: text length below min length percent data quality checks
+---
 # text length below min length percent data quality checks
 
 This check finds texts that are shorter than the minimum accepted text length.

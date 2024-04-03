@@ -1,3 +1,6 @@
+---
+title: invalid latitude data quality checks
+---
 # invalid latitude data quality checks
 
 This check finds numeric values that are not valid latitude coordinates. A valid latitude coordinate is in the range -90...90. It counts the values outside a valid range for a latitude.

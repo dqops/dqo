@@ -1,3 +1,6 @@
+---
+title: text length above max length data quality checks
+---
 # text length above max length data quality checks
 
 This check finds texts that are longer than the maximum accepted text length.

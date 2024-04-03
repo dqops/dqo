@@ -1,4 +1,7 @@
-# Data quality accepted values sensors
+---
+title: DQOps data quality accepted values sensors
+---
+# DQOps data quality accepted values sensors
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **accepted values** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
 ---

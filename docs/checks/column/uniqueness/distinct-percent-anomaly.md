@@ -1,3 +1,6 @@
+---
+title: distinct percent anomaly data quality checks
+---
 # distinct percent anomaly data quality checks
 
 This check monitors the percentage of distinct values and detects anomalies in the changes in this percentage. It monitors a 90-day time window.

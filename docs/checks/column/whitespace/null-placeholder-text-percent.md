@@ -1,3 +1,6 @@
+---
+title: null placeholder text percent data quality checks
+---
 # null placeholder text percent data quality checks
 
 This check detects text values that are well-known equivalents (placeholders) of a null value, such as *null*, *None*, *n/a*.

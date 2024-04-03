@@ -1,3 +1,6 @@
+---
+title: mean change data quality checks
+---
 # mean change data quality checks
 
 This check detects that the mean (average) of numeric values has changed more than *max_percent* from the last measured mean.

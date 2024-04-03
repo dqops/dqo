@@ -1,3 +1,6 @@
+---
+title: nulls count data quality checks
+---
 # nulls count data quality checks
 
 Detects incomplete columns that contain any *null* values. Counts the number of rows having a null value.

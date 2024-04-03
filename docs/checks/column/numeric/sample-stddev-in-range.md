@@ -1,3 +1,6 @@
+---
+title: sample stddev in range data quality checks
+---
 # sample stddev in range data quality checks
 
 This check calculates the standard deviation of numeric values. It verifies that the standard deviation is within the range of accepted values

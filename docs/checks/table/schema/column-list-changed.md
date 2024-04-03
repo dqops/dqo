@@ -1,3 +1,6 @@
+---
+title: column list changed data quality checks
+---
 # column list changed data quality checks
 
 A table-level check that detects if the list of columns has changed since the last time the check was run.

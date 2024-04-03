@@ -1,3 +1,6 @@
+---
+title: distinct percent change 30 days data quality checks
+---
 # distinct percent change 30 days data quality checks
 
 This check monitors the percentage of distinct values and compares it to the measure thirty days ago to overcome the monthly seasonability impact.

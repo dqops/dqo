@@ -1,3 +1,6 @@
+---
+title: DQOps REST API table_comparison_results operations
+---
 # DQOps REST API table_comparison_results operations
 Operations that returns the results of the most recent table comparison that was performed between the compared table and the reference table (the source of truth).
 

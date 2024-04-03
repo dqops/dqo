@@ -1,3 +1,6 @@
+---
+title: column level patterns data quality checks
+---
 # column level patterns data quality checks
 
 This is a list of patterns column data quality checks supported by DQOps and a brief description of what data quality issued they detect.

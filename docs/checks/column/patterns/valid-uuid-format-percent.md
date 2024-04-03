@@ -1,3 +1,6 @@
+---
+title: valid uuid format percent data quality checks
+---
 # valid uuid format percent data quality checks
 
 This check validates the format of UUID values in text columns.

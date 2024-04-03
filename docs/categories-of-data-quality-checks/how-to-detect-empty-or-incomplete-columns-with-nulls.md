@@ -1,4 +1,7 @@
-# Detecting empty and incomplete columns
+---
+title: How to detect empty and incomplete columns
+---
+# How to detect empty and incomplete columns
 Read this guide to learn how to detect empty columns or incomplete columns containing too many null values in a dataset.
 
 The data quality checks that detect empty and incomplete columns are configured in the `nulls` category in DQOps.

@@ -1,3 +1,6 @@
+---
+title: column count match data quality checks
+---
 # column count match data quality checks
 
 Table level comparison check that compares the column count of the current (parent) table with the column count of the reference table.

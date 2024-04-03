@@ -1,4 +1,7 @@
-# Detecting data type changes in text columns
+---
+title: How to detect data type changes in text columns
+---
+# How to detect data type changes in text columns
 Read this guide to learn how DQOps detect the effective data type in text columns. Data type detection verifies that values are castable to a given data type.
 
 The data quality checks that detect data types in text columns are configured in the `datatype` category in DQOps.

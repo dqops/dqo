@@ -1,3 +1,6 @@
+---
+title: mean match data quality checks
+---
 # mean match data quality checks
 
 A column-level check that ensures that compares the mean (average) of the values in the tested column to the mean (average) of values in a reference column from the reference table.

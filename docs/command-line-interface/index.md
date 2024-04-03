@@ -1,4 +1,7 @@
-# DQOps command-line interface
+---
+title: DQOps command-line interface reference
+---
+# DQOps command-line interface reference
 All command-line commands supported from the DQOps shell or directly from the system command prompt are listed below.
 
 

@@ -1,3 +1,6 @@
+---
+title: nulls percent anomaly data quality checks
+---
 # nulls percent anomaly data quality checks
 
 Detects day-to-day anomalies in the percentage of *null* values. Measures the percentage of rows having a *null* value.

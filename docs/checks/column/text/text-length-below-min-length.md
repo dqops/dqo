@@ -1,3 +1,6 @@
+---
+title: text length below min length data quality checks
+---
 # text length below min length data quality checks
 
 This check finds texts that are shorter than the minimum accepted text length. It counts the number of texts that are too short and raises a data quality issue when too many invalid texts are found.

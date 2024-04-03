@@ -1,3 +1,6 @@
+---
+title: row count data quality checks
+---
 # row count data quality checks
 
 This check detects empty or too-small tables. It captures the row count of a tested table.

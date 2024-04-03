@@ -1,3 +1,6 @@
+---
+title: DQOps REST API tables models reference
+---
 # DQOps REST API tables models reference
 The references of all objects used by [tables](../operations/tables.md) REST API operations are listed below.
 

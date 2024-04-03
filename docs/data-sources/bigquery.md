@@ -1,5 +1,8 @@
-# BigQuery
-Read this guide to learn how to connect DQOps to BigQuery from the UI, command-line interface, or directly in YAML files. All parameters are documented.
+---
+title: How to activate data observability for Google BigQuery
+---
+# How to activate data observability for Google BigQuery
+Read this guide to learn how to connect DQOps to BigQuery from the UI, command-line interface, or directly in YAML files, and activate monitoring.
 
 ## Overview
 

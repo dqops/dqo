@@ -1,4 +1,7 @@
-# Detecting anomalies in numeric data
+---
+title: How to detect anomalies in numeric data
+---
+# How to detect anomalies in numeric data
 Read this guide to learn how to detect anomaly data quality issues in numeric data using DQOps.
 The data quality checks are configured in the `anomaly` category in DQOps.
 

@@ -1,3 +1,6 @@
+---
+title: DQOps REST API columns models reference
+---
 # DQOps REST API columns models reference
 The references of all objects used by [columns](../operations/columns.md) REST API operations are listed below.
 

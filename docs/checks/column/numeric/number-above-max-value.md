@@ -1,3 +1,6 @@
+---
+title: number above max value data quality checks
+---
 # number above max value data quality checks
 
 This check finds numeric values bigger than the maximum accepted value. It counts the values that are too big.

@@ -1,3 +1,6 @@
+---
+title: column count changed data quality checks
+---
 # column count changed data quality checks
 
 A table-level check that detects if the number of columns in the table has changed since the last time the check (checkpoint) was run.

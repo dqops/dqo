@@ -1,3 +1,6 @@
+---
+title: text match date format percent data quality checks
+---
 # text match date format percent data quality checks
 
 Verifies that the values in text columns match one of the predefined date formats, such as an ISO 8601 date.

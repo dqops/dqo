@@ -1,4 +1,7 @@
-# Asserting accepted values in columns
+---
+title: How to validate accepted values in columns
+---
+# How to validate accepted values in columns
 Read this guide to learn how to verify that text and numeric columns contain accepted values. Assert that all expected values are used in tested columns.
 
 ## Accepted values category

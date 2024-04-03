@@ -1,3 +1,6 @@
+---
+title: text valid currency code percent data quality checks
+---
 # text valid currency code percent data quality checks
 
 This check measures the percentage of text values that are valid currency names. It raises a data quality issue when the percentage of valid currency names (excluding null values) falls below a minimum accepted rate.

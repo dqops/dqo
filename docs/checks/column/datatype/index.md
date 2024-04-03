@@ -1,3 +1,6 @@
+---
+title: column level datatype data quality checks
+---
 # column level datatype data quality checks
 
 This is a list of datatype column data quality checks supported by DQOps and a brief description of what data quality issued they detect.

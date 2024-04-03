@@ -1,3 +1,6 @@
+---
+title: sql condition passed percent on column data quality checks
+---
 # sql condition passed percent on column data quality checks
 
 A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression). Measures the percentage of rows passing the condition.

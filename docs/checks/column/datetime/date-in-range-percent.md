@@ -1,3 +1,6 @@
+---
+title: date in range percent data quality checks
+---
 # date in range percent data quality checks
 
 Verifies that the dates in date, datetime, or timestamp columns are within a reasonable range of dates.

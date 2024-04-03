@@ -1,3 +1,6 @@
+---
+title: DQOps REST API default_table_check_patterns operations
+---
 # DQOps REST API default_table_check_patterns operations
 Operations for managing the configuration of the default table-level checks for tables matching a pattern.
 

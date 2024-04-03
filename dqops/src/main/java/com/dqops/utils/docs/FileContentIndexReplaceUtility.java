@@ -51,7 +51,12 @@ public class FileContentIndexReplaceUtility {
         if (endMarkerLine.isEmpty()) {
             throw new RuntimeException("Marker " + endMarker + " not found in the file (probably mkdocs.yml)");
         }
-        int indexOfEnd = originalFileContentLines.indexOf(endMarkerLine.get());
+
+        List<String> contentAfterBeginMarker = originalFileContentLines.stream()
+                .skip(indexOfBegin + 1)
+                .collect(Collectors.toList());
+
+        int indexOfEnd = contentAfterBeginMarker.indexOf(endMarkerLine.get()) + indexOfBegin + 1;
 
         List<String> currentLines = originalFileContentLines.stream()
                 .skip(indexOfBegin + 1)

@@ -1,3 +1,6 @@
+---
+title: row count change 1 day data quality checks
+---
 # row count change 1 day data quality checks
 
 This check compares the current table volume (the row count) to the row count from the previous day.

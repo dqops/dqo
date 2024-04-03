@@ -1,3 +1,6 @@
+---
+title: number above max value percent data quality checks
+---
 # number above max value percent data quality checks
 
 This check finds numeric values bigger than the maximum accepted value. It measures the percentage of values that are too big.

@@ -1,3 +1,6 @@
+---
+title: DQOps REST API check_results operations
+---
 # DQOps REST API check_results operations
 Returns all the data quality check results of executed checks on tables and columns.
 

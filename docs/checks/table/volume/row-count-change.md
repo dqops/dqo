@@ -1,3 +1,6 @@
+---
+title: row count change data quality checks
+---
 # row count change data quality checks
 
 This check compares the current table volume (the row count) to the last known row count.

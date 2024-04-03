@@ -1,3 +1,6 @@
+---
+title: DQOps REST API errors models reference
+---
 # DQOps REST API errors models reference
 The references of all objects used by [errors](../operations/errors.md) REST API operations are listed below.
 

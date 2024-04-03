@@ -1,3 +1,6 @@
+---
+title: text parsable to date percent data quality checks
+---
 # text parsable to date percent data quality checks
 
 Verifies that values in a text column can be parsed and converted to a date type.

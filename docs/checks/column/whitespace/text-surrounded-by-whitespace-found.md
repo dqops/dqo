@@ -1,3 +1,6 @@
+---
+title: text surrounded by whitespace found data quality checks
+---
 # text surrounded by whitespace found data quality checks
 
 This check detects text values that contain additional whitespace characters before or after the text.

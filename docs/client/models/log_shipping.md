@@ -1,3 +1,6 @@
+---
+title: DQOps REST API log_shipping models reference
+---
 # DQOps REST API log_shipping models reference
 The references of all objects used by [log_shipping](../operations/log_shipping.md) REST API operations are listed below.
 

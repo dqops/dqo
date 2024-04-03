@@ -1,4 +1,7 @@
-# dqo column command
+---
+title: dqo column command-line command
+---
+# dqo column command-line command
 The reference of the **column** command in DQOps. Modify and list columns
 
 

@@ -1,3 +1,6 @@
+---
+title: expected texts in top values count data quality checks
+---
 # expected texts in top values count data quality checks
 
 A column-level check that counts how many expected text values are among the TOP most popular values in the column.

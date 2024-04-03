@@ -1,3 +1,6 @@
+---
+title: text not matching date pattern found data quality checks
+---
 # text not matching date pattern found data quality checks
 
 This check detects dates in the wrong format inside text columns using a regular expression.

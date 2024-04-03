@@ -1,3 +1,6 @@
+---
+title: distinct count change 1 day data quality checks
+---
 # distinct count change 1 day data quality checks
 
 This check monitors the count of distinct values and compares it to the measure from the previous day. It raises a data quality issue when the change exceeds an accepted threshold.

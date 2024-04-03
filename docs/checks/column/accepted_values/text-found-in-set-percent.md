@@ -1,3 +1,6 @@
+---
+title: text found in set percent data quality checks
+---
 # text found in set percent data quality checks
 
 A column-level check that calculates the percentage of rows for which the tested text column contains a value from a set of expected values.

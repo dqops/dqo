@@ -1,3 +1,6 @@
+---
+title: text length in range percent data quality checks
+---
 # text length in range percent data quality checks
 
 This check verifies that the minimum and maximum lengths of text values are in the range of accepted values.

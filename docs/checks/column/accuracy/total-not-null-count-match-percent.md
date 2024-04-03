@@ -1,3 +1,6 @@
+---
+title: total not null count match percent data quality checks
+---
 # total not null count match percent data quality checks
 
 A column-level check that ensures that the difference between the count of null values in the tested column and the count of null values in another column in a referenced table is below a maximum accepted percentage of difference.

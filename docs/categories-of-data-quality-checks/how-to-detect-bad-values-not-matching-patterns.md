@@ -1,4 +1,7 @@
-# Detecting values not matching patterns
+---
+title: How to detect values not matching patterns
+---
+# How to detect values not matching patterns
 Read this guide to learn how to validate column values if they match patterns, such as phone numbers, emails, or any regular expression.
 
 The pattern match checks are configured in the `patterns` category in DQOps.

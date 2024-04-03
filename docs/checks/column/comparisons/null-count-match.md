@@ -1,3 +1,6 @@
+---
+title: null count match data quality checks
+---
 # null count match data quality checks
 
 A column-level check that ensures that compares the count of null values in the tested column to the count of null values in a reference column from the reference table.

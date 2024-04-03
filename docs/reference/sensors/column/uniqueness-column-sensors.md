@@ -1,4 +1,7 @@
-# Data quality uniqueness sensors
+---
+title: DQOps data quality uniqueness sensors
+---
+# DQOps data quality uniqueness sensors
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **uniqueness** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
 ---

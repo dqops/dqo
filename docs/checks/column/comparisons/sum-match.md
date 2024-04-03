@@ -1,3 +1,6 @@
+---
+title: sum match data quality checks
+---
 # sum match data quality checks
 
 A column-level check that ensures that compares the sum of the values in the tested column to the sum of values in a reference column from the reference table.

@@ -1,3 +1,6 @@
+---
+title: false percent data quality checks
+---
 # false percent data quality checks
 
 This check measures the percentage of **false** values in a boolean column. It raises a data quality issue when the measured percentage is outside the accepted range.

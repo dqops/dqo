@@ -1,3 +1,6 @@
+---
+title: text parsable to boolean percent data quality checks
+---
 # text parsable to boolean percent data quality checks
 
 Verifies that values in a text column are convertible to a boolean value.

@@ -21,39 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Documentation model that describes multiple similar checks.
+ * Container object with a list of checks within the same data quality dimension.
  */
 @Data
-public class SimilarChecksDocumentationModel {
+public class CheckDimensionDocumentationModel {
     /**
-     * Check description extracted from the JavaDoc comment for the whole check definition class.
-     */
-    private String checkSpecClassJavaDoc;
-
-    /**
-     * Sensor target ('table' or 'column')
+     * Check target ('table' or 'column')
      */
     private String target;
-
-    /**
-     * Sensor category.
-     */
-    private String category;
-
-    /**
-     * The name of the markdown file with the documentation of the category.
-     */
-    private String categoryPageName;
-
-    /**
-     * Similar check root name (e.g. daily_partition_row_count -> row_count).
-     */
-    private String primaryCheckName;
-
-    /**
-     * True for standard data quality checks, false for advanced.
-     */
-    private boolean standard;
 
     /**
      * The name of the data quality dimension from the primary check class.
@@ -61,7 +36,7 @@ public class SimilarChecksDocumentationModel {
     private String qualityDimension;
 
     /**
-     * List of all similar checks.
+     * List of checks, grouped by similar checks.
      */
-    private List<CheckDocumentationModel> allChecks = new ArrayList<>();
+    private List<SimilarChecksDocumentationModel> checkGroups = new ArrayList<>();
 }

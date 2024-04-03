@@ -1,3 +1,6 @@
+---
+title: column list or order changed data quality checks
+---
 # column list or order changed data quality checks
 
 A table-level check that detects if the list of columns and the order of columns have changed since the last time the check was run.

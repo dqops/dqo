@@ -1,3 +1,6 @@
+---
+title: invalid ip4 address format found data quality checks
+---
 # invalid ip4 address format found data quality checks
 
 This check detects invalid IP4 internet addresses in text columns using a regular expression.

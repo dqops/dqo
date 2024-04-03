@@ -1,3 +1,6 @@
+---
+title: nulls percent change 1 day data quality checks
+---
 # nulls percent change 1 day data quality checks
 
 Detects relative increases or decreases in the percentage of null values since the previous day.

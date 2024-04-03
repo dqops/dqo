@@ -1,3 +1,6 @@
+---
+title: total min match percent data quality checks
+---
 # total min match percent data quality checks
 
 A column-level check that ensures that the difference between the minimum value in the tested column and the minimum value in another column in a referenced table is below a maximum accepted percentage of difference.

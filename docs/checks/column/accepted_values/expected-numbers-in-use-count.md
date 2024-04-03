@@ -1,3 +1,6 @@
+---
+title: expected numbers in use count data quality checks
+---
 # expected numbers in use count data quality checks
 
 A column-level check that counts unique values in a numeric column and counts how many values out of a list of expected numeric values were found in the column.

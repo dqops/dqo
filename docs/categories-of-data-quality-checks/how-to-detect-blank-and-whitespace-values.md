@@ -1,4 +1,7 @@
-# Detecting whitespace and null value placeholders
+---
+title: How to detect whitespace and null value placeholders
+---
+# How to detect whitespace and null value placeholders
 Read this guide to learn how to detect data quality issues in text columns containing spaces, tabs, or special texts equivalent to a null value.
 
 The data quality checks for detecting whitespace and empty value placeholders are configured in the `whitespace` category in DQOps.

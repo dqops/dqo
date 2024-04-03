@@ -1,3 +1,6 @@
+---
+title: max match data quality checks
+---
 # max match data quality checks
 
 A column-level check that ensures that compares the maximum value in the tested column to maximum value in a reference column from the reference table.

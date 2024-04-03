@@ -1,4 +1,7 @@
-# Data quality numeric sensors
+---
+title: DQOps data quality numeric sensors
+---
+# DQOps data quality numeric sensors
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **numeric** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
 ---

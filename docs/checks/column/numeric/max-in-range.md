@@ -1,3 +1,6 @@
+---
+title: max in range data quality checks
+---
 # max in range data quality checks
 
 This check finds a maximum value in a numeric column. It verifies that the maximum value is within the range of accepted values

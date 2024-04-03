@@ -1,3 +1,6 @@
+---
+title: invalid email format found data quality checks
+---
 # invalid email format found data quality checks
 
 This check detects invalid email addresses in text columns using a regular expression.

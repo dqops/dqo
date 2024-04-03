@@ -1,3 +1,6 @@
+---
+title: row count match data quality checks
+---
 # row count match data quality checks
 
 Table level comparison check that compares the row count of the current (parent) table with the row count of the reference table.

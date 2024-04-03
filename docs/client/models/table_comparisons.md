@@ -1,3 +1,6 @@
+---
+title: DQOps REST API table_comparisons models reference
+---
 # DQOps REST API table_comparisons models reference
 The references of all objects used by [table_comparisons](../operations/table_comparisons.md) REST API operations are listed below.
 

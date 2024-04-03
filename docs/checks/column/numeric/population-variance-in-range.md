@@ -1,3 +1,6 @@
+---
+title: population variance in range data quality checks
+---
 # population variance in range data quality checks
 
 This check calculates a population variance of numeric values. It verifies that the population variance is within the range of accepted values

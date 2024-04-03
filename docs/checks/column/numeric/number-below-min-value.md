@@ -1,3 +1,6 @@
+---
+title: number below min value data quality checks
+---
 # number below min value data quality checks
 
 This check finds numeric values smaller than the minimum accepted value. It counts the values that are too small.

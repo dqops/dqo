@@ -1,3 +1,6 @@
+---
+title: nulls percent data quality checks
+---
 # nulls percent data quality checks
 
 Detects incomplete columns that contain any *null* values. Measures the percentage of rows having a null value.

@@ -1,3 +1,6 @@
+---
+title: negative values percent data quality checks
+---
 # negative values percent data quality checks
 
 This check finds negative values in a numeric column. It measures the percentage of negative values and raises a data quality issue

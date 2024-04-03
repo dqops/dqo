@@ -1,3 +1,6 @@
+---
+title: sum change 1 day data quality checks
+---
 # sum change 1 day data quality checks
 
 This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured one day ago (yesterday).

@@ -1,3 +1,6 @@
+---
+title: median anomaly data quality checks
+---
 # median anomaly data quality checks
 
 This check calculates a median of values in a numeric column and detects anomalies in a time series of previous medians.

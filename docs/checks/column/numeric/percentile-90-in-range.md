@@ -1,3 +1,6 @@
+---
+title: percentile 90 in range data quality checks
+---
 # percentile 90 in range data quality checks
 
 This check finds the 90th percentile value in a numeric column. The 90th percentile is a value greater than 90% of the smallest values and smaller than the remaining 10% of other values.

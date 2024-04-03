@@ -1,3 +1,6 @@
+---
+title: table availability data quality checks
+---
 # table availability data quality checks
 
 A table-level check that ensures a query can be successfully executed on a table without server errors. It also verifies that the table exists and is accessible (queryable).
@@ -283,6 +286,53 @@ spec:
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
                     FROM `<target_table>` AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+    ??? example "Oracle"
+
+        === "Sensor template for Oracle"
+
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                   WHEN COUNT(*) > 0 THEN COUNT(*)
+                   ELSE 1.0
+                END AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+        === "Rendered SQL for Oracle"
+
+            ```sql
+            SELECT
+                CASE
+                   WHEN COUNT(*) > 0 THEN COUNT(*)
+                   ELSE 1.0
+                END AS actual_value,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM
+                (
+                    SELECT
+                        *,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -848,6 +898,53 @@ spec:
             GROUP BY time_period
             ORDER BY time_period
             ```
+    ??? example "Oracle"
+
+        === "Sensor template for Oracle"
+
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                   WHEN COUNT(*) > 0 THEN COUNT(*)
+                   ELSE 1.0
+                END AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+        === "Rendered SQL for Oracle"
+
+            ```sql
+            SELECT
+                CASE
+                   WHEN COUNT(*) > 0 THEN COUNT(*)
+                   ELSE 1.0
+                END AS actual_value,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM
+                (
+                    SELECT
+                        *,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
     ??? example "PostgreSQL"
 
         === "Sensor template for PostgreSQL"
@@ -1401,6 +1498,53 @@ spec:
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
                     FROM `<target_table>` AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+    ??? example "Oracle"
+
+        === "Sensor template for Oracle"
+
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                   WHEN COUNT(*) > 0 THEN COUNT(*)
+                   ELSE 1.0
+                END AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+        === "Rendered SQL for Oracle"
+
+            ```sql
+            SELECT
+                CASE
+                   WHEN COUNT(*) > 0 THEN COUNT(*)
+                   ELSE 1.0
+                END AS actual_value,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM
+                (
+                    SELECT
+                        *,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan

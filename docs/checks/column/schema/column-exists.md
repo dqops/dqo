@@ -1,3 +1,6 @@
+---
+title: column exists data quality checks
+---
 # column exists data quality checks
 
 A column-level check that reads the metadata of the monitored table and verifies if the column still exists in the data source.

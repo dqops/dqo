@@ -1,3 +1,6 @@
+---
+title: data ingestion delay data quality checks
+---
 # data ingestion delay data quality checks
 
 A table-level check that calculates the time difference between the most recent row in the table and the most recent timestamp when the last row was loaded into the data warehouse or data lake.

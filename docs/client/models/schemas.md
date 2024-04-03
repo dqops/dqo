@@ -1,3 +1,6 @@
+---
+title: DQOps REST API schemas models reference
+---
 # DQOps REST API schemas models reference
 The references of all objects used by [schemas](../operations/schemas.md) REST API operations are listed below.
 

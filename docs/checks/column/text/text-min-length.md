@@ -1,3 +1,6 @@
+---
+title: text min length data quality checks
+---
 # text min length data quality checks
 
 This check finds the length of the shortest text in a column. DQOps validates the shortest length using a range rule.

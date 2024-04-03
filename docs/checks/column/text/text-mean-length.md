@@ -1,3 +1,6 @@
+---
+title: text mean length data quality checks
+---
 # text mean length data quality checks
 
 This check calculates the average text length in a column. DQOps validates the mean length using a range rule.

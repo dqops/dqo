@@ -1,3 +1,6 @@
+---
+title: lookup key not found data quality checks
+---
 # lookup key not found data quality checks
 
 This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database.

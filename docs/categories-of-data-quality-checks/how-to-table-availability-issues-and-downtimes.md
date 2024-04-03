@@ -1,4 +1,7 @@
-# Monitoring table availability issues
+---
+title: How to monitor table availability
+---
+# How to monitor table availability
 Read this guide to learn how to enable table availability monitoring. DQOps will detect when the table is not available for use.
 
 The table availability monitoring checks are configured in the `availability` category in DQOps.

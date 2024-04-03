@@ -1,3 +1,6 @@
+---
+title: DQOps REST API incidents models reference
+---
 # DQOps REST API incidents models reference
 The references of all objects used by [incidents](../operations/incidents.md) REST API operations are listed below.
 

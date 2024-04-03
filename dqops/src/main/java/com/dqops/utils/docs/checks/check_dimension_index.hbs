@@ -1,0 +1,4 @@
+| Data quality check name | Check category | Description | Standard check |
+|-------------------------|----------------|-------------|----------------|
+{{#each checkGroups}}|[*{{replace primaryCheckName " " "_"}}*](../checks/{{target}}/{{category}}/{{replace primaryCheckName " " "-"}}.md)|[{{category}}](../categories-of-data-quality-checks/{{categoryPageName}})|{{single-line checkSpecClassJavaDoc}}|{{checkmark standard}}|
+{{/each}}

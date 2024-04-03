@@ -1,3 +1,6 @@
+---
+title: distinct count data quality checks
+---
 # distinct count data quality checks
 
 This check counts distinct values and verifies if the distinct count is within an accepted range. It raises a data quality issue when the distinct count is below or above the accepted range.

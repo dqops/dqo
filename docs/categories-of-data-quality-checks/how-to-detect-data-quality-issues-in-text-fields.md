@@ -1,4 +1,7 @@
-# Detecting out-of-range text values
+---
+title: How to detect out-of-range text values
+---
+# How to detect out-of-range text values
 Read this guide to learn how to find text values that are too short or too long, which are most likely invalid values stored in a database.
 
 The data quality checks that detect issues with too short or too long texts are configured in the `text` category in DQOps.

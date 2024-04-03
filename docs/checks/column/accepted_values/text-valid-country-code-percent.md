@@ -1,3 +1,6 @@
+---
+title: text valid country code percent data quality checks
+---
 # text valid country code percent data quality checks
 
 This check measures the percentage of text values that are valid two-letter country codes.

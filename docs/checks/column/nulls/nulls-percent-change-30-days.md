@@ -1,3 +1,6 @@
+---
+title: nulls percent change 30 days data quality checks
+---
 # nulls percent change 30 days data quality checks
 
 Detects relative increases or decreases in the percentage of null values since the last month (30 days ago).

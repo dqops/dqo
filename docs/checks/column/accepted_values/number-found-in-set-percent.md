@@ -1,3 +1,6 @@
+---
+title: number found in set percent data quality checks
+---
 # number found in set percent data quality checks
 
 A column-level check that calculates the percentage of rows for which the tested numeric column contains a value from a set of expected values.

@@ -1,3 +1,6 @@
+---
+title: min anomaly data quality checks
+---
 # min anomaly data quality checks
 
 This check finds a minimum value in a numeric column and detects anomalies in a time series of previous minimum values.

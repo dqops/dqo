@@ -1,3 +1,6 @@
+---
+title: DQOps REST API tables operations
+---
 # DQOps REST API tables operations
 Operations related to manage the metadata of imported tables, and managing the configuration of table-level data quality checks.
 

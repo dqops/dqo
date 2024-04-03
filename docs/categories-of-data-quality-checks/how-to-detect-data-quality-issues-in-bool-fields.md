@@ -1,4 +1,7 @@
-# Measuring the percentage of true and false values
+---
+title: How to measure the percentage of true and false values
+---
+# How to measure the percentage of true and false values
 Read this guide to learn how to measure the percentage of true and false boolean values and how to set up data quality checks that assert the valid range.
 
 The data quality checks for bool columns are configured in the `bool` category in DQOps.

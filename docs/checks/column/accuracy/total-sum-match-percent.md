@@ -1,3 +1,6 @@
+---
+title: total sum match percent data quality checks
+---
 # total sum match percent data quality checks
 
 A column-level check that ensures that the difference between the sum of all values in the tested column and the sum of values in another column in a referenced table is below a maximum accepted percentage of difference.
