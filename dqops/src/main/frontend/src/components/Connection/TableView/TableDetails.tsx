@@ -191,7 +191,7 @@ const TableDetails = () => {
         <FileFormatConfiguration
           fileFormatType={fileFormatType}
           onChangeFile={onChangeFile}
-          configuration={tableBasic?.file_format?.[format]}
+          configuration={tableBasic?.file_format?.[fileFormatType]}
           onChangeConfiguration={onChangeConfiguration}
           cleanConfiguration={cleanConfiguration}
           freezeFileType={false}
