@@ -1,4 +1,7 @@
-# A text not exceeding a maximum length 
+---
+title: How to detect texts exceeding a maximum length using a data quality check
+---
+# How to detect texts exceeding a maximum length using a data quality check 
 This sample shows how to use data quality checks to detect a text not exceeding a maximum length and view the results on data quality dashboards.
 
 ## Overview

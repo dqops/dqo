@@ -1,4 +1,7 @@
-# Detect empty tables
+---
+title: How to detect empty or incomplete tables using data quality checks
+---
+# How to detect empty or incomplete tables using data quality checks
 This sample shows how to use data quality checks in the DQOps platform to detect empty tables and view the results on data quality dashboards.
 
 ## Overview

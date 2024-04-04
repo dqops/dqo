@@ -1,4 +1,7 @@
-# Detect null values
+---
+title: How to detect null values using data quality checks
+---
+# How to detect null values using data quality checks
 This sample shows how to use data quality checks to detect null values in the table and view the results on data quality dashboards.
 
 ## Overview

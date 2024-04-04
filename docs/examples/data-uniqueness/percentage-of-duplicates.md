@@ -1,4 +1,7 @@
-# Percentage of duplicates
+---
+title: How to measure the percentage of duplicate values using a data quality check
+---
+# How to measure the percentage of duplicate values using a data quality check
 This sample shows how to use data quality checks in the DQOps platform to detect the percentage of duplicates and view the results on data quality dashboards.
 
 ## Overview

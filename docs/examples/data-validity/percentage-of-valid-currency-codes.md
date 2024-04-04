@@ -1,5 +1,8 @@
-# Percentage of valid currency codes
-This sample shows how to use data quality checks to detect the percentage of valid currency codes in a column and view the results on data quality dashboards.
+---
+title: How to detect invalid currency codes in a dataset using a data quality check
+---
+# How to detect invalid currency codes in a dataset using a data quality check
+This sample shows how to use data quality checks to measure the percentage of valid currency codes in a column and view the results on data quality dashboards.
 
 ## Overview
 

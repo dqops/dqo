@@ -1,5 +1,8 @@
-# Percentage of rows containing USA zipcodes
-This sample shows how to use data quality checks to detect the percentage of rows containing USA zipcodes and view the results on data quality dashboards.
+---
+title: How to detect invalid USA zipcodes using a data quality check
+---
+# How to detect invalid USA zipcodes using a data quality check
+This sample shows how to use data quality checks to measure the percentage of rows containing USA zipcodes and view the results on data quality dashboards.
 
 ## Overview
 

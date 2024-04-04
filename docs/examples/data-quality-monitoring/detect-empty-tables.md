@@ -1,4 +1,7 @@
-# Detect empty tables
+---
+title: How to detect empty tables using data observability checks
+---
+# How to detect empty tables using data observability checks
 This sample shows how to use the default DQOps data observability checks to detect empty tables and view the results on data quality dashboards.
 
 ## Overview

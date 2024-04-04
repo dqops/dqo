@@ -1,5 +1,8 @@
-# Percentage of negative values
-This sample shows how to use data quality checks to detect the percentage of negative values in a column and view the results on data quality dashboards.
+---
+title: How to measure the percentage of negative values using a data quality check
+---
+# How to measure the percentage of negative values using a data quality check
+This sample shows how to use data quality checks to measure the percentage of negative values in a column and view the results on data quality dashboards.
 
 ## Overview
 

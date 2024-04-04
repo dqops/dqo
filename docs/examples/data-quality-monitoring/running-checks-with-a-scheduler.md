@@ -1,4 +1,7 @@
-# Running checks with a scheduler
+---
+title: How to schedule data quality checks using a CRON schedule
+---
+# How to schedule data quality checks using a CRON schedule
 This sample shows how to run data quality checks with a scheduler and set different schedules on multiple checks with the DQOps platform. 
 
 ## Overview

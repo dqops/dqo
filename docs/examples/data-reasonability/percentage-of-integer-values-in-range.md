@@ -1,4 +1,7 @@
-# Percentage of integer values in range
+---
+title: How to measure the percentage of integer values in range using a data quality check
+---
+# How to measure the percentage of integer values in range using a data quality check
 This sample shows how to use data quality checks to detect the percentage of integer values in range and view the results on data quality dashboards.
 
 ## Overview

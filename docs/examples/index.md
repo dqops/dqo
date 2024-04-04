@@ -1,4 +1,7 @@
-# Use cases
+---
+title: List of data quality use cases and examples
+---
+# List of data quality use cases and examples
 Check various examples demonstrating how the DQOps platform can detect data quality issues, and help you evaluate results on data quality dashboards.
 
 ## List of data quality use cases
