@@ -1,4 +1,7 @@
-# Add connection to a data source
+---
+title: Add a connection to a data source
+---
+# Add a connection to a data source
 This guide shows how to connect a data source to DQOps, import the metadata, and operate with the DQOps user interface.
 
 ## Overview

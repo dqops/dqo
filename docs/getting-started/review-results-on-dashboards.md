@@ -1,4 +1,7 @@
-# Review results on dashboards
+---
+title: Review data quality results on data quality dashboards
+---
+# Review data quality results on data quality dashboards
 This guide will show how to use the data quality dashboards provided by DQOps, and how to review your first data quality KPI score after profiling the data.
 
 ## Overview

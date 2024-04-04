@@ -1,4 +1,7 @@
-# DQOps local installation
+---
+title: DQOps local installation with pip
+---
+# DQOps local installation with pip
 This guide will tell you how to quickly install DQOps locally from PyPI and create a DQOps Cloud account to enable the data quality dashboards.
 
 ## Overview
