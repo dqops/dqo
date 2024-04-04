@@ -1,7 +1,7 @@
 ---
-title: How to monitor and detect table availability issues
+title: How to monitor and detect table availability issues with data observability
 ---
-# How to monitor and detect table availability issues
+# How to monitor and detect table availability issues with data observability
 This sample shows how to use data quality checks to detect table availability issues and view the results on data quality dashboards.
 
 ## Overview
