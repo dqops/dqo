@@ -24,22 +24,18 @@ SELECT
         WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
             SUM(
                 CASE
-                    WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^-0-9./]%'
-                        AND (
-                            CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[-/.]0[1-9][-/.]%'
-                                OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[-/.]1[0-2][-/.]%'
-                        ) AND (
-                            (
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '0[1-9][-/.]__[-/.][0-9][0-9][0-9][0-9]'
-                                OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '[12][0-9][-/.]__[-/.][0-9][0-9][0-9][0-9]'
-                                OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '3[01][-/.]__[-/.][0-9][0-9][0-9][0-9]'
-                            ) OR (
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '[0-9][0-9][0-9][0-9][-/.]__[-/.]0[1-9]'
-                                OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '[0-9][0-9][0-9][0-9][-/.]__[-/.][12][0-9]'
-                                OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '[0-9][0-9][0-9][0-9][-/.]__[-/.]3[01]'
-                            )
-                        )
-                        THEN 1
+                    WHEN LEN(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR)) <= 10
+                        AND(
+                            TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 110) IS NOT NULL     --  mm-dd-yyyy
+                            OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 101) IS NOT NULL  --  mm/dd/yyyy
+                            OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 105) IS NOT NULL  --  dd-mm-yyyy
+                            OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 103) IS NOT NULL  --  dd/mm/yyyy
+                            OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 104) IS NOT NULL  --  dd.mm.yyyy
+                            OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 107) IS NOT NULL  --  Mon dd, yyyy
+                            OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 102) IS NOT NULL  --  yyyy.mm.dd
+                            OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 111) IS NOT NULL  --  yyyy/mm/dd
+                            OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 23) IS NOT NULL   --  yyyy-mm-dd
+                        ) THEN 1
                     ELSE 0
                     END
             )
@@ -88,21 +84,18 @@ SELECT
                 CASE WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
                          CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%' OR
                          CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^-+0123456789.,]%' OR
-                         CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^-0-9./]%'
-                            AND (
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[-/.]0[1-9][-/.]%'
-                                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[-/.]1[0-2][-/.]%'
-                            ) AND (
-                                (
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '0[1-9][-/.]__[-/.][0-9][0-9][0-9][0-9]'
-                                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '[12][0-9][-/.]__[-/.][0-9][0-9][0-9][0-9]'
-                                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '3[01][-/.]__[-/.][0-9][0-9][0-9][0-9]'
-                                ) OR (
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '[0-9][0-9][0-9][0-9][-/.]__[-/.]0[1-9]'
-                                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '[0-9][0-9][0-9][0-9][-/.]__[-/.][12][0-9]'
-                                    OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '[0-9][0-9][0-9][0-9][-/.]__[-/.]3[01]'
-                                )
-                            )
+                         LEN(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR)) <= 10
+                             AND(
+                                 TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 110) IS NOT NULL     --  mm-dd-yyyy
+                                 OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 101) IS NOT NULL  --  mm/dd/yyyy
+                                 OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 105) IS NOT NULL  --  dd-mm-yyyy
+                                 OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 103) IS NOT NULL  --  dd/mm/yyyy
+                                 OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 104) IS NOT NULL  --  dd.mm.yyyy
+                                 OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 107) IS NOT NULL  --  Mon dd, yyyy
+                                 OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 102) IS NOT NULL  --  yyyy.mm.dd
+                                 OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 111) IS NOT NULL  --  yyyy/mm/dd
+                                 OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 23) IS NOT NULL   --  yyyy-mm-dd
+                             )
                          OR
                          CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^-0-9./:APMapm ]%'
                                AND (
