@@ -20,7 +20,7 @@ Measures the percentage of **true** values in a boolean column and verifies that
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_true_percent`</span>|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_true_percent`</span>|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1329,7 +1329,7 @@ Measures the percentage of **true** values in a boolean column and verifies that
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_true_percent`</span>|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_true_percent`</span>|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2640,7 +2640,7 @@ Measures the percentage of **true** values in a boolean column and verifies that
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_true_percent`</span>|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_true_percent`</span>|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3951,7 +3951,7 @@ Measures the percentage of **true** values in a boolean column and verifies that
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_true_percent`</span>|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_true_percent`</span>|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -5284,7 +5284,7 @@ Measures the percentage of **true** values in a boolean column and verifies that
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_true_percent`</span>|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_true_percent`</span>|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
 
 **Command-line examples**
 

@@ -17,7 +17,7 @@ because they identify issues that affect unstructured data in data lakes.
 
 ### Data quality dimension types
 The following table explains data quality dimensions supported by DQOps, showing both the definition of the dimension, 
-and an example of a typical data quality issue.
+and examples of typical data quality issues.
 
 | Data quality dimension name                | Data quality dimension definition                                                                                                                                                                                                                                                                            | Potential data quality issues                                                                                                                                                                                            |
 |:-------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -31,8 +31,22 @@ and an example of a typical data quality issue.
 | [**Uniqueness**](#data-uniqueness)         | The degree to which records occur only once in a data set and are not duplicated.                                                                                                                                                                                                                            | Duplicate values found in a key column that must contain only unique values.                                                                                                                                             |
 | [**Validity**](#data-validity)             | The degree to which data values comply with pre-defined business rules such as the format, patterns, type, and range. E.g. zip codes. e-mails                                                                                                                                                                | Invalid phone format. Values not matching regular expression patterns.                                                                                                                                                   |
 
-## Best practices for monitoring data quality dimensions
+The list of data quality checks for each data quality dimension is found in sections below.
 
+### How data quality dimensions are measured
+DQOps measures data quality by calculating a [data quality KPI score](definition-of-data-quality-kpis.md).
+It is as a percentage of passed [data quality checks](definition-of-data-quality-checks/index.md) out of all executed checks.
+The data quality KPI is represented as a percentage value. The following formula calculates the score.
+
+![Data quality KPI formula simple](https://dqops.com/docs/images/concepts/data-quality-kpis/data-quality-kpi-formula-simple-min.png){ loading=lazy }
+
+The data quality KPI is calculated by grouping data quality check results by the data quality dimension.
+The following image shows a [data quality KPI dashboard](types-of-data-quality-dashboards.md#data-quality-kpis) from DQOps, 
+showing the results for each measured data quality dimension.
+
+![Data quality KPIs divided by data quality dimensions](https://dqops.com/docs/images/concepts/data-quality-dimensions/data-quality-dimension-kpi-per-dimension-min.png){ loading=lazy }
+
+### Best practices for monitoring data quality dimensions
 Selecting data quality dimensions is one of the steps in the process of defining business needs for data quality monitoring.
 This is usually done by the Data Owner who understands the purpose of the data, the data model, and the business processes
 in their area of responsibility.
@@ -52,6 +66,71 @@ important that the data arrives in a certain format - the organization should pr
 
 You can learn more about defining data quality requirements and how to set up the whole data quality monitoring process in our eBook
 ["A step-by-step guide to improve data quality"](https://dqops.com/best-practices-for-effective-data-quality-improvement/).
+
+## The purpose of data quality dimensions
+Measuring data quality dimensions ensures data meets its purpose, establishes benchmarks for improvement, and builds trust in data-driven decisions.
+By quantifying key aspects, you can identify and prioritize improvements, ensuring reliable insights and data-driven decision making. 
+It also helps track progress and justify data quality investments, fostering a shared understanding across the organization.
+
+In short, measuring data quality dimensions transforms a vague concept like "good data" into concrete,
+actionable metrics that are essential for ensuring the trustworthiness of your data-driven processes.
+
+### Assess data current status
+Measuring data quality dimensions allows you to assess data fitness for use by uncovering issues
+and determining its suitability for specific purposes.
+Data quality dimensions help identify problems like missing values (completeness), misspellings and wrong values (validity), inconsistencies and data anomalies (consistency),
+and outdated information (timeliness).  
+
+You can also use these dimensions to determine if your data is good enough for a particular task, 
+such as basic reporting versus complex predictive modeling, since different use cases may have varying requirements across data quality dimensions.
+
+The following image shows the data quality KPI scores divided by data sources, schemas, and tables. 
+When a data quality dimension is selected on the dashboard, the results are filtered to show the scores only for that dimension.
+
+![Data quality KPIs divided by data quality dimensions](https://dqops.com/docs/images/concepts/data-quality-dimensions/data-quality-kpi-per-data-source-and-table-min.png){ loading=lazy }
+
+### Establish benchmark and track improvements
+Data quality dimensions provide measurable attributes, transforming data quality assessments from subjective judgments to quantifiable metrics.
+This allows you to monitor progress over time and track whether your data cleansing initiatives,
+governance policies, or operational changes are positively impacting the quality of your data.
+
+The following image shows the data quality KPI calculated for each data quality dimension. 
+The initial scores (the benchmark) can be calculated during the [data profiling phase](definition-of-data-quality-kpis.md#profile-tables).
+
+![Data quality KPI per data quality dimension with effort](https://dqops.com/docs/images/concepts/data-quality-dimensions/data-quality-issues-per-dimension-to-measure-effort-min.png){ loading=lazy }
+
+We can also track data quality improvement for each data quality dimension over time. 
+The following chart shows the data quality KPIs for each day of the month and data quality dimension.
+
+![Data quality KPI score per data quality dimension daily chart](https://dqops.com/docs/images/concepts/data-quality-dimensions/data-quality-kpi-chart-per-data-quality-dimension-min.png){ loading=lazy }
+
+### Facilitate data-driven decision making
+Measuring data quality dimensions empowers data-driven decision making in two key ways. 
+First, high-quality data builds trust in the insights and visualizations derived from it. 
+You can be confident that your conclusions are based on reliable information, not flawed data. 
+
+Second, understanding the strengths and limitations of your data across various dimensions allows you to make informed business decisions. 
+Data quality insights guide your actions and prevent you from basing critical choices on potentially inaccurate information.
+
+### Prioritize data quality effort
+By measuring data quality dimensions, you can identify the areas where data quality issues have the biggest impact.
+This allows you to focus your resources on making improvements that will yield the greatest benefits.
+Additionally, tracking changes in data quality over time helps you demonstrate the return on investment (ROI) of data quality initiatives.
+This can be crucial for justifying continued investment in maintaining and improving data quality.
+
+The best method to prioritize the data cleansing process is to filter data quality results by a data quality dimension with a low KPI score. 
+Then, cleanse the tables with the lowest data quality score or those whose KPI score has dropped since the previous month.
+
+![Priority of tables to fix data quality issues guided by the data quality KPI score](https://dqops.com/docs/images/concepts/data-quality-dimensions/prioritize-tables-by-data-quality-kpi-score-min.png){ loading=lazy }
+
+### Enhance trust and collaboration
+Clearly defined and measured data quality dimensions establish transparent standards and
+build trust among data consumers and those who manage it.  
+This creates a common vocabulary for discussing data quality, making collaboration between data producers and users more effective.
+Everyone involved has a clear understanding of what constitutes high-quality data, which fosters better communication and collaboration.
+
+## Data quality dimensions reference
+The following chapters describe every data quality dimension in detail and include a list of data quality checks that measure that dimension.
 
 ## Data Accuracy
 
@@ -224,6 +303,13 @@ The following table lists data quality checks that detect integrity issues on co
 
 ## Data Reasonableness
 
+### Reasonableness dimension definition
+The following table provides an overview of the reasonableness data quality dimension.
+
+| Dimension          | Description                                                                                                     | How DQOps measures data reasonableness                                                                                                                                                                                                                                                            |
+|--------------------|-----------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Reasonableness** | The data reasonableness dimension verifies if the data makes sense and the values are within reasonable ranges. | DQOps uses data quality range checks to assess the reasonableness of data.<br/> For example, you can validate that the prices in the product table are within reasonable ranges.<br/> You can validate the length of text fields or aggregated values such as a sum, mean, median, or percentile. |
+
 ### Table reasonableness checks
 The following table lists data quality checks that detect reasonableness issues on tables.
 
@@ -269,6 +355,13 @@ The following table lists data quality checks that detect reasonableness issues 
 
 ## Data Timeliness
 
+### Timeliness dimension definition
+The following table provides an overview of the timeliness data quality dimension.
+
+| Dimension      | Description                                                                                                                 | How DQOps measures data timeliness                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+|----------------|-----------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Timeliness** | The data timeliness dimension verifies if the data source contains fresh data and if the data processing lag is acceptable. | DQOps captures the most recent timestamps from the monitored table and measures the time between now and the timestamp of the most recent record. <br/> The data timeliness dimension is divided into: <br/>- **data freshness** tracks how old the data is<br/>- **data staleness** tracks when the data was loaded for the last time<br/>- **ingestion delay** measures the time between the most recent record and the time when it was loaded, showing the time consumed by data processing. <br/> Check out the [data timeliness formula](../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md#freshness-staleness-and-ingestion-delay-compared) to see how they differ. |
+
 ### Table timeliness checks
 The following table lists data quality checks that detect timeliness issues on tables.
 
@@ -281,6 +374,13 @@ The following table lists data quality checks that detect timeliness issues on t
 
 ## Data Uniqueness
 
+### Uniqueness dimension definition
+The following table provides an overview of the uniqueness data quality dimension.
+
+| Dimension      | Description                                                                          | How DQOps measures data uniqueness                                                         |
+|----------------|--------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
+| **Uniqueness** | The data uniqueness dimension verifies that no records are duplicate in the dataset. | DQOps measures the number and the percentage of distinct and duplicate values in a column. |
+
 ### Column uniqueness checks
 The following table lists data quality checks that detect uniqueness issues on columns.
 
@@ -292,6 +392,13 @@ The following table lists data quality checks that detect uniqueness issues on c
 |[*duplicate_percent*](../checks/column/uniqueness/duplicate-percent.md)|[uniqueness](../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|This check measures the percentage of duplicate values in all non-null values. It raises a data quality issue when the percentage of duplicates is above an accepted threshold. The default threshold is 0% duplicate values.| |
 
 ## Data Validity
+
+### Validity dimension definition
+The following table provides an overview of the validity data quality dimension.
+
+| Dimension    | Description                                                                                                                                                                                                | How DQOps measures data validity                                                                                                                                                                                                                                                                                                                                      |
+|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Validity** | The data validity dimension verifies that the values conform to agreed data formats and low cardinality columns (columns containing only known values) store only values from an accepted data dictionary. | DQOps uses regular expressions to validate values that should match a pattern, such as an email or a phone number.<br/> Columns that should contain only values from a data dictionary use an **IN** SQL condition.<br/> DQOps provides several built-in dictionaries, such as country and currency codes.<br/> The other dictionaries can be uploaded as a CSV file. |
 
 ### Table validity checks
 The following table lists data quality checks that detect validity issues on tables.

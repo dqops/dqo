@@ -24,7 +24,7 @@ Calculates the time difference in days between the most recent event timestamp a
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
+|<span class="no-wrap-code">`profile_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Timeliness](../../../dqo-concepts/data-quality-dimensions.md#data-timeliness)|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
@@ -1741,7 +1741,7 @@ Daily  calculating the time difference in days between the most recent event tim
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
+|<span class="no-wrap-code">`daily_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Timeliness](../../../dqo-concepts/data-quality-dimensions.md#data-timeliness)|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
@@ -3460,7 +3460,7 @@ Monthly monitoring calculating the time difference in days between the most rece
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
+|<span class="no-wrap-code">`monthly_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Timeliness](../../../dqo-concepts/data-quality-dimensions.md#data-timeliness)|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
@@ -5179,7 +5179,7 @@ Daily partitioned check calculating the time difference in days between the most
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
+|<span class="no-wrap-code">`daily_partition_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Timeliness](../../../dqo-concepts/data-quality-dimensions.md#data-timeliness)|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
@@ -6918,7 +6918,7 @@ Monthly partitioned check calculating the time difference in days between the mo
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
+|<span class="no-wrap-code">`monthly_partition_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Timeliness](../../../dqo-concepts/data-quality-dimensions.md#data-timeliness)|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 

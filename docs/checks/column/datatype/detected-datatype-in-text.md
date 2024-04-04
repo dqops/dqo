@@ -21,7 +21,7 @@ Detects the data type of text values stored in the column. The sensor returns th
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -4454,7 +4454,7 @@ Detects the data type of text values stored in the column. The sensor returns th
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -8889,7 +8889,7 @@ Detects the data type of text values stored in the column. The sensor returns th
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -13324,7 +13324,7 @@ Detects the data type of text values stored in the column. The sensor returns th
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -17781,7 +17781,7 @@ Detects the data type of text values stored in the column. The sensor returns th
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
 
 **Command-line examples**
 

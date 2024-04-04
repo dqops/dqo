@@ -206,8 +206,8 @@ spec:
 ## List of integrity checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*lookup_key_not_found*](../checks/column/integrity/lookup-key-not-found.md)|Integrity|This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database. This check counts the number of values not found in the dictionary table. It raises a data quality issue when too many missing keys are discovered.|:material-check-bold:|
-|[*lookup_key_found_percent*](../checks/column/integrity/lookup-key-found-percent.md)|Integrity|This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database. This check measures the percentage of valid keys found in the dictionary table. It raises a data quality issue when a percentage of valid keys is below a minimum accepted threshold.| |
+|[*lookup_key_not_found*](../checks/column/integrity/lookup-key-not-found.md)|[Integrity](../dqo-concepts/data-quality-dimensions.md#data-integrity)|This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database. This check counts the number of values not found in the dictionary table. It raises a data quality issue when too many missing keys are discovered.|:material-check-bold:|
+|[*lookup_key_found_percent*](../checks/column/integrity/lookup-key-found-percent.md)|[Integrity](../dqo-concepts/data-quality-dimensions.md#data-integrity)|This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database. This check measures the percentage of valid keys found in the dictionary table. It raises a data quality issue when a percentage of valid keys is below a minimum accepted threshold.| |
 
 
 **Reference and samples**

@@ -90,8 +90,8 @@ spec:
 ## List of bool checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*true_percent*](../checks/column/bool/true-percent.md)|Reasonableness|This check measures the percentage of **true** values in a boolean column. It raises a data quality issue when the measured percentage is outside the accepted range.|:material-check-bold:|
-|[*false_percent*](../checks/column/bool/false-percent.md)|Reasonableness|This check measures the percentage of **false** values in a boolean column. It raises a data quality issue when the measured percentage is outside the accepted range.|:material-check-bold:|
+|[*true_percent*](../checks/column/bool/true-percent.md)|[Reasonableness](../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|This check measures the percentage of **true** values in a boolean column. It raises a data quality issue when the measured percentage is outside the accepted range.|:material-check-bold:|
+|[*false_percent*](../checks/column/bool/false-percent.md)|[Reasonableness](../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|This check measures the percentage of **false** values in a boolean column. It raises a data quality issue when the measured percentage is outside the accepted range.|:material-check-bold:|
 
 
 **Reference and samples**

@@ -22,7 +22,7 @@ Measures the percentage of valid values that are present in a dictionary table. 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_lookup_key_found_percent`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Integrity|[*foreign_key_match_percent*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`profile_lookup_key_found_percent`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Integrity](../../../dqo-concepts/data-quality-dimensions.md#data-integrity)|[*foreign_key_match_percent*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -1499,7 +1499,7 @@ Measures the percentage of valid values that are present in a dictionary table. 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_lookup_key_found_percent`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Integrity|[*foreign_key_match_percent*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`daily_lookup_key_found_percent`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Integrity](../../../dqo-concepts/data-quality-dimensions.md#data-integrity)|[*foreign_key_match_percent*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -2978,7 +2978,7 @@ Measures the percentage of valid values that are present in a dictionary table. 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_lookup_key_found_percent`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Integrity|[*foreign_key_match_percent*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`monthly_lookup_key_found_percent`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Integrity](../../../dqo-concepts/data-quality-dimensions.md#data-integrity)|[*foreign_key_match_percent*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -4457,7 +4457,7 @@ Measures the percentage of valid values that are present in a dictionary table. 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_lookup_key_found_percent`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Integrity|[*foreign_key_match_percent*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`daily_partition_lookup_key_found_percent`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Integrity](../../../dqo-concepts/data-quality-dimensions.md#data-integrity)|[*foreign_key_match_percent*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -5958,7 +5958,7 @@ Measures the percentage of valid values that are present in a dictionary table. 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_lookup_key_found_percent`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Integrity|[*foreign_key_match_percent*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`monthly_partition_lookup_key_found_percent`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Integrity](../../../dqo-concepts/data-quality-dimensions.md#data-integrity)|[*foreign_key_match_percent*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 

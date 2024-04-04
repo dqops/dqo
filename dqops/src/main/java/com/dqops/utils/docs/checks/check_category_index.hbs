@@ -1,6 +1,6 @@
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-{{#each checkGroups}}|[*{{replace primaryCheckName " " "_"}}*](/docs/checks/{{target}}/{{category}}/{{replace primaryCheckName " " "-"}}.md)|{{qualityDimension}}|{{single-line checkSpecClassJavaDoc}}|{{checkmark standard}}|
+{{#each checkGroups}}|[*{{replace primaryCheckName " " "_"}}*](/docs/checks/{{target}}/{{category}}/{{replace primaryCheckName " " "-"}}.md)|[{{qualityDimension}}](/docs/dqo-concepts/data-quality-dimensions.md#data-{{lowercase qualityDimension}})|{{single-line checkSpecClassJavaDoc}}|{{checkmark standard}}|
 {{/each}}
 
 **Reference and samples**
