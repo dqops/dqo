@@ -64,7 +64,7 @@ public class BigQueryColumnTextTextParsableToDatePercentSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0d, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class BigQueryColumnTextTextParsableToDatePercentSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0d, resultTable.column(0).get(0));
+        Assertions.assertEquals(40.0, resultTable.column(0).get(0));
     }
 
     @Test
