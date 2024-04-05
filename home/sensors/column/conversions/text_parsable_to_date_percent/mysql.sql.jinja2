@@ -6,7 +6,14 @@ SELECT
         ELSE 100.0 * SUM(
             CASE
                 WHEN CONVERT({{ lib.render_target_column('analyzed_table') }}, DATE) IS NOT NULL
-                    THEN 1
+                    OR STR_TO_DATE({{lib.render_target_column('analyzed_table')}}, '%d/%m/%Y') IS NOT NULL
+                    OR STR_TO_DATE({{lib.render_target_column('analyzed_table')}}, '%d-%m-%Y') IS NOT NULL
+                    OR STR_TO_DATE({{lib.render_target_column('analyzed_table')}}, '%m-%d-%Y') IS NOT NULL
+                    OR STR_TO_DATE({{lib.render_target_column('analyzed_table')}}, '%d/%m/%Y') IS NOT NULL
+                    OR STR_TO_DATE({{lib.render_target_column('analyzed_table')}}, '%m/%d/%Y') IS NOT NULL
+                    OR STR_TO_DATE({{lib.render_target_column('analyzed_table')}}, '%Y/%m/%d') IS NOT NULL
+                    OR STR_TO_DATE({{lib.render_target_column('analyzed_table')}}, '%b %e, %Y') IS NOT NULL
+                        THEN 1
                 ELSE 0
             END
         ) / COUNT({{ lib.render_target_column('analyzed_table') }})
