@@ -9,6 +9,9 @@
 
   .popupcontainer {
     display: flex;
+    row-gap: 10px;
+    column-gap: 10px;
+    margin-bottom: 20px;
   }
 
   #aEbookLink {
@@ -18,17 +21,12 @@
   }
 
   #imageEbook {
-    width: 800px;
+    width: 1000px;
     border-style: none !important;
   }
 
   #aEbook {
     border-style: none !important;
-  }
-
-  .ebook-description-popup {
-    margin-left: 10px;
-    text-size: 16px;
   }
 
   .modal__overlay {
@@ -42,16 +40,16 @@
     justify-content: center;
     align-items: center;
     z-index: 10;
+    /* font-family: 'Helvetica Neue'; */
   }
 
   .modal__container {
     background-color: white;
-    padding: 20px;
     padding-top: 5px;
     max-width: 640px;
     height: 100%;
-    width: 50%;
-    border-radius: 4px;
+    border-radius: 8px  ;
+    border: 2px solid grey  ;
     overflow-y: hidden;
     font-size: 18px;
     display: flex;
@@ -59,29 +57,25 @@
     align-items: center;
     justify-content: center;
     line-height: 1.5;
-    color: black;
-    margin-bottom: 10px;
+    color: #1C182D;
+  }
+  .right-container {
+    width: 50%;
   }
 
   @supports (display: flex) {
     .modal__container {
       height: initial;
       max-height: 80vh;
-      margin-top: 3rem;
-      margin-bottom: 2rem;
       line-height: 1.5;
     }
   }
 
   .modal__btn {
     font-size: 0.875rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+    margin-top: 5px;
     background-color: 2303ee;
-    margin-top: 30px;
-    color: black;
+    padding-right: 10px;
   }
 
   .micromodal-slide {
@@ -91,7 +85,23 @@
   .micromodal-slide.is-open {
     display: block;
   }
-
+.close-div, .close-div-2 {
+  width: 100%;
+  justify-content: flex-end;
+  height: 30px;
+  padding-bottom: 10px;
+}
+.close-div {
+  display: none;
+}
+.close-div-2 {
+  display: flex;
+}
+.download-description {
+  font-size: small; 
+  padding-top: 15px; 
+  margin-right: 20px;
+}
   @media only screen and (min-device-width: 320px) and (max-device-width: 660px) {
     .modal__container {
       width: 90% !important;
@@ -103,18 +113,39 @@
   }
 
   @media (max-width: 1100px) {
+    .right-container {
+    width: 100%;
+  }
+  .download-description {
+    font-size: medium;
+  }
+  .second-image-container{
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
     .popupcontainer {
       flex-direction: column;
       margin-bottom: 20px;
-      margin-left: 15px;
+      margin-left: 30px;
       margin-right: 15px;
     }
     .modal__container {
       max-height: 95vh;
     }
+    body {
+            font-family: 'Helvetica Neue', sans-serif;
+    }
+.close-div-2 {
+  display: none;
+}
+.close-div {
+  display: flex;
+}
   }
 </style>
-
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;700&display=swap">
 <div class="md-copyright">
   {% if config.copyright %}
   <div class="md-copyright__highlight">
@@ -140,48 +171,51 @@
       aria-modal="true"
       aria-labelledby="modal-1-title"
     >
-      <div
-        style="
-          width: 100%;
-          display: flex;
-          justify-content: flex-end;
-          margin-bottom: 20px;
-        "
-      >
-        <button
-          class="modal__btn"
-          data-micromodal-close
-          aria-label="Close this dialog window"
-          style="padding: 0; width: 0px; height: 0px; font-weight: 700"
-        >
-          X
-        </button>
-      </div>
-
       <div class="popupcontainer">
         <div class="imagepopupcontainer">
+          <div class="close-div"
+        >
+          <button
+            class="modal__btn"
+            data-micromodal-close
+            aria-label="Close this dialog window"
+          >
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="Menu / Close_LG"> <path id="Vector" d="M21 21L12 12M12 12L3 3M12 12L21.0001 3M12 12L3 21.0001" stroke="#bab5b5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g> </g></svg>
+          </button>
+        </div>
+        <div class="second-image-container">
           <a
             href="https://dqops.com/best-practices-for-effective-data-quality-improvement/"
             target="_blank"
             id="aEbookLink"
           >
             <img
-              src="/docs/images/dqops-ebook-open-with-process.png"
+              src="/docs/images/border-website5.png"
               alt="A step-by-step guide to improve data quality"
               title="A step-by-step guide to improve data quality"
               id="imageEbook"
               class="glightbox-ignored-image"
             />
-          </a>
+          </a> 
         </div>
-        <div>
-          <p class="ebook-description-popup">
-            Check out "A Step-by-Step Guide to Improve Data Quality" eBook
-            created by the DQOps team.
-          </p>
-          <p class="ebook-description-popup">
-            Learn the whole process of profiling, monitoring,
-            and fixing data quality issues.
+        </div>
+        <div class="right-container">
+          <div class="close-div-2"
+        >
+          <button
+            class="modal__btn"
+            data-micromodal-close
+            aria-label="Close this dialog window"
+          >
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="Menu / Close_LG"> <path id="Vector" d="M21 21L12 12M12 12L3 3M12 12L21.0001 3M12 12L3 21.0001" stroke="#bab5b5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g> </g></svg>
+          </button>
+        </div>
+          <div style="color: gray; font-size: 15px;">
+            Free eBook
+          </div>
+          <div style="font-size: 25px; font-weight: 700; line-height: 1.4;">Step-by-Step Guide to Improve Data Quality</div>
+          <p class="download-description">
+            Download a free eBook to learn the whole process of profiling, monitoring, and fixing data quality issues.
           </p>
           <style>
             #_form_35_ { font-size:14px; line-height:1.6; font-family:arial, helvetica, sans-serif; margin:0; }
@@ -265,7 +299,7 @@
             #_form_35_ button[type="submit"] { padding:20px; font-size:1.5em; }
             #_form_35_ ._inline-style { margin:20px 0 0 !important; }
             }
-            #_form_35_ { position:relative; text-align:left; margin:25px auto 0; padding-top:14px; padding-right:14px; padding-bottom:14px; padding-left:14px; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; box-sizing:border-box; *zoom:1; background:rgba(255, 255, 255, 0) !important; border:0px solid #b0b0b0 !important; max-width:340px; -moz-border-radius:0px !important; -webkit-border-radius:0px !important; border-radius:0px !important; color:#3f3f3f; }
+            #_form_35_ { position:relative; text-align:left; margin:25px auto 0; padding-right:14px; padding-bottom:14px;-webkit-box-sizing:border-box; -moz-box-sizing:border-box; box-sizing:border-box; *zoom:1; background:rgba(255, 255, 255, 0) !important; border:0px solid #b0b0b0 !important; max-width:340px; -moz-border-radius:0px !important; -webkit-border-radius:0px !important; border-radius:0px !important; color:#3f3f3f; }
             #_form_35_._inline-form,#_form_35_._inline-form ._form-content { font-family:Helvetica, Arial, sans-serif; }
             #_form_35_._inline-form ._row span,#_form_35_._inline-form ._row label { font-family:Helvetica, Arial, sans-serif; font-size:14px; font-weight:400; line-height:1.6em; }
             #_form_35__inlineform input[type="text"],#_form_35__inlineform input[type="date"],#_form_35__inlineform input[type="tel"],#_form_35__inlineform select,#_form_35__inlineform textarea:not(.g-recaptcha-response) { font-family:Helvetica, Arial, sans-serif; font-size:14px; font-weight:400; font-color:#000; line-height:1.6em; }
