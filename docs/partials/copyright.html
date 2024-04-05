@@ -97,6 +97,11 @@
 .close-div-2 {
   display: flex;
 }
+.download-description {
+  font-size: small; 
+  padding-top: 15px; 
+  margin-right: 20px;
+}
   @media only screen and (min-device-width: 320px) and (max-device-width: 660px) {
     .modal__container {
       width: 90% !important;
@@ -111,10 +116,19 @@
     .right-container {
     width: 100%;
   }
+  .download-description {
+    font-size: medium;
+  }
+  .second-image-container{
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
     .popupcontainer {
       flex-direction: column;
       margin-bottom: 20px;
-      margin-left: 15px;
+      margin-left: 30px;
       margin-right: 15px;
     }
     .modal__container {
@@ -169,19 +183,21 @@
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="Menu / Close_LG"> <path id="Vector" d="M21 21L12 12M12 12L3 3M12 12L21.0001 3M12 12L3 21.0001" stroke="#bab5b5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g> </g></svg>
           </button>
         </div>
+        <div class="second-image-container">
           <a
             href="https://dqops.com/best-practices-for-effective-data-quality-improvement/"
             target="_blank"
             id="aEbookLink"
           >
             <img
-              src="/docs/images/ebook-with-background.png"
+              src="/docs/images/border-website5.png"
               alt="A step-by-step guide to improve data quality"
               title="A step-by-step guide to improve data quality"
               id="imageEbook"
               class="glightbox-ignored-image"
             />
-          </a>
+          </a> 
+        </div>
         </div>
         <div class="right-container">
           <div class="close-div-2"
@@ -197,9 +213,9 @@
           <div style="color: gray; font-size: 15px;">
             Free eBook
           </div>
-          <div style="font-size: 30px; font-weight: 700; line-height: 1.4;">Step-by-Step Guide to Improve Data Quality</div>
-          <p style="font-size: small; padding-top: 15px; margin-right: 20px;" >
-            Download a free ebook to learn the whole process of profiling, monitoring, and fixing data quality issues.
+          <div style="font-size: 25px; font-weight: 700; line-height: 1.4;">Step-by-Step Guide to Improve Data Quality</div>
+          <p class="download-description">
+            Download a free eBook to learn the whole process of profiling, monitoring, and fixing data quality issues.
           </p>
           <style>
             #_form_35_ { font-size:14px; line-height:1.6; font-family:arial, helvetica, sans-serif; margin:0; }
