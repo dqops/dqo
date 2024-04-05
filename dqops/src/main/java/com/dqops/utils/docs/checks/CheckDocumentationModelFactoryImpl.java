@@ -252,6 +252,12 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 SimilarChecksDocumentationModel similarChecksDocumentationModel = new SimilarChecksDocumentationModel();
                 SimilarCheckModel firstCheckModel = similarChecksGroup.getSimilarChecks().get(0);
                 similarChecksDocumentationModel.setCategory(firstCheckModel.getCategory()); // the category of the first check, the other similar checks should be in the same category
+                String categoryPageName = CheckCategoryDocumentationConstants.CATEGORY_FILE_NAMES.get(firstCheckModel.getCategory());
+                if (categoryPageName == null) {
+                    categoryPageName =  "how-to-detect-" + firstCheckModel.getCategory().replace('_', '-') + "-data-quality-issues.md";
+                }
+                similarChecksDocumentationModel.setCategoryPageName(categoryPageName);
+
                 similarChecksDocumentationModel.setTarget(target.name());
                 String firstCheckName = firstCheckModel.getCheckModel().getCheckName();
                 if (firstCheckName.startsWith("profile_")) {

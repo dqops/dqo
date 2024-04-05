@@ -1,3 +1,6 @@
+---
+title: row count change data quality checks
+---
 # row count change data quality checks
 
 This check compares the current table volume (the row count) to the last known row count.
@@ -18,7 +21,7 @@ Detects when the volume&#x27;s (row count) change since the last known row count
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_row_count_change`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_row_count_change`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -877,7 +880,7 @@ Detects when the volume&#x27;s (row count) change since the last known row count
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_row_count_change`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_row_count_change`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1738,7 +1741,7 @@ Detects when the volume (row count) changes since the last known row count from 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_row_count_change`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_row_count_change`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2599,7 +2602,7 @@ Detects when the partition&#x27;s volume (row count) change between the current 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_row_count_change`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_row_count_change`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3482,7 +3485,7 @@ Detects when the partition&#x27;s volume (row count) change between the current 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_row_count_change`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_row_count_change`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|:material-check-bold:|
 
 **Command-line examples**
 

@@ -142,6 +142,7 @@ public class EncodingLoggingEvent implements ILoggingEvent {
      * @deprecated
      */
     @Override
+    @Deprecated
     public Marker getMarker() {
         return wrappedEvent.getMarker();
     }
@@ -160,6 +161,7 @@ public class EncodingLoggingEvent implements ILoggingEvent {
      * @deprecated
      */
     @Override
+    @Deprecated
     public Map<String, String> getMdc() {
         return wrappedEvent.getMdc();
     }

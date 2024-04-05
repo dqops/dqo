@@ -1,4 +1,7 @@
-# Data quality stdev rules
+---
+title: DQOps data quality stdev rules
+---
+# DQOps data quality stdev rules
 The list of stdev [data quality rules](../../dqo-concepts/definition-of-data-quality-rules.md) supported by DQOps. The source code is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-architecture.md#dqops-home)/rules/stdev* folder in the DQOps distribution.
 
 

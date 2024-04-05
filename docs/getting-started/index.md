@@ -1,4 +1,7 @@
-# Getting started with DQOps
+---
+title: Getting started with DQOps Data Quality Operations Center
+---
+# Getting started with DQOps Data Quality Operations Center
 This guide provides a quick tutorial on how to get started with DQOps using the web interface. You will add a data source, analyze it, and review the data quality results. 
 
 ## Sample data

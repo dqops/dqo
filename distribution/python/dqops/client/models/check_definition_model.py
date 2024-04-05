@@ -18,6 +18,7 @@ class CheckDefinitionModel:
         rule_name (Union[Unset, str]): Rule name
         help_text (Union[Unset, str]): Help text that is shown in the check editor that describes the purpose and usage
             of the check
+        friendly_name (Union[Unset, str]): An alternative check's name that is shown on the check editor.
         standard (Union[Unset, bool]): This is a standard data quality check that is always shown on the data quality
             checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are
             shown when the user decides to expand the list of checks.
@@ -33,6 +34,7 @@ class CheckDefinitionModel:
     sensor_name: Union[Unset, str] = UNSET
     rule_name: Union[Unset, str] = UNSET
     help_text: Union[Unset, str] = UNSET
+    friendly_name: Union[Unset, str] = UNSET
     standard: Union[Unset, bool] = UNSET
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
@@ -45,6 +47,7 @@ class CheckDefinitionModel:
         sensor_name = self.sensor_name
         rule_name = self.rule_name
         help_text = self.help_text
+        friendly_name = self.friendly_name
         standard = self.standard
         custom = self.custom
         built_in = self.built_in
@@ -62,6 +65,8 @@ class CheckDefinitionModel:
             field_dict["rule_name"] = rule_name
         if help_text is not UNSET:
             field_dict["help_text"] = help_text
+        if friendly_name is not UNSET:
+            field_dict["friendly_name"] = friendly_name
         if standard is not UNSET:
             field_dict["standard"] = standard
         if custom is not UNSET:
@@ -86,6 +91,8 @@ class CheckDefinitionModel:
 
         help_text = d.pop("help_text", UNSET)
 
+        friendly_name = d.pop("friendly_name", UNSET)
+
         standard = d.pop("standard", UNSET)
 
         custom = d.pop("custom", UNSET)
@@ -101,6 +108,7 @@ class CheckDefinitionModel:
             sensor_name=sensor_name,
             rule_name=rule_name,
             help_text=help_text,
+            friendly_name=friendly_name,
             standard=standard,
             custom=custom,
             built_in=built_in,

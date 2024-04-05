@@ -1,4 +1,7 @@
-# DQOps installation options
+---
+title: DQOps Data Quality Operations Center installation options
+---
+# DQOps Data Quality Operations Center installation options
 This guide lists all options of installing DQOps Data Quality Operations Center, using pip, docker, or compiling the code directly.
 
 ## Install to play and learn

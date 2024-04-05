@@ -1,3 +1,6 @@
+---
+title: expected texts in top values count data quality checks
+---
 # expected texts in top values count data quality checks
 
 A column-level check that counts how many expected text values are among the TOP most popular values in the column.
@@ -21,7 +24,7 @@ Verifies that the top X most popular column values contain all values from a lis
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_expected_texts_in_top_values_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
+|<span class="no-wrap-code">`profile_expected_texts_in_top_values_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
 
 **Command-line examples**
 
@@ -3218,7 +3221,7 @@ Verifies that the top X most popular column values contain all values from a lis
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_expected_texts_in_top_values_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
+|<span class="no-wrap-code">`daily_expected_texts_in_top_values_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
 
 **Command-line examples**
 
@@ -6417,7 +6420,7 @@ Verifies that the top X most popular column values contain all values from a lis
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_expected_texts_in_top_values_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
+|<span class="no-wrap-code">`monthly_expected_texts_in_top_values_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
 
 **Command-line examples**
 
@@ -9616,7 +9619,7 @@ Verifies that the top X most popular column values contain all values from a lis
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_expected_texts_in_top_values_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
+|<span class="no-wrap-code">`daily_partition_expected_texts_in_top_values_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
 
 **Command-line examples**
 
@@ -12835,7 +12838,7 @@ Verifies that the top X most popular column values contain all values from a lis
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_expected_texts_in_top_values_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
+|<span class="no-wrap-code">`monthly_partition_expected_texts_in_top_values_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
 
 **Command-line examples**
 

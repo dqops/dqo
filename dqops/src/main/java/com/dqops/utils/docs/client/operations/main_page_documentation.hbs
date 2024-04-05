@@ -1,3 +1,6 @@
+---
+title: Reference of all operations used by DQOps REST API
+---
 # Reference of all operations used by DQOps REST API
 This is a list of the operations in DQOps REST API Python client broken down by individual groups of operations.
 

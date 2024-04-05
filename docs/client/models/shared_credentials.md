@@ -1,3 +1,6 @@
+---
+title: DQOps REST API shared_credentials models reference
+---
 # DQOps REST API shared_credentials models reference
 The references of all objects used by [shared_credentials](../operations/shared_credentials.md) REST API operations are listed below.
 

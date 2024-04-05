@@ -31,6 +31,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.pii.ColumnPiiContainsUsaPhonePercentSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,7 +66,7 @@ public class SingleStoreDbColumnPiiContainsUsaPhonePercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(82.60870361328125, (float) resultTable.column(0).get(0));
+        Assertions.assertEquals(69.565, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
     }
 
     @Test
@@ -78,7 +79,7 @@ public class SingleStoreDbColumnPiiContainsUsaPhonePercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(82.60870361328125, (float) resultTable.column(0).get(0));
+        Assertions.assertEquals(69.565, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
     }
 
     @Test
@@ -91,7 +92,7 @@ public class SingleStoreDbColumnPiiContainsUsaPhonePercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(82.60870361328125, (float) resultTable.column(0).get(0));
+        Assertions.assertEquals(69.565, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
     }
 
     @Test
@@ -104,7 +105,7 @@ public class SingleStoreDbColumnPiiContainsUsaPhonePercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(82.60870361328125, (float) resultTable.column(0).get(0));
+        Assertions.assertEquals(100, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
     }
 
     @Test
@@ -117,6 +118,6 @@ public class SingleStoreDbColumnPiiContainsUsaPhonePercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(82.60870361328125, (float) resultTable.column(0).get(0));
+        Assertions.assertEquals(69.565, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
     }
 }

@@ -1,4 +1,7 @@
-# Detecting out-of-range text values
+---
+title: How to detect out-of-range text values
+---
+# How to detect out-of-range text values
 Read this guide to learn how to find text values that are too short or too long, which are most likely invalid values stored in a database.
 
 The data quality checks that detect issues with too short or too long texts are configured in the `text` category in DQOps.
@@ -166,14 +169,14 @@ to the minimum or maximum text length.
 ## List of text checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*text_min_length*](../checks/column/text/text-min-length.md)|Reasonableness|This check finds the length of the shortest text in a column. DQOps validates the shortest length using a range rule. DQOps raises an issue when the minimum text length is outside a range of accepted values.|:material-check-bold:|
-|[*text_max_length*](../checks/column/text/text-max-length.md)|Reasonableness|This check finds the length of the longest text in a column. DQOps validates the maximum length using a range rule. DQOps raises an issue when the maximum text length is outside a range of accepted values.|:material-check-bold:|
-|[*text_mean_length*](../checks/column/text/text-mean-length.md)|Reasonableness|This check calculates the average text length in a column. DQOps validates the mean length using a range rule. DQOps raises an issue when the mean text length is outside a range of accepted values.| |
-|[*text_length_below_min_length*](../checks/column/text/text-length-below-min-length.md)|Reasonableness|This check finds texts that are shorter than the minimum accepted text length. It counts the number of texts that are too short and raises a data quality issue when too many invalid texts are found.| |
-|[*text_length_below_min_length_percent*](../checks/column/text/text-length-below-min-length-percent.md)|Reasonableness|This check finds texts that are shorter than the minimum accepted text length. It measures the percentage of too short texts and raises a data quality issue when too many invalid texts are found.| |
-|[*text_length_above_max_length*](../checks/column/text/text-length-above-max-length.md)|Reasonableness|This check finds texts that are longer than the maximum accepted text length. It counts the number of texts that are too long and raises a data quality issue when too many invalid texts are found.| |
-|[*text_length_above_max_length_percent*](../checks/column/text/text-length-above-max-length-percent.md)|Reasonableness|This check finds texts that are longer than the maximum accepted text length. It measures the percentage of texts that are too long and raises a data quality issue when too many invalid texts are found.| |
-|[*text_length_in_range_percent*](../checks/column/text/text-length-in-range-percent.md)|Reasonableness|This check verifies that the minimum and maximum lengths of text values are in the range of accepted values. It measures the percentage of texts with a valid length and raises a data quality issue when an insufficient number of texts have a valid length.| |
+|[*text_min_length*](../checks/column/text/text-min-length.md)|[Reasonableness](../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|This check finds the length of the shortest text in a column. DQOps validates the shortest length using a range rule. DQOps raises an issue when the minimum text length is outside a range of accepted values.|:material-check-bold:|
+|[*text_max_length*](../checks/column/text/text-max-length.md)|[Reasonableness](../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|This check finds the length of the longest text in a column. DQOps validates the maximum length using a range rule. DQOps raises an issue when the maximum text length is outside a range of accepted values.|:material-check-bold:|
+|[*text_mean_length*](../checks/column/text/text-mean-length.md)|[Reasonableness](../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|This check calculates the average text length in a column. DQOps validates the mean length using a range rule. DQOps raises an issue when the mean text length is outside a range of accepted values.| |
+|[*text_length_below_min_length*](../checks/column/text/text-length-below-min-length.md)|[Reasonableness](../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|This check finds texts that are shorter than the minimum accepted text length. It counts the number of texts that are too short and raises a data quality issue when too many invalid texts are found.| |
+|[*text_length_below_min_length_percent*](../checks/column/text/text-length-below-min-length-percent.md)|[Reasonableness](../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|This check finds texts that are shorter than the minimum accepted text length. It measures the percentage of too short texts and raises a data quality issue when too many invalid texts are found.| |
+|[*text_length_above_max_length*](../checks/column/text/text-length-above-max-length.md)|[Reasonableness](../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|This check finds texts that are longer than the maximum accepted text length. It counts the number of texts that are too long and raises a data quality issue when too many invalid texts are found.| |
+|[*text_length_above_max_length_percent*](../checks/column/text/text-length-above-max-length-percent.md)|[Reasonableness](../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|This check finds texts that are longer than the maximum accepted text length. It measures the percentage of texts that are too long and raises a data quality issue when too many invalid texts are found.| |
+|[*text_length_in_range_percent*](../checks/column/text/text-length-in-range-percent.md)|[Reasonableness](../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|This check verifies that the minimum and maximum lengths of text values are in the range of accepted values. It measures the percentage of texts with a valid length and raises a data quality issue when an insufficient number of texts have a valid length.| |
 
 
 **Reference and samples**

@@ -1,4 +1,7 @@
-# Detect invalid emails
+---
+title: How to detect invalid emails using a data quality check
+---
+# How to detect invalid emails using a data quality check
 This sample shows how to use data quality checks in the DQOps platform to detect invalid emails and view the results on data quality dashboards.
 
 ## Overview

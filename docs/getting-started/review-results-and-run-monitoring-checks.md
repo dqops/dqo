@@ -1,4 +1,7 @@
-# Review initial results and run monitoring checks
+---
+title: Review initial data quality results and run monitoring checks
+---
+# Review initial data quality results and run monitoring checks
 This guide will show you how to run the first data quality check, and how to review the first results and data quality issues in DQOps. 
 
 ## Overview

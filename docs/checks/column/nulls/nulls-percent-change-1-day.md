@@ -1,3 +1,6 @@
+---
+title: nulls percent change 1 day data quality checks
+---
 # nulls percent change 1 day data quality checks
 
 Detects relative increases or decreases in the percentage of null values since the previous day.
@@ -19,7 +22,7 @@ Verifies that the null percent value in a column changed in a fixed rate since l
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_nulls_percent_change_1_day`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
+|<span class="no-wrap-code">`profile_nulls_percent_change_1_day`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 
@@ -1296,7 +1299,7 @@ Verifies that the null percent value in a column changed in a fixed rate since t
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_nulls_percent_change_1_day`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
+|<span class="no-wrap-code">`daily_nulls_percent_change_1_day`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 
@@ -2575,7 +2578,7 @@ Verifies that the null percent value in a column changed in a fixed rate since t
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_nulls_percent_change_1_day`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
+|<span class="no-wrap-code">`daily_partition_nulls_percent_change_1_day`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 

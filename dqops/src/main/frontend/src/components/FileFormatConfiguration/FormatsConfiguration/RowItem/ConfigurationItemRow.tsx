@@ -2,7 +2,6 @@ import React from 'react';
 import Input from '../../../Input';
 import Select from '../../../Select';
 import { TConfigurationItemRow } from './TConfigurationItemRow';
-import SelectInput from '../../../SelectInput';
 
 export default function ConfigurationItemRow({
   label,
@@ -32,7 +31,7 @@ export default function ConfigurationItemRow({
       {isEnum && options && (
         <div className={className}>
           <div className="pb-1">{label}</div>
-          <SelectInput
+          <Select
             options={options}
             value={String(value ?? defaultValue)}
             onChange={handleChange}

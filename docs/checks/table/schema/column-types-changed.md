@@ -1,3 +1,6 @@
+---
+title: column types changed data quality checks
+---
 # column types changed data quality checks
 
 A table-level check that detects if the column names or column types have changed since the last time the check was run.
@@ -20,7 +23,7 @@ Detects if new columns were added, removed or their data types have changed. Ret
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_column_types_changed`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*column_types_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-types-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)| |
+|<span class="no-wrap-code">`profile_column_types_changed`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*column_types_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-types-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)| |
 
 **Command-line examples**
 
@@ -122,7 +125,7 @@ Detects if new columns were added, removed or their data types have changed sinc
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_column_types_changed`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*column_types_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-types-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)| |
+|<span class="no-wrap-code">`daily_column_types_changed`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*column_types_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-types-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)| |
 
 **Command-line examples**
 
@@ -225,7 +228,7 @@ Detects if new columns were added, removed or their data types have changed sinc
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_column_types_changed`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*column_types_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-types-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)| |
+|<span class="no-wrap-code">`monthly_column_types_changed`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*column_types_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-types-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)| |
 
 **Command-line examples**
 

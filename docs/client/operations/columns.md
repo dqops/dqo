@@ -1,3 +1,6 @@
+---
+title: DQOps REST API columns operations
+---
 # DQOps REST API columns operations
 Operations related to manage the metadata of columns, and managing the configuration of column-level data quality checks.
 

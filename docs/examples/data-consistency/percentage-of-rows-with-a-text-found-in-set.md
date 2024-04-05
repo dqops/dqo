@@ -1,4 +1,7 @@
-# Percentage of rows with a text found in a set
+---
+title: How to measure the percentage of rows with a text found in a set using a data quality check
+---
+# How to measure the percentage of rows with a text found in a set using a data quality check
 This sample shows how to use data quality checks to detect the percentage of rows with a text found in a set and view the results on data quality dashboards.
 
 ## Overview

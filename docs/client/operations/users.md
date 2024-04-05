@@ -1,3 +1,6 @@
+---
+title: DQOps REST API users operations
+---
 # DQOps REST API users operations
 Operations for managing access for DQOps users in a multi-user installations. User management is supported in the TEAM and ENTERPRISE licences.
 

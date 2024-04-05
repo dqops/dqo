@@ -1,3 +1,6 @@
+---
+title: DQOps REST API sensor_readouts operations
+---
 # DQOps REST API sensor_readouts operations
 Operations that are retrieving the data quality sensor readouts of executed checks on tables and columns.
 

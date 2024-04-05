@@ -1,4 +1,7 @@
-# Running data quality checks
+---
+title: How to run data quality checks with filters
+---
+# How to run data quality checks with filters
 Read this guide to learn how to run data quality checks in DQOps and what filtering options are available to run only the checks you want.
 
 ## Overview

@@ -1,4 +1,7 @@
-# Data quality monitoring checks
+---
+title: Data quality monitoring checks for data observability
+---
+# Data quality monitoring checks for data observability
 This guide shows how the data quality monitoring checks in DQOps are observing the data sources, and tracking the data quality with data quality KPIs.
 
 ## What are data monitoring checks?

@@ -1,5 +1,8 @@
-# SQL Server
-Read this guide to learn how to connect DQOps to Microsoft SQL Server from the UI, command-line interface, or directly in YAML files. All parameters are documented.
+---
+title: How to activate data observability for Microsoft SQL Server
+---
+# How to activate data observability for Microsoft SQL Server
+Read this guide to learn how to connect DQOps to Microsoft SQL Server from the UI, command-line interface, or directly in YAML files, and activate monitoring.
 
 ## Overview
 

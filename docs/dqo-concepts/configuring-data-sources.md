@@ -1,4 +1,7 @@
-# Configuring data sources
+---
+title: How to register data sources in DQOps for data observability
+---
+# How to register data sources in DQOps for data observability
 Read this guide to understand how DQOps stores the connection parameters to monitored data sources, and how to manage credentials.
 
 ## Overview

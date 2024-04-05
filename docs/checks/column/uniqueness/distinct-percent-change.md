@@ -1,3 +1,6 @@
+---
+title: distinct percent change data quality checks
+---
 # distinct percent change data quality checks
 
 This check monitors the percentage of distinct values and compares it to the last known value. It raises a data quality issue when the change exceeds an accepted threshold.
@@ -17,7 +20,7 @@ Verifies that the distinct percent in a monitored column has changed by a fixed 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_distinct_percent_change`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
+|<span class="no-wrap-code">`profile_distinct_percent_change`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
@@ -1096,7 +1099,7 @@ Verifies that the distinct percent in a monitored column has changed by a fixed 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_distinct_percent_change`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
+|<span class="no-wrap-code">`daily_distinct_percent_change`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
@@ -2177,7 +2180,7 @@ Verifies that the distinct percent in a monitored column has changed by a fixed 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_distinct_percent_change`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
+|<span class="no-wrap-code">`monthly_distinct_percent_change`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
@@ -3258,7 +3261,7 @@ Verifies that the distinct percent in a monitored column has changed by a fixed 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_distinct_percent_change`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
+|<span class="no-wrap-code">`daily_partition_distinct_percent_change`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
@@ -4361,7 +4364,7 @@ Verifies that the distinct percent in a monitored column has changed by a fixed 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_distinct_percent_change`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
+|<span class="no-wrap-code">`monthly_partition_distinct_percent_change`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 

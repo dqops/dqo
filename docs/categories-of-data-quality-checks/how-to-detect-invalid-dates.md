@@ -1,4 +1,7 @@
-# Detecting invalid dates
+---
+title: How to detect invalid dates
+---
+# How to detect invalid dates
 Read this guide to learn how to detect invalid dates in data, such as dates in the future or out of reasonable range and dates in a wrong format.
 
 The data quality checks that detect invalid dates are configured in the `datetime` category in DQOps.
@@ -184,9 +187,9 @@ spec:
 ## List of datetime checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*date_values_in_future_percent*](../checks/column/datetime/date-values-in-future-percent.md)|Validity|Detects dates in the future in date, datetime and timestamp columns. Measures a percentage of dates in the future. Raises a data quality issue when too many future dates are found.|:material-check-bold:|
-|[*date_in_range_percent*](../checks/column/datetime/date-in-range-percent.md)|Validity|Verifies that the dates in date, datetime, or timestamp columns are within a reasonable range of dates. The default configuration detects fake dates such as 1900-01-01 and 2099-12-31. Measures the percentage of valid dates and raises a data quality issue when too many dates are found.|:material-check-bold:|
-|[*text_match_date_format_percent*](../checks/column/datetime/text-match-date-format-percent.md)|Validity|Verifies that the values in text columns match one of the predefined date formats, such as an ISO 8601 date. Measures the percentage of valid date strings and raises a data quality issue when too many invalid date strings are found.|:material-check-bold:|
+|[*date_values_in_future_percent*](../checks/column/datetime/date-values-in-future-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|Detects dates in the future in date, datetime and timestamp columns. Measures a percentage of dates in the future. Raises a data quality issue when too many future dates are found.|:material-check-bold:|
+|[*date_in_range_percent*](../checks/column/datetime/date-in-range-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|Verifies that the dates in date, datetime, or timestamp columns are within a reasonable range of dates. The default configuration detects fake dates such as 1900-01-01 and 2099-12-31. Measures the percentage of valid dates and raises a data quality issue when too many dates are found.|:material-check-bold:|
+|[*text_match_date_format_percent*](../checks/column/datetime/text-match-date-format-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|Verifies that the values in text columns match one of the predefined date formats, such as an ISO 8601 date. Measures the percentage of valid date strings and raises a data quality issue when too many invalid date strings are found.|:material-check-bold:|
 
 
 **Reference and samples**

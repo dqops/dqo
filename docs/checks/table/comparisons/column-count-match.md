@@ -1,3 +1,6 @@
+---
+title: column count match data quality checks
+---
 # column count match data quality checks
 
 Table level comparison check that compares the column count of the current (parent) table with the column count of the reference table.
@@ -17,7 +20,7 @@ Verifies that the column count of the tested (parent) table matches the column c
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_column_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Accuracy|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_column_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -156,7 +159,7 @@ Verifies that the column count of the tested (parent) table matches the column c
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_column_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Accuracy|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_column_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -296,7 +299,7 @@ Verifies that the column count of the tested (parent) table matches the column c
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_column_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Accuracy|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_column_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 

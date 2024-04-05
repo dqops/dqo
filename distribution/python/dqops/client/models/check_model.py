@@ -31,6 +31,9 @@ class CheckModel:
     Attributes:
         check_name (Union[Unset, str]): Data quality check name that is used in YAML.
         help_text (Union[Unset, str]): Help text that describes the data quality check.
+        display_name (Union[Unset, str]): User assigned display name that is shown instead of the original data quality
+            check name.
+        friendly_name (Union[Unset, str]): An alternative check's name that is shown on the check editor as a hint.
         sensor_parameters (Union[Unset, List['FieldModel']]): List of fields for editing the sensor parameters.
         sensor_name (Union[Unset, str]): Full sensor name. This field is for information purposes and can be used to
             create additional custom checks that reuse the same data quality sensor.
@@ -84,6 +87,8 @@ class CheckModel:
 
     check_name: Union[Unset, str] = UNSET
     help_text: Union[Unset, str] = UNSET
+    display_name: Union[Unset, str] = UNSET
+    friendly_name: Union[Unset, str] = UNSET
     sensor_parameters: Union[Unset, List["FieldModel"]] = UNSET
     sensor_name: Union[Unset, str] = UNSET
     quality_dimension: Union[Unset, str] = UNSET
@@ -116,6 +121,8 @@ class CheckModel:
     def to_dict(self) -> Dict[str, Any]:
         check_name = self.check_name
         help_text = self.help_text
+        display_name = self.display_name
+        friendly_name = self.friendly_name
         sensor_parameters: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.sensor_parameters, Unset):
             sensor_parameters = []
@@ -199,6 +206,10 @@ class CheckModel:
             field_dict["check_name"] = check_name
         if help_text is not UNSET:
             field_dict["help_text"] = help_text
+        if display_name is not UNSET:
+            field_dict["display_name"] = display_name
+        if friendly_name is not UNSET:
+            field_dict["friendly_name"] = friendly_name
         if sensor_parameters is not UNSET:
             field_dict["sensor_parameters"] = sensor_parameters
         if sensor_name is not UNSET:
@@ -278,6 +289,10 @@ class CheckModel:
         check_name = d.pop("check_name", UNSET)
 
         help_text = d.pop("help_text", UNSET)
+
+        display_name = d.pop("display_name", UNSET)
+
+        friendly_name = d.pop("friendly_name", UNSET)
 
         sensor_parameters = []
         _sensor_parameters = d.pop("sensor_parameters", UNSET)
@@ -401,6 +416,8 @@ class CheckModel:
         check_model = cls(
             check_name=check_name,
             help_text=help_text,
+            display_name=display_name,
+            friendly_name=friendly_name,
             sensor_parameters=sensor_parameters,
             sensor_name=sensor_name,
             quality_dimension=quality_dimension,

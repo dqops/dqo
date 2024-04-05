@@ -1,4 +1,8 @@
-# Integrity check between columns in different tables
+---
+title: How to verify integrity between columns in different tables by a value lookup data quality check
+---
+
+# How to verify integrity between columns in different tables by a value lookup data quality check
 This sample shows how to use data quality checks to detect integrity between columns in different tables and view the results on data quality dashboards.
 
 ## Overview

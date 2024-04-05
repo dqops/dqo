@@ -1,3 +1,6 @@
+---
+title: DQOps REST API table_comparisons operations
+---
 # DQOps REST API table_comparisons operations
 Operations for managing the configurations of table comparisons between tables on the same or different data sources
 

@@ -49,6 +49,7 @@ public class HandlebarsDocumentationUtilities {
         handlebars.registerHelper("render-type", renderTypeHelper);
         handlebars.registerHelper("checkmark", checkmarkHelper);
         handlebars.registerHelper("single-line", singleLineHelper);
+        handlebars.registerHelper("lowercase", lowercaseHelper);
         handlebars.registerHelper("indent", indentHelper);
         handlebars.registerHelper("contains", containsHelper);
         handlebars.registerHelper("var", variableHelper);
@@ -269,6 +270,14 @@ public class HandlebarsDocumentationUtilities {
         }
 
         return s.replaceAll("\\s+", " ");
+    };
+
+    private static final Helper<String> lowercaseHelper = (s, _ignore) -> {
+        if (s == null) {
+            return null;
+        }
+
+        return s.toLowerCase(Locale.ROOT);
     };
 
     private static final Helper<String> indentHelper = (s, o) -> {

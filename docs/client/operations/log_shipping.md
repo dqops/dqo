@@ -1,3 +1,6 @@
+---
+title: DQOps REST API log_shipping operations
+---
 # DQOps REST API log_shipping operations
 Log shipping controller that accepts logs sent from a web application or external tools and aggregates them in the local DQOps instance logs.
 

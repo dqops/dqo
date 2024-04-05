@@ -1,3 +1,6 @@
+---
+title: column level numeric data quality checks
+---
 # column level numeric data quality checks
 
 This is a list of numeric column data quality checks supported by DQOps and a brief description of what data quality issued they detect.

@@ -1,3 +1,6 @@
+---
+title: valid uuid format percent data quality checks
+---
 # valid uuid format percent data quality checks
 
 This check validates the format of UUID values in text columns.
@@ -18,7 +21,7 @@ Verifies that the percentage of valid UUID in a text column does not fall below 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`profile_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -1349,7 +1352,7 @@ Verifies that the percentage of valid UUID in a text column does not fall below 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`daily_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -2682,7 +2685,7 @@ Verifies that the percentage of valid UUID in a text column does not fall below 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`monthly_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -4015,7 +4018,7 @@ Verifies that the percentage of valid UUID in a text column does not fall below 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`daily_partition_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -5370,7 +5373,7 @@ Verifies that the percentage of valid UUID in a text column does not fall below 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`monthly_partition_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 

@@ -1,4 +1,7 @@
-# Configuring data quality checks
+---
+title: How to configure data quality checks and rules
+---
+# How to configure data quality checks and rules
 Read this guide to learn how to configure data quality checks in DQOps in YAML files, and how to set up the validation rules.
 
 ## Where are the data quality checks configured?

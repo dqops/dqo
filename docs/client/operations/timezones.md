@@ -1,3 +1,6 @@
+---
+title: DQOps REST API timezones operations
+---
 # DQOps REST API timezones operations
 Operations for returning time zone names and codes supported by DQOps.
 

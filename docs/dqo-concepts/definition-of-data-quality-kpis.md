@@ -1,4 +1,7 @@
-# Data quality KPIs
+---
+title: How to measure data quality KPI - definition and formula
+---
+# How to measure data quality KPI - definition and formula
 Learn how to measure the data quality KPI score with DQOps, what is the formula used to calculate the score, and how to improve data quality following KPIs.
 
 ## Purpose of data quality KPIs
@@ -38,11 +41,15 @@ of a [data quality dimension](data-quality-dimensions.md), allowing to identify 
 
 ## Data quality score formula
 DQOps calculates data quality KPIs as a percentage of passed [data quality checks](definition-of-data-quality-checks/index.md) out of all executed checks.
+The data quality KPI is represented as a percentage value. The following formula calculates the score.
+
+![Data quality KPI formula simple](https://dqops.com/docs/images/concepts/data-quality-kpis/data-quality-kpi-formula-simple-min.png){ loading=lazy }
+
 The result of measuring the data quality KPI for two data quality checks, [daily_nulls_percent](../checks/column/nulls/nulls-percent.md#daily-nulls-percent)
 and [daily_duplicate_percent](../checks/column/uniqueness/duplicate-percent.md#daily-duplicate-percent) on
 5 columns over the period of 10 days is shown below.
 
-![Data quality score formula](https://dqops.com/docs/images/concepts/data-quality-kpis/data_quality_kpi_calculation_formula_min.png)
+![Data quality score formula](https://dqops.com/docs/images/concepts/data-quality-kpis/data_quality_kpi_calculation_formula_min.png){ loading=lazy }
 
 Passed data quality checks are shown as green boxes. Data quality issues that decrease the data quality KPI
 are shown as orange (*error* severity issue) and red (*fatal* severity issue) boxes.
@@ -64,12 +71,18 @@ DQOps supports configuring [data quality rules](definition-of-data-quality-rules
   
 The effect of *warning* severity issues on the data quality KPI formula used in DQOps is shown below. 
 
-![Data quality score formula with warnings](https://dqops.com/docs/images/concepts/data-quality-kpis/data_quality_kpi_calculation_formula_with_warnings_min.png)
+![Data quality score formula with warnings](https://dqops.com/docs/images/concepts/data-quality-kpis/data_quality_kpi_calculation_formula_with_warnings_min.png){ loading=lazy }
 
 The reason for treating *warning* severity data quality issues as passed data quality checks is due to the nature of warnings.
 Warnings should be raised only for anomalies or data quality issues that are expected occasionally, and will be
 reviewed when they are detected. Warnings should be also raised for data quality issues that are outside the agreed
 data contact between the data producer and the data consumer.
+
+The updated data quality KPI formula is shown below.
+The number of valid data quality results plus the number of warnings is divided by the total number of data quality results,
+including both passed data quality checks and errors.
+
+![Data quality KPI formula with parameters](https://dqops.com/docs/images/concepts/data-quality-kpis/data-quality-kpi-formula-parameters-min.png){ loading=lazy }
 
 
 ### **Excluding data checks from KPI**
@@ -166,7 +179,7 @@ If the orphaned results of failed data quality checks are not removed, they will
 
 The profiling KPI scorecard dashboard is shown below. The dashboard can be found in the Data Quality Dashboards -> Profiling -> Profiling data quality KPIs section.
 
-![Data quality profiling initial KPI scorecard](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards3.png){ loading=lazy }
+![Data quality profiling initial KPI scorecard](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards3.png){ loading=lazy; width="1200px" }
 
 Once the data profiling is complete, it will be clear which data quality issues are real issues, and which failed profiling checks
 should not be measured, since some columns may be incomplete. The selected list of profiling checks should be activated
@@ -202,7 +215,7 @@ The data quality improvement process is a continuous loop between
 
 -  Valid issues are assigned to the data engineering teams, or the data producer is contacted to fix the data at the source
 
--  The data quality KPI scores are reviewed for each data source, table, vendor, and data quality dimension
+-  The data quality KPI scores are reviewed for each data source, table, vendor, and [data quality dimension](data-quality-dimensions.md)
 
 -  Tasks are planned to fix data quality issues
 
@@ -213,7 +226,7 @@ The data quality improvement process is a continuous loop between
 The following screenshot shows one of data quality KPI dashboards with drill-down options for locating the type of the data quality issue.
 This dashboard can be found in the Data Quality Dashboards -> Monitoring -> Data quality KPIs section.
 
-![Data quality KPI per table dashboard](https://dqops.com/docs/images/concepts/data-quality-kpis/kpi-per-table-summary-dashboard.png){ loading=lazy }
+![Data quality KPI per table dashboard](https://dqops.com/docs/images/concepts/data-quality-kpis/kpi-per-table-summary-dashboard.png){ loading=lazy; width="1200px" }
 
 ## Data contracts
 
@@ -305,11 +318,11 @@ Sample data quality KPIs aggregated at a daily level are shown in the table belo
 The data quality dashboards such as the **KPI history** dashboard shown below can aggregate the data quality KPI per day.
 Please look at the last chart with KPI calculated for the whole previous month.
 
-![Data quality KPI chart per day of month](https://dqops.com/docs/images/concepts/data-quality-kpis/dashboard-daily-kpi-chart-min.png){ loading=lazy }
+![Data quality KPI chart per day of month](https://dqops.com/docs/images/concepts/data-quality-kpis/dashboard-daily-kpi-chart-min.png){ loading=lazy; width="1200px" }
 
 
 ### **Monthly with data quality dimensions**
-The data quality KPIs are most relevant, when aggregated both at the monthly period, and divided by the data quality dimension,
+The data quality KPIs are most relevant, when aggregated both at the monthly period, and divided by the [data quality dimension](data-quality-dimensions.md),
 as shown in the following table.
 
 | Month      | Timeliness | Completeness | Validity |
@@ -333,11 +346,12 @@ in [the concept of data grouping](measuring-data-quality-with-data-grouping.md) 
 The following data quality KPI formula shows how DQOps measures the score for each group of rows, when the data is grouped by a *state* column
 that contains US state names.
 
-![Data quality KPI formula for grouped data](https://dqops.com/docs/images/concepts/data-quality-kpis/data_quality_kpi_calculation_with_grouping_min.png){ loading=lazy }
+![Data quality KPI formula for grouped data](https://dqops.com/docs/images/concepts/data-quality-kpis/data_quality_kpi_calculation_with_grouping_min.png){ loading=lazy; width="1200px" }
 
 
 ### **By groups of rows and dimensions**
-Data quality KPI can be also aggregated both by the data group name and data quality dimension. Sample results are shown in the table below.
+Data quality KPI can be also aggregated both by the data group name and [data quality dimension](data-quality-dimensions.md).
+Sample results are shown in the table below.
 
 |   Month | Data Source (*state*) | Timelines | Completeness | Validity |
 |--------:|:----------------------|----------:|-------------:|---------:|
@@ -350,7 +364,8 @@ The data quality KPI formula for splitting scores by the data group name and dat
 
 ![Data quality KPI formula for grouped data on multiple data quality dimensions](https://dqops.com/docs/images/concepts/data-quality-kpis/data_quality_kpi_calculation_with_grouping_multiple_dimensions_min.png){ loading=lazy }
 
-The data quality dashboards provided by DQOps that show the results aggregated by data group names and data quality dimensions are
+The data quality dashboards provided by DQOps that show the results aggregated by data group names and
+[data quality dimensions](data-quality-dimensions.md) are
 
  -  *Profiling -> Data quality KPIs -> KPIs per quality dimension and data group* for profiling checks, showing the initial data quality score
  -  *Monitoring -> Data quality KPIs -> KPIs per quality dimension and data group* for monitoring checks, showing data quality scores observed by regular full-table monitoring
@@ -368,11 +383,12 @@ Please read the concept of [data grouping by tags](measuring-data-quality-with-d
 
 The following data quality KPI formula shows how DQOps can measure timeliness for tables tagged by a state name.
 
-![Data quality KPI formula for tagged tables](https://dqops.com/docs/images/concepts/data-quality-kpis/data_quality_kpi_calculation_with_tagging_min.png){ loading=lazy }
+![Data quality KPI formula for tagged tables](https://dqops.com/docs/images/concepts/data-quality-kpis/data_quality_kpi_calculation_with_tagging_min.png){ loading=lazy; width="1200px" }
 
 
 ## What's next
 - Look at some built-in [data quality KPI dashboards](types-of-data-quality-dashboards.md#data-quality-kpis) 
 - Read about [build-in data quality dashboards](types-of-data-quality-dashboards.md)
+- Learn how DQOps [assigns data quality checks to data quality dimensions](data-quality-dimensions.md)
 - Learn how to [review results of data quality monitoring results on dashboards](../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
 - Find out how data quality [KPIs are measured incrementally for partitioned data](incremental-data-quality-monitoring.md)

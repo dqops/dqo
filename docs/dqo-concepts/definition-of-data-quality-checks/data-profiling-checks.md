@@ -1,3 +1,6 @@
+---
+title: Data profiling checks
+---
 # Data profiling checks
 Read this guide to understand the purpose of data profiling checks in DQOps, and how they are used to evaluate the initial data quality status of tables.
 

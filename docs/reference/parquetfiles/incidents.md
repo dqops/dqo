@@ -1,3 +1,6 @@
+---
+title: DQOps incidents parquet table schema
+---
 # DQOps incidents parquet table schema
 The parquet file schema for the incidents table stored in the *[$DQO_USER_HOME](../../dqo-concepts/dqops-user-home-folder.md)/.data/incidents* folder in DQOps.
 

@@ -1,4 +1,7 @@
-# Data quality availability sensors
+---
+title: DQOps data quality availability sensors
+---
+# DQOps data quality availability sensors
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **availability** category supported by DQOps are listed below. Those sensors are measured on a table level.
 
 ---
@@ -88,6 +91,28 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         0.0 AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
+=== "Oracle"
+
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (

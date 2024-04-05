@@ -1,3 +1,6 @@
+---
+title: DQOps REST API connections operations
+---
 # DQOps REST API connections operations
 Operations for adding/updating/deleting the configuration of data sources managed by DQOps.
 

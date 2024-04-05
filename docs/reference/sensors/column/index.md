@@ -1,3 +1,6 @@
+---
+title: Sensors/column
+---
 # Sensors/column
 
 **This is a list of column sensors in DQOps broken down by category and a brief description of what they do.**

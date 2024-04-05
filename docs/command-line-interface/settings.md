@@ -1,4 +1,7 @@
-# dqo settings command
+---
+title: dqo settings command-line command
+---
+# dqo settings command-line command
 The reference of the **settings** command in DQOps. Show or set settings
 
 

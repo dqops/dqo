@@ -79,3 +79,6 @@ p:has(span.center-content) {
   max-width: unset;
   width: unset;
 }
+.md-main__inner {
+  margin-top: 0px;
+}

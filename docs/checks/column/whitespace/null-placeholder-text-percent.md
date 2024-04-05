@@ -1,3 +1,6 @@
+---
+title: null placeholder text percent data quality checks
+---
 # null placeholder text percent data quality checks
 
 This check detects text values that are well-known equivalents (placeholders) of a null value, such as *null*, *None*, *n/a*.
@@ -18,7 +21,7 @@ Detects texts that are well-known placeholders of null values, such as *None*, *
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_null_placeholder_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*null_placeholder_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#null-placeholder-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`profile_null_placeholder_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*null_placeholder_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#null-placeholder-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -1437,7 +1440,7 @@ Detects texts that are well-known placeholders of null values, such as *None*, *
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_null_placeholder_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*null_placeholder_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#null-placeholder-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`daily_null_placeholder_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*null_placeholder_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#null-placeholder-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -2858,7 +2861,7 @@ Detects texts that are well-known placeholders of null values, such as *None*, *
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_null_placeholder_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*null_placeholder_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#null-placeholder-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`monthly_null_placeholder_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*null_placeholder_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#null-placeholder-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -4279,7 +4282,7 @@ Detects texts that are well-known placeholders of null values, such as *None*, *
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_null_placeholder_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*null_placeholder_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#null-placeholder-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`daily_partition_null_placeholder_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*null_placeholder_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#null-placeholder-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -5722,7 +5725,7 @@ Detects texts that are well-known placeholders of null values, such as *None*, *
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_null_placeholder_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*null_placeholder_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#null-placeholder-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`monthly_partition_null_placeholder_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*null_placeholder_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#null-placeholder-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 

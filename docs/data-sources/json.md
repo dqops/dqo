@@ -1,5 +1,8 @@
-# JSON
-Read this guide to learn how to configure DQOps to use JSON files from the UI, command-line interface, or directly in YAML files. All parameters are documented.
+---
+title: How to activate data observability for JSON files
+---
+# How to activate data observability for JSON files
+Read this guide to learn how to configure DQOps to use JSON files from the UI, command-line interface, or directly in YAML files, and activate monitoring.
 
 ## Overview
 

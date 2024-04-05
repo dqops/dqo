@@ -1,3 +1,6 @@
+---
+title: min anomaly data quality checks
+---
 # min anomaly data quality checks
 
 This check finds a minimum value in a numeric column and detects anomalies in a time series of previous minimum values.
@@ -20,7 +23,7 @@ Detects new outliers, which are new minimum values, much below the last known mi
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_min_anomaly`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_min_anomaly`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -907,7 +910,7 @@ Detects new outliers, which are new minimum values, much below the last known mi
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_min_anomaly`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_min_anomaly`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1796,7 +1799,7 @@ Detects new outliers, which are new minimum values, much below the last known mi
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_min_anomaly`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_min_anomaly`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 

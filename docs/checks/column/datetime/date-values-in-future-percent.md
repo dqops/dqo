@@ -1,3 +1,6 @@
+---
+title: date values in future percent data quality checks
+---
 # date values in future percent data quality checks
 
 Detects dates in the future in date, datetime and timestamp columns. Measures a percentage of dates in the future. Raises a data quality issue when too many future dates are found.
@@ -17,7 +20,7 @@ Detects dates in the future in date, datetime and timestamp columns. Measures a 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_date_values_in_future_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_date_values_in_future_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1934,7 +1937,7 @@ Detects dates in the future in date, datetime and timestamp columns. Measures a 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_date_values_in_future_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_date_values_in_future_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3853,7 +3856,7 @@ Detects dates in the future in date, datetime and timestamp columns. Measures a 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_date_values_in_future_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_date_values_in_future_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -5772,7 +5775,7 @@ Detects dates in the future in date, datetime and timestamp columns. Measures a 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_date_values_in_future_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_date_values_in_future_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -7713,7 +7716,7 @@ Detects dates in the future in date, datetime and timestamp columns. Measures a 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_date_values_in_future_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_date_values_in_future_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 

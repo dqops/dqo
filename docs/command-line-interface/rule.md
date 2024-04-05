@@ -1,4 +1,7 @@
-# dqo rule command
+---
+title: dqo rule command-line command
+---
+# dqo rule command-line command
 The reference of the **rule** command in DQOps. Edit sensor template
 
 

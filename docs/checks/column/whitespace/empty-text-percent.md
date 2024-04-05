@@ -1,3 +1,6 @@
+---
+title: empty text percent data quality checks
+---
 # empty text percent data quality checks
 
 This check detects empty texts that are not null. Empty texts have a length of zero.
@@ -18,7 +21,7 @@ Detects empty texts (not null, zero-length texts) and measures their percentage 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_empty_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*empty_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#empty-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`profile_empty_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*empty_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#empty-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -1471,7 +1474,7 @@ Detects empty texts (not null, zero-length texts) and measures their percentage 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_empty_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*empty_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#empty-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`daily_empty_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*empty_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#empty-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -2926,7 +2929,7 @@ Detects empty texts (not null, zero-length texts) and measures their percentage 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_empty_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*empty_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#empty-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`monthly_empty_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*empty_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#empty-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -4381,7 +4384,7 @@ Detects empty texts (not null, zero-length texts) and measures their percentage 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_empty_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*empty_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#empty-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`daily_partition_empty_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*empty_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#empty-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -5858,7 +5861,7 @@ Detects empty texts (not null, zero-length texts) and measures their percentage 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_empty_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*empty_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#empty-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`monthly_partition_empty_text_percent`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*empty_text_percent*](../../../reference/sensors/column/whitespace-column-sensors.md#empty-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 

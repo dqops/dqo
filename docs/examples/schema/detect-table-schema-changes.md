@@ -1,4 +1,7 @@
-# Detect table schema changes
+---
+title: How to detect table schema changes using data observability checks
+---
+# How to detect table schema changes using data observability checks
 This sample shows how to use data quality checks in the DQOps platform to detect table schema changes and view the results on data quality dashboards.
 
 ## Overview

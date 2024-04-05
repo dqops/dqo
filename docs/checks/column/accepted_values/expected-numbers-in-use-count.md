@@ -1,3 +1,6 @@
+---
+title: expected numbers in use count data quality checks
+---
 # expected numbers in use count data quality checks
 
 A column-level check that counts unique values in a numeric column and counts how many values out of a list of expected numeric values were found in the column.
@@ -19,7 +22,7 @@ Verifies that the expected numeric values were found in the column. Raises a dat
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_expected_numbers_in_use_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*expected_numbers_in_use_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
+|<span class="no-wrap-code">`profile_expected_numbers_in_use_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*expected_numbers_in_use_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
 
 **Command-line examples**
 
@@ -1646,7 +1649,7 @@ Verifies that the expected numeric values were found in the column. Raises a dat
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_expected_numbers_in_use_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*expected_numbers_in_use_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
+|<span class="no-wrap-code">`daily_expected_numbers_in_use_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*expected_numbers_in_use_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
 
 **Command-line examples**
 
@@ -3275,7 +3278,7 @@ Verifies that the expected numeric values were found in the column. Raises a dat
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_expected_numbers_in_use_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*expected_numbers_in_use_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
+|<span class="no-wrap-code">`monthly_expected_numbers_in_use_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*expected_numbers_in_use_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
 
 **Command-line examples**
 
@@ -4904,7 +4907,7 @@ Verifies that the expected numeric values were found in the column. Raises a dat
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_expected_numbers_in_use_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*expected_numbers_in_use_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
+|<span class="no-wrap-code">`daily_partition_expected_numbers_in_use_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*expected_numbers_in_use_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
 
 **Command-line examples**
 
@@ -6555,7 +6558,7 @@ Verifies that the expected numeric values were found in the column. Raises a dat
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_expected_numbers_in_use_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*expected_numbers_in_use_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
+|<span class="no-wrap-code">`monthly_partition_expected_numbers_in_use_count`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*expected_numbers_in_use_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
 
 **Command-line examples**
 

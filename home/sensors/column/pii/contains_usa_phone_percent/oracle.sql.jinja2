@@ -5,8 +5,8 @@ SELECT
         ELSE 100.0 * SUM(
             CASE
                 WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                     '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                    THEN 1
+                        '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                    ) THEN 1
                 ELSE 0
             END
         ) / COUNT({{ lib.render_target_column('analyzed_table') }})

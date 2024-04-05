@@ -1,3 +1,6 @@
+---
+title: DQOps REST API dictionaries operations
+---
 # DQOps REST API dictionaries operations
 Operations for managing data dictionary CSV files in DQOps. Data dictionaries can be used in *accepted_values* data quality checks.
 

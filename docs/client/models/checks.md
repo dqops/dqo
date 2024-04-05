@@ -1,3 +1,6 @@
+---
+title: DQOps REST API checks models reference
+---
 # DQOps REST API checks models reference
 The references of all objects used by [checks](../operations/checks.md) REST API operations are listed below.
 
@@ -49,6 +52,7 @@ Check model that is returned by the REST API. Describes a single unique data qua
 |<span class="no-wrap-code">`sensor_name`</span>|Sensor name|*string*|
 |<span class="no-wrap-code">`rule_name`</span>|Rule name|*string*|
 |<span class="no-wrap-code">`help_text`</span>|Help text that is shown in the check editor that describes the purpose and usage of the check|*string*|
+|<span class="no-wrap-code">`friendly_name`</span>|An alternative check's name that is shown on the check editor.|*string*|
 |<span class="no-wrap-code">`standard`</span>|This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.|*boolean*|
 |<span class="no-wrap-code">`custom`</span>|This check has is a custom check or was customized by the user.|*boolean*|
 |<span class="no-wrap-code">`built_in`</span>|This check is provided with DQOps as a built-in check.|*boolean*|

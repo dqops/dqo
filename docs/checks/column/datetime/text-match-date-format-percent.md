@@ -1,3 +1,6 @@
+---
+title: text match date format percent data quality checks
+---
 # text match date format percent data quality checks
 
 Verifies that the values in text columns match one of the predefined date formats, such as an ISO 8601 date.
@@ -18,7 +21,7 @@ Verifies that the values in text columns match one of the predefined date format
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_text_match_date_format_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*text_match_date_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#text-match-date-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_text_match_date_format_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*text_match_date_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#text-match-date-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1733,7 +1736,7 @@ Verifies that the values in text columns match one of the predefined date format
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_text_match_date_format_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*text_match_date_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#text-match-date-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_text_match_date_format_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*text_match_date_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#text-match-date-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3450,7 +3453,7 @@ Verifies that the values in text columns match one of the predefined date format
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_text_match_date_format_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*text_match_date_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#text-match-date-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_text_match_date_format_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*text_match_date_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#text-match-date-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -5167,7 +5170,7 @@ Verifies that the values in text columns match one of the predefined date format
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_text_match_date_format_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*text_match_date_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#text-match-date-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_text_match_date_format_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*text_match_date_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#text-match-date-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -6906,7 +6909,7 @@ Verifies that the values in text columns match one of the predefined date format
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_text_match_date_format_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*text_match_date_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#text-match-date-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_text_match_date_format_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*text_match_date_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#text-match-date-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 

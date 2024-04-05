@@ -1,4 +1,7 @@
-# Data quality whitespace sensors
+---
+title: DQOps data quality whitespace sensors
+---
+# DQOps data quality whitespace sensors
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **whitespace** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
 ---

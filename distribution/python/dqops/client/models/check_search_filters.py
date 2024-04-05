@@ -48,6 +48,8 @@ class CheckSearchFilters:
         check_type (Union[Unset, CheckType]):
         time_scale (Union[Unset, CheckTimeScale]):
         check_category (Union[Unset, str]): The target check category, for example: *nulls*, *volume*, *anomaly*.
+        quality_dimension (Union[Unset, str]): The target data quality dimension, for example: *Completeness*,
+            *Accuracy*, *Consistency*, *Timeliness*, *Availability*.
         table_comparison_name (Union[Unset, str]): The name of a configured table comparison. When the table comparison
             is provided, DQOps will only perform table comparison checks that compare data between tables.
         check_name (Union[Unset, str]): The target check name to run only this named check. Uses the short check name
@@ -71,6 +73,7 @@ class CheckSearchFilters:
     check_type: Union[Unset, CheckType] = UNSET
     time_scale: Union[Unset, CheckTimeScale] = UNSET
     check_category: Union[Unset, str] = UNSET
+    quality_dimension: Union[Unset, str] = UNSET
     table_comparison_name: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
@@ -105,6 +108,7 @@ class CheckSearchFilters:
             time_scale = self.time_scale.value
 
         check_category = self.check_category
+        quality_dimension = self.quality_dimension
         table_comparison_name = self.table_comparison_name
         check_name = self.check_name
         sensor_name = self.sensor_name
@@ -145,6 +149,8 @@ class CheckSearchFilters:
             field_dict["timeScale"] = time_scale
         if check_category is not UNSET:
             field_dict["checkCategory"] = check_category
+        if quality_dimension is not UNSET:
+            field_dict["qualityDimension"] = quality_dimension
         if table_comparison_name is not UNSET:
             field_dict["tableComparisonName"] = table_comparison_name
         if check_name is not UNSET:
@@ -200,6 +206,8 @@ class CheckSearchFilters:
 
         check_category = d.pop("checkCategory", UNSET)
 
+        quality_dimension = d.pop("qualityDimension", UNSET)
+
         table_comparison_name = d.pop("tableComparisonName", UNSET)
 
         check_name = d.pop("checkName", UNSET)
@@ -228,6 +236,7 @@ class CheckSearchFilters:
             check_type=check_type,
             time_scale=time_scale,
             check_category=check_category,
+            quality_dimension=quality_dimension,
             table_comparison_name=table_comparison_name,
             check_name=check_name,
             sensor_name=sensor_name,

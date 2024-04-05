@@ -1,3 +1,6 @@
+---
+title: text mean length data quality checks
+---
 # text mean length data quality checks
 
 This check calculates the average text length in a column. DQOps validates the mean length using a range rule.
@@ -18,7 +21,7 @@ Verifies that the mean (average) length of texts in a column is within an accept
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_text_mean_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*text_mean_length*](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`profile_text_mean_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*text_mean_length*](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -1253,7 +1256,7 @@ Verifies that the mean (average) length of texts in a column is within an accept
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_text_mean_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*text_mean_length*](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`daily_text_mean_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*text_mean_length*](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -2490,7 +2493,7 @@ Verifies that the mean (average) length of texts in a column is within an accept
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_text_mean_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*text_mean_length*](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`monthly_text_mean_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*text_mean_length*](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -3727,7 +3730,7 @@ Verifies that the mean (average) length of texts in a column is within an accept
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_text_mean_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*text_mean_length*](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`daily_partition_text_mean_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*text_mean_length*](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -4986,7 +4989,7 @@ Verifies that the mean (average) length of texts in a column is within an accept
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_text_mean_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*text_mean_length*](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`monthly_partition_text_mean_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*text_mean_length*](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 

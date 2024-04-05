@@ -1,4 +1,7 @@
-# Data quality checks overview
+---
+title: Definition of data quality checks
+---
+# Definition of data quality checks
 Data quality checks are responsible for detecting data quality issues, and asserting the data quality requirements for monitored data sources.
 
 ## Data quality check definition

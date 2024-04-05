@@ -1,4 +1,7 @@
-# dqo run command
+---
+title: dqo run command-line command
+---
+# dqo run command-line command
 The reference of the **run** command in DQOps. This command is useful when you want to continuously monitor the quality of your data in real-time. The job scheduler runs in the background, allowing you to perform other tasks while the DQOps is running.
 
 

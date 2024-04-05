@@ -440,7 +440,7 @@ const Tree = () => {
             />
             <Tooltip
               content={node.tooltip ?? node.id}
-              className="max-w-120 py-4 px-4  delay-300 "
+              className="max-w-120 py-4 px-4  delay-300 pointer-events-none"
               placement="top-start"
             >
               <div className="flex flex-1 justify-between items-center">

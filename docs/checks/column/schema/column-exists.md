@@ -1,3 +1,6 @@
+---
+title: column exists data quality checks
+---
 # column exists data quality checks
 
 A column-level check that reads the metadata of the monitored table and verifies if the column still exists in the data source.
@@ -18,7 +21,7 @@ Checks the metadata of the monitored table and verifies if the column exists.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_column_exists`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*column_exists*](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[*equals_1*](../../../reference/rules/Comparison.md#equals-1)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_column_exists`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*column_exists*](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[*equals_1*](../../../reference/rules/Comparison.md#equals-1)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -123,7 +126,7 @@ Checks the metadata of the monitored table and verifies if the column exists. St
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_column_exists`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*column_exists*](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[*equals_1*](../../../reference/rules/Comparison.md#equals-1)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_column_exists`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*column_exists*](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[*equals_1*](../../../reference/rules/Comparison.md#equals-1)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -229,7 +232,7 @@ Checks the metadata of the monitored table and verifies if the column exists. St
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_column_exists`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*column_exists*](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[*equals_1*](../../../reference/rules/Comparison.md#equals-1)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_column_exists`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*column_exists*](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[*equals_1*](../../../reference/rules/Comparison.md#equals-1)|:material-check-bold:|
 
 **Command-line examples**
 

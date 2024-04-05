@@ -1,3 +1,6 @@
+---
+title: column level custom sql data quality checks
+---
 # column level custom sql data quality checks
 
 This is a list of custom_sql column data quality checks supported by DQOps and a brief description of what data quality issued they detect.

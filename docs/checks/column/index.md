@@ -1,3 +1,6 @@
+---
+title: column level
+---
 # column level
 
 This is a list of column data quality checks supported by DQOps, broken down by a category and a brief description of what quality issued they detect.
