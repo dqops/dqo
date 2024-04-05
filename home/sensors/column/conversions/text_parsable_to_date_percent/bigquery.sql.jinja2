@@ -6,37 +6,37 @@
     {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
         SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- elif (lib.target_column_data_type == 'INT64') -%}
-            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- elif (lib.target_column_data_type == 'INT') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- elif (lib.target_column_data_type == 'DATE') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- elif (lib.target_column_data_type == 'TIME') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- else -%}
         {{ lib.render_target_column(analyzed_table_to_render) }}
     {%- endif -%}
@@ -48,7 +48,14 @@ SELECT
         ELSE 100.0 * SUM(
             CASE
                 WHEN SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
-                    THEN 1
+                    OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                    OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                    OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                    OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                    OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                    OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                    OR SAFE.PARSE_DATE('%b %e, %Y', {{render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
+                        THEN 1
                 ELSE 0
             END
         ) / COUNT({{ lib.render_target_column('analyzed_table') }})
