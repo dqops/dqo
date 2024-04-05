@@ -1,9 +1,9 @@
 ---
-title: Measuring data quality dimensions - list of data quality checks
+title: How to measure data quality dimensions - list of data quality checks
 ---
 
-# Measuring data quality dimensions - list of data quality checks
-This guide describes the data quality dimensions that DQOps can measure. This reference provides the mapping of data quality checks to data quality dimensions. 
+# How to measure data quality dimensions - list of data quality checks
+This guide provides the definition of data quality dimensions. Read this guide to learn the mapping of data quality checks to data quality dimensions. 
 
 ## What is a data quality dimension?
 
