@@ -177,7 +177,7 @@ title: What is DQOps Data Quality Operations Center
 
     <div class="grid cards" markdown>
 
-    -   :material-book-open-page-variant:{ .lg .middle } __DQOps tutorial__
+    -   :material-book-open-page-variant:{ .lg .middle } [__DQOps tutorial__](getting-started/index.md)
     
         ---
     
@@ -186,7 +186,7 @@ title: What is DQOps Data Quality Operations Center
         [:octicons-arrow-right-24: Getting started guide](getting-started/index.md)
 
 
-    -   :material-image-broken-variant:{ .lg .middle } __Categories of data quality checks__
+    -   :material-image-broken-variant:{ .lg .middle } [__Categories of data quality checks__](categories-of-data-quality-checks/index.md)
     
         ---
     
@@ -195,7 +195,7 @@ title: What is DQOps Data Quality Operations Center
         [:octicons-arrow-right-24: Review the categories of data quality issues](categories-of-data-quality-checks/index.md)
 
 
-    -   :material-download:{ .lg .middle } __Download from PyPI or Docker Hub__
+    -   :material-download:{ .lg .middle } [__Download from PyPI or Docker Hub__](dqops-installation/index.md)
     
         ---
     

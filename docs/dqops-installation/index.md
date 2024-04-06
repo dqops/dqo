@@ -4,11 +4,11 @@ title: DQOps Data Quality Operations Center installation options
 # DQOps Data Quality Operations Center installation options
 This guide lists all options of installing DQOps Data Quality Operations Center, using pip, docker, or compiling the code directly.
 
-## Install to play and learn
+## Install DQOps to play and learn
 
 <div class="grid cards grid-columns-150-pct" markdown>
 
--   :material-language-python:{ .lg .middle } __Install as a Python package__
+-   :material-language-python:{ .lg .middle } [__Install as a Python package__](install-dqops-using-pip.md)
 
     ---
 
@@ -28,11 +28,11 @@ This guide lists all options of installing DQOps Data Quality Operations Center,
 </div>
 
 
-## Install for production use
+## Install DQOps for production use
 
 <div class="grid cards grid-columns-150-pct" markdown>
 
--   :material-docker:{ .lg .middle } __Run as a Docker container__
+-   :material-docker:{ .lg .middle } [__Run as a Docker container__](run-dqops-as-docker-container.md)
 
     ---
 
@@ -50,7 +50,7 @@ This guide lists all options of installing DQOps Data Quality Operations Center,
     [:octicons-arrow-right-24: Learn how to run DQOps in Docker](run-dqops-as-docker-container.md)
 
 
--   :material-folder-zip:{ .lg .middle } __Download a release package__
+-   :material-folder-zip:{ .lg .middle } [__Download a release package__](install-dqops-from-release-package.md)
 
     ---
 
@@ -65,7 +65,7 @@ This guide lists all options of installing DQOps Data Quality Operations Center,
     [:octicons-arrow-right-24: Learn how to download a release package](install-dqops-from-release-package.md)
 
 
--   :material-github:{ .lg .middle } __Compile DQOps from GitHub__
+-   :material-github:{ .lg .middle } [__Compile DQOps from GitHub__](install-dqops-from-github.md)
 
     ---
 

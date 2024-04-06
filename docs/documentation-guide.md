@@ -4,7 +4,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 ## DQOps documentation
 <div class="grid cards" markdown>
 
--   :material-home:{ .lg .middle } __What is DQOps__
+-   :material-home:{ .lg .middle } [__What is DQOps__](index.md)
 
     ---
 
@@ -16,7 +16,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
     [:octicons-arrow-right-24: What is DQOps?](index.md)
 
 
--   :material-book-open-page-variant:{ .lg .middle } __Getting started__
+-   :material-book-open-page-variant:{ .lg .middle } [__Getting started__](getting-started/index.md)
 
     ---
 
@@ -26,7 +26,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
     [:octicons-arrow-right-24: Getting started with DQOps](getting-started/index.md)
 
 
--   :material-lightbulb-on-90:{ .lg .middle } __DQOps concepts__
+-   :material-lightbulb-on-90:{ .lg .middle } [__DQOps concepts__](dqo-concepts/index.md)
 
     ---
 
@@ -34,7 +34,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     [:octicons-arrow-right-24: Learn about DQOps concepts](dqo-concepts/index.md)
 
--   :fontawesome-solid-user-gear:{ .lg .middle } __Installation guide__
+-   :fontawesome-solid-user-gear:{ .lg .middle } [__Installation guide__](dqops-installation/index.md)
 
     ---
 
@@ -42,7 +42,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     [:octicons-arrow-right-24: Download DQOps from PyPI](dqops-installation/install-dqops-using-pip.md) or [Docker Hub](dqops-installation/run-dqops-as-docker-container.md)
 
--   :material-database:{ .lg .middle } __Data sources__
+-   :material-database:{ .lg .middle } [__Data sources__](data-sources/index.md)
 
     ---
 
@@ -50,7 +50,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     [:octicons-arrow-right-24: List of supported data sources](data-sources/index.md)
 
--   :material-format-list-checks:{ .lg .middle } __Categories of data quality checks__
+-   :material-format-list-checks:{ .lg .middle } [__Categories of data quality checks__](categories-of-data-quality-checks/index.md)
 
     ---
 
@@ -59,7 +59,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
     [:octicons-arrow-right-24: Categories of data quality checks](categories-of-data-quality-checks/index.md)
 
 
--   :material-book-education:{ .lg .middle } __Use cases and examples__
+-   :material-book-education:{ .lg .middle } [__Data quality use cases and examples__](examples/index.md)
 
     ---
 
@@ -68,7 +68,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
     [:octicons-arrow-right-24: Review data quality use cases](examples/index.md)
 
 
--   :material-tooltip-question:{ .lg .middle } __Working with DQOps__
+-   :material-tooltip-question:{ .lg .middle } [__Working with DQOps__](working-with-dqo/index.md)
 
     ---
 
@@ -77,7 +77,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
     [:octicons-arrow-right-24: Working with DQOps](working-with-dqo/index.md)
 
 
--   :material-power-plug:{ .lg .middle } __Integrations__
+-   :material-power-plug:{ .lg .middle } [__DQOps Integrations__](integrations/index.md)
 
     ---
 
@@ -90,7 +90,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 ## References
 <div class="grid cards" markdown>
 
--   :octicons-terminal-16:{ .lg .middle } __Command-line interface__
+-   :octicons-terminal-16:{ .lg .middle } [__DQOps command-line interface__](command-line-interface/index.md)
 
     ---
 
@@ -99,7 +99,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
     [:octicons-arrow-right-24: Command-line interface reference](command-line-interface/index.md)
 
 
--   :material-api:{ .lg .middle } __REST API Python Client__
+-   :material-api:{ .lg .middle } [__DQOps REST API Python Client__](client/index.md)
 
     ---
 
@@ -108,7 +108,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
     [:octicons-arrow-right-24: REST API Python Client reference](client/index.md)
 
 
--   :material-book-open-variant:{ .lg .middle } __Data quality checks reference__
+-   :material-book-open-variant:{ .lg .middle } [__Data quality checks reference__](checks/index.md)
 
     ---
 
@@ -117,7 +117,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
     [:octicons-arrow-right-24: Data quality checks reference](checks/index.md)
 
 
--   :material-table-eye:{ .lg .middle } __Data quality sensors reference__
+-   :material-table-eye:{ .lg .middle } [__Data quality sensors reference__](reference/sensors/index.md)
 
     ---
 
@@ -125,7 +125,8 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     [:octicons-arrow-right-24: Data quality sensors reference](reference/sensors/index.md)
 
--   :material-ruler:{ .lg .middle } __Data quality rules reference__
+
+-   :material-ruler:{ .lg .middle } [__Data quality rules reference__](reference/rules/index.md)
 
     ---
 
@@ -133,7 +134,8 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     [:octicons-arrow-right-24: Data quality rules reference](reference/rules/index.md)
 
--   :material-file-code:{ .lg .middle } __YAML file reference__
+
+-   :material-file-code:{ .lg .middle } [__DQOps YAML files reference__](reference/yaml/index.md)
 
     ---
 
@@ -141,7 +143,8 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     [:octicons-arrow-right-24: DQOps YAML file schema reference](reference/yaml/index.md)
 
--   :material-table-large:{ .lg .middle } __Parquet tables reference__
+
+-   :material-table-large:{ .lg .middle } [__DQOps parquet tables reference__](reference/parquetfiles/index.md)
 
     ---
 
