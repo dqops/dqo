@@ -134,7 +134,7 @@ The following chapters describe every data quality dimension in detail and inclu
 
 ## Data Accuracy
 
-### Accuracy dimension definition
+### Data accuracy definition
 The following table provides an overview of the accuracy data quality dimension.
 
 | Dimension     | Description                                                                                                                                                                                         | How DQOps measures data accuracy                                                     |
@@ -169,7 +169,7 @@ The following table lists data quality checks that detect accuracy issues on col
 
 ## Data Availability
 
-### Availability dimension definition
+### Data availability definition
 The following table provides an overview of the availability data quality dimension.
 
 | Dimension        | Description                                                                                                                                                          | How DQOps measures data availability                                                                                                                             |
@@ -185,7 +185,7 @@ The following table lists data quality checks that detect availability issues on
 
 ## Data Completeness
 
-### Completeness dimension definition
+### Data completeness definition
 The following table provides an overview of the completeness data quality dimension.
 
 | Dimension        | Description                                                                                                                      | How DQOps measures data completeness                                                                                                                                                                                                                                                                                                               |
@@ -224,7 +224,7 @@ The following table lists data quality checks that detect completeness issues on
 
 ## Data Consistency
 
-### Consistency dimension definition
+### Data consistency definition
 The following table provides an overview of the consistency data quality dimension.
 
 | Dimension       | Description                                                                                                                                                                                                                                                                                                                                    | How DQOps measures data consistency                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
@@ -286,7 +286,7 @@ The following table lists data quality checks that detect consistency issues on 
 
 ## Data Integrity
 
-### Integrity dimension definition
+### Data integrity definition
 The following table provides an overview of the integrity data quality dimension.
 
 | Dimension     | Description                                                                                              | How DQOps measures data integrity                                                                                                                                                                                                                                                                                                                                                                                                                                        |
@@ -303,7 +303,7 @@ The following table lists data quality checks that detect integrity issues on co
 
 ## Data Reasonableness
 
-### Reasonableness dimension definition
+### Data reasonableness definition
 The following table provides an overview of the reasonableness data quality dimension.
 
 | Dimension          | Description                                                                                                     | How DQOps measures data reasonableness                                                                                                                                                                                                                                                            |
@@ -355,7 +355,7 @@ The following table lists data quality checks that detect reasonableness issues 
 
 ## Data Timeliness
 
-### Timeliness dimension definition
+### Data timeliness definition
 The following table provides an overview of the timeliness data quality dimension.
 
 | Dimension      | Description                                                                                                                 | How DQOps measures data timeliness                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -374,7 +374,7 @@ The following table lists data quality checks that detect timeliness issues on t
 
 ## Data Uniqueness
 
-### Uniqueness dimension definition
+### Data uniqueness definition
 The following table provides an overview of the uniqueness data quality dimension.
 
 | Dimension      | Description                                                                          | How DQOps measures data uniqueness                                                         |
@@ -393,7 +393,7 @@ The following table lists data quality checks that detect uniqueness issues on c
 
 ## Data Validity
 
-### Validity dimension definition
+### Data validity definition
 The following table provides an overview of the validity data quality dimension.
 
 | Dimension    | Description                                                                                                                                                                                                | How DQOps measures data validity                                                                                                                                                                                                                                                                                                                                      |
