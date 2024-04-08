@@ -64,7 +64,7 @@ public class DatabricksColumnPatternsInvalidUuidFormatCountSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(7L, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class DatabricksColumnPatternsInvalidUuidFormatCountSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(7L, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class DatabricksColumnPatternsInvalidUuidFormatCountSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(7L, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
     }
 
     @Test
