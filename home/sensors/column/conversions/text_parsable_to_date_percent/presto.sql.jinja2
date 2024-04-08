@@ -6,7 +6,14 @@ SELECT
         ELSE CAST(100.0 * SUM(
             CASE
                 WHEN TRY_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
-                    THEN 1
+                    OR TRY(DATE_PARSE({{lib.render_column_cast_to_string('analyzed_table')}}, '%d/%m/%Y')) IS NOT NULL
+                    OR TRY(DATE_PARSE({{lib.render_column_cast_to_string('analyzed_table')}}, '%d-%m-%Y')) IS NOT NULL
+                    OR TRY(DATE_PARSE({{lib.render_column_cast_to_string('analyzed_table')}}, '%m-%d-%Y')) IS NOT NULL
+                    OR TRY(DATE_PARSE({{lib.render_column_cast_to_string('analyzed_table')}}, '%d/%m/%Y')) IS NOT NULL
+                    OR TRY(DATE_PARSE({{lib.render_column_cast_to_string('analyzed_table')}}, '%m/%d/%Y')) IS NOT NULL
+                    OR TRY(DATE_PARSE({{lib.render_column_cast_to_string('analyzed_table')}}, '%Y/%m/%d')) IS NOT NULL
+                    OR TRY(DATE_PARSE({{lib.render_column_cast_to_string('analyzed_table')}}, '%b %e, %Y')) IS NOT NULL
+                        THEN 1
                 ELSE 0
             END
         ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
