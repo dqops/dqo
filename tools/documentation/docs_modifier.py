@@ -1,5 +1,5 @@
 from files_provider import get_all_files
-from script_tag_modifier import modify_script_tags
+from docs_file_modifier import modify_file
 import sys
 
 
@@ -15,8 +15,8 @@ def main():
 
     number = 0
     for item in file_paths:
-        modify_script_tags(item)
         print("modifying file : " + item)
+        modify_file(item)
         number+=1
 
     print("Total modified files : " + str(number))
