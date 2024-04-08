@@ -45,7 +45,7 @@ To use DQOps you need:
 
 DQOps is available on [PyPi repository](https://pypi.org/project/dqops/). 
 
-1.  Create an empty folder where you want to create your `DQOps User Home`. `DQOps User Home` is a folder where
+1.  Create an **empty folder** where you want to create your `DQOps User Home`. `DQOps User Home` is a folder where
     DQOps will store the metadata of imported data sources, the configuration of activated data quality checks, and the
     data quality results.
 
@@ -81,7 +81,7 @@ DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
     You should see a message that confirms a successful installation of the `dqops` package.
 
     ```asc
-    Successfully installed dqops-1.0.0
+    Successfully installed dqops-1.1.0
     ```
 
     <span id="add-python-scripts-to-path">If</span> you see additional two warning (shown in yellow on Microsoft Windows) that the default location
@@ -93,7 +93,7 @@ DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
     ``` { .asc hl_lines="1-2" }
     WARNING: The script dqo.exe is installed in 'C:\Users\<yourlogin>\AppData\Roaming\Python\Python39\Scripts' which is not on PATH.
     Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
-    Successfully installed dqops-1.0.0
+    Successfully installed dqops-1.1.0
     ```
 
     After adding the Python's Scrips folder to the path, you will be able to run DQOps simply by typing `dqo` from the command line. 

@@ -32,7 +32,7 @@ This guide lists all options of installing DQOps Data Quality Operations Center,
 
 <div class="grid cards grid-columns-150-pct" markdown>
 
--   :material-docker:{ .lg .middle } [__Run as a Docker container__](run-dqops-as-docker-container.md)
+-   :material-docker:{ .lg .middle } [__Run DQOps as a Docker container__](run-dqops-as-docker-container.md)
 
     ---
 
@@ -50,7 +50,7 @@ This guide lists all options of installing DQOps Data Quality Operations Center,
     [:octicons-arrow-right-24: Learn how to run DQOps in Docker](run-dqops-as-docker-container.md)
 
 
--   :material-folder-zip:{ .lg .middle } [__Download a release package__](install-dqops-from-release-package.md)
+-   :material-folder-zip:{ .lg .middle } [__Download a DQOps release package__](install-dqops-from-release-package.md)
 
     ---
 

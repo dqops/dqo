@@ -41,13 +41,25 @@ To start DQOps locally, you need:
 
 ## Install DQOps with pip manager
 
-1. Create an empty folder that will be used to store the configuration. 
-   This folder is called the `DQOps user home` and is documented in the
-   [DQOps user home concept](../dqo-concepts/dqops-user-home-folder.md) guide.
-   DQOps will store the configuration of data sources, configured data quality checks and the data quality check
-   results in this folder.
+1.  Create an **empty folder** that will be used to store the configuration. 
+    This folder is called the **`DQOps user home`** and is documented in the
+    [DQOps user home concept](../dqo-concepts/dqops-user-home-folder.md) guide.
+    DQOps will store the configuration of data sources, configured data quality checks and the data quality check
+    results in this folder.
 
-2. Open a terminal, change the working folder to our `DQOps user home`, and install DQOps via pip manager
+    !!! danger "Starting DQOps in an empty folder is required"
+
+        Please do not go directly to the next step. First, create an empty folder, then change the current folder
+        to this new new directory that we are calling `DQOps User Home`. During the first run, DQOps will create
+        the folder structure described in the [DQOps user home folder concept](../dqo-concepts/dqops-user-home-folder.md),
+        creating DQOps files in an empty folder is advised.
+
+        ```bash
+        mkdir dqouserhome
+        cd dqouserhome
+        ```
+
+2.  Open a terminal, change the working folder to our `DQOps user home`, and install DQOps via pip manager
 
     ```
     python -m pip install --user dqops
@@ -80,14 +92,33 @@ To start DQOps locally, you need:
 2.  Initialize your `DQOps user home` folder.
 
     After installation, you will be asked whether to initialize the `DQOps user home` folder in the default location. 
+    This is the empty folder mentioned before in which you started DQOps. 
     Type Y to initialize the folder structure. Please remember that the current working folder must be empty.  
 
     ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder2.png)
 
 3.  Login to DQOps Cloud.
    
-    To use all DQOps features, such as storing data quality definitions and results in the cloud and use data quality dashboards, you
+    To use all DQOps features, such as storing data quality definitions and results in the cloud
+    and use [data quality dashboards](../dqo-concepts/types-of-data-quality-dashboards.md), you
     must create a DQOps Cloud account.
+ 
+    !!! info "Registration of a DQOps Cloud account is optional"
+
+        You can skip this step and start DQOps without registering a DQOps Cloud account.
+        However, having a DQOps Cloud is required to use [data quality dashboards](../dqo-concepts/types-of-data-quality-dashboards.md) and activate SSO login. 
+        
+        All other DQOps features will work fine because DQOps is an open-source data quality solution.
+ 
+        The open-source version supports the following features for free:
+ 
+         - Data quality checks for all supported [data sources](../data-sources/index.md). There is no paywall to limit access to data sources for enterprise data sources.
+
+         - The user interface for [managing data sources and configuring data quality checks](../dqo-concepts/dqops-user-interface-overview.md) works locally.
+
+         - [Data quality REST API and Python Client](../client/index.md) that you can integrate into the data pipelines.
+
+         - DQOps is the only [data observability platform that supports anomaly detection](../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md) for free because [historical data quality results](../dqo-concepts/data-storage-of-data-quality-results.md) are stored locally on your machine.
 
     Once the `DQOps user home` folder is initialized, DQOps will ask you to log in to your DQOps Cloud account.
 
@@ -122,3 +153,9 @@ To start DQOps locally, you need:
 
 Now that you have installed and opened DQOps, it is time to
 [connect your first data source](add-data-source-connection.md).
+
+## Other installation options
+- [Install as a Python package](../dqops-installation/install-dqops-using-pip.md) describes the process of installing DQOps from a PyPI package in details.
+- [Run DQOps as a Docker container](../dqops-installation/run-dqops-as-docker-container.md) shows how to run DQOps in Docker, it is the recommended way for running DQOps for production use.
+- You can [download a DQOps release package](../dqops-installation/install-dqops-from-release-package.md), unzip it and run directly on your machine.
+- You can also check out [DQOps from GitHub and compile it from the source code](../dqops-installation/install-dqops-from-github.md).
