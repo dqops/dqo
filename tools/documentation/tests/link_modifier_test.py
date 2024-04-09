@@ -1,6 +1,5 @@
-import os 
 import unittest
-from content_modifiers.link_modifier import modify_link
+from scripts.content_modifiers.link_modifier import modify_link
 
 class LinkModifierTest(unittest.TestCase):
     

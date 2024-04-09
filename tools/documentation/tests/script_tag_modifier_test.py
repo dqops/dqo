@@ -1,6 +1,5 @@
-import os 
 import unittest
-from content_modifiers.script_tag_modifier import modify_script_tag
+from scripts.content_modifiers.script_tag_modifier import modify_script_tag
 
 class ScriptTagModifierTest(unittest.TestCase):
     

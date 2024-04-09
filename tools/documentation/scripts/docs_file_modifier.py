@@ -1,6 +1,6 @@
-from file_handler import provide_file_content, save_lines_to_file
-from content_modifiers.script_tag_modifier import modify_script_tag
-from content_modifiers.link_modifier import modify_link
+from scripts.file_handler import provide_file_content, save_lines_to_file
+from scripts.content_modifiers.script_tag_modifier import modify_script_tag
+from scripts.content_modifiers.link_modifier import modify_link
 
 def modify_file(file_path: str):
 

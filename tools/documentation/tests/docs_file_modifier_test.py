@@ -1,7 +1,7 @@
 import unittest
 import shutil
 import os 
-from docs_file_modifier import modify_file
+from scripts.docs_file_modifier import modify_file
 from os.path import abspath, dirname, join, realpath
 
 class DocsFileModifierTest(unittest.TestCase):

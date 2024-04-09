@@ -1,5 +1,5 @@
-from files_provider import get_all_files
-from docs_file_modifier import modify_file
+from scripts.files_provider import get_all_files
+from scripts.docs_file_modifier import modify_file
 import sys
 
 
