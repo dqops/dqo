@@ -3,7 +3,7 @@ import re
 regex_pattern: str = "<script[^<>]*>"
 opening_script_tag_pattern: re.Pattern = re.compile(regex_pattern)
 
-def script_tag_modification(line: str) -> str:
+def modify_script_tag(line: str) -> str:
     if _verify_application(line):
         return _apply_modification(line)
     return line

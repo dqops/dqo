@@ -7,7 +7,6 @@ from os.path import abspath, dirname, join, realpath
 class DocsFileModifierTest(unittest.TestCase):
 
     def setUp(self) -> None:
-
         self.maxDiff = None
 
         temp_folder: str = abspath(dirname(realpath(__file__)) + "/temp")
@@ -15,7 +14,7 @@ class DocsFileModifierTest(unittest.TestCase):
         if not os.path.isdir(temp_folder):
             os.mkdir(temp_folder)
 
-    def test_modify_file_when_multiple_script_tags_then_modifies_them(self):
+    def test_modify_file__when_multiple_script_tags__then_modifies_them(self):
         (target_file, copied_source_file) = self._prepare_files("./script_tag_modifier_examples/multiple_script_tags")
 
         modify_file(copied_source_file)
@@ -37,7 +36,6 @@ class DocsFileModifierTest(unittest.TestCase):
         return (target_file, original_file_copy)
 
     def tearDown(self):
-
         temp_folder: str = abspath(dirname(realpath(__file__)) + "/temp")
 
         if os.path.isdir(temp_folder):

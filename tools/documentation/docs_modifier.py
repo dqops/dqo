@@ -14,9 +14,9 @@ def main():
     file_paths: list[str] = get_all_files(root_path)
 
     number = 0
-    for item in file_paths:
-        print("modifying file : " + item)
-        modify_file(item)
+    for file_path in file_paths:
+        print("modifying file : " + file_path)
+        modify_file(file_path)
         number+=1
 
     print("Total modified files : " + str(number))
