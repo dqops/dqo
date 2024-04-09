@@ -1,8 +1,8 @@
 ---
-title: How to measure data quality KPI - definition and formula
+title: How to measure data quality KPI metrics - definition and formula
 ---
-# How to measure data quality KPI - definition and formula
-Learn how to measure the data quality KPI score with DQOps, what is the formula used to calculate the score, and how to improve data quality following KPIs.
+# How to measure data quality KPI metrics - definition and formula
+Learn how to measure the data quality KPI metrics with DQOps, what is the formula used to calculate the score, and how to improve data quality following KPIs.
 
 ## Purpose of data quality KPIs
 
@@ -16,21 +16,21 @@ We can divide the data quality KPIs into business-focused and data engineering-f
 - The data quality KPIs for data engineering monitor the problems with the data pipelines, allowing the data engineering teams to
   improve the data platform.
 
-The data quality score should be also calculated at a physical level, measuring the KPI of each
+The data quality metrics should be also calculated at a physical level, measuring the KPI of each
 
 - data source
 - database schema
 - table
 - column
 
-Beyond monitoring physical entities such as tables, the data quality KPI should be also calculated at logical levels
+Beyond monitoring physical entities such as tables, the data quality KPI metrics should be also calculated at logical levels
 
 - data domain in a data mesh architecture
 - data producer
 - external vendor that is providing data as part of their service contract
 - data contract
 
-DQOps calculates the data quality KPI score as a value between 0% and 100%, which is the percentage of passed data quality checks.
+DQOps calculates the data quality KPI metric as a value between 0% and 100%, which is the percentage of passed data quality checks.
 A percentage KPI is the easiest way to share between
 all stakeholders, including the data teams, data stewards, data owners, data producers, and data consumers.
 

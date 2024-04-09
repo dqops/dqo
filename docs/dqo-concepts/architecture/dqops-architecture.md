@@ -223,6 +223,7 @@ For long-running production deployment, DQOps should be started as a Docker cont
 The [dqops/dqo](https://hub.docker.com/r/dqops/dqo) docker image can be pulled directly from Docker Hub.
 
 The Docker deployment diagram does not differ much from running DQOps locally as a Python module.
+
 ![DQOps deployment in Docker](https://dqops.com/docs/images/architecture/DQOPs-docker-instance-components-min.png)
 
 The following command will start DQOps as a docker container:
