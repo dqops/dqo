@@ -27,7 +27,7 @@ class LinkModifierTest(unittest.TestCase):
         self.assertEqual(target, output)
 
     def test_modify_link__when_path_is_relative__then_expand_path(self):
-        file_path: str = """/usr/share/docs/data-sources/athena/index.html"""
+        file_path: str = """site/data-sources/athena/index.html"""
         source: str = """<a href="../index.html">"""
         target: str = """<a href="/docs/data-sources/index.html">"""
 
@@ -36,7 +36,7 @@ class LinkModifierTest(unittest.TestCase):
         self.assertEqual(target, output)
 
     def test_modify_link__when_path_is_relative_with_depth_two__then_expand_path(self):
-        file_path: str = """/usr/share/docs/data-sources/athena/index.html"""
+        file_path: str = """site/data-sources/athena/index.html"""
         source: str = """<a href="../../images/favicon.ico">"""
         target: str = """<a href="/docs/images/favicon.ico">"""
 
