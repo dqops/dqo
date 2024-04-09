@@ -126,7 +126,7 @@ To start the DQOps application with the example, follow the steps below.
 
     After installation, you will be asked whether to initialize the [DQOps user home folder](../dqo-concepts/dqops-user-home-folder.md) in the default location. Type Y to create the folder. . 
 
-    ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder2.png)
+    ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder2.png){ loading=lazy; width="1200px" }
 
     The DQOps user home folder locally stores data such as sensor and checkout readings, as well as data source configurations. [You can learn more about data storage here](../dqo-concepts/data-storage-of-data-quality-results.md).
 
@@ -138,7 +138,7 @@ To start the DQOps application with the example, follow the steps below.
  
     After creating the [DQOps user home folder](../dqo-concepts/dqops-user-home-folder.md), you will be asked whether to log in to the DQOps cloud. 
 
-    ![Log in to DQOps Cloud](https://dqops.com/docs/images/getting-started/log-in-to-dqops-cloud3.png)
+    ![Log in to DQOps Cloud](https://dqops.com/docs/images/getting-started/log-in-to-dqops-cloud3.png){ loading=lazy; width="1200px" }
 
     After typing Y, you will be redirected to [https://cloud.dqops.com/registration](https://cloud.dqops.com/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
  
@@ -155,7 +155,7 @@ Simply, open the DQOps User Interface Console (http://localhost:8888).
 
 To navigate to a list of checks:
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks1.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks1.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring checks** section.
 
@@ -184,7 +184,7 @@ Learn more about [navigating the check editor](../dqo-concepts/dqops-user-interf
 
 Run the activated check using the **Run check** button.
 
-![Run check](https://dqops.com/docs/images/examples/row-count-run-check1.png)
+![Run check](https://dqops.com/docs/images/examples/row-count-run-check1.png){ loading=lazy; width="1200px" }
 
 The results of the run check are shown as a color square
 
@@ -206,7 +206,7 @@ The Check results category shows the severity level that result from the verific
 The Sensor readouts category displays the values obtained by the sensors from the data source. The Execution errors category displays any error
 that occurred during the check's execution.
 
-![Check details](https://dqops.com/docs/images/examples/row-count-check-details1.png)
+![Check details](https://dqops.com/docs/images/examples/row-count-check-details1.png){ loading=lazy; width="1200px" }
 
 To see the results which you should expect, refer to the description of each example.
 

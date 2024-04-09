@@ -39,7 +39,7 @@ The **Manage users** screen shows a list of all users along with their roles and
 Note that only a user with an Admin role can change other users, and options to edit or delete would be inactive for 
 other users. If you are using a single-user license, you will see only one user.
 
-![Users-List](https://dqops.com/docs/images/working-with-dqo/users-managment/userList3.png)
+![Users-List](https://dqops.com/docs/images/working-with-dqo/users-managment/userList3.png){ loading=lazy; width="1200px" }
 
 
 ## Add a new user
@@ -61,7 +61,7 @@ An administrator can also change a user's password by clicking on the change pas
 pop-up with a randomly generated password. You may choose to enter your own password, provided that it is at least eight characters long
 and contains both uppercase and lowercase letters and digits.
 
-![Change-users-password](https://dqops.com/docs/images/working-with-dqo/users-managment/changePassword.png)
+![Change-users-password](https://dqops.com/docs/images/working-with-dqo/users-managment/changePassword.png){ loading=lazy; width="1000px" }
 
 ## What's next
 

@@ -49,7 +49,7 @@ For a full [reference of execution errors parquet files schema](../reference/par
 If an execution error occurs while [running data quality checks](run-data-quality-checks.md) in the check editor,
 you will see a black square next to the check name.
 
-![Execution error on the check editor](https://dqops.com/docs/images/working-with-dqo/managing-errors/execution-error-on-check-editor.png)
+![Execution error on the check editor](https://dqops.com/docs/images/working-with-dqo/managing-errors/execution-error-on-check-editor.png){ loading=lazy; width="1200px" }
 
 
 To review the error details, click on the **Results** icon and select the **Execution errors** tab.
@@ -58,17 +58,17 @@ You can filter the list by data group and month.
 
 For example, when we execute a numeric check on the string column we get a sensor error as the one shown below.
 
-![Execution error on the check editor](https://dqops.com/docs/images/working-with-dqo/managing-errors/execution-error-details.png)
+![Execution error on the check editor](https://dqops.com/docs/images/working-with-dqo/managing-errors/execution-error-details.png){ loading=lazy; width="1200px" }
 
 
 ### **Delete the execution error**
 To delete check execution errors, go to the Error details screen and click on the delete icon in the upper right corner.
 
-![Delete execution error](https://dqops.com/docs/images/working-with-dqo/managing-errors/delete-execution-errors.png)
+![Delete execution error](https://dqops.com/docs/images/working-with-dqo/managing-errors/delete-execution-errors.png){ loading=lazy; width="1200px" }
 
 Then on the dialog box, you can select only the Execution errors using the checkbox and specify the time range.
 
-![Delete execution error - dialog screen](https://dqops.com/docs/images/working-with-dqo/managing-errors/delete-execution-errors-dialog-screen2.png)
+![Delete execution error - dialog screen](https://dqops.com/docs/images/working-with-dqo/managing-errors/delete-execution-errors-dialog-screen2.png){ loading=lazy }
 
 For more information about [deleting results](delete-data-quality-results.md), please follow the link. 
 
@@ -78,7 +78,7 @@ You can review the summary list and details of all the execution errors on the d
 To view the execution errors dashboards, simply go to the **Data Quality Dashboard** section. On the tree view on the
 left open the **DQOPs usage**, and then the **Execution errors** folder.
 
-![Navigating to execution errors dashboards](https://dqops.com/docs/images/working-with-dqo/managing-errors/navigating-to-execution-errors-dashboards.png)
+![Navigating to execution errors dashboards](https://dqops.com/docs/images/working-with-dqo/managing-errors/navigating-to-execution-errors-dashboards.png){ loading=lazy; width="1200px" }
 
 DQOps has two built-in dashboards for reviewing Execution errors: **History of execution errors** and **Details of execution errors** described below.
 
@@ -87,14 +87,14 @@ The **Details of execution errors** dashboard displays a summary of errors per c
 check type, check category, or check name. It also displays the daily distribution of errors, time when the error occurred, and detailed error messages. 
 It also displays the daily distribution of errors and full error details including the error message. 
 
-![Details of execution errors](https://dqops.com/docs/images/working-with-dqo/managing-errors/details-of-execution-errors-dashboard.png)
+![Details of execution errors](https://dqops.com/docs/images/working-with-dqo/managing-errors/details-of-execution-errors-dashboard.png){ loading=lazy; width="1200px" }
 
 
 The **History of execution errors** dashboard displays the summary of errors per connection, schema, table, column, dimension,
 check type, check category, or check name for the current or previous month. It also shows the distribution of errors 
 per day of the month.
 
-![History of execution errors](https://dqops.com/docs/images/working-with-dqo/managing-errors/history-of-execution-errors-dashboard.png)
+![History of execution errors](https://dqops.com/docs/images/working-with-dqo/managing-errors/history-of-execution-errors-dashboard.png){ loading=lazy; width="1200px" }
 
 You can modify the built-in dashboards. Follow the link for [more information about creating custom data quality dashboards](../integrations/looker-studio/creating-custom-data-quality-dashboards.md).
 

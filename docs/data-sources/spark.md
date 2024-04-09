@@ -20,18 +20,18 @@ To navigate to the Spark connection settings:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png){ loading=lazy; width="1200px" }
 
 2. Select Spark database type.
 
-    ![Selecting Spark database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-spark.png)
+    ![Selecting Spark database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-spark.png){ loading=lazy; width="1200px" }
 
 
 ### **Fill in the connection settings**
 
 After navigating to the Spark connection settings, you will need to fill in its details.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-spark1.png)
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-spark1.png){ loading=lazy; width="1200px" }
 
 | Spark connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
 |---------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -55,7 +55,7 @@ can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
 
 For example:
 
-![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png)
+![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png){ loading=lazy; width="1200px" }
 
 To remove the property click on the trash icon at the end of the input field.
 
@@ -72,18 +72,18 @@ Now we can import schemas and tables.
 1. Import the selected data resources (source schemas and tables) by clicking on the **Import Tables** button next to
    the name of the source schema from which you want to import tables.
 
-    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-schemas.png)
+    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-schemas.png){ loading=lazy; width="1200px" }
 
 2. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.png)
+    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.png){ loading=lazy; width="1200px" }
 
 When new tables are imported, DQOps automatically activates profiling and monitoring checks, such as row count,
 table availability, and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m.
 By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks,
 or modify the schedule for newly imported tables.
 
-![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png)
+![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png){ loading=lazy; width="1200px" }
 
 
 ## Add Spark connection using DQOps Shell

@@ -166,7 +166,7 @@ To configure the event and/or ingestion timestamp columns:
 
 4. Click the Save button in the upper right corner.
 
-![Configure event and ingestion timestamp columns](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/event-and-ingestion-columns-configuration-for-timeliness-checks.png){ loading=lazy }
+![Configure event and ingestion timestamp columns](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/event-and-ingestion-columns-configuration-for-timeliness-checks.png){ loading=lazy; width="1200px" }
 
 
 ### Configuring timestamp columns in YAML
@@ -209,7 +209,7 @@ We advise configuring the check for warning and error severity levels.
 ### Configuring table freshness in UI
 The data timeliness checks are configured on the table level, as shown in the following screenshot.
 
-![Data freshness data quality check configured in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-freshness-data-quality-check-in-dqops-min.png){ loading=lazy }
+![Data freshness data quality check configured in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-freshness-data-quality-check-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### Configuring table freshness in YAML
 The configuration of [*data_freshness*](../checks/table/timeliness/data-freshness.md) is straightforward in YAML.
@@ -265,12 +265,12 @@ They allow to track and review all types of timeliness issues from multiple angl
 The **Table freshness - tables with most current data** dashboard shows the tables with the most recent data,
 but also shows data freshness issues for outdated tables.
 
-![Data freshness data quality dashboard in DQOps showing tables with most recent data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-freshness-dashboard-most-recent-tables-in-dqops-min.png){ loading=lazy }
+![Data freshness data quality dashboard in DQOps showing tables with most recent data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-freshness-dashboard-most-recent-tables-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### History of timeliness issues
 The **History of timeliness issues** dashboard shows an aggregated list of recent data timeliness issues.
 
-![Data quality dashboard showing a history of recent data timelines issues in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/history-of-recent-data-timeliness-issues-dashboard-in-dqops-min.png){ loading=lazy }
+![Data quality dashboard showing a history of recent data timelines issues in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/history-of-recent-data-timeliness-issues-dashboard-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 
 ## List of timeliness checks at a table level

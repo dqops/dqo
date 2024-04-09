@@ -96,7 +96,7 @@ The values are:
 
 - The **Text mean length** shows the average text length.
 
-![Data profiling a text column length in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-profiling-text-column-length-in-dqops-min.png){ loading=lazy }
+![Data profiling a text column length in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-profiling-text-column-length-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ## Minimum text length
 The [*text_min_length*](../checks/column/text/text-min-length.md) has two optional rule parameters.
@@ -109,7 +109,7 @@ The [*text_min_length*](../checks/column/text/text-min-length.md) has two option
 The following screenshot shows configuring the [*text_min_length*](../checks/column/text/text-min-length.md) check 
 in the [DQOps data quality check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
-![Configuring minimum text length in range data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/min-text-length-in-range-data-quality-check-in-dqops-min.png){ loading=lazy }
+![Configuring minimum text length in range data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/min-text-length-in-range-data-quality-check-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### Verifying minimum text length in YAML
 The configuration of the [*text_min_length*](../checks/column/text/text-min-length.md) check in YAML is simple.
@@ -159,7 +159,7 @@ And one of the anomaly or change detection rules:
 The following screenshot shows the configuration of a custom data quality check that detects changes
 to the minimum or maximum text length.
 
-![Creating custom data quality check that detects anomalies in the maximum text length](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/creating-custom-text-maximum-length-anomaly-detection-check-dqops-min.png){ loading=lazy }
+![Creating custom data quality check that detects anomalies in the maximum text length](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/creating-custom-text-maximum-length-anomaly-detection-check-dqops-min.png){ loading=lazy; width="1200px" }
 
 ## Use cases
 | **Name of the example**                                                                                        | **Description**                                                                                                                                                                                                                         |

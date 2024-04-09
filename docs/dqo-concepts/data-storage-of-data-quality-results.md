@@ -231,13 +231,13 @@ DQOps tracks local file changes, comparing the list of files previously synchron
 When any YAML, or *.parquet* file is saved, deleted or updated locally, DQOps detects the file change and changes the color of the
 `Synchronize` button to green. 
 
-![Synchronize button status when local changes are present in DQOps](https://dqops.com/docs/images/concepts/data-storage/synchronize-button-local-changes-present-min.png){ loading=lazy }
+![Synchronize button status when local changes are present in DQOps](https://dqops.com/docs/images/concepts/data-storage/synchronize-button-local-changes-present-min.png){ loading=lazy; width="1200px" }
 
 Press the `Synchronize` button to start the synchronization job. The progress of synchronization can be tracked in the job
 notification panel on the right of the `Synchronize` button.
 When no local changes are present, the button is white.
 
-![Synchronize button status when no local changes are present in DQOps](https://dqops.com/docs/images/concepts/data-storage/synchronize-button-no-local-changes-present-min.png){ loading=lazy }
+![Synchronize button status when no local changes are present in DQOps](https://dqops.com/docs/images/concepts/data-storage/synchronize-button-no-local-changes-present-min.png){ loading=lazy; width="1200px" }
 
 !!! info "Only local changes are detected"
 

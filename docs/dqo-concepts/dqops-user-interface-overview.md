@@ -8,7 +8,7 @@ This guide introduces the concept of DQOps user interface, how the screen is org
 
 The DQOps web interface is divided into three main areas.
 
-![The DQOps user interface overview](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/user-interface-overview3.png)
+![The DQOps user interface overview](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/user-interface-overview3.png){ loading=lazy; width="1200px" }
 
 1. The [navigation bar](#navigation-bar) has links to the main DQOps data quality monitoring sections and provides access to the main settings and other functions.
 2. The [tree view](#tree-view) displays all the data sources available in your workspace or a list of dashboards depending on the section chosen in the navigation bar. 
@@ -120,11 +120,11 @@ such as **Data Source**, **Profiling**, **Monitoring Checks**, **Partition Check
 Each section can have a maximum of seven tabs open at a time.  If you try to add an eighth tab, the first one will be automatically removed to maintain the limit. 
 These tabs are stored locally, which means that you can always return to them even after closing the application.
 
-![Tabs](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tabs.png)
+![Tabs](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tabs.png){ loading=lazy; width="1200px" }
 
 If the tab's content no longer exists, a pop-up notification will appear and the corresponding tab will close automatically.
 
-![Closing tab](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tab-will-closed.png)
+![Closing tab](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tab-will-closed.png){ loading=lazy; width="1200px" }
 
 ### **Main workspace tabs**
 
@@ -140,7 +140,7 @@ Below the quick links are tabs that vary in different sections.
 
 In the **Profiling** section you can access:
 
-![Main workspace tabs - Profiling](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-profiling.png)
+![Main workspace tabs - Profiling](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-profiling.png){ loading=lazy; width="1200px" }
 
 - **Basic data statistics** that allows you to [collect basic statistics](../working-with-dqo/collecting-basic-data-statistics.md) about data sources during the data profiling stage.
 - **Table preview** that provides a summary preview of the table. 
@@ -150,7 +150,7 @@ In the **Profiling** section you can access:
 
 In the **Monitoring Checks** section you can access
 
-![Main workspace tabs - Monitoring](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-monitoring.png)
+![Main workspace tabs - Monitoring](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-monitoring.png){ loading=lazy; width="1200px" }
 
 
 - **Table quality status (daily checks)** provides a summary of the results of the executed daily monitoring checks.
@@ -162,7 +162,7 @@ In the **Monitoring Checks** section you can access
   
 In the **Partition Checks** section you can access
 
-![Main workspace tabs - Partition](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-partition.png)
+![Main workspace tabs - Partition](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-partition.png){ loading=lazy; width="1200px" }
 
 - **Table quality status (daily checks)** provides a summary of the results of the executed daily partition checks.
 - **Daily checks** that gives access to the Check editor for daily checks.
@@ -176,7 +176,7 @@ In the **Partition Checks** section you can access
 
 The Check editor screen allows you to work with checks.
 
-![Main workspace tabs](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-check-editor3.png)
+![Main workspace tabs](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-check-editor3.png){ loading=lazy; width="1200px" }
 
 Under tabs selection, there is information about the set schedule configuration. Also, in the **Partition Checks** 
 section, there is additional information about the date partitioning column.
@@ -199,13 +199,13 @@ The buttons and icons allow you to:
 - Disable checks by using the Disable button
 - Access check **Settings** where you can set Custom data groupings, modify inclusion/exclusion of check in KPI and SLA, modify the name of the Data Quality Dimension, add SQL WHERE condition, modify scheduling settings, or add Labels.
 
-    ![Settings buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-settings.png) 
+    ![Settings buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-settings.png){ loading=lazy; width="1200px" }
 
 - Check schedule status. 
 - Run data quality checks
 - View detailed results for checks, Sensor readouts, and Execution errors
 
-    ![Results buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-results.png)
+    ![Results buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-results.png){ loading=lazy; width="1200px" }
 
 - View detailed information about check. 
 - Check the results of the run check shown as a color square
@@ -220,7 +220,7 @@ The buttons and icons allow you to:
 In the **Profiling**, **Monitoring Checks**, and **Partition Checks**, there is a tab called **Table quality status**.
 This tab provides a summary of the results of the executed checks, grouped by check category or data quality dimension.
 
-![Table quality status](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status.png)
+![Table quality status](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status.png){ loading=lazy; width="1200px" }
 
 
 By using the radio buttons in the upper right corner of the screen, you can view the results for the **Current month**,
@@ -242,7 +242,7 @@ The color indicate the current or the highest severity status:
 
 You can view the list of executed checks by clicking on the arrow. Hovering over a check name will display more details.
 
-![Table quality status - detailed checks view](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status-detailed-checks-view.png)
+![Table quality status - detailed checks view](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status-detailed-checks-view.png){ loading=lazy; width="1200px" }
 
 ## Notifications
 

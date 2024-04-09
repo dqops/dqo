@@ -556,7 +556,7 @@ The parameters for a single configured data quality checks are shown on the
 [data quality check editor screen](dqops-user-interface-overview.md#check-editor) in the user interface
 after clicking the wheel icon.
 
-![Data quality check settings panel in DQOps](https://dqops.com/docs/images/concepts/configuring-checks/check_level_settings_panel_min.png)
+![Data quality check settings panel in DQOps](https://dqops.com/docs/images/concepts/configuring-checks/check_level_settings_panel_min.png){ loading=lazy; width="1200px" }
 
 
 ### **Disable a data quality check**
@@ -810,7 +810,7 @@ dqo> check activate -c=connection_name -t=public.fact_* -ch=daily_nulls_percent 
 DQOps provides the option to configure multiple checks from the user interface. You can search for target tables and 
 columns to activate data quality checks or review the configuration of rules.
 
-![Search for checks on the multiple check editor](https://dqops.com/docs/images/working-with-dqo/activate-and-deactivate-multiple-checks/search-for-checks.png)
+![Search for checks on the multiple check editor](https://dqops.com/docs/images/working-with-dqo/activate-and-deactivate-multiple-checks/search-for-checks.png){ loading=lazy; width="1200px" }
 
 To learn more about [configuring multiple data quality checks](../working-with-dqo/activate-and-deactivate-multiple-checks.md), refer to the manual.
 

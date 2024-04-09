@@ -23,7 +23,7 @@ It is the easiest way to understand how the data quality check targeting is used
     to see how to use the user interface to configure and run the data quality checks. The remaining content of this guide
     focuses on the data quality check **targeting** to select checks to run.
 
-    ![run data quality check in DQOps data quality check editor](https://dqops.com/docs/images/concepts/run-check-in-editor-min.png)
+    ![run data quality check in DQOps data quality check editor](https://dqops.com/docs/images/concepts/run-check-in-editor-min.png){ loading=lazy; width="1200px" }
 
 
 ## Targeting data sources and tables

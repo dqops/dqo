@@ -14,7 +14,7 @@ The measure (the percentage) is verified with a range data quality check.
 The profile of a sample *bool* column is shown below. The tested column has ~201M false values and ~5M true values.
 The percentage of true values is 2.43%.
 
-![Bool column profiling statistics in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/bool-column-profile-min.png){ loading=lazy }
+![Bool column profiling statistics in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/bool-column-profile-min.png){ loading=lazy; width="1200px" }
 
 ## Bool data quality checks
 DQOps has two similar data quality checks for analyzing bool values.
@@ -32,7 +32,7 @@ Both bool checks accept two optional rule parameters, which set the valid percen
 ### Enable bool checks in UI
 [DQOps check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor) shows the bool checks in the `Bool` category.
 
-![Configure data quality check to measure the percentage of true values in a bool column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/boolean-true-percent-check-editor-warning-min.png){ loading=lazy }
+![Configure data quality check to measure the percentage of true values in a bool column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/boolean-true-percent-check-editor-warning-min.png){ loading=lazy; width="1200px" }
 
 ### Enable bool checks in YAML
 Bool checks are configured in the `bool` category node.

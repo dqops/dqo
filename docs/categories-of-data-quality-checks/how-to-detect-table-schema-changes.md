@@ -65,7 +65,7 @@ The change detection checks should be configured as
 [daily monitoring checks](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md#daily-monitoring-checks)
 to detect day-to-day changes.
 
-![Enabled data quality checks for table schema drift detection](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-schema-drift-monitoring-enabled-without-changes-min.png){ loading=lazy }
+![Enabled data quality checks for table schema drift detection](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-schema-drift-monitoring-enabled-without-changes-min.png){ loading=lazy; width="1200px" }
 
 ### Example of a schema change
 In the meantime, a new column was added to the table using an SQL statement shown below.
@@ -77,7 +77,7 @@ ADD COLUMN int64_field_31 INTEGER;
 
 The following screenshot shows the data quality check editor on the next day.
 
-![Data quality checks that detected table schema changes](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-schema-drift-monitoring-detected-changes-min.png){ loading=lazy }
+![Data quality checks that detected table schema changes](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-schema-drift-monitoring-detected-changes-min.png){ loading=lazy; width="1200px" }
 
 DQOps detected new data quality issues for all types of schema changes because adding a new column is detected by all table-level checks.
 You can also review the [example of detecting table schema changes](../examples/schema/detect-table-schema-changes.md),
@@ -122,7 +122,7 @@ DQOps supports the following schema change detection checks configured on a colu
 The column-level schema change detection checks are configured using the [data quality check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor)
 on a column level.
 
-![Configuring column schema change detection data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-schema-checks-enabled-in-editor-min.png){ loading=lazy }
+![Configuring column schema change detection data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-schema-checks-enabled-in-editor-min.png){ loading=lazy; width="1200px" }
 
 
 ### Configuring column-level checks in YAML
@@ -150,14 +150,14 @@ DQOps supports several data quality dashboards that are showing recent table sch
 ### Recent table schema changes
 The summary dashboard shows all recent table schema changes of any type.
 
-![Data quality dashboard showing recent table schema changes](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/summary-of-table-schema-changes-dashboard-min.png){ loading=lazy }
+![Data quality dashboard showing recent table schema changes](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/summary-of-table-schema-changes-dashboard-min.png){ loading=lazy; width="1200px" }
 
 ### Detecting column count changes
 The column count changes dashboard shows only the schema changes detected by the [*column_count_changed*](../checks/table/schema/column-count-changed.md) check.
 DQOps has similar [data quality dashboards](../dqo-concepts/types-of-data-quality-dashboards.md)
 in the schema folder for different schema changes.
 
-![Data quality dashboard showing table schema changes for a count of columns](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-count-changed-dashboard-min.png){ loading=lazy }
+![Data quality dashboard showing table schema changes for a count of columns](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-count-changed-dashboard-min.png){ loading=lazy; width="1200px" }
 
 
 ## Use cases

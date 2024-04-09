@@ -97,7 +97,7 @@ The data quality issues can be divided into two groups
 
 Data quality checks are excluded from KPI calculation in the check's settings section in DQOps as shown below.
 
-![Excluding data quality check from KPI calculation screenshot](https://dqops.com/docs/images/concepts/data-quality-kpis/exclude-check-from-kpi-in-ui-min.png){ loading=lazy }
+![Excluding data quality check from KPI calculation screenshot](https://dqops.com/docs/images/concepts/data-quality-kpis/exclude-check-from-kpi-in-ui-min.png){ loading=lazy; width="1200px" }
 
 The configuration is stored in the *exclude_from_kpi* field in the YAML file, as shown below.
 
@@ -194,14 +194,14 @@ with a *profiling_* prefix, while the daily monitoring (and partitioned) checks 
 Migrating similar data quality checks between types is also supported directly in the check editor. 
 Activate the copy tool by clicking the *Set up monitoring checks* button.
 
-![Starting data quality check copy tool](https://dqops.com/docs/images/concepts/data-quality-kpis/set-up-monitoring-checks-screenshot-step-1-min.png)
+![Starting data quality check copy tool](https://dqops.com/docs/images/concepts/data-quality-kpis/set-up-monitoring-checks-screenshot-step-1-min.png){ loading=lazy; width="1200px" }
 
 Select the checks that should be copied, and click the "Daily monitoring checks" or "Monthly monitoring checks"
 buttons, depending on the frequency of running the checks. Daily monitoring checks will capture one data quality score per day, overwriting
 previous results if the check is reevaluated during the day. Monthly monitoring checks will capture only one result per month, overwriting
 data quality results captured on previous days.
 
-![Copy data quality checks between types](https://dqops.com/docs/images/concepts/data-quality-kpis/set-up-monitoring-checks-screenshot-step-2-min.png)
+![Copy data quality checks between types](https://dqops.com/docs/images/concepts/data-quality-kpis/set-up-monitoring-checks-screenshot-step-2-min.png){ loading=lazy; width="1200px" }
 
 ### **Observe data**
 The next step is a continuous data observability process. DQOps will run configured *monitoring* and *partitioned* checks daily,

@@ -77,7 +77,7 @@ We want to accept a maximum number of rows that fail the condition by setting th
 
 The example of running the check on the *311_service_requests* table found 41276 rows that are not uppercase.
 
-![SQL condition failed data quality check in editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-condition-failed-count-data-quality-check-editor-min.png){ loading=lazy }
+![SQL condition failed data quality check in editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-condition-failed-count-data-quality-check-editor-min.png){ loading=lazy; width="1200px" }
 
 ### Activating failed check in YAML
 The [`sql_condition_failed_on_column`](../checks/column/custom_sql/sql-condition-failed-on-column.md) 
@@ -113,7 +113,7 @@ and [`sql_condition_passed_percent_on_table`](../checks/table/custom_sql/sql-con
 data quality checks measure the percentage of rows passing the SQL condition. 
 The percentage is compared to a minimum accepted percentage by a data quality rule.
 
-![SQL condition passed percent data quality check in editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-condition-passed-percent-check-editor-min.png){ loading=lazy }
+![SQL condition passed percent data quality check in editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-condition-passed-percent-check-editor-min.png){ loading=lazy; width="1200px" }
 
 ### Activating percent check in YAML
 The [`sql_condition_passed_percent_on_column`](../checks/column/custom_sql/sql-condition-passed-percent-on-column.md)
@@ -162,7 +162,7 @@ The following example uses the
 [`sql_condition_passed_percent_on_column`](../checks/column/custom_sql/sql-condition-passed-percent-on-column.md)
 daily monitoring data quality check.
 
-![Compare columns in a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/compare-column-values-data-quality-check-in-editor-min.png){ loading=lazy }
+![Compare columns in a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/compare-column-values-data-quality-check-in-editor-min.png){ loading=lazy; width="1200px" }
 
 ### Activate compare check in YAML
 The following example uses the
@@ -212,7 +212,7 @@ Please turn on advanced checks to see it in the check editor.
 The following example shows running the check on the *state_plane_x_coordinate* column, 
 which is a text column and needs casting to a float value. The aggregate expression is `AVG(SAFE_CAST({column} as FLOAT64))`.
 
-![SQL aggregate expression value in range data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-aggregate-expression-in-range-data-quality-check-min.png){ loading=lazy }
+![SQL aggregate expression value in range data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-aggregate-expression-in-range-data-quality-check-min.png){ loading=lazy; width="1200px" }
 
 ### Activating aggregate check in YAML
 The [`sql_aggregate_expression_on_column`](../checks/column/custom_sql/sql-aggregate-expression-on-column.md)

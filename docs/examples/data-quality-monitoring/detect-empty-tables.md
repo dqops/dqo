@@ -48,7 +48,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/detect-empty-tables-navigating-to-a-list-of-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/detect-empty-tables-navigating-to-a-list-of-checks.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
 
@@ -74,14 +74,14 @@ Run the activated [daily_row_count](../../checks/table/volume/row-count.md) chec
 
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-![Run check](https://dqops.com/docs/images/examples/detect-empty-tables-run-checks.png)
+![Run check](https://dqops.com/docs/images/examples/detect-empty-tables-run-checks.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![Daily row count check results](https://dqops.com/docs/images/examples/detect-empty-tables-checks-results.png)
+![Daily row count check results](https://dqops.com/docs/images/examples/detect-empty-tables-checks-results.png){ loading=lazy; width="1200px" }
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
@@ -123,7 +123,7 @@ This dashboard allow filtering data by:
 * data group,
 * table.
  
-![Daily row count check results on Current table status dashboard](https://dqops.com/docs/images/examples/daily-row-count-check-results-on-current-table-status-dashboard.png)
+![Daily row count check results on Current table status dashboard](https://dqops.com/docs/images/examples/daily-row-count-check-results-on-current-table-status-dashboard.png){ loading=lazy; width="1200px" }
 
 ## YAML configuration file
 

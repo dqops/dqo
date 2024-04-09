@@ -23,12 +23,12 @@ Please read the guide for [detecting numeric anomalies](how-to-detect-anomaly-da
 The fastest way to find out-of-range values is by reviewing basic statistics collected by DQOps. 
 The column list shows minimum and maximum values.
 
-![Column list with minimum and maximum values for columns](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-list-with-min-max-statistics-min.png){ loading=lazy }
+![Column list with minimum and maximum values for columns](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-list-with-min-max-statistics-min.png){ loading=lazy; width="1200px" }
 
 We can also review the values of aggregate metrics, such as sum or mean value. 
 DQOps shows these measures on the column's statistics screen.
 
-![Profiling statistics of a single column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-statistics-numeric-ranges-min.png){ loading=lazy }
+![Profiling statistics of a single column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-statistics-numeric-ranges-min.png){ loading=lazy; width="1200px" }
 
 
 ## Detecting out-of-range numbers
@@ -103,7 +103,7 @@ such as 0 for negative values.
 The following example shows the configuration of 
 the [*number_above_max_value*](../checks/column/numeric/number-above-max-value.md) check.
 
-![Detect numeric values above a maximum accepted value using a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-out-of-range-numeric-values-above-maximum-value-check-min.png){ loading=lazy }
+![Detect numeric values above a maximum accepted value using a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-out-of-range-numeric-values-above-maximum-value-check-min.png){ loading=lazy; width="1200px" }
 
 ### Detect invalid numbers in YAML
 The [*number_above_max_value*](../checks/column/numeric/number-above-max-value.md) check is straightforward to configure in YAML.
@@ -145,7 +145,7 @@ DQOps shows these measures when the *advanced checks* are enabled with a checkbo
 
 The following example shows the [*mean_in_range*](../checks/column/numeric/mean-in-range.md) data quality check configured in the editor.
 
-![Mean numeric value data quality check in editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mean-value-in-range-data-quality-check-min.png){ loading=lazy }
+![Mean numeric value data quality check in editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mean-value-in-range-data-quality-check-min.png){ loading=lazy; width="1200px" }
 
 
 ### Activating an aggregate check inYAML

@@ -40,12 +40,12 @@ We assume that all values are integer values, allowing us to use an *INTEGER* da
 The column statistics show that the most common street numbers are integers, 
 but DQOps detected that the column contains mixed data types.
 
-![Mixed data types detected in column that has mostly numeric values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mixed-data-types-example-with-numeric-values-min.png){ loading=lazy }
+![Mixed data types detected in column that has mostly numeric values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mixed-data-types-example-with-numeric-values-min.png){ loading=lazy; width="1200px" }
 
 We can change the table filter to return only rows containing non-numeric values
 that failed to be converted to an *INTEGER* data type.
 
-![Configure table filter for data profiling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/setting-table-filter-to-rerun-profiling-min.png){ loading=lazy }
+![Configure table filter for data profiling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/setting-table-filter-to-rerun-profiling-min.png){ loading=lazy; width="1200px" }
 
 The SQL filter that we used is shown below.
 
@@ -102,7 +102,7 @@ analyzes all values in a column and asserts that all values are of an expected d
 The [*detected_datatype_in_text*](../checks/column/datatype/detected-datatype-in-text.md) data quality check
 is easy to activate. The parameter of the rule is the expected data type.
 
-![Configure data type detection check in UI](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/assert-data-type-in-text-column-street-number-check-min.png){ loading=lazy }
+![Configure data type detection check in UI](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/assert-data-type-in-text-column-street-number-check-min.png){ loading=lazy; width="1200px" }
 
 ### Configure detection check in YAML
 The [*detected_datatype_in_text*](../checks/column/datatype/detected-datatype-in-text.md)
@@ -136,7 +136,7 @@ DQOps uses the historical data quality results for change detection.
 The [*detected_datatype_in_text_changed*](../checks/column/datatype/detected-datatype-in-text-changed.md)
 check uses parameterless data quality rules to select the severity level for reported issues.
 
-![Detect data type changed in text column data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-data-type-changed-check-min.png){ loading=lazy }
+![Detect data type changed in text column data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-data-type-changed-check-min.png){ loading=lazy; width="1200px" }
 
 The example above shows the first execution of the check when historical results are not yet present. 
 Hence, the *expected_value* is missing. 
@@ -173,7 +173,7 @@ By using a partitioned version of the data type detection checks, it is possible
 The following example shows that the last five daily partitions contained only integer values in the *street_number* column, 
 and the detected data type has not changed day-to-day.
 
-![Data type detection in daily partitions](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-type-detection-in-partitioned-data-min.png){ loading=lazy }
+![Data type detection in daily partitions](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-type-detection-in-partitioned-data-min.png){ loading=lazy; width="1200px" }
 
 
 ## List of datatype checks at a column level

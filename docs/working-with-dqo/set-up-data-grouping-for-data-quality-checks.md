@@ -37,12 +37,12 @@ To set up the default data grouping configuration template at the **data source 
 1. In the DQOps user interface, go to the **Data Source** section, select the data source of interest in the tree view on the left,
     and select the **Default grouping template** tab.
 
-    ![Default data grouping template tag](https://dqops.com/docs/images/working-with-dqo/set-up-data-grouping/default-data-grouping-template.png)
+    ![Default data grouping template tag](https://dqops.com/docs/images/working-with-dqo/set-up-data-grouping/default-data-grouping-template.png){ loading=lazy; width="1200px" }
 
 2. In the **Default grouping template** tab, write a tag for a data source or select the discriminator column from the dropdown that would
     identify the data source. You can configure up to 9 different data grouping dimension levels.
 
-    ![Adding data grouping](https://dqops.com/docs/images/working-with-dqo/set-up-data-grouping/adding-data-grouping.png)
+    ![Adding data grouping](https://dqops.com/docs/images/working-with-dqo/set-up-data-grouping/adding-data-grouping.png){ loading=lazy; width="1200px" }
 
 3. Once you have set the data grouping configuration, click on the **Save** button to save your changes.
 
@@ -53,14 +53,14 @@ To set up data grouping configuration at the **table level**:
 1.  In the DQOps user interface, go to the **Data Source** section, select the table of interest in the tree view on the left,
     and select the **Data Grouping** tab.
 
-    ![Adding a table-level data grouping configuration](https://dqops.com/docs/images/working-with-dqo/set-up-data-grouping/adding-table-level-data-grouping.png)
+    ![Adding a table-level data grouping configuration](https://dqops.com/docs/images/working-with-dqo/set-up-data-grouping/adding-table-level-data-grouping.png){ loading=lazy; width="1200px" }
 
 2. Click on the **New data grouping configuration** button.
 
 3. Write a **Data grouping configuration name** and write a tag for a data grouping or select the discriminator column 
     that would identify the data source.
 
-    ![Table-level data grouping configuration](https://dqops.com/docs/images/working-with-dqo/set-up-data-grouping/table-level-data-grouping-configuration.png)
+    ![Table-level data grouping configuration](https://dqops.com/docs/images/working-with-dqo/set-up-data-grouping/table-level-data-grouping-configuration.png){ loading=lazy; width="1200px" }
 
 4. Once you have set the data grouping configuration, click on the **Save** button to save your changes.
 
@@ -76,7 +76,7 @@ check results tracked by DQOps and will impact data quality KPIs.
 
 For more information about data grouping, see [data grouping in the DQOps concepts section](../dqo-concepts/measuring-data-quality-with-data-grouping.md).
 
-![Select default data grouping configuration](https://dqops.com/docs/images/working-with-dqo/set-up-data-grouping/select-default-data-grouping-configuration.png)
+![Select default data grouping configuration](https://dqops.com/docs/images/working-with-dqo/set-up-data-grouping/select-default-data-grouping-configuration.png){ loading=lazy; width="1200px" }
 
 On this screen you can also edit or delete data grouping configurations using Action buttons. 
 

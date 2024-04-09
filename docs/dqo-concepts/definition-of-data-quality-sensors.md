@@ -137,7 +137,7 @@ The first tab named the *Sensor definition* is responsible for editing the speci
 a custom data quality sensor
 stored in the [*$DQO_USER_HOME/sensors/\*\*/\*.dqosensor.yaml*](../reference/yaml/SensorDefinitionYaml.md) files.
 
-![Sensor definition configuration](https://dqops.com/docs/images/concepts/sensor-definition-configuration.png)
+![Sensor definition configuration](https://dqops.com/docs/images/concepts/sensor-definition-configuration.png){ loading=lazy; width="1200px" }
 
 ### **Database specific SQL query template**
 The Jinja2 query templates are edited on the tabs named as the [data sources](../data-sources/index.md).
@@ -148,7 +148,7 @@ The configuration for each data source is stored in two files:
 
 - Jinja2 file stored in the *sensors/\*\*/&lt;data_source_type&gt;.sql.jinja2* file.
 
-![PostgreSQL template](https://dqops.com/docs/images/concepts/sensor-postgresql-jinja-template.png)
+![PostgreSQL template](https://dqops.com/docs/images/concepts/sensor-postgresql-jinja-template.png){ loading=lazy; width="1200px" }
 
 
 ## What's next

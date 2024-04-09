@@ -67,7 +67,7 @@ To navigate to the CSV connection settings:
    
 2. Select **CSV** connection type.
 
-   ![Selecting CSV database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-csv.png)
+   ![Selecting CSV database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-csv.png){ loading=lazy; width="1200px" }
 
 ### **Fill in the connection settings**
 
@@ -98,11 +98,11 @@ where you can import files.
 
 1. Import the "files" schema by clicking the **Import tables** button.
 
-    ![Importing schemas](https://dqops.com/docs/images/getting-started/importing-schema-files.png)
+    ![Importing schemas](https://dqops.com/docs/images/getting-started/importing-schema-files.png){ loading=lazy; width="1200px" }
 
 2. Click on the checkbox next to the file name **austin_crime.csv** and import it by clicking **Import selected tables** button in the upper right corner.
 
-    ![Importing tables](https://dqops.com/docs/images/getting-started/importing-tables-austin-crime-csv.png)
+    ![Importing tables](https://dqops.com/docs/images/getting-started/importing-tables-austin-crime-csv.png){ loading=lazy; width="1200px" }
 
 DQOps will create a table from the **austin_crime.csv** file in the virtual schema "files", which will allow you to profile it and monitor its data quality.
 
@@ -130,20 +130,20 @@ To Run basic statistics and profiling checks, click on the appropriate buttons o
 
 We will evaluate the results from basic statistics and profiling checks at the next step of the Getting started.
 
-![Running basic statistics and profiling checks](https://dqops.com/docs/images/getting-started/running-basics-statistics-and-profiling-checks-csv.png)
+![Running basic statistics and profiling checks](https://dqops.com/docs/images/getting-started/running-basics-statistics-and-profiling-checks-csv.png){ loading=lazy; width="1200px" }
 
 ### Review scheduling with the Advisor
 
 To review scheduling for profiling and daily monitoring checks, click on the **Review scheduling** button.
 
-![Review scheduling](https://dqops.com/docs/images/getting-started/review-scheduling-csv.png)
+![Review scheduling](https://dqops.com/docs/images/getting-started/review-scheduling-csv.png){ loading=lazy; width="1200px" }
 
 You will be linked to **Data Source** section, **Schedule** tab where you can review scheduling settings for the added connection.
 
 The scheduling is enabled by default. You can turn it off by clicking the notification icon in the upper right corner and 
 then clicking the **Job scheduler** toggle button.
       
-![Reviewing data source details](https://dqops.com/docs/images/getting-started/reviewing-data-source-section-csv1.png)
+![Reviewing data source details](https://dqops.com/docs/images/getting-started/reviewing-data-source-section-csv1.png){ loading=lazy; width="1200px" }
 
 
 ## Explore the connection-level tabs in the Data sources section
@@ -173,7 +173,7 @@ At the table level in the **Data sources** section, there are the following tabs
 
 You can check the details of the imported table by expanding the tree view on the left and selecting the "austin_crime.csv" table.
 
-![Reviewing table details](https://dqops.com/docs/images/getting-started/reviewing-table-details-csv.png)
+![Reviewing table details](https://dqops.com/docs/images/getting-started/reviewing-table-details-csv.png){ loading=lazy; width="1200px" }
 
 ## Next step
 

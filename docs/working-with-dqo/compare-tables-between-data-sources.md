@@ -34,7 +34,7 @@ these [types of checks in the DQOps concept section](../dqo-concepts/definition-
 
 To navigate to table comparison screen, follow these steps:
 
-![Create a table comparison](https://dqops.com/docs/images/working-with-dqo/comparisons/create-table-comparison2.png)
+![Create a table comparison](https://dqops.com/docs/images/working-with-dqo/comparisons/create-table-comparison2.png){ loading=lazy; width="1200px" }
 
 1. Select the **Profiling**, **Monitoring checks**, or **Partition checks** section and select the table of interest from the tree view on the left. This will be your source table.
 
@@ -46,7 +46,7 @@ To navigate to table comparison screen, follow these steps:
 On the table comparison screen, enter a unique name for your comparison and select the reference table by filtering the
 connection, schema, and table name from the dropdown menu.
 
-![Select column for comparison](https://dqops.com/docs/images/working-with-dqo/comparisons/select-column-for-comparison.png)
+![Select column for comparison](https://dqops.com/docs/images/working-with-dqo/comparisons/select-column-for-comparison.png){ loading=lazy; width="1200px" }
 
 ### **Optional data grouping in comparisons**
 
@@ -55,7 +55,7 @@ If you want to use data grouping, select columns on compared (source) and refere
 You can modify this limit by changing the `--dqo.sensors.limit.sensor-readout-limit` parameter.
 [Learn more about data groupings](../dqo-concepts/measuring-data-quality-with-data-grouping.md).
 
-![Optional data grouping on comparison](https://dqops.com/docs/images/working-with-dqo/comparisons/optional-data-grouping-on-comparison.png)
+![Optional data grouping on comparison](https://dqops.com/docs/images/working-with-dqo/comparisons/optional-data-grouping-on-comparison.png){ loading=lazy; width="1200px" }
 
 ### **Save a new table comparison**
 
@@ -64,7 +64,7 @@ To save a new table comparison, simply click the **Save** button located in the 
 This will show a comparison screen where you can match the reference columns to the source columns. DQOps will automatically map the 
 columns between the tables based on the column names, but you can make adjustments if necessary.
 
-![Select columns checks](https://dqops.com/docs/images/working-with-dqo/comparisons/selecting-columns-checks2.png)
+![Select columns checks](https://dqops.com/docs/images/working-with-dqo/comparisons/selecting-columns-checks2.png){ loading=lazy; width="1200px" }
 
 ## Run table comparison
 
@@ -74,13 +74,13 @@ checks you want to run, simply click on the checkboxes.
 Once you have activated the checks, you can set the severity level for each one. You can choose from three levels: warning, error, and fatal.
 [Learn more about the severity levels](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels).
 
-![Table comparisons severity levels](https://dqops.com/docs/images/working-with-dqo/comparisons/table-comparisions-severity-levels2.png)
+![Table comparisons severity levels](https://dqops.com/docs/images/working-with-dqo/comparisons/table-comparisions-severity-levels2.png){ loading=lazy; width="1200px" }
     
 When you create a new table comparison a new category of checks named Comparisons/[name of the comparison] is also 
 created on the [Check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor) with a list of table and column checks.
 On the Editor screen you can activate and deactivate comparison checks, set severity levels, run checks and view the results.
 
-![List of checks](https://dqops.com/docs/images/working-with-dqo/comparisons/comparison-check-editor.png)
+![List of checks](https://dqops.com/docs/images/working-with-dqo/comparisons/comparison-check-editor.png){ loading=lazy; width="1200px" }
 
 After making all the necessary adjustments, click the **Save** button to save the changes.  
 
@@ -88,7 +88,7 @@ Once all the required elements have been set, run the comparison between two tab
 After completion of the job, the checkbox will be highlighted with the color of the result: green for valid, yellow for 
 warning, orange for error and red for fatal. 
 
-![Table reconciliation summary with discrepancies on columns](https://dqops.com/docs/images/working-with-dqo/comparisons/results2.png)
+![Table reconciliation summary with discrepancies on columns](https://dqops.com/docs/images/working-with-dqo/comparisons/results2.png){ loading=lazy; width="1200px" }
 
 
 ## View detailed results of table comparison
@@ -96,19 +96,19 @@ warning, orange for error and red for fatal.
 By expanding the rows, you can view the more detailed results. Additionally, if you set the grouping columns, you will 
 be able to view a list of mismatches in the data groupings.
 
-![Table reconciliation details at a column level](https://dqops.com/docs/images/working-with-dqo/comparisons/results-detils.png)
+![Table reconciliation details at a column level](https://dqops.com/docs/images/working-with-dqo/comparisons/results-detils.png){ loading=lazy; width="1200px" }
 
 In a situation when you see the results for a table comparison checks that have been collected earlier, you can delete 
 the old results by clicking the **Delete results** button. 
 
-![Deleting table comparison results](https://dqops.com/docs/images/working-with-dqo/comparisons/delete-results2.png)
+![Deleting table comparison results](https://dqops.com/docs/images/working-with-dqo/comparisons/delete-results2.png){ loading=lazy; width="1200px" }
 
 
 ## Deleting table comparison
 
 To remove an entire table comparison configuration, go to the list of table comparisons and click the **Delete** button. 
 
-![Deleting table comparison results](https://dqops.com/docs/images/working-with-dqo/comparisons/deleting-comparison2.png)
+![Deleting table comparison results](https://dqops.com/docs/images/working-with-dqo/comparisons/deleting-comparison2.png){ loading=lazy; width="1200px" }
 
 
 ## Next steps

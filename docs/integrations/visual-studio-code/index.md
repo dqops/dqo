@@ -64,7 +64,7 @@ extensions must be installed.
 First, please install the [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) extension
 by Red Hat as shown in the following example.
 
-![YAML extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/yaml-extension.png)
+![YAML extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/yaml-extension.png){ loading=lazy; width="1200px" }
 
 If you intend to create custom [data quality sensors](../../dqo-concepts/definition-of-data-quality-sensors.md),
 please also install the [Better Jinja](https://marketplace.visualstudio.com/items?itemName=samuelcolvin.jinjahtml)
@@ -72,14 +72,14 @@ extension by Samuel Colvin.
 
 DQOps sensors are defined as Jinja2 templates of SQL queries and are easier to edit with this extension.
 
-![Better Jinja extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/better-jinja-extension.png)
+![Better Jinja extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/better-jinja-extension.png){ loading=lazy; width="1200px" }
 
 
 ## Code completion 
 The following screenshot shows how the [.dqotable.yaml](../../reference/yaml/TableYaml.md) file is shown 
 in Visual Studio Code when the YAML schema support is enabled.
 
-![Validated DQOps YAML file in Visual Studio Code](https://dqops.com/docs/images/integrations/visual-studio-code/dqotable-yaml-viewed-in-visual-studio-code.png)
+![Validated DQOps YAML file in Visual Studio Code](https://dqops.com/docs/images/integrations/visual-studio-code/dqotable-yaml-viewed-in-visual-studio-code.png){ loading=lazy; width="1200px" }
 
 
 ### **Table-level elements**
@@ -88,14 +88,14 @@ or a child node should be placed.
 
 Press `CTRL+Space` to expand the code completion dialog, showing available elements at this level.
 
-![Edit DQOps table YAML in VS Code](https://dqops.com/docs/images/integrations/visual-studio-code/objects-at-table-level-node.png)
+![Edit DQOps table YAML in VS Code](https://dqops.com/docs/images/integrations/visual-studio-code/objects-at-table-level-node.png){ loading=lazy; width="1200px" }
 
 The above example shows how to add a `comments` section at the table level. Comments are used to track changes inside
 the YAML file and are presented in the DQOps user interface.
 
 
 ### **Add a check category**
-Data quality checks are grouped in categories as described in the [configuring checks](../../dqo-concepts/configuring-data-quality-checks-and-rules.md)
+Data quality checks are grouped in categories as described in the [configuring checks](../../dqo-concepts/configuring-data-quality-checks-and-rules.md){ loading=lazy; width="1200px" }
 article.
 
 The list of check type nodes where categories are listed below. Those nodes are available both at a table root level
@@ -110,7 +110,7 @@ to configure table-level checks and below a named column to configure column-lev
 When the cursor is within one of the nodes for check types, press `CTRL+Space` to expand the list of categories
 available for that check type.
 
-![Expanding list of DQOps check categories in VS Code](https://dqops.com/docs/images/integrations/visual-studio-code/adding-profiling-accuracy-check.png)
+![Expanding list of DQOps check categories in VS Code](https://dqops.com/docs/images/integrations/visual-studio-code/adding-profiling-accuracy-check.png){ loading=lazy; width="1200px" }
 
 
 ### **Add a data quality check**
@@ -119,7 +119,7 @@ The data quality checks are defined below the category nodes.
 Place the cursor below the category node, adding required indenting. Press `CTRL+Space` to see a list of checks
 available within that category.
 
-![Adding data quality checks in DQOps using VS Code](https://dqops.com/docs/images/integrations/visual-studio-code/adding-profile-table-availability-check.png)
+![Adding data quality checks in DQOps using VS Code](https://dqops.com/docs/images/integrations/visual-studio-code/adding-profile-table-availability-check.png){ loading=lazy; width="1200px" }
 
 You may notice an extra node `custom_checks` that was suggested at this level. The `custom_checks`
 is a dictionary of custom checks defined by the user within that category. When configuring a custom check, 
@@ -138,7 +138,7 @@ The data quality rules to configure are:
 
 Place the cursor below the check node, adding required indenting. Press `CTRL+Space` to see a list of available nodes.
 
-![Adding error severity rule in DQOps using VS Code](https://dqops.com/docs/images/integrations/visual-studio-code/adding-error-threshold.png)
+![Adding error severity rule in DQOps using VS Code](https://dqops.com/docs/images/integrations/visual-studio-code/adding-error-threshold.png){ loading=lazy; width="1200px" }
 
 Each data quality check has several parameters, allowing to customize the check further.
 The following elements are supported, not including the data quality issue thresholds presented before.
@@ -172,7 +172,7 @@ parameters.
 The following example shows how to configure rules for 
 the [table availability](../../checks/table/availability/table-availability.md) check.
 
-![Configuring data quality rule parameters in DQOps using VS Code](https://dqops.com/docs/images/integrations/visual-studio-code/adding-max-failures-threshold.png)
+![Configuring data quality rule parameters in DQOps using VS Code](https://dqops.com/docs/images/integrations/visual-studio-code/adding-max-failures-threshold.png){ loading=lazy; width="1200px" }
 
 The assigned value to the rule parameter is shown below.
 
@@ -180,7 +180,7 @@ When setting **0** to the `max_failures` in the
 [table availability](../../checks/table/availability/table-availability.md) check, DQOps will raise a data quality
 issue instantly when an error is detected while trying to run a special availability testing query on the table.
 
-![Configuring table availability check in DQOps using VS Code](https://dqops.com/docs/images/integrations/visual-studio-code/adding-max-failures-threshold-value.png)
+![Configuring table availability check in DQOps using VS Code](https://dqops.com/docs/images/integrations/visual-studio-code/adding-max-failures-threshold-value.png){ loading=lazy; width="1200px" }
 
 
 ## Getting help
@@ -189,14 +189,14 @@ the data quality checks and their parameters directly in Visual Studio Code.
 
 The help is shown when the mouse cursor is placed over a node for a while.
 
-![Data quality check documentation preview in VS Code](https://dqops.com/docs/images/integrations/visual-studio-code/check-tooltip.png)
+![Data quality check documentation preview in VS Code](https://dqops.com/docs/images/integrations/visual-studio-code/check-tooltip.png){ loading=lazy; width="1200px" }
 
 
 ## Invalid syntax highlighting
 When a node added to a YAML file is invalid and not included in the DQOps YAML schema, Visual Studio Code
 will underline the invalid node as shown below.
 
-![Syntax issues when configuring data quality check with DQOps using VS Code](https://dqops.com/docs/images/integrations/visual-studio-code/not-allowed-object.png)
+![Syntax issues when configuring data quality check with DQOps using VS Code](https://dqops.com/docs/images/integrations/visual-studio-code/not-allowed-object.png){ loading=lazy; width="1200px" }
 
 
 ## What's next

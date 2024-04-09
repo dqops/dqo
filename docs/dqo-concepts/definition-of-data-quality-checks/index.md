@@ -55,7 +55,7 @@ The configuration of alerting rules are:
 - raise an [*error* severity data quality issue](#error) when the row count (the number of countries) drops below **100**
 - raise a [*fatal* severity data quality issue](#fatal) when the table is empty, because the row count (the number of countries) is below **1**
 
-![data quality rule severity levels in DQOps check editor](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/check_editor_rules-min.png)
+![data quality rule severity levels in DQOps check editor](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/check_editor_rules-min.png){ loading=lazy; width="1200px" }
 
 
 ### **DQOps YAML files**
@@ -202,7 +202,7 @@ Below is an example of the **Configuration** screen for the `daily_row_count` ch
 This screen is responsible for editing the specification files for a custom data quality check
 stored in the [*$DQO_USER_HOME/checks/\*\*/\*.dqocheck.yaml*](../../reference/yaml/CheckDefinitionYaml.md) files.
 
-![Check definition configuration](https://dqops.com/docs/images/concepts/check-definition-configuration.png)
+![Check definition configuration](https://dqops.com/docs/images/concepts/check-definition-configuration.png){ loading=lazy; width="1200px" }
 
 
 ## What's next

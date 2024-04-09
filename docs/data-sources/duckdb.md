@@ -25,18 +25,18 @@ To navigate to the DuckDB connection settings:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png){ loading=lazy; width="1200px" }
 
 2. Select the DuckDB file connection option.
 
-    ![Selecting CSV database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-duckdb.png)
+    ![Selecting CSV database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-duckdb.png){ loading=lazy; width="1200px" }
 
 
 ### **Fill in the connection settings**
 
 After navigating to the DuckDB connection settings, you will need to fill in its details.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-duckdb.png)
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-duckdb.png){ loading=lazy; width="1200px" }
 
 | DuckDB connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                            | 
 |----------------------------|------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

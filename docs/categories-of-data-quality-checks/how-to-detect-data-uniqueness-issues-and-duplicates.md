@@ -103,12 +103,12 @@ The table-level profiling statistics screen shows only the number of distinct va
 Columns with fewer unique values are highlighted with a darker green background color.
 These are the columns that potentially contain duplicate values.
 
-![Table profiling summary screen showing duplicate counts for each column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-statistics-on-column-list-dqops-profiling-screen-min.png){ loading=lazy }
+![Table profiling summary screen showing duplicate counts for each column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-statistics-on-column-list-dqops-profiling-screen-min.png){ loading=lazy; width="1200px" }
 
 ### Column statistics
 The data profiling screen for a column shows all data uniqueness metrics captured by the DQOps data profiler.
 
-![Column level uniqueness statistics in DQOps showing duplicate and distinct count](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-and-duplicate-count-statistics-in-dqops-min.png){ loading=lazy }
+![Column level uniqueness statistics in DQOps showing duplicate and distinct count](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-and-duplicate-count-statistics-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 
 ## Distinct count
@@ -129,7 +129,7 @@ The [*distinct_count*](../checks/column/uniqueness/distinct-count.md) check
 verifies that the count of distinct values is within an accepted range.
 The range is defined by setting the **min_count** and **max_count** parameters.
 
-![Distinct count in range data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-in-range-check-in-dqops-min.png){ loading=lazy }
+![Distinct count in range data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-in-range-check-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### Validating distinct count in YAML
 The configuration of the [*distinct_count*](../checks/column/uniqueness/distinct-count.md) check is simple.
@@ -161,7 +161,7 @@ A value below 100% indicates that the column contains duplicate values.
 ### Validating distinct percent in UI
 The [*distinct_percent*](../checks/column/uniqueness/distinct-percent.md)  check has one parameter, the *max_percent* value.
 
-![Distinct percent data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-percent-data-quality-check-in-dqops-min.png){ loading=lazy }
+![Distinct percent data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-percent-data-quality-check-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### Validating distinct percent in YAML
 The configuration of the [*distinct_percent*](../checks/column/uniqueness/distinct-percent.md) check in a YAML file is shown below.
@@ -193,7 +193,7 @@ The difference calculated by the expression `COUNT(column_name) - COUNT(DISTINCT
 The [*duplicate_count*](../checks/column/uniqueness/duplicate-count.md) check
 takes one parameter **max_count**, which is the maximum accepted number of duplicate values.
 
-![Duplicate count data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/duplicate-count-check-in-dqops-min.png){ loading=lazy }
+![Duplicate count data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/duplicate-count-check-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### Finding duplicates in YAML
 The configuration of the [*duplicate_count*](../checks/column/uniqueness/duplicate-count.md) check in a YAML file is shown below.
@@ -230,7 +230,7 @@ The check will show the first values after 30 days.
 However, the check will not reveal any results if the distinct count has been unchanged for the last three months.
 That is because the time series anomaly detection rule needs to detect the scale of day-to-day changes.
 
-![Distinct count anomaly detection by DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-anomaly-detection-in-dqops-min.png){ loading=lazy }
+![Distinct count anomaly detection by DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-anomaly-detection-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### Distinct count anomaly detection in YAML
 The configuration of the [*daily_distinct_count_anomaly*](../checks/column/uniqueness/distinct-count-anomaly.md#daily-distinct-count-anomaly)
@@ -282,13 +282,13 @@ DQOps replaces the `{alias}.` token with the alias of the table.
 ### Detect multi-column duplicates in UI
 We have to add a virtual column to the monitored table. The column will be calculated using the SQL expression shown above.
 
-![Adding calculated column for concatenating values for multi-column duplicate detection in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/adding-calculated-column-concatenated-unique-values-in-dqops-min.png){ loading=lazy }
+![Adding calculated column for concatenating values for multi-column duplicate detection in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/adding-calculated-column-concatenated-unique-values-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 After adding a calculated column,
 DQOps will show it in the metadata tree. We can now configure the [*duplicate_count*](../checks/column/uniqueness/duplicate-count.md)
 data quality check.
 
-![Duplicate count detection in DQOps on multiple columns using a data quality check editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/duplicate-detection-check-in-dqops-on-multiple-columns-min.png){ loading=lazy }
+![Duplicate count detection in DQOps on multiple columns using a data quality check editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/duplicate-detection-check-in-dqops-on-multiple-columns-min.png){ loading=lazy; width="1200px" }
 
 ### Detect multi-column duplicates in YAML
 We must add our calculated column to the list of columns to detect duplicates on multiple other columns. 
@@ -314,7 +314,7 @@ spec:
 ## Configuring other uniqueness checks
 The DQOps data quality check editor shows the remaining uniqueness checks after clicking the *Show advanced checks* checkbox.
 
-![List of all uniqueness data quality checks in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/all-uniqueness-checks-in-dqops-min.png){ width="619px"; loading=lazy }
+![List of all uniqueness data quality checks in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/all-uniqueness-checks-in-dqops-min.png){ loading=lazy; width="800px" }
 
 _(click to expand)_
 

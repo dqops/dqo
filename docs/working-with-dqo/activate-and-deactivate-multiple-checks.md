@@ -14,7 +14,7 @@ tables or columns.
 
 To access the multiple (bulk) check editor, follow these steps:
 
-![Navigate to multiple (bulk) check editor](https://dqops.com/docs/images/working-with-dqo/activate-and-deactivate-multiple-checks/navigate-to-multiple-check-editor.png)
+![Navigate to multiple (bulk) check editor](https://dqops.com/docs/images/working-with-dqo/activate-and-deactivate-multiple-checks/navigate-to-multiple-check-editor.png){ loading=lazy; width="1200px" }
 
 1. Click on the **Profiling**, **Monitoring checks** or **Partition checks** section at the top of the screen.
 
@@ -30,7 +30,7 @@ To access the multiple (bulk) check editor, follow these steps:
 
 To search for checks you wish to modify, follow these steps:
 
-![Search for checks on the multiple check editor](https://dqops.com/docs/images/working-with-dqo/activate-and-deactivate-multiple-checks/search-for-checks.png)
+![Search for checks on the multiple check editor](https://dqops.com/docs/images/working-with-dqo/activate-and-deactivate-multiple-checks/search-for-checks.png){ loading=lazy; width="1200px" }
 
 
 1. Choose whether you want to modify Table or Column checks using the radiobuttons.
@@ -49,7 +49,7 @@ To search for checks you wish to modify, follow these steps:
 
 After the search, a table will be displayed containing the checks that match your search criteria.
 
-![Search results on the multiple check editor](https://dqops.com/docs/images/working-with-dqo/activate-and-deactivate-multiple-checks/search-results.png)
+![Search results on the multiple check editor](https://dqops.com/docs/images/working-with-dqo/activate-and-deactivate-multiple-checks/search-results.png){ loading=lazy; width="1200px" }
 
 The table contains several columns that provide information about the status of each check, its name, category, 
 associated table, associated columns (for column check search), sensor parameters (if applicable), and warning, error, and fatal threshold levels.
@@ -62,17 +62,17 @@ To activate all checks, simply click on the **Activate for all matching filter**
 
 Alternatively, you can select specific checks using the checkboxes and activate them by clicking the **Activate selected** button. 
 
-![Select and activate checks](https://dqops.com/docs/images/working-with-dqo/activate-and-deactivate-multiple-checks/select-and-activate-checks.png)
+![Select and activate checks](https://dqops.com/docs/images/working-with-dqo/activate-and-deactivate-multiple-checks/select-and-activate-checks.png){ loading=lazy; width="1200px" }
 
 This will open a screen where you can set the parameters and thresholds. [Learn more about threshold levels.](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels)
 
-![Activate checks screen](https://dqops.com/docs/images/working-with-dqo/activate-and-deactivate-multiple-checks/activate-checks.png)
+![Activate checks screen](https://dqops.com/docs/images/working-with-dqo/activate-and-deactivate-multiple-checks/activate-checks.png){ loading=lazy; width="1000px" }
 
 After setting the thresholds click on the **Activate all selected check** button. 
 
 This will activate all the checks with the selected threshold level, as shown in the example below. 
 
-![List of checks after activation](https://dqops.com/docs/images/working-with-dqo/activate-and-deactivate-multiple-checks/checks-after-activation1.png)
+![List of checks after activation](https://dqops.com/docs/images/working-with-dqo/activate-and-deactivate-multiple-checks/checks-after-activation1.png){ loading=lazy; width="1200px" }
 
 
 ### **Deactivate multiple checks**

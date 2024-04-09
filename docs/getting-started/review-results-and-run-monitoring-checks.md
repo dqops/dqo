@@ -26,11 +26,11 @@ To review the results:
 
     For detailed description of each column go to the [Basics statistics section](../working-with-dqo/collecting-basic-data-statistics.md).
 
-    ![Basic statistics results for austin crimes](https://dqops.com/docs/images/getting-started/austin-crimes-statistics3.png)
+    ![Basic statistics results for austin crimes](https://dqops.com/docs/images/getting-started/austin-crimes-statistics3.png){ loading=lazy; width="1200px" }
 
 2. To view detailed statistics, click on the name of the column or navigate to the single column on the tree view.
  
-    ![Basic statistics results for austin crimes - details](https://dqops.com/docs/images/getting-started/austin-crimes-address-column-statistics4.png)
+    ![Basic statistics results for austin crimes - details](https://dqops.com/docs/images/getting-started/austin-crimes-address-column-statistics4.png){ loading=lazy; width="1200px" }
 
 
 ## Review profiling checks results
@@ -46,7 +46,7 @@ In the previous step we have run profiling checks for imported tables and column
 **Table quality status** allows you to quickly evaluate the data quality status of your table. To navigate to the Table quality status,
 click on **Profiling** section, the "crime" table on the tree view, and **Table quality status** tab.
 
-![Profiling Table quality status](https://dqops.com/docs/images/getting-started/profiling-table-quality-status2.png)
+![Profiling Table quality status](https://dqops.com/docs/images/getting-started/profiling-table-quality-status2.png){ loading=lazy; width="1200px" }
 
 This tab provides you with an overview of the current data quality status of your table, including the number of 
 executed checks, and detailed results per table and columns grouped by check categories.
@@ -66,7 +66,7 @@ and severity status.
 
 To navigate to the Profiling checks editor, click on **Profiling** section, the **austin_crime.csv** table on the tree view, and **Profiling checks** tab.
 
-![Profiling checks list](https://dqops.com/docs/images/getting-started/profiling-checks-list3.png)
+![Profiling checks list](https://dqops.com/docs/images/getting-started/profiling-checks-list3.png){ loading=lazy; width="1200px" }
 
 Here you can view the list of all table profiling checks. Notice that the toggle button next to the name of the 
 default checks activated upon importing new tables have a light green color. If the check has
@@ -87,7 +87,7 @@ For activated checks, notice a square next to the name indicating the results of
 
 To review the profiling checks results, click the **Results** icon to view more details of the results.
 
-![Checking results](https://dqops.com/docs/images/getting-started/checking-results3.png)
+![Checking results](https://dqops.com/docs/images/getting-started/checking-results3.png){ loading=lazy; width="1200px" }
 
 A table will appear with more details about the run check. The check displayed Valid results with the actual value 1 000. 
 
@@ -126,14 +126,14 @@ Now let's run monitoring checks.
 
 1. Go to the **Monitoring Checks** section, and select the **austin_crime.csv** table from the tree view and **Daily** tab. 
 
-    ![Monitoring checks section](https://dqops.com/docs/images/getting-started/monitoring-checks-section3.png)
+    ![Monitoring checks section](https://dqops.com/docs/images/getting-started/monitoring-checks-section3.png){ loading=lazy; width="1200px" }
 
 2. Click the **Run check** icon next to daily_row_count check. This check verifies that the number of rows in the table
     does not exceed the minimum accepted count set as the threshold level which is 1 in this case.
    
     You can read more about [issue severity levels in DQOps concepts section](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels).
 
-    ![Running check](https://dqops.com/docs/images/getting-started/run-daily-row-count-check3.png)
+    ![Running check](https://dqops.com/docs/images/getting-started/run-daily-row-count-check3.png){ loading=lazy; width="1200px" }
     
     A green square should appear next to the name of the checks indicating that the result of the run check is valid.
     You can view the details by placing the mouse cursor on the green square or view more detail results by clicking the

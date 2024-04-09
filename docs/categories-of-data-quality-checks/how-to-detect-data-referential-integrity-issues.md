@@ -145,7 +145,7 @@ The checks use two parameters to identify the dictionary table and the key colum
 The [*lookup_key_not_found*](../checks/column/integrity/lookup-key-not-found.md) check also takes a **max_count** rule parameter, 
 and the [*lookup_key_found_percent*](../checks/column/integrity/lookup-key-found-percent.md) check takes a **max_percent** rule parameter.
 
-![Detecting missing keys using a lookup data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/foreign-key-lookup-check-configured-in-check-editor-min.png){ loading=lazy }
+![Detecting missing keys using a lookup data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/foreign-key-lookup-check-configured-in-check-editor-min.png){ loading=lazy; width="1200px" }
 
 Both data quality checks failed, showing that 1982 records use unknown country codes., which accounts for 0.0087% of the dataset. 
 Our target of 100% rows containing valid country codes was missed by 0.0087%.

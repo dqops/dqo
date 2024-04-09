@@ -80,7 +80,7 @@ The following image shows the **table comparison** configuration in DQOps.
 The table comparison is defined on the *compared table* and specifies the reference table.
 The tables are compared by grouping rows by the *county* and *city* columns and comparing aggregated measures.
 
-![Table reconciliation configuration of compared tables and identity columns](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-table-mapping-min.png){ loading=lazy }
+![Table reconciliation configuration of compared tables and identity columns](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-table-mapping-min.png){ loading=lazy; width="1200px" }
 
 Please read the manual for [comparing tables](../working-with-dqo/compare-tables-between-data-sources.md)
 in the working with DQOps section to see an entire process,
@@ -118,7 +118,7 @@ The default alerting thresholds enabled by DQOps are listed below.
 
 The configuration of thresholds is collapsed by default. Please use the expand icon to show the detailed settings.
 
-![Configuration of discrepancy tolerance in data reconciliation](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-enable-column-mapping-and-activate-measures-min.png){ loading=lazy }
+![Configuration of discrepancy tolerance in data reconciliation](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-enable-column-mapping-and-activate-measures-min.png){ loading=lazy; width="1200px" }
 
 
 ### Comparing data for time periods
@@ -149,14 +149,14 @@ using a background color of each  [data quality issue severity levels](../dqo-co
 ### Tables match
 When all metrics match, DQOps shows the cells using a green background.
 
-![Table reconciliation valid result tables match](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-tables-match-result-min.png){ loading=lazy }
+![Table reconciliation valid result tables match](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-tables-match-result-min.png){ loading=lazy; width="1200px" }
 
 ### Discrepancies detected
 We are introducing a discrepancy on the rows whose city value is MANOR. 
 For the purpose of this example, the error is injected by configuring
 a [table filter](../dqo-concepts/configuring-table-metadata.md#table-filter-predicate) `city <> 'MANOR'`.
 
-![Table reconciliation summary with discrepancies on columns](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-difference-on-group-min.png){ loading=lazy }
+![Table reconciliation summary with discrepancies on columns](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-difference-on-group-min.png){ loading=lazy; width="1200px" }
 
 
 ## Configuring table comparison in YAML

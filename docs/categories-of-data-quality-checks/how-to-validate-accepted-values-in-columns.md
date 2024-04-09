@@ -14,7 +14,7 @@ The examples of testing accepted values will use a 311 Austin municipal services
 The table contains requests from four counties in the Austin metro area: *Travis*, *Williamson*, *Hays*, and *Bastrop*.
 The column profiling results confirm that all service calls reported in the table are in these counties, written in capital case.
 
-![Column profiling result with most popular values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-profiling-result-top-column-values-statistics-min.png){ loading=lazy }
+![Column profiling result with most popular values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-profiling-result-top-column-values-statistics-min.png){ loading=lazy; width="1200px" }
 
 
 ## Verify that ONLY accepted values are used
@@ -39,11 +39,11 @@ To verify that all rows contain only the expected values, set the parameter to 1
 This data quality check also needs a list of expected values that the check uses to test values in the column.
 The list is specified in the expected_values parameter, which is a list (array) of values.
 
-![Enabling text in set percent data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/daily-text-found-in-set-percent-data-quality-check-editor-min.png){ loading=lazy }
+![Enabling text in set percent data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/daily-text-found-in-set-percent-data-quality-check-editor-min.png){ loading=lazy; width="1200px" }
 
 The list of the expected values is configured in a popup window.
 
-![Adding a list of expected values in a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/expected-values-list-popup-data-quality-check-min.png){ loading=lazy }
+![Adding a list of expected values in a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/expected-values-list-popup-data-quality-check-min.png){ loading=lazy; width="1200px" }
 
 
 ### Configure the check in YAML
@@ -80,19 +80,19 @@ guide to learn more.
 The screens for defining data dictionaries are found in the configuration section of the DQOps user interface.
 The following example shows how to add a data dictionary named austin_counties.csv.
 
-![Adding data dictionary CSV file in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/add-data-dictionary-editor-min.png){ loading=lazy }
+![Adding data dictionary CSV file in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/add-data-dictionary-editor-min.png){ loading=lazy; width="1200px" }
 
 The data dictionary list screen shows a dictionary reference token used in the data quality checks to reference the data dictionary.
 The token to access the *austin_counties.csv* dictionary is `${dictionary://austin_counties.csv}`.
 
-![Data dictionary list screen for data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-dictionary-list-screen-min.png){ loading=lazy }
+![Data dictionary list screen for data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-dictionary-list-screen-min.png){ loading=lazy; width="1200px" }
 
 ### Referencing dictionaries in UI
 The dictionary reference is used as one of the values for the *expected_values* parameter.
 DQOps supports referencing multiple data dictionaries, which are merged. 
 Mixing standalone values and data dictionaries is also supported.
 
-![Referencing data dictionary in a text found in set percent data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/daily-text-found-in-set-percent-check-reference-dictionary-min.png){ loading=lazy }
+![Referencing data dictionary in a text found in set percent data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/daily-text-found-in-set-percent-check-reference-dictionary-min.png){ loading=lazy; width="1200px" }
 
 ### Referencing dictionaries in YAML
 When used in a YAML file, the data dictionary reference token should be wrapped in double quotes.
@@ -137,7 +137,7 @@ The configuration of the [*expected_text_values_in_use_count*](../checks/column/
 check is very similar. The `max_missing` rule parameter configures the maximum number of expected values
 that can be missing in the column. Use the value 0 for the `max_missing` to test that all the expected values are in use.
 
-![Asserting that all expected text values are present in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/all-expected-column-values-are-in-use-data-quality-check-min.png){ loading=lazy }
+![Asserting that all expected text values are present in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/all-expected-column-values-are-in-use-data-quality-check-min.png){ loading=lazy; width="1200px" }
 
 ### Configure the check in YAML
 The configuration of the [*expected_text_values_in_use_count*](../checks/column/accepted_values/expected-text-values-in-use-count.md)
@@ -175,7 +175,7 @@ because the first four county names are found in the column, even if *BURNET* is
 The [*expected_text_values_in_use_count*](../checks/column/accepted_values/expected-text-values-in-use-count.md) check fails
 because no row contains the expected *BURNET* value.
 
-![Detecting expected values that are missing in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-values-found-vs-text-values-in-use-min.png){ loading=lazy }
+![Detecting expected values that are missing in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-values-found-vs-text-values-in-use-min.png){ loading=lazy; width="1200px" }
 
 
 ## Testing the most common values
@@ -204,7 +204,7 @@ The `max_missing` rule parameter controls the tolerance for missing expected com
 When the `max_missing` rule parameter is 0, DQOps must find all expected values at the top.
 The parameter value 1 allows one missing value, and so on.
 
-![Asserting that expected values are in the top of most popular values in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-values-in-top-most-popular-min.png){ loading=lazy }
+![Asserting that expected values are in the top of most popular values in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-values-in-top-most-popular-min.png){ loading=lazy; width="1200px" }
 
 ### Configure the check in YAML
 The configuration of the [*expected_texts_in_top_values_count*](../checks/column/accepted_values/expected-texts-in-top-values-count.md)
@@ -245,7 +245,7 @@ This parameter sets the minimum percentage of values that must be valid country 
 The following example shows that a public dataset showing the daily count of COVID-19 cases
 per country uses some invalid country codes.
 
-![DQOps data quality check that validates two letter country codes in column values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/country-code-validation-check-in-dqops-min.png){ loading=lazy }
+![DQOps data quality check that validates two letter country codes in column values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/country-code-validation-check-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### Activating country code validation in UI
 The [*text_valid_country_code_percent*](../checks/column/accepted_values/text-valid-country-code-percent.md) check is easy to configure.

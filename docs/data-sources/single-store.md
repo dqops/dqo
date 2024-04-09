@@ -20,11 +20,11 @@ To navigate to the SingleStoreDB connection settings:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
-   ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
+   ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png){ loading=lazy; width="1200px" }
 
 2. Select SingleStoreDB database type.
 
-   ![Selecting SingleStoreDB database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-singlestore1.png)
+   ![Selecting SingleStoreDB database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-singlestore1.png){ loading=lazy; width="1200px" }
 
 ### **Fill in the connection settings**
 

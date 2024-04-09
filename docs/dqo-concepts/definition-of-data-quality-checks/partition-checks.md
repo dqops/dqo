@@ -88,13 +88,13 @@ using an [**error** severity](index.md#error) rule that raises a data quality is
 
 The issue was detected on *January 14th, 2024* and *January 15th, 2024*. The results are highlighted with an orange color for **error** severity issues. 
 
-![daily partitioned data quality check results](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/daily-partitioned-checks-editor-results-min.png)
+![daily partitioned data quality check results](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/daily-partitioned-checks-editor-results-min.png){ loading=lazy; width="1200px" }
 
 A longer history of partition volume (row counts) is shown when switching the view to a chart mode. 
 The orange area limited from the top at **500** rows is the *error* severity threshold. Any data quality results for
 daily partition below **500** rows are data quality issues when the volume of the partition for that day was below a minimum required size.
 
-![daily partitioned data quality check results chart](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/daily-partitioned-checks-editor-chart-min.png)
+![daily partitioned data quality check results chart](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/daily-partitioned-checks-editor-chart-min.png){ loading=lazy; width="1200px" }
 
 
 ### **Monthly partitioned checks**
@@ -107,7 +107,7 @@ The row counts for October, November and December 2023 met the volume requiremen
 was run at *2024-01-20 20:35:43* (shown as the *Executed At* timestamp). Not all data for the current month (January 2024) were received yet,
 and the table had only **12876** rows. An **error** severity issue was raised, because the minimum accepted monthly row count is **20000** rows.
 
-![monthly partitioned data quality check results](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/monthly-partitioned-checks-editor-results-min.png)
+![monthly partitioned data quality check results](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/monthly-partitioned-checks-editor-results-min.png){ loading=lazy; width="1200px" }
 
 !!! warning "Using monthly partitioned checks to analyze the current month"
 
@@ -129,7 +129,7 @@ When you navigate to the **Partition checks** section and choose a table or colu
 partitioning column, a red warning message will appear above the Check editor saying **Partition checks will not be run, please configure the date or
 datetime column**. Furthermore, this column will be highlighted in orange in the tree view on the left side of the screen.
 
-![Not configured data partitioning column warning](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/not-configured-date-partitioning-column-warning2.png)
+![Not configured data partitioning column warning](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/not-configured-date-partitioning-column-warning2.png){ loading=lazy; width="1200px" }
 
 To enable the time partition check, set a column that contains the date, datetime, or timestamp.
 
@@ -140,7 +140,7 @@ To enable the time partition check, set a column that contains the date, datetim
 3.  Select the **Data and time columns** tab and in the **Partition checks** section, select a column from the drop-down list in the "Date or datetime column
     name used for date/time partitioning used in partition checks" input field.
 
-    ![Partitioning column configuration](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/date-or-datetime-column-configuration-for-partion-checks2.png)
+    ![Partitioning column configuration](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/date-or-datetime-column-configuration-for-partion-checks2.png){ loading=lazy; width="1200px" }
 
     You can also get to this screen by clicking the **Configure the date partitioning column** button located on the screen with a list of partition checks.
 

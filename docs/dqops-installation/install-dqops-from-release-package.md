@@ -94,4 +94,4 @@ To use DQOps you need:
 7.  Open the DQOps User Interface Console by CTRL-clicking on the link displayed on the command line (for example http://localhost:8888/)
     or by copying the link to your browser. You will see the welcome screen as shown below.
 
-    ![DQOps user interface](https://dqops.com/docs/images/getting-started/dqops-user-interface.png)
+    ![DQOps user interface](https://dqops.com/docs/images/getting-started/dqops-user-interface.png){ loading=lazy; width="1200px" }

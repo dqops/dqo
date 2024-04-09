@@ -412,7 +412,7 @@ data quality issues for different data groups.
 
 Below is an example of **Current table status** dashboard showing grouping by different product categories. 
 
-![Data grouping on current table status dashboard.png](https://dqops.com/docs/images/concepts/data-grouping-on-current-table-status-dashboard.png)
+![Data grouping on current table status dashboard.png](https://dqops.com/docs/images/concepts/data-grouping-on-current-table-status-dashboard.png){ loading=lazy; width="1200px" }
 
 
 ## What's next

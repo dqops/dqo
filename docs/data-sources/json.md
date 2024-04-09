@@ -25,18 +25,18 @@ To navigate to the JSON connection settings:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png){ loading=lazy; width="1200px" }
 
 2. Select the JSON file connection option.
 
-    ![Selecting JSON database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-json.png)
+    ![Selecting JSON database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-json.png){ loading=lazy; width="1200px" }
 
 
 ### **Fill in the connection settings**
 
 After navigating to the JSON connection settings, you will need to fill in its details.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-json.png)
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-json.png){ loading=lazy; width="1200px" }
 
 | JSON connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                            | 
 |--------------------------|------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -135,7 +135,7 @@ can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
 
 For example:
 
-![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png)
+![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png){ loading=lazy; width="1200px" }
 
 To remove the property click on the trash icon at the end of the input field.
 
@@ -151,18 +151,18 @@ Now we can import JSON files.
 
 1. Import the selected virtual schemas by clicking on the **Import Tables** button next to the source schema name from which you want to import tables.
 
-   ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-schemas.png)
+   ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-schemas.png){ loading=lazy; width="1200px" }
 
 2. Select the tables (folders with JSON files or just the files) you want to import or import all tables using the buttons in the upper right corner.
 
-   ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-json.png)
+   ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-json.png){ loading=lazy; width="1200px" }
 
 When new tables are imported, DQOps automatically activates profiling and monitoring checks, such as row count,
 table availability, and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m.
 By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks,
 or modify the schedule for newly imported tables.
 
-![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-advisor-json.png)
+![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-advisor-json.png){ loading=lazy; width="1200px" }
 
 
 ### Register single file as table
@@ -174,7 +174,7 @@ To view the schema, expand the connection in the tree view on the left.
 Then, click on the three dots icon next to the schema name(1.) and select the **Add table** (2.) option.
 This will open the **Add table** popup modal.
 
-![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-1.png)
+![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-1.png){ loading=lazy }
 
 Enter the table name and the path absolute to the file. Save the new table configuration.
 
@@ -186,18 +186,18 @@ Enter the table name and the path absolute to the file. Save the new table confi
 
     If you use the absolute file path, you only need to fill in the table name.
 
-![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-2.png)
+![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-2.png){ loading=lazy; width="1200px" }
 
 After saving the new table configuration, the new table will be present under the schema.
 You can view the list of columns by clicking on "Columns" under the table in the three view on the left.
 
 You can verify the import tables job in the notification panel on the right corner.
 
-![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-3.png)
+![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-3.png){ loading=lazy; width="1200px" }
 
 If the job completes successfully, the created table will be imported and ready to use.
 
-![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-4.png)
+![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-4.png){ loading=lazy; width="1200px" }
 
 ## Add JSON connection using DQOps Shell
 

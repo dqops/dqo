@@ -24,16 +24,16 @@ To delete the data quality results at the connection, schema, table or column le
 
 1. In DQOps user interface, click on the three-dot icon next to the name of a connection, schema, table or column in the tree view.
 
-    ![Click three-dot icon](https://dqops.com/docs/images/working-with-dqo/delete-data-quality-results/click-three-dot-icon2.png)
+    ![Click three-dot icon](https://dqops.com/docs/images/working-with-dqo/delete-data-quality-results/click-three-dot-icon2.png){ loading=lazy; width="1200px" }
 
 2. From the drop-down menu select the **Delete data** command.
 
-    ![Select Delete data command](https://dqops.com/docs/images/working-with-dqo/delete-data-quality-results/delete-data-command2.png)
+    ![Select Delete data command](https://dqops.com/docs/images/working-with-dqo/delete-data-quality-results/delete-data-command2.png){ loading=lazy; width="1200px" }
    
 3. In the window, you can specify whether you want to delete all data, data for a specific time range, check type, or time gradient.
     You can also decide to delete only results from basic statistics, checks, sensors or execution errors.
 
-    ![Delete data window](https://dqops.com/docs/images/working-with-dqo/delete-data-quality-results/delete-data-window2.png)
+    ![Delete data window](https://dqops.com/docs/images/working-with-dqo/delete-data-quality-results/delete-data-window2.png){ loading=lazy; width="1000px" }
 
 4. Click the **Delete** button to delete the selected data.
 

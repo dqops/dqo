@@ -44,7 +44,7 @@ The data quality KPI is calculated by grouping data quality check results by the
 The following image shows a [data quality KPI dashboard](types-of-data-quality-dashboards.md#data-quality-kpis) from DQOps, 
 showing the results for each measured data quality dimension.
 
-![Data quality KPIs divided by data quality dimensions](https://dqops.com/docs/images/concepts/data-quality-dimensions/data-quality-dimension-kpi-per-dimension-min.png){ loading=lazy }
+![Data quality KPIs divided by data quality dimensions](https://dqops.com/docs/images/concepts/data-quality-dimensions/data-quality-dimension-kpi-per-dimension-min.png){ loading=lazy; width="1200px" }
 
 ### Best practices for monitoring data quality dimensions
 Selecting data quality dimensions is one of the steps in the process of defining business needs for data quality monitoring.

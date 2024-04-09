@@ -63,7 +63,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-match-date-regex-percent-checks1.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-match-date-regex-percent-checks1.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
 

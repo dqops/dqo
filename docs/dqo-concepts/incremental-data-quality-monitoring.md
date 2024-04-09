@@ -74,7 +74,7 @@ DQOps generates data quality SQL queries with an additional **WHERE *partition_b
 The configuration of the default time windows for daily and monthly partitioned checks is configured in the *Date and time columns* tab
 on the table's metadata screen.
 
-![Incremental time window configuration](https://dqops.com/docs/images/concepts/data-quality-kpis/incremental-time-window-configuration.png){ loading=lazy }
+![Incremental time window configuration](https://dqops.com/docs/images/concepts/data-quality-kpis/incremental-time-window-configuration.png){ loading=lazy; width="1200px" }
 
 ### **Running checks for different time windows**
 Partitioned checks can be executed for a different time window directly from the data quality check editor screen as shown below.
@@ -91,7 +91,7 @@ The metadata tree nodes that support running checks are:
 - column
 - single check
 
-![Running all checks incrementally](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/run-partition-checks-from-the-tree-view.png){ loading=lazy }
+![Running all checks incrementally](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/run-partition-checks-from-the-tree-view.png){ loading=lazy; width="1200px" }
 
 By running data quality checks incrementally, DQOps avoids additional pressure on the monitored data source.
 When the table is physically partitioned by the column used by partitioned checks and the time window filter is passed to the database,
@@ -148,7 +148,7 @@ teh current month and the previous month. The data for the current month is stil
 by data quality issues, but the data for the past month must pass the [data quality KPIs](definition-of-data-quality-kpis.md)
 for all required [data quality dimensions](data-quality-dimensions.md).
 
-![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards3.png)
+![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards3.png){ loading=lazy; width="1200px" }
 
 
 ## What's next

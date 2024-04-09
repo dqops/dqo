@@ -53,7 +53,7 @@ The DQOps data quality checks that detect the most popular patterns are listed i
 The [*invalid_email_format_found*](../checks/column/patterns/invalid-email-format-found.md) check detects invalid emails that do not match the typical email patterns.
 The following column profile summary shows a sample email column that contains one invalid email.
 
-![Email column profile with an invalid email](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/email-column-profile-min.png){ loading=lazy }
+![Email column profile with an invalid email](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/email-column-profile-min.png){ loading=lazy; width="1200px" }
 
 
 ### Detecting invalid emails in UI
@@ -61,7 +61,7 @@ The [*invalid_email_format_found*](../checks/column/patterns/invalid-email-forma
 check is located in the *patterns* category. The parameter **max_count** configures the maximum accepted number of invalid emails.
 The check has found one invalid email.
 
-![Invalid email format data quality check in DQOps editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/invalid-email-data-quality-check-in-dqops-editor-min.png){ loading=lazy }
+![Invalid email format data quality check in DQOps editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/invalid-email-data-quality-check-in-dqops-editor-min.png){ loading=lazy; width="1200px" }}
 
 ### Detecting invalid emails in UI
 The configuration of the [*invalid_email_format_found*](../checks/column/patterns/invalid-email-format-found.md) check is simple.
@@ -92,14 +92,14 @@ use regular expressions to validate if text columns contain valid date strings t
 
 The following summary of column profiling shows a text column that contains one invalid date.
 
-![Date column profile with dates as strings in an invalid format](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-date-column-profile-min.png){ loading=lazy }
+![Date column profile with dates as strings in an invalid format](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-date-column-profile-min.png){ loading=lazy; width="1200px" }
 
 ### Detecting invalid dates in UI
 We will use the [*text_matching_date_pattern_percent*](../checks/column/patterns/text-matching-date-pattern-percent.md)
 check to detect invalid date patterns and measure the percentage of valid rows.
 The tested table has three rows, and only two contain valid dates. We are expecting that the rate of valid values is 66.6%.
 
-![Text in valid date format data quality check in DQOps editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/validating-dates-in-text-columns-dqops-data-quality-check-min.png){ loading=lazy }
+![Text in valid date format data quality check in DQOps editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/validating-dates-in-text-columns-dqops-data-quality-check-min.png){ loading=lazy; width="1200px" }
 
 ### Detecting invalid dates in YAML
 The configuration of the [*text_matching_date_pattern_percent*](../checks/column/patterns/text-matching-date-pattern-percent.md)
@@ -159,7 +159,7 @@ check is configured by setting the regular expression pattern and a  minimum acc
 We will validate the text column that should contain dates but using a custom regular expression.
 The regular expression will be `^[0-9]{4}-[0-9]{2}-[0-9]{2}$`.
 
-![Validate date text with a custom regular expression using DQOps check editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/regex-match-data-quality-check-validating-date-string-in-dqops-min.png){ loading=lazy }
+![Validate date text with a custom regular expression using DQOps check editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/regex-match-data-quality-check-validating-date-string-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### Validating regular expressions in YAML
 The configuration of the [*texts_matching_regex_percent*](../checks/column/patterns/texts-matching-regex-percent.md)

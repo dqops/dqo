@@ -52,7 +52,7 @@ Null values can cause problems in several data analytics and data transformation
 We say that a column is incomplete when it contains some null values.
 The following example shows the data profiling statistics of a column with over 16% of null values.
 
-![Column with null values profiling statistics](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/null-count-profiling-statistics-min.png){ loading=lazy }
+![Column with null values profiling statistics](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/null-count-profiling-statistics-min.png){ loading=lazy; width="1200px" }
 
 ### Detect incomplete columns with UI
 DQOps uses a [*nulls_count*](../checks/column/nulls/nulls-count.md) data quality check to count null values. 
@@ -60,7 +60,7 @@ It raises a data quality issue when any null values are found.
 
 The default value of the *max_count* parameter is 0, which asserts that no null values are present.
 
-![Detect incomplete columns with some null values using a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/incomplete-column-with-some-nulls-check-in-editor-min.png){ loading=lazy }
+![Detect incomplete columns with some null values using a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/incomplete-column-with-some-nulls-check-in-editor-min.png){ loading=lazy; width="1200px" }
 
 ### Detect incomplete columns in YAML
 The following example shows a [*nulls_count*](../checks/column/nulls/nulls-count.md) check configured in a YAML file.
@@ -107,7 +107,7 @@ DQOps supports configuring multiple alert severity levels by using a different t
 The following example raises a warning severity issue when the percent of the null value is above 16%.
 An issue at an error severity level is raised when the percent of null values exceeds 20%.
 
-![Detect incomplete columns with a minimum accepted percentage of nulls](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-incomplete-columns-with-accepted-percent-of-nulls-min.png){ loading=lazy }
+![Detect incomplete columns with a minimum accepted percentage of nulls](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-incomplete-columns-with-accepted-percent-of-nulls-min.png){ loading=lazy; width="1200px" }
 
 ### Detect in YAML
 The configuration of the [*nulls_percent*](../checks/column/nulls/nulls-percent.md) check is straightforward in YAML.
@@ -145,7 +145,7 @@ The default value is 1 row, which finds empty columns not passing that limit.
 The [*not_nulls_count*](../checks/column/nulls/not-nulls-count.md) check configured with the default settings finds empty columns.
 The following screen shows a valid column that was not empty.
 
-![Detect empty columns in tables with a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-empty-tables-check-min.png){ loading=lazy }
+![Detect empty columns in tables with a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-empty-tables-check-min.png){ loading=lazy; width="1200px" }
 
 ### Detect empty columns in UI
 The configuration of the [*not_nulls_count*](../checks/column/nulls/not-nulls-count.md) that detects empty columns is shown below.
@@ -178,7 +178,7 @@ The minimum accepted number of non-null values is configured by setting the *min
 ### Detect in UI
 The following example shows how to assert that a column contains at least 1500000 non-null values.
 
-![Detect columns with too little non-null values in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-columns-with-too-little-not-null-values-min.png){ loading=lazy }
+![Detect columns with too little non-null values in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-columns-with-too-little-not-null-values-min.png){ loading=lazy; width="1200px" }
 
 ### Detect in YAML
 The configuration of the [*not_nulls_count*](../checks/column/nulls/not-nulls-count.md) check in a YAML file only uses a different value of the *min_count* parameter.
@@ -227,7 +227,7 @@ that monitors the whole table every day is the same,
 but the [*daily_nulls_percent_anomaly*](../checks/column/nulls/nulls-percent-anomaly.md#daily-nulls-percent-anomaly) check 
 requires 30 days of monitoring before it will show any results.
 
-![Detect anomalies in the percentage of null values in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-anomalies-in-percent-of-null-values-in-date-partitions-min.png){ loading=lazy }
+![Detect anomalies in the percentage of null values in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-anomalies-in-percent-of-null-values-in-date-partitions-min.png){ loading=lazy; width="1200px" }
 
 ### Configuring completeness anomaly detection in YAML
 The [*nulls_percent_anomaly*](../checks/column/nulls/nulls-percent-anomaly.md) check only requires the configuration of the *anomaly_percent* parameters
@@ -291,7 +291,7 @@ This dashboard shows only the status of the most recent evaluation of all data q
 When the data is fixed in the data source, and the failed data quality check is rerun,
 the issue will disappear from the dashboard.
 
-![Data quality dashboard showing empty and incomplete detected by data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/empty-and-incomplete-columns-issues-shown-on-monitoring-dashboard-min.png){ loading=lazy }
+![Data quality dashboard showing empty and incomplete detected by data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/empty-and-incomplete-columns-issues-shown-on-monitoring-dashboard-min.png){ loading=lazy; width="1200px" }
 
 ### Partition monitoring dashboards
 DQOps has a separate set of data quality dashboards for partitioned data.
@@ -300,12 +300,12 @@ These dashboards are found in the "Partitions" folder. They show issues for ever
 The top section of the partition's *Current completeness issues on columns" dashboard shows the data sources, 
 affected tables, and the types of completeness issues.
 
-![Partitions with nulls shown on a dashboard - the filters](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partition-completeness-status-dashboard-top-min.png){ loading=lazy }
+![Partitions with nulls shown on a dashboard - the filters](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partition-completeness-status-dashboard-top-min.png){ loading=lazy; width="1200px" }
 
 The next section shows more details about incomplete or empty columns. 
 The status identifies the highest severity issue by color.
 
-![List of columns in a partitioned table that have incomplete data shown on a data quality dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/completeness-issues-dashboard-column-details-min.png){ loading=lazy }
+![List of columns in a partitioned table that have incomplete data shown on a data quality dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/completeness-issues-dashboard-column-details-min.png){ loading=lazy; width="1200px" }
 
 
 ## Use cases

@@ -60,7 +60,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-schema-detection-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-schema-detection-checks.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
 
@@ -87,7 +87,7 @@ Run the activated check using the **Run check** button.
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 You can run all checks for the connection by clicking on the three dots icon next to the connection name in the tree view, and selecting the **Run checks** option.
 
-![Run check](https://dqops.com/docs/images/examples/schema-detection-run-checks.png)
+![Run check](https://dqops.com/docs/images/examples/schema-detection-run-checks.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**

@@ -124,12 +124,12 @@ The default configuration of the [*daily_row_count*](../checks/table/volume/row-
 check sets the value of the *min_count* parameter to 1. 
 This configuration asserts that the table is not empty, having at least one row.
 
-![Detecting empty tables with daily monitoring checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-non-empty-tables-with-row-count-check-initial-min.png){ loading=lazy }
+![Detecting empty tables with daily monitoring checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-non-empty-tables-with-row-count-check-initial-min.png){ loading=lazy; width="1200px" }
 
 ### Detect too small tables in UI
 We can also set a higher value of the *min_count* parameter, which is the desired minimum size of the table.
 
-![Monitoring minimum accepted table row count](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-minimum-table-row-count-min.png){ loading=lazy }
+![Monitoring minimum accepted table row count](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-minimum-table-row-count-min.png){ loading=lazy; width="1200px" }
 
 ### Configuring row count check in YAML
 The row count check is straightforward to configure in the table YAML file.
@@ -172,14 +172,14 @@ condition to the row count SQL query.
 DQOps shows the row counts of daily or monthly partitions when a partitioned version of the check is run. 
 Partitions that are below a minimum size are highlighted.
 
-![Minimum partition row count results](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-daily-partition-mininum-row-count-results-min.png){ loading=lazy }
+![Minimum partition row count results](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-daily-partition-mininum-row-count-results-min.png){ loading=lazy; width="1200px" }
 
 ### Partition sizes chart
 The view of the partition sizes can be switched from a table view to a chart view.
 
 The chart shows too small daily partitions on the yellow part of the chart, below the minimum row count threshold line.
 
-![Minimum partition row count chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-daily-partition-mininum-row-count-chart-min.png){ loading=lazy }
+![Minimum partition row count chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-daily-partition-mininum-row-count-chart-min.png){ loading=lazy; width="1200px" }
 
 ### Configuring partition volume check in YAML
 The configuration of the partition row count check requires a proper configuration of the *partition_by_column* column name. 
@@ -240,14 +240,14 @@ that measures the whole table and detects daily row count increases/decreases.
 
 The anomalous partition is highlighted for the purpose of this manual.
 
-![Partition row count anomaly issue on a chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partitition-row-count-anomaly-chart-min.png){ loading=lazy }
+![Partition row count anomaly issue on a chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partitition-row-count-anomaly-chart-min.png){ loading=lazy; width="1200px" }
 
 ### Detecting anomalies at multiple severity levels
 The chart below shows how DQOps presents a row count anomaly check with different values of the *anomaly_percent* parameters
 at various [issue severity levels](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels)
 (*warning*, *error*, *fatal*).
 
-![Partition row count anomaly at multiple severity levels chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partition-row-count-anomaly-full-screen-min.png){ loading=lazy }
+![Partition row count anomaly at multiple severity levels chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partition-row-count-anomaly-full-screen-min.png){ loading=lazy; width="1200px" }
 
 ### Configuring anomaly detection in YAML
 The following example of a DQOps YAML file shows the configuration of the [*daily_row_count_anomaly*](../checks/table/volume/row-count-anomaly.md#daily-row-count-anomaly)
@@ -302,7 +302,7 @@ A value of 10.0 means that DQOps raises a data quality issue when the row count 
 The [*row_count_change*](../checks/table/volume/row-count-change.md) check takes one parameter **max_percent**. 
 It sets the maximum accepted row count change since the previous known value or a relative value a week or a month ago.
 
-![Row count relative change since the last day data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/row-count-relative-change-data-quality-check-in-dqops-min.png){ loading=lazy }
+![Row count relative change since the last day data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/row-count-relative-change-data-quality-check-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### Configuring volume relative change check in YAML
 The configuration of the [*row_count_change*](../checks/table/volume/row-count-change.md) check is simple.

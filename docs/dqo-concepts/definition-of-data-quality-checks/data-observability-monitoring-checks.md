@@ -57,14 +57,14 @@ to store the data quality results.
 Because *daily monitoring* checks store the end-of-day status (and only one result per check and day of running),
 the values of the *Checkpoint date* (`time_period` parquet column) are truncated to the beginning of the day when the check was run.
 
-![daily monitoring data quality checks editor](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/daily-monitoring-checks-editor-min.png)
+![daily monitoring data quality checks editor](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/daily-monitoring-checks-editor-min.png){ loading=lazy; width="1200px" }
 
 The same data quality results are also shown on the chart view.
 All captured data quality metrics are presented as an `Actual value` time series on the chart, called the [*data quality sensor readouts*](../definition-of-data-quality-sensors.md) in DQOps.
 Because all recent row counts were below the minimum required 500.000 rows,
 all the results are shown within the yellow zone for *warning* severity data quality issues.
 
-![daily monitoring of data volume](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/daily-monitoring-row-count-chart-min.png)
+![daily monitoring of data volume](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/daily-monitoring-row-count-chart-min.png){ loading=lazy; width="1200px" }
 
 ### **Monthly monitoring checks**
 The *monthly monitoring* checks store the end-of-month data quality status, replacing previously captured results. 
@@ -73,7 +73,7 @@ at *2020-01-20 16:56:17* (January 20th, 2024).
 
 DQOps stored one result for January 2024, truncating the value of the *Checkpoint date* (`time_period` parquet column) to the beginning of the month.
 
-![monthly monitoring data quality checks editor](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/monthly-monitoring-checks-editor-min.png)
+![monthly monitoring data quality checks editor](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/monthly-monitoring-checks-editor-min.png){ loading=lazy; width="1200px" }
 
 
 ## Monitoring checks pros and cons
@@ -95,7 +95,7 @@ Use the data monitoring checks to:
    as a percentage of passed *daily quality checks*. The data quality KPI can be calculated for each [data quality dimension](../data-quality-dimensions.md),
    and for all data sources, tables, [categories of data quality checks](../../categories-of-data-quality-checks/index.md).
 
-![history of data quality KPI per day an data quality dimension](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/data-quality-kpi-history-current-month-chart-min.png)
+![history of data quality KPI per day an data quality dimension](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/data-quality-kpi-history-current-month-chart-min.png){ loading=lazy; width="1200px" }
 
 !!! tip "You can run monitoring checks multiple times during the day"
 

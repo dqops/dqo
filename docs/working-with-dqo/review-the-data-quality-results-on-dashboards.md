@@ -27,7 +27,7 @@ in the Concept section.
 For example, to review the summary KPIs of all executed monitoring checks you can use the **KPIs scorecard - summary** dashboard.
 You can find it in the **Monitoring** group, **Data quality KPIs** subgroup.
 
-![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards3.png)
+![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards3.png){ loading=lazy; width="1200px" }
 
 When you hover over the name of the dashboard in the tree view, thumbnails are displayed to help you identify the
 type of dashboard.
@@ -47,21 +47,21 @@ On each dashboard, data can be filtered. You can filter data by clicking on the 
 of the dashboard, or clicking on the elements in the tables such as the Connection, Schema, Dimension, Data group, etc.
 Some dashboards have additional filtering options such as checks boxes or input fields.
 
-![Dashboards filtering](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboards-filtering.png)
+![Dashboards filtering](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboards-filtering.png){ loading=lazy; width="1200px" }
 
 The following example shows the filtering of data by a connection named **bigquery-public-data** after clicking on it.
 
-![Dashboards - connection filtering example](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboards-connection-filtering-example.png)
+![Dashboards - connection filtering example](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboards-connection-filtering-example.png){ loading=lazy; width="1200px" }
 
 Data on dashboards is displayed for a specific time range, most often for the current month.
 Depending on the type of dashboard, you can change the specific time range using **Time window** dropdown button located
 on the top part of the dashboard.
 
-![Time window filtering](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboard-time-window-filtering.png)
+![Time window filtering](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboard-time-window-filtering.png){ loading=lazy; width="1200px" }
 
 Other dashboards have buttons to change the view between the current and previous month.
 
-![Current/previous month switch](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboards-current-previous-month-switch.png)
+![Current/previous month switch](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboards-current-previous-month-switch.png){ loading=lazy; width="1200px" }
 
 ### **Export data presented in dashboard**
 
@@ -72,7 +72,7 @@ To export data from a table or chart, follow these steps:
 
 2. Right-click on the chart or click three dots icon and select **Export**.
    
-    ![Export data presented in dashboards](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/export-results-from-dashboard.png)
+    ![Export data presented in dashboards](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/export-results-from-dashboard.png){ loading=lazy; width="1200px" }
 
 3. Enter a name for your export and select an Export As option:
 

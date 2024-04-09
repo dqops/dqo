@@ -80,7 +80,7 @@ nav:
     - Data volume: 'categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md'
     - Empty and incomplete columns: 'categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md'
     - Invalid dates: 'categories-of-data-quality-checks/how-to-detect-invalid-dates.md'
-    - Numeric statistics: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md'
+    - Numerical statistics: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md'
     - PII values: 'categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md'
     - Referential integrity: 'categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md'
     - Table availability: 'categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md'

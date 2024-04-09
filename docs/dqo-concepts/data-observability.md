@@ -56,7 +56,7 @@ When a check is manually enabled on a table or column, DQOps uses the check's pa
 the [*.dqotable.yaml*](../reference/yaml/TableYaml.md) file instead of the default configuration from a default check pattern file.
 Disabling a check on the table or column is also possible to prevent it from running.
 
-![Default data observability checks activated on table in DQOps](https://dqops.com/docs/images/concepts/data-observability/default-data-quality-checks-activated-automatically-min.png){ loading=lazy }
+![Default data observability checks activated on table in DQOps](https://dqops.com/docs/images/concepts/data-observability/default-data-quality-checks-activated-automatically-min.png){ loading=lazy; width="1200px" }
 
 
 ### Data quality check patterns
@@ -245,34 +245,34 @@ The list of table-level data quality checks patterns is under the *Table-level c
 
 The listing screen shows a list of patterns and the filters to match the target tables.
 
-![List of table-level default data quality check patterns in DQOps](https://dqops.com/docs/images/concepts/data-observability/table-level-data-quality-checks-patterns-min.png){ loading=lazy }
+![List of table-level default data quality check patterns in DQOps](https://dqops.com/docs/images/concepts/data-observability/table-level-data-quality-checks-patterns-min.png){ loading=lazy; width="1200px" }
 
 The search filter for the target patterns is configured on the *Target table* tab.
 
-![Target table filters pattern for activating data quality checks in DQOps](https://dqops.com/docs/images/concepts/data-observability/target-table-filters-configuration-for-default-data-quality-checks-min.png){ loading=lazy }
+![Target table filters pattern for activating data quality checks in DQOps](https://dqops.com/docs/images/concepts/data-observability/target-table-filters-configuration-for-default-data-quality-checks-min.png){ loading=lazy; width="1200px" }
 
 The *Profiling*, *Monitoring Daily*, *Monitoring Monthly*, *Partition Daily*, and *Partition Monthly* tabs show a data quality check configuration editor. 
 The following screenshot shows the default configuration of the [*Volume*](../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md) and
 [*Timeliness*](../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md) data quality checks that is provided in DQOps in the **default** pattern.
 
-![Default table-level data quality checks activated by DQOps](https://dqops.com/docs/images/concepts/data-observability/default-table-level-data-quality-checks-editor-short-min.png){ loading=lazy }
+![Default table-level data quality checks activated by DQOps](https://dqops.com/docs/images/concepts/data-observability/default-table-level-data-quality-checks-editor-short-min.png){ loading=lazy; width="1200px" }
 
 ### Column-level check patterns
 The list of column-level data quality checks patterns is under the *Column-level checks patterns* node.
 
 The listing screen shows a list of patterns and the filters to match the target columns.
 
-![List of column-level default data quality check patterns in DQOps](https://dqops.com/docs/images/concepts/data-observability/column-level-data-quality-checks-patterns-min.png){ loading=lazy }
+![List of column-level default data quality check patterns in DQOps](https://dqops.com/docs/images/concepts/data-observability/column-level-data-quality-checks-patterns-min.png){ loading=lazy; width="1200px" }
 
 The search filter for the target patterns is configured on the *Target column* tab.
 
-![Target column filters pattern for activating data quality checks in DQOps](https://dqops.com/docs/images/concepts/data-observability/target-column-filters-configuration-for-default-data-quality-checks-min.png){ loading=lazy }
+![Target column filters pattern for activating data quality checks in DQOps](https://dqops.com/docs/images/concepts/data-observability/target-column-filters-configuration-for-default-data-quality-checks-min.png){ loading=lazy; width="1200px" }
 
 The *Profiling*, *Monitoring Daily*, *Monitoring Monthly*, *Partition Daily*, and *Partition Monthly* tabs show a data quality check configuration editor.
 The following screenshot shows the default configuration of the [*Nulls*](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md) and
 [*Uniqueness*](../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md) data quality checks that is provided in DQOps in the **default** pattern.
 
-![Default column-level data quality checks activated by DQOps](https://dqops.com/docs/images/concepts/data-observability/default-column-level-data-quality-checks-editor-short-min.png){ loading=lazy }
+![Default column-level data quality checks activated by DQOps](https://dqops.com/docs/images/concepts/data-observability/default-column-level-data-quality-checks-editor-short-min.png){ loading=lazy; width="1200px" }
 
 
 ## Default table-level checks

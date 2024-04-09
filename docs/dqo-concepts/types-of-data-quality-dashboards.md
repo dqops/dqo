@@ -37,7 +37,7 @@ data quality checks.
 For example, to review the summary KPIs of all executed monitoring checks you can use the **KPIs scorecard - summary** dashboard.
 You can find it in the **Monitoring** group, **Data quality KPIs** subgroup.
 
-![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards3.png)
+![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards3.png){ loading=lazy; width="1200px" }
 
 When you hover over the name of the dashboard in the tree view, thumbnails are displayed to help you identify the
 type of dashboard.
@@ -49,7 +49,7 @@ In DQOps the dashboards are divided into two groups: basic and advanced dashboar
 The toggle button **Show advanced dashboards** at the top of the tree view allows to toggle between
 displaying only basic dashboards or both basic and more advanced dashboards.
 
-![Advanced dashboards toggle button](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/advanced-dashboards-toggle-button.png)
+![Advanced dashboards toggle button](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/advanced-dashboards-toggle-button.png){ loading=lazy }
 
 
 ### **Filtering**
@@ -58,21 +58,21 @@ On each dashboard, data can be filtered. You can filter data by clicking on the 
 of the dashboard, or clicking on the elements in the tables such as the Connection, Schema, Dimension, Data group, etc.
 Some dashboards have additional filtering options such as checks boxes or input fields.
 
-![Dashboards filtering](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboards-filtering.png)
+![Dashboards filtering](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboards-filtering.png){ loading=lazy; width="1200px" }
 
 The following example shows the filtering of data by a connection named **bigquery-public-data** after clicking on it.
 
-![Dashboards - connection filtering example](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboards-connection-filtering-example.png)
+![Dashboards - connection filtering example](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboards-connection-filtering-example.png){ loading=lazy; width="1200px" }
 
 Data on dashboards is displayed for a specific time range, most often for the current month.
 Depending on the type of dashboard, you can change the specific time range using **Time window** dropdown button located
 on the top part of the dashboard.
 
-![Time window filtering](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboard-time-window-filtering.png)
+![Time window filtering](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboard-time-window-filtering.png){ loading=lazy; width="1200px" }
 
 Other dashboards have buttons to change the view between the current and previous month.
 
-![Current/previous month switch](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboards-current-previous-month-switch.png)
+![Current/previous month switch](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboards-current-previous-month-switch.png){ loading=lazy; width="1200px" }
 
 ## Profiling, Monitoring, and Partitions groups
 
@@ -121,7 +121,7 @@ These dashboards allow filtering data by:
  
 **Current table status** dashboard is a representative of this group.
 
-![Current table status](https://dqops.com/docs/images/concepts/data-quality-dashboards/current-table-status3.png)
+![Current table status](https://dqops.com/docs/images/concepts/data-quality-dashboards/current-table-status3.png){ loading=lazy; width="1200px" }
 
 
 ### **Highest issue severity per day**
@@ -146,7 +146,7 @@ These dashboards allow filtering data by:
 
 **Highest issue severity per table and day** is a representative of this group.
 
-![Highest issue severity per table and day](https://dqops.com/docs/images/concepts/data-quality-dashboards/highest-issue-severity-per-table-and-day.png)
+![Highest issue severity per table and day](https://dqops.com/docs/images/concepts/data-quality-dashboards/highest-issue-severity-per-table-and-day.png){ loading=lazy; width="1200px" }
 
 
 ### **Data quality issues count**
@@ -172,7 +172,7 @@ This dashboard allows filtering data by:
 * table,
 * day of the month.
 
-![Data quality failed checks per table and day](https://dqops.com/docs/images/concepts/data-quality-dashboards/data-quality-failed-checks-per-table-and-day.png)
+![Data quality failed checks per table and day](https://dqops.com/docs/images/concepts/data-quality-dashboards/data-quality-failed-checks-per-table-and-day.png){ loading=lazy; width="1200px" }
 
 
 ### **Data quality KPIs**
@@ -203,7 +203,7 @@ This dashboard allows filtering data by:
 * table,
 * day of the month.
 
-![KPIs per table and day](https://dqops.com/docs/images/concepts/data-quality-dashboards/kpis-per-table-and-day.png)
+![KPIs per table and day](https://dqops.com/docs/images/concepts/data-quality-dashboards/kpis-per-table-and-day.png){ loading=lazy; width="1200px" }
 
 
 ### **Check results**
@@ -229,7 +229,7 @@ This dashboard allows filtering data by:
 * issue severity
 * day
 
-![History of data quality check results](https://dqops.com/docs/images/concepts/data-quality-dashboards/history-of-data-quality-check-results.png)
+![History of data quality check results](https://dqops.com/docs/images/concepts/data-quality-dashboards/history-of-data-quality-check-results.png){ loading=lazy; width="1200px" }
 
 
 ### **Data Quality Dimensions**
@@ -260,7 +260,7 @@ This dashboard allows filtering data by:
 * issue severity.
 
 
-![Current completeness issues on columns](https://dqops.com/docs/images/concepts/data-quality-dashboards/current-completeness-issues-on-columns2.png)
+![Current completeness issues on columns](https://dqops.com/docs/images/concepts/data-quality-dashboards/current-completeness-issues-on-columns2.png){ loading=lazy; width="1200px" }
 
 
 **Timeliness** dimensions has specialized dashboards for evaluating:
@@ -288,7 +288,7 @@ This dashboard allows filtering data by:
 * check name,
 * table.
 
-![Table freshness - tables with the oldest data](https://dqops.com/docs/images/concepts/data-quality-dashboards/table-freshness-tables-with-the-oldest-data.png)
+![Table freshness - tables with the oldest data](https://dqops.com/docs/images/concepts/data-quality-dashboards/table-freshness-tables-with-the-oldest-data.png){ loading=lazy; width="1200px" }
 
 
 ### **Volume**
@@ -310,7 +310,7 @@ This dashboard allows filtering data by:
 * stages,
 * table.
 
-![Largest tables by number of rows](https://dqops.com/docs/images/concepts/data-quality-dashboards/largest-tables-by-number-of-rows.png)
+![Largest tables by number of rows](https://dqops.com/docs/images/concepts/data-quality-dashboards/largest-tables-by-number-of-rows.png){ loading=lazy; width="1200px" }
 
 
 ### **PII**
@@ -337,7 +337,7 @@ This dashboard allows filtering data by:
 * table,
 * column.
 
-![PII data detected dashboard](https://dqops.com/docs/images/concepts/data-quality-dashboards/pii-data-detected-dashboard.png)
+![PII data detected dashboard](https://dqops.com/docs/images/concepts/data-quality-dashboards/pii-data-detected-dashboard.png){ loading=lazy; width="1200px" }
 
 ### **Schema changes**
 
@@ -371,7 +371,7 @@ This dashboard allows filtering data by:
 * severity
 * table.
 
-![Schema changes - summary of changes in columns](https://dqops.com/docs/images/concepts/data-quality-dashboards/schema-changes-summary-of-changes-in-columns2.png)
+![Schema changes - summary of changes in columns](https://dqops.com/docs/images/concepts/data-quality-dashboards/schema-changes-summary-of-changes-in-columns2.png){ loading=lazy; width="1200px" }
 
 ## DQOps usage
 
@@ -403,7 +403,7 @@ This dashboard allows filtering data by:
 * check category,
 * check name.
 
-![Details of execution errors](https://dqops.com/docs/images/concepts/data-quality-dashboards/details-of-execution-errors.png)
+![Details of execution errors](https://dqops.com/docs/images/concepts/data-quality-dashboards/details-of-execution-errors.png){ loading=lazy; width="1200px" }
 
 ### **Checks no longer in use**
 
@@ -419,7 +419,7 @@ This dashboard allows filtering data by:
 * quality dimension,
 * check category.
 
-![Checks no longer in use - summary tables dashboard](https://dqops.com/docs/images/concepts/data-quality-dashboards/checks-no-longer-in-use.png)
+![Checks no longer in use - summary tables dashboard](https://dqops.com/docs/images/concepts/data-quality-dashboards/checks-no-longer-in-use.png){ loading=lazy; width="1200px" }
 
 ## What's next
 
