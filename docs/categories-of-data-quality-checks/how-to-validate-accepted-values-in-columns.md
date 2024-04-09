@@ -186,7 +186,7 @@ The first two counties *TRAVIS* and *WILLIAMSON* are used in almost all service 
 We can use the [*expected_texts_in_top_values_count*](../checks/column/accepted_values/expected-texts-in-top-values-count.md)
 data quality check to ensure that these two county names are always the most common values in the column.
 
-![Top values in a column to assert in a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-profiling-result-top-two-column-values-min.png){ width="619px"; loading=lazy }
+![Top values in a column to assert in a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-profiling-result-top-two-column-values-min.png){ width="500px"; loading=lazy }
 
 ### Configure the check in UI
 The [*expected_texts_in_top_values_count*](../checks/column/accepted_values/expected-texts-in-top-values-count.md) data quality check

@@ -155,7 +155,7 @@ The **empty or too small tables** dashboard shows data volume issues identified 
 The dashboard presented below shows issues detected by daily monitoring checks. There is also a data profiling version
 of the dashboard in the *profiling* folder of the data quality dashboard tree.
 
-![Empty or too small tables data quality dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/empty-or-too-small-table-dashboard-with-warning-min.png){ loading=lazy; width="600px" }
+![Empty or too small tables data quality dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/empty-or-too-small-table-dashboard-with-warning-min2.png){ loading=lazy; width="600px" }
 
 *(click to expand)*
 
@@ -210,7 +210,7 @@ spec:
 ### Identifying too small partitions on dashboards
 The *daily partitions row count* dashboard shows the list of partitioned tables. The row count for each day is shown in a pivot table.
 
-![Daily partition row count monitoring data quality dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-partition-row-count-dashboard-min.png){ loading=lazy; width="600px" }
+![Daily partition row count monitoring data quality dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-partition-row-count-dashboard-min2.png){ loading=lazy; width="600px" }
 
 *(click to expand)*
 
@@ -286,7 +286,7 @@ or a reference value at a relative point in the past.
   can be configured to compare the row count to the value from the previous day only when that value was captured.
 
 - The [*row_count_change_7_days*](../checks/table/volume/row-count-change-7-days.md) compares the current row count
-  to a count captured seven days ago. This behavior avoids the influence of weekly seasonability
+  to a count captured seven days ago. This behavior avoids the influence of weekly seasonality
   by comparing Mondays to Mondays, Tuesdays to Tuesdays, etc.
 
 - The [*row_count_change_30_days*](../checks/table/volume/row-count-change-30-days.md) compares the current row count
