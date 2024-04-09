@@ -138,7 +138,8 @@ const Select = ({
           <div
             data-testid="select-option"
             key={index}
-            className={clsx("py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm h-8" , empty ? 'h-5' : ''
+            className={clsx("py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm h-8" , empty ? 'h-5' : '',
+            option.icon ? 'flex items-center gap-x-2' : ''
             )}
             onClick={() => handleClick(option)}
           >
