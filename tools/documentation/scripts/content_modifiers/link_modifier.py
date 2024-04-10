@@ -3,10 +3,10 @@ import re
 # a link -> href
 # img script -> src
 
-tag_regex_string: str = "<(((a)|(link))[^<>]*href=[^<>]*)|(((script)|(img))[^<>]*src=[^<>]*)>"
+tag_regex_string: str = "<(((a)|(link))[^<>]*href)|(((script)|(img))[^<>]*src)=[^<>]*>"
 link_tag_pattern: re.Pattern = re.compile(tag_regex_string)
 
-attribute_regex_string: str = """(?:href=\"([^<>]*)\")|(?:src=\"([^<>]*)\")"""
+attribute_regex_string: str = """((?:(?:href)|(?:src))=\"([^<>]*)\")"""
 link_pattern: re.Pattern = re.compile(attribute_regex_string)
 
 def modify_link(line: str, file_path: str) -> str:
@@ -51,5 +51,7 @@ def _apply_modification(line: str, file_path: str) -> str:
             new_link = "/".join(folders) + "/" + link.replace("../","")
 
             line = line.replace(link, new_link)
+
+            line = _apply_modification(line, file_path)
 
     return line

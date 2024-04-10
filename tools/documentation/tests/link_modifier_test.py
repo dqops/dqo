@@ -45,13 +45,23 @@ class LinkModifierTest(unittest.TestCase):
         self.assertEqual(target, output)
 
     def test_modify_link__when_path_is_relative_and_end_wth_slash__then_expand_path_and_add_index_name(self):
-        file_path: str = """/usr/share/docs/data-sources/athena/index.html"""
+        file_path: str = """site/data-sources/athena/index.html"""
         source: str = """<a href="../">"""
         target: str = """<a href="/docs/data-sources/index.html">"""
 
         output: str = modify_link(source, file_path)
 
         self.assertEqual(target, output)
+
+    def test_modify_link__when_two_in_one_line__then_modifies_both(self):
+        file_path: str = """site/checks/index.html"""
+        source: str = """<td style="text-align: left;">This<a href="../checks/column/numeric/valid-latitude-percent/index.html">valid_latitude_percent</a> and <a href="../checks/column/numeric/valid-longitude-percent/">valid_longitude_percent</a>checks.</td>"""
+        target: str = """<td style="text-align: left;">This<a href="/docs/checks/column/numeric/valid-latitude-percent/index.html">valid_latitude_percent</a> and <a href="/docs/checks/column/numeric/valid-longitude-percent/">valid_longitude_percent</a>checks.</td>"""
+        self.maxDiff = None
+        output: str = modify_link(source, file_path)
+
+        self.assertEqual(target, output)
+
 
 if __name__ == '__main__':
     unittest.main()
