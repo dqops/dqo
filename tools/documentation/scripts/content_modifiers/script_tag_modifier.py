@@ -1,23 +1,14 @@
 import re
-from file_handler import provide_file_content, save_lines_to_file
 
 regex_pattern: str = "<script[^<>]*>"
 opening_script_tag_pattern: re.Pattern = re.compile(regex_pattern)
 
-def modify_script_tags(file_path: str):
+def modify_script_tag(line: str) -> str:
+    if _verify_application(line):
+        return _apply_modification(line)
+    return line
 
-    lines: list[str] = provide_file_content(file_path)
-    modified_lines: list[str] = list()
-
-    for line in lines:
-        if _verify_tag_application(line):
-            modified_lines.append(_apply_tag_modification(line))
-        else:
-            modified_lines.append(line)
-
-    save_lines_to_file(file_path, modified_lines)
-
-def _verify_tag_application(line: str):
+def _verify_application(line: str):
 
     script_tag_opening: str = "<script"
     script_exclusion_string: str = "lazyload.min.js"
@@ -27,19 +18,16 @@ def _verify_tag_application(line: str):
         return False
     return True
 
-def _apply_tag_modification(line: str) -> str:
+def _apply_modification(line: str) -> str:
     line_with_type: str = _replace_in_opening_script_tag(line, ">", " type=\"rocketlazyloadscript\">")
     line_with_type_and_src_modification: str = _replace_in_opening_script_tag(line_with_type, "src", "data-rocket-src")
     return line_with_type_and_src_modification
 
 def _replace_in_opening_script_tag(line: str, replaced: str, replacement: str) -> str:
-
     result = opening_script_tag_pattern.search(line)
     if result is None:
         return line
 
     match_text = result.group(0)
-
     modified_line: str = line.replace(match_text, match_text.replace(replaced, replacement))
-
     return modified_line
