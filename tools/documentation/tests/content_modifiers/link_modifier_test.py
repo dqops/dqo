@@ -62,6 +62,15 @@ class LinkModifierTest(unittest.TestCase):
 
         self.assertEqual(target, output)
 
+    def test_modify_link__when_just_two_dots__then_modifies(self):
+        file_path: str = """site/checks/index.html"""
+        source: str = """<a href=".." class="md-nav__link">"""
+        target: str = """<a href="/site/index.html" class="md-nav__link">"""
+        self.maxDiff = None
+        output: str = modify_link(source, file_path)
+
+        self.assertEqual(target, output)
+
 
 if __name__ == '__main__':
     unittest.main()
