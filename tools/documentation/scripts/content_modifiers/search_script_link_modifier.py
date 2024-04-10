@@ -1,6 +1,6 @@
 import re
 
-search_script_regex_string: str = """\"base\": \"([^,"]*)\","""
+search_script_regex_string: str = """\"base\": (\"[^,"]*\"),"""
 search_script_link_pattern: re.Pattern = re.compile(search_script_regex_string)
 
 def modify_link(line: str) -> str:
@@ -23,6 +23,6 @@ def _apply_modification(line: str) -> str:
         if link is None:
             continue
 
-        line = line.replace(link, "/")
+        line = line.replace(link, "\"/docs/\"")
 
     return line

@@ -118,5 +118,13 @@ class LinkModifierTest(unittest.TestCase):
 
         self.assertEqual(target, output)
 
+    def test_modify_link__when_two_dots_ends_link__then_modifies(self):
+        file_path: str = """site/dqo-concepts/definition-of-data-quality-checks/data-profiling-checks/index.html"""
+        source: str = """<a href="../..">"""
+        target: str = """<a href="/docs/dqo-concepts/index.html">"""
+        output: str = modify_link(source, file_path)
+
+        self.assertEqual(target, output)
+
 if __name__ == '__main__':
     unittest.main()
