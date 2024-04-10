@@ -1,9 +1,10 @@
 import re
+from typing import List
 
 # a link -> href
 # img script -> src
 
-tag_regex_string: str = "<(((a)|(link))[^<>]*href)|(((script)|(img))[^<>]*src)=[^<>]*>"
+tag_regex_string: str = "<(?:(?:(?:a)|(?:link))[^<>]*href)|(?:(?:(?:script)|(?:img))[^<>]*src)=[^<>]*>"
 link_tag_pattern: re.Pattern = re.compile(tag_regex_string)
 
 attribute_regex_string: str = """(?:(?:(?:href)|(?:src))=\"(?:([.]{2}[^<>"]*)|([^<>"]*\/))\")"""
@@ -35,12 +36,8 @@ def _apply_modification(line: str, file_path: str) -> str:
                 continue
 
             if link == "..":
-                directory_path: str = file_path_fixed[:file_path_fixed.rfind("/")] # removes filename
-                directory_path_from_docs = directory_path.replace("site/", "/docs/")
-                folders: list[str] = directory_path_from_docs.split("/")
-                folders.pop()
-
-                new_link = "/".join(folders) + "/" + link.replace("..","")
+                absolute_prefix = _getMissingAbsolutePath(link, file_path_fixed)
+                new_link = absolute_prefix + link.replace("..","")
 
                 line = line.replace(link, new_link)
                 link = new_link
@@ -52,20 +49,25 @@ def _apply_modification(line: str, file_path: str) -> str:
                 link = new_link
 
             if link.startswith("../"):
-
-                directory_path: str = file_path_fixed[:file_path_fixed.rfind("/")] # removes filename
-                directory_path_from_docs = directory_path.replace("site/", "/docs/")
-                folders: list[str] = directory_path_from_docs.split("/")
-
-                relative_folders_number: int = link.count("../")
-
-                while relative_folders_number > 0:
-                    folders.pop()
-                    relative_folders_number -= 1
-
-                new_link = "/".join(folders) + "/" + link.replace("../","")
+                absolute_prefix = _getMissingAbsolutePath(link, file_path_fixed)
+                new_link = absolute_prefix + link.replace("../","")
 
                 line = line.replace(link, new_link)
                 link = new_link
 
     return line
+
+def _getMissingAbsolutePath(relative_link: str, file_path: str) -> str:
+    folders: list[str] = _getDocsFoldersListOfFilePath(file_path)
+    relative_folders_number: int = relative_link.count("..")
+    while relative_folders_number > 0:
+        folders.pop()
+        relative_folders_number -= 1
+
+    return "/".join(folders) + "/"
+
+def _getDocsFoldersListOfFilePath(file_path: str) -> List[str]:
+    directory_path: str = file_path[:file_path.rfind("/")] # removes filename
+    directory_path_from_docs = directory_path.replace("site/", "/docs/")
+    folders: list[str] = directory_path_from_docs.split("/")
+    return folders

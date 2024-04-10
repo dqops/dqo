@@ -15,6 +15,10 @@ def main():
 
     number = 0
     for file_path in file_paths:
+
+        if file_path is not None and not file_path.startswith("site"):
+                raise Exception("ERROR: All paths of docs files should start with \"site\" folder !!!\nExecute docs modificaiton script from a valid folder.")
+
         print("modifying file : " + file_path)
         modify_file(file_path)
         number+=1
@@ -24,6 +28,6 @@ def main():
 start = time.time()
 main()
 end = time.time()
-print("time : " + str(end - start))
+print("In time : " + str(end - start))
 
 # python docs_modifier.py C:\dev\dqoado\site
