@@ -6,7 +6,7 @@ import re
 tag_regex_string: str = "<(((a)|(link))[^<>]*href)|(((script)|(img))[^<>]*src)=[^<>]*>"
 link_tag_pattern: re.Pattern = re.compile(tag_regex_string)
 
-attribute_regex_string: str = """((?:(?:href)|(?:src))=\"([^<>]*)\")"""
+attribute_regex_string: str = """((?:(?:href)|(?:src))=\"(?:([.]{2}[^<>]*)|([^<>]*/))\")"""
 link_pattern: re.Pattern = re.compile(attribute_regex_string)
 
 def modify_link(line: str, file_path: str) -> str:
@@ -26,6 +26,8 @@ def _apply_modification(line: str, file_path: str) -> str:
         file_path_fixed = file_path.replace("\\", "/")
 
     result = link_pattern.search(line)
+    if result is None:
+        return line
     groups = result.groups()
 
     for link in groups:

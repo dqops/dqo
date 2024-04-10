@@ -56,7 +56,7 @@ class LinkModifierTest(unittest.TestCase):
     def test_modify_link__when_two_in_one_line__then_modifies_both(self):
         file_path: str = """site/checks/index.html"""
         source: str = """<td style="text-align: left;">This<a href="../checks/column/numeric/valid-latitude-percent/index.html">valid_latitude_percent</a> and <a href="../checks/column/numeric/valid-longitude-percent/">valid_longitude_percent</a>checks.</td>"""
-        target: str = """<td style="text-align: left;">This<a href="/docs/checks/column/numeric/valid-latitude-percent/index.html">valid_latitude_percent</a> and <a href="/docs/checks/column/numeric/valid-longitude-percent/">valid_longitude_percent</a>checks.</td>"""
+        target: str = """<td style="text-align: left;">This<a href="/docs/checks/column/numeric/valid-latitude-percent/index.html">valid_latitude_percent</a> and <a href="/docs/checks/column/numeric/valid-longitude-percent/index.html">valid_longitude_percent</a>checks.</td>"""
         self.maxDiff = None
         output: str = modify_link(source, file_path)
 

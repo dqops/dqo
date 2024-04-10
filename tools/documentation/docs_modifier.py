@@ -1,7 +1,7 @@
 from scripts.files_provider import get_all_files
 from scripts.docs_file_modifier import modify_file
 import sys
-
+import time
 
 def main():
 
@@ -21,6 +21,9 @@ def main():
 
     print("Total modified files : " + str(number))
 
+start = time.time()
 main()
+end = time.time()
+print("time : " + end - start)
 
 # python docs_modifier.py C:\dev\dqoado\site
