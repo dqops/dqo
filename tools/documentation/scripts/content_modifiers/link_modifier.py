@@ -28,13 +28,11 @@ def _apply_modification(line: str, file_path: str) -> str:
     results = link_pattern.findall(line)
     if results is None:
         return line
+    
     for groups in results:
         for link in groups:
-            if link is None:
+            if link is None or link == '':
                 continue
-
-            if link.endswith("/"):
-                line = line.replace(link, link + "index.html")
 
             if link == "..":
                 directory_path: str = file_path_fixed[:file_path_fixed.rfind("/")] # removes filename
@@ -45,6 +43,13 @@ def _apply_modification(line: str, file_path: str) -> str:
                 new_link = "/".join(folders) + "/" + link.replace("..","")
 
                 line = line.replace(link, new_link)
+                link = new_link
+
+            if link.endswith("/"):
+                new_link = link + "index.html"
+
+                line = line.replace(link, new_link)
+                link = new_link
 
             if link.startswith("../"):
 
@@ -61,7 +66,6 @@ def _apply_modification(line: str, file_path: str) -> str:
                 new_link = "/".join(folders) + "/" + link.replace("../","")
 
                 line = line.replace(link, new_link)
+                link = new_link
 
     return line
-
-

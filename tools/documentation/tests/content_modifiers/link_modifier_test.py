@@ -55,7 +55,7 @@ class LinkModifierTest(unittest.TestCase):
 
     def test_modify_link__when_two_in_one_line__then_modifies_both(self):
         file_path: str = """site/checks/index.html"""
-        source: str = """<a href="../checks/column/numeric/index.html"></a> and <a href="../checks/column/numeric/"></a>checks.</td>"""
+        source: str = """<a href="../checks/column/numeric/"></a> and <a href="../checks/column/numeric/"></a>checks.</td>"""
         target: str = """<a href="/docs/checks/column/numeric/index.html"></a> and <a href="/docs/checks/column/numeric/index.html"></a>checks.</td>"""
         output: str = modify_link(source, file_path)
 
