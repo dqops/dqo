@@ -55,9 +55,16 @@ class LinkModifierTest(unittest.TestCase):
 
     def test_modify_link__when_two_in_one_line__then_modifies_both(self):
         file_path: str = """site/checks/index.html"""
-        source: str = """<td style="text-align: left;">This<a href="../checks/column/numeric/valid-latitude-percent/index.html">valid_latitude_percent</a> and <a href="../checks/column/numeric/valid-longitude-percent/">valid_longitude_percent</a>checks.</td>"""
-        target: str = """<td style="text-align: left;">This<a href="/docs/checks/column/numeric/valid-latitude-percent/index.html">valid_latitude_percent</a> and <a href="/docs/checks/column/numeric/valid-longitude-percent/index.html">valid_longitude_percent</a>checks.</td>"""
-        self.maxDiff = None
+        source: str = """<a href="../checks/column/numeric/index.html"></a> and <a href="../checks/column/numeric/"></a>checks.</td>"""
+        target: str = """<a href="/docs/checks/column/numeric/index.html"></a> and <a href="/docs/checks/column/numeric/index.html"></a>checks.</td>"""
+        output: str = modify_link(source, file_path)
+
+        self.assertEqual(target, output)
+
+    def test_modify_link__when_two_links_with_trailing_slash_in_one_line__then_modifies_both(self):
+        file_path: str = """site/checks/index.html"""
+        source: str = """<a href="/docs/checks/column/"> and <a href="/docs/checks/column2/">"""
+        target: str = """<a href="/docs/checks/column/index.html"> and <a href="/docs/checks/column2/index.html">"""
         output: str = modify_link(source, file_path)
 
         self.assertEqual(target, output)
@@ -65,8 +72,7 @@ class LinkModifierTest(unittest.TestCase):
     def test_modify_link__when_just_two_dots__then_modifies(self):
         file_path: str = """site/checks/index.html"""
         source: str = """<a href=".." class="md-nav__link">"""
-        target: str = """<a href="/site/index.html" class="md-nav__link">"""
-        self.maxDiff = None
+        target: str = """<a href="/docs/index.html" class="md-nav__link">"""
         output: str = modify_link(source, file_path)
 
         self.assertEqual(target, output)
