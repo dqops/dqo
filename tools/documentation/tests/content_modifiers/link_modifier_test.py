@@ -35,6 +35,15 @@ class LinkModifierTest(unittest.TestCase):
 
         self.assertEqual(target, output)
 
+    def test_modify_link__when_site_name_in_middle_of_link__then_do_not_touch_it(self):
+        file_path: str = """site/somewhere/site/athena/index.html"""
+        source: str = """<a href="../../site/index.html">"""
+        target: str = """<a href="/docs/somewhere/site/index.html">"""
+
+        output: str = modify_link(source, file_path)
+
+        self.assertEqual(target, output)
+
     def test_modify_link__when_path_is_relative_with_depth_two__then_expand_path(self):
         file_path: str = """site/data-sources/athena/index.html"""
         source: str = """<a href="../../images/favicon.ico">"""
