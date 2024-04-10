@@ -7,7 +7,7 @@ from typing import List
 tag_regex_string: str = "<(?:(?:(?:a)|(?:link))[^<>]*href)|(?:(?:(?:script)|(?:img))[^<>]*src)=[^<>]*>"
 link_tag_pattern: re.Pattern = re.compile(tag_regex_string)
 
-attribute_regex_string: str = """(?:(?:(?:href)|(?:src))=\"(?:([.]{2}[^<>"]*)|([^<>"]*\/))\")"""
+attribute_regex_string: str = """(?:(?:(?:href)|(?:src))=\"(?:([.]{1,2}[^<>"]*)|([^<>"]*\/))\")"""
 link_pattern: re.Pattern = re.compile(attribute_regex_string)
 
 def modify_link(line: str, file_path: str) -> str:
@@ -35,25 +35,19 @@ def _apply_modification(line: str, file_path: str) -> str:
             if link is None or link == '':
                 continue
 
-            if link == "..":
-                absolute_prefix = _getMissingAbsolutePath(link, file_path_fixed)
-                new_link = absolute_prefix + link.replace("..","")
-
-                line = line.replace(link, new_link)
-                link = new_link
-
             if link.endswith("/"):
                 new_link = link + "index.html"
-
                 line = line.replace(link, new_link)
-                link = new_link
 
+            if link == "." or link == ".." or link == "./index.html":
+                absolute_prefix = _getMissingAbsolutePath(link, file_path_fixed)
+                new_link = absolute_prefix + "index.html"
+                line = line.replace(link, new_link)
+            
             if link.startswith("../"):
                 absolute_prefix = _getMissingAbsolutePath(link, file_path_fixed)
                 new_link = absolute_prefix + link.replace("../","")
-
                 line = line.replace(link, new_link)
-                link = new_link
 
     return line
 
@@ -68,6 +62,7 @@ def _getMissingAbsolutePath(relative_link: str, file_path: str) -> str:
 
 def _getDocsFoldersListOfFilePath(file_path: str) -> List[str]:
     directory_path: str = file_path[:file_path.rfind("/")] # removes filename
-    directory_path_from_docs = directory_path.replace("site/", "/docs/")
+    directory_path_from_docs = re.sub(r'^(site)', '/docs', directory_path)
+    # directory_path_from_docs = directory_path.replace("site/", "/docs/")
     folders: list[str] = directory_path_from_docs.split("/")
     return folders

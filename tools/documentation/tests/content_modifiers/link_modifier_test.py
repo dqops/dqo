@@ -71,12 +71,36 @@ class LinkModifierTest(unittest.TestCase):
 
     def test_modify_link__when_just_two_dots__then_modifies(self):
         file_path: str = """site/checks/index.html"""
-        source: str = """<a href=".." class="md-nav__link">"""
-        target: str = """<a href="/docs/index.html" class="md-nav__link">"""
+        source: str = """<a href="..">"""
+        target: str = """<a href="/docs/index.html">"""
         output: str = modify_link(source, file_path)
 
         self.assertEqual(target, output)
 
+    def test_modify_link__when_just_one_dot__then_modifies(self):
+        file_path: str = """site/index.html"""
+        source: str = """<a href=".">"""
+        target: str = """<a href="/docs/index.html">"""
+        output: str = modify_link(source, file_path)
+
+        self.assertEqual(target, output)
+
+    def test_modify_link__when_one_dot_with_filename__then_modifies(self):
+        file_path: str = """site/index.html"""
+        source: str = """<a href="./index.html">"""
+        target: str = """<a href="/docs/index.html">"""
+        output: str = modify_link(source, file_path)
+
+        self.assertEqual(target, output)
+
+    def test_modify_link__when_one_dot_with_filename_under_folder_structure__then_modifies(self):
+        file_path: str = """site/data-sources/mysql/index.html"""
+        source: str = """<a href="./index.html">"""
+        target: str = """<a href="/docs/data-sources/mysql/index.html">"""
+        output: str = modify_link(source, file_path)
+
+        self.assertEqual(target, output)
+        
 
 if __name__ == '__main__':
     unittest.main()
