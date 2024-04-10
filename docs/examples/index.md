@@ -126,7 +126,7 @@ To start the DQOps application with the example, follow the steps below.
 
     After installation, you will be asked whether to initialize the [DQOps user home folder](../dqo-concepts/dqops-user-home-folder.md) in the default location. Type Y to create the folder. . 
 
-    ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder2.png){ loading=lazy; width="1200px" }
+    ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder2.png){ loading=lazy }
 
     The DQOps user home folder locally stores data such as sensor and checkout readings, as well as data source configurations. [You can learn more about data storage here](../dqo-concepts/data-storage-of-data-quality-results.md).
 
@@ -138,7 +138,7 @@ To start the DQOps application with the example, follow the steps below.
  
     After creating the [DQOps user home folder](../dqo-concepts/dqops-user-home-folder.md), you will be asked whether to log in to the DQOps cloud. 
 
-    ![Log in to DQOps Cloud](https://dqops.com/docs/images/getting-started/log-in-to-dqops-cloud3.png){ loading=lazy; width="1200px" }
+    ![Log in to DQOps Cloud](https://dqops.com/docs/images/getting-started/log-in-to-dqops-cloud3.png){ loading=lazy }
 
     After typing Y, you will be redirected to [https://cloud.dqops.com/registration](https://cloud.dqops.com/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
  

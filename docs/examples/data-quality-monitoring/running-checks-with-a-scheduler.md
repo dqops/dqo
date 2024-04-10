@@ -152,7 +152,7 @@ In DQOps, the scheduler is started as a default. Data synchronization take place
 To start or stop the scheduler use the user interface. Simply switch on or off the **Jobs scheduler** using the button in the Notifications window
 on the [right upper right corner of the navigation bar](../../dqo-concepts/dqops-user-interface-overview.md).
 
-![Start and stop a scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png){ loading=lazy; width="1200px" }
+![Start and stop a scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png){ loading=lazy }
 
 
 ## YAML configuration file

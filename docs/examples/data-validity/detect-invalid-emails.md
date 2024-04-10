@@ -86,7 +86,7 @@ You can also run all the checks for an entire subcategory of checks using the **
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![String-invalid-email-count check results](https://dqops.com/docs/images/examples/daily-string-invalid-email-count-check-results1.png)
+![String-invalid-email-count check results](https://dqops.com/docs/images/examples/daily-string-invalid-email-count-check-results1.png){ loading=lazy; width="1200px" }
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
@@ -127,7 +127,7 @@ These dashboards allow filtering data by:
 * table,
 * column.
     
-![String-invalid-email-count results on Current column status dashboard](https://dqops.com/docs/images/examples/daily-string-invalid-email-count-check-results-on-current-column-status-dashboard.png)
+![String-invalid-email-count results on Current column status dashboard](https://dqops.com/docs/images/examples/daily-string-invalid-email-count-check-results-on-current-column-status-dashboard.png){ loading=lazy; width="1200px" }
 
 ## Change a schedule at the connection level
 
@@ -136,7 +136,7 @@ table, or individual check.
 
 After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
-![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png)
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the **Data Source** section.
 

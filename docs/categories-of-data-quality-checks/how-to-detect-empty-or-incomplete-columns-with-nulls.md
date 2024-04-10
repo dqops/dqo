@@ -291,7 +291,7 @@ This dashboard shows only the status of the most recent evaluation of all data q
 When the data is fixed in the data source, and the failed data quality check is rerun,
 the issue will disappear from the dashboard.
 
-![Data quality dashboard showing empty and incomplete detected by data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/empty-and-incomplete-columns-issues-shown-on-monitoring-dashboard-min.png){ loading=lazy; width="1200px" }
+![Data quality dashboard showing empty and incomplete detected by data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/empty-and-incomplete-columns-issues-shown-on-monitoring-dashboard-min3.png){ loading=lazy; width="1200px" }
 
 ### Partition monitoring dashboards
 DQOps has a separate set of data quality dashboards for partitioned data.
@@ -300,12 +300,12 @@ These dashboards are found in the "Partitions" folder. They show issues for ever
 The top section of the partition's *Current completeness issues on columns" dashboard shows the data sources, 
 affected tables, and the types of completeness issues.
 
-![Partitions with nulls shown on a dashboard - the filters](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partition-completeness-status-dashboard-top-min2.png){ loading=lazy; width="1200px" }
+![Partitions with nulls shown on a dashboard - the filters](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partition-completeness-status-dashboard-top-min3.png){ loading=lazy; width="1200px" }
 
 The next section shows more details about incomplete or empty columns. 
 The status identifies the highest severity issue by color.
 
-![List of columns in a partitioned table that have incomplete data shown on a data quality dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/completeness-issues-dashboard-column-details-min2.png){ loading=lazy; width="1200px" }
+![List of columns in a partitioned table that have incomplete data shown on a data quality dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/completeness-issues-dashboard-column-details-min.png){ loading=lazy; width="1200px" }
 
 
 ## Use cases

@@ -183,7 +183,7 @@ After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every 
 
    By default, scheduler is active. You can turn it off by clicking on notification icon in the top right corner of the screen, and clicking the toggle button.
 
-   ![Turn off scheduler](https://dqops.com/docs/images/examples/turning-off-scheduler.png){ loading=lazy; width="1200px" }
+   ![Turn off scheduler](https://dqops.com/docs/images/examples/turning-off-scheduler.png){ loading=lazy }
 
    Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
    all tables associated with that connection.
@@ -213,7 +213,7 @@ A notification contains the most important information about an incident you may
 
 An example of notification in Slack is shown below.
 
-![Example of Slack notification](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-slack-notification.png){ loading=lazy; width="1200px" }
+![Example of Slack notification](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-slack-notification.png){ loading=lazy }
 
 Follow the link to learn more about [configuring Slack notification](../../integrations/slack/configuring-slack-notifications.md). 
 

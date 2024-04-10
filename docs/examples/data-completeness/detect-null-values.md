@@ -92,7 +92,7 @@ You can also run all the checks for an entire subcategory of checks using the **
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![Null-count check results](https://dqops.com/docs/images/examples/daily-null-count-check-results1.png)
+![Null-count check results](https://dqops.com/docs/images/examples/daily-null-count-check-results1.png){ loading=lazy; width="1200px" }
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
@@ -134,7 +134,7 @@ This dashboard allows filtering data by:
 * column,
 * issue severity
 
-![Null-count check results on current completeness issues on columns dashboard](https://dqops.com/docs/images/examples/current-completeness-issues-on-columns-dashboard.png)
+![Null-count check results on current completeness issues on columns dashboard](https://dqops.com/docs/images/examples/current-completeness-issues-on-columns-dashboard.png){ loading=lazy; width="1200px" }
 
 ## Change a schedule at the connection level
 
@@ -143,7 +143,7 @@ table, or individual check.
 
 After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
-![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png)
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the **Data Source** section.
 
