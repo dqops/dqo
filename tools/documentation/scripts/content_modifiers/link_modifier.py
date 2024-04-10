@@ -7,7 +7,7 @@ from typing import List
 tag_regex_string: str = "<(?:(?:(?:a)|(?:link))[^<>]*href)|(?:(?:(?:script)|(?:img))[^<>]*src)=[^<>]*>"
 link_tag_pattern: re.Pattern = re.compile(tag_regex_string)
 
-attribute_regex_string: str = """(?:(?:(?:href)|(?:src))=\"(?:([.]{1,2}[^<>"]*)|([^<>"]*\/))\")"""
+attribute_regex_string: str = """(?:(?:(?:href)|(?:src))=\"(?:([.]{1,2}[^<>"]*)|([^<>"]*\/)|([^<>"]*\/[.]))\")"""
 link_pattern: re.Pattern = re.compile(attribute_regex_string)
 
 def modify_link(line: str, file_path: str) -> str:
@@ -35,8 +35,8 @@ def _apply_modification(line: str, file_path: str) -> str:
             if link is None or link == '':
                 continue
 
-            if link.endswith("/"):
-                new_link = link + "index.html"
+            if link.endswith("/") or link.endswith("/."):
+                new_link = link.rstrip(".") + "index.html"
                 line = line.replace(link, new_link)
 
             if link == "." or link == ".." or link == "./index.html":

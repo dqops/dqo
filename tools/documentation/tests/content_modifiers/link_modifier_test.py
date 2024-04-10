@@ -110,6 +110,13 @@ class LinkModifierTest(unittest.TestCase):
 
         self.assertEqual(target, output)
         
+    def test_modify_link__when_one_dot_ends_link__then_modifies(self):
+        file_path: str = "site"
+        source: str = """<a href="/docs/.">"""
+        target: str = """<a href="/docs/index.html">"""
+        output: str = modify_link(source, file_path)
+
+        self.assertEqual(target, output)
 
 if __name__ == '__main__':
     unittest.main()
