@@ -15,7 +15,7 @@ class DocsFileModifierTest(unittest.TestCase):
             os.mkdir(temp_folder)
 
     def test_modify_file__when_multiple_script_tags__then_modifies_them(self):
-        (target_file, copied_source_file) = self._prepare_files("./script_tag_modifier_examples/multiple_script_tags")
+        (target_file, copied_source_file) = self._prepare_files("./content_modifiers/script_tag_modifier_examples/multiple_script_tags")
 
         modify_file(copied_source_file)
 

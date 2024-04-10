@@ -24,6 +24,6 @@ def main():
 start = time.time()
 main()
 end = time.time()
-print("time : " + end - start)
+print("time : " + str(end - start))
 
 # python docs_modifier.py C:\dev\dqoado\site

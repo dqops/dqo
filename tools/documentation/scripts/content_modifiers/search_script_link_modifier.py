@@ -23,6 +23,6 @@ def _apply_modification(line: str) -> str:
         if link is None:
             continue
 
-        line.replace(link, "/")
+        line = line.replace(link, "/")
 
     return line
