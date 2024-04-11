@@ -2,8 +2,8 @@ import React, { ChangeEvent, FocusEvent } from 'react';
 
 import clsx from 'clsx';
 
-import SvgIcon from '../SvgIcon';
 import { Tooltip } from '@material-tailwind/react';
+import SvgIcon from '../SvgIcon';
 
 interface ITextAreaProps {
   className?: string;
@@ -46,7 +46,7 @@ const TextArea = ({
         htmlFor={name}
         className="block text-sm font-regular text-blue-dark-700 mb-1 flex space-x-1 items-center"
       >
-        <span>{label}</span>
+        <span className='text-sm'>{label}</span>
         {!!tooltipText && (
           <Tooltip
             content={tooltipText}

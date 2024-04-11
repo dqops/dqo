@@ -78,7 +78,15 @@ export default function UserProfile({ name, email }: UserProfile) {
     .then(() => setOpen(false))
     .catch((err) => console.error(err))
   }
-
+  const profileItems = [
+    { label: 'Data quality dashboards:', value: userProfile?.data_quality_data_warehouse_enabled ? 'enabled' : 'disabled' },
+    { label: 'Users:', value: userProfile?.users_limit ? formatNumberWithSegments(userProfile.users_limit) : '-' },
+    { label: 'Monitored connections:', value: userProfile?.connections_limit ? formatNumberWithSegments(userProfile.connections_limit) : '-' },
+    { label: 'Total monitored tables:', value: userProfile?.tables_limit ? formatNumberWithSegments(userProfile.tables_limit) : '-' },
+    { label: 'Tables per connection:', value: userProfile?.connection_tables_limit ? formatNumberWithSegments(userProfile.connection_tables_limit) : '-' },
+    { label: 'Concurrent jobs:', value: userProfile?.jobs_limit ? formatNumberWithSegments(userProfile.jobs_limit) : '-' },
+    { label: 'Months in data quality warehouse:', value: userProfile?.months_limit ? formatNumberWithSegments(userProfile.months_limit) : '-' }
+  ];
   return (
     <Popover open={isProfileOpen} handler={toggleOpen} placement="top-end">
       <PopoverHandler>
@@ -92,7 +100,7 @@ export default function UserProfile({ name, email }: UserProfile) {
           </div>
         </IconButton>
       </PopoverHandler>
-      <PopoverContent className="bg-white h-110 w-70 rounded-md border border-gray-400 flex-col justify-center items-center z-50 text-black text-sm">
+      <PopoverContent className="bg-white h-112 w-70 rounded-md border border-gray-400 flex-col justify-center items-center z-50 text-black text-sm">
         <div className="flex justify-between items-center h-12 ">
           <div className="ml-1 flex items-center justify-center gap-x-2">
             {' '}
@@ -130,55 +138,15 @@ export default function UserProfile({ name, email }: UserProfile) {
         </div>
 
         <div className="font-bold h-8 ml-1">Account limits:</div>
-        <div className="flex justify-between items-center">
-          <div className="ml-1">Data quality dashboards:</div>
-          <div className="mr-1">
-            {userProfile?.data_quality_data_warehouse_enabled ? 'enabled' : 'disabled'}
-          </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="ml-1">Users:</div>
-          <div className="mr-1">
-            {userProfile?.users_limit ? userProfile.users_limit : '-'}
-          </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="ml-1">Monitored connections:</div>
-          <div className="mr-1">
-            {userProfile?.connections_limit
-              ? userProfile?.connections_limit
-              : '-'}
-          </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="ml-1">Total monitored tables:</div>
-          <div className="mr-1">
-            {userProfile?.tables_limit ? userProfile.tables_limit : '-'}
-          </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="ml-1">Tables per connection:</div>
-          <div className="mr-1">
-            {userProfile?.connection_tables_limit
-              ? userProfile.connection_tables_limit
-              : '-'}
-          </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="ml-1">Concurrent jobs:</div>
-          <div className="mr-1">
-            {userProfile?.jobs_limit ? userProfile.jobs_limit : '-'}
-          </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="ml-1">Months in data quality warehouse:</div>
-          <div className="mr-1">
-            {userProfile?.months_limit ? userProfile.months_limit : '-'}
-          </div>
-        </div>
-        <div className='my-2'>{apiKey.length!==0 ?
-         <div className='flex items-center justify-between' ><TextArea label='User API Key:' value={apiKey} className='select-all' onClick={copyWhole}/>
-          <SvgIcon name={copied ? 'done' : 'copytext' } className='cursor-pointer' onClick={() => copyToClipboard()}/>
+          {profileItems.map((item, index) => (
+            <div className="flex justify-between items-center pb-0.5" key={index}>
+              <div className="ml-1">{item.label}</div>
+              <div className="mr-1">{item.value}</div>
+            </div>
+          ))}
+        <div className='my-2 ml-1'>{apiKey.length!==0 ?
+         <div className='flex items-center' ><TextArea label='User API Key:' value={apiKey} className='select-all text-sm' onClick={copyWhole}/>
+          <SvgIcon name={copied ? 'done' : 'copytext' } className='cursor-pointer mt-8 ml-5' onClick={() => copyToClipboard()}/>
           </div> 
         : <Button label='Generate API Key' color='primary' variant='outlined' onClick={generateApiKey}/>}
         </div>
@@ -188,15 +156,15 @@ export default function UserProfile({ name, email }: UserProfile) {
             href="https://cloud.dqops.com/account"
             target="_blank"
             rel="noreferrer"
-            className="block text-teal-500 text-sm underline mb-3"
+            className="block text-teal-500 text-sm underline mb-3 ml-1"
           >
             Manage account 
           </a> 
         }
         {userProfile.can_change_own_password === true && 
           <>
-          <div className='text-teal-500 mb-3 text-sm cursor-pointer underline' onClick={() => setOpen(true)}>Change password</div>
-          <div className='text-green-500 pt-2 text-sm'>{passwordChangedMessage}</div>
+          <div className='text-teal-500 mb-3 text-sm cursor-pointer underline ml-1' onClick={() => setOpen(true)}>Change password</div>
+          <div className='text-green-500 pt-2 text-sm ml-1'>{passwordChangedMessage}</div>
           </>
         }
         </div>
@@ -204,4 +172,15 @@ export default function UserProfile({ name, email }: UserProfile) {
       </PopoverContent>
     </Popover>
   );
+}
+
+function formatNumberWithSegments(num: number): string {
+  const numStr = num.toString();
+  const segments = [];
+  
+  for (let i = numStr.length; i > 0; i -= 3) {
+      segments.unshift(numStr.slice(Math.max(0, i - 3), i));
+  }
+
+  return segments.join(' ');
 }
