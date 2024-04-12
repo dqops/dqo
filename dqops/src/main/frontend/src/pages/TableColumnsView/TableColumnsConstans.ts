@@ -46,6 +46,7 @@ export interface MyData {
   importedDatatype?: string | undefined;
   columnHash: number;
   isColumnSelected: boolean;
+  dimentions?: any[];
 }
 
 export interface ITableColumnsProps {
@@ -61,6 +62,7 @@ export interface ITableColumnsProps {
 }
 
 export const labels = [
+  'Dimensions',
   'Column name',
   'Detected data type',
   'Imported data type',

@@ -1,20 +1,34 @@
-import React, { useEffect, useState, useLayoutEffect } from 'react';
-import { ColumnApiClient } from '../../services/apiClient';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
+  ColumnCurrentDataQualityStatusModel,
   ColumnStatisticsModel,
   DataGroupingConfigurationSpec
 } from '../../api';
-import ConfirmDialog from './ConfirmDialog';
-import { CheckTypes } from '../../shared/routes';
-import { setCreatedDataStream } from '../../redux/actions/definition.actions';
-import { useSelector } from 'react-redux';
-import { getFirstLevelState } from '../../redux/selectors';
 import Loader from '../../components/Loader';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { ITableColumnsProps, MyData, spec } from './TableColumnsConstans';
-import { renderValue } from './TableColumnsUtils';
+import { setCreatedDataStream } from '../../redux/actions/definition.actions';
+import { getFirstLevelState } from '../../redux/selectors';
+import { CheckResultApi, ColumnApiClient } from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
+import ConfirmDialog from './ConfirmDialog';
 import TableColumnsBody from './TableColumnsBody';
+import { ITableColumnsProps, MyData, spec } from './TableColumnsConstans';
 import TableColumnsHeader from './TableColumnsHeader';
+import { renderValue } from './TableColumnsUtils';
+
+const rewriteDimensions = (columnStatus : { [key: string]: ColumnCurrentDataQualityStatusModel }) => {
+  const columnValues: any = {}; 
+  Object.entries(columnStatus).forEach(([key, value]) => {
+    const dimentions: Array<any> = [];
+    Object.entries(value.checks ?? {}).forEach(([key, value]) => {
+     dimentions.push({ quality_dimension: value.quality_dimension, current_severity: value.current_severity,
+       highest_historical_severity: value.highest_historical_severity, last_executed_at: value.last_executed_at, check_name: key, category: value.category });
+    })
+    columnValues[key] = dimentions; 
+  })
+  return columnValues;
+}
 
 const TableColumns = ({
   connectionName,
@@ -34,6 +48,7 @@ const TableColumns = ({
     {}
   );
   const [shouldResetCheckboxes, setShouldResetCheckboxes] = useState(false);
+  const [status, setStatus] = useState<{ [key: string]: ColumnCurrentDataQualityStatusModel }>({})
 
   const handleButtonClick = (name: string) => {
     setObjectStates((prevStates) => ({
@@ -136,7 +151,8 @@ const TableColumns = ({
         scale: renderValue(scaleData?.[i]),
         importedDatatype: typeData?.[i],
         columnHash: Number(hashData?.[i]),
-        isColumnSelected: false
+        isColumnSelected: false,
+        dimentions: rewriteDimensions(status)[columnNameData?.[i] ?? '']
       };
 
       dataArray.push(newData);
@@ -230,6 +246,10 @@ const TableColumns = ({
       </div>
     );
   }
+
+  useEffect(() => {
+    CheckResultApi.getTableDataQualityStatus(connectionName, schemaName, tableName).then((res) => {console.log(res.data), setStatus(res.data.columns ?? {}) })
+  }, [connectionName, schemaName, tableName]);
 
   return (
     <div className="p-4 relative">

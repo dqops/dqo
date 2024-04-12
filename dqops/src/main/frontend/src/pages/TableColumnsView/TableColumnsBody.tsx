@@ -1,4 +1,6 @@
-import { IconButton } from '@material-tailwind/react';
+import { IconButton, Tooltip } from '@material-tailwind/react';
+import clsx from 'clsx';
+import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -7,6 +9,7 @@ import {
   TableColumnsStatisticsModel
 } from '../../api';
 import Checkbox from '../../components/Checkbox';
+import { getColor } from '../../components/Connection/TableView/TableQualityStatus/TableQualityStatusUtils';
 import SvgIcon from '../../components/SvgIcon';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
@@ -128,6 +131,46 @@ export default function TableColumnsBody({
       : ([] as string[]);
   }, [job]);
 
+const renderSecondLevelTooltip = (data: any) => {
+  return (
+    <div>
+      <div className="flex gap-x-2">
+        <div className="w-42">Data quality check:</div>
+        <div>{data.check_name}</div>
+      </div>
+      <div className="flex gap-x-2">
+        <div className="w-42">Last executed at:</div>
+        <div>{moment(data.last_executed_at).format('YYYY-MM-DD HH:mm:ss')}</div>
+      </div>
+      <div className="flex gap-x-2">
+        <div className="w-42">Current severity level:</div>
+        <div>{data.current_severity}</div>
+      </div>
+      <div className="flex gap-x-2">
+        <div className="w-42">Highest historical severity level:</div>
+        <div>{data.highest_severity}</div>
+      </div>
+      <div className="flex gap-x-2">
+        <div className="w-42">Category:</div>
+        <div>{data.category}</div>
+      </div>
+      <div className="flex gap-x-2">
+        <div className="w-42">Quality Dimension:</div>
+        <div>{data.quality_dimension}</div>
+      </div>
+    </div>
+  );
+};
+
+const getBasicDimmensions = (column: MyData, type: string) : any[] => {
+  return column.dimentions?.filter((x) => x.quality_dimension === type) ?? []
+};  
+const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
+
+const getAdditionalDimentions = (column: MyData) : any[] => {
+  return column.dimentions?.filter((x) => !basicDimensionTypes.includes(x.quality_dimension)) ?? [];
+}
+
   return (
     <tbody className="text-sm">
       {columns.map((column, index) => (
@@ -148,13 +191,29 @@ export default function TableColumnsBody({
               />
             </div>
           </td>
+          <td className='border-b border-gray-100 text-left px-4 py-2'>
+            <div className='flex items-center gap-x-0.5'>
+            {basicDimensionTypes.map((dimType) => {
+              return getBasicDimmensions(column, dimType)?.map((dim, index) => (
+                <Tooltip key={index} content={renderSecondLevelTooltip(dim)}>
+                  <div className={clsx('w-4 h-4', getColor(dim.current_severity))} style={{ borderRadius: "8px" }} />
+                </Tooltip>
+              ));
+            })}
+            {getAdditionalDimentions(column).map((dim)  =>
+                <Tooltip key={index} content={renderSecondLevelTooltip(dim)}>
+                  <div className={clsx('w-4 h-4', getColor(dim.current_severity))} style={{ borderRadius: "8px" }} />
+                </Tooltip>
+             )}
+          </div>
+          </td>
           <td
             className="border-b border-gray-100 text-left px-4 py-2 underline cursor-pointer"
             onClick={() => navigate(column.nameOfCol ? column.nameOfCol : '')}
           >
             {column.nameOfCol}
           </td>
-          <td className="border-b border-gray-100 px-4 py-2">
+          <td className="border-b border-gray-100 text-left px-4 py-2">
             <div key={index} className="truncate">
               {getDetectedDatatype(column.detectedDatatypeVar)}
             </div>
