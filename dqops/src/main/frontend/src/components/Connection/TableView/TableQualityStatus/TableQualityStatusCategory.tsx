@@ -137,7 +137,7 @@ export default function TableQualityStatusCategory({
                     >
                       <div
                         className={clsx(
-                          ' h-4 w-4 mr-2 mt-1 ml-2',
+                          ' h-4 w-4 mr-0.5 mt-2 ml-2',
                           getColor(
                             getTableCircleStatus(
                               severityType,
@@ -173,7 +173,10 @@ export default function TableQualityStatusCategory({
                         ? 'chevron-up'
                         : 'chevron-down'
                     }
-                    className="h-5 w-5 pr-1"
+                    className={clsx("h-5 w-5 pr-1",   extendedChecks.find(
+                      (x) =>
+                        x.checkType === key && x.categoryDimension === 'table'
+                    ) ? "mb-1" : "mt-1")}
                   />
                 </div>
               ) : null}

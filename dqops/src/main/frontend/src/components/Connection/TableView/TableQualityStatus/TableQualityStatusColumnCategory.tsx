@@ -215,7 +215,14 @@ export default function TableQualityStatusColumnCategory({
                       )}
                     >
                       <div
-                        className="h-4 w-4 ml-2 mt-1 mr-2"
+                        className={clsx("h-4 w-4 ml-2 mt-2 mr-0.5", getColor(
+                          getColumnCircleStatus(
+                            severityType,
+                            categoryDimension,
+                            (tableDataQualityStatus.columns ?? {})[customKey],
+                            firstLevelChecksKey
+                          ).status
+                        ))}
                         style={{
                           borderRadius: '6px',
                           ...(getColor(
@@ -236,15 +243,19 @@ export default function TableQualityStatusColumnCategory({
                   <SvgIcon
                     key={`svg_column_${customKey}_${firstLevelChecksKey}`}
                     name={
-                      extendedChecks.find(
+                     extendedChecks.find(
                         (x) =>
                           x.checkType === customKey &&
                           x.categoryDimension === firstLevelChecksKey
-                      )
+                      ) 
                         ? 'chevron-up'
                         : 'chevron-down'
                     }
-                    className="h-5 w-5 pr-1"
+                    className={clsx("h-5 w-5 pr-1",extendedChecks.find(
+                      (x) =>
+                        x.checkType === customKey &&
+                        x.categoryDimension === firstLevelChecksKey
+                    ) ? "mb-1" : "mt-1")}
                   />
                 </div>
                 </div>
