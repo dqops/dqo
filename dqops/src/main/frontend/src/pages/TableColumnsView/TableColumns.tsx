@@ -11,6 +11,7 @@ import { setCreatedDataStream } from '../../redux/actions/definition.actions';
 import { getFirstLevelState } from '../../redux/selectors';
 import { CheckResultApi, ColumnApiClient } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 import ConfirmDialog from './ConfirmDialog';
 import TableColumnsBody from './TableColumnsBody';
 import { ITableColumnsProps, MyData, spec } from './TableColumnsConstans';
@@ -41,6 +42,7 @@ const TableColumns = ({
   onChangeSelectedColumns,
   refreshListFunc
 }: ITableColumnsProps) => {
+  const {checkTypes} : {checkTypes: CheckTypes} = useDecodedParams()
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
   const [sortedArray, setSortedArray] = useState<MyData[]>();
@@ -248,7 +250,7 @@ const TableColumns = ({
   }
 
   useEffect(() => {
-    CheckResultApi.getTableDataQualityStatus(connectionName, schemaName, tableName).then((res) => {console.log(res.data), setStatus(res.data.columns ?? {}) })
+    CheckResultApi.getTableDataQualityStatus(connectionName, schemaName, tableName, undefined, undefined, checkTypes === CheckTypes.PROFILING ? true : undefined).then((res) => {console.log(res.data), setStatus(res.data.columns ?? {}) })
   }, [connectionName, schemaName, tableName]);
 
   return (

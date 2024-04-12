@@ -132,7 +132,14 @@ export default function TableColumnsBody({
   }, [job]);
 
 const renderSecondLevelTooltip = (data: any) => {
-  return (
+  return (data.empty ?
+  <div>
+      <div className="flex gap-x-2">
+        <div className="w-42">Quality Dimension:</div>
+        <div>{data.quality_dimension}</div>
+      </div>
+    <div className="w-full">No data quality checks configured</div>
+  </div> :
     <div>
       <div className="flex gap-x-2">
         <div className="w-42">Data quality check:</div>
@@ -163,7 +170,8 @@ const renderSecondLevelTooltip = (data: any) => {
 };
 
 const getBasicDimmensions = (column: MyData, type: string) : any[] => {
-  return column.dimentions?.filter((x) => x.quality_dimension === type) ?? []
+  const basicDimensions = column.dimentions?.filter((x) => x.quality_dimension === type);
+  return basicDimensions?.length ? basicDimensions : [{empty: true, quality_dimension : type}]
 };  
 const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
 
@@ -195,14 +203,14 @@ const getAdditionalDimentions = (column: MyData) : any[] => {
             <div className='flex items-center gap-x-0.5'>
             {basicDimensionTypes.map((dimType) => {
               return getBasicDimmensions(column, dimType)?.map((dim, index) => (
-                <Tooltip key={index} content={renderSecondLevelTooltip(dim)}>
-                  <div className={clsx('w-4 h-4', getColor(dim.current_severity))} style={{ borderRadius: "8px" }} />
+                <Tooltip key={index} content={renderSecondLevelTooltip(dim)} >
+                  <div className={clsx('w-3 h-3', dim.empty === true ? 'border border-gray-200 bg-white' : getColor(dim.current_severity))} style={{ borderRadius: "6px" }} />
                 </Tooltip>
               ));
             })}
             {getAdditionalDimentions(column).map((dim)  =>
                 <Tooltip key={index} content={renderSecondLevelTooltip(dim)}>
-                  <div className={clsx('w-4 h-4', getColor(dim.current_severity))} style={{ borderRadius: "8px" }} />
+                  <div className={clsx('w-3 h-3', getColor(dim.current_severity))} style={{ borderRadius: "6px" }} />
                 </Tooltip>
              )}
           </div>
