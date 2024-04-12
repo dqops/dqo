@@ -206,6 +206,7 @@
             class="modal__btn"
             data-micromodal-close
             aria-label="Close this dialog window"
+            onclick="MicroModal.close('modal-1')"
           >
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="Menu / Close_LG"> <path id="Vector" d="M21 21L12 12M12 12L3 3M12 12L21.0001 3M12 12L3 21.0001" stroke="#bab5b5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g> </g></svg>
           </button>
@@ -360,7 +361,7 @@
             <div class="_form-thank-you" style="display:none;">
             </div>
           </form>
-          <script type="text/javascript">
+          <script defer type="text/javascript">
           window.cfields = [];
           window._show_thank_you = function(id, message, trackcmp_url, email) {
               var form = document.getElementById('_form_' + id + '_'), thank_you = form.querySelector('._form-thank-you');
@@ -854,20 +855,23 @@
   </div>
 </div>
 
-<script src="/docs/javascripts/micromodal.min.js"></script>
-<script>
+<script defer src="/docs/javascripts/micromodal.min.js"></script>
+<script defer>
   if (
     !localStorage.getItem("ebook-popup-shown")
   ) {
     document.addEventListener("DOMContentLoaded", function () {
       try {
-        MicroModal.init({
-          awaitCloseAnimation: true,
-          onShow: function (modal) {},
-          onClose: function (modal) {},
-        })
-
         setTimeout(function () {
+          MicroModal.init({
+            awaitCloseAnimation: true,
+            onShow: function (modal) {},
+            onClose: function(modal, element, event) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          });
+
           MicroModal.show("modal-1");
           localStorage.setItem("ebook-popup-shown", new Date());
         }, 10000)
