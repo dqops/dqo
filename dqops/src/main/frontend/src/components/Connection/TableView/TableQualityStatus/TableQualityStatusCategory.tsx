@@ -2,6 +2,10 @@ import { Tooltip } from '@material-tailwind/react';
 import clsx from 'clsx';
 import moment from 'moment';
 import React from 'react';
+import {
+  CheckCurrentDataQualityStatusModelCurrentSeverityEnum,
+  TableCurrentDataQualityStatusModel
+} from '../../../../api';
 import SvgIcon from '../../../SvgIcon';
 import {
   TFirstLevelCheck,
@@ -12,10 +16,6 @@ import {
   getTableCircleStatus,
   getTableStatus
 } from './TableQualityStatusUtils';
-import {
-  CheckCurrentDataQualityStatusModelCurrentSeverityEnum,
-  TableCurrentDataQualityStatusModel
-} from '../../../../api';
 
 interface ITableQualityStatusColumnCategoryProps {
   tableDataQualityStatus: TableCurrentDataQualityStatusModel;
@@ -80,7 +80,7 @@ export default function TableQualityStatusCategory({
                 toggleExtendedChecks(key, 'table');
               }}
             >
-              {getColor(
+              {/* {getColor(
                 getTableStatus(severityType, firstLevelChecks[key]).status
               ) !== '' ? (
                 <div>
@@ -91,19 +91,20 @@ export default function TableQualityStatusCategory({
                         (x) =>
                           x.checkType === key && x.categoryDimension === 'table'
                       )
-                        ? 'chevron-down'
-                        : 'chevron-right'
+                        ? 'chevron-up'
+                        : 'chevron-down'
                     }
                     className="h-5 w-5 pr-1"
                   />
                 </div>
-              ) : null}
+              ) : null} */}
+              <div className='w-5 h-full'></div>
               {getColor(
                 getTableStatus(severityType, firstLevelChecks[key]).status
               ) !== '' ? (
                 <div
                   className={clsx(
-                    'w-43 h-8 flex ',
+                    'w-43 h-8 flex justify-end',
                     getColor(
                       getTableStatus(severityType, firstLevelChecks[key]).status
                     ),
@@ -136,7 +137,7 @@ export default function TableQualityStatusCategory({
                     >
                       <div
                         className={clsx(
-                          ' h-4 w-4 mr-2 mt-1 ml-2',
+                          ' h-4 w-4 mr-0.5 mt-2 ml-2',
                           getColor(
                             getTableCircleStatus(
                               severityType,
@@ -158,6 +159,27 @@ export default function TableQualityStatusCategory({
                       ></div>
                     </Tooltip>
                   ) : null}
+              {getColor(
+                getTableStatus(severityType, firstLevelChecks[key]).status
+              ) !== '' ? (
+                <div className='flex justify-center items-center'>
+                  <SvgIcon
+                    key={`svg_table_level_checks_${key}`}
+                    name={
+                      extendedChecks.find(
+                        (x) =>
+                          x.checkType === key && x.categoryDimension === 'table'
+                      )
+                        ? 'chevron-up'
+                        : 'chevron-down'
+                    }
+                    className={clsx("h-5 w-5 pr-1",   extendedChecks.find(
+                      (x) =>
+                        x.checkType === key && x.categoryDimension === 'table'
+                    ) ? "mb-1" : "mt-1")}
+                  />
+                </div>
+              ) : null}
                 </div>
               ) : null}
             </div>
@@ -186,7 +208,7 @@ export default function TableQualityStatusCategory({
                     >
                       <div
                         className={clsx(
-                          'cursor-auto h-12 ml-5 p-2',
+                          'cursor-auto h-12 ml-4.5 p-2',
                           getColor(
                             severityType === 'current'
                               ? x.currentSeverity ??
