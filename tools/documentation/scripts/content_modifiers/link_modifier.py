@@ -35,19 +35,18 @@ def _apply_modification(line: str, file_path: str) -> str:
             continue
 
         if link.endswith("/") or link.endswith("/."):
-            new_link = link.rstrip(".") + "index.html"
+            new_link = link.rstrip(".")
             line = line.replace(link, new_link)
             link = new_link
 
-        if link == "." or link == ".." or link == "./index.html":
+        if link == "." or link == ".." or link == "./":
             absolute_prefix = _getMissingAbsolutePath(link, file_path_fixed)
-            new_link = absolute_prefix + "index.html"
+            new_link = absolute_prefix
             line = line.replace(link, new_link)
         
         if link.startswith("../"):
             absolute_prefix = _getMissingAbsolutePath(link, file_path_fixed)
             new_link = absolute_prefix + link.replace("../", "").replace("..", "")
-            new_link = new_link + ("index.html" if new_link.endswith("/") else "")
             line = line.replace(link, new_link)
 
     return line
