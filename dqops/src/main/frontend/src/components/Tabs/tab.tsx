@@ -26,7 +26,7 @@ const Tab = ({ tab, active, onChange, closable, onClose }: TabProps) => {
 
   return (
     <div
-      className={`relative text-sm leading-20 py-2 cursor-pointer px-8 ${
+      className={`relative text-sm leading-20 py-2 cursor-pointer px-8 rounded-t-md ${
         active
           ? 'font-semibold relative border-b-2 border-primary'
           : ''
