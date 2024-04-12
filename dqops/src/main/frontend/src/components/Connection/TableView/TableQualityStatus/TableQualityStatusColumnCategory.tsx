@@ -102,6 +102,7 @@ export default function TableQualityStatusColumnCategory({
     categoryDimension: string
   ) => {
     const array = [...extendedChecks];
+    console.log(extendedChecks, checkType, categoryDimension)
     if (
       array.find(
         (item) =>
@@ -161,24 +162,10 @@ export default function TableQualityStatusColumnCategory({
               ).status
             ) !== '' ? (
               <div className="h-full flex w-40 items-center ">
-                <div>
-                  <SvgIcon
-                    key={`svg_column_${customKey}_${firstLevelChecksKey}`}
-                    name={
-                      extendedChecks.find(
-                        (x) =>
-                          x.checkType === customKey &&
-                          x.categoryDimension === firstLevelChecksKey
-                      )
-                        ? 'chevron-down'
-                        : 'chevron-right'
-                    }
-                    className="h-5 w-5 pr-1"
-                  />
-                </div>
+                <div className='w-5 h-full'></div>
                 <div
                   className={clsx(
-                    'h-8 w-43 flex',
+                    'h-8 w-43 flex justify-end',
                     getColor(
                       getColumnStatus(
                         severityType,
@@ -245,6 +232,21 @@ export default function TableQualityStatusColumnCategory({
                       ></div>
                     </Tooltip>
                   ) : null}
+                <div className='flex items-center justify-center'>
+                  <SvgIcon
+                    key={`svg_column_${customKey}_${firstLevelChecksKey}`}
+                    name={
+                      extendedChecks.find(
+                        (x) =>
+                          x.checkType === customKey &&
+                          x.categoryDimension === firstLevelChecksKey
+                      )
+                        ? 'chevron-up'
+                        : 'chevron-down'
+                    }
+                    className="h-5 w-5 pr-1"
+                  />
+                </div>
                 </div>
               </div>
             ) : null}
@@ -275,7 +277,7 @@ export default function TableQualityStatusColumnCategory({
                     >
                       <div
                         className={clsx(
-                          'cursor-auto h-12 p-2 ml-5',
+                          'cursor-auto h-12 p-2 ml-4.5',
                           getColor(
                             severityType === 'current'
                               ? x.currentSeverity
