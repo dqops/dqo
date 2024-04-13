@@ -12,10 +12,11 @@ def _verify_application(line: str):
 
     script_tag_opening: str = "<script"
     script_exclusion_string: str = "lazyload.min.js"
+    script_nowprocket_string: str = "nowprocket"
     excluded_config_script_tag_opening: str = "<script id=\"__config\" type=\"application/json\""
     excluded_schema_script: str = "type=\"application/ld+json\""
 
-    if script_tag_opening not in line or script_exclusion_string in line or excluded_config_script_tag_opening in line or excluded_schema_script in line:
+    if script_tag_opening not in line or script_exclusion_string in line or excluded_config_script_tag_opening in line or excluded_schema_script in line or script_nowprocket_string in line:
         return False
     return True
 
