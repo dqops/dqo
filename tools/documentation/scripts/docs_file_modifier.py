@@ -3,7 +3,6 @@ from scripts.content_modifiers.script_tag_modifier import modify_script_tag
 import scripts.content_modifiers.link_modifier as link_modifier
 import scripts.content_modifiers.search_script_link_modifier as search_script_link_modifier
 
-
 def modify_file(file_path: str):
 
     lines: list[str] = provide_file_content(file_path)

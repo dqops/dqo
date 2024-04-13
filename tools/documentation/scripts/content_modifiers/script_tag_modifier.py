@@ -13,15 +13,17 @@ def _verify_application(line: str):
     script_tag_opening: str = "<script"
     script_exclusion_string: str = "lazyload.min.js"
     excluded_config_script_tag_opening: str = "<script id=\"__config\" type=\"application/json\""
+    excluded_schema_script: str = "type=\"application/ld+json\""
 
-    if script_tag_opening not in line or script_exclusion_string in line or excluded_config_script_tag_opening in line:
+    if script_tag_opening not in line or script_exclusion_string in line or excluded_config_script_tag_opening in line or excluded_schema_script in line:
         return False
     return True
 
 def _apply_modification(line: str) -> str:
     line_with_type: str = _replace_in_opening_script_tag(line, ">", " type=\"rocketlazyloadscript\">")
     line_with_type_and_src_modification: str = _replace_in_opening_script_tag(line_with_type, "src", "data-rocket-src")
-    return line_with_type_and_src_modification
+    line_with_defer_modification: src = _replace_in_opening_script_tag(line_with_type_and_src_modification, "<script", "<script defer")
+    return line_with_defer_modification
 
 def _replace_in_opening_script_tag(line: str, replaced: str, replacement: str) -> str:
     result = opening_script_tag_pattern.search(line)

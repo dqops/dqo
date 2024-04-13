@@ -14,7 +14,6 @@
     {
       "@context":"https://schema.org",
       "@graph": [{
-        "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": [{
           "@type": "ListItem",
@@ -54,7 +53,9 @@
       },
       {% if page.file %}
       {
-        "@type": "HowTo",
+        "@type": "WebPage",
+        "name": "{{ effective_page_title }}",
+        "description": "{{ page.meta.description }}",
         "datePublished": "{{ page.file.abs_src_path | format_file_created_date('%Y-%m-%dT%H:%M:%S%z') }}",
         "dateModified": "{{ page.file.abs_src_path | format_file_modified_date('%Y-%m-%dT%H:%M:%S%z') }}"
       },
@@ -95,9 +96,11 @@
           "potentialAction":[
             {
               "@type":"InteractAction",
+              "name": "Get started with DQOps",
+              "description": "Installation steps for downloading and getting started with DQOps",
               "target":{
-                "@type":"EntryPoint",
-                "urlTemplate":"https://dqops.com/docs/dqops-installation/"
+                "@type":"URL",
+                "url":"https://dqops.com/docs/getting-started/"
               }
             }
           ],
