@@ -436,7 +436,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      * Applies missing default observability check configuration when it is not configured.
      */
     public void applyDefaultConfigurationWhenMissing() {
-        UserDomainIdentity rootDataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(this.userConfigurationProperties.getDefaultDataDomain());
+        UserDomainIdentity rootDataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForCloudDomain(this.userConfigurationProperties.getDefaultDataDomain());
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(rootDataDomainAdminIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();

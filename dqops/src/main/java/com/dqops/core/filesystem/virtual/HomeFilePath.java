@@ -15,6 +15,8 @@
  */
 package com.dqops.core.filesystem.virtual;
 
+import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -60,6 +62,29 @@ public class HomeFilePath implements Cloneable {
         }
         HomeFolderPath folderPath = new HomeFolderPath(dataDomain, folderNames);
         return new HomeFilePath(folderPath, filePathComponents[filePathComponents.length - 1]);
+    }
+
+    /**
+     * Creates a path from a file system path that is relative to the user home folder.
+     * @param pathRelativeToUserHome File system path that is relative to the user home folder.
+     * @return Home file path.
+     */
+    public static HomeFilePath fromRelativePath(Path pathRelativeToUserHome) {
+        String firstElement = pathRelativeToUserHome.getName(0).toString();
+        if (Objects.equals(firstElement, BuiltInFolderNames.DATA_DOMAINS)) {
+            int nameCount = pathRelativeToUserHome.getNameCount();
+            if (nameCount <= 2) {
+                return null; // unknown or too short, maybe a path to the whole domains folder, or a path to the domain root folder... useless
+            }
+            String dataDomainName = pathRelativeToUserHome.getName(1).toString();
+            Path pathRelativeToDomainFolder = pathRelativeToUserHome.subpath(2, nameCount);
+            String pathInDomainFolder = pathRelativeToDomainFolder.toString().replace('\\', '/');
+
+            return HomeFilePath.fromFilePath(dataDomainName, pathInDomainFolder);
+        } else {
+            return HomeFilePath.fromFilePath(UserDomainIdentity.DEFAULT_DATA_DOMAIN,
+                    pathRelativeToUserHome.toString().replace('\\', '/'));
+        }
     }
 
     /**

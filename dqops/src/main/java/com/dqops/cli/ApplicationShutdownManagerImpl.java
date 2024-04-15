@@ -19,6 +19,7 @@ import com.dqops.core.jobqueue.DqoJobQueue;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
 import com.dqops.core.scheduler.JobSchedulerService;
+import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -36,6 +37,7 @@ public class ApplicationShutdownManagerImpl implements ApplicationShutdownManage
     private ParentDqoJobQueue parentDqoJobQueue;
     private JobSchedulerService jobSchedulerService;
     private DqoJobQueueMonitoringService jobQueueMonitoringService;
+    private TableStatusCache tableStatusCache;
 
     /**
      * Constructor that receives dependencies to services that should be notified to shut down.
@@ -44,18 +46,21 @@ public class ApplicationShutdownManagerImpl implements ApplicationShutdownManage
      * @param parentDqoJobQueue Second job queue for parent jobs.
      * @param jobSchedulerService Job scheduler.
      * @param jobQueueMonitoringService Job queue monitoring service.
+     * @param tableStatusCache Table status cache.
      */
     @Autowired
     public ApplicationShutdownManagerImpl(ApplicationContext applicationContext,
                                           DqoJobQueue dqoJobQueue,
                                           ParentDqoJobQueue parentDqoJobQueue,
                                           JobSchedulerService jobSchedulerService,
-                                          DqoJobQueueMonitoringService jobQueueMonitoringService) {
+                                          DqoJobQueueMonitoringService jobQueueMonitoringService,
+                                          TableStatusCache tableStatusCache) {
         this.applicationContext = applicationContext;
         this.dqoJobQueue = dqoJobQueue;
         this.parentDqoJobQueue = parentDqoJobQueue;
         this.jobSchedulerService = jobSchedulerService;
         this.jobQueueMonitoringService = jobQueueMonitoringService;
+        this.tableStatusCache = tableStatusCache;
     }
 
     /**
@@ -67,6 +72,7 @@ public class ApplicationShutdownManagerImpl implements ApplicationShutdownManage
         if (log.isDebugEnabled()) {
             log.debug("Shutdown initialized with a return code: " + returnCode);
         }
+        this.tableStatusCache.stop();
         this.dqoJobQueue.stop();
         this.parentDqoJobQueue.stop();
         this.jobQueueMonitoringService.stop();
