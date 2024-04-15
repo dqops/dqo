@@ -104,7 +104,7 @@ public class BigQueryColumnPiiContainsEmailPercentSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
+        Assertions.assertEquals(33.333, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test

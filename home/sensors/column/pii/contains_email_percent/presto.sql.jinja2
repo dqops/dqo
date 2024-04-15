@@ -5,7 +5,7 @@ SELECT
         ELSE CAST(100.0 * SUM(
             CASE
                 WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                     '(?:^|[ \t.,:;"''`|\n\r])[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-]+[\.](?:[a-zA-Z0-9-.]+)*(?:[a-zA-Z]{2,3})(?:[ \t.,:;"''`|\n\r]|$)')
+                     '(?:^|[ \t.,:;"''`|\n\r])[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-]+[\.](?:[a-zA-Z0-9-.]+)*(?:[a-zA-Z]{2,4})(?:[ \t.,:;"''`|\n\r]|$)')
                     THEN 1
                 ELSE 0
             END
