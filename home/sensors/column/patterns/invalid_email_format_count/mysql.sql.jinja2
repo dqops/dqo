@@ -2,7 +2,7 @@
 SELECT
     SUM(
         CASE
-            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$') }}
+            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$') }}
                 THEN 0
             ELSE 1
         END
@@ -13,6 +13,3 @@ FROM {{ lib.render_target_table() }} AS analyzed_table
 {{- lib.render_where_clause() -}}
 {{- lib.render_group_by() -}}
 {{- lib.render_order_by() -}}
-
-
-
