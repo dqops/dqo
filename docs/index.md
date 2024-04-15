@@ -473,7 +473,7 @@ Want to learn more about data quality?
     [Download the eBook](https://dqops.com/best-practices-for-effective-data-quality-improvement/) to learn the process of managing
     an iterative data quality project that leads to fixing all data quality issues.
     
-    ![DQOps data quality improvement process](https://dqops.com/docs/images/dqops-data-quality-improvement-process-min.png){ loading=lazy; width="150px" }
+    ![DQOps data quality improvement process](https://dqops.com/docs/images/dqops-data-quality-improvement-process-min2.png){ loading=lazy; width="150px" }
 
     _Click to zoom in_
     
