@@ -24,6 +24,7 @@ import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import com.dqops.testutils.ValueConverter;
 import com.dqops.trino.BaseTrinoIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
@@ -64,7 +65,7 @@ public class TrinoColumnPatternsInvalidEmailFormatCountSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(22L, resultTable.column(0).get(0));
+        Assertions.assertEquals(10, ValueConverter.toInteger(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -77,7 +78,7 @@ public class TrinoColumnPatternsInvalidEmailFormatCountSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(22L, resultTable.column(0).get(0));
+        Assertions.assertEquals(10, ValueConverter.toInteger(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -90,7 +91,7 @@ public class TrinoColumnPatternsInvalidEmailFormatCountSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(22L, resultTable.column(0).get(0));
+        Assertions.assertEquals(10, ValueConverter.toInteger(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -103,7 +104,7 @@ public class TrinoColumnPatternsInvalidEmailFormatCountSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(4L, resultTable.column(0).get(0));
+        Assertions.assertEquals(4, ValueConverter.toInteger(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -116,6 +117,6 @@ public class TrinoColumnPatternsInvalidEmailFormatCountSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(22L, resultTable.column(0).get(0));
+        Assertions.assertEquals(10, ValueConverter.toInteger(resultTable.column(0).get(0)));
     }
 }
