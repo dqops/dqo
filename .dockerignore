@@ -8,7 +8,6 @@ site
 .vscode
 dqoai/target
 dqops/target
-distribution/target
 distribution/python/dist
 distribution/python/venv
 distribution/python/dqops.egg-info
