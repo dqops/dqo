@@ -131,5 +131,22 @@ class LinkModifierTest(unittest.TestCase):
 
         self.assertEqual(source, output)
 
+    def test_modify_link__when_two_links_in_row__then_modify_both(self):
+        file_path: str = """site/working-with-dqo/index.html"""
+        source: str = """<a href="command-line-interface/"><a href="../command-line-interface/">"""
+        target: str = """<a href="/docs/working-with-dqo/command-line-interface/"><a href="/docs/command-line-interface/">"""
+        output: str = modify_link(source, file_path)
+
+        self.assertEqual(target, output)
+
+    def test_modify_link__when_two_links_in_row_with_another_style__then_modify_both(self):
+        file_path: str = """site/working-with-dqo/index.html"""
+        source: str = """<a href="./"><a href="../data-observability-monitoring-checks/">"""
+        target: str = """<a href="/docs/working-with-dqo/"><a href="/docs/data-observability-monitoring-checks/">"""
+        output: str = modify_link(source, file_path)
+
+        self.assertEqual(target, output)
+
+
 if __name__ == '__main__':
     unittest.main()

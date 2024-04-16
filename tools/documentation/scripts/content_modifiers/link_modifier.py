@@ -4,8 +4,6 @@ from typing import List
 # a link -> href
 # img script -> src
 
-
-
 tag_regex_string: str = "<(?:(?:(?:a)|(?:link))[^<>]*href)|(?:(?:(?:script)|(?:img))[^<>]*src)=[^<>]*>"
 link_tag_pattern: re.Pattern = re.compile(tag_regex_string)
 
@@ -37,24 +35,27 @@ def _apply_modification(line: str, file_path: str) -> str:
 
         if link.endswith("/") or link.endswith("/."):
             new_link = link.rstrip(".")
-            line = line.replace(link, new_link)
+            line = line.replace(link, new_link, 1)
             link = new_link
 
         if link == "." or link == ".." or link == "./":
             absolute_prefix = _get_missing_absolute_path(link, file_path_fixed)
             new_link = absolute_prefix
-            line = line.replace(link, new_link)
+            line = line.replace(link, new_link, 1)
+            link = new_link
         
         if link.startswith("../"):
             absolute_prefix = _get_missing_absolute_path(link, file_path_fixed)
             new_link = absolute_prefix + link.replace("../", "").replace("..", "")
-            line = line.replace(link, new_link)
+            line = line.replace(link, new_link, 1)
+            link = new_link
 
         # relative link with no dots
         if not link.startswith(("/", "http")):
             folders: list[str] = _get_docs_folders_list_of_file_path(file_path_fixed)
             new_link = "/".join(folders) + "/" + link
-            line = line.replace(link, new_link)
+            line = line.replace(link, new_link, 1)
+            link = new_link
 
     return line
 
