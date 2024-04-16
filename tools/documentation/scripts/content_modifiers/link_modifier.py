@@ -40,19 +40,19 @@ def _apply_modification(line: str, file_path: str) -> str:
             link = new_link
 
         if link == "." or link == ".." or link == "./":
-            absolute_prefix = _getMissingAbsolutePath(link, file_path_fixed)
+            absolute_prefix = _get_missing_absolute_path(link, file_path_fixed)
             new_link = absolute_prefix
             line = line.replace(link, new_link)
         
         if link.startswith("../"):
-            absolute_prefix = _getMissingAbsolutePath(link, file_path_fixed)
+            absolute_prefix = _get_missing_absolute_path(link, file_path_fixed)
             new_link = absolute_prefix + link.replace("../", "").replace("..", "")
             line = line.replace(link, new_link)
 
     return line
 
-def _getMissingAbsolutePath(relative_link: str, file_path: str) -> str:
-    folders: list[str] = _getDocsFoldersListOfFilePath(file_path)
+def _get_missing_absolute_path(relative_link: str, file_path: str) -> str:
+    folders: list[str] = _get_docs_folders_list_of_file_path(file_path)
     relative_folders_number: int = relative_link.count("..")
     while relative_folders_number > 0:
         folders.pop()
@@ -60,7 +60,7 @@ def _getMissingAbsolutePath(relative_link: str, file_path: str) -> str:
 
     return "/".join(folders) + "/"
 
-def _getDocsFoldersListOfFilePath(file_path: str) -> List[str]:
+def _get_docs_folders_list_of_file_path(file_path: str) -> List[str]:
     directory_path: str = file_path[:file_path.rfind("/")] # removes filename
     directory_path_from_docs = re.sub(r'^(site)', '/docs', directory_path)
     folders: list[str] = directory_path_from_docs.split("/")

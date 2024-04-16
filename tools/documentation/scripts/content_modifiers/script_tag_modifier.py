@@ -23,7 +23,7 @@ def _verify_application(line: str):
 def _apply_modification(line: str) -> str:
     line_with_type: str = _replace_in_opening_script_tag(line, ">", " type=\"rocketlazyloadscript\">")
     line_with_type_and_src_modification: str = _replace_in_opening_script_tag(line_with_type, "src", "data-rocket-src")
-    line_with_defer_modification: src = _replace_in_opening_script_tag(line_with_type_and_src_modification, "<script", "<script defer")
+    line_with_defer_modification: str = _replace_in_opening_script_tag(line_with_type_and_src_modification, "<script", "<script defer")
     return line_with_defer_modification
 
 def _replace_in_opening_script_tag(line: str, replaced: str, replacement: str) -> str:
