@@ -7,7 +7,7 @@ from typing import List
 tag_regex_string: str = "<(?:(?:(?:a)|(?:link))[^<>]*href)|(?:(?:(?:script)|(?:img))[^<>]*src)=[^<>]*>"
 link_tag_pattern: re.Pattern = re.compile(tag_regex_string)
 
-attribute_regex_string: str = """(?:(?:(?:href)|(?:src))=\"((?:[.]{1,2}[^<>"]*)|(?:[^<>"]*\/)|(?:[^<>"]*\/[.]))\")"""
+attribute_regex_string: str = """(?:(?:(?:href)|(?:src))=\"((?:[.]{1,2}[^<>"]*)|(?:[^<>"]*\/)|(?:[^<>"]*\/[.])|(?:[^<>"]*#[^<>"]+))\")"""
 link_pattern: re.Pattern = re.compile(attribute_regex_string)
 
 def modify_link(line: str, file_path: str) -> str:
@@ -23,8 +23,7 @@ def _verify_application(line: str):
 
 def _apply_modification(line: str, file_path: str) -> str:
 
-    if file_path is not None:
-        file_path_fixed = file_path.replace("\\", "/")
+    file_path_fixed: str = file_path.replace("\\", "/") if file_path is not None else file_path
 
     results = link_pattern.findall(line)
     if results is None:
@@ -36,23 +35,32 @@ def _apply_modification(line: str, file_path: str) -> str:
 
         if link.endswith("/") or link.endswith("/."):
             new_link = link.rstrip(".")
-            line = line.replace(link, new_link)
+            line = line.replace(link, new_link, 1)
             link = new_link
 
         if link == "." or link == ".." or link == "./":
-            absolute_prefix = _getMissingAbsolutePath(link, file_path_fixed)
+            absolute_prefix = _get_missing_absolute_path(link, file_path_fixed)
             new_link = absolute_prefix
-            line = line.replace(link, new_link)
+            line = line.replace(link, new_link, 1)
+            link = new_link
         
         if link.startswith("../"):
-            absolute_prefix = _getMissingAbsolutePath(link, file_path_fixed)
+            absolute_prefix = _get_missing_absolute_path(link, file_path_fixed)
             new_link = absolute_prefix + link.replace("../", "").replace("..", "")
-            line = line.replace(link, new_link)
+            line = line.replace(link, new_link, 1)
+            link = new_link
+
+        # relative link with no dots
+        if not link.startswith(("/", "http")):
+            folders: list[str] = _get_docs_folders_list_of_file_path(file_path_fixed)
+            new_link = "/".join(folders) + "/" + link
+            line = line.replace(link, new_link, 1)
+            link = new_link
 
     return line
 
-def _getMissingAbsolutePath(relative_link: str, file_path: str) -> str:
-    folders: list[str] = _getDocsFoldersListOfFilePath(file_path)
+def _get_missing_absolute_path(relative_link: str, file_path: str) -> str:
+    folders: list[str] = _get_docs_folders_list_of_file_path(file_path)
     relative_folders_number: int = relative_link.count("..")
     while relative_folders_number > 0:
         folders.pop()
@@ -60,7 +68,7 @@ def _getMissingAbsolutePath(relative_link: str, file_path: str) -> str:
 
     return "/".join(folders) + "/"
 
-def _getDocsFoldersListOfFilePath(file_path: str) -> List[str]:
+def _get_docs_folders_list_of_file_path(file_path: str) -> List[str]:
     directory_path: str = file_path[:file_path.rfind("/")] # removes filename
     directory_path_from_docs = re.sub(r'^(site)', '/docs', directory_path)
     folders: list[str] = directory_path_from_docs.split("/")
