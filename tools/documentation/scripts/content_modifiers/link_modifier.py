@@ -4,10 +4,12 @@ from typing import List
 # a link -> href
 # img script -> src
 
+
+
 tag_regex_string: str = "<(?:(?:(?:a)|(?:link))[^<>]*href)|(?:(?:(?:script)|(?:img))[^<>]*src)=[^<>]*>"
 link_tag_pattern: re.Pattern = re.compile(tag_regex_string)
 
-attribute_regex_string: str = """(?:(?:(?:href)|(?:src))=\"((?:[.]{1,2}[^<>"]*)|(?:[^<>"]*\/)|(?:[^<>"]*\/[.]))\")"""
+attribute_regex_string: str = """(?:(?:(?:href)|(?:src))=\"((?:[.]{1,2}[^<>"]*)|(?:[^<>"]*\/)|(?:[^<>"]*\/[.])|(?:[^<>"]*#[^<>"]+))\")"""
 link_pattern: re.Pattern = re.compile(attribute_regex_string)
 
 def modify_link(line: str, file_path: str) -> str:
@@ -49,7 +51,7 @@ def _apply_modification(line: str, file_path: str) -> str:
             line = line.replace(link, new_link)
 
         # relative link with no dots
-        if not link.startswith(("/", "#", "http")):
+        if not link.startswith(("/", "http")):
             folders: list[str] = _get_docs_folders_list_of_file_path(file_path_fixed)
             new_link = "/".join(folders) + "/" + link
             line = line.replace(link, new_link)

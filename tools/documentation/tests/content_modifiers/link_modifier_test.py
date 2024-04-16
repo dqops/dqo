@@ -3,6 +3,8 @@ from scripts.content_modifiers.link_modifier import modify_link
 
 class LinkModifierTest(unittest.TestCase):
 
+    # verify links with use of regex on all generated doc files: ((src)|(href))="(?!(http)|(/docs))
+
     # beginning single dot in link and multiple script tags inline are not supported and not covered in tests
 
     def test_modify_link__when_absolute_link_ends_with_slash__then_dont_modify(self):
@@ -106,12 +108,21 @@ class LinkModifierTest(unittest.TestCase):
 
         self.assertEqual(target, output)
 
+    def test_modify_link__when_link_is_related_to_opened_page_and_have_hash__then_expand_to_full_link(self):
+        file_path: str = """site/working-with-dqo/configure-scheduling-of-data-quality-checks/index.html"""
+        source: str = """<a href="configuring-schedules-by-modifying-yaml-file/#dqo-cls">"""
+        target: str = """<a href="/docs/working-with-dqo/configure-scheduling-of-data-quality-checks/configuring-schedules-by-modifying-yaml-file/#dqo-cls">"""
+        output: str = modify_link(source, file_path)
+
+        self.assertEqual(target, output)
+
     def test_modify_link__when_link_starts_with_hash__then_dont_modify(self):
         file_path: str = """site/working-with-dqo/index.html"""
         source: str = """<a href="#some-content/">"""
+        target: str = """<a href="/docs/working-with-dqo/#some-content/">"""
         output: str = modify_link(source, file_path)
 
-        self.assertEqual(source, output)
+        self.assertEqual(target, output)
 
     def test_modify_link__when_link_starts_with_http__then_dont_modify(self):
         file_path: str = """site/working-with-dqo/index.html"""
