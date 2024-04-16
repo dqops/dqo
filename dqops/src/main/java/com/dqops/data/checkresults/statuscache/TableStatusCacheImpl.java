@@ -37,6 +37,7 @@ import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -58,6 +59,9 @@ public class TableStatusCacheImpl implements TableStatusCache {
     private Sinks.Many<CurrentTableStatusKey> loadTableStatusRequestSink;
     private Disposable subscription;
     private Sinks.EmitFailureHandler emitFailureHandlerPublisher;
+    private int queuedOperationsCount;
+    private final Object lock = new Object();
+    private CompletableFuture<Integer> queueEmptyFuture;
 
     /**
      * Creates a new instance of the cache, configuring the cache size.
@@ -91,6 +95,7 @@ public class TableStatusCacheImpl implements TableStatusCache {
     protected CurrentTableStatusCacheEntry loadEntryCore(CurrentTableStatusKey tableStatusKey) {
         CurrentTableStatusCacheEntry currentTableStatusCacheEntry = new CurrentTableStatusCacheEntry(tableStatusKey, CurrentTableStatusEntryStatus.LOADING_QUEUED);
         this.loadTableStatusRequestSink.emitNext(tableStatusKey, this.emitFailureHandlerPublisher);
+        incrementAwaitingOperationsCount();
         return currentTableStatusCacheEntry;
     }
 
@@ -119,6 +124,42 @@ public class TableStatusCacheImpl implements TableStatusCache {
 
         currentTableStatusCacheEntry.setStatus(CurrentTableStatusEntryStatus.REFRESH_QUEUED);
         this.loadTableStatusRequestSink.emitNext(tableStatusKey, this.emitFailureHandlerPublisher);
+        incrementAwaitingOperationsCount();
+    }
+
+    /**
+     * Returns a future that is completed when there are no queued table status reload operations.
+     * @return Future that is completed when the status of all requested tables was loaded.
+     */
+    @Override
+    public CompletableFuture<Integer> getQueueEmptyFuture() {
+        synchronized (this.lock) {
+            return this.queueEmptyFuture;
+        }
+    }
+
+    /**
+     * Increments the count of ongoing refresh operations.
+     */
+    protected void incrementAwaitingOperationsCount() {
+        synchronized (this.lock) {
+            if (this.queuedOperationsCount == 0) {
+                this.queueEmptyFuture = new CompletableFuture<>(); // uncompleted future
+            }
+            this.queuedOperationsCount++;
+        }
+    }
+
+    /**
+     * Decrements the number of queued refresh operations, releasing the future.
+     */
+    protected void decrementAwaitingOperationsCount() {
+        synchronized (this.lock) {
+            this.queuedOperationsCount--;
+            if (this.queuedOperationsCount == 0) {
+                this.queueEmptyFuture.complete(0);
+            }
+        }
     }
 
     /**
@@ -128,15 +169,16 @@ public class TableStatusCacheImpl implements TableStatusCache {
     public void onRequestLoadTableStatus(CurrentTableStatusKey tableStatusKey) {
         CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey, this::loadEntryCore);
 
-        currentTableStatusCacheEntry.setStatus(CurrentTableStatusEntryStatus.LOADING);
-
         try {
+            currentTableStatusCacheEntry.setStatus(CurrentTableStatusEntryStatus.LOADING);
+
             UserDomainIdentity userDomainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForLocalDomain(tableStatusKey.getDataDomain());
 
             TableCurrentDataQualityStatusFilterParameters filterParameters =
                 TableCurrentDataQualityStatusFilterParameters.builder()
                     .connectionName(tableStatusKey.getConnectionName())
                     .physicalTableName(tableStatusKey.getPhysicalTableName())
+                    .lastMonths(3)
                     .profiling(true)
                     .monitoring(true)
                     .partitioned(true)
@@ -150,6 +192,9 @@ public class TableStatusCacheImpl implements TableStatusCache {
             currentTableStatusCacheEntry.setStatus(CurrentTableStatusEntryStatus.LOADED);
             log.error("Failed to load the current table status for the table " + tableStatusKey.toString() + ", error: " + ex.getMessage(), ex);
         }
+        finally {
+            decrementAwaitingOperationsCount();
+        }
     }
 
     /**
@@ -162,6 +207,9 @@ public class TableStatusCacheImpl implements TableStatusCache {
         }
         
         this.started = true;
+
+        this.queueEmptyFuture = new CompletableFuture<>();
+        this.queueEmptyFuture.complete(0);
 
         this.loadTableStatusRequestSink = Sinks.many().unicast().onBackpressureBuffer();
         Flux<List<CurrentTableStatusKey>> requestLoadFlux = this.loadTableStatusRequestSink.asFlux()

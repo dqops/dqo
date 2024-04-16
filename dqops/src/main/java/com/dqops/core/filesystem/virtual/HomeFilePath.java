@@ -20,6 +20,7 @@ import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.parquet.Strings;
 
@@ -30,6 +31,7 @@ import java.util.Objects;
  * Virtual file path to a file.
  */
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@Slf4j
 public class HomeFilePath implements Cloneable {
     private HomeFolderPath folder;
     private String fileName;
@@ -70,20 +72,27 @@ public class HomeFilePath implements Cloneable {
      * @return Home file path.
      */
     public static HomeFilePath fromRelativePath(Path pathRelativeToUserHome) {
-        String firstElement = pathRelativeToUserHome.getName(0).toString();
-        if (Objects.equals(firstElement, BuiltInFolderNames.DATA_DOMAINS)) {
-            int nameCount = pathRelativeToUserHome.getNameCount();
-            if (nameCount <= 2) {
-                return null; // unknown or too short, maybe a path to the whole domains folder, or a path to the domain root folder... useless
-            }
-            String dataDomainName = pathRelativeToUserHome.getName(1).toString();
-            Path pathRelativeToDomainFolder = pathRelativeToUserHome.subpath(2, nameCount);
-            String pathInDomainFolder = pathRelativeToDomainFolder.toString().replace('\\', '/');
+        try {
+            String firstElement = pathRelativeToUserHome.getName(0).toString();
+            if (Objects.equals(firstElement, BuiltInFolderNames.DATA_DOMAINS)) {
+                int nameCount = pathRelativeToUserHome.getNameCount();
+                if (nameCount <= 2) {
+                    return null; // unknown or too short, maybe a path to the whole domains folder, or a path to the domain root folder... useless
+                }
+                String dataDomainName = pathRelativeToUserHome.getName(1).toString();
+                Path pathRelativeToDomainFolder = pathRelativeToUserHome.subpath(2, nameCount);
+                String pathInDomainFolder = pathRelativeToDomainFolder.toString().replace('\\', '/');
 
-            return HomeFilePath.fromFilePath(dataDomainName, pathInDomainFolder);
-        } else {
-            return HomeFilePath.fromFilePath(UserDomainIdentity.DEFAULT_DATA_DOMAIN,
-                    pathRelativeToUserHome.toString().replace('\\', '/'));
+                return HomeFilePath.fromFilePath(dataDomainName, pathInDomainFolder);
+            } else {
+                return HomeFilePath.fromFilePath(UserDomainIdentity.DEFAULT_DATA_DOMAIN,
+                        pathRelativeToUserHome.toString().replace('\\', '/'));
+            }
+        }
+        catch (Exception ex) {
+            String msg = "Cannot compute a home file path from \"" + pathRelativeToUserHome + "\", error: " + ex.getMessage();
+            log.error(msg, ex);
+            throw new DqoRuntimeException(msg, ex);
         }
     }
 

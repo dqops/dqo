@@ -450,6 +450,10 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         }
 
         Path relativePath = this.userHomeRootPath.relativize(filePath);
+        if (relativePath.getNameCount() < 2) {
+            return; // path too short, nothing interested here
+        }
+
         HomeFilePath homeFilePath = HomeFilePath.fromRelativePath(relativePath);
         if (homeFilePath == null) {
             return; // updated path is too short, we don't know what it is

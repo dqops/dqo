@@ -18,6 +18,8 @@ package com.dqops.data.checkresults.statuscache;
 
 import com.dqops.data.checkresults.services.models.currentstatus.TableCurrentDataQualityStatusModel;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * Service that keeps a cache of last known table statuses. It starts loading a table status when
  * the table status is requested. This service reloads the last known table status when the parquet files are updated.
@@ -37,6 +39,12 @@ public interface TableStatusCache {
      * @param tableStatusKey Table status key.
      */
     void invalidateTableStatus(CurrentTableStatusKey tableStatusKey);
+
+    /**
+     * Returns a future that is completed when there are no queued table status reload operations.
+     * @return Future that is completed when the status of all requested tables was loaded.
+     */
+    CompletableFuture<Integer> getQueueEmptyFuture();
 
     /**
      * Starts a service that loads table statuses of requested tables.
