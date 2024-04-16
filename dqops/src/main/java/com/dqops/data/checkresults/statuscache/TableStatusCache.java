@@ -16,7 +16,7 @@
 
 package com.dqops.data.checkresults.statuscache;
 
-import com.dqops.data.checkresults.services.models.currentstatus.TableCurrentDataQualityStatusModel;
+import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
 
 import java.util.concurrent.CompletableFuture;
 

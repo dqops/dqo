@@ -15,7 +15,7 @@
  */
 package com.dqops.rules;
 
-import com.dqops.data.checkresults.services.models.CheckResultStatus;
+import com.dqops.data.checkresults.models.CheckResultStatus;
 
 /**
  * Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.

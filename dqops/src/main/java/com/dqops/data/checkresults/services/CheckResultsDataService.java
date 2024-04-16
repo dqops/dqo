@@ -19,9 +19,9 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.core.principal.UserDomainIdentity;
-import com.dqops.data.checkresults.services.models.*;
-import com.dqops.data.checkresults.services.models.currentstatus.TableCurrentDataQualityStatusFilterParameters;
-import com.dqops.data.checkresults.services.models.currentstatus.TableCurrentDataQualityStatusModel;
+import com.dqops.data.checkresults.models.*;
+import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusFilterParameters;
+import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
 import com.dqops.metadata.sources.PhysicalTableName;
 
 import java.time.Instant;

@@ -22,7 +22,7 @@ import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.data.checkresults.services.CheckResultsDetailedFilterParameters;
 import com.dqops.data.errors.services.ErrorsDataService;
 import com.dqops.data.errors.services.ErrorsDetailedFilterParameters;
-import com.dqops.data.errors.services.models.ErrorsListModel;
+import com.dqops.data.errors.models.ErrorsListModel;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;

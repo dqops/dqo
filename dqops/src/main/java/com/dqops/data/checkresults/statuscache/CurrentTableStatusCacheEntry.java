@@ -16,7 +16,7 @@
 
 package com.dqops.data.checkresults.statuscache;
 
-import com.dqops.data.checkresults.services.models.currentstatus.TableCurrentDataQualityStatusModel;
+import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
 
 /**
  * Object that stores the current table status for a table. It also knows when the status was loaded, if it was loaded,

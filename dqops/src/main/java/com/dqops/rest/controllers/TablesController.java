@@ -34,7 +34,7 @@ import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.statistics.services.StatisticsDataService;
-import com.dqops.data.statistics.services.models.StatisticsResultsForTableModel;
+import com.dqops.data.statistics.models.StatisticsResultsForTableModel;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
