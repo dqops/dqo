@@ -26,5 +26,13 @@ class ScriptTagModifierTest(unittest.TestCase):
 
         self.assertEqual(target, output)
 
+    def test_modify_script_tag__when_defer_exists__then_do_not_duplicate_it(self):
+        source: str = """<script defer src="/static/js/a_script.js"></script>"""
+        target: str = """<script defer data-rocket-src="/static/js/a_script.js" type="rocketlazyloadscript"></script>"""
+
+        output: str = modify_script_tag(source)
+
+        self.assertEqual(target, output)
+
 if __name__ == '__main__':
     unittest.main()
