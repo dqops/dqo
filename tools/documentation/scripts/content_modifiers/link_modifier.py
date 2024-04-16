@@ -23,8 +23,7 @@ def _verify_application(line: str):
 
 def _apply_modification(line: str, file_path: str) -> str:
 
-    if file_path is not None:
-        file_path_fixed = file_path.replace("\\", "/")
+    file_path_fixed: str = file_path.replace("\\", "/") if file_path is not None else file_path
 
     results = link_pattern.findall(line)
     if results is None:
@@ -47,6 +46,12 @@ def _apply_modification(line: str, file_path: str) -> str:
         if link.startswith("../"):
             absolute_prefix = _get_missing_absolute_path(link, file_path_fixed)
             new_link = absolute_prefix + link.replace("../", "").replace("..", "")
+            line = line.replace(link, new_link)
+
+        # relative link with no dots
+        if not link.startswith(("/", "#", "http")):
+            folders: list[str] = _get_docs_folders_list_of_file_path(file_path_fixed)
+            new_link = "/".join(folders) + "/" + link
             line = line.replace(link, new_link)
 
     return line
