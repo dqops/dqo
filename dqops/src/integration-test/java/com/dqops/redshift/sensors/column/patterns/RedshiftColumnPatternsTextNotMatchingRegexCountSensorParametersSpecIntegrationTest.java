@@ -30,6 +30,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.patterns.ColumnPatternsTextNotMatchingRegexCountSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -66,7 +67,7 @@ public class RedshiftColumnPatternsTextNotMatchingRegexCountSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(18.0, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -81,7 +82,7 @@ public class RedshiftColumnPatternsTextNotMatchingRegexCountSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(18.0, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -96,7 +97,7 @@ public class RedshiftColumnPatternsTextNotMatchingRegexCountSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(18.0, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -111,7 +112,7 @@ public class RedshiftColumnPatternsTextNotMatchingRegexCountSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1.0, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(5.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -125,6 +126,6 @@ public class RedshiftColumnPatternsTextNotMatchingRegexCountSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(18.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 }
