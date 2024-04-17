@@ -853,6 +853,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
         tableStatusModel.calculateHighestCurrentAndHistoricSeverity();
         tableStatusModel.calculateDataQualityKpiScore();
+        tableStatusModel.calculateStatusesForDataQualityDimensions();
 
         return tableStatusModel;
     }

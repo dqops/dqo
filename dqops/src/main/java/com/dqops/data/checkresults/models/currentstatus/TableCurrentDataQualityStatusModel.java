@@ -46,7 +46,7 @@ import java.util.stream.Stream;
         "The values of severity levels are: 0 - all data quality checks passed, 1 - a warning was detected, 2 - an error was detected, " +
         "3 - a fatal data quality issue was detected.")
 @Data
-public class TableCurrentDataQualityStatusModel implements CurrentDataQualityStatusHolder {
+public class TableCurrentDataQualityStatusModel implements CurrentDataQualityStatusHolder, Cloneable {
     /**
      * The connection name in DQOps.
      */
@@ -152,6 +152,12 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
     private Map<String, ColumnCurrentDataQualityStatusModel> columns = new LinkedHashMap<>();
 
     /**
+     * The data quality status for each data quality dimension. The status includes the status of table-level checks and column-level checks for all columns that are reported for the same dimension, such as Completeness.
+     */
+    @JsonPropertyDescription("Dictionary of the current data quality statues for each data quality dimension.")
+    private Map<String, DimensionCurrentDataQualityStatusModel> dimensions = new LinkedHashMap<>();
+
+    /**
      * Analyzes all table level checks and column level checks to calculate the highest severity level at a table level.
      */
     public void calculateHighestCurrentAndHistoricSeverity() {
@@ -202,6 +208,47 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
         Double dataQualityKpi = totalExecutedChecksWithNoExecutionErrors > 0 ?
                 (this.getValidResults() + this.getWarnings()) * 100.0 / totalExecutedChecksWithNoExecutionErrors : null;
         setDataQualityKpi(dataQualityKpi);
+    }
+
+    /**
+     * Calculates the status for each data quality dimension, aggregates statuses of data quality checks for each data quality dimension.
+     */
+    public void calculateStatusesForDataQualityDimensions() {
+        for (ColumnCurrentDataQualityStatusModel columnModel : columns.values()) {
+            columnModel.calculateStatusesForDimensions();
+
+            for (DimensionCurrentDataQualityStatusModel columnDimensionModel : columnModel.getDimensions().values()) {
+                String dimensionName = columnDimensionModel.getDimension();
+                DimensionCurrentDataQualityStatusModel tableDimensionModel = this.dimensions.get(dimensionName);
+                if (tableDimensionModel == null) {
+                    tableDimensionModel = new DimensionCurrentDataQualityStatusModel();
+                    tableDimensionModel.setDimension(dimensionName);
+                    this.dimensions.put(dimensionName, tableDimensionModel);
+                }
+
+                tableDimensionModel.appendResults(columnDimensionModel);
+            }
+        }
+
+        for (CheckCurrentDataQualityStatusModel checkStatusModel : checks.values()) {
+            String qualityDimension = checkStatusModel.getQualityDimension();
+            if (qualityDimension == null) {
+                continue; // should not happen, but if somebody intentionally configures an empty dimension....
+            }
+
+            DimensionCurrentDataQualityStatusModel dimensionModel = this.dimensions.get(qualityDimension);
+            if (dimensionModel == null) {
+                dimensionModel = new DimensionCurrentDataQualityStatusModel();
+                dimensionModel.setDimension(qualityDimension);
+                this.dimensions.put(qualityDimension, dimensionModel);
+            }
+
+            dimensionModel.appendCheckResult(checkStatusModel);
+        }
+
+        for (DimensionCurrentDataQualityStatusModel dimensionModel : this.dimensions.values()) {
+            dimensionModel.calculateDataQualityKpiScore();
+        }
     }
 
     public static class TableCurrentDataQualityStatusModelSampleFactory implements SampleValueFactory<TableCurrentDataQualityStatusModel> {

@@ -117,6 +117,13 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
     private Map<String, CheckCurrentDataQualityStatusModel> checks = new LinkedHashMap<>();
 
     /**
+     * The data quality status for each data quality dimension. The status includes the status of column-level for the same dimension, such as Completeness.
+     */
+    @JsonPropertyDescription("Dictionary of the current data quality statues for each data quality dimension.")
+    private Map<String, DimensionCurrentDataQualityStatusModel> dimensions = new LinkedHashMap<>();
+
+
+    /**
      * Calculates the highest current severity status and historic severity status from all checks.
      */
     public void calculateHighestCurrentAndHistoricSeverity() {
@@ -136,6 +143,31 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
                     checkStatusModel.getHighestHistoricalSeverity().getSeverity() != 4) {
                 this.highestHistoricalSeverity = checkStatusModel.getHighestHistoricalSeverity();
             }
+        }
+    }
+
+    /**
+     * Processes the check results and computes results for each data quality dimension.
+     */
+    public void calculateStatusesForDimensions() {
+        for (CheckCurrentDataQualityStatusModel checkStatusModel : checks.values()) {
+            String qualityDimension = checkStatusModel.getQualityDimension();
+            if (qualityDimension == null) {
+                continue; // should not happen, but if somebody intentionally configures an empty dimension....
+            }
+
+            DimensionCurrentDataQualityStatusModel dimensionModel = this.dimensions.get(qualityDimension);
+            if (dimensionModel == null) {
+                dimensionModel = new DimensionCurrentDataQualityStatusModel();
+                dimensionModel.setDimension(qualityDimension);
+                this.dimensions.put(qualityDimension, dimensionModel);
+            }
+
+            dimensionModel.appendCheckResult(checkStatusModel);
+        }
+
+        for (DimensionCurrentDataQualityStatusModel dimensionModel : this.dimensions.values()) {
+            dimensionModel.calculateDataQualityKpiScore();
         }
     }
 
