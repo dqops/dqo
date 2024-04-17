@@ -101,7 +101,7 @@ public class ColumnPatternsInvalidEmailFormatCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[a-zA-Z0-9.!#$%%&''*+\\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%%&''*+\\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -133,7 +133,7 @@ public class ColumnPatternsInvalidEmailFormatCountSensorParametersSpecBigQueryTe
                 SELECT
                     SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[a-zA-Z0-9.!#$%%&''*+\\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%%&''*+\\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                                 THEN 0
                             ELSE 1
                         END
@@ -163,7 +163,7 @@ public class ColumnPatternsInvalidEmailFormatCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[a-zA-Z0-9.!#$%%&''*+\\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%%&''*+\\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -193,7 +193,7 @@ public class ColumnPatternsInvalidEmailFormatCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[a-zA-Z0-9.!#$%%&''*+\\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%%&''*+\\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -230,7 +230,7 @@ public class ColumnPatternsInvalidEmailFormatCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[a-zA-Z0-9.!#$%%&''*+\\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%%&''*+\\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -262,7 +262,7 @@ public class ColumnPatternsInvalidEmailFormatCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[a-zA-Z0-9.!#$%%&''*+\\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%%&''*+\\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -296,7 +296,7 @@ public class ColumnPatternsInvalidEmailFormatCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[a-zA-Z0-9.!#$%%&''*+\\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%%&''*+\\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -340,7 +340,7 @@ public class ColumnPatternsInvalidEmailFormatCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[a-zA-Z0-9.!#$%%&''*+\\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%%&''*+\\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -378,7 +378,7 @@ public class ColumnPatternsInvalidEmailFormatCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[a-zA-Z0-9.!#$%%&''*+\\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%%&''*+\\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -416,7 +416,7 @@ public class ColumnPatternsInvalidEmailFormatCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[a-zA-Z0-9.!#$%%&''*+\\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%%&''*+\\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END

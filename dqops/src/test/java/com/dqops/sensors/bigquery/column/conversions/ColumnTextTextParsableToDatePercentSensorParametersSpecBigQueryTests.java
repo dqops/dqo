@@ -103,8 +103,15 @@ public class ColumnTextTextParsableToDatePercentSensorParametersSpecBigQueryTest
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%1$s AS DATE) IS NOT NULL
-                                THEN 1
+                            WHEN SAFE_CAST(analyzed_table.`length_string` AS DATE) IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%%b %%e, %%Y', analyzed_table.`length_string`) IS NOT NULL
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -138,8 +145,15 @@ public class ColumnTextTextParsableToDatePercentSensorParametersSpecBigQueryTest
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%1$s AS DATE) IS NOT NULL
-                                THEN 1
+                            WHEN SAFE_CAST(analyzed_table.`length_string` AS DATE) IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%%b %%e, %%Y', analyzed_table.`length_string`) IS NOT NULL
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -171,8 +185,15 @@ public class ColumnTextTextParsableToDatePercentSensorParametersSpecBigQueryTest
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%1$s AS DATE) IS NOT NULL
-                                THEN 1
+                            WHEN SAFE_CAST(analyzed_table.`length_string` AS DATE) IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%%b %%e, %%Y', analyzed_table.`length_string`) IS NOT NULL
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -204,8 +225,15 @@ public class ColumnTextTextParsableToDatePercentSensorParametersSpecBigQueryTest
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%1$s AS DATE) IS NOT NULL
-                                THEN 1
+                            WHEN SAFE_CAST(analyzed_table.`length_string` AS DATE) IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%%b %%e, %%Y', analyzed_table.`length_string`) IS NOT NULL
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -244,8 +272,15 @@ public class ColumnTextTextParsableToDatePercentSensorParametersSpecBigQueryTest
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%1$s AS DATE) IS NOT NULL
-                                THEN 1
+                            WHEN SAFE_CAST(analyzed_table.`length_string` AS DATE) IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%%b %%e, %%Y', analyzed_table.`length_string`) IS NOT NULL
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -279,8 +314,15 @@ public class ColumnTextTextParsableToDatePercentSensorParametersSpecBigQueryTest
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%1$s AS DATE) IS NOT NULL
-                                THEN 1
+                            WHEN SAFE_CAST(analyzed_table.`length_string` AS DATE) IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%%b %%e, %%Y', analyzed_table.`length_string`) IS NOT NULL
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -316,8 +358,15 @@ public class ColumnTextTextParsableToDatePercentSensorParametersSpecBigQueryTest
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%1$s AS DATE) IS NOT NULL
-                                THEN 1
+                            WHEN SAFE_CAST(analyzed_table.`length_string` AS DATE) IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%%b %%e, %%Y', analyzed_table.`length_string`) IS NOT NULL
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -363,8 +412,15 @@ public class ColumnTextTextParsableToDatePercentSensorParametersSpecBigQueryTest
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%1$s AS DATE) IS NOT NULL
-                                THEN 1
+                            WHEN SAFE_CAST(analyzed_table.`length_string` AS DATE) IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%%b %%e, %%Y', analyzed_table.`length_string`) IS NOT NULL
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -404,8 +460,15 @@ public class ColumnTextTextParsableToDatePercentSensorParametersSpecBigQueryTest
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%1$s AS DATE) IS NOT NULL
-                                THEN 1
+                            WHEN SAFE_CAST(analyzed_table.`length_string` AS DATE) IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%%b %%e, %%Y', analyzed_table.`length_string`) IS NOT NULL
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -445,8 +508,15 @@ public class ColumnTextTextParsableToDatePercentSensorParametersSpecBigQueryTest
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%1$s AS DATE) IS NOT NULL
-                                THEN 1
+                            WHEN SAFE_CAST(analyzed_table.`length_string` AS DATE) IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST(analyzed_table.`length_string` AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%%b %%e, %%Y', analyzed_table.`length_string`) IS NOT NULL
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)

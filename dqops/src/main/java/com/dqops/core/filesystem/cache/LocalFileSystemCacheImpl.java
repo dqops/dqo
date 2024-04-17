@@ -85,7 +85,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         this.dqoCacheConfigurationProperties = dqoCacheConfigurationProperties;
         this.tableStatusCacheProvider = tableStatusCacheProvider;
         this.homeLocationFindService = homeLocationFindService;
-        this.userHomeRootPath = Path.of(homeLocationFindService.getUserHomePath());
+        this.userHomeRootPath = homeLocationFindService.getUserHomePath() != null ? Path.of(homeLocationFindService.getUserHomePath()) : Path.of(".");
 
         WatchService newWatchService = null;
         if (dqoCacheConfigurationProperties.isEnable() && dqoCacheConfigurationProperties.isWatchFileSystemChanges()) {
