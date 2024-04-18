@@ -41,18 +41,24 @@ public class AwsDefaultConfigProfileProvider {
             String keyContent = fileContent.getTextContent();
 
             if (Objects.equals(keyContent.replace("\r\n", "\n"), DefaultCloudCredentialFileContent.AWS_DEFAULT_CONFIG_INITIAL_CONTENT)) {
-                throw new DqoRuntimeException("The .credentials/" + DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME +
-                        " file contains default (fake) credentials. Please update the file by setting valid AWS default credentials.");
-            }
+                ProfileFile profileFile;
+                try (InputStream keyReaderStream = new ByteArrayInputStream(keyContent.getBytes(StandardCharsets.UTF_8))) {
+                    profileFile = ProfileFile.builder().content(keyReaderStream).type(ProfileFile.Type.CONFIGURATION).build();
+                    return profileFile.getSection(sectionName, sectionTitle);
+                } catch (IOException e) {
+                    throw new DqoRuntimeException("The .credentials/" + DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME +
+                            " file contains default (fake) credentials. Please update the file by setting valid AWS default credentials.");
+                }
+            } else {
+                ProfileFile profileFile;
+                try (InputStream keyReaderStream = new ByteArrayInputStream(keyContent.getBytes(StandardCharsets.UTF_8))) {
+                    profileFile = ProfileFile.builder().content(keyReaderStream).type(ProfileFile.Type.CONFIGURATION).build();
+                } catch (IOException e) {
+                    throw new DqoRuntimeException("Failed to read AWS default credentials.");
+                }
 
-            ProfileFile profileFile;
-            try (InputStream keyReaderStream = new ByteArrayInputStream(keyContent.getBytes(StandardCharsets.UTF_8))) {
-                profileFile = ProfileFile.builder().content(keyReaderStream).type(ProfileFile.Type.CONFIGURATION).build();
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to read AWS default credentials.");
+                return profileFile.getSection(sectionName, sectionTitle);
             }
-
-            return profileFile.getSection(sectionName, sectionTitle);
         }
         return Optional.empty();
     }
