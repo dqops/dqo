@@ -44,6 +44,8 @@ import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -64,6 +66,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     private final DqoDuckdbConfiguration dqoDuckdbConfiguration;
     private static final Object settingsExecutionLock = new Object();
     private static final boolean settingsConfigured = false;
+    private static final String temporaryDirectoryPrefix = "dqops_duckdb_temp_";
 
     /**
      * Injection constructor for the duckdb connection.
@@ -195,6 +198,11 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
                 String threadsQuery = "SET GLOBAL threads = " + dqoDuckdbConfiguration.getThreads();
                 this.executeCommand(threadsQuery, JobCancellationToken.createDummyJobCancellationToken());
+
+                String temporaryDirectory = Files.createTempDirectory(temporaryDirectoryPrefix).toFile().getAbsolutePath();
+                Path.of(temporaryDirectory).toFile().deleteOnExit();
+                String tempDirectoryQuery = "SET temp_directory = " + temporaryDirectory;
+                this.executeCommand(tempDirectoryQuery, JobCancellationToken.createDummyJobCancellationToken());
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
