@@ -5,7 +5,7 @@ SELECT
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
         ELSE SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} ~ '{{ parameters.regex }}' IS TRUE
+                WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }} IS TRUE
                     THEN 0
                 ELSE 1
             END
