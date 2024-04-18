@@ -155,7 +155,7 @@ public class ColumnPatternsDailyPartitionedChecksSpec extends AbstractCheckCateg
      * Sets a new definition of an invalid email percent check.
      * @param dailyPartitionInvalidEmailFormatPercent Invalid email percent check.
      */
-    public void setDailyPartitionInvalidEmailFormatFound(ColumnInvalidEmailFormatPercentCheckSpec dailyPartitionInvalidEmailFormatPercent) {
+    public void setDailyPartitionInvalidEmailFormatPercent(ColumnInvalidEmailFormatPercentCheckSpec dailyPartitionInvalidEmailFormatPercent) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionInvalidEmailFormatPercent, dailyPartitionInvalidEmailFormatPercent));
         this.dailyPartitionInvalidEmailFormatPercent = dailyPartitionInvalidEmailFormatPercent;
         propagateHierarchyIdToField(dailyPartitionInvalidEmailFormatPercent, "daily_partition_invalid_email_format_percent");
