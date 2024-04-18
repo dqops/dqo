@@ -105,7 +105,7 @@ public class SchemasControllerUTTests extends BaseTest {
     }
 
     private UserHomeContext createHierarchyTree() {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
         TableWrapper table1 = connectionWrapper.getTables().createAndAddNew(
@@ -315,7 +315,7 @@ public class SchemasControllerUTTests extends BaseTest {
     @Test
     void getSchemas_whenTableHasTheSameSchemaAsOneDuckdbDirectory_thenReturnsWithNoDuplicates() {
         String connectionName = "conn";
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew(connectionName);
         connectionWrapper.setSpec(DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv));

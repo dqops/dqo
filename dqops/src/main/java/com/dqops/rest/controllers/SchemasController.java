@@ -91,7 +91,7 @@ public class SchemasController {
     public ResponseEntity<Flux<SchemaModel>> getSchemas(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -192,7 +192,7 @@ public class SchemasController {
             Optional<Boolean> checkConfigured,
             @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
             Optional<Integer> limit) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
@@ -269,7 +269,7 @@ public class SchemasController {
             Optional<Boolean> checkConfigured,
             @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
             Optional<Integer> limit) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
@@ -346,7 +346,7 @@ public class SchemasController {
             Optional<Boolean> checkConfigured,
             @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
             Optional<Integer> limit) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
@@ -400,7 +400,7 @@ public class SchemasController {
             @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
             @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
@@ -441,7 +441,7 @@ public class SchemasController {
             @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
             @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
@@ -482,7 +482,7 @@ public class SchemasController {
             @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
             @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(

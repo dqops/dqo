@@ -45,7 +45,7 @@ public class FileSensorDefinitionWrapperImplTests extends BaseTest {
 		this.fileCheckDefinitionList = (FileSensorDefinitionListImpl) userHomeContext.getUserHome().getSensors();
 		this.fileCheckFolder = this.fileCheckDefinitionList.getSensorsFolder().getOrAddDirectFolder("conn");
 		this.yamlSerializer = YamlSerializerObjectMother.createNew();
-		this.sut = new FileSensorDefinitionWrapperImpl(fileCheckFolder, yamlSerializer);
+		this.sut = new FileSensorDefinitionWrapperImpl(fileCheckFolder, yamlSerializer, false);
     }
 
     @Test
@@ -87,7 +87,7 @@ public class FileSensorDefinitionWrapperImplTests extends BaseTest {
 
         Assertions.assertFalse(this.sut.getSpec().isDirty());
         Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
-        FileSensorDefinitionWrapperImpl sut2 = new FileSensorDefinitionWrapperImpl(fileCheckFolder, this.yamlSerializer);
+        FileSensorDefinitionWrapperImpl sut2 = new FileSensorDefinitionWrapperImpl(fileCheckFolder, this.yamlSerializer, false);
         SensorDefinitionSpec spec2 = sut2.getSpec();
         Assertions.assertEquals(false, spec2.isDirty());
     }
@@ -108,7 +108,7 @@ public class FileSensorDefinitionWrapperImplTests extends BaseTest {
 		userHomeContext.flush();
 
         Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
-        FileSensorDefinitionWrapperImpl sut2 = new FileSensorDefinitionWrapperImpl(fileCheckFolder, this.yamlSerializer);
+        FileSensorDefinitionWrapperImpl sut2 = new FileSensorDefinitionWrapperImpl(fileCheckFolder, this.yamlSerializer, false);
         SensorDefinitionSpec spec2 = sut2.getSpec();
         Assertions.assertEquals("val", spec2.getParameters().get("p1"));
     }
@@ -145,7 +145,7 @@ public class FileSensorDefinitionWrapperImplTests extends BaseTest {
 		this.sut.flush();
 		userHomeContext.flush();
 
-        FileSensorDefinitionWrapperImpl sut2 = new FileSensorDefinitionWrapperImpl(fileCheckFolder, this.yamlSerializer);
+        FileSensorDefinitionWrapperImpl sut2 = new FileSensorDefinitionWrapperImpl(fileCheckFolder, this.yamlSerializer, false);
         SensorDefinitionSpec spec2 = sut2.getSpec();
         Assertions.assertNotNull(spec2);
     }
@@ -161,7 +161,7 @@ public class FileSensorDefinitionWrapperImplTests extends BaseTest {
 		this.sut.flush();
 		userHomeContext.flush();
 
-        FileSensorDefinitionWrapperImpl sut2 = new FileSensorDefinitionWrapperImpl(fileCheckFolder, this.yamlSerializer);
+        FileSensorDefinitionWrapperImpl sut2 = new FileSensorDefinitionWrapperImpl(fileCheckFolder, this.yamlSerializer, false);
         SensorDefinitionSpec spec2 = sut2.getSpec();
         Assertions.assertNotNull(spec2);
         Assertions.assertSame(spec2, sut2.getSpec());

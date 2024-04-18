@@ -63,7 +63,7 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
         this.sut = new DataGroupingConfigurationsController(this.userHomeContextFactory, new RestApiLockServiceImpl());
         this.userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
-        this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
                 SampleCsvFileNames.continuous_days_one_row_per_day,
                 ProviderType.bigquery);

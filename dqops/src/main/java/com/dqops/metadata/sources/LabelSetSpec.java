@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.sources;
 
+import com.dqops.metadata.basespecs.ReadOnlyObjectModifiedException;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
@@ -34,6 +35,8 @@ public class LabelSetSpec extends AbstractSet<String> implements HierarchyNode, 
     private LinkedHashSet<String> labels = new LinkedHashSet<>();
     @JsonIgnore
     private boolean dirty;
+    @JsonIgnore
+    private boolean readOnly;
     @JsonIgnore
     private HierarchyId hierarchyId;
 
@@ -165,7 +168,10 @@ public class LabelSetSpec extends AbstractSet<String> implements HierarchyNode, 
      */
     @Override
     public void setDirty() {
-		this.dirty = true;
+		if (this.readOnly) {
+            throw new ReadOnlyObjectModifiedException(this);
+        }
+        this.dirty = true;
     }
 
     /**
@@ -196,6 +202,7 @@ public class LabelSetSpec extends AbstractSet<String> implements HierarchyNode, 
         LabelSetSpec cloned = new LabelSetSpec();
         cloned.labels = (LinkedHashSet<String>) this.labels.clone();
         cloned.clearDirty(false);
+        cloned.readOnly = false;
         return cloned;
     }
 
@@ -208,5 +215,27 @@ public class LabelSetSpec extends AbstractSet<String> implements HierarchyNode, 
     @Override
     public boolean isDefault() {
         return this.size() == 0;
+    }
+
+    /**
+     * Check if the object is frozen (read only). A read-only object cannot be modified.
+     *
+     * @return True when the object is read-only and trying to apply a change will return an error.
+     */
+    @Override
+    @JsonIgnore
+    public boolean isReadOnly() {
+        return this.readOnly;
+    }
+
+    /**
+     * Sets the read-only flag on the current object, and optionally on child objects.
+     *
+     * @param propagateToChildren When true, makes also the child objects as read-only.
+     */
+    @Override
+    @JsonIgnore
+    public void makeReadOnly(boolean propagateToChildren) {
+        this.readOnly = true;
     }
 }

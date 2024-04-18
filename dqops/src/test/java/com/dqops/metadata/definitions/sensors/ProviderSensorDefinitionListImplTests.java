@@ -31,7 +31,7 @@ public class ProviderSensorDefinitionListImplTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-		this.sut = new ProviderSensorDefinitionListImpl();
+		this.sut = new ProviderSensorDefinitionListImpl(false);
     }
 
     @Test

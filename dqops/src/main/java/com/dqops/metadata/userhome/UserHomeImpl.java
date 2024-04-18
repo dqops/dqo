@@ -94,25 +94,30 @@ public class UserHomeImpl implements UserHome, Cloneable {
     @JsonIgnore
     private boolean dirty;
 
+    @JsonIgnore
+    private boolean readOnly;
+
     /**
      * Creates a default user home implementation.
      * @param userIdentity User identity that specifies the calling user and the data domain.
+     * @param readOnly The user home is opened in a read-only mode.
      */
-    public UserHomeImpl(UserDomainIdentity userIdentity) {
+    public UserHomeImpl(UserDomainIdentity userIdentity, boolean readOnly) {
         this.userIdentity = userIdentity;
-		this.setConnections(new ConnectionListImpl());
-		this.setSensors(new SensorDefinitionListImpl());
-		this.setRules(new RuleDefinitionListImpl());
-        this.setChecks(new CheckDefinitionListImpl());
-        this.setSettings(new SettingsWrapperImpl());
-        this.setCredentials(new SharedCredentialListImpl());
-        this.setDictionaries(new DictionaryListImpl());
-        this.setFileIndices(new FileIndexListImpl());
-        this.setDashboards(new DashboardFolderListSpecWrapperImpl());
-        this.setDefaultSchedules(new MonitoringSchedulesWrapperImpl());
-        this.setTableDefaultChecksPatterns(new TableDefaultChecksPatternListImpl());
-        this.setColumnDefaultChecksPatterns(new ColumnDefaultChecksPatternListImpl());
-        this.setDefaultNotificationWebhooks(new DefaultIncidentWebhookNotificationsWrapperImpl());
+		this.setConnections(new ConnectionListImpl(readOnly));
+		this.setSensors(new SensorDefinitionListImpl(readOnly));
+		this.setRules(new RuleDefinitionListImpl(readOnly));
+        this.setChecks(new CheckDefinitionListImpl(readOnly));
+        this.setSettings(new SettingsWrapperImpl(readOnly));
+        this.setCredentials(new SharedCredentialListImpl(readOnly));
+        this.setDictionaries(new DictionaryListImpl(readOnly));
+        this.setFileIndices(new FileIndexListImpl(readOnly));
+        this.setDashboards(new DashboardFolderListSpecWrapperImpl(readOnly));
+        this.setDefaultSchedules(new MonitoringSchedulesWrapperImpl(readOnly));
+        this.setTableDefaultChecksPatterns(new TableDefaultChecksPatternListImpl(readOnly));
+        this.setColumnDefaultChecksPatterns(new ColumnDefaultChecksPatternListImpl(readOnly));
+        this.setDefaultNotificationWebhooks(new DefaultIncidentWebhookNotificationsWrapperImpl(readOnly));
+        this.readOnly = readOnly;
     }
 
     /**
@@ -131,6 +136,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
      * @param schedules Default monitoring schedules wrapper.
      * @param tableDefaultChecksPatterns Default table-level checks.
      * @param columnDefaultChecksPatterns Default column-level checks.
+     * @param readOnly Make the user home read-only.
      */
     public UserHomeImpl(UserDomainIdentity userIdentity,
                         ConnectionListImpl connections,
@@ -145,7 +151,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
                         MonitoringSchedulesWrapperImpl schedules,
                         TableDefaultChecksPatternListImpl tableDefaultChecksPatterns,
                         ColumnDefaultChecksPatternListImpl columnDefaultChecksPatterns,
-                        DefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks) {
+                        DefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks,
+                        boolean readOnly) {
         this.userIdentity = userIdentity;
 		this.setConnections(connections);
 		this.setSensors(sensors);
@@ -160,6 +167,9 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setTableDefaultChecksPatterns(tableDefaultChecksPatterns);
         this.setColumnDefaultChecksPatterns(columnDefaultChecksPatterns);
         this.setDefaultNotificationWebhooks(notificationWebhooks);
+        if (readOnly) {
+            makeReadOnly(true);
+        }
     }
 
     /**
@@ -721,4 +731,32 @@ public class UserHomeImpl implements UserHome, Cloneable {
         }
     }
 
+    /**
+     * Check if the object is frozen (read only). A read-only object cannot be modified.
+     *
+     * @return True when the object is read-only and trying to apply a change will return an error.
+     */
+    @Override
+    @JsonIgnore
+    public boolean isReadOnly() {
+        return this.readOnly;
+    }
+
+    /**
+     * Sets the read-only flag on the current object, and optionally on child objects.
+     *
+     * @param propagateToChildren When true, makes also the child objects as read-only.
+     */
+    @Override
+    @JsonIgnore
+    public void makeReadOnly(boolean propagateToChildren) {
+        if (!this.readOnly) {
+            this.readOnly = true;
+            if (propagateToChildren) {
+                for (HierarchyNode element : this.children()) {
+                    element.makeReadOnly(true);
+                }
+            }
+        }
+    }
 }

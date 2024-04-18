@@ -25,6 +25,10 @@ import java.util.List;
  * Data quality sensor definition collection. Tracks the status of the child elements (addition, removal).
  */
 public class SensorDefinitionListImpl extends AbstractIndexingList<String, SensorDefinitionWrapper> implements SensorDefinitionList {
+    public SensorDefinitionListImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
     /**
      * Creates a new element given an object name. Derived classes should create a correct object type.
      *

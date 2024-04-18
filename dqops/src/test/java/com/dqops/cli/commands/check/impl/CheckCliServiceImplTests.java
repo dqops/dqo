@@ -132,7 +132,7 @@ public class CheckCliServiceImplTests extends BaseTest {
     }
 
     private UserHome createHierarchyTree() {
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
         TableWrapper table1 = connectionWrapper.getTables().createAndAddNew(
@@ -213,7 +213,7 @@ public class CheckCliServiceImplTests extends BaseTest {
 
         this.sut.updateAllChecksPatch(allChecksModelCliPatchParameters);
 
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         userHome = userHomeContext.getUserHome();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertNotNull(checks);

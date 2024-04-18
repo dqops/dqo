@@ -45,7 +45,7 @@ public class FileConnectionWrapperImplTests extends BaseTest {
 		this.connectionList = (FileConnectionListImpl) userHomeContext.getUserHome().getConnections();
 		this.connectionFolder = this.connectionList.getSourcesFolder().getOrAddDirectFolder("conn");
 		this.yamlSerializer = YamlSerializerObjectMother.createNew();
-		this.sut = new FileConnectionWrapperImpl(connectionFolder, yamlSerializer);
+		this.sut = new FileConnectionWrapperImpl(connectionFolder, yamlSerializer, false);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class FileConnectionWrapperImplTests extends BaseTest {
 
         Assertions.assertFalse(this.sut.getSpec().isDirty());
         Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
-        FileConnectionWrapperImpl sut2 = new FileConnectionWrapperImpl(connectionFolder, this.yamlSerializer);
+        FileConnectionWrapperImpl sut2 = new FileConnectionWrapperImpl(connectionFolder, this.yamlSerializer, false);
         ConnectionSpec spec2 = sut2.getSpec();
         Assertions.assertEquals("dbname1", spec2.getPostgresql().getDatabase());
     }
@@ -89,7 +89,7 @@ public class FileConnectionWrapperImplTests extends BaseTest {
 		userHomeContext.flush();
 
         Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
-        FileConnectionWrapperImpl sut2 = new FileConnectionWrapperImpl(connectionFolder, this.yamlSerializer);
+        FileConnectionWrapperImpl sut2 = new FileConnectionWrapperImpl(connectionFolder, this.yamlSerializer, false);
         ConnectionSpec spec2 = sut2.getSpec();
         Assertions.assertEquals("dbname2", spec2.getPostgresql().getDatabase());
     }
@@ -126,7 +126,7 @@ public class FileConnectionWrapperImplTests extends BaseTest {
 		this.sut.flush();
 		userHomeContext.flush();
 
-        FileConnectionWrapperImpl sut2 = new FileConnectionWrapperImpl(connectionFolder, this.yamlSerializer);
+        FileConnectionWrapperImpl sut2 = new FileConnectionWrapperImpl(connectionFolder, this.yamlSerializer, false);
         ConnectionSpec spec2 = sut2.getSpec();
         Assertions.assertNotNull(spec2);
     }
@@ -142,7 +142,7 @@ public class FileConnectionWrapperImplTests extends BaseTest {
 		this.sut.flush();
 		userHomeContext.flush();
 
-        FileConnectionWrapperImpl sut2 = new FileConnectionWrapperImpl(connectionFolder, this.yamlSerializer);
+        FileConnectionWrapperImpl sut2 = new FileConnectionWrapperImpl(connectionFolder, this.yamlSerializer, false);
         ConnectionSpec spec2 = sut2.getSpec();
         Assertions.assertNotNull(spec2);
         Assertions.assertSame(spec2, sut2.getSpec());

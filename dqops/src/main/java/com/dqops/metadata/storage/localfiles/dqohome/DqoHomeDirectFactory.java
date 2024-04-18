@@ -41,9 +41,10 @@ public class DqoHomeDirectFactory {
      * Creates an instance of DQOps home given a path.
      * WARNING: this method should be only used internally by DQOps build tools (classes called by Maven during build).
      * @param dqoHomePath Path to DQOps home.
+     * @param readOnly Open the home context in read-only mode.
      * @return DQOps Home context.
      */
-    public static DqoHomeContext openDqoHome(Path dqoHomePath) {
+    public static DqoHomeContext openDqoHome(Path dqoHomePath, boolean readOnly) {
         DqoCacheConfigurationProperties dqoCacheConfigurationProperties = new DqoCacheConfigurationProperties();
         dqoCacheConfigurationProperties.setEnable(false);
         dqoCacheConfigurationProperties.setWatchFileSystemChanges(false);
@@ -55,7 +56,7 @@ public class DqoHomeDirectFactory {
         LocalFolderTreeNode dqoHomeFolder = new LocalFolderTreeNode(fileSystemContext, new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN));
         DqoHomeContext dqoHomeContext = new DqoHomeContext(dqoHomeFolder);
         YamlSerializerImpl yamlSerializer = new YamlSerializerImpl(new DqoConfigurationProperties(), new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties()));
-        FileDqoHomeImpl fileDqoHome = FileDqoHomeImpl.create(dqoHomeContext, yamlSerializer);
+        FileDqoHomeImpl fileDqoHome = FileDqoHomeImpl.create(dqoHomeContext, yamlSerializer, readOnly);
         dqoHomeContext.setDqoHome(fileDqoHome);
 
         return dqoHomeContext;

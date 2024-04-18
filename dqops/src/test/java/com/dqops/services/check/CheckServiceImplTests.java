@@ -128,7 +128,7 @@ public class CheckServiceImplTests extends BaseTest {
     }
 
     private ExecutionContext createHierarchyTree() {
-        ExecutionContext executionContext = this.executionContextFactory.create(UserDomainIdentityObjectMother.createAdminIdentity());
+        ExecutionContext executionContext = this.executionContextFactory.create(UserDomainIdentityObjectMother.createAdminIdentity(), false);
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
         TableWrapper table1 = connectionWrapper.getTables().createAndAddNew(
@@ -300,7 +300,7 @@ public class CheckServiceImplTests extends BaseTest {
         bulkCheckDeactivateParameters.setCheckSearchFilters(checkSearchFilters);
         this.sut.disableChecks(bulkCheckDeactivateParameters, adminPrincipal);
 
-        ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity());
+        ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity(), false);
         userHome = executionContextSecond.getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?,?,?,?>> checksEnabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertTrue(checksEnabled.isEmpty());
@@ -355,7 +355,7 @@ public class CheckServiceImplTests extends BaseTest {
         bulkCheckDeactivateParameters.setCheckSearchFilters(checkSearchFilters);
         this.sut.deleteChecks(bulkCheckDeactivateParameters, adminPrincipal);
 
-        ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity());
+        ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity(), false);
         userHome = executionContextSecond.getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?,?,?,?>> checksEnabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertTrue(checksEnabled.isEmpty());
@@ -398,7 +398,7 @@ public class CheckServiceImplTests extends BaseTest {
         bulkCheckDeactivateParameters.setSelectedTablesToColumns(selectedTables);
         this.sut.disableChecks(bulkCheckDeactivateParameters, adminPrincipal);
 
-        ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity());
+        ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity(), false);
         userHome = executionContextSecond.getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?,?,?,?>> checksEnabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertEquals(1, checksEnabled.size());
@@ -456,7 +456,7 @@ public class CheckServiceImplTests extends BaseTest {
         bulkCheckDeactivateParameters.setSelectedTablesToColumns(selectedTables);
         this.sut.deleteChecks(bulkCheckDeactivateParameters, adminPrincipal);
 
-        ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity());
+        ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity(), false);
         userHome = executionContextSecond.getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?,?,?,?>> checksEnabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertEquals(1, checksEnabled.size());
@@ -502,7 +502,7 @@ public class CheckServiceImplTests extends BaseTest {
 
         this.sut.activateOrUpdateAllChecks(allChecksPatchParameters, principal);
 
-        ExecutionContext executionContextSecond = executionContextFactory.create(principal.getDataDomainIdentity());
+        ExecutionContext executionContextSecond = executionContextFactory.create(principal.getDataDomainIdentity(), false);
         UserHome userHome = executionContextSecond.getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertNotNull(checks);
@@ -558,7 +558,7 @@ public class CheckServiceImplTests extends BaseTest {
 
         this.sut.activateOrUpdateAllChecks(allChecksPatchParameters, principal);
 
-        ExecutionContext executionContextSecond = executionContextFactory.create(principal.getDataDomainIdentity());
+        ExecutionContext executionContextSecond = executionContextFactory.create(principal.getDataDomainIdentity(), false);
         UserHome userHome = executionContextSecond.getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertNotNull(checks);

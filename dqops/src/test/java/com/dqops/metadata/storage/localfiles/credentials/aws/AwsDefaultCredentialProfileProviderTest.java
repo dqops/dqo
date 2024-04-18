@@ -40,7 +40,7 @@ public class AwsDefaultCredentialProfileProviderTest extends BaseTest {
         LocalUserHomeCreatorObjectMother.initializeDqoUserHomeAt(testUserHome.toString());
 
         UserHomeContextFactory userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithEmptyTemporaryContext();
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY, false);
         userHomePath = userHomeContext.getHomeRoot().getPhysicalAbsolutePath();
 
         secretValueLookupContext = new SecretValueLookupContext(userHomeContext.getUserHome());

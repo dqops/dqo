@@ -74,7 +74,7 @@ public class SourceConnectionsServiceImpl implements SourceConnectionsService {
                                               boolean verifyNameUniqueness) {
         ConnectionTestModel connectionTestModel = new ConnectionTestModel();
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();
 

@@ -153,7 +153,7 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
         }
 
         UserDomainIdentity userIdentity = this.getPrincipal().getDataDomainIdentity();
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();
 

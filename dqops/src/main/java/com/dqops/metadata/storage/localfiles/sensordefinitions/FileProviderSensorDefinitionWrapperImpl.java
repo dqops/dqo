@@ -47,9 +47,13 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
      * @param sensorDefinitionFolderNode Folder in the virtual file system that holds the sensor definition.
      * @param providerType Provider type.
      * @param yamlSerializer Yaml serializer.
+     * @param readOnly Make the list read-only.
      */
-    public FileProviderSensorDefinitionWrapperImpl(FolderTreeNode sensorDefinitionFolderNode, ProviderType providerType, YamlSerializer yamlSerializer) {
-        super(providerType);
+    public FileProviderSensorDefinitionWrapperImpl(FolderTreeNode sensorDefinitionFolderNode,
+                                                   ProviderType providerType,
+                                                   YamlSerializer yamlSerializer,
+                                                   boolean readOnly) {
+        super(providerType, readOnly);
         this.sensorDefinitionFolderNode = sensorDefinitionFolderNode;
         this.yamlSerializer = yamlSerializer;
     }
@@ -84,9 +88,11 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
                         throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
 
-                    fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+                    ProviderSensorDefinitionSpec cachedObjectInstance = deserializedSpec.deepClone();
+                    cachedObjectInstance.makeReadOnly(true);
+                    fileContent.setCachedObjectInstance(cachedObjectInstance);
                 } else {
-                    deserializedSpec = deserializedSpec.deepClone();
+                    deserializedSpec = this.isReadOnly() ? deserializedSpec : deserializedSpec.deepClone();
                 }
 
 				this.setSpec(deserializedSpec);

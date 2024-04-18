@@ -1,5 +1,6 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.metadata.basespecs.ReadOnlyObjectModifiedException;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
@@ -14,6 +15,8 @@ public class FilePathListSpec extends AbstractList<String> implements HierarchyN
     private ArrayList<String> filePaths = new ArrayList<>();
     @JsonIgnore
     private boolean dirty;
+    @JsonIgnore
+    private boolean readOnly;
     @JsonIgnore
     private HierarchyId hierarchyId;
 
@@ -31,6 +34,31 @@ public class FilePathListSpec extends AbstractList<String> implements HierarchyN
     public boolean add(String s) {
         setDirty();
         return this.filePaths.add(s);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param o
+     * @throws UnsupportedOperationException {@inheritDoc}
+     * @throws ClassCastException            {@inheritDoc}
+     * @throws NullPointerException          {@inheritDoc}
+     * @implSpec This implementation iterates over the collection looking for the
+     * specified element.  If it finds the element, it removes the element
+     * from the collection using the iterator's remove method.
+     *
+     * <p>Note that this implementation throws an
+     * {@code UnsupportedOperationException} if the iterator returned by this
+     * collection's iterator method does not implement the {@code remove}
+     * method and this collection contains the specified object.
+     */
+    @Override
+    public boolean remove(Object o) {
+        boolean removed = this.filePaths.remove(o);
+        if (removed) {
+            setDirty();
+        }
+        return removed;
     }
 
     /**
@@ -58,6 +86,9 @@ public class FilePathListSpec extends AbstractList<String> implements HierarchyN
      */
     @Override
     public void setDirty() {
+        if (this.readOnly) {
+            throw new ReadOnlyObjectModifiedException(this);
+        }
         this.dirty = true;
     }
 
@@ -130,6 +161,7 @@ public class FilePathListSpec extends AbstractList<String> implements HierarchyN
         FilePathListSpec cloned = new FilePathListSpec();
         cloned.filePaths = (ArrayList<String>) this.filePaths.clone();
         cloned.clearDirty(false);
+        cloned.readOnly = false;
         return cloned;
     }
 
@@ -142,5 +174,27 @@ public class FilePathListSpec extends AbstractList<String> implements HierarchyN
     @Override
     public boolean isDefault() {
         return this.size() == 0;
+    }
+
+    /**
+     * Check if the object is frozen (read only). A read-only object cannot be modified.
+     *
+     * @return True when the object is read-only and trying to apply a change will return an error.
+     */
+    @Override
+    @JsonIgnore
+    public boolean isReadOnly() {
+        return this.readOnly;
+    }
+
+    /**
+     * Sets the read-only flag on the current object, and optionally on child objects.
+     *
+     * @param propagateToChildren When true, makes also the child objects as read-only.
+     */
+    @Override
+    @JsonIgnore
+    public void makeReadOnly(boolean propagateToChildren) {
+        this.readOnly = true;
     }
 }

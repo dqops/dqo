@@ -60,6 +60,7 @@ public class FileUserHomeImpl extends UserHomeImpl {
      * @param tableDefaultChecksPattern Default table check patterns.
      * @param columnDefaultChecksPattern Default column check patterns.
      * @param userHomeContext User home context.
+     * @param readOnly Make the user home read-only.
      */
     public FileUserHomeImpl(UserDomainIdentity userIdentity,
                             FileConnectionListImpl sources,
@@ -75,9 +76,10 @@ public class FileUserHomeImpl extends UserHomeImpl {
                             FileTableDefaultChecksPatternListImpl tableDefaultChecksPattern,
                             FileColumnDefaultChecksPatternListImpl columnDefaultChecksPattern,
                             FileDefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks,
-                            UserHomeContext userHomeContext) {
+                            UserHomeContext userHomeContext,
+                            boolean readOnly) {
         super(userIdentity, sources, sensors, rules, checks, settings, credentials, dictionaries, fileIndices, dashboards,
-                monitoringSchedules, tableDefaultChecksPattern, columnDefaultChecksPattern, notificationWebhooks);
+                monitoringSchedules, tableDefaultChecksPattern, columnDefaultChecksPattern, notificationWebhooks, readOnly);
         this.userHomeContext = userHomeContext;
 		this.homeFolder = userHomeContext.getHomeRoot(); // just a convenience
     }
@@ -87,9 +89,10 @@ public class FileUserHomeImpl extends UserHomeImpl {
      * @param userHomeContext User home context.
      * @param yamlSerializer Configured YAML serializer.
      * @param jsonSerializer Configured JSON serializer.
+     * @param readOnly Create the user home in a read-only mode.
      * @return File based user home.
      */
-    public static FileUserHomeImpl create(UserHomeContext userHomeContext, YamlSerializer yamlSerializer, JsonSerializer jsonSerializer) {
+    public static FileUserHomeImpl create(UserHomeContext userHomeContext, YamlSerializer yamlSerializer, JsonSerializer jsonSerializer, boolean readOnly) {
         FolderTreeNode sourcesFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.SOURCES);
         FolderTreeNode sensorsFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.SENSORS);
         FolderTreeNode rulesFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.RULES);
@@ -101,24 +104,24 @@ public class FileUserHomeImpl extends UserHomeImpl {
         FolderTreeNode patternsFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.PATTERNS);
         FolderTreeNode localSettingsFolder = userHomeContext.getHomeRoot();
 
-        FileConnectionListImpl dataSources = new FileConnectionListImpl(sourcesFolder, yamlSerializer);
-        FileSensorDefinitionListImpl sensors = new FileSensorDefinitionListImpl(sensorsFolder, yamlSerializer);
-        FileRuleDefinitionListImpl rules = new FileRuleDefinitionListImpl(rulesFolder, yamlSerializer);
-        FileCheckDefinitionListImpl checks = new FileCheckDefinitionListImpl(checksFolder, yamlSerializer);
-        FileSettingsWrapperImpl settings = new FileSettingsWrapperImpl(localSettingsFolder, yamlSerializer);
-        FileSharedCredentialListImpl credentials = new FileSharedCredentialListImpl(credentialsFolder);
-        FileDictionaryListImpl dictionaries = new FileDictionaryListImpl(dictionariesFolder);
-        FileFileIndexListImpl fileIndices = new FileFileIndexListImpl(indexFolder, jsonSerializer);
-        FileDashboardFolderListSpecWrapperImpl dashboards = new FileDashboardFolderListSpecWrapperImpl(settingsFolder, yamlSerializer);
-        FileMonitoringSchedulesWrapperImpl monitoringSchedules = new FileMonitoringSchedulesWrapperImpl(settingsFolder, yamlSerializer);
-        FileTableDefaultChecksPatternListImpl tableDefaultChecksPatterns = new FileTableDefaultChecksPatternListImpl(patternsFolder, yamlSerializer);
-        FileColumnDefaultChecksPatternListImpl columnDefaultChecksPatterns = new FileColumnDefaultChecksPatternListImpl(patternsFolder, yamlSerializer);
-        FileDefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks = new FileDefaultIncidentWebhookNotificationsWrapperImpl(settingsFolder, yamlSerializer);
+        FileConnectionListImpl dataSources = new FileConnectionListImpl(sourcesFolder, yamlSerializer, readOnly);
+        FileSensorDefinitionListImpl sensors = new FileSensorDefinitionListImpl(sensorsFolder, yamlSerializer, readOnly);
+        FileRuleDefinitionListImpl rules = new FileRuleDefinitionListImpl(rulesFolder, yamlSerializer, readOnly);
+        FileCheckDefinitionListImpl checks = new FileCheckDefinitionListImpl(checksFolder, yamlSerializer, readOnly);
+        FileSettingsWrapperImpl settings = new FileSettingsWrapperImpl(localSettingsFolder, yamlSerializer, readOnly);
+        FileSharedCredentialListImpl credentials = new FileSharedCredentialListImpl(credentialsFolder, readOnly);
+        FileDictionaryListImpl dictionaries = new FileDictionaryListImpl(dictionariesFolder, readOnly);
+        FileFileIndexListImpl fileIndices = new FileFileIndexListImpl(indexFolder, jsonSerializer, readOnly);
+        FileDashboardFolderListSpecWrapperImpl dashboards = new FileDashboardFolderListSpecWrapperImpl(settingsFolder, yamlSerializer, readOnly);
+        FileMonitoringSchedulesWrapperImpl monitoringSchedules = new FileMonitoringSchedulesWrapperImpl(settingsFolder, yamlSerializer, readOnly);
+        FileTableDefaultChecksPatternListImpl tableDefaultChecksPatterns = new FileTableDefaultChecksPatternListImpl(patternsFolder, yamlSerializer, readOnly);
+        FileColumnDefaultChecksPatternListImpl columnDefaultChecksPatterns = new FileColumnDefaultChecksPatternListImpl(patternsFolder, yamlSerializer, readOnly);
+        FileDefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks = new FileDefaultIncidentWebhookNotificationsWrapperImpl(settingsFolder, yamlSerializer, readOnly);
 
         return new FileUserHomeImpl(userHomeContext.getUserIdentity(), dataSources,
                 sensors, rules, checks, settings, credentials, dictionaries, fileIndices, dashboards,
                 monitoringSchedules, tableDefaultChecksPatterns, columnDefaultChecksPatterns,
-                notificationWebhooks, userHomeContext);
+                notificationWebhooks, userHomeContext, readOnly);
     }
 
     /**

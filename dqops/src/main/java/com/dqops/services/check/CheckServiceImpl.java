@@ -118,7 +118,7 @@ public class CheckServiceImpl implements CheckService {
      */
     @Override
     public void disableChecks(BulkCheckDeactivateParameters parameters, DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
         UserHome userHome = userHomeContext.getUserHome();
         HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
         Collection<AbstractCheckSpec<?,?,?,?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, parameters.getCheckSearchFilters());
@@ -164,7 +164,7 @@ public class CheckServiceImpl implements CheckService {
      */
     @Override
     public void deleteChecks(BulkCheckDeactivateParameters parameters, DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
         UserHome userHome = userHomeContext.getUserHome();
         HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
         Collection<AbstractCheckSpec<?,?,?,?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, parameters.getCheckSearchFilters());
@@ -288,7 +288,7 @@ public class CheckServiceImpl implements CheckService {
             patchCheckModel(check, parameters);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connectionList = userHome.getConnections();
 

@@ -27,8 +27,10 @@ public class FileDefaultIncidentWebhookNotificationsWrapperImpl extends DefaultI
      * Creates a default notification webhooks wrapper for its specification that uses yaml files for storage.
      * @param settingsFolderNode Folder with yaml files for webhooks specifications.
      * @param yamlSerializer Yaml serializer.
+     * @param readOnly Make the wrapper read-only.
      */
-    public FileDefaultIncidentWebhookNotificationsWrapperImpl(FolderTreeNode settingsFolderNode, YamlSerializer yamlSerializer) {
+    public FileDefaultIncidentWebhookNotificationsWrapperImpl(FolderTreeNode settingsFolderNode, YamlSerializer yamlSerializer, boolean readOnly) {
+        super(readOnly);
         this.settingsFolderNode = settingsFolderNode;
         this.yamlSerializer = yamlSerializer;
     }
@@ -55,10 +57,12 @@ public class FileDefaultIncidentWebhookNotificationsWrapperImpl extends DefaultI
 //                        throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
                     if (deserializedSpec != null) {
-                        fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+                        IncidentWebhookNotificationsSpec cachedObjectInstance = deserializedSpec.deepClone();
+                        cachedObjectInstance.makeReadOnly(true);
+                        fileContent.setCachedObjectInstance(cachedObjectInstance);
                     }
                 } else {
-                    deserializedSpec = (IncidentWebhookNotificationsSpec) deserializedSpec.deepClone();
+                    deserializedSpec = this.isReadOnly() ? deserializedSpec : (IncidentWebhookNotificationsSpec) deserializedSpec.deepClone();
                 }
                 this.setSpec(deserializedSpec);
                 deserializedSpec.clearDirty(true);

@@ -40,7 +40,23 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
     @JsonIgnore
     private boolean dirty;
     @JsonIgnore
+    private boolean readOnly;
+    @JsonIgnore
     private final Object lock = new Object();
+
+    /**
+     * Creates a new, mutable list.
+     */
+    public AbstractIndexingList() {
+    }
+
+    /**
+     * Creates a new list, configuring the read-only status.
+     * @param readOnly Make the list read-only.
+     */
+    public AbstractIndexingList(boolean readOnly) {
+        this.readOnly = readOnly;
+    }
 
     /**
      * Finds an existing object given the object name.
@@ -119,6 +135,9 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
      */
     @Override
     public V set(int index, V element) {
+        if (this.readOnly) {
+            throw new ReadOnlyObjectModifiedException(this);
+        }
 		this.loadOnce();
         V old = this.list.get(index);
         K objectName = element.getObjectName();
@@ -143,6 +162,9 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
      */
     @Override
     public void add(int index, V element) {
+        if (this.readOnly) {
+            throw new ReadOnlyObjectModifiedException(this);
+        }
         K objectName = element.getObjectName();
         assert objectName != null;
         if (this.index.containsKey(objectName)) {
@@ -190,6 +212,10 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
         if (element.getStatus() != InstanceStatus.UNCHANGED) {
 			this.dirty = true;
         }
+
+        if (this.readOnly) {
+            element.makeReadOnly(true);
+        }
         return true;
     }
 
@@ -199,6 +225,9 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
      * @return Created object instance.
      */
     public V createAndAddNew(K key) {
+        if (this.readOnly) {
+            throw new ReadOnlyObjectModifiedException(this);
+        }
         V existingElement = this.getByObjectName(key, true);
         if (existingElement != null) {
             throw new DuplicateKeyException("Object with this name already exist");
@@ -225,6 +254,9 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
      */
     @Override
     public boolean remove(Object o) {
+        if (this.readOnly) {
+            throw new ReadOnlyObjectModifiedException(this);
+        }
         ObjectName<K> objectNameHolder = (ObjectName<K>)o;
         K objectName = objectNameHolder.getObjectName();
         V existingElement = getByObjectName(objectName, true);
@@ -244,6 +276,9 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
      */
     @Override
     public V remove(int index) {
+        if (this.readOnly) {
+            throw new ReadOnlyObjectModifiedException(this);
+        }
         V existing = this.list.get(index);
         K objectName = existing.getObjectName();
         this.index.remove(objectName);
@@ -368,6 +403,35 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
     }
 
     /**
+     * Check if the object is frozen (read only). A read-only object cannot be modified.
+     *
+     * @return True when the object is read-only and trying to apply a change will return an error.
+     */
+    @Override
+    @JsonIgnore
+    public boolean isReadOnly() {
+        return this.readOnly;
+    }
+
+    /**
+     * Sets the read-only flag on the current object, and optionally on child objects.
+     *
+     * @param propagateToChildren When true, makes also the child objects as read-only.
+     */
+    @Override
+    @JsonIgnore
+    public void makeReadOnly(boolean propagateToChildren) {
+        if (!this.readOnly) {
+            this.readOnly = true;
+            if (propagateToChildren) {
+                for (V element : this.list) {
+                    element.makeReadOnly(true);
+                }
+            }
+        }
+    }
+
+    /**
      * Performs a deep clone of the object.
      *
      * @return Deep clone of the object.
@@ -380,6 +444,7 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
             cloned.index = new LinkedHashMap<>();
             cloned.deleted = new ArrayList<>();
             cloned.dirty = false;
+            cloned.readOnly = false;
 
             if (this.list.size() == 0 && this.deleted.size() == 0) {
                 return cloned;

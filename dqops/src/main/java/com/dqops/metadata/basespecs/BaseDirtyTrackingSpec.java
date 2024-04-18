@@ -23,11 +23,16 @@ import lombok.ToString;
  * Base class for all specs in the tree. Provides basic dirty checking.
  */
 @EqualsAndHashCode(callSuper = false)
-public abstract class BaseDirtyTrackingSpec implements DirtyStatus {
+public abstract class BaseDirtyTrackingSpec implements DirtyStatus, ReadOnlyStatus {
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private boolean dirty;
+
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private boolean readOnly;
 
     /**
      * Check if the object is dirty (has changes).
@@ -50,7 +55,11 @@ public abstract class BaseDirtyTrackingSpec implements DirtyStatus {
      */
     @JsonIgnore
     public void setDirtyIf(boolean hasChanged) {
-        if(hasChanged) {
+        if (this.readOnly) {
+            throw new ReadOnlyObjectModifiedException(this);
+        }
+
+        if (hasChanged) {
 			this.dirty = true;
         }
     }
@@ -61,5 +70,37 @@ public abstract class BaseDirtyTrackingSpec implements DirtyStatus {
      */
     public void clearDirty(boolean propagateToChildren) {
 		this.dirty = false;
+    }
+
+    /**
+     * Check if the object is frozen (read only). A read-only object cannot be modified.
+     *
+     * @return True when the object is read-only and trying to apply a change will return an error.
+     */
+    @Override
+    @JsonIgnore
+    public boolean isReadOnly() {
+        return this.readOnly;
+    }
+
+    /**
+     * Sets the read-only flag on the current object, and optionally on child objects.
+     *
+     * @param propagateToChildren When true, makes also the child objects as read-only.
+     */
+    @Override
+    @JsonIgnore
+    public void makeReadOnly(boolean propagateToChildren) {
+        this.readOnly = true;
+    }
+
+    /**
+     * Creates and returns a copy of this object.
+     */
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        BaseDirtyTrackingSpec cloned = (BaseDirtyTrackingSpec) super.clone();
+        cloned.readOnly = false;
+        return cloned;
     }
 }

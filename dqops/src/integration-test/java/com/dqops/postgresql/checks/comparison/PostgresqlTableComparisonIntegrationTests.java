@@ -94,7 +94,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
         userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithEmptyTemporaryContext();
-        userHomeContext = userHomeContextFactory.openLocalUserHome(userDomainIdentity);
+        userHomeContext = userHomeContextFactory.openLocalUserHome(userDomainIdentity, false);
         UserHomeContextObjectMother.addSampleTable(userHomeContext, comparedSampleTable);
         UserHomeContextObjectMother.addSampleTable(userHomeContext, referenceSampleTable);
         userHome = userHomeContext.getUserHome();

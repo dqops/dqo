@@ -25,6 +25,10 @@ import java.util.List;
  * Collection of data dictionaries. Tracks the status of the child elements (addition, removal).
  */
 public class DictionaryListImpl extends AbstractIndexingList<String, DictionaryWrapper> implements DictionaryList {
+    public DictionaryListImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
     /**
      * Creates a new element given an object name. Derived classes should create a correct object type.
      *

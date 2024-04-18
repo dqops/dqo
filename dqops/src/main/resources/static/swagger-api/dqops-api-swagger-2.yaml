@@ -19514,6 +19514,67 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  ColumnInvalidEmailFormatPercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnPatternsInvalidEmailFormatPercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ empty strings in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
   ColumnInvalidIp4AddressFormatFoundCheckSpec:
     type: "object"
     properties:
@@ -23712,6 +23773,10 @@ definitions:
         description: "Verifies that the number of invalid emails in a text column\
           \ does not exceed the maximum accepted count."
         $ref: "#/definitions/ColumnInvalidEmailFormatFoundCheckSpec"
+      daily_invalid_email_format_percent:
+        description: "Verifies that the percentage of invalid emails in a text column\
+          \ does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/ColumnInvalidEmailFormatPercentCheckSpec"
       daily_text_not_matching_date_pattern_found:
         description: "Verifies that the number of texts not matching the date format\
           \ regular expression does not exceed the maximum accepted count."
@@ -23764,6 +23829,10 @@ definitions:
         description: "Verifies that the number of invalid emails in a text column\
           \ does not exceed the maximum accepted count."
         $ref: "#/definitions/ColumnInvalidEmailFormatFoundCheckSpec"
+      daily_partition_invalid_email_format_percent:
+        description: "Verifies that the percentage of invalid emails in a text column\
+          \ does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/ColumnInvalidEmailFormatPercentCheckSpec"
       daily_partition_text_not_matching_date_pattern_found:
         description: "Verifies that the number of texts not matching the date format\
           \ regular expression does not exceed the maximum accepted count."
@@ -23794,6 +23863,13 @@ definitions:
           \ column does not exceed the maximum accepted count."
         $ref: "#/definitions/ColumnInvalidIp6AddressFormatFoundCheckSpec"
   ColumnPatternsInvalidEmailFormatCountSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+  ColumnPatternsInvalidEmailFormatPercentSensorParametersSpec:
     type: "object"
     properties:
       filter:
@@ -23844,6 +23920,10 @@ definitions:
         description: "Verifies that the number of invalid emails in a text column\
           \ does not exceed the maximum accepted count."
         $ref: "#/definitions/ColumnInvalidEmailFormatFoundCheckSpec"
+      monthly_invalid_email_format_percent:
+        description: "Verifies that the percentage of invalid emails in a text column\
+          \ does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/ColumnInvalidEmailFormatPercentCheckSpec"
       monthly_text_not_matching_date_pattern_found:
         description: "Verifies that the number of texts not matching the date format\
           \ regular expression does not exceed the maximum accepted count."
@@ -23896,6 +23976,10 @@ definitions:
         description: "Verifies that the number of invalid emails in a text column\
           \ does not exceed the maximum accepted count."
         $ref: "#/definitions/ColumnInvalidEmailFormatFoundCheckSpec"
+      monthly_partition_invalid_email_format_percent:
+        description: "Verifies that the percentage of invalid emails in a text column\
+          \ does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/ColumnInvalidEmailFormatPercentCheckSpec"
       monthly_partition_text_not_matching_date_pattern_found:
         description: "Verifies that the number of texts not matching the date format\
           \ regular expression does not exceed the maximum accepted count."
@@ -23948,6 +24032,10 @@ definitions:
         description: "Verifies that the number of invalid emails in a text column\
           \ does not exceed the maximum accepted count."
         $ref: "#/definitions/ColumnInvalidEmailFormatFoundCheckSpec"
+      profile_invalid_email_format_percent:
+        description: "Verifies that the percentage of invalid emails in a text column\
+          \ does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/ColumnInvalidEmailFormatPercentCheckSpec"
       profile_text_not_matching_date_pattern_found:
         description: "Verifies that the number of texts not matching the date format\
           \ regular expression does not exceed the maximum accepted count."

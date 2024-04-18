@@ -437,7 +437,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      */
     public void applyDefaultConfigurationWhenMissing() {
         UserDomainIdentity rootDataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForCloudDomain(this.userConfigurationProperties.getDefaultDataDomain());
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(rootDataDomainAdminIdentity);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(rootDataDomainAdminIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
         LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
 

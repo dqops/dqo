@@ -178,7 +178,7 @@ public class TableStatusCacheImpl implements TableStatusCache {
                 TableCurrentDataQualityStatusFilterParameters.builder()
                     .connectionName(tableStatusKey.getConnectionName())
                     .physicalTableName(tableStatusKey.getPhysicalTableName())
-                    .lastMonths(3)
+                    .lastMonths(2)
                     .profiling(true)
                     .monitoring(true)
                     .partitioned(true)
@@ -214,11 +214,12 @@ public class TableStatusCacheImpl implements TableStatusCache {
         this.loadTableStatusRequestSink = Sinks.many().unicast().onBackpressureBuffer();
         Flux<List<CurrentTableStatusKey>> requestLoadFlux = this.loadTableStatusRequestSink.asFlux()
                 .onBackpressureBuffer(SUBSCRIBER_BACKPRESSURE_BUFFER_SIZE)
-                .buffer(Duration.ofMillis(10)); // wait 10 millis, maybe multiple file system updates are made, like changing multiple parquet files... we want to merge all file changes
-        this.subscription = requestLoadFlux.subscribeOn(Schedulers.parallel())
-                .parallel()
+                .buffer(Duration.ofMillis(50))  // wait 50 millis, maybe multiple file system updates are made, like changing multiple parquet files... we want to merge all file changes
+                .publishOn(Schedulers.parallel());
+        this.subscription = requestLoadFlux.parallel()
                 .flatMap(list -> Flux.fromIterable(list))
-                .subscribe(tableKey -> onRequestLoadTableStatus(tableKey));
+                .doOnNext(tableKey -> onRequestLoadTableStatus(tableKey))
+                .subscribe();
     }
 
     /**

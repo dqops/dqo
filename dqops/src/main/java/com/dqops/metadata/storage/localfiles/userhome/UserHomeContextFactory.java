@@ -24,7 +24,8 @@ public interface UserHomeContextFactory {
     /**
      * Opens a local home context, loads the files from the local file system.
      * @param userDomainIdentity User identity that identifies the user for whom we are opening the user home and the data domain for which we are opening the DQOps user home.
+     * @param readOnly Make the context read-only.
      * @return User home context with an active user home model that is backed by the local home file system.
      */
-    UserHomeContext openLocalUserHome(UserDomainIdentity userDomainIdentity);
+    UserHomeContext openLocalUserHome(UserDomainIdentity userDomainIdentity, boolean readOnly);
 }

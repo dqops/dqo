@@ -24,6 +24,10 @@ import java.util.List;
  * Collection of custom rule definitions. Tracks the status of the child elements (addition, removal).
  */
 public class RuleDefinitionListImpl extends AbstractIndexingList<String, RuleDefinitionWrapper> implements RuleDefinitionList {
+    public RuleDefinitionListImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
     /**
      * Creates a new element given an object name. Derived classes should create a correct object type.
      *

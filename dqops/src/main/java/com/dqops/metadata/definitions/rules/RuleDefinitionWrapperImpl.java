@@ -45,11 +45,20 @@ public class RuleDefinitionWrapperImpl extends AbstractElementWrapper<String, Ru
     }
 
     /**
+     * Create the rule definition wrapper in an optional read-only mode.
+     * @param readOnly Turn on read-only mode.
+     */
+    public RuleDefinitionWrapperImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
+    /**
      * Creates a rule definition wrapper given a rule name.
      * @param ruleName Rule name.
+     * @param readOnly Make the wrapper read-only.
      */
-    public RuleDefinitionWrapperImpl(String ruleName) {
-        this();
+    public RuleDefinitionWrapperImpl(String ruleName, boolean readOnly) {
+        this(readOnly);
         this.ruleName = ruleName;
     }
 

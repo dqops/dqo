@@ -65,7 +65,7 @@ public class FileWriterImpl implements FileWriter {
 	public CliOperationStatus writeStringToFile(String content) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 		DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), false);
 		Path userHomeFolderPath = userHomeContext.getHomeRoot().getPhysicalAbsolutePath();
 
 		boolean response = this.terminalFactory.getReader().promptBoolean("Do you want to use default file name?", true);

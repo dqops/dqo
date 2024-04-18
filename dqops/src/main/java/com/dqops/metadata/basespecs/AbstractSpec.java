@@ -258,6 +258,23 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
     }
 
     /**
+     * Sets the read-only flag on the current object, and optionally on child objects.
+     *
+     * @param propagateToChildren When true, makes also the child objects as read-only.
+     */
+    @Override
+    public void makeReadOnly(boolean propagateToChildren) {
+        if (!this.isReadOnly()) {
+            super.makeReadOnly(propagateToChildren);
+            if (propagateToChildren) {
+                for (HierarchyNode child : this.children()) {
+                    child.makeReadOnly(true);
+                }
+            }
+        }
+    }
+
+    /**
      * Checks if the object is a default value, so it would be rendered as an empty node. We want to skip it and not render it to YAML.
      * The implementation of this interface method should check all object's fields to find if at least one of them has a non-default value or is not null, so it should be rendered.
      *

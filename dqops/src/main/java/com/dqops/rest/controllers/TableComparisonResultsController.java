@@ -86,7 +86,7 @@ public class TableComparisonResultsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -143,7 +143,7 @@ public class TableComparisonResultsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -200,7 +200,7 @@ public class TableComparisonResultsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();

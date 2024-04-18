@@ -47,7 +47,7 @@ public class DqoHomeContextFactoryImpl implements DqoHomeContextFactory {
     public DqoHomeContext openLocalDqoHome() {
         synchronized (this) {
             if (this.sharedDqoHomeContext == null) {
-                this.sharedDqoHomeContext = loadNewLocalDqoHome();
+                this.sharedDqoHomeContext = loadNewLocalDqoHome(false);
             }
 
             return this.sharedDqoHomeContext;
@@ -56,12 +56,13 @@ public class DqoHomeContextFactoryImpl implements DqoHomeContextFactory {
 
     /**
      * Loads a new DQOps user home context, accessing the files again.
+     * @param readOnly Open the user home in read-only mode.
      * @return New instance of a DQOps home context with an active DQO_HOME home model that is backed by the local home file system.
      */
-    public DqoHomeContext loadNewLocalDqoHome() {
+    public DqoHomeContext loadNewLocalDqoHome(boolean readOnly) {
         LocalFolderTreeNode homeRoot = this.localFileSystemFactory.openLocalDqoHome();
         DqoHomeContext dqoHomeContext = new DqoHomeContext(homeRoot);
-        FileDqoHomeImpl fileDqoHomeModel = FileDqoHomeImpl.create(dqoHomeContext, this.yamlSerializer);
+        FileDqoHomeImpl fileDqoHomeModel = FileDqoHomeImpl.create(dqoHomeContext, this.yamlSerializer, readOnly);
         dqoHomeContext.setDqoHome(fileDqoHomeModel);
         return dqoHomeContext;
     }

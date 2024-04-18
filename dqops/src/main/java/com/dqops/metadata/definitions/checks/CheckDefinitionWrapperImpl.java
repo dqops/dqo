@@ -41,12 +41,17 @@ public class CheckDefinitionWrapperImpl extends AbstractElementWrapper<String, C
     public CheckDefinitionWrapperImpl() {
     }
 
+    public CheckDefinitionWrapperImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
     /**
      * Creates a check definition wrapper given a check name.
      * @param checkName Check name.
+     * @param readOnly Make the wrapper read-only.
      */
-    public CheckDefinitionWrapperImpl(String checkName) {
-        this();
+    public CheckDefinitionWrapperImpl(String checkName, boolean readOnly) {
+        this(readOnly);
         this.checkName = checkName;
     }
 

@@ -110,7 +110,7 @@ public class GenerateDocumentationPostProcessor {
             HandlebarsDocumentationUtilities.configure(projectDir);
 
             Path dqoHomePath = projectDir.resolve("../home").toAbsolutePath().normalize();
-            DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
+            DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath, true);
             LinkageStore<Class<?>> linkageStore = new LinkageStore<>();
 
             pythonCaller = createPythonCaller(projectDir);

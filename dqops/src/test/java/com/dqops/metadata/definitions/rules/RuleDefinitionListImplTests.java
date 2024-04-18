@@ -30,7 +30,7 @@ public class RuleDefinitionListImplTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-		this.sut = new RuleDefinitionListImpl();
+		this.sut = new RuleDefinitionListImpl(false);
     }
 
     @Test

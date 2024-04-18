@@ -27,7 +27,7 @@ public class DqoHomeDirectFactoryTests extends BaseTest {
     @Test
     void openDqoHome_whenPathToHomeGiven_thenOpensDqoHome() {
         Path dqoHomePath = Path.of(System.getenv("DQO_HOME"));
-        DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
+        DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath, false);
         Assertions.assertNotNull(dqoHomeContext);
         Assertions.assertTrue(dqoHomeContext.getDqoHome().getSensors().size() > 10);
     }

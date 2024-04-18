@@ -21,6 +21,7 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
+import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapperImpl;
@@ -48,9 +49,14 @@ public class FileTableDefaultChecksPatternWrapperImpl extends TableDefaultChecks
      * @param patternName Full pattern name as used to store in the database.
      * @param patternFileNameBaseName Pattern file module name. This is the default checks specification file name inside the defaults folder without the .dqotablepattern.yaml extension.
      * @param yamlSerializer Yaml serializer.
+     * @param readOnly Make the wrapper read-only.
      */
-    public FileTableDefaultChecksPatternWrapperImpl(FolderTreeNode defaultsFolderNode, String patternName, String patternFileNameBaseName, YamlSerializer yamlSerializer) {
-        super(patternName);
+    public FileTableDefaultChecksPatternWrapperImpl(FolderTreeNode defaultsFolderNode,
+                                                    String patternName,
+                                                    String patternFileNameBaseName,
+                                                    YamlSerializer yamlSerializer,
+                                                    boolean readOnly) {
+        super(patternName, readOnly);
         this.defaultsFolderNode = defaultsFolderNode;
         this.patternFileNameBaseName = patternFileNameBaseName;
         this.yamlSerializer = yamlSerializer;
@@ -102,9 +108,11 @@ public class FileTableDefaultChecksPatternWrapperImpl extends TableDefaultChecks
                         throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
 
-                    fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+                    AbstractSpec cachedObjectInstance = deserializedSpec.deepClone();
+                    cachedObjectInstance.makeReadOnly(true);
+                    fileContent.setCachedObjectInstance(cachedObjectInstance);
                 } else {
-                    deserializedSpec = (TableDefaultChecksPatternSpec) deserializedSpec.deepClone();
+                    deserializedSpec = this.isReadOnly() ? deserializedSpec : (TableDefaultChecksPatternSpec) deserializedSpec.deepClone();
                 }
 				this.setSpec(deserializedSpec);
 				this.clearDirty(true);

@@ -36,9 +36,10 @@ public class FileSharedCredentialWrapperImpl extends SharedCredentialWrapperImpl
      * Creates a credential file wrapper that is file based.
      * @param credentialsFolderNode Credentials (.credentials) folder to store credentials files.
      * @param credentialName Credential file name.
+     * @param readOnly Make the wrapper read-only.
      */
-    public FileSharedCredentialWrapperImpl(FolderTreeNode credentialsFolderNode, String credentialName) {
-        super(credentialName);
+    public FileSharedCredentialWrapperImpl(FolderTreeNode credentialsFolderNode, String credentialName, boolean readOnly) {
+        super(credentialName, readOnly);
         this.credentialsFolderNode = credentialsFolderNode;
     }
 

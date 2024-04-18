@@ -26,7 +26,8 @@ import java.util.Objects;
 /**
  * Table-level default checks pattern spec wrapper.
  */
-public class TableDefaultChecksPatternWrapperImpl extends AbstractElementWrapper<String, TableDefaultChecksPatternSpec> implements TableDefaultChecksPatternWrapper {
+public class TableDefaultChecksPatternWrapperImpl extends AbstractElementWrapper<String, TableDefaultChecksPatternSpec>
+        implements TableDefaultChecksPatternWrapper {
     private static final ChildHierarchyNodeFieldMapImpl<TableDefaultChecksPatternWrapperImpl> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractElementWrapper.FIELDS) {
         {
         }
@@ -42,11 +43,20 @@ public class TableDefaultChecksPatternWrapperImpl extends AbstractElementWrapper
     }
 
     /**
+     * Create a default check configuration pattern wrapper in read-only mode.
+     * @param readOnly Make the wrapper read-only.
+     */
+    public TableDefaultChecksPatternWrapperImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
+    /**
      * Creates a default checks pattern wrapper given a pattern name.
      * @param patternName Pattern name.
+     * @param readOnly Make the wrapper read-only.
      */
-    public TableDefaultChecksPatternWrapperImpl(String patternName) {
-        this();
+    public TableDefaultChecksPatternWrapperImpl(String patternName, boolean readOnly) {
+        this(readOnly);
         this.patternName = patternName;
     }
 

@@ -24,6 +24,13 @@ import java.util.List;
  * Data source collection. Tracks the status of the child elements (addition, removal).
  */
 public class FileIndexListImpl extends AbstractIndexingList<FileIndexName, FileIndexWrapper> implements FileIndexList {
+    public FileIndexListImpl() {
+    }
+
+    public FileIndexListImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
     /**
      * Creates a new element given an object name. Derived classes should create a correct object type.
      *

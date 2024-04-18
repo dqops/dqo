@@ -44,12 +44,17 @@ public class SharedCredentialWrapperImpl extends AbstractPojoElementWrapper<Stri
     public SharedCredentialWrapperImpl() {
     }
 
+    public SharedCredentialWrapperImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
     /**
      * Creates a shared credential wrapper given a credential name.
      * @param credentialName Credential name.
+     * @param readOnly Make the wrapper read-only.
      */
-    public SharedCredentialWrapperImpl(String credentialName) {
-        this();
+    public SharedCredentialWrapperImpl(String credentialName, boolean readOnly) {
+        this(readOnly);
         this.credentialName = credentialName;
     }
 

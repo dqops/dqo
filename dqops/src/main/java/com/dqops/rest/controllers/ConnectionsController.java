@@ -103,7 +103,7 @@ public class ConnectionsController {
     })
     @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<ConnectionModel>> getAllConnections(@AuthenticationPrincipal DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -136,7 +136,7 @@ public class ConnectionsController {
     public ResponseEntity<Mono<ConnectionSpecificationModel>> getConnection(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -177,7 +177,7 @@ public class ConnectionsController {
     public ResponseEntity<Mono<ConnectionModel>> getConnectionBasic(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -217,7 +217,7 @@ public class ConnectionsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -257,7 +257,7 @@ public class ConnectionsController {
     public ResponseEntity<Mono<CommentsListSpec>> getConnectionComments(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -292,7 +292,7 @@ public class ConnectionsController {
     public ResponseEntity<Mono<LabelSetSpec>> getConnectionLabels(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -328,7 +328,7 @@ public class ConnectionsController {
     public ResponseEntity<Mono<DataGroupingConfigurationSpec>> getConnectionDefaultGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -364,7 +364,7 @@ public class ConnectionsController {
     public ResponseEntity<Mono<ConnectionIncidentGroupingSpec>> getConnectionIncidentGrouping(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -400,7 +400,7 @@ public class ConnectionsController {
     public ResponseEntity<Flux<CommonColumnModel>> getConnectionCommonColumns(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -459,7 +459,7 @@ public class ConnectionsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -507,7 +507,7 @@ public class ConnectionsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -553,7 +553,7 @@ public class ConnectionsController {
             @ApiParam("Connection specification") @RequestBody ConnectionSpec connectionSpec) {
         return this.lockService.callSynchronouslyOnConnection(connectionName,
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     UserHome userHome = userHomeContext.getUserHome();
 
                     ConnectionList connections = userHome.getConnections();
@@ -599,7 +599,7 @@ public class ConnectionsController {
 
         return this.lockService.callSynchronouslyOnConnection(connectionName,
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     UserHome userHome = userHomeContext.getUserHome();
 
                     ConnectionList connections = userHome.getConnections();
@@ -646,7 +646,7 @@ public class ConnectionsController {
             @ApiParam("Monitoring schedule definition to store") @RequestBody MonitoringScheduleSpec monitoringScheduleSpec) {
         return this.lockService.callSynchronouslyOnConnection(connectionName,
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     UserHome userHome = userHomeContext.getUserHome();
 
                     ConnectionList connections = userHome.getConnections();
@@ -724,7 +724,7 @@ public class ConnectionsController {
             @ApiParam("List of labels") @RequestBody LabelSetSpec labelSetSpec) {
         return this.lockService.callSynchronouslyOnConnection(connectionName,
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     UserHome userHome = userHomeContext.getUserHome();
 
                     ConnectionList connections = userHome.getConnections();
@@ -765,7 +765,7 @@ public class ConnectionsController {
             @ApiParam("List of comments") @RequestBody CommentsListSpec commentsListSpec) {
         return this.lockService.callSynchronouslyOnConnection(connectionName,
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     UserHome userHome = userHomeContext.getUserHome();
 
                     ConnectionList connections = userHome.getConnections();
@@ -807,7 +807,7 @@ public class ConnectionsController {
                 @RequestBody DataGroupingConfigurationSpec dataGroupingConfigurationSpec) {
         return this.lockService.callSynchronouslyOnConnection(connectionName,
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     UserHome userHome = userHomeContext.getUserHome();
 
                     ConnectionList connections = userHome.getConnections();
@@ -849,7 +849,7 @@ public class ConnectionsController {
             @ApiParam("Incident grouping and notification configuration") @RequestBody ConnectionIncidentGroupingSpec incidentGroupingSpec) {
         return this.lockService.callSynchronouslyOnConnection(connectionName,
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     UserHome userHome = userHomeContext.getUserHome();
 
                     ConnectionList connections = userHome.getConnections();
@@ -898,7 +898,7 @@ public class ConnectionsController {
 
         return this.lockService.callSynchronouslyOnConnection(connectionName,
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     UserHome userHome = userHomeContext.getUserHome();
 
                     ConnectionList connections = userHome.getConnections();
@@ -943,7 +943,7 @@ public class ConnectionsController {
             @RequestBody BulkCheckDeactivateParameters bulkDeactivateParameters) {
         return this.lockService.callSynchronouslyOnConnection(connectionName,
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     UserHome userHome = userHomeContext.getUserHome();
 
                     ConnectionList connections = userHome.getConnections();
@@ -982,7 +982,7 @@ public class ConnectionsController {
             @ApiParam("Connection name") @PathVariable String connectionName) {
         return this.lockService.callSynchronouslyOnConnection(connectionName,
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     UserHome userHome = userHomeContext.getUserHome();
 
                     ConnectionList connections = userHome.getConnections();

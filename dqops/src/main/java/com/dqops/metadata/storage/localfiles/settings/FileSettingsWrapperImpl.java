@@ -40,8 +40,10 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 	 * Creates a settings wrapper for a settings specification that uses yaml files for storage.
 	 * @param settingsFolderNode Folder with yaml files for settings specifications.
 	 * @param yamlSerializer Yaml serializer.
+	 * @param readOnly Make the wrapper read-only.
 	 */
-	public FileSettingsWrapperImpl(FolderTreeNode settingsFolderNode, YamlSerializer yamlSerializer) {
+	public FileSettingsWrapperImpl(FolderTreeNode settingsFolderNode, YamlSerializer yamlSerializer, boolean readOnly) {
+		super(readOnly);
 		this.settingsFolderNode = settingsFolderNode;
 		this.yamlSerializer = yamlSerializer;
 	}
@@ -67,10 +69,12 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 						throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
 					}
 					if (deserializedSpec != null) {
-						fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+						LocalSettingsSpec cachedObjectInstance = deserializedSpec.deepClone();
+						cachedObjectInstance.makeReadOnly(true);
+						fileContent.setCachedObjectInstance(cachedObjectInstance);
 					}
 				} else {
-					deserializedSpec = deserializedSpec.deepClone();
+					deserializedSpec = this.isReadOnly() ? deserializedSpec : deserializedSpec.deepClone();
 				}
 				this.setSpec(deserializedSpec);
 				deserializedSpec.clearDirty(true);

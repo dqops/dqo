@@ -119,7 +119,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         this.sut = new TablesController(tableService, this.userHomeContextFactory, dqoHomeContextFactory, specToUiCheckMappingService,
                 uiToSpecCheckMappingService, statisticsDataService, defaultObservabilityConfigurationService, new RestApiLockServiceImpl(), null);
-        this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
     }
 

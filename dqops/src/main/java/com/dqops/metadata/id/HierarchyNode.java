@@ -16,11 +16,12 @@
 package com.dqops.metadata.id;
 
 import com.dqops.metadata.basespecs.DirtyStatus;
+import com.dqops.metadata.basespecs.ReadOnlyStatus;
 
 /**
  * Interface implemented by objects that are represented on the hierarchy ID tree.
  */
-public interface HierarchyNode extends DirtyStatus {
+public interface HierarchyNode extends DirtyStatus, ReadOnlyStatus {
     /**
      * Retrieves a child node given an expected object type that we want to extract.
      * Returns a child that has the class type as expected or is a subclass of the expected type.

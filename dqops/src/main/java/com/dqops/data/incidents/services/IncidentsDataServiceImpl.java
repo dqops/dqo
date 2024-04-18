@@ -320,7 +320,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
      */
     @Override
     public Collection<IncidentsPerConnectionModel> findConnectionIncidentStats(UserDomainIdentity userDomainIdentity) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userDomainIdentity);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userDomainIdentity, true);
         ConnectionList connectionList = userHomeContext.getUserHome().getConnections();
         List<ConnectionWrapper> connectionWrappers = connectionList.toList();
 

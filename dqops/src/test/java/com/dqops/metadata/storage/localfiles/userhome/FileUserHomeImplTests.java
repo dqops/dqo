@@ -27,7 +27,7 @@ public class FileUserHomeImplTests extends BaseTest {
     @Test
     void create_whenCalledWithInMemoryFileSystem_thenReturnsModel() {
         FileUserHomeImpl sut = FileUserHomeImpl.create(UserHomeContextObjectMother.createInMemoryFileHomeContext(),
-                YamlSerializerObjectMother.createNew(), JsonSerializerObjectMother.createNew());
+                YamlSerializerObjectMother.createNew(), JsonSerializerObjectMother.createNew(), false);
         Assertions.assertNotNull(sut);
         Assertions.assertNotNull(sut.getConnections());
     }

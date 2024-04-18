@@ -42,11 +42,20 @@ public class TableWrapperImpl extends AbstractElementWrapper<PhysicalTableName, 
     }
 
     /**
+     * Creates a new table wrapper, configuring the read-only mode.
+     * @param readOnly The instance is in read only mode.
+     */
+    public TableWrapperImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
+    /**
      * Creates a new table wrapper given a table file name.
      * @param physicalTableName Physical table name that is converted to a file name used to store the table specification.
+     * @param readOnly Make the wrapper read-only.
      */
-    public TableWrapperImpl(PhysicalTableName physicalTableName) {
-        this();
+    public TableWrapperImpl(PhysicalTableName physicalTableName, boolean readOnly) {
+        this(readOnly);
         this.physicalTableName = physicalTableName;
     }
 

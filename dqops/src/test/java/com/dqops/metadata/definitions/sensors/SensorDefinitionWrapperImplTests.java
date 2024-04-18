@@ -40,7 +40,7 @@ public class SensorDefinitionWrapperImplTests extends BaseTest {
 
     @Test
     void setProviderChecks_whenSet_returnProviderChecks() {
-        ProviderSensorDefinitionListImpl providerCheckList = new ProviderSensorDefinitionListImpl();
+        ProviderSensorDefinitionListImpl providerCheckList = new ProviderSensorDefinitionListImpl(false);
 		this.sut.setProviderSensors(providerCheckList);
         Assertions.assertEquals(providerCheckList, this.sut.getProviderSensors());
     }

@@ -89,7 +89,7 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
 
     @Test
     void traverseHierarchyNodeTree_whenTraversingDeepStructures_thenReturnsDeepObjects() {
-        ConnectionWrapperImpl connectionWrapper = new ConnectionWrapperImpl("conn");
+        ConnectionWrapperImpl connectionWrapper = new ConnectionWrapperImpl("conn", false);
         TableList tables = connectionWrapper.getTables();
         TableWrapper table1 = tables.createAndAddNew(new PhysicalTableName("s1", "tab1"));
         TableWrapper table2 = tables.createAndAddNew(new PhysicalTableName("s2", "tab2"));

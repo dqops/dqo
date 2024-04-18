@@ -48,9 +48,14 @@ public class FileCheckDefinitionWrapperImpl extends CheckDefinitionWrapperImpl {
      * @param checkName Full check name as used to store in the database.
      * @param checkFileNameBaseName Check module name. This is the check specification file name inside the checks folder without the .dqocheck.yaml extension.
      * @param yamlSerializer Yaml serializer.
+     * @param readOnly Make the wrapper read-only.
      */
-    public FileCheckDefinitionWrapperImpl(FolderTreeNode customCheckFolderNode, String checkName, String checkFileNameBaseName, YamlSerializer yamlSerializer) {
-        super(checkName);
+    public FileCheckDefinitionWrapperImpl(FolderTreeNode customCheckFolderNode,
+                                          String checkName,
+                                          String checkFileNameBaseName,
+                                          YamlSerializer yamlSerializer,
+                                          boolean readOnly) {
+        super(checkName, readOnly);
         this.customCheckFolderNode = customCheckFolderNode;
         this.checkFileNameBaseName = checkFileNameBaseName;
         this.yamlSerializer = yamlSerializer;
@@ -102,9 +107,11 @@ public class FileCheckDefinitionWrapperImpl extends CheckDefinitionWrapperImpl {
                         throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
 
-                    fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+                    CheckDefinitionSpec cachedObjectInstance = deserializedSpec.deepClone();
+                    cachedObjectInstance.makeReadOnly(true);
+                    fileContent.setCachedObjectInstance(cachedObjectInstance);
                 } else {
-                    deserializedSpec = deserializedSpec.deepClone();
+                    deserializedSpec = this.isReadOnly() ? deserializedSpec : deserializedSpec.deepClone();
                 }
 				this.setSpec(deserializedSpec);
 				this.clearDirty(true);

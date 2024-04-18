@@ -91,7 +91,7 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
      */
     @Override
     public boolean detectNotSynchronizedChangesInFolder(DqoRoot dqoRoot, UserDomainIdentity userDomainIdentity) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userDomainIdentity);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userDomainIdentity, true);
         UserHome userHome = userHomeContext.getUserHome();
 
         FileIndexName localIndexName = new FileIndexName(dqoRoot, FileLocation.LOCAL);

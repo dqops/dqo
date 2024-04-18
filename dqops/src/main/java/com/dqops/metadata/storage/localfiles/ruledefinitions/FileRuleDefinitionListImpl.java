@@ -38,8 +38,10 @@ public class FileRuleDefinitionListImpl extends RuleDefinitionListImpl {
      * Creates a rule definition collection using a given rules folder.
      * @param rulesFolder Rules folder node.
      * @param yamlSerializer  Yaml serializer.
+     * @param readOnly Make the list read-only.
      */
-    public FileRuleDefinitionListImpl(FolderTreeNode rulesFolder, YamlSerializer yamlSerializer) {
+    public FileRuleDefinitionListImpl(FolderTreeNode rulesFolder, YamlSerializer yamlSerializer, boolean readOnly) {
+        super(readOnly);
         this.rulesFolder = rulesFolder;
         this.yamlSerializer = yamlSerializer;
     }
@@ -75,7 +77,7 @@ public class FileRuleDefinitionListImpl extends RuleDefinitionListImpl {
                 if (this.getByObjectName(ruleName, false) != null) {
                     continue; // was already added
                 }
-				this.addWithoutFullLoad(new FileRuleDefinitionWrapperImpl(ruleSpecFolderNode, ruleName, ruleModuleName, this.yamlSerializer));
+				this.addWithoutFullLoad(new FileRuleDefinitionWrapperImpl(ruleSpecFolderNode, ruleName, ruleModuleName, this.yamlSerializer, this.isReadOnly()));
             }
         }
 
@@ -118,7 +120,7 @@ public class FileRuleDefinitionListImpl extends RuleDefinitionListImpl {
         }
         FolderTreeNode ruleParentFolderNode = this.rulesFolder.getOrAddFolderPath(ruleFolderPath);
         FileRuleDefinitionWrapperImpl ruleModelWrapper =
-                new FileRuleDefinitionWrapperImpl(ruleParentFolderNode, ruleName, ruleModuleName, this.yamlSerializer);
+                new FileRuleDefinitionWrapperImpl(ruleParentFolderNode, ruleName, ruleModuleName, this.yamlSerializer, this.isReadOnly());
         ruleModelWrapper.setSpec(new RuleDefinitionSpec());
         return ruleModelWrapper;
     }

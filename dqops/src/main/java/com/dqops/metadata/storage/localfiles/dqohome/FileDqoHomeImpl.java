@@ -38,8 +38,9 @@ public class FileDqoHomeImpl extends DqoHomeImpl {
                            FileRuleDefinitionListImpl rules,
                            FileCheckDefinitionListImpl checks,
                            FileDashboardFolderListSpecWrapperImpl dashboards,
-                           DqoHomeContext dqoHomeContext) {
-        super(sensors, rules, checks, dashboards);
+                           DqoHomeContext dqoHomeContext,
+                           boolean readOnly) {
+        super(sensors, rules, checks, dashboards, readOnly);
         this.dqoHomeContext = dqoHomeContext;
 		this.homeFolder = dqoHomeContext.getHomeRoot(); // just a convenience
     }
@@ -47,19 +48,21 @@ public class FileDqoHomeImpl extends DqoHomeImpl {
     /**
      * Creates a file based user home.
      * @param dqoHomeContext Dqo home context.
+     * @param yamlSerializer YAML serializer.
+     * @param readOnly Open the home in read-only mode.
      * @return File based user home.
      */
-    public static FileDqoHomeImpl create(DqoHomeContext dqoHomeContext, YamlSerializer yamlSerializer) {
+    public static FileDqoHomeImpl create(DqoHomeContext dqoHomeContext, YamlSerializer yamlSerializer, boolean readOnly) {
         FolderTreeNode sensorsFolder = dqoHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.SENSORS);
         FolderTreeNode rulesFolder = dqoHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.RULES);
         FolderTreeNode checksFolder = dqoHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.CHECKS);
         FolderTreeNode settingsFolder = dqoHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.SETTINGS);
-        FileSensorDefinitionListImpl sensors = new FileSensorDefinitionListImpl(sensorsFolder, yamlSerializer);
-        FileRuleDefinitionListImpl rules = new FileRuleDefinitionListImpl(rulesFolder, yamlSerializer);
-        FileCheckDefinitionListImpl checks = new FileCheckDefinitionListImpl(checksFolder, yamlSerializer);
-        FileDashboardFolderListSpecWrapperImpl dashboards = new FileDashboardFolderListSpecWrapperImpl(settingsFolder, yamlSerializer);
+        FileSensorDefinitionListImpl sensors = new FileSensorDefinitionListImpl(sensorsFolder, yamlSerializer, readOnly);
+        FileRuleDefinitionListImpl rules = new FileRuleDefinitionListImpl(rulesFolder, yamlSerializer, readOnly);
+        FileCheckDefinitionListImpl checks = new FileCheckDefinitionListImpl(checksFolder, yamlSerializer, readOnly);
+        FileDashboardFolderListSpecWrapperImpl dashboards = new FileDashboardFolderListSpecWrapperImpl(settingsFolder, yamlSerializer, readOnly);
 
-        return new FileDqoHomeImpl(sensors, rules, checks, dashboards, dqoHomeContext);
+        return new FileDqoHomeImpl(sensors, rules, checks, dashboards, dqoHomeContext, readOnly);
     }
 
     /**

@@ -189,7 +189,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      */
     @Override
     public List<CheckCategoryDocumentationModel> makeDocumentationForTableChecks() {
-        UserHomeImpl userHome = new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
+        UserHomeImpl userHome = new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY, false);
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("<target_connection>");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
         TableSpec tableSpec = createTableSpec(false);
@@ -210,7 +210,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      */
     @Override
     public List<CheckCategoryDocumentationModel> makeDocumentationForColumnChecks() {
-        UserHomeImpl userHome = new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
+        UserHomeImpl userHome = new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY, false);
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("<target_connection>");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
         TableSpec tableSpec = createTableSpec(true);

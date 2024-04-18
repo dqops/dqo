@@ -45,6 +45,22 @@ public abstract class AbstractElementWrapper<K, V extends DirtyStatus & Hierarch
     private InstanceStatus status = InstanceStatus.NOT_TOUCHED;
 
     /**
+     * Makes an element wrapper that is mutable.
+     */
+    public AbstractElementWrapper() {
+    }
+
+    /**
+     * Creates a new instance of the object. Makes the instance read-only on load if the <code>readOnly</code> is true.
+     * @param readOnly Make the wrapper read-only on load.
+     */
+    public AbstractElementWrapper(boolean readOnly) {
+        if (readOnly) {
+            this.makeReadOnly(false);
+        }
+    }
+
+    /**
      * Returns an object name that is used for indexing. The object name must correctly implement equals and hashCode.
      *
      * @return Object name;

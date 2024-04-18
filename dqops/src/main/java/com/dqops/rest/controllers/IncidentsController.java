@@ -409,7 +409,7 @@ public class IncidentsController {
             @ApiParam("Incident id") @PathVariable String incidentId,
             @ApiParam(name = "status", value = "New incident status, supported values: open, acknowledged, resolved, muted")
                 @RequestParam IncidentStatus status) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();

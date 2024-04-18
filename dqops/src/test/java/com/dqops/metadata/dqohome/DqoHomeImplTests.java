@@ -27,7 +27,7 @@ public class DqoHomeImplTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-		this.sut = new DqoHomeImpl();
+		this.sut = new DqoHomeImpl(false);
     }
 
     @Test

@@ -36,20 +36,27 @@ public class SensorDefinitionWrapperImpl extends AbstractElementWrapper<String, 
     @JsonIgnore
     private String name;
     @JsonIgnore
-    private ProviderSensorDefinitionListImpl providerSensors = new ProviderSensorDefinitionListImpl();
+    protected ProviderSensorDefinitionListImpl providerSensors;
 
     /**
      * Creates a default sensor definition wrapper.
      */
     public SensorDefinitionWrapperImpl() {
+        this.providerSensors = new ProviderSensorDefinitionListImpl(false);
+    }
+
+    public SensorDefinitionWrapperImpl(boolean readOnly) {
+        super(readOnly);
+        this.providerSensors = new ProviderSensorDefinitionListImpl(readOnly);
     }
 
     /**
      * Creates a sensor definition wrapper given the sensor name.
      * @param name Sensor name.
+     * @param readOnly Make the wrapper read-only.
      */
-    public SensorDefinitionWrapperImpl(String name) {
-        this();
+    public SensorDefinitionWrapperImpl(String name, boolean readOnly) {
+        this(readOnly);
         this.name = name;
     }
 
@@ -95,7 +102,7 @@ public class SensorDefinitionWrapperImpl extends AbstractElementWrapper<String, 
      * @param providerSensors New provider sensor collection.
      */
     public void setProviderSensors(ProviderSensorDefinitionListImpl providerSensors) {
-		this.setDirtyIf(this.providerSensors != providerSensors);    // this is a special case, we are not making the object modified
+		this.setDirtyIf(this.providerSensors != null && this.providerSensors != providerSensors);    // this is a special case, we are not making the object modified
         this.providerSensors = providerSensors;
         if (providerSensors != null && this.getHierarchyId() != null) {
 			this.propagateHierarchyIdToField(providerSensors, "provider_sensors");

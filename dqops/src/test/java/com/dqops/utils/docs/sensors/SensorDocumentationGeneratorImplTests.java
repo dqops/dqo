@@ -50,7 +50,7 @@ public class SensorDocumentationGeneratorImplTests extends BaseTest {
         this.projectRootPath = Path.of(".");
         HandlebarsDocumentationUtilities.configure(this.projectRootPath);
         Path dqoHomePath = Path.of(System.getenv("DQO_HOME"));
-        DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
+        DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath, true);
         this.dqoHome = dqoHomeContext.getDqoHome();
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());

@@ -98,7 +98,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         this.sut = new ColumnsController(columnService, this.userHomeContextFactory, dqoHomeContextFactory, specToUiCheckMappingService,
                 uiToSpecCheckMappingService, null, new DefaultObservabilityConfigurationServiceImpl(ConnectionProviderRegistryObjectMother.getInstance()),
                 new RestApiLockServiceImpl());
-        this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
     }
 

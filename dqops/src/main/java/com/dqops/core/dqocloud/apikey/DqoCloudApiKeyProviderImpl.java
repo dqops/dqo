@@ -98,7 +98,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
             }
 
             UserDomainIdentity userIdentityForRootHome = userIdentity != null ? userIdentity : UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY;
-            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentityForRootHome);
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentityForRootHome, true);
             SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
             LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
             boolean cloudSyncDisabledInSettings = localSettingsSpec != null && localSettingsSpec.isDisableCloudSync();
@@ -144,7 +144,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     @Override
     public boolean isCloudSynchronizationDisabled(UserDomainIdentity userIdentity) {
         UserDomainIdentity userIdentityForRootHome = userIdentity != null ? userIdentity : UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY;
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentityForRootHome);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentityForRootHome, true);
         SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
         LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
         boolean cloudSyncDisabledInSettings = localSettingsSpec != null && localSettingsSpec.isDisableCloudSync();

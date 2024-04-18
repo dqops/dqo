@@ -26,6 +26,6 @@ public class UserHomeObjectMother {
      * @return Bare, empty user home.
      */
     public static UserHomeImpl createBareUserHome() {
-        return new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
+        return new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY, false);
     }
 }

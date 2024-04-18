@@ -85,7 +85,7 @@ public class UserHomeContextCacheImpl implements UserHomeContextCache {
         String currentRootMountedDataDomain = this.cliCurrentDataDomainService.getCurrentDataDomain();
         UserDomainIdentity dataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForCloudDomain(currentRootMountedDataDomain);
 
-        UserHomeContext cachedUserHomeContext = this.userHomeContextFactory.openLocalUserHome(dataDomainAdminIdentity);
+        UserHomeContext cachedUserHomeContext = this.userHomeContextFactory.openLocalUserHome(dataDomainAdminIdentity, true);
         this.cachedUserHomeContext = cachedUserHomeContext;
         this.cachedAt = Instant.now();
 

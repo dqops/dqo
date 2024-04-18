@@ -43,6 +43,22 @@ public abstract class AbstractPojoElementWrapper<K, V> extends AbstractSpec
     private InstanceStatus status = InstanceStatus.NOT_TOUCHED;
 
     /**
+     * Creates a default element wrapper that is mutable.
+     */
+    public AbstractPojoElementWrapper() {
+    }
+
+    /**
+     * Create a new element wrapper, configuring if it is read-only.
+     * @param readOnly Make the element read-only.
+     */
+    public AbstractPojoElementWrapper(boolean readOnly) {
+        if (readOnly) {
+            this.makeReadOnly(false);
+        }
+    }
+
+    /**
      * Returns an object name that is used for indexing. The object name must correctly implement equals and hashCode.
      *
      * @return Object name;
@@ -116,8 +132,8 @@ public abstract class AbstractPojoElementWrapper<K, V> extends AbstractSpec
         }
 
         if (this.status == InstanceStatus.UNCHANGED || this.status == InstanceStatus.NOT_TOUCHED || this.status == InstanceStatus.LOAD_IN_PROGRESS) {
-			this.status = InstanceStatus.MODIFIED;
 			this.setDirty();
+            this.status = InstanceStatus.MODIFIED;
         }
     }
 

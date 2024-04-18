@@ -43,12 +43,13 @@ public class FileSensorDefinitionWrapperImpl extends SensorDefinitionWrapperImpl
      * Creates a new wrapper for a sensor definition that uses yaml files for storage.
      * @param sensorFolderNode Sensor folder with files.
      * @param yamlSerializer Yaml serializer.
+     * @param readOnly Make the wrapper read-only.
      */
-    public FileSensorDefinitionWrapperImpl(FolderTreeNode sensorFolderNode, YamlSerializer yamlSerializer) {
-        super(sensorFolderNode.getFolderPath().extractSubFolderAt(1).getFullObjectName());
+    public FileSensorDefinitionWrapperImpl(FolderTreeNode sensorFolderNode, YamlSerializer yamlSerializer, boolean readOnly) {
+        super(sensorFolderNode.getFolderPath().extractSubFolderAt(1).getFullObjectName(), readOnly);
         this.sensorFolderNode = sensorFolderNode;
         this.yamlSerializer = yamlSerializer;
-		this.setProviderSensors(new FileProviderSensorDefinitionListImpl(sensorFolderNode, yamlSerializer));
+		this.providerSensors = new FileProviderSensorDefinitionListImpl(sensorFolderNode, yamlSerializer, readOnly);
     }
 
     /**
@@ -87,9 +88,11 @@ public class FileSensorDefinitionWrapperImpl extends SensorDefinitionWrapperImpl
                     throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                 }
 
-                fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+                SensorDefinitionSpec cachedObjectInstance = deserializedSpec.deepClone();
+                cachedObjectInstance.makeReadOnly(true);
+                fileContent.setCachedObjectInstance(cachedObjectInstance);
             } else {
-                deserializedSpec = deserializedSpec.deepClone();
+                deserializedSpec = this.isReadOnly() ? deserializedSpec : deserializedSpec.deepClone();
             }
 			this.setSpec(deserializedSpec);
 			this.clearDirty(true);

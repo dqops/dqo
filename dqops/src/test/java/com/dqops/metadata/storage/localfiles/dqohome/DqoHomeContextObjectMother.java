@@ -34,7 +34,7 @@ public class DqoHomeContextObjectMother {
     public static DqoHomeContext createEmptyInMemoryFileHomeContext() {
         YamlSerializer yamlSerializer = YamlSerializerObjectMother.createNew();
         DqoHomeContext dqoHomeContext = new DqoHomeContext(new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN)));
-        FileDqoHomeImpl fileDqoHomeModel = FileDqoHomeImpl.create(dqoHomeContext, yamlSerializer);
+        FileDqoHomeImpl fileDqoHomeModel = FileDqoHomeImpl.create(dqoHomeContext, yamlSerializer, false);
         dqoHomeContext.setDqoHome(fileDqoHomeModel);
         return dqoHomeContext;
     }

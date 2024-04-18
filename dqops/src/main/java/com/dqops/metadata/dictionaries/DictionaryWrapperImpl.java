@@ -48,12 +48,17 @@ public class DictionaryWrapperImpl extends AbstractPojoElementWrapper<String, Fi
     public DictionaryWrapperImpl() {
     }
 
+    public DictionaryWrapperImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
     /**
      * Creates a data dictionary wrapper given a credential name.
      * @param dictionaryName Dictionary name.
+     * @param readOnly Make the wrapper read-only.
      */
-    public DictionaryWrapperImpl(String dictionaryName) {
-        this();
+    public DictionaryWrapperImpl(String dictionaryName, boolean readOnly) {
+        this(readOnly);
         this.dictionaryName = dictionaryName;
     }
 

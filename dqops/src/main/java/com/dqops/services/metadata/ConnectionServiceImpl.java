@@ -89,7 +89,7 @@ public class ConnectionServiceImpl implements ConnectionService {
      */
     @Override
     public List<PushJobResult<DeleteStoredDataResult>> deleteConnections(Iterable<String> connectionNames, DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
         UserHome userHome = userHomeContext.getUserHome();
 
         List<DeleteStoredDataQueueJobParameters> deleteStoredDataParameters = new ArrayList<>();

@@ -43,12 +43,13 @@ public class FileConnectionWrapperImpl extends ConnectionWrapperImpl {
      * Creates a connection spec wrapper that is file based.
      * @param connectionFolderNode Connection folder with yaml files.
      * @param yamlSerializer Yaml serializer.
+     * @param readOnly Make the wrapper read-only.
      */
-    public FileConnectionWrapperImpl(FolderTreeNode connectionFolderNode, YamlSerializer yamlSerializer) {
-        super(connectionFolderNode.getFolderPath().extractSubFolderAt(1).getFullObjectName());
+    public FileConnectionWrapperImpl(FolderTreeNode connectionFolderNode, YamlSerializer yamlSerializer, boolean readOnly) {
+        super(connectionFolderNode.getFolderPath().extractSubFolderAt(1).getFullObjectName(), readOnly);
         this.connectionFolderNode = connectionFolderNode;
         this.yamlSerializer = yamlSerializer;
-		this.setTables(new FileTableListImpl(connectionFolderNode, yamlSerializer));
+		this.tables = new FileTableListImpl(connectionFolderNode, yamlSerializer, readOnly);
     }
 
     /**
@@ -88,9 +89,11 @@ public class FileConnectionWrapperImpl extends ConnectionWrapperImpl {
                         throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
 
-                    fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+                    ConnectionSpec cachedObjectInstance = deserializedSpec.deepClone();
+                    cachedObjectInstance.makeReadOnly(true);
+                    fileContent.setCachedObjectInstance(cachedObjectInstance);
                 } else {
-                    deserializedSpec = deserializedSpec.deepClone();
+                    deserializedSpec = this.isReadOnly() ? deserializedSpec : deserializedSpec.deepClone();
                 }
 				this.setSpec(deserializedSpec);
                 deserializedSpec.clearDirty(true);
