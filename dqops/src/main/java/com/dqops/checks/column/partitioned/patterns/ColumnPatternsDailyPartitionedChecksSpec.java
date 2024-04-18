@@ -44,6 +44,7 @@ public class ColumnPatternsDailyPartitionedChecksSpec extends AbstractCheckCateg
             put("daily_partition_text_not_matching_regex_found", o -> o.dailyPartitionTextNotMatchingRegexFound);
             put("daily_partition_texts_matching_regex_percent", o -> o.dailyPartitionTextsMatchingRegexPercent);
             put("daily_partition_invalid_email_format_found", o -> o.dailyPartitionInvalidEmailFormatFound);
+            put("daily_partition_invalid_email_format_percent", o -> o.dailyPartitionInvalidEmailFormatPercent);
             put("daily_partition_text_not_matching_date_pattern_found", o -> o.dailyPartitionTextNotMatchingDatePatternFound);
             put("daily_partition_text_matching_date_pattern_percent", o -> o.dailyPartitionTextMatchingDatePatternPercent);
             put("daily_partition_text_matching_name_pattern_percent", o -> o.dailyPartitionTextMatchingNamePatternPercent);
@@ -63,6 +64,9 @@ public class ColumnPatternsDailyPartitionedChecksSpec extends AbstractCheckCateg
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidEmailFormatFoundCheckSpec dailyPartitionInvalidEmailFormatFound;
+
+    @JsonPropertyDescription("Verifies that the percentage of invalid emails in a text column does not exceed the maximum accepted percentage.")
+    private ColumnInvalidEmailFormatPercentCheckSpec dailyPartitionInvalidEmailFormatPercent;
 
     @JsonPropertyDescription("Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.")
     private ColumnTextNotMatchingDatePatternFoundCheckSpec dailyPartitionTextNotMatchingDatePatternFound;
@@ -137,6 +141,24 @@ public class ColumnPatternsDailyPartitionedChecksSpec extends AbstractCheckCateg
         this.setDirtyIf(!Objects.equals(this.dailyPartitionInvalidEmailFormatFound, dailyPartitionInvalidEmailFormatFound));
         this.dailyPartitionInvalidEmailFormatFound = dailyPartitionInvalidEmailFormatFound;
         propagateHierarchyIdToField(dailyPartitionInvalidEmailFormatFound, "daily_partition_invalid_email_format_found");
+    }
+
+    /**
+     * Returns a maximum invalid email percent check.
+     * @return Maximum invalid email percent check.
+     */
+    public ColumnInvalidEmailFormatPercentCheckSpec getDailyPartitionInvalidEmailFormatPercent() {
+        return dailyPartitionInvalidEmailFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of an invalid email percent check.
+     * @param dailyPartitionInvalidEmailFormatPercent Invalid email percent check.
+     */
+    public void setDailyPartitionInvalidEmailFormatPercent(ColumnInvalidEmailFormatPercentCheckSpec dailyPartitionInvalidEmailFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionInvalidEmailFormatPercent, dailyPartitionInvalidEmailFormatPercent));
+        this.dailyPartitionInvalidEmailFormatPercent = dailyPartitionInvalidEmailFormatPercent;
+        propagateHierarchyIdToField(dailyPartitionInvalidEmailFormatPercent, "daily_partition_invalid_email_format_percent");
     }
 
     /**
