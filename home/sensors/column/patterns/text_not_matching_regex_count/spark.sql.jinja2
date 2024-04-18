@@ -1,18 +1,11 @@
 {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-{%- macro make_text_constant(string) -%}
-    {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-{%- endmacro %}
-
-{%- macro render_regex(regex) -%}
-     {{ make_text_constant(regex) }}
-{%- endmacro -%}
 
 SELECT
     CASE
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
         ELSE SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
+                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
                     THEN 0
                 ELSE 1
             END

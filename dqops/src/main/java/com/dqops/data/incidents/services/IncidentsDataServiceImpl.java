@@ -16,19 +16,18 @@
 package com.dqops.data.incidents.services;
 
 import com.dqops.core.configuration.DqoIncidentsConfigurationProperties;
-import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
-import com.dqops.data.checkresults.services.models.CheckResultEntryModel;
-import com.dqops.data.checkresults.services.models.IncidentHistogramFilterParameters;
+import com.dqops.data.checkresults.models.CheckResultEntryModel;
+import com.dqops.data.checkresults.models.IncidentHistogramFilterParameters;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.data.incidents.factory.IncidentsColumnNames;
-import com.dqops.data.checkresults.services.models.CheckResultListFilterParameters;
-import com.dqops.data.checkresults.services.models.IncidentIssueHistogramModel;
-import com.dqops.data.incidents.services.models.IncidentListFilterParameters;
-import com.dqops.data.incidents.services.models.IncidentModel;
+import com.dqops.data.checkresults.models.CheckResultListFilterParameters;
+import com.dqops.data.checkresults.models.IncidentIssueHistogramModel;
+import com.dqops.data.incidents.models.IncidentListFilterParameters;
+import com.dqops.data.incidents.models.IncidentModel;
 import com.dqops.rest.models.common.SortDirection;
-import com.dqops.data.incidents.services.models.IncidentsPerConnectionModel;
+import com.dqops.data.incidents.models.IncidentsPerConnectionModel;
 import com.dqops.data.incidents.snapshot.IncidentsSnapshot;
 import com.dqops.data.incidents.snapshot.IncidentsSnapshotFactory;
 import com.dqops.data.storage.LoadedMonthlyPartition;

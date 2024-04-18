@@ -1,11 +1,7 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 
-{%- macro make_text_constant(string) -%}
-    {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-{%- endmacro -%}
-
 {%- macro render_regex(regex) -%}
-     r{{ make_text_constant(regex) }}
+     r{{ lib.make_text_constant(regex) }}
 {%- endmacro -%}
 
 SELECT

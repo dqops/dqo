@@ -15,7 +15,7 @@
  */
 package com.dqops.rest.models.metadata;
 
-import com.dqops.data.statistics.services.models.StatisticsMetricModel;
+import com.dqops.data.statistics.models.StatisticsMetricModel;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.fasterxml.jackson.annotation.JsonInclude;

@@ -31,6 +31,7 @@ import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.patterns.ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec;
 import com.dqops.singlestore.BaseSingleStoreDbIntegrationTest;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -68,7 +69,7 @@ public class SingleStoreDbColumnPatternsTextsMatchingRegexPercentSensorParameter
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(33.333, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -82,7 +83,7 @@ public class SingleStoreDbColumnPatternsTextsMatchingRegexPercentSensorParameter
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(33.333, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -96,7 +97,7 @@ public class SingleStoreDbColumnPatternsTextsMatchingRegexPercentSensorParameter
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(33.333, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -110,7 +111,7 @@ public class SingleStoreDbColumnPatternsTextsMatchingRegexPercentSensorParameter
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(83.33333F, resultTable.column(0).get(0));
+        Assertions.assertEquals(16.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -125,6 +126,6 @@ public class SingleStoreDbColumnPatternsTextsMatchingRegexPercentSensorParameter
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(33.333, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 }

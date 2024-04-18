@@ -18,11 +18,15 @@ package com.dqops.metadata.storage.localfiles.dqohome;
 import com.dqops.core.configuration.DqoCacheConfigurationProperties;
 import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
+import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.filesystem.cache.LocalFileSystemCacheImpl;
+import com.dqops.core.filesystem.localfiles.HomeLocationFindServiceImpl;
 import com.dqops.core.filesystem.localfiles.LocalFolderTreeNode;
 import com.dqops.core.filesystem.virtual.FileSystemContext;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
 import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.data.checkresults.statuscache.TableStatusCacheProviderImpl;
+import com.dqops.utils.StaticBeanFactory;
 import com.dqops.utils.logging.UserErrorLoggerImpl;
 import com.dqops.utils.serialization.YamlSerializerImpl;
 
@@ -43,7 +47,9 @@ public class DqoHomeDirectFactory {
         DqoCacheConfigurationProperties dqoCacheConfigurationProperties = new DqoCacheConfigurationProperties();
         dqoCacheConfigurationProperties.setEnable(false);
         dqoCacheConfigurationProperties.setWatchFileSystemChanges(false);
-        LocalFileSystemCacheImpl localFileSystemCache = new LocalFileSystemCacheImpl(dqoCacheConfigurationProperties);
+        LocalFileSystemCacheImpl localFileSystemCache = new LocalFileSystemCacheImpl(dqoCacheConfigurationProperties,
+                new TableStatusCacheProviderImpl(StaticBeanFactory.getBeanFactory()),
+                new HomeLocationFindServiceImpl(new DqoUserConfigurationProperties(), new DqoConfigurationProperties()));
         LocalDqoHomeFileStorageServiceImpl localDqoHomeFileStorageService = new LocalDqoHomeFileStorageServiceImpl(dqoHomePath.toString(), localFileSystemCache);
         FileSystemContext fileSystemContext = new FileSystemContext(localDqoHomeFileStorageService);
         LocalFolderTreeNode dqoHomeFolder = new LocalFolderTreeNode(fileSystemContext, new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN));

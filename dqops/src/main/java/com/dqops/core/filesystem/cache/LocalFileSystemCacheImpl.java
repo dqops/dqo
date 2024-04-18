@@ -17,10 +17,19 @@
 package com.dqops.core.filesystem.cache;
 
 import com.dqops.core.configuration.DqoCacheConfigurationProperties;
+import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.virtual.FileContent;
+import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.filesystem.virtual.HomeFilePath;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
+import com.dqops.data.checkresults.statuscache.CurrentTableStatusKey;
+import com.dqops.data.checkresults.statuscache.TableStatusCache;
+import com.dqops.data.checkresults.statuscache.TableStatusCacheProvider;
+import com.dqops.data.storage.HivePartitionPathUtility;
 import com.dqops.data.storage.LoadedMonthlyPartition;
+import com.dqops.data.storage.ParquetPartitioningKeys;
+import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.reflection.ObjectMemorySizeUtility;
 import com.github.benmanes.caffeine.cache.Cache;
@@ -38,6 +47,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -56,16 +66,26 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
     private final Map<WatchKey, Path> watchedDirectoriesByWatchKey = new LinkedHashMap<>();
     private final Object directoryWatchersLock = new Object();
     private final DqoCacheConfigurationProperties dqoCacheConfigurationProperties;
+    private final TableStatusCacheProvider tableStatusCacheProvider;
+    private final HomeLocationFindService homeLocationFindService;
+    private final Path userHomeRootPath;
     private Instant nextFileChangeDetectionAt = Instant.now().minus(100L, ChronoUnit.MILLIS);
     private boolean wasRecentlyInvalidated;
 
     /**
      * Dependency injection constructor.
      * @param dqoCacheConfigurationProperties Cache configuration parameters.
+     * @param tableStatusCacheProvider Table status cache provider.
+     * @param homeLocationFindService Service that finds the location of the user home, used to translate file paths of updated files to relative file paths in the user home.
      */
     @Autowired
-    public LocalFileSystemCacheImpl(DqoCacheConfigurationProperties dqoCacheConfigurationProperties) {
+    public LocalFileSystemCacheImpl(DqoCacheConfigurationProperties dqoCacheConfigurationProperties,
+                                    TableStatusCacheProvider tableStatusCacheProvider,
+                                    HomeLocationFindService homeLocationFindService) {
         this.dqoCacheConfigurationProperties = dqoCacheConfigurationProperties;
+        this.tableStatusCacheProvider = tableStatusCacheProvider;
+        this.homeLocationFindService = homeLocationFindService;
+        this.userHomeRootPath = homeLocationFindService.getUserHomePath() != null ? Path.of(homeLocationFindService.getUserHomePath()) : Path.of(".");
 
         WatchService newWatchService = null;
         if (dqoCacheConfigurationProperties.isEnable() && dqoCacheConfigurationProperties.isWatchFileSystemChanges()) {
@@ -326,6 +346,8 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         }
 
         this.parquetFilesCache.put(filePath, table);
+        invalidateTableStatusCache(filePath);
+
 
         Path parentFolderPath = filePath.getParent();
         this.fileListsCache.invalidate(parentFolderPath);
@@ -347,6 +369,8 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         this.fileContentsCache.invalidate(filePath);
         this.parquetFilesCache.invalidate(filePath);
         this.wasRecentlyInvalidated = true;
+        invalidateTableStatusCache(filePath);
+
 
         Path parentFolderPath = filePath.getParent();
         this.fileListsCache.invalidate(parentFolderPath);
@@ -368,6 +392,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
 
         this.folderListsCache.invalidate(folderPath);
         this.fileListsCache.invalidate(folderPath);
+        invalidateTableStatusCache(folderPath);
 
         this.stopFolderWatcher(folderPath);
 
@@ -389,6 +414,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
 
         this.folderListsCache.invalidate(folderPath);
         this.fileListsCache.invalidate(folderPath);
+        invalidateTableStatusCache(folderPath);
     }
 
     /**
@@ -404,11 +430,51 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         this.fileContentsCache.invalidate(filePath);
         this.parquetFilesCache.invalidate(filePath);
         this.wasRecentlyInvalidated = true;
+        invalidateTableStatusCache(filePath);
 
         Path folderPath = filePath.getParent();
         if (folderPath != null) {
             this.folderListsCache.invalidate(folderPath);
             this.fileListsCache.invalidate(folderPath);
+        }
+    }
+
+    /**
+     * Matches the path of an updated or deleted file to a parquet file for tables that are cached: check_results and errors.
+     * If a table is detected whose data quality results were updated, triggers an invalidation of a current table cache.
+     * @param filePath File path to a file that should be updated.
+     */
+    public void invalidateTableStatusCache(Path filePath) {
+        if (!filePath.startsWith(this.userHomeRootPath)) {
+            return;
+        }
+
+        Path relativePath = this.userHomeRootPath.relativize(filePath);
+        if (relativePath.getNameCount() < 2) {
+            return; // path too short, nothing interested here
+        }
+
+        HomeFilePath homeFilePath = HomeFilePath.fromRelativePath(relativePath);
+        if (homeFilePath == null) {
+            return; // updated path is too short, we don't know what it is
+        }
+
+        HomeFolderPath folder = homeFilePath.getFolder();
+        if (folder.size() < 4 || !Objects.equals(BuiltInFolderNames.DATA, folder.get(0).getFileSystemName()) ||
+                !(Objects.equals(BuiltInFolderNames.CHECK_RESULTS, folder.get(1).getFileSystemName()) ||
+                        Objects.equals(BuiltInFolderNames.ERRORS, folder.get(1).getFileSystemName()))) {
+            return; // not a parquet folder
+        }
+
+        String connectionNameFolder = folder.get(2).getFileSystemName();
+        String schemaTableNameFolder = folder.get(3).getFileSystemName();
+
+        if (connectionNameFolder.startsWith(ParquetPartitioningKeys.CONNECTION + "=") && connectionNameFolder.length() > 2 &&
+                schemaTableNameFolder.startsWith(ParquetPartitioningKeys.SCHEMA_TABLE  + "=") && schemaTableNameFolder.length() > 2) {
+            String decodedConnectionName = FileNameSanitizer.decodeFileSystemName(connectionNameFolder.substring(2));
+            PhysicalTableName physicalTableName = PhysicalTableName.fromBaseFileName(schemaTableNameFolder.substring(2));
+            TableStatusCache tableStatusCache = this.tableStatusCacheProvider.getTableStatusCache();
+            tableStatusCache.invalidateTableStatus(new CurrentTableStatusKey(folder.getDataDomain(), decodedConnectionName, physicalTableName));
         }
     }
 

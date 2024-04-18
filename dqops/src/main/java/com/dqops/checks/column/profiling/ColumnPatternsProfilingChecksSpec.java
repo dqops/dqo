@@ -44,6 +44,7 @@ public class ColumnPatternsProfilingChecksSpec extends AbstractCheckCategorySpec
             put("profile_text_not_matching_regex_found", o -> o.profileTextNotMatchingRegexFound);
             put("profile_texts_matching_regex_percent", o -> o.profileTextsMatchingRegexPercent);
             put("profile_invalid_email_format_found", o -> o.profileInvalidEmailFormatFound);
+            put("profile_invalid_email_format_percent", o -> o.profileInvalidEmailFormatPercent);
             put("profile_text_not_matching_date_pattern_found", o -> o.profileTextNotMatchingDatePatternFound);
             put("profile_text_matching_date_pattern_percent", o -> o.profileTextMatchingDatePatternPercent);
             put("profile_text_matching_name_pattern_percent", o -> o.profileTextMatchingNamePatternPercent);
@@ -63,6 +64,9 @@ public class ColumnPatternsProfilingChecksSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidEmailFormatFoundCheckSpec profileInvalidEmailFormatFound;
+
+    @JsonPropertyDescription("Verifies that the percentage of invalid emails in a text column does not exceed the maximum accepted percentage.")
+    private ColumnInvalidEmailFormatPercentCheckSpec profileInvalidEmailFormatPercent;
 
     @JsonPropertyDescription("Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.")
     private ColumnTextNotMatchingDatePatternFoundCheckSpec profileTextNotMatchingDatePatternFound;
@@ -137,6 +141,24 @@ public class ColumnPatternsProfilingChecksSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.profileInvalidEmailFormatFound, profileInvalidEmailFormatFound));
         this.profileInvalidEmailFormatFound = profileInvalidEmailFormatFound;
         propagateHierarchyIdToField(profileInvalidEmailFormatFound, "profile_invalid_email_format_found");
+    }
+
+    /**
+     * Returns a maximum invalid email percent check.
+     * @return Maximum invalid email percent check.
+     */
+    public ColumnInvalidEmailFormatPercentCheckSpec getProfileInvalidEmailFormatPercent() {
+        return profileInvalidEmailFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of an invalid email percent check.
+     * @param profileInvalidEmailFormatPercent Invalid email percent check.
+     */
+    public void setProfileInvalidEmailFormatPercent(ColumnInvalidEmailFormatPercentCheckSpec profileInvalidEmailFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileInvalidEmailFormatPercent, profileInvalidEmailFormatPercent));
+        this.profileInvalidEmailFormatPercent = profileInvalidEmailFormatPercent;
+        propagateHierarchyIdToField(profileInvalidEmailFormatPercent, "profile_invalid_email_format_percent");
     }
 
     /**

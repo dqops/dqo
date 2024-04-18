@@ -17,6 +17,9 @@
 package com.dqops.core.filesystem.cache;
 
 import com.dqops.core.configuration.DqoCacheSpecConfigurationPropertiesObjectMother;
+import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
+import com.dqops.core.filesystem.localfiles.HomeLocationFindServiceObjectMother;
+import com.dqops.data.checkresults.statuscache.TableStatusCacheProviderImpl;
 import com.dqops.utils.BeanFactoryObjectMother;
 
 /**
@@ -44,7 +47,9 @@ public class LocalFileSystemCacheObjectMother {
      * @return New file system cache.
      */
     public static LocalFileSystemCache createNewCache() {
-        return new LocalFileSystemCacheImpl(DqoCacheSpecConfigurationPropertiesObjectMother.getWithCacheEnabledButNoFileSystemWatching());
+        return new LocalFileSystemCacheImpl(DqoCacheSpecConfigurationPropertiesObjectMother.getWithCacheEnabledButNoFileSystemWatching(),
+                new TableStatusCacheProviderImpl(BeanFactoryObjectMother.getBeanFactory()),
+                HomeLocationFindServiceObjectMother.getDefaultHomeFinder());
     }
 
     /**
@@ -52,6 +57,8 @@ public class LocalFileSystemCacheObjectMother {
      * @return Caching service that works only as a read-through caching.
      */
     public static LocalFileSystemCache createNewWithCachingDisabled() {
-        return new LocalFileSystemCacheImpl(DqoCacheSpecConfigurationPropertiesObjectMother.createWithDisabledCache());
+        return new LocalFileSystemCacheImpl(DqoCacheSpecConfigurationPropertiesObjectMother.createWithDisabledCache(),
+                new TableStatusCacheProviderImpl(BeanFactoryObjectMother.getBeanFactory()),
+                HomeLocationFindServiceObjectMother.getDefaultHomeFinder());
     }
 }

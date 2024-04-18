@@ -57,7 +57,7 @@ public class SparkColumnPatternsTextNotMatchingRegexCountSensorParametersSpecInt
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "email", this.checkSpec);
 
@@ -66,12 +66,12 @@ public class SparkColumnPatternsTextNotMatchingRegexCountSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(15.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.daily);
@@ -81,12 +81,12 @@ public class SparkColumnPatternsTextNotMatchingRegexCountSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(15.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.monthly);
@@ -96,12 +96,12 @@ public class SparkColumnPatternsTextNotMatchingRegexCountSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(15.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.daily,"date");
 
@@ -110,12 +110,12 @@ public class SparkColumnPatternsTextNotMatchingRegexCountSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(5.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.monthly,"date");
 
@@ -124,6 +124,6 @@ public class SparkColumnPatternsTextNotMatchingRegexCountSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(15.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 }

@@ -436,7 +436,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      * Applies missing default observability check configuration when it is not configured.
      */
     public void applyDefaultConfigurationWhenMissing() {
-        UserDomainIdentity rootDataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(this.userConfigurationProperties.getDefaultDataDomain());
+        UserDomainIdentity rootDataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForCloudDomain(this.userConfigurationProperties.getDefaultDataDomain());
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(rootDataDomainAdminIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
@@ -506,30 +506,6 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         if (defaultColumnChecksPatternWrapper == null) {
             defaultColumnChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns().createAndAddNew(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME);
             defaultColumnChecksPatternWrapper.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultColumnChecks());
-        }
-
-        if (this.userConfigurationProperties.isInitializeDefaultCloudCredentials()) {
-            SharedCredentialList credentialList = userHome.getCredentials();
-
-            if (credentialList.getByObjectName(DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME, true) == null) {
-                SharedCredentialWrapper gcpCredentialWrapper = credentialList.createAndAddNew(DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME);
-                gcpCredentialWrapper.setObject(new FileContent(DefaultCloudCredentialFileContent.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_INITIAL_CONTENT));
-            }
-
-            if (credentialList.getByObjectName(DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME, true) == null) {
-                SharedCredentialWrapper awsCredentialWrapper = credentialList.createAndAddNew(DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME);
-                awsCredentialWrapper.setObject(new FileContent(DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT));
-            }
-
-            if (credentialList.getByObjectName(DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME, true) == null) {
-                SharedCredentialWrapper awsConfigWrapper = credentialList.createAndAddNew(DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME);
-                awsConfigWrapper.setObject(new FileContent(DefaultCloudCredentialFileContent.AWS_DEFAULT_CONFIG_INITIAL_CONTENT));
-            }
-
-            if (credentialList.getByObjectName(DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME, true) == null) {
-                SharedCredentialWrapper azureCredentialsWrapper = credentialList.createAndAddNew(DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME);
-                azureCredentialsWrapper.setObject(new FileContent(DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT));
-            }
         }
 
         userHomeContext.flush();

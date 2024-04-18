@@ -22,14 +22,13 @@ import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.core.configuration.DqoIncidentsConfigurationProperties;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
-import com.dqops.data.checkresults.services.models.*;
-import com.dqops.data.checkresults.services.models.currentstatus.*;
+import com.dqops.data.checkresults.models.*;
+import com.dqops.data.checkresults.models.currentstatus.*;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshot;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.errors.snapshot.ErrorsSnapshot;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactory;
-import com.dqops.data.checkresults.services.models.IncidentIssueHistogramModel;
 import com.dqops.data.normalization.CommonColumnNames;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
@@ -664,7 +663,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         statusModel.setSchemaName(physicalTableName.getSchemaName());
         statusModel.setTableName(physicalTableName.getTableName());
 
-        int lastMonths = tableCurrentDataQualityStatusFilterParameters.getLastMonths();
+        int lastMonths = tableCurrentDataQualityStatusFilterParameters.getLastMonths() == null ? 3 :
+                tableCurrentDataQualityStatusFilterParameters.getLastMonths();
         if (tableCurrentDataQualityStatusFilterParameters.getSince() != null) {
             ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
             ZonedDateTime nowZonedTime = Instant.now().atZone(defaultTimeZoneId);
@@ -853,6 +853,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
         tableStatusModel.calculateHighestCurrentAndHistoricSeverity();
         tableStatusModel.calculateDataQualityKpiScore();
+        tableStatusModel.calculateStatusesForDataQualityDimensions();
 
         return tableStatusModel;
     }

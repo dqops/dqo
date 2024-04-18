@@ -21,7 +21,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.checkresults.services.CheckResultsOverviewParameters;
-import com.dqops.data.checkresults.services.models.CheckResultsOverviewDataModel;
+import com.dqops.data.checkresults.models.CheckResultsOverviewDataModel;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;

@@ -97,7 +97,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(loaderKey);
             if (connectionIncidentTableUpdater == null) {
                 // create and start a new connection incident loader
-                UserDomainIdentity domainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(userDomainIdentity.getDataDomainCloud());
+                UserDomainIdentity domainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForCloudDomain(userDomainIdentity.getDataDomainCloud());
                 connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(loaderKey, domainIdentity, connectionName,
                         tableIncidentImportBatch, null, null);
                 connectionIncidentLoaders.put(loaderKey, connectionIncidentTableUpdater);
@@ -126,7 +126,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(loaderKey);
             if (connectionIncidentTableUpdater == null) {
                 // create and start a new connection incident loader
-                UserDomainIdentity domainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(userDomainIdentity.getDataDomainCloud());
+                UserDomainIdentity domainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForCloudDomain(userDomainIdentity.getDataDomainCloud());
                 connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(loaderKey, domainIdentity, connectionName,
                         null, incidentStatusChangeParameters, null);
                 connectionIncidentLoaders.put(loaderKey, connectionIncidentTableUpdater);
@@ -155,7 +155,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(loaderKey);
             if (connectionIncidentTableUpdater == null) {
                 // create and start a new connection incident loader
-                UserDomainIdentity domainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(userDomainIdentity.getDataDomainCloud());
+                UserDomainIdentity domainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForCloudDomain(userDomainIdentity.getDataDomainCloud());
                 connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(loaderKey, domainIdentity, connectionName,
                         null, null, incidentIssueUrlChangeParameters);
                 connectionIncidentLoaders.put(loaderKey, connectionIncidentTableUpdater);

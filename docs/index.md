@@ -12,7 +12,7 @@ title: What is DQOps Data Quality Operations Center
     <span class="center-content" style="font-size: 1.2rem;font-weight: 500">
     An open-source data quality platform for the whole data platform lifecycle
     <br/>
-    from **profiling** new data sources to applying **full automation** of data quality monitoring
+    from **profiling** new data sources to automate **data quality monitoring**
     </span>
     <br/>
     <br/>
@@ -473,7 +473,7 @@ Want to learn more about data quality?
     [Download the eBook](https://dqops.com/best-practices-for-effective-data-quality-improvement/) to learn the process of managing
     an iterative data quality project that leads to fixing all data quality issues.
     
-    ![DQOps data quality improvement process](https://dqops.com/docs/images/dqops-data-quality-improvement-process-min.png){ loading=lazy; width="150px" }
+    ![DQOps data quality improvement process](https://dqops.com/docs/images/dqops-data-quality-improvement-process-min2.png){ loading=lazy; width="150px" }
 
     _Click to zoom in_
     

@@ -155,7 +155,7 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
      */
     @Override
     public void detectNotSynchronizedChangesInDomain(String domainName) {
-        UserDomainIdentity dataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(domainName);
+        UserDomainIdentity dataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForCloudDomain(domainName);
 
         Schedulers.boundedElastic().schedule(() -> {
             detectAndPublishLocalFolderStatus(DqoRoot.sources, dataDomainAdminIdentity);

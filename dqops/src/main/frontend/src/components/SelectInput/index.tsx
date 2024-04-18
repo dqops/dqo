@@ -2,9 +2,9 @@ import React, { ChangeEvent, useMemo, useRef, useState } from 'react';
 
 import clsx from 'clsx';
 
+import { Tooltip } from '@material-tailwind/react';
 import usePopup from '../../hooks/usePopup';
 import SvgIcon from '../SvgIcon';
-import { Tooltip } from '@material-tailwind/react';
 
 interface Option {
   label: string;
@@ -118,11 +118,8 @@ const SelectInput = ({
             disabled={disabled}
           />
           <SvgIcon
-            name="chevron-down"
-            className={clsx(
-              'absolute transform top-1/2 -translate-y-2/4 right-2 w-4',
-              isOpen ? 'transform rotate-180' : ''
-            )}
+            name={isOpen ? "chevron-up" :"chevron-down"}
+            className='absolute right-2 w-4'
           />
         </div>
         <div

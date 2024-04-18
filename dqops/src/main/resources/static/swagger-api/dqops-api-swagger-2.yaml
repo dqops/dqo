@@ -17037,6 +17037,12 @@ definitions:
           \ check statuses that describe the most current status."
         additionalProperties:
           $ref: "#/definitions/CheckCurrentDataQualityStatusModel"
+      dimensions:
+        type: "object"
+        description: "Dictionary of the current data quality statues for each data\
+          \ quality dimension."
+        additionalProperties:
+          $ref: "#/definitions/DimensionCurrentDataQualityStatusModel"
     description: "The column's most recent data quality status. It is a summary of\
       \ the results of the most recently executed data quality checks on the column.\
       \ Verify the value of the current_severity to see if there are any data quality\
@@ -30786,6 +30792,88 @@ definitions:
         - "booleans"
         - "texts"
         - "mixed"
+  DimensionCurrentDataQualityStatusModel:
+    type: "object"
+    properties:
+      dimension:
+        type: "string"
+        description: "Data quality dimension name. The most popular dimensions are:\
+          \ Completeness, Uniqueness, Timeliness, Validity, Consistency, Accuracy,\
+          \ Availability."
+      current_severity:
+        type: "string"
+        description: "The most recent data quality issue severity for this table.\
+          \ When the table is monitored using data grouping, it is the highest issue\
+          \ severity of all recently analyzed data groups. For partitioned checks,\
+          \ it is the highest severity of all results for all partitions (time periods)\
+          \ in the analyzed time range."
+        enum:
+        - "valid"
+        - "warning"
+        - "error"
+        - "fatal"
+      highest_historical_severity:
+        type: "string"
+        description: "The highest severity of previous executions of this data quality\
+          \ issue in the analyzed time range. It can be different from the *current_severity*\
+          \ if the data quality issue was solved and the most recently data quality\
+          \ issue did not detect it anymore. For partitioned checks, this field returns\
+          \ the same value as the *current_severity*, because data quality issues\
+          \ in older partitions are still valid."
+        enum:
+        - "valid"
+        - "warning"
+        - "error"
+        - "fatal"
+      last_check_executed_at:
+        type: "integer"
+        format: "int64"
+        description: "The UTC timestamp when the most recent data quality check was\
+          \ executed on the table."
+      executed_checks:
+        type: "integer"
+        format: "int32"
+        description: "The total number of most recent checks that were executed on\
+          \ the table for one data quality dimension. Table comparison checks that\
+          \ are comparing groups of data are counted as the number of compared data\
+          \ groups."
+      valid_results:
+        type: "integer"
+        format: "int32"
+        description: "The number of most recent valid data quality checks that passed\
+          \ without raising any issues."
+      warnings:
+        type: "integer"
+        format: "int32"
+        description: "The number of most recent data quality checks that failed by\
+          \ raising a warning severity data quality issue."
+      errors:
+        type: "integer"
+        format: "int32"
+        description: "The number of most recent data quality checks that failed by\
+          \ raising an error severity data quality issue."
+      fatals:
+        type: "integer"
+        format: "int32"
+        description: "The number of most recent data quality checks that failed by\
+          \ raising a fatal severity data quality issue."
+      execution_errors:
+        type: "integer"
+        format: "int32"
+        description: "The number of data quality check execution errors that were\
+          \ reported due to access issues to the data source, invalid mapping in DQOps,\
+          \ invalid queries in data quality sensors or invalid python rules. When\
+          \ an execution error is reported, the configuration of a data quality check\
+          \ on a table must be updated."
+      data_quality_kpi:
+        type: "number"
+        format: "double"
+        description: "Data quality KPI score for the data quality dimension, measured\
+          \ as a percentage of passed data quality checks. DQOps counts data quality\
+          \ issues at a warning severity level as passed checks. The data quality\
+          \ KPI score is a value in the range 0..100."
+    description: "The summary of the current data quality status for one data quality\
+      \ dimension"
   DqoCloudUserModel:
     type: "object"
     properties:
@@ -34393,6 +34481,12 @@ definitions:
           \ data quality results. The keys in the dictionary are the column names."
         additionalProperties:
           $ref: "#/definitions/ColumnCurrentDataQualityStatusModel"
+      dimensions:
+        type: "object"
+        description: "Dictionary of the current data quality statues for each data\
+          \ quality dimension."
+        additionalProperties:
+          $ref: "#/definitions/DimensionCurrentDataQualityStatusModel"
     description: "The table's most recent data quality status. It is a summary of\
       \ the results of the most recently executed data quality checks on the table.\
       \ Verify the value of the highest_severity_level to see if there are any data\

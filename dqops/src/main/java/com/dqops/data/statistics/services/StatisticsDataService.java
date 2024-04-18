@@ -16,8 +16,8 @@
 package com.dqops.data.statistics.services;
 
 import com.dqops.core.principal.UserDomainIdentity;
-import com.dqops.data.statistics.services.models.StatisticsResultsForColumnModel;
-import com.dqops.data.statistics.services.models.StatisticsResultsForTableModel;
+import com.dqops.data.statistics.models.StatisticsResultsForColumnModel;
+import com.dqops.data.statistics.models.StatisticsResultsForTableModel;
 import com.dqops.metadata.sources.PhysicalTableName;
 
 /**

@@ -15,8 +15,8 @@
  */
 package com.dqops.rest.models.metadata;
 
-import com.dqops.data.statistics.services.models.StatisticsMetricModel;
-import com.dqops.data.statistics.services.models.StatisticsResultsForColumnModel;
+import com.dqops.data.statistics.models.StatisticsMetricModel;
+import com.dqops.data.statistics.models.StatisticsResultsForColumnModel;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
