@@ -1,19 +1,11 @@
 {% import '/dialects/presto.sql.jinja2' as lib with context -%}
 
-{%- macro make_text_constant(string) -%}
-    {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-{%- endmacro -%}
-
-{%- macro render_regex(regex) -%}
-     {{ make_text_constant(regex) }}
-{%- endmacro -%}
-
 SELECT
     CASE
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
         ELSE CAST(100.0 * SUM(
             CASE
-                WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
                     THEN 1
                 ELSE 0
             END

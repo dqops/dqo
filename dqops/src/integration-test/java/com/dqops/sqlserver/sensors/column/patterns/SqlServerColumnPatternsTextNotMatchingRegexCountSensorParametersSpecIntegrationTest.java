@@ -57,7 +57,7 @@ public class SqlServerColumnPatternsTextNotMatchingRegexCountSensorParametersSpe
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setRegex("%@%.%");
+        this.sut.setRegex("%_@_%._%");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "email", this.checkSpec);
@@ -67,7 +67,7 @@ public class SqlServerColumnPatternsTextNotMatchingRegexCountSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(2.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(3.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -87,7 +87,7 @@ public class SqlServerColumnPatternsTextNotMatchingRegexCountSensorParametersSpe
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setRegex("%@%.%");
+        this.sut.setRegex("%_@_%._%");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.monthly);
@@ -97,12 +97,12 @@ public class SqlServerColumnPatternsTextNotMatchingRegexCountSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(2.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(3.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setRegex("%@%.%");
+        this.sut.setRegex("%_@_%._%");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.daily,"date");
@@ -119,7 +119,7 @@ public class SqlServerColumnPatternsTextNotMatchingRegexCountSensorParametersSpe
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setRegex("%@%.%");
+        this.sut.setRegex("%_@_%._%");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.monthly,"date");
@@ -129,6 +129,6 @@ public class SqlServerColumnPatternsTextNotMatchingRegexCountSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(2.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(3.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 }

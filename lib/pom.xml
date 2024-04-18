@@ -19,7 +19,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<license.licenseName>apache_v2</license.licenseName>
-		<duckdb.version>0.10.1</duckdb.version>
+		<duckdb.version>0.10.2</duckdb.version>
 	</properties>
 
 	<licenses>
