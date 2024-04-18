@@ -508,30 +508,6 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             defaultColumnChecksPatternWrapper.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultColumnChecks());
         }
 
-        if (this.userConfigurationProperties.isInitializeDefaultCloudCredentials()) {
-            SharedCredentialList credentialList = userHome.getCredentials();
-
-            if (credentialList.getByObjectName(DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME, true) == null) {
-                SharedCredentialWrapper gcpCredentialWrapper = credentialList.createAndAddNew(DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME);
-                gcpCredentialWrapper.setObject(new FileContent(DefaultCloudCredentialFileContent.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_INITIAL_CONTENT));
-            }
-
-            if (credentialList.getByObjectName(DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME, true) == null) {
-                SharedCredentialWrapper awsCredentialWrapper = credentialList.createAndAddNew(DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME);
-                awsCredentialWrapper.setObject(new FileContent(DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT));
-            }
-
-            if (credentialList.getByObjectName(DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME, true) == null) {
-                SharedCredentialWrapper awsConfigWrapper = credentialList.createAndAddNew(DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME);
-                awsConfigWrapper.setObject(new FileContent(DefaultCloudCredentialFileContent.AWS_DEFAULT_CONFIG_INITIAL_CONTENT));
-            }
-
-            if (credentialList.getByObjectName(DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME, true) == null) {
-                SharedCredentialWrapper azureCredentialsWrapper = credentialList.createAndAddNew(DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME);
-                azureCredentialsWrapper.setObject(new FileContent(DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT));
-            }
-        }
-
         userHomeContext.flush();
     }
 
