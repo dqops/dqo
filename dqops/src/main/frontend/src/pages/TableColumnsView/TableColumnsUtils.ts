@@ -232,7 +232,6 @@ function sortByDimenstion(dataArray: MyData[], direction: 'asc' | 'desc'): MyDat
 
     return direction === 'desc' ? aHighestSeverity - bHighestSeverity : bHighestSeverity - aHighestSeverity;
   });
-  console.log(array)
   return array;
 }
 

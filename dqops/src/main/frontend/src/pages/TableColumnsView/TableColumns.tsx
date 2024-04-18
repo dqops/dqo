@@ -267,8 +267,8 @@ const TableColumns = ({
     );
   }
   const handleSorting  = (data: MyData[]) => {
-    console.log(data);
-    setSortedArray(data);
+    const arr = [...data]
+    setSortedArray(arr);
   }
 
   useEffect(() => {
