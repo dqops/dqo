@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
+  CheckCurrentDataQualityStatusModelCurrentSeverityEnum,
   ColumnCurrentDataQualityStatusModel,
   ColumnStatisticsModel,
   DataGroupingConfigurationSpec
@@ -18,13 +19,30 @@ import { ITableColumnsProps, MyData, spec } from './TableColumnsConstans';
 import TableColumnsHeader from './TableColumnsHeader';
 import { renderValue } from './TableColumnsUtils';
 
+const getSeverityLevel = (severity: CheckCurrentDataQualityStatusModelCurrentSeverityEnum | undefined) => {
+  switch (severity) {
+    case 'execution_error': 
+      return 4;
+    case 'fatal' : 
+      return 3;
+    case 'error': 
+      return 2;
+    case 'warning': 
+      return 1;
+    case 'valid':
+      return 0;        
+  }
+  return 4;
+} 
+
 const rewriteDimensions = (columnStatus : { [key: string]: ColumnCurrentDataQualityStatusModel }) => {
   const columnValues: any = {}; 
   Object.entries(columnStatus).forEach(([key, value]) => {
     const dimentions: Array<any> = [];
     Object.entries(value.checks ?? {}).forEach(([key, value]) => {
      dimentions.push({ quality_dimension: value.quality_dimension, current_severity: value.current_severity,
-       highest_historical_severity: value.highest_historical_severity, last_executed_at: value.last_executed_at, check_name: key, category: value.category });
+       highest_historical_severity: value.highest_historical_severity, last_executed_at: value.last_executed_at,
+        check_name: key, category: value.category, severity_level: getSeverityLevel(value.current_severity) });
     })
     columnValues[key] = dimentions; 
   })
@@ -248,18 +266,21 @@ const TableColumns = ({
       </div>
     );
   }
+  const handleSorting  = (data: MyData[]) => {
+    console.log(data);
+    setSortedArray(data);
+  }
 
   useEffect(() => {
-    CheckResultApi.getTableDataQualityStatus(connectionName, schemaName, tableName, undefined, undefined, checkTypes === CheckTypes.PROFILING ? true : undefined).then((res) => {console.log(res.data), setStatus(res.data.columns ?? {}) })
+    CheckResultApi.getTableDataQualityStatus(connectionName, schemaName, tableName, undefined, undefined, checkTypes === CheckTypes.PROFILING ? true : undefined).then((res) =>  setStatus(res.data.columns ?? {}))
   }, [connectionName, schemaName, tableName]);
-
   return (
     <div className="p-4 relative">
       <table className=" mt-4 w-full">
         <TableColumnsHeader
           dataArray={sortedArray || dataArray}
           updateData={updateData}
-          setSortedArray={setSortedArray}
+          setSortedArray={handleSorting}
         />
         <TableColumnsBody
           columns={sortedArray || dataArray}

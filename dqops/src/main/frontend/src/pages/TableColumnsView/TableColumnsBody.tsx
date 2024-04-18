@@ -202,14 +202,14 @@ const getAdditionalDimentions = (column: MyData) : any[] => {
           <td className='border-b border-gray-100 text-left px-4 py-2'>
             <div className='flex items-center gap-x-0.5'>
             {basicDimensionTypes.map((dimType) => {
-              return getBasicDimmensions(column, dimType)?.map((dim, index) => (
-                <Tooltip key={index} content={renderSecondLevelTooltip(dim)} >
+              return getBasicDimmensions(column, dimType)?.map((dim, jIndex) => (
+                <Tooltip key={`Dimensionindex${jIndex}`} content={renderSecondLevelTooltip(dim)} >
                   <div className={clsx('w-3 h-3', dim.empty === true ? 'border border-gray-200 bg-white' : getColor(dim.current_severity))} style={{ borderRadius: "6px" }} />
                 </Tooltip>
               ));
             })}
-            {getAdditionalDimentions(column).map((dim)  =>
-                <Tooltip key={index} content={renderSecondLevelTooltip(dim)}>
+            {getAdditionalDimentions(column).map((dim, dimIndex)  =>
+                <Tooltip key={`DimensionTooltipindex${dimIndex}`} content={renderSecondLevelTooltip(dim)}>
                   <div className={clsx('w-3 h-3', getColor(dim.current_severity))} style={{ borderRadius: "6px" }} />
                 </Tooltip>
              )}

@@ -203,14 +203,47 @@ export const getSortedData = <T extends { [key: string]: any }>(
   });
   return sortedArray;
 };
+function countDimensions(dimensions: any[] | undefined): number {
+  return dimensions ? dimensions.length : 0;
+}
+
+function getHighestSeverity(dimensions: any[] | undefined): number {
+  if (!dimensions || dimensions.length === 0) return -1;
+  
+  let highestSeverity = -1;
+  dimensions.forEach(dimension => {
+    if (dimension.severity_level > highestSeverity) {
+      highestSeverity = dimension.severity_level;
+    }
+  });
+  return highestSeverity;
+}
+function sortByDimenstion(dataArray: MyData[], direction: 'asc' | 'desc'): MyData[] {
+  const array = dataArray.sort((a, b) => {
+    const aDimensionCount = countDimensions(a.dimentions);
+    const bDimensionCount = countDimensions(b.dimentions);
+
+    if (aDimensionCount !== bDimensionCount) {
+      return direction === 'desc' ? aDimensionCount - bDimensionCount : bDimensionCount - aDimensionCount;
+    }
+
+    const aHighestSeverity = getHighestSeverity(a.dimentions);
+    const bHighestSeverity = getHighestSeverity(b.dimentions);
+
+    return direction === 'desc' ? aHighestSeverity - bHighestSeverity : bHighestSeverity - aHighestSeverity;
+  });
+  console.log(array)
+  return array;
+}
+
 export const handleSorting = (
   param: string,
   dataArray: MyData[],
   sortDirection: 'asc' | 'desc',
   setSortDirection: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>,
   setSortedArray: any
-) => {
-  switch (param) {
+  ) => {
+    switch (param) {
     case 'Column name':
       setSortedArray(
         getSortedArrayAlphabetictly('nameOfCol', dataArray, sortDirection)
@@ -261,6 +294,10 @@ export const handleSorting = (
         getSortedData<MyData>('unique_value', dataArray, sortDirection)
       );
       break;
+    case 'Dimensions':   
+      setSortedArray(
+        sortByDimenstion(dataArray, sortDirection)
+      );
   }
   setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
 };
