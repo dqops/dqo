@@ -44,6 +44,7 @@ public class ColumnPatternsMonthlyMonitoringChecksSpec extends AbstractCheckCate
             put("monthly_text_not_matching_regex_found", o -> o.monthlyTextNotMatchingRegexFound);
             put("monthly_texts_matching_regex_percent", o -> o.monthlyTextsMatchingRegexPercent);
             put("monthly_invalid_email_format_found", o -> o.monthlyInvalidEmailFormatFound);
+            put("monthly_invalid_email_format_percent", o -> o.monthlyInvalidEmailFormatPercent);
             put("monthly_text_not_matching_date_pattern_found", o -> o.monthlyTextNotMatchingDatePatternFound);
             put("monthly_text_matching_date_pattern_percent", o -> o.monthlyTextMatchingDatePatternPercent);
             put("monthly_text_matching_name_pattern_percent", o -> o.monthlyTextMatchingNamePatternPercent);
@@ -63,6 +64,9 @@ public class ColumnPatternsMonthlyMonitoringChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidEmailFormatFoundCheckSpec monthlyInvalidEmailFormatFound;
+
+    @JsonPropertyDescription("Verifies that the percentage of invalid emails in a text column does not exceed the maximum accepted percentage.")
+    private ColumnInvalidEmailFormatPercentCheckSpec monthlyInvalidEmailFormatPercent;
 
     @JsonPropertyDescription("Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.")
     private ColumnTextNotMatchingDatePatternFoundCheckSpec monthlyTextNotMatchingDatePatternFound;
@@ -137,6 +141,24 @@ public class ColumnPatternsMonthlyMonitoringChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyInvalidEmailFormatFound, monthlyInvalidEmailFormatFound));
         this.monthlyInvalidEmailFormatFound = monthlyInvalidEmailFormatFound;
         propagateHierarchyIdToField(monthlyInvalidEmailFormatFound, "monthly_invalid_email_format_found");
+    }
+
+    /**
+     * Returns a maximum invalid email count check.
+     * @return Maximum invalid email count check.
+     */
+    public ColumnInvalidEmailFormatPercentCheckSpec getMonthlyInvalidEmailFormatPercent() {
+        return monthlyInvalidEmailFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of an invalid email count check.
+     * @param monthlyInvalidEmailFormatPercent Invalid email count check.
+     */
+    public void setMonthlyInvalidEmailFormatPercent(ColumnInvalidEmailFormatPercentCheckSpec monthlyInvalidEmailFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyInvalidEmailFormatPercent, monthlyInvalidEmailFormatPercent));
+        this.monthlyInvalidEmailFormatPercent = monthlyInvalidEmailFormatPercent;
+        propagateHierarchyIdToField(monthlyInvalidEmailFormatPercent, "monthly_invalid_email_format_percent");
     }
 
     /**

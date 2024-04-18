@@ -44,6 +44,7 @@ public class ColumnPatternsMonthlyPartitionedChecksSpec extends AbstractCheckCat
             put("monthly_partition_text_not_matching_regex_found", o -> o.monthlyPartitionTextNotMatchingRegexFound);
             put("monthly_partition_texts_matching_regex_percent", o -> o.monthlyPartitionTextsMatchingRegexPercent);
             put("monthly_partition_invalid_email_format_found", o -> o.monthlyPartitionInvalidEmailFormatFound);
+            put("monthly_partition_invalid_email_format_percent", o -> o.monthlyPartitionInvalidEmailFormatPercent);
             put("monthly_partition_text_not_matching_date_pattern_found", o -> o.monthlyPartitionTextNotMatchingDatePatternFound);
             put("monthly_partition_text_matching_date_pattern_percent", o -> o.monthlyPartitionTextMatchingDatePatternPercent);
             put("monthly_partition_text_matching_name_pattern_percent", o -> o.monthlyPartitionTextMatchingNamePatternPercent);
@@ -63,6 +64,9 @@ public class ColumnPatternsMonthlyPartitionedChecksSpec extends AbstractCheckCat
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidEmailFormatFoundCheckSpec monthlyPartitionInvalidEmailFormatFound;
+
+    @JsonPropertyDescription("Verifies that the percentage of invalid emails in a text column does not exceed the maximum accepted percentage.")
+    private ColumnInvalidEmailFormatPercentCheckSpec monthlyPartitionInvalidEmailFormatPercent;
 
     @JsonPropertyDescription("Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.")
     private ColumnTextNotMatchingDatePatternFoundCheckSpec monthlyPartitionTextNotMatchingDatePatternFound;
@@ -137,6 +141,24 @@ public class ColumnPatternsMonthlyPartitionedChecksSpec extends AbstractCheckCat
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionInvalidEmailFormatFound, monthlyPartitionInvalidEmailFormatFound));
         this.monthlyPartitionInvalidEmailFormatFound = monthlyPartitionInvalidEmailFormatFound;
         propagateHierarchyIdToField(monthlyPartitionInvalidEmailFormatFound, "monthly_partition_invalid_email_format_found");
+    }
+
+    /**
+     * Returns a maximum invalid email percent check.
+     * @return Maximum invalid email percent check.
+     */
+    public ColumnInvalidEmailFormatPercentCheckSpec getMonthlyPartitionInvalidEmailFormatPercent() {
+        return monthlyPartitionInvalidEmailFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of an invalid email percent check.
+     * @param monthlyPartitionInvalidEmailFormatPercent Invalid email percent check.
+     */
+    public void setMonthlyPartitionInvalidEmailFormatPercent(ColumnInvalidEmailFormatPercentCheckSpec monthlyPartitionInvalidEmailFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionInvalidEmailFormatPercent, monthlyPartitionInvalidEmailFormatPercent));
+        this.monthlyPartitionInvalidEmailFormatPercent = monthlyPartitionInvalidEmailFormatPercent;
+        propagateHierarchyIdToField(monthlyPartitionInvalidEmailFormatPercent, "monthly_partition_invalid_email_format_percent");
     }
 
     /**
