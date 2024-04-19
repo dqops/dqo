@@ -1,4 +1,4 @@
-import { TableColumnsStatisticsModel } from '../../api';
+import { DimensionCurrentDataQualityStatusModel, TableColumnsStatisticsModel } from '../../api';
 import { MyData } from './TableColumnsConstans';
 
 export const renderValue = (value: any) => {
@@ -207,16 +207,37 @@ function countDimensions(dimensions: any[] | undefined): number {
   return dimensions ? dimensions.length : 0;
 }
 
-function getHighestSeverity(dimensions: any[] | undefined): number {
+const getSeverityLevel = (severity: any) : number => {
+  switch (severity) {
+    case 'fatal' : 
+      return 3;
+    case 'error': 
+      return 2;
+    case 'warning': 
+      return 1;
+    case 'valid':
+      return 0;        
+  }
+  return 4;
+} 
+
+
+function getHighestSeverity(dimensions:  ({
+  [key: string]: DimensionCurrentDataQualityStatusModel;
+} | undefined)[] | undefined | undefined): number {
   if (!dimensions || dimensions.length === 0) return -1;
-  
   let highestSeverity = -1;
-  dimensions.forEach(dimension => {
-    if (dimension.severity_level > highestSeverity) {
-      highestSeverity = dimension.severity_level;
+  let counter = 0;
+  Object.values(dimensions).forEach(dimension => {
+    if (getSeverityLevel(dimension?.current_severity) === highestSeverity) {
+      counter ++;
+    }
+    if (getSeverityLevel(dimension?.current_severity) > highestSeverity) {
+      highestSeverity = getSeverityLevel(dimension?.current_severity);
+      counter = 0;
     }
   });
-  return highestSeverity;
+  return highestSeverity * 100 + counter;
 }
 function sortByDimenstion(dataArray: MyData[], direction: 'asc' | 'desc'): MyData[] {
   const array = dataArray.sort((a, b) => {
