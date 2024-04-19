@@ -188,6 +188,8 @@ To provide your user credentials to DQOps, use the Google Cloud CLI:
 
 ### Using shared credentials
 
+With DQOps, you can configure credentials to access GCP Cloud directly in the platform.
+
 Please note, that any credentials and secrets shared with the DQOps Cloud or DQOps SaaS instances are stored in the .credentials folder. 
 This folder also contains the default credentials file for GCP named GCP_application_default_credentials.json.
 
