@@ -268,7 +268,7 @@ const TableColumns = ({
   useEffect(() => {
     CheckResultApi.getTableDataQualityStatus(connectionName, schemaName, tableName, undefined, undefined, checkTypes === CheckTypes.PROFILING ? true : undefined).then((res) =>  setStatus(res.data.columns ?? {}))
   }, [connectionName, schemaName, tableName]);
-  console.log(dataArray)
+
   return (
     <div className="p-4 relative">
       <table className=" mt-4 w-full">
