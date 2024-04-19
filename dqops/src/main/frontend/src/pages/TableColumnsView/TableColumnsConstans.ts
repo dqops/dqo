@@ -1,5 +1,6 @@
 import {
   DataGroupingConfigurationSpec,
+  DimensionCurrentDataQualityStatusModel,
   TableColumnsStatisticsModel
 } from '../../api';
 
@@ -46,7 +47,9 @@ export interface MyData {
   importedDatatype?: string | undefined;
   columnHash: number;
   isColumnSelected: boolean;
-  dimentions?: any[];
+  dimentions?: ({
+    [key: string]: DimensionCurrentDataQualityStatusModel;
+} | undefined)[]
 }
 
 export interface ITableColumnsProps {

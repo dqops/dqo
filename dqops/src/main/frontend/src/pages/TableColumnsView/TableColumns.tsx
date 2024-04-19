@@ -36,17 +36,11 @@ const getSeverityLevel = (severity: CheckCurrentDataQualityStatusModelCurrentSev
 } 
 
 const rewriteDimensions = (columnStatus : { [key: string]: ColumnCurrentDataQualityStatusModel }) => {
-  const columnValues: any = {}; 
+  const obj : any = {};
   Object.entries(columnStatus).forEach(([key, value]) => {
-    const dimentions: Array<any> = [];
-    Object.entries(value.checks ?? {}).forEach(([key, value]) => {
-     dimentions.push({ quality_dimension: value.quality_dimension, current_severity: value.current_severity,
-       highest_historical_severity: value.highest_historical_severity, last_executed_at: value.last_executed_at,
-        check_name: key, category: value.category, severity_level: getSeverityLevel(value.current_severity) });
-    })
-    columnValues[key] = dimentions; 
-  })
-  return columnValues;
+    obj[key] = value.dimensions;
+  }); 
+  return obj;
 }
 
 const TableColumns = ({

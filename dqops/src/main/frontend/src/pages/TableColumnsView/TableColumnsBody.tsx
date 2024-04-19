@@ -5,6 +5,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
+  DimensionCurrentDataQualityStatusModel,
+  DimensionCurrentDataQualityStatusModelCurrentSeverityEnum,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../api';
@@ -131,52 +133,53 @@ export default function TableColumnsBody({
       : ([] as string[]);
   }, [job]);
 
-const renderSecondLevelTooltip = (data: any) => {
-  return (data.empty ?
-  <div>
-      <div className="flex gap-x-2">
-        <div className="w-42">Quality Dimension:</div>
-        <div>{data.quality_dimension}</div>
-      </div>
-    <div className="w-full">No data quality checks configured</div>
-  </div> :
+const renderSecondLevelTooltip = (data: DimensionCurrentDataQualityStatusModel) => {
+  return (
+  //   data.empty ?
+  // <div>
+  //     <div className="flex gap-x-2">
+  //       <div className="w-42">Quality Dimension:</div>
+  //       <div>{data.quality_dimension}</div>
+  //     </div>
+  //   <div className="w-full">No data quality checks configured</div>
+  // </div> :
     <div>
-      <div className="flex gap-x-2">
+      {/* <div className="flex gap-x-2">
         <div className="w-42">Data quality check:</div>
-        <div>{data.check_name}</div>
-      </div>
+        <div>{data?.check_name}</div>
+      </div> */}
       <div className="flex gap-x-2">
         <div className="w-42">Last executed at:</div>
-        <div>{moment(data.last_executed_at).format('YYYY-MM-DD HH:mm:ss')}</div>
+        <div>{moment(data?.last_check_executed_at).format('YYYY-MM-DD HH:mm:ss')}</div>
       </div>
       <div className="flex gap-x-2">
         <div className="w-42">Current severity level:</div>
-        <div>{data.current_severity}</div>
+        <div>{data?.current_severity}</div>
       </div>
       <div className="flex gap-x-2">
         <div className="w-42">Highest historical severity level:</div>
-        <div>{data.highest_severity}</div>
+        <div>{data?.highest_historical_severity}</div>
       </div>
-      <div className="flex gap-x-2">
+      {/* <div className="flex gap-x-2">
         <div className="w-42">Category:</div>
-        <div>{data.category}</div>
-      </div>
+        <div>{data?.category}</div>
+      </div> */}
       <div className="flex gap-x-2">
         <div className="w-42">Quality Dimension:</div>
-        <div>{data.quality_dimension}</div>
+        <div>{data?.dimension}</div>
       </div>
     </div>
   );
 };
 
-const getBasicDimmensions = (column: MyData, type: string) : any[] => {
-  const basicDimensions = column.dimentions?.filter((x) => x.quality_dimension === type);
+const getBasicDimmensionsKeys = (column: MyData, type: string) => {
+  const basicDimensions = Object.keys(column.dimentions ?? {})?.filter((x) => x === type);
   return basicDimensions?.length ? basicDimensions : [{empty: true, quality_dimension : type}]
 };  
 const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
 
-const getAdditionalDimentions = (column: MyData) : any[] => {
-  return column.dimentions?.filter((x) => !basicDimensionTypes.includes(x.quality_dimension)) ?? [];
+const getAdditionalDimentionsKeys = (column: MyData) => {
+  return Object.keys(column.dimentions ?? {})?.filter((x) => !basicDimensionTypes.includes(x)) ?? [];
 }
 
   return (
@@ -202,15 +205,15 @@ const getAdditionalDimentions = (column: MyData) : any[] => {
           <td className='border-b border-gray-100 text-left px-4 py-2'>
             <div className='flex items-center gap-x-0.5'>
             {basicDimensionTypes.map((dimType) => {
-              return getBasicDimmensions(column, dimType)?.map((dim, jIndex) => (
-                <Tooltip key={`Dimensionindex${jIndex}`} content={renderSecondLevelTooltip(dim)} >
-                  <div className={clsx('w-3 h-3', dim.empty === true ? 'border border-gray-200 bg-white' : getColor(dim.current_severity))} style={{ borderRadius: "6px" }} />
+              return getBasicDimmensionsKeys(column, dimType)?.map((dimensionKey, jIndex) => (
+                <Tooltip key={`Dimensionindex${jIndex}`} content={renderSecondLevelTooltip(column.dimentions?.[dimensionKey as any] ?? {})} >
+                  <div className={clsx('w-3 h-3', !column.dimentions?.[dimensionKey as any] ? 'border border-gray-200 bg-white' : getColor(column.dimentions?.[dimensionKey as any]?.current_severity as DimensionCurrentDataQualityStatusModelCurrentSeverityEnum | undefined))} style={{ borderRadius: "6px" }} />
                 </Tooltip>
               ));
             })}
-            {getAdditionalDimentions(column).map((dim, dimIndex)  =>
-                <Tooltip key={`DimensionTooltipindex${dimIndex}`} content={renderSecondLevelTooltip(dim)}>
-                  <div className={clsx('w-3 h-3', getColor(dim.current_severity))} style={{ borderRadius: "6px" }} />
+            {getAdditionalDimentionsKeys(column).map((dimensionKey : string, dimIndex)  =>
+                <Tooltip key={`DimensionTooltipindex${dimIndex}`} content={renderSecondLevelTooltip(column.dimentions?.[dimensionKey as any] ?? {})}>
+                  <div className={clsx('w-3 h-3', getColor(column.dimentions as any))} style={{ borderRadius: "6px" }} />
                 </Tooltip>
              )}
           </div>
