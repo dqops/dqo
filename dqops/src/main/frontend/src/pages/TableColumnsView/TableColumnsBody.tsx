@@ -133,16 +133,17 @@ export default function TableColumnsBody({
       : ([] as string[]);
   }, [job]);
 
-const renderSecondLevelTooltip = (data: DimensionCurrentDataQualityStatusModel) => {
+const renderSecondLevelTooltip = (data: DimensionCurrentDataQualityStatusModel | undefined) => {
+  // console.log(data)
   return (
-  //   data.empty ?
-  // <div>
-  //     <div className="flex gap-x-2">
-  //       <div className="w-42">Quality Dimension:</div>
-  //       <div>{data.quality_dimension}</div>
-  //     </div>
-  //   <div className="w-full">No data quality checks configured</div>
-  // </div> :
+    !data?.last_check_executed_at ?
+  <div>
+      <div className="flex gap-x-2">
+        <div className="w-42">Quality Dimension:</div>
+        <div>{data?.dimension}</div>
+      </div>
+    <div className="w-full">No data quality checks configured</div>
+  </div> :
     <div>
       {/* <div className="flex gap-x-2">
         <div className="w-42">Data quality check:</div>
@@ -173,14 +174,15 @@ const renderSecondLevelTooltip = (data: DimensionCurrentDataQualityStatusModel) 
 };
 
 const getBasicDimmensionsKeys = (column: MyData, type: string) => {
-  const basicDimensions = Object.keys(column.dimentions ?? {})?.filter((x) => x === type);
-  return basicDimensions?.length ? basicDimensions : [{empty: true, quality_dimension : type}]
+  const basicDimensions = Object.keys(column.dimentions ?? {})?.find((x) => x === type);
+  return  basicDimensions ?? [{dimension: type}];
 };  
 const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
 
 const getAdditionalDimentionsKeys = (column: MyData) => {
   return Object.keys(column.dimentions ?? {})?.filter((x) => !basicDimensionTypes.includes(x)) ?? [];
 }
+
 
   return (
     <tbody className="text-sm">
@@ -205,16 +207,22 @@ const getAdditionalDimentionsKeys = (column: MyData) => {
           <td className='border-b border-gray-100 text-left px-4 py-2'>
             <div className='flex items-center gap-x-0.5'>
             {basicDimensionTypes.map((dimType) => {
-              return getBasicDimmensionsKeys(column, dimType)?.map((dimensionKey, jIndex) => (
-                <Tooltip key={`Dimensionindex${jIndex}`} content={renderSecondLevelTooltip(column.dimentions?.[dimensionKey as any] ?? {})} >
-                  <div className={clsx('w-3 h-3', !column.dimentions?.[dimensionKey as any] ? 'border border-gray-200 bg-white' : getColor(column.dimentions?.[dimensionKey as any]?.current_severity as DimensionCurrentDataQualityStatusModelCurrentSeverityEnum | undefined))} style={{ borderRadius: "6px" }} />
+              const dimensionKey = getBasicDimmensionsKeys(column, dimType)
+              return (
+                <Tooltip key={`Dimensionindex${dimType}`} content={renderSecondLevelTooltip(column.dimentions?.[dimensionKey as any] ?? {dimension: dimType})} >
+                  <div className={clsx('w-3 h-3', !column.dimentions?.[dimensionKey as any]?.current_severity ? 'border border-gray-200 bg-white' : 
+                  getColor(column.dimentions?.[dimensionKey as any]?.current_severity as DimensionCurrentDataQualityStatusModelCurrentSeverityEnum | undefined))} style={{ borderRadius: "6px" }} />
                 </Tooltip>
-              ));
+
+              )
             })}
-            {getAdditionalDimentionsKeys(column).map((dimensionKey : string, dimIndex)  =>
-                <Tooltip key={`DimensionTooltipindex${dimIndex}`} content={renderSecondLevelTooltip(column.dimentions?.[dimensionKey as any] ?? {})}>
-                  <div className={clsx('w-3 h-3', getColor(column.dimentions as any))} style={{ borderRadius: "6px" }} />
+            {getAdditionalDimentionsKeys(column).map((dimensionKey : string, dimIndex)  => {
+              console.log(column.dimentions?.[dimensionKey as any], getColor(column.dimentions?.[dimensionKey as any]?.current_severity as DimensionCurrentDataQualityStatusModelCurrentSeverityEnum | undefined), getColor(column.dimentions?.[dimensionKey as any]?.current_severity as DimensionCurrentDataQualityStatusModelCurrentSeverityEnum | undefined).length === 0 ? 'bg-gray-150' :  getColor(column.dimentions?.[dimensionKey as any]?.current_severity as DimensionCurrentDataQualityStatusModelCurrentSeverityEnum | undefined))
+              return <Tooltip key={`DimensionTooltipindex${dimIndex}`} content={renderSecondLevelTooltip(column.dimentions?.[dimensionKey as any])}>
+                  <div className={clsx('w-3 h-3', 
+                  getColor(column.dimentions?.[dimensionKey as any]?.current_severity as DimensionCurrentDataQualityStatusModelCurrentSeverityEnum | undefined)).length === 0 ? 'bg-gray-150 border border-gray-200' :  getColor(column.dimentions?.[dimensionKey as any]?.current_severity as DimensionCurrentDataQualityStatusModelCurrentSeverityEnum | undefined)} style={{ borderRadius: "6px" }} />
                 </Tooltip>
+              }
              )}
           </div>
           </td>
