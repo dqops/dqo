@@ -13,7 +13,7 @@ helps manage and analyze data with built-in features like machine learning, geos
 
 To add BigQuery data source connection to DQOps you need the following:
 
-  - A BiqQuery service account with **BigQuery > BigQuery Job User** permission
+  - A BigQuery service account with **BigQuery > BigQuery Job User** permission
   - A service account key in JSON format for JSON key authentication. For details refer to [Create and delete service account keys](https://cloud.google.com/iam/docs/keys-create-delete)
   - A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials](#using-google-application-credentials-authentication) authentication
 
@@ -170,19 +170,63 @@ Complete documentation of all connection parameters used in the `spec.bigquery` 
 described in the reference section of the [BigQueryParametersSpec](../reference/yaml/ConnectionYaml.md#bigqueryparametersspec)
 YAML file format.
 
+## Configure the credentials
 
-## Using Google Application Credentials authentication
+### Using Google Application Credentials authentication
 
-[Application Default Credentials](https://cloud.google.com/docs/authentication/provide-credentials-adc) is a strategy used by the Google authentication libraries to automatically find 
+[Application Default Credentials](https://cloud.google.com/docs/authentication/provide-credentials-adc) is a strategy used by the Google authentication libraries to automatically find
 credentials based on the application environment.
 
-DQOps allows authentication using Google Application Credentials. 
+DQOps allows authentication using Google Application Credentials.
 
 To provide your user credentials to DQOps, use the Google Cloud CLI:
 
 1. [Install the gcloud CLI](https://cloud.google.com/sdk/docs/install), if you haven't already.
 2. Run `gcloud auth application-default login` command in shell or command line to create your credential file.
 3. Log in at login screen. The credentials will apply to all API calls that make use of the Application Default Credentials client library.
+
+
+### Using shared credentials
+
+With DQOps, you can configure credentials to access GCP Cloud directly in the platform.
+
+Please note, that any credentials and secrets shared with the DQOps Cloud or DQOps SaaS instances are stored in the .credentials folder. 
+This folder also contains the default credentials file for GCP named GCP_application_default_credentials.json.
+
+``` { .asc .annotate hl_lines="4" }
+$DQO_USER_HOME
+├───...
+└───.credentials                                                            
+    ├───GCP_application_default_credentials.json
+    └─...   
+```
+
+If you wish to use JSON key authentication, the content of the file must be replaced with a service account key in JSON format.
+You can find more details on how to [Create and delete service account keys](https://cloud.google.com/iam/docs/keys-create-delete) in Google Cloud documentation.
+
+If you do not replace the content of the file, the Application Default Credentials will be used.
+
+
+To set the credential file in DQOps, follow these steps:
+
+1. Open the Configuration section.
+2. Select Shared credentials from the tree view on the left.
+3. Click the edit link on the “GCP_application_credentials.json” file.
+
+![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/shared-credentials-ui.png)
+
+4. In the text area, paste the key in JSON format, replacing the placeholder text.
+
+![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/edit-gcp-shared-credential.png)
+
+![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/replaced-gcp-shared-credential.png)
+
+5. Click the **Save** button, to save changes.
+
+!!! tip "Use the Application Default Credentials after filling in the shared credential"
+    
+    If you still want to use default credentials from Google Cloud CLI, 
+    you must manually delete the .credentialsGCP_application_default_credentials.json file from the DQOps credentials.
 
 
 ## Next steps
