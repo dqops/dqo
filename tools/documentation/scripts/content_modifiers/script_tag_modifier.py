@@ -15,12 +15,14 @@ def _verify_application(line: str):
     excluded_config_script_tag_opening: str = "<script id=\"__config\" type=\"application/json\""
     excluded_schema_script: str = "type=\"application/ld+json\""
     excluded_inline_script_tag_with_no_attibutes: str = "<script>"
+    excluded_bundle_script: str = "/bundle."
 
     if script_tag_opening not in line \
             or excluded_config_script_tag_opening in line \
             or excluded_schema_script in line \
             or excluded_script_nowprocket_string in line \
-            or excluded_inline_script_tag_with_no_attibutes in line:
+            or excluded_inline_script_tag_with_no_attibutes in line \
+            or excluded_bundle_script in line:
         return False
     return True
 
