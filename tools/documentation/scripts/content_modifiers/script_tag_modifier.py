@@ -21,7 +21,7 @@ def _verify_application(line: str):
             or excluded_config_script_tag_opening in line \
             or excluded_schema_script in line \
             or excluded_script_nowprocket_string in line \
-            or excluded_inline_script_tag_with_no_attibutes in line \
+            or (excluded_inline_script_tag_with_no_attibutes in line and "const lightbox" not in line) \
             or excluded_bundle_script in line:
         return False
     return True
