@@ -1,16 +1,19 @@
 import {
   CheckCurrentDataQualityStatusModel,
   CheckCurrentDataQualityStatusModelCurrentSeverityEnum,
-  ColumnCurrentDataQualityStatusModel
+  ColumnCurrentDataQualityStatusModel,
+  DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
 } from '../../../../api';
 import { TFirstLevelCheck, severityMap } from './TableQualityStatusConstans';
 
 export const getColor = (
   status:
-    | CheckCurrentDataQualityStatusModelCurrentSeverityEnum
+    | CheckCurrentDataQualityStatusModelCurrentSeverityEnum 
+    | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum 
     | null
     | undefined
 ) => {
+  // console.log(status)
   switch (status) {
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error:
       return 'bg-gray-150';

@@ -1,20 +1,47 @@
-import React, { useEffect, useState, useLayoutEffect } from 'react';
-import { ColumnApiClient } from '../../services/apiClient';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
+  CheckCurrentDataQualityStatusModelCurrentSeverityEnum,
+  ColumnCurrentDataQualityStatusModel,
   ColumnStatisticsModel,
   DataGroupingConfigurationSpec
 } from '../../api';
-import ConfirmDialog from './ConfirmDialog';
-import { CheckTypes } from '../../shared/routes';
-import { setCreatedDataStream } from '../../redux/actions/definition.actions';
-import { useSelector } from 'react-redux';
-import { getFirstLevelState } from '../../redux/selectors';
 import Loader from '../../components/Loader';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { ITableColumnsProps, MyData, spec } from './TableColumnsConstans';
-import { renderValue } from './TableColumnsUtils';
+import { setCreatedDataStream } from '../../redux/actions/definition.actions';
+import { getFirstLevelState } from '../../redux/selectors';
+import { CheckResultApi, ColumnApiClient } from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
+import ConfirmDialog from './ConfirmDialog';
 import TableColumnsBody from './TableColumnsBody';
+import { ITableColumnsProps, MyData, spec } from './TableColumnsConstans';
 import TableColumnsHeader from './TableColumnsHeader';
+import { renderValue } from './TableColumnsUtils';
+
+const getSeverityLevel = (severity: CheckCurrentDataQualityStatusModelCurrentSeverityEnum | undefined) => {
+  switch (severity) {
+    case 'execution_error': 
+      return 4;
+    case 'fatal' : 
+      return 3;
+    case 'error': 
+      return 2;
+    case 'warning': 
+      return 1;
+    case 'valid':
+      return 0;        
+  }
+  return 4;
+} 
+
+const rewriteDimensions = (columnStatus : { [key: string]: ColumnCurrentDataQualityStatusModel }) => {
+  const obj : any = {};
+  Object.entries(columnStatus).forEach(([key, value]) => {
+    obj[key] = value.dimensions;
+  }); 
+  return obj;
+}
 
 const TableColumns = ({
   connectionName,
@@ -27,6 +54,7 @@ const TableColumns = ({
   onChangeSelectedColumns,
   refreshListFunc
 }: ITableColumnsProps) => {
+  const {checkTypes} : {checkTypes: CheckTypes} = useDecodedParams()
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
   const [sortedArray, setSortedArray] = useState<MyData[]>();
@@ -34,6 +62,7 @@ const TableColumns = ({
     {}
   );
   const [shouldResetCheckboxes, setShouldResetCheckboxes] = useState(false);
+  const [status, setStatus] = useState<{ [key: string]: ColumnCurrentDataQualityStatusModel }>({})
 
   const handleButtonClick = (name: string) => {
     setObjectStates((prevStates) => ({
@@ -136,7 +165,8 @@ const TableColumns = ({
         scale: renderValue(scaleData?.[i]),
         importedDatatype: typeData?.[i],
         columnHash: Number(hashData?.[i]),
-        isColumnSelected: false
+        isColumnSelected: false,
+        dimentions: rewriteDimensions(status)[columnNameData?.[i] ?? '']
       };
 
       dataArray.push(newData);
@@ -230,6 +260,14 @@ const TableColumns = ({
       </div>
     );
   }
+  const handleSorting  = (data: MyData[]) => {
+    const arr = [...data]
+    setSortedArray(arr);
+  }
+
+  useEffect(() => {
+    CheckResultApi.getTableDataQualityStatus(connectionName, schemaName, tableName, undefined, undefined, checkTypes === CheckTypes.PROFILING ? true : undefined).then((res) =>  setStatus(res.data.columns ?? {}))
+  }, [connectionName, schemaName, tableName]);
 
   return (
     <div className="p-4 relative">
@@ -237,7 +275,7 @@ const TableColumns = ({
         <TableColumnsHeader
           dataArray={sortedArray || dataArray}
           updateData={updateData}
-          setSortedArray={setSortedArray}
+          setSortedArray={handleSorting}
         />
         <TableColumnsBody
           columns={sortedArray || dataArray}
