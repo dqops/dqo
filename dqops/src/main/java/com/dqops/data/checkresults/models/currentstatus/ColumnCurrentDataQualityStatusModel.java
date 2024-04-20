@@ -16,12 +16,14 @@
 
 package com.dqops.data.checkresults.models.currentstatus;
 
+import com.dqops.checks.CheckType;
 import com.dqops.data.checkresults.models.CheckResultStatus;
 import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.utils.docs.generators.SampleListUtility;
 import com.dqops.utils.docs.generators.SampleMapUtility;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -43,7 +45,7 @@ import java.util.*;
         "It is a summary of the results of the most recently executed data quality checks on the column. " +
         "Verify the value of the current_severity to see if there are any data quality issues on the column.")
 @Data
-public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualityStatusHolder {
+public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualityStatusHolder, Cloneable {
     /**
      * The most recent data quality issue severity for this column. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups.
      * For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.
@@ -171,6 +173,77 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
         }
     }
 
+    /**
+     * Makes a shallow clone of the object.
+     * @return Shallow clone of the object.
+     */
+    protected ColumnCurrentDataQualityStatusModel clone() {
+        try {
+            return (ColumnCurrentDataQualityStatusModel)super.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new DqoRuntimeException("Clone not supported", ex);
+        }
+    }
+
+    /**
+     * Creates a deep clone of the table status model, preserving only the checks for an expected check type.
+     * All scores and the data quality KPI is recalculated for the checks that left.
+     * @param checkType Data quality check type to copy, the results of the other check types are ignored.
+     * @return A deep clone of the object with results only for that check type.
+     */
+    public ColumnCurrentDataQualityStatusModel cloneFilteredByCheckType(CheckType checkType) {
+        ColumnCurrentDataQualityStatusModel tableStatusClone = this.clone();
+        tableStatusClone.currentSeverity = null;
+        tableStatusClone.highestHistoricalSeverity = null;
+        tableStatusClone.lastCheckExecutedAt = null;
+        // we are preserving the executedChecks... for informative reasons
+        tableStatusClone.validResults = 0;
+        tableStatusClone.warnings = 0;
+        tableStatusClone.errors = 0;
+        tableStatusClone.fatals = 0;
+        tableStatusClone.executionErrors = 0;
+        tableStatusClone.dimensions = new LinkedHashMap<>();
+        tableStatusClone.checks = new LinkedHashMap<>();
+
+        for (Map.Entry<String, CheckCurrentDataQualityStatusModel> keyValue : this.checks.entrySet()) {
+            if (keyValue.getValue().getCheckType() == checkType) {
+                tableStatusClone.checks.put(keyValue.getKey(), keyValue.getValue());
+            }
+        }
+
+        tableStatusClone.calculateHighestCurrentAndHistoricSeverity();
+
+        return tableStatusClone;
+    }
+
+    /**
+     * Recalculates the number of valid results, warnings, errors, fatal errors and execution errors from the values in the check results.
+     * This method should be called after the list of checks was filtered.
+     */
+    public void countIssuesFromCheckResults() {
+        this.executedChecks = 0;
+        this.validResults = 0;
+        this.warnings = 0;
+        this.errors = 0;
+        this.fatals = 0;
+        this.executionErrors = 0;
+        this.lastCheckExecutedAt = null;
+
+        for (CheckCurrentDataQualityStatusModel checkStatusModel : checks.values()) {
+            if (checkStatusModel.getLastExecutedAt() != null &&
+                    (this.lastCheckExecutedAt == null || checkStatusModel.getLastExecutedAt().isAfter(this.lastCheckExecutedAt))) {
+                this.lastCheckExecutedAt = checkStatusModel.getLastExecutedAt();
+            }
+
+            this.executedChecks += checkStatusModel.getExecutedChecks();
+            this.validResults += checkStatusModel.getValidResults();
+            this.warnings += checkStatusModel.getWarnings();
+            this.errors += checkStatusModel.getErrors();
+            this.fatals += checkStatusModel.getFatals();
+            this.executionErrors += checkStatusModel.getExecutionErrors();
+        }
+    }
 
     public static class ColumnCurrentDataQualityStatusModelSampleFactory implements SampleValueFactory<ColumnCurrentDataQualityStatusModel> {
         @Override

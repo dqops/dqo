@@ -16,12 +16,14 @@
 
 package com.dqops.data.checkresults.models.currentstatus;
 
+import com.dqops.checks.CheckType;
 import com.dqops.data.checkresults.models.CheckResultStatus;
 import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.utils.docs.generators.SampleListUtility;
 import com.dqops.utils.docs.generators.SampleMapUtility;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -201,6 +203,45 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
     }
 
     /**
+     * Recalculates the number of valid results, warnings, errors, fatal errors and execution errors from the values in the check results.
+     * This method should be called after the list of checks was filtered.
+     */
+    public void countIssuesFromCheckResults() {
+        this.executedChecks = 0;
+        this.validResults = 0;
+        this.warnings = 0;
+        this.errors = 0;
+        this.fatals = 0;
+        this.executionErrors = 0;
+        this.lastCheckExecutedAt = null;
+
+        for (CheckCurrentDataQualityStatusModel checkStatusModel : checks.values()) {
+            if (checkStatusModel.getLastExecutedAt() != null &&
+                    (this.lastCheckExecutedAt == null || checkStatusModel.getLastExecutedAt().isAfter(this.lastCheckExecutedAt))) {
+                this.lastCheckExecutedAt = checkStatusModel.getLastExecutedAt();
+            }
+
+            this.executedChecks += checkStatusModel.getExecutedChecks();
+            this.validResults += checkStatusModel.getValidResults();
+            this.warnings += checkStatusModel.getWarnings();
+            this.errors += checkStatusModel.getErrors();
+            this.fatals += checkStatusModel.getFatals();
+            this.executionErrors += checkStatusModel.getExecutionErrors();
+        }
+
+        for (ColumnCurrentDataQualityStatusModel columModel : this.columns.values()) {
+            columModel.countIssuesFromCheckResults();
+
+            this.executedChecks += columModel.getExecutedChecks();
+            this.validResults += columModel.getValidResults();
+            this.warnings += columModel.getWarnings();
+            this.errors += columModel.getErrors();
+            this.fatals += columModel.getFatals();
+            this.executionErrors += columModel.getExecutionErrors();
+        }
+    }
+
+    /**
      * Calculates a data quality KPI score for a table.
      */
     public void calculateDataQualityKpiScore() {
@@ -249,6 +290,60 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
         for (DimensionCurrentDataQualityStatusModel dimensionModel : this.dimensions.values()) {
             dimensionModel.calculateDataQualityKpiScore();
         }
+    }
+
+    /**
+     * Makes a shallow clone of the object.
+     * @return Shallow clone of the object.
+     */
+    protected TableCurrentDataQualityStatusModel clone() {
+        try {
+            return (TableCurrentDataQualityStatusModel)super.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new DqoRuntimeException("Clone not supported", ex);
+        }
+    }
+
+    /**
+     * Creates a deep clone of the table status model, preserving only the checks for an expected check type.
+     * All scores and the data quality KPI is recalculated for the checks that left.
+     * @param checkType Data quality check type to copy, the results of the other check types are ignored.
+     * @param includeColumns Include columns. When this parameter is false, the dictionary of columns is removed.
+     * @return A deep clone of the object with results only for that check type.
+     */
+    public TableCurrentDataQualityStatusModel cloneFilteredByCheckType(CheckType checkType, boolean includeColumns) {
+        TableCurrentDataQualityStatusModel tableStatusClone = this.clone();
+        tableStatusClone.currentSeverity = null;
+        tableStatusClone.highestHistoricalSeverity = null;
+        tableStatusClone.dataQualityKpi = null;
+        tableStatusClone.dimensions = new LinkedHashMap<>();
+        tableStatusClone.checks = new LinkedHashMap<>();
+
+        for (Map.Entry<String, CheckCurrentDataQualityStatusModel> keyValue : this.checks.entrySet()) {
+            if (keyValue.getValue().getCheckType() == checkType) {
+                tableStatusClone.checks.put(keyValue.getKey(), keyValue.getValue());
+            }
+        }
+
+        tableStatusClone.columns = new LinkedHashMap<>();
+        for (Map.Entry<String, ColumnCurrentDataQualityStatusModel> columnKeyValue : this.columns.entrySet()) {
+            ColumnCurrentDataQualityStatusModel columnModelFiltered = columnKeyValue.getValue().cloneFilteredByCheckType(checkType);
+            if (!columnModelFiltered.getChecks().isEmpty()) {
+                tableStatusClone.columns.put(columnKeyValue.getKey(), columnModelFiltered);
+            }
+        }
+
+        tableStatusClone.countIssuesFromCheckResults();
+        tableStatusClone.calculateHighestCurrentAndHistoricSeverity();
+        tableStatusClone.calculateDataQualityKpiScore();
+        tableStatusClone.calculateStatusesForDataQualityDimensions();
+
+        if (!includeColumns) {
+            tableStatusClone.columns = null; // detaching columns
+        }
+
+        return tableStatusClone;
     }
 
     public static class TableCurrentDataQualityStatusModelSampleFactory implements SampleValueFactory<TableCurrentDataQualityStatusModel> {

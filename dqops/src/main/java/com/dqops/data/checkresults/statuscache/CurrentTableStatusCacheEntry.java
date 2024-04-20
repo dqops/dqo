@@ -24,8 +24,12 @@ import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityS
  */
 public class CurrentTableStatusCacheEntry {
     private CurrentTableStatusKey key;
-    private volatile CurrentTableStatusEntryStatus status;
-    private volatile TableCurrentDataQualityStatusModel statusModel;
+    private final Object lock = new Object();
+    private CurrentTableStatusEntryStatus status;
+    private TableCurrentDataQualityStatusModel allCheckTypesWithColumns;
+    private TableCurrentDataQualityStatusModel profilingTableOnly;
+    private TableCurrentDataQualityStatusModel monitoringTableOnly;
+    private TableCurrentDataQualityStatusModel partitionedTableOnly;
 
     /**
      * Creates a new entry.
@@ -50,7 +54,9 @@ public class CurrentTableStatusCacheEntry {
      * @return Current status.
      */
     public CurrentTableStatusEntryStatus getStatus() {
-        return status;
+        synchronized (this.lock) {
+            return status;
+        }
     }
 
     /**
@@ -58,23 +64,58 @@ public class CurrentTableStatusCacheEntry {
      * @param status New status.
      */
     public void setStatus(CurrentTableStatusEntryStatus status) {
-        this.status = status;
+        synchronized (this.lock) {
+            this.status = status;
+        }
     }
 
     /**
-     * Returns the current model with the table status.
-     * @return Current table status.
+     * Returns the current model with the table status for all check types. This status contains also information for all columns.
+     * @return Current table status for all check types.
      */
-    public TableCurrentDataQualityStatusModel getStatusModel() {
-        return statusModel;
+    public TableCurrentDataQualityStatusModel getAllCheckTypesWithColumns() {
+        return allCheckTypesWithColumns;
     }
 
     /**
-     * Sets the current model. If it is not empty, the status is also changed to loaded.
-     * @param statusModel Status model.
+     * Returns the status for the table related only to profiling checks. The status does not contain a list of column.
+     * @return The status of the table, for profiling checks only.
      */
-    public void setStatusModel(TableCurrentDataQualityStatusModel statusModel) {
-        this.statusModel = statusModel;
-        this.status = CurrentTableStatusEntryStatus.LOADED;
+    public TableCurrentDataQualityStatusModel getProfilingTableOnly() {
+        return profilingTableOnly;
+    }
+
+    /**
+     * Returns the status for the table related only to monitoring checks. The status does not contain a list of column.
+     * @return The status of the table, for monitoring checks only.
+     */
+    public TableCurrentDataQualityStatusModel getMonitoringTableOnly() {
+        return monitoringTableOnly;
+    }
+
+    /**
+     * Returns the status for the table related only to partitioned checks. The status does not contain a list of column.
+     * @return The status of the table, for partitioned checks only.
+     */
+    public TableCurrentDataQualityStatusModel getPartitionedTableOnly() {
+        return partitionedTableOnly;
+    }
+
+    /**
+     * Sets the current model with a detailed status for all check types. If it is not empty, the status is also changed to loaded.
+     * @param allCheckTypesWithColumns Status model.
+     */
+    public void setStatusModels(
+            TableCurrentDataQualityStatusModel allCheckTypesWithColumns,
+            TableCurrentDataQualityStatusModel profilingTableOnly,
+            TableCurrentDataQualityStatusModel monitoringTableOnly,
+            TableCurrentDataQualityStatusModel partitionedTableOnly) {
+        synchronized (this.lock) {
+            this.allCheckTypesWithColumns = allCheckTypesWithColumns;
+            this.profilingTableOnly = profilingTableOnly;
+            this.monitoringTableOnly = monitoringTableOnly;
+            this.partitionedTableOnly = partitionedTableOnly;
+            this.status = CurrentTableStatusEntryStatus.LOADED;
+        }
     }
 }

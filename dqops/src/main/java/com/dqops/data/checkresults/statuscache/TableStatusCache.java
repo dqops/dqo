@@ -16,6 +16,7 @@
 
 package com.dqops.data.checkresults.statuscache;
 
+import com.dqops.checks.CheckType;
 import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
 
 import java.util.concurrent.CompletableFuture;
@@ -29,16 +30,20 @@ public interface TableStatusCache {
      * Retrieves the current table status for a requested table.
      *
      * @param tableStatusKey Table status key.
+     * @param checkType Check type. When a check type is given, the operation returns the status model only for one check type. The returned model does not contain columns.
+     *                  When the <code>checkType</code> is null, this method returns a full model for all checks, including all columns.
      * @return Table status model or null when it is not yet loaded.
      */
-    TableCurrentDataQualityStatusModel getCurrentTableStatus(CurrentTableStatusKey tableStatusKey);
+    TableCurrentDataQualityStatusModel getCurrentTableStatus(CurrentTableStatusKey tableStatusKey, CheckType checkType);
 
     /**
      * Notifies the table status cache that the table result were updated and should be invalidated.
      *
      * @param tableStatusKey Table status key.
+     * @param replacingCachedFile True when we are replacing a file that was already in a cache, false when a file is just placed into a cache,
+     *                            and it is not a real invalidation, but just a notification that a file was just cached.
      */
-    void invalidateTableStatus(CurrentTableStatusKey tableStatusKey);
+    void invalidateTableStatus(CurrentTableStatusKey tableStatusKey, boolean replacingCachedFile);
 
     /**
      * Returns a future that is completed when there are no queued table status reload operations.

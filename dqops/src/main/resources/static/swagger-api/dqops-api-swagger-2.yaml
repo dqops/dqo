@@ -13981,6 +13981,9 @@ definitions:
         type: "integer"
         format: "int64"
         description: "The UTC timestamp when the check was recently executed."
+      column_name:
+        type: "string"
+        description: "Optional column name for column-level data quality checks."
       check_type:
         type: "string"
         description: "The check type: profiling, monitoring, partitioned."
@@ -14002,6 +14005,40 @@ definitions:
       quality_dimension:
         type: "string"
         description: "Data quality dimension, such as Completeness, Uniqueness, Validity."
+      executed_checks:
+        type: "integer"
+        format: "int32"
+        description: "The total number of most recent checks that were executed on\
+          \ the column. Table comparison checks that are comparing groups of data\
+          \ are counted as the number of compared data groups."
+      valid_results:
+        type: "integer"
+        format: "int32"
+        description: "The number of most recent valid data quality checks that passed\
+          \ without raising any issues."
+      warnings:
+        type: "integer"
+        format: "int32"
+        description: "The number of most recent data quality checks that failed by\
+          \ raising a warning severity data quality issue."
+      errors:
+        type: "integer"
+        format: "int32"
+        description: "The number of most recent data quality checks that failed by\
+          \ raising an error severity data quality issue."
+      fatals:
+        type: "integer"
+        format: "int32"
+        description: "The number of most recent data quality checks that failed by\
+          \ raising a fatal severity data quality issue."
+      execution_errors:
+        type: "integer"
+        format: "int32"
+        description: "The number of data quality check execution errors that were\
+          \ reported due to access issues to the data source, invalid mapping in DQOps,\
+          \ invalid queries in data quality sensors or invalid python rules. When\
+          \ an execution error is reported, the configuration of a data quality check\
+          \ on a column must be updated."
     description: "The most recent data quality status for a single data quality check.\
       \ If data grouping is enabled, the *current_severity* will be the highest data\
       \ quality issue status from all data quality results for all data groups. For\

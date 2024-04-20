@@ -418,7 +418,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                                                                      UserDomainIdentity userDomainIdentity) {
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS, userDomainIdentity);
+                physicalTableName, CheckResultsColumnNames.CHECK_RESULTS_COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
         LocalDate startMonth;
         if (filterParameters.getDays() != null) {
             startMonth = firstSeen.minus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
@@ -542,7 +542,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
 
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS, userDomainIdentity);
+                physicalTableName, CheckResultsColumnNames.CHECK_RESULTS_COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
         LocalDate startMonth;
         if (filterParameters.getDays() != null) {
             startMonth = firstSeen.minus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
@@ -683,7 +683,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 .createForRecentMonths(lastMonths, lastMonths + 1);
 
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_RESULTS_OVERVIEW, userDomainIdentity);
+                physicalTableName, CheckResultsColumnNames.CHECK_RESULTS_COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
         checkResultsSnapshot.ensureMonthsAreLoaded(checkResultsLoadParameters.getStartMonth(), checkResultsLoadParameters.getEndMonth());
 
         if (checkResultsSnapshot.getLoadedMonthlyPartitions() != null && !checkResultsSnapshot.getLoadedMonthlyPartitions().isEmpty()) {
@@ -710,7 +710,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         }
 
         ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_OVERVIEW, userDomainIdentity);
+                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
         errorsSnapshot.ensureMonthsAreLoaded(checkResultsLoadParameters.getStartMonth(), checkResultsLoadParameters.getEndMonth());
 
         if (errorsSnapshot.getLoadedMonthlyPartitions() != null && !errorsSnapshot.getLoadedMonthlyPartitions().isEmpty()) {
@@ -758,7 +758,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         int rowCount = sourceTable.rowCount();
 
         for (int i = 0; i < rowCount; i++) {
-            Integer severity = severityColumn == null ? 4 : severityColumn.get(i);
+            Integer severity = severityColumn == null ? 4 : (severityColumn.isMissing(i) ? null : severityColumn.get(i));
             if (severity == null) {
                 continue;
             }
@@ -776,10 +776,13 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
             String checkName = checkNameColumn.get(i);
             String columnName = columnNameColumn.get(i);
+            if (columnName != null && columnName.isEmpty()) {
+                columnName = null;
+            }
             CurrentDataQualityStatusHolder currentStatusHolder;
             ColumnCurrentDataQualityStatusModel columnCurrentDataQualityStatusModel = null;
 
-            if (Strings.isNullOrEmpty(columnName)) {
+            if (columnName == null) {
                 // table level check
                 currentStatusHolder = tableStatusModel;
             } else {
@@ -821,6 +824,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 checkCurrentStatusModel.setLastExecutedAt(executedAt);
                 checkCurrentStatusModel.setHighestHistoricalSeverity(RuleSeverityLevel.fromSeverityLevel(severity));
                 checkCurrentStatusModel.setCurrentSeverity(CheckResultStatus.fromSeverity(severity));
+                checkCurrentStatusModel.setColumnName(columnName);
                 currentStatusHolder.getChecks().put(checkName, checkCurrentStatusModel);
             } else {
                 if (severity != 4 && (checkCurrentStatusModel.getHighestHistoricalSeverity() == null ||
@@ -849,6 +853,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                     checkCurrentStatusModel.setCurrentSeverity(CheckResultStatus.fromSeverity(severity));
                 }
             }
+            checkCurrentStatusModel.incrementTotalIssueCount(severity);
         }
 
         tableStatusModel.calculateHighestCurrentAndHistoricSeverity();
@@ -1094,7 +1099,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                                                   PhysicalTableName physicalTableName,
                                                   UserDomainIdentity userDomainIdentity) {
         ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_OVERVIEW, userDomainIdentity);
+                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
         errorsSnapshot.ensureMonthsAreLoaded(loadParameters.getStartMonth(), loadParameters.getEndMonth());
         Table allErrors = errorsSnapshot.getAllData();
         if (allErrors == null) {
@@ -1121,7 +1126,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                                     PhysicalTableName physicalTableName,
                                     UserDomainIdentity userDomainIdentity) {
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_RESULTS_OVERVIEW, userDomainIdentity);
+                physicalTableName, CheckResultsColumnNames.CHECK_RESULTS_COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
         checkResultsSnapshot.ensureMonthsAreLoaded(loadParameters.getStartMonth(), loadParameters.getEndMonth());
         Table ruleResultsData = checkResultsSnapshot.getAllData();
         return ruleResultsData;
@@ -1141,7 +1146,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                                           PhysicalTableName physicalTableName,
                                           UserDomainIdentity userDomainIdentity) {
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_RESULTS_DETAILED, userDomainIdentity);
+                physicalTableName, CheckResultsColumnNames.CHECK_RESULTS_COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
         int maxMonthsToLoad = DEFAULT_MAX_RECENT_LOADED_MONTHS;
 
         if (loadParameters.getStartMonth() != null && loadParameters.getEndMonth() != null) {

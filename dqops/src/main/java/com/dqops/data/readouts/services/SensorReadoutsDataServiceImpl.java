@@ -314,7 +314,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
                                              PhysicalTableName physicalTableName,
                                              UserDomainIdentity userDomainIdentity) {
         SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, SensorReadoutsColumnNames.COLUMN_NAMES_FOR_READOUTS_DETAILED, userDomainIdentity);
+                physicalTableName, SensorReadoutsColumnNames.SENSOR_READOUT_COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
         int maxMonthsToLoad = DEFAULT_MAX_RECENT_LOADED_MONTHS;
 
         if (loadParameters.getStartMonth() != null && loadParameters.getEndMonth() != null) {

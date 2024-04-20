@@ -316,7 +316,7 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
                                      PhysicalTableName physicalTableName,
                                      UserDomainIdentity userDomainIdentity) {
         ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_DETAILED, userDomainIdentity);
+                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
         int maxMonthsToLoad = DEFAULT_MAX_RECENT_LOADED_MONTHS;
 
         if (loadParameters.getStartMonth() != null && loadParameters.getEndMonth() != null) {

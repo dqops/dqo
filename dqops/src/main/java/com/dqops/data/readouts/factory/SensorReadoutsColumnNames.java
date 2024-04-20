@@ -214,7 +214,7 @@ public class SensorReadoutsColumnNames {
     /**
      * List of column names that should be loaded from the parquet files when the recent readouts detailed view is needed.
      */
-    public static final String[] COLUMN_NAMES_FOR_READOUTS_DETAILED = new String[] {
+    public static final String[] SENSOR_READOUT_COLUMN_NAMES_FOR_READ_ONLY_ACCESS = new String[] {
             ID_COLUMN_NAME,
 
             ACTUAL_VALUE_COLUMN_NAME,

@@ -16,6 +16,7 @@
 
 package com.dqops.data.checkresults.statuscache;
 
+import com.dqops.checks.CheckType;
 import com.dqops.core.configuration.DqoCacheConfigurationProperties;
 import com.dqops.core.configuration.DqoQueueConfigurationProperties;
 import com.dqops.core.principal.UserDomainIdentity;
@@ -23,6 +24,7 @@ import com.dqops.core.principal.UserDomainIdentityFactory;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusFilterParameters;
 import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.extern.slf4j.Slf4j;
@@ -102,24 +104,46 @@ public class TableStatusCacheImpl implements TableStatusCache {
     /**
      * Retrieves the current table status for a requested table.
      * @param tableStatusKey Table status key.
+     * @param checkType Check type. When a check type is given, the operation returns the status model only for one check type. The returned model does not contain columns.
+     *                  When the <code>checkType</code> is null, this method returns a full model for all checks, including all columns.
      * @return Table status model or null when it is not yet loaded.
      */
     @Override
-    public TableCurrentDataQualityStatusModel getCurrentTableStatus(CurrentTableStatusKey tableStatusKey) {
+    public TableCurrentDataQualityStatusModel getCurrentTableStatus(CurrentTableStatusKey tableStatusKey, CheckType checkType) {
         CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey, this::loadEntryCore);
-        return currentTableStatusCacheEntry.getStatusModel();
+        if (checkType == null) {
+            return currentTableStatusCacheEntry.getAllCheckTypesWithColumns();
+        }
+
+        switch (checkType) {
+            case profiling:
+                return currentTableStatusCacheEntry.getProfilingTableOnly();
+            case monitoring:
+                return currentTableStatusCacheEntry.getMonitoringTableOnly();
+            case partitioned:
+                return currentTableStatusCacheEntry.getPartitionedTableOnly();
+            default:
+                throw new DqoRuntimeException("Unsupported check type");
+        }
     }
 
     /**
      * Notifies the table status cache that the table result were updated and should be invalidated.
      * @param tableStatusKey Table status key.
+     * @param replacingCachedFile True when we are replacing a file that was already in a cache, false when a file is just placed into a cache,
+     *                            and it is not a real invalidation, but just a notification that a file was just cached.
      */
     @Override
-    public void invalidateTableStatus(CurrentTableStatusKey tableStatusKey) {
+    public void invalidateTableStatus(CurrentTableStatusKey tableStatusKey, boolean replacingCachedFile) {
         CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey, this::loadEntryCore);
-        if (currentTableStatusCacheEntry.getStatus() == CurrentTableStatusEntryStatus.LOADING_QUEUED ||
-                currentTableStatusCacheEntry.getStatus() == CurrentTableStatusEntryStatus.REFRESH_QUEUED) {
+        CurrentTableStatusEntryStatus currentEntryStatus = currentTableStatusCacheEntry.getStatus();
+
+        if (currentEntryStatus == CurrentTableStatusEntryStatus.LOADING_QUEUED || currentEntryStatus == CurrentTableStatusEntryStatus.REFRESH_QUEUED) {
             return; // another refresh was already queued
+        }
+
+        if (currentEntryStatus == CurrentTableStatusEntryStatus.LOADING && !replacingCachedFile) {
+            return; // this refresh was triggered by this class when it was loading parquet files and they were cached for the first time, it is not a change to a parquet file
         }
 
         currentTableStatusCacheEntry.setStatus(CurrentTableStatusEntryStatus.REFRESH_QUEUED);
@@ -184,9 +208,13 @@ public class TableStatusCacheImpl implements TableStatusCache {
                     .partitioned(true)
                     .build();
 
-            TableCurrentDataQualityStatusModel tableCurrentDataQualityStatusModel =
+            TableCurrentDataQualityStatusModel fullStatusModel =
                     this.checkResultsDataService.analyzeTableMostRecentQualityStatus(filterParameters, userDomainIdentity);
-            currentTableStatusCacheEntry.setStatusModel(tableCurrentDataQualityStatusModel); // also sets the status
+            TableCurrentDataQualityStatusModel profilingStatus = fullStatusModel.cloneFilteredByCheckType(CheckType.profiling, false);
+            TableCurrentDataQualityStatusModel monitoringStatus = fullStatusModel.cloneFilteredByCheckType(CheckType.monitoring, false);
+            TableCurrentDataQualityStatusModel partitionedStatus = fullStatusModel.cloneFilteredByCheckType(CheckType.partitioned, false);
+
+            currentTableStatusCacheEntry.setStatusModels(fullStatusModel, profilingStatus, monitoringStatus, partitionedStatus); // also sets the status
         }
         catch (Exception ex) {
             currentTableStatusCacheEntry.setStatus(CurrentTableStatusEntryStatus.LOADED);

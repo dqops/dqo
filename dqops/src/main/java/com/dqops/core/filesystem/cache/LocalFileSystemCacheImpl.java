@@ -345,9 +345,9 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
             processFileChanges(true);
         }
 
+        boolean replacingCachedFile = this.parquetFilesCache.getIfPresent(filePath) != null;
         this.parquetFilesCache.put(filePath, table);
-        invalidateTableStatusCache(filePath);
-
+        invalidateTableStatusCache(filePath, replacingCachedFile);
 
         Path parentFolderPath = filePath.getParent();
         this.fileListsCache.invalidate(parentFolderPath);
@@ -369,7 +369,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         this.fileContentsCache.invalidate(filePath);
         this.parquetFilesCache.invalidate(filePath);
         this.wasRecentlyInvalidated = true;
-        invalidateTableStatusCache(filePath);
+        invalidateTableStatusCache(filePath, true);
 
 
         Path parentFolderPath = filePath.getParent();
@@ -392,7 +392,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
 
         this.folderListsCache.invalidate(folderPath);
         this.fileListsCache.invalidate(folderPath);
-        invalidateTableStatusCache(folderPath);
+        invalidateTableStatusCache(folderPath, true);
 
         this.stopFolderWatcher(folderPath);
 
@@ -414,7 +414,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
 
         this.folderListsCache.invalidate(folderPath);
         this.fileListsCache.invalidate(folderPath);
-        invalidateTableStatusCache(folderPath);
+        invalidateTableStatusCache(folderPath, true);
     }
 
     /**
@@ -430,7 +430,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         this.fileContentsCache.invalidate(filePath);
         this.parquetFilesCache.invalidate(filePath);
         this.wasRecentlyInvalidated = true;
-        invalidateTableStatusCache(filePath);
+        invalidateTableStatusCache(filePath, true);
 
         Path folderPath = filePath.getParent();
         if (folderPath != null) {
@@ -443,8 +443,10 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      * Matches the path of an updated or deleted file to a parquet file for tables that are cached: check_results and errors.
      * If a table is detected whose data quality results were updated, triggers an invalidation of a current table cache.
      * @param filePath File path to a file that should be updated.
+     * @param replacingCachedFile True when we are replacing a file that was already in a cache, false when a file is just placed into a cache,
+     *                            and it is not a real invalidation, but just a notification that a file was just cached.
      */
-    public void invalidateTableStatusCache(Path filePath) {
+    public void invalidateTableStatusCache(Path filePath, boolean replacingCachedFile) {
         if (!filePath.startsWith(this.userHomeRootPath)) {
             return;
         }
@@ -474,7 +476,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
             String decodedConnectionName = FileNameSanitizer.decodeFileSystemName(connectionNameFolder.substring(2));
             PhysicalTableName physicalTableName = PhysicalTableName.fromBaseFileName(schemaTableNameFolder.substring(2));
             TableStatusCache tableStatusCache = this.tableStatusCacheProvider.getTableStatusCache();
-            tableStatusCache.invalidateTableStatus(new CurrentTableStatusKey(folder.getDataDomain(), decodedConnectionName, physicalTableName));
+            tableStatusCache.invalidateTableStatus(new CurrentTableStatusKey(folder.getDataDomain(), decodedConnectionName, physicalTableName), replacingCachedFile);
         }
     }
 
