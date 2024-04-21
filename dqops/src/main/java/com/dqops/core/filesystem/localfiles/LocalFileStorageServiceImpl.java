@@ -34,6 +34,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -295,6 +296,7 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
             try (Stream<Path> fileList = Files.list(absolutePath)) {
                 List<HomeFolderPath> folders = fileList
                         .filter(path -> Files.isDirectory(path))
+                        .sorted()
                         .map(path -> {
                             String fileSystemName = path.getFileName().toString();
                             FolderName subFolder = FolderName.fromFileSystemName(fileSystemName);
@@ -339,6 +341,7 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
             try (Stream<Path> pathStream = Files.list(absolutePath)) {
                 List<HomeFilePath> filePathsList = pathStream
                         .filter(path -> !Files.isDirectory(path))
+                        .sorted()
                         .map(path -> {
                             String fileSystemName = path.getFileName().toString();
                             return folderPath.resolveFile(fileSystemName);

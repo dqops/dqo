@@ -362,6 +362,10 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
 
         parameter.getNodes().add(abstractStatisticsCollectorSpec);
 
+        if (this.filters.getMaxResults() != null && parameter.getNodes().size() >= this.filters.getMaxResults()) {
+            return TreeNodeTraversalResult.STOP_TRAVERSAL;
+        }
+
         return TreeNodeTraversalResult.SKIP_CHILDREN; // no need to search any deeper, we have found what we were looking for
     }
 

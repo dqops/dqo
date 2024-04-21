@@ -34,6 +34,8 @@ import lombok.Data;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -308,11 +310,12 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
     /**
      * Creates a deep clone of the table status model, preserving only the checks for an expected check type.
      * All scores and the data quality KPI is recalculated for the checks that left.
-     * @param checkType Data quality check type to copy, the results of the other check types are ignored.
-     * @param includeColumns Include columns. When this parameter is false, the dictionary of columns is removed.
+     * @param checkFilter Check filter that filters the checks that should be preserved.
+     * @param includeColumnsAndChecks Include columns and checks. When this parameter is false, the dictionary of columns is removed.
      * @return A deep clone of the object with results only for that check type.
      */
-    public TableCurrentDataQualityStatusModel cloneFilteredByCheckType(CheckType checkType, boolean includeColumns) {
+    public TableCurrentDataQualityStatusModel cloneFilteredByCheckType(
+            Predicate<CheckCurrentDataQualityStatusModel> checkFilter, boolean includeColumnsAndChecks) {
         TableCurrentDataQualityStatusModel tableStatusClone = this.clone();
         tableStatusClone.currentSeverity = null;
         tableStatusClone.highestHistoricalSeverity = null;
@@ -321,14 +324,14 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
         tableStatusClone.checks = new LinkedHashMap<>();
 
         for (Map.Entry<String, CheckCurrentDataQualityStatusModel> keyValue : this.checks.entrySet()) {
-            if (keyValue.getValue().getCheckType() == checkType) {
+            if (checkFilter == null || checkFilter.test(keyValue.getValue())) {
                 tableStatusClone.checks.put(keyValue.getKey(), keyValue.getValue());
             }
         }
 
         tableStatusClone.columns = new LinkedHashMap<>();
         for (Map.Entry<String, ColumnCurrentDataQualityStatusModel> columnKeyValue : this.columns.entrySet()) {
-            ColumnCurrentDataQualityStatusModel columnModelFiltered = columnKeyValue.getValue().cloneFilteredByCheckType(checkType);
+            ColumnCurrentDataQualityStatusModel columnModelFiltered = columnKeyValue.getValue().cloneFilteredByCheckType(checkFilter);
             if (!columnModelFiltered.getChecks().isEmpty()) {
                 tableStatusClone.columns.put(columnKeyValue.getKey(), columnModelFiltered);
             }
@@ -339,7 +342,8 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
         tableStatusClone.calculateDataQualityKpiScore();
         tableStatusClone.calculateStatusesForDataQualityDimensions();
 
-        if (!includeColumns) {
+        if (!includeColumnsAndChecks) {
+            tableStatusClone.checks = null; // detaching checks
             tableStatusClone.columns = null; // detaching columns
         }
 

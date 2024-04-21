@@ -188,6 +188,10 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
 
         parameter.getNodes().add(tableWrapper);
 
+        if (this.filters.getMaxResults() != null && parameter.getNodes().size() >= this.filters.getMaxResults()) {
+            return TreeNodeTraversalResult.STOP_TRAVERSAL;
+        }
+
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 

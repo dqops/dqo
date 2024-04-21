@@ -19,6 +19,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.ProfilingTimePeriodTruncation;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
+import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.PhysicalTableName;
@@ -109,6 +110,14 @@ public class TableListModel {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private FileFormatSpec fileFormat;
 
+    /**
+     * The current data quality status for the table, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache.
+     * In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the table.
+     */
+    @JsonPropertyDescription("The current data quality status for the table, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache. " +
+            "In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the table.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private TableCurrentDataQualityStatusModel dataQualityStatus;
 
     /**
      * True when the table has any checks configured.

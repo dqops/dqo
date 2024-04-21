@@ -36,6 +36,8 @@ import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityObjectMother;
+import com.dqops.data.checkresults.statuscache.TableStatusCacheImpl;
+import com.dqops.data.checkresults.statuscache.TableStatusCacheStub;
 import com.dqops.data.statistics.services.StatisticsDataServiceImpl;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
@@ -83,6 +85,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 public class TablesControllerUTTests extends BaseTest {
@@ -118,7 +121,10 @@ public class TablesControllerUTTests extends BaseTest {
         DefaultObservabilityConfigurationServiceImpl defaultObservabilityConfigurationService = new DefaultObservabilityConfigurationServiceImpl(ConnectionProviderRegistryObjectMother.getInstance());
 
         this.sut = new TablesController(tableService, this.userHomeContextFactory, dqoHomeContextFactory, specToUiCheckMappingService,
-                uiToSpecCheckMappingService, statisticsDataService, defaultObservabilityConfigurationService, new RestApiLockServiceImpl(), null);
+                uiToSpecCheckMappingService, statisticsDataService, defaultObservabilityConfigurationService,
+                new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl()),
+                new TableStatusCacheStub(),
+                new RestApiLockServiceImpl(), null);
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
     }
@@ -130,7 +136,11 @@ public class TablesControllerUTTests extends BaseTest {
         ResponseEntity<Flux<TableListModel>> responseEntity = this.sut.getTables(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName());
+                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty());
 
         List<TableListModel> result = responseEntity.getBody().collectList().block();
         Assertions.assertNotNull(result);

@@ -358,6 +358,10 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
 
         parameter.getNodes().add(abstractCheckSpec);
 
+        if (this.filters.getMaxResults() != null && parameter.getNodes().size() >= this.filters.getMaxResults()) {
+            return TreeNodeTraversalResult.STOP_TRAVERSAL;
+        }
+
         return TreeNodeTraversalResult.SKIP_CHILDREN; // no need to search any deeper, we have found what we were looking for
     }
 

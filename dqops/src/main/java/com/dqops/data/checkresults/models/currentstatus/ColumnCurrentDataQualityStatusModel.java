@@ -35,6 +35,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * The column validity status. It is a summary of the results of the most recently executed data quality checks on the column.
@@ -189,10 +190,10 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
     /**
      * Creates a deep clone of the table status model, preserving only the checks for an expected check type.
      * All scores and the data quality KPI is recalculated for the checks that left.
-     * @param checkType Data quality check type to copy, the results of the other check types are ignored.
+     * @param checkFilter Check filter that filters the checks that should be preserved.
      * @return A deep clone of the object with results only for that check type.
      */
-    public ColumnCurrentDataQualityStatusModel cloneFilteredByCheckType(CheckType checkType) {
+    public ColumnCurrentDataQualityStatusModel cloneFilteredByCheckType(Predicate<CheckCurrentDataQualityStatusModel> checkFilter) {
         ColumnCurrentDataQualityStatusModel tableStatusClone = this.clone();
         tableStatusClone.currentSeverity = null;
         tableStatusClone.highestHistoricalSeverity = null;
@@ -207,7 +208,7 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
         tableStatusClone.checks = new LinkedHashMap<>();
 
         for (Map.Entry<String, CheckCurrentDataQualityStatusModel> keyValue : this.checks.entrySet()) {
-            if (keyValue.getValue().getCheckType() == checkType) {
+            if (checkFilter == null || checkFilter.test(keyValue.getValue())) {
                 tableStatusClone.checks.put(keyValue.getKey(), keyValue.getValue());
             }
         }

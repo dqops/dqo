@@ -27,6 +27,7 @@ public class CurrentTableStatusCacheEntry {
     private final Object lock = new Object();
     private CurrentTableStatusEntryStatus status;
     private TableCurrentDataQualityStatusModel allCheckTypesWithColumns;
+    private TableCurrentDataQualityStatusModel monitoringAndPartitionedTableOnly;
     private TableCurrentDataQualityStatusModel profilingTableOnly;
     private TableCurrentDataQualityStatusModel monitoringTableOnly;
     private TableCurrentDataQualityStatusModel partitionedTableOnly;
@@ -78,6 +79,14 @@ public class CurrentTableStatusCacheEntry {
     }
 
     /**
+     * Returns a table data quality status that covers only monitoring and partitioned checks, but excludes the profiling status.
+     * @return The quality status for monitoring and partitioned checks only.
+     */
+    public TableCurrentDataQualityStatusModel getMonitoringAndPartitionedTableOnly() {
+        return monitoringAndPartitionedTableOnly;
+    }
+
+    /**
      * Returns the status for the table related only to profiling checks. The status does not contain a list of column.
      * @return The status of the table, for profiling checks only.
      */
@@ -103,15 +112,21 @@ public class CurrentTableStatusCacheEntry {
 
     /**
      * Sets the current model with a detailed status for all check types. If it is not empty, the status is also changed to loaded.
-     * @param allCheckTypesWithColumns Status model.
+     * @param allCheckTypesWithColumns Status model with all checks and columns.
+     * @param monitoringAndPartitionedTableOnly Status model with monitoring and partitioned checks, without columns.
+     * @param profilingTableOnly Status model with only profiling checks and no columns.
+     * @param monitoringTableOnly Status model with only monitoring checks and no columns.
+     * @param partitionedTableOnly Status model with only partitioned checks and no columns.
      */
     public void setStatusModels(
             TableCurrentDataQualityStatusModel allCheckTypesWithColumns,
+            TableCurrentDataQualityStatusModel monitoringAndPartitionedTableOnly,
             TableCurrentDataQualityStatusModel profilingTableOnly,
             TableCurrentDataQualityStatusModel monitoringTableOnly,
             TableCurrentDataQualityStatusModel partitionedTableOnly) {
         synchronized (this.lock) {
             this.allCheckTypesWithColumns = allCheckTypesWithColumns;
+            this.monitoringAndPartitionedTableOnly = monitoringAndPartitionedTableOnly;
             this.profilingTableOnly = profilingTableOnly;
             this.monitoringTableOnly = monitoringTableOnly;
             this.partitionedTableOnly = partitionedTableOnly;

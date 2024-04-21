@@ -31,6 +31,9 @@ import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.scheduler.JobSchedulerService;
+import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
+import com.dqops.data.checkresults.statuscache.CurrentTableStatusKey;
+import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.statistics.services.StatisticsDataService;
@@ -44,7 +47,9 @@ import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
+import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
+import com.dqops.metadata.search.TableSearchFilters;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -67,6 +72,7 @@ import com.dqops.services.metadata.TableService;
 import com.dqops.statistics.StatisticsCollectorTarget;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,10 +84,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -94,8 +98,8 @@ import java.util.stream.Stream;
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Tables", description = "Operations related to manage the metadata of imported tables, and managing the configuration of table-level data quality checks.")
+@Slf4j
 public class TablesController {
-    private static final Logger LOG = LoggerFactory.getLogger(TablesController.class);
     private final TableService tableService;
     private UserHomeContextFactory userHomeContextFactory;
     private DqoHomeContextFactory dqoHomeContextFactory;
@@ -103,6 +107,8 @@ public class TablesController {
     private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
     private StatisticsDataService statisticsDataService;
     private DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
+    private HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher;
+    private TableStatusCache tableStatusCache;
     private RestApiLockService lockService;
     private JobSchedulerService jobSchedulerService;
 
@@ -115,6 +121,8 @@ public class TablesController {
      * @param modelToSpecCheckMappingService   Check mapper to convert the check model to a check specification.
      * @param statisticsDataService            Statistics data service, provides access to the statistics (basic profiling).
      * @param defaultObservabilityConfigurationService The service that applies the configuration of the default checks to a table.
+     * @param hierarchyNodeTreeSearcher        Node searcher, used to search for tables using filters.
+     * @param tableStatusCache                 The cache of last known data quality status for a table.
      * @param lockService                      Object lock service.
      * @param jobSchedulerService              Job scheduler service.
      */
@@ -126,6 +134,8 @@ public class TablesController {
                             ModelToSpecCheckMappingService modelToSpecCheckMappingService,
                             StatisticsDataService statisticsDataService,
                             DefaultObservabilityConfigurationService defaultObservabilityConfigurationService,
+                            HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
+                            TableStatusCache tableStatusCache,
                             RestApiLockService lockService,
                             JobSchedulerService jobSchedulerService) {
         this.tableService = tableService;
@@ -135,6 +145,8 @@ public class TablesController {
         this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
         this.statisticsDataService = statisticsDataService;
         this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
+        this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
+        this.tableStatusCache = tableStatusCache;
         this.lockService = lockService;
         this.jobSchedulerService = jobSchedulerService;
     }
@@ -160,7 +172,15 @@ public class TablesController {
     public ResponseEntity<Flux<TableListModel>> getTables(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Schema name") @PathVariable String schemaName) {
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam(name = "page", value = "Page number, the first page is 1", required = false)
+            @RequestParam(required = false) Optional<Integer> page,
+            @ApiParam(name = "limit", value = "Page size, the default is 100 rows, but paging is disabled is neither page and limit parameters are provided", required = false)
+            @RequestParam(required = false) Optional<Integer> limit,
+            @ApiParam(name = "filter", value = "Optional table name filter", required = false)
+            @RequestParam(required = false) Optional<String> filter,
+            @ApiParam(name = "checkType", value = "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type", required = false)
+            @RequestParam(required = false) Optional<CheckType> checkType) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -170,20 +190,73 @@ public class TablesController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        List<TableSpec> tableSpecs = connectionWrapper.getTables().toList()
+        TableSearchFilters tableSearchFilters = new TableSearchFilters();
+        if (filter.isEmpty() || !Strings.isNullOrEmpty(filter.get())) {
+            tableSearchFilters.setFullTableName(schemaName + ".*");
+        } else {
+            tableSearchFilters.setFullTableName(schemaName + "." + filter.get());
+        }
+
+        Integer tableLimit = null;
+        Integer skip = null;
+        if (page.isPresent() || limit.isPresent()) {
+            if (page.isPresent() && page.get() < 1) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
+            if (limit.isPresent() && limit.get() < 1) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
+
+            Integer pageValue = page.orElse(1);
+            Integer limitValue = limit.orElse(100);
+            tableLimit = pageValue * limitValue;
+            skip = (pageValue - 1) * limitValue;
+        }
+
+        tableSearchFilters.setMaxResults(tableLimit);
+        Collection<TableWrapper> matchingTableWrappers = this.hierarchyNodeTreeSearcher.findTables(
+                connectionWrapper.getTables(), tableSearchFilters);
+
+        List<TableSpec> tableSpecs = matchingTableWrappers
                 .stream()
-                .filter(tw -> Objects.equals(tw.getPhysicalTableName().getSchemaName(), schemaName))
-                .sorted(Comparator.comparing(tw -> tw.getPhysicalTableName().getTableName()))
+                .skip(skip == null ? 0 : skip)
                 .map(TableWrapper::getSpec)
                 .collect(Collectors.toList());
 
         boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
         boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
-        Stream<TableListModel> modelStream = tableSpecs.stream()
+        List<TableListModel> tableModelsList = tableSpecs.stream()
                 .map(ts -> TableListModel.fromTableSpecificationForListEntry(
-                        connectionName, ts, isEditor, isOperator));
+                        connectionName, ts, isEditor, isOperator))
+                .collect(Collectors.toList());
 
-        return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK); // 200
+        tableModelsList.forEach(listModel -> {
+            CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                    listModel.getConnectionName(), listModel.getTarget());
+            TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
+            listModel.setDataQualityStatus(currentTableStatus);
+        });
+
+        if (tableModelsList.stream().anyMatch(model -> model.getDataQualityStatus() == null)) {
+            // the results not loaded yet, we need to wait until the queue is empty
+            CompletableFuture<Boolean> waitForLoadTasksFuture = this.tableStatusCache.getQueueEmptyFuture(100L);
+
+            Flux<TableListModel> resultListFilledWithDelay = Mono.fromFuture(waitForLoadTasksFuture)
+                    .thenMany(Flux.fromIterable(tableModelsList)
+                            .map(tableListModel -> {
+                                if (tableListModel.getDataQualityStatus() == null) {
+                                    CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                                            tableListModel.getConnectionName(), tableListModel.getTarget());
+                                    TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
+                                    tableListModel.setDataQualityStatus(currentTableStatus);
+                                }
+                                return tableListModel;
+                            }));
+
+            return new ResponseEntity<>(resultListFilledWithDelay, HttpStatus.OK); // 200
+        }
+
+        return new ResponseEntity<>(Flux.fromStream(tableModelsList.stream()), HttpStatus.OK); // 200
     }
 
     /**

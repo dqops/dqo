@@ -102,17 +102,29 @@ public class TableStatusCacheImpl implements TableStatusCache {
     }
 
     /**
+     * Retrieves the current table status for a requested table including all columns.
+     *
+     * @param tableStatusKey Table status key.
+     * @return Table status model or null when it is not yet loaded.
+     */
+    @Override
+    public TableCurrentDataQualityStatusModel getCurrentTableStatusWithColumns(CurrentTableStatusKey tableStatusKey) {
+        CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey, this::loadEntryCore);
+        return currentTableStatusCacheEntry.getAllCheckTypesWithColumns();
+    }
+
+    /**
      * Retrieves the current table status for a requested table.
      * @param tableStatusKey Table status key.
      * @param checkType Check type. When a check type is given, the operation returns the status model only for one check type. The returned model does not contain columns.
-     *                  When the <code>checkType</code> is null, this method returns a full model for all checks, including all columns.
+     *                  When the <code>checkType</code> is null, this method returns a model for monitoring and partitioned checks combined.
      * @return Table status model or null when it is not yet loaded.
      */
     @Override
     public TableCurrentDataQualityStatusModel getCurrentTableStatus(CurrentTableStatusKey tableStatusKey, CheckType checkType) {
         CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey, this::loadEntryCore);
         if (checkType == null) {
-            return currentTableStatusCacheEntry.getAllCheckTypesWithColumns();
+            return currentTableStatusCacheEntry.getMonitoringAndPartitionedTableOnly();
         }
 
         switch (checkType) {
@@ -153,12 +165,20 @@ public class TableStatusCacheImpl implements TableStatusCache {
 
     /**
      * Returns a future that is completed when there are no queued table status reload operations.
+     * @param waitTimeoutMilliseconds Optional timeout to wait for the completion of the future. If the timeout elapses, the future is completed with a value <code>false</code>.
      * @return Future that is completed when the status of all requested tables was loaded.
      */
     @Override
-    public CompletableFuture<Integer> getQueueEmptyFuture() {
+    public CompletableFuture<Boolean> getQueueEmptyFuture(Long waitTimeoutMilliseconds) {
         synchronized (this.lock) {
-            return this.queueEmptyFuture;
+            CompletableFuture<Boolean> booleanCompletableFuture = this.queueEmptyFuture
+                    .thenApply(result -> true);
+
+            if (waitTimeoutMilliseconds != null) {
+                booleanCompletableFuture = booleanCompletableFuture.completeOnTimeout(false, waitTimeoutMilliseconds, TimeUnit.MILLISECONDS);
+            }
+
+            return booleanCompletableFuture;
         }
     }
 
@@ -210,11 +230,18 @@ public class TableStatusCacheImpl implements TableStatusCache {
 
             TableCurrentDataQualityStatusModel fullStatusModel =
                     this.checkResultsDataService.analyzeTableMostRecentQualityStatus(filterParameters, userDomainIdentity);
-            TableCurrentDataQualityStatusModel profilingStatus = fullStatusModel.cloneFilteredByCheckType(CheckType.profiling, false);
-            TableCurrentDataQualityStatusModel monitoringStatus = fullStatusModel.cloneFilteredByCheckType(CheckType.monitoring, false);
-            TableCurrentDataQualityStatusModel partitionedStatus = fullStatusModel.cloneFilteredByCheckType(CheckType.partitioned, false);
 
-            currentTableStatusCacheEntry.setStatusModels(fullStatusModel, profilingStatus, monitoringStatus, partitionedStatus); // also sets the status
+            TableCurrentDataQualityStatusModel monitoringAndPartitionedStatus = fullStatusModel.cloneFilteredByCheckType(
+                    checkResultsModel -> checkResultsModel.getCheckType() == CheckType.monitoring || checkResultsModel.getCheckType() == CheckType.partitioned, false);
+            TableCurrentDataQualityStatusModel profilingStatus = fullStatusModel.cloneFilteredByCheckType(
+                    checkResultsModel -> checkResultsModel.getCheckType() == CheckType.profiling, false);
+            TableCurrentDataQualityStatusModel monitoringStatus = fullStatusModel.cloneFilteredByCheckType(
+                    checkResultsModel -> checkResultsModel.getCheckType() == CheckType.monitoring, false);
+            TableCurrentDataQualityStatusModel partitionedStatus = fullStatusModel.cloneFilteredByCheckType(
+                    checkResultsModel -> checkResultsModel.getCheckType() == CheckType.partitioned, false);
+
+            currentTableStatusCacheEntry.setStatusModels(fullStatusModel, monitoringAndPartitionedStatus,
+                    profilingStatus, monitoringStatus, partitionedStatus); // also sets the status
         }
         catch (Exception ex) {
             currentTableStatusCacheEntry.setStatus(CurrentTableStatusEntryStatus.LOADED);

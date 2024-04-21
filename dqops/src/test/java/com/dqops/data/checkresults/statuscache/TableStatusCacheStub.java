@@ -22,19 +22,22 @@ import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityS
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Service that keeps a cache of last known table statuses. It starts loading a table status when
- * the table status is requested. This service reloads the last known table status when the parquet files are updated.
+ * Test stub for TableStatusCache.
  */
-public interface TableStatusCache {
+public class TableStatusCacheStub implements TableStatusCache {
     /**
      * Retrieves the current table status for a requested table.
      *
      * @param tableStatusKey Table status key.
-     * @param checkType Check type. When a check type is given, the operation returns the status model only for one check type. The returned model does not contain columns.
-     *                  When the <code>checkType</code> is null, this method returns a model for monitoring and partitioned checks combined.
+     * @param checkType      Check type. When a check type is given, the operation returns the status model only for one check type. The returned model does not contain columns.
+     *                       When the <code>checkType</code> is null, this method returns a full model for all checks, including all columns.
      * @return Table status model or null when it is not yet loaded.
      */
-    TableCurrentDataQualityStatusModel getCurrentTableStatus(CurrentTableStatusKey tableStatusKey, CheckType checkType);
+    @Override
+    public TableCurrentDataQualityStatusModel getCurrentTableStatus(CurrentTableStatusKey tableStatusKey, CheckType checkType) {
+        TableCurrentDataQualityStatusModel statusModel = new TableCurrentDataQualityStatusModel();
+        return statusModel;
+    }
 
     /**
      * Retrieves the current table status for a requested table including all columns.
@@ -42,31 +45,47 @@ public interface TableStatusCache {
      * @param tableStatusKey Table status key.
      * @return Table status model or null when it is not yet loaded.
      */
-    TableCurrentDataQualityStatusModel getCurrentTableStatusWithColumns(CurrentTableStatusKey tableStatusKey);
+    @Override
+    public TableCurrentDataQualityStatusModel getCurrentTableStatusWithColumns(CurrentTableStatusKey tableStatusKey) {
+        TableCurrentDataQualityStatusModel statusModel = new TableCurrentDataQualityStatusModel();
+        return statusModel;
+    }
 
     /**
      * Notifies the table status cache that the table result were updated and should be invalidated.
      *
-     * @param tableStatusKey Table status key.
+     * @param tableStatusKey      Table status key.
      * @param replacingCachedFile True when we are replacing a file that was already in a cache, false when a file is just placed into a cache,
      *                            and it is not a real invalidation, but just a notification that a file was just cached.
      */
-    void invalidateTableStatus(CurrentTableStatusKey tableStatusKey, boolean replacingCachedFile);
+    @Override
+    public void invalidateTableStatus(CurrentTableStatusKey tableStatusKey, boolean replacingCachedFile) {
+
+    }
 
     /**
      * Returns a future that is completed when there are no queued table status reload operations.
-     * @param waitTimeoutMilliseconds Optional timeout to wait for the completion of the future. If the timeout elapses, the future is completed with a value <code>false</code>.
+     *
      * @return Future that is completed when the status of all requested tables was loaded.
      */
-    CompletableFuture<Boolean> getQueueEmptyFuture(Long waitTimeoutMilliseconds);
+    @Override
+    public CompletableFuture<Boolean> getQueueEmptyFuture(Long timeout) {
+        return CompletableFuture.completedFuture(true);
+    }
 
     /**
      * Starts a service that loads table statuses of requested tables.
      */
-    void start();
+    @Override
+    public void start() {
+
+    }
 
     /**
      * Stops a table current status loader cache.
      */
-    void stop();
+    @Override
+    public void stop() {
+
+    }
 }
