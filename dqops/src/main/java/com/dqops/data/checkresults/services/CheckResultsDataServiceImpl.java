@@ -43,6 +43,7 @@ import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.utils.datetime.LocalDateTimePeriodUtility;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.tables.TableColumnUtility;
+import com.dqops.utils.tables.TableCopyUtility;
 import com.dqops.utils.tables.TableRowUtility;
 import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
@@ -97,7 +98,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         String connectionName = checksContainerHierarchyId.getConnectionName();
         PhysicalTableName physicalTableName = checksContainerHierarchyId.getPhysicalTableName();
 
-        Table ruleResultsTable = loadRuleResults(loadParameters, connectionName, physicalTableName, userDomainIdentity);
+        Table ruleResultsTable = loadCheckResults(loadParameters, connectionName, physicalTableName, userDomainIdentity);
         Table errorsTable = loadErrorsNormalizedToResults(loadParameters, connectionName, physicalTableName, userDomainIdentity);
         Table combinedTable = errorsTable != null ?
                 (ruleResultsTable != null ? errorsTable.copy().append(ruleResultsTable) : errorsTable) :
@@ -189,7 +190,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         TableComparisonResultsModel result = new TableComparisonResultsModel();
         CheckResultsOverviewParameters checkResultsLoadParameters = CheckResultsOverviewParameters.createForRecentMonths(2, 1);
 
-        Table ruleResultsTable = loadRuleResults(checkResultsLoadParameters, connectionName, physicalTableName, userDomainIdentity);
+        Table ruleResultsTable = loadCheckResults(checkResultsLoadParameters, connectionName, physicalTableName, userDomainIdentity);
         Table errorsTable = loadErrorsNormalizedToResults(checkResultsLoadParameters, connectionName, physicalTableName, userDomainIdentity);
         Table combinedTable = errorsTable != null ?
                 (ruleResultsTable != null ? errorsTable.append(ruleResultsTable) : errorsTable) :
@@ -1101,11 +1102,12 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createReadOnlySnapshot(connectionName,
                 physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
         errorsSnapshot.ensureMonthsAreLoaded(loadParameters.getStartMonth(), loadParameters.getEndMonth());
-        Table allErrors = errorsSnapshot.getAllData();
-        if (allErrors == null) {
+        Table allErrorsWithAllColumns = errorsSnapshot.getAllData();
+        if (allErrorsWithAllColumns == null) {
             return null;
         }
 
+        Table allErrors = TableCopyUtility.extractColumns(allErrorsWithAllColumns, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_OVERVIEW);
         IntColumn severityColumn = IntColumn.create(CheckResultsColumnNames.SEVERITY_COLUMN_NAME, allErrors.rowCount());
         severityColumn.setMissingTo(CheckResultStatus.execution_error.getSeverity()); // severity 0,1,2,3 are success,warning,error,fatal, so a processing error with severity 4 will sort ahead of other severities (processing errors are more severe for the overview)
         allErrors.addColumns(severityColumn);
@@ -1114,21 +1116,25 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
     }
 
     /**
-     * Loads rule results.
+     * Loads check results.
      * @param loadParameters Load parameters.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
      * @param userDomainIdentity User identity with the data domain.
-     * @return Table with all rule results or null when no data found.
+     * @return Table with all check results or null when no data found.
      */
-    protected Table loadRuleResults(CheckResultsOverviewParameters loadParameters,
-                                    String connectionName,
-                                    PhysicalTableName physicalTableName,
-                                    UserDomainIdentity userDomainIdentity) {
+    protected Table loadCheckResults(CheckResultsOverviewParameters loadParameters,
+                                     String connectionName,
+                                     PhysicalTableName physicalTableName,
+                                     UserDomainIdentity userDomainIdentity) {
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
                 physicalTableName, CheckResultsColumnNames.CHECK_RESULTS_COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
         checkResultsSnapshot.ensureMonthsAreLoaded(loadParameters.getStartMonth(), loadParameters.getEndMonth());
-        Table ruleResultsData = checkResultsSnapshot.getAllData();
+        Table ruleResultsDataAll = checkResultsSnapshot.getAllData();
+        if (ruleResultsDataAll == null) {
+            return null;
+        }
+        Table ruleResultsData = TableCopyUtility.extractColumns(ruleResultsDataAll, CheckResultsColumnNames.COLUMN_NAMES_FOR_RESULTS_OVERVIEW);
         return ruleResultsData;
     }
 

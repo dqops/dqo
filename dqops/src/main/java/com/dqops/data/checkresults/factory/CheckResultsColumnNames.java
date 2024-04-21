@@ -99,6 +99,28 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
     public static final String WARNING_UPPER_BOUND_COLUMN_NAME = "warning_upper_bound";
 
     /**
+     * List of column names that should be loaded from the parquet files when the recent result overview is needed.
+     * We only want to read the statuses.
+     */
+    public static final String[] COLUMN_NAMES_FOR_RESULTS_OVERVIEW = new String[] {
+            COLUMN_NAME_COLUMN_NAME,
+            CHECK_TYPE_COLUMN_NAME,
+            TIME_GRADIENT_COLUMN_NAME,
+            CHECK_HASH_COLUMN_NAME,
+            CHECK_CATEGORY_COLUMN_NAME,
+            CHECK_NAME_COLUMN_NAME,
+            DATA_GROUP_NAME_COLUMN_NAME,
+            ACTUAL_VALUE_COLUMN_NAME,
+            SEVERITY_COLUMN_NAME,
+            TIME_PERIOD_COLUMN_NAME,
+            TIME_PERIOD_UTC_COLUMN_NAME,
+            EXECUTED_AT_COLUMN_NAME,
+            TABLE_COMPARISON_NAME_COLUMN_NAME,
+            TIME_SERIES_ID_COLUMN_NAME,
+            QUALITY_DIMENSION_COLUMN_NAME
+    };
+
+    /**
      * List of column names that should be loaded from the parquet files when we are not planning to make any updates.
      * We only want to read the statuses.
      */
