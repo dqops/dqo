@@ -253,6 +253,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
         ConnectionSpec connectionSpecCloned = getConnectionSpec().expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
         connectionSpecCloned.getDuckdb().fillSpecWithDefaultCredentials(secretValueLookupContext);
+        this.getConnectionSpec().setDuckdb(connectionSpecCloned.getDuckdb());
 
         try {
             // todo: can be used with duckdb 0.10 when aws extension is fixed,
