@@ -14,7 +14,7 @@ export default function TotalChecksExecuted({
         <div>{tableDataQualityStatus.executed_checks}</div>
       </div>
       <div className="flex gap-x-2">
-        <div className="w-42">Valid:</div>
+        <div className="w-42">Correct results:</div>
         <div>{tableDataQualityStatus.valid_results}</div>
       </div>
       <div className="flex gap-x-2">
@@ -26,7 +26,7 @@ export default function TotalChecksExecuted({
         <div>{tableDataQualityStatus.errors}</div>
       </div>
       <div className="flex gap-x-2">
-        <div className="w-42">Fatals:</div>
+        <div className="w-42">Fatal results:</div>
         <div>{tableDataQualityStatus.fatals}</div>
       </div>
       <div className="flex gap-x-2">
