@@ -206,9 +206,11 @@ $DQO_USER_HOME
 ```
 
 If you wish to use AWS authentication, the content of the files must be replaced with your aws_access_key_id, aws_secret_access_key and region.
-You can find more details on how to [manage access keys for IAM users](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.htmle) in AWS documentation.
+You can find more details on how to [manage access keys for IAM users](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html) in AWS documentation.
 
-If you do not replace the content of the files, the default credentials will be loaded from system.
+!!! warning
+
+    If you do not replace the content of the files, the default credentials will be loaded from system.
 
 
 To set the credential file in DQOps, follow these steps:

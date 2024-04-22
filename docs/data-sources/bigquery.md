@@ -204,7 +204,9 @@ $DQO_USER_HOME
 If you wish to use JSON key authentication, the content of the file must be replaced with a service account key in JSON format.
 You can find more details on how to [Create and delete service account keys](https://cloud.google.com/iam/docs/keys-create-delete) in Google Cloud documentation.
 
-If you do not replace the content of the file, the Application Default Credentials will be used.
+!!! warning
+
+    If you do not replace the content of the file, the Application Default Credentials will be used.
 
 
 To set the credential file in DQOps, follow these steps:
