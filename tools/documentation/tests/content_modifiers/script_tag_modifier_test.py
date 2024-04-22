@@ -40,5 +40,16 @@ class ScriptTagModifierTest(unittest.TestCase):
         output: str = modify_script_tag(source)
         self.assertEqual(source, output)
 
+    def test_modify_script_tag__when_bundle_script__then_dont_modify(self):
+        source: str = """<script src="assets/javascripts/bundle.c18c5fb9.min.js"></script>"""
+        output: str = modify_script_tag(source)
+        self.assertEqual(source, output)
+
+    def test_modify_script_tag__when_inline_script_with_no_attributes_but_glightbox_script__then_modify(self):
+        source: str = """<script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false});})</script></body>"""
+        target: str = """<script defer type="rocketlazyloadscript">document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false});})</script></body>"""
+        output: str = modify_script_tag(source)
+        self.assertEqual(target, output)
+
 if __name__ == '__main__':
     unittest.main()
