@@ -17,6 +17,7 @@ package com.dqops.metadata.storage.localfiles.sources;
 
 import com.dqops.BaseTest;
 import com.dqops.metadata.comments.CommentsListSpec;
+import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;

@@ -18,11 +18,10 @@ package com.dqops.metadata.defaultchecks.column;
 
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.defaultchecks.table.TargetTablePatternFilter;
-import com.dqops.metadata.defaultchecks.table.TargetTablePatternSpec;
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.metadata.sources.LabelSetSpec;
+import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.google.common.base.Strings;
 

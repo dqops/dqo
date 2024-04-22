@@ -26,6 +26,7 @@ import com.dqops.checks.table.monitoring.volume.TableVolumeMonthlyMonitoringChec
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.metadata.groupings.DataStreamLevelSpecObjectMother;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
+import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.utils.serialization.YamlSerializer;
 import com.dqops.utils.serialization.YamlSerializerObjectMother;
 import org.junit.jupiter.api.Assertions;

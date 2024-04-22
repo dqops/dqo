@@ -19,6 +19,7 @@ import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.HierarchyId;
+import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import com.dqops.sensors.AbstractSensorParametersSpec;

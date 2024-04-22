@@ -18,7 +18,7 @@ package com.dqops.metadata.defaultchecks.table;
 
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.metadata.sources.LabelSetSpec;
+import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.google.common.base.Strings;
 

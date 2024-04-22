@@ -38,6 +38,7 @@ import com.dqops.data.statistics.models.StatisticsResultsForColumnModel;
 import com.dqops.data.statistics.models.StatisticsResultsForTableModel;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.metadata.comments.CommentsListSpec;
+import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.*;

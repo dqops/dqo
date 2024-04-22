@@ -24,6 +24,7 @@ import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
+import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
