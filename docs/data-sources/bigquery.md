@@ -226,7 +226,7 @@ To set the credential file in DQOps, follow these steps:
 !!! tip "Use the Application Default Credentials after filling in the shared credential"
     
     If you still want to use default credentials from Google Cloud CLI, 
-    you must manually delete the .credentialsGCP_application_default_credentials.json file from the DQOps credentials.
+    you must manually delete the .credentials/GCP_application_default_credentials.json file from the DQOps credentials.
 
 
 ## Next steps
