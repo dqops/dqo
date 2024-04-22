@@ -425,23 +425,23 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
                     Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
                     if(credentialProfile.isPresent()){
                         Optional<String> accessKeyId = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
-                        if(!Strings.isNullOrEmpty(this.getAwsAccessKeyId()) && accessKeyId.isPresent()){
+                        if(accessKeyId.isPresent()){
                             String awsAccessKeyId = accessKeyId.get();
                             this.setUser(awsAccessKeyId);
                         }
                         Optional<String> secretAccessKey = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
-                        if(!Strings.isNullOrEmpty(this.getAwsSecretAccessKey()) && secretAccessKey.isPresent()){
+                        if(secretAccessKey.isPresent()){
                             String awsSecretAccessKey = secretAccessKey.get();
                             this.setPassword(awsSecretAccessKey);
                         }
                     }
                 }
 
-                if(Strings.isNullOrEmpty(this.getUser())){
+                if(Strings.isNullOrEmpty(this.getRegion())){
                     Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
                     if(configProfile.isPresent()){
                         Optional<String> region = configProfile.get().property(AwsConfigProfileSettingNames.REGION);
-                        if(!Strings.isNullOrEmpty(this.getRegion()) && region.isPresent()){
+                        if(region.isPresent()){
                             String awsRegion = region.get();
                             this.setRegion(awsRegion);
                         }

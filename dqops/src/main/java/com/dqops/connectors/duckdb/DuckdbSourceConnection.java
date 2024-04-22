@@ -201,7 +201,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
                 String temporaryDirectory = Files.createTempDirectory(temporaryDirectoryPrefix).toFile().getAbsolutePath();
                 Path.of(temporaryDirectory).toFile().deleteOnExit();
-                String tempDirectoryQuery = "SET temp_directory = " + temporaryDirectory;
+                String tempDirectoryQuery = "SET temp_directory = '" + temporaryDirectory + "'";
                 this.executeCommand(tempDirectoryQuery, JobCancellationToken.createDummyJobCancellationToken());
             }
         } catch (Exception e) {
@@ -253,6 +253,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
         ConnectionSpec connectionSpecCloned = getConnectionSpec().expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
         connectionSpecCloned.getDuckdb().fillSpecWithDefaultCredentials(secretValueLookupContext);
+        this.getConnectionSpec().setDuckdb(connectionSpecCloned.getDuckdb());
 
         try {
             // todo: can be used with duckdb 0.10 when aws extension is fixed,
