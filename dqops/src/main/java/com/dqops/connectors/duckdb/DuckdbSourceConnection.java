@@ -201,7 +201,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
                 String temporaryDirectory = Files.createTempDirectory(temporaryDirectoryPrefix).toFile().getAbsolutePath();
                 Path.of(temporaryDirectory).toFile().deleteOnExit();
-                String tempDirectoryQuery = "SET temp_directory = " + temporaryDirectory;
+                String tempDirectoryQuery = "SET temp_directory = '" + temporaryDirectory + "'";
                 this.executeCommand(tempDirectoryQuery, JobCancellationToken.createDummyJobCancellationToken());
             }
         } catch (Exception e) {
