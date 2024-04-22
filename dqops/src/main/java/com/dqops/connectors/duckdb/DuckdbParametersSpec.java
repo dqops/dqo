@@ -437,7 +437,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
                     }
                 }
 
-                if(Strings.isNullOrEmpty(this.getUser())){
+                if(Strings.isNullOrEmpty(this.getRegion())){
                     Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
                     if(configProfile.isPresent()){
                         Optional<String> region = configProfile.get().property(AwsConfigProfileSettingNames.REGION);
