@@ -137,7 +137,7 @@ const DuckdbConnection = ({
     });
     setCopiedDatabase((prev) => ({ ...prev, directories, storage_type }));
   };
-
+  console.log(copiedDatabase, duckdb);
   return (
     <SectionWrapper
       title="DuckDB connection parameters"
@@ -151,20 +151,26 @@ const DuckdbConnection = ({
         onChange={changeStorageTypeDirectoryPrefixes}
       />
 
-      {copiedDatabase?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 && (
+      {copiedDatabase?.storage_type ===
+        DuckdbParametersSpecStorageTypeEnum.s3 && (
         <Select
           label="AWS authentication mode"
           options={awsAuthenticationOptions}
           className="mb-4"
           value={copiedDatabase?.aws_authentication_mode}
           onChange={(value) => {
-            setCopiedDatabase({ aws_authentication_mode: value });
+            setCopiedDatabase((prev) => ({
+              ...prev,
+              aws_authentication_mode: value
+            }));
           }}
         />
       )}
 
-      {copiedDatabase?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 
-        && copiedDatabase?.aws_authentication_mode === DuckdbParametersSpecAwsAuthenticationModeEnum.iam && (
+      {copiedDatabase?.storage_type ===
+        DuckdbParametersSpecStorageTypeEnum.s3 &&
+        copiedDatabase?.aws_authentication_mode ===
+          DuckdbParametersSpecAwsAuthenticationModeEnum.iam && (
           <>
             <FieldTypeInput
               data={sharedCredentials}
@@ -196,10 +202,12 @@ const DuckdbConnection = ({
               }
             />
           </>
-      )}
+        )}
 
-      {copiedDatabase?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 
-        && copiedDatabase?.aws_authentication_mode === DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials && (
+      {copiedDatabase?.storage_type ===
+        DuckdbParametersSpecStorageTypeEnum.s3 &&
+        copiedDatabase?.aws_authentication_mode ===
+          DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials && (
           <>
             <FieldTypeInput
               data={sharedCredentials}
@@ -207,14 +215,18 @@ const DuckdbConnection = ({
               className="mb-4 text-sm"
               maskingType="region"
               value={copiedDatabase?.region}
-              placeholder={duckdb?.aws_authentication_mode === 
-                DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials ? 'Use the value from the ".credentials/AWS_default_config" DQOps shared credential file' : ''}  
+              placeholder={
+                duckdb?.aws_authentication_mode ===
+                DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials
+                  ? 'Use the value from the ".credentials/AWS_default_config" DQOps shared credential file'
+                  : ''
+              }
               onChange={(value) =>
                 setCopiedDatabase((prev) => ({ ...prev, region: value }))
               }
             />
           </>
-      )}
+        )}
 
       <FileFormatConfiguration
         fileFormatType={
