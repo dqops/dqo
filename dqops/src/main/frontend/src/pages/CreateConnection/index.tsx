@@ -8,9 +8,9 @@ import {
   DuckdbParametersSpecStorageTypeEnum,
   MysqlParametersSpecMysqlEngineTypeEnum,
   SingleStoreDbParametersSpecLoadBalancingModeEnum,
-  TrinoParametersSpecAthenaAwsAuthenticationModeEnum,
   TrinoParametersSpecTrinoEngineTypeEnum,
-  DuckdbParametersSpecAwsAuthenticationModeEnum
+  DuckdbParametersSpecAwsAuthenticationModeEnum,
+  TrinoParametersSpecAwsAuthenticationModeEnum
 } from '../../api';
 import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
 import SelectDatabase from '../../components/Dashboard/SelectDatabase';
@@ -54,8 +54,11 @@ const CreateConnection = () => {
         break;
       }
       case ConnectionModelProviderTypeEnum.redshift: {
-        copiedDatabase.redshift = { port: '5439',
-        properties: { '': '' } };
+        copiedDatabase.redshift = { 
+          port: '5439',
+          redshift_authentication_mode: TrinoParametersSpecAwsAuthenticationModeEnum.default_credentials,
+          properties: { '': '' } 
+        };
         break;
       }
       case ConnectionModelProviderTypeEnum.sqlserver: {
@@ -72,7 +75,7 @@ const CreateConnection = () => {
         copiedDatabase.trino = {
           port: '8080',
           trino_engine_type: nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum,
-          athena_aws_authentication_mode: TrinoParametersSpecAthenaAwsAuthenticationModeEnum.iam,
+          aws_authentication_mode: TrinoParametersSpecAwsAuthenticationModeEnum.default_credentials,
           catalog:
             (nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum) ===
             TrinoParametersSpecTrinoEngineTypeEnum.athena

@@ -70,13 +70,13 @@ const DuckdbConnection = ({
   sharedCredentials,
   freezeFileType = false
 }: IDuckdbConnectionProps) => {
-  const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
-    if (!onChange) return;
-    onChange({
-      ...duckdb,
-      ...obj
-    });
-  };
+  // const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
+  //   if (!onChange) return;
+  //   onChange({
+  //     ...duckdb,
+  //     ...obj
+  //   });
+  // };
 
   const [copiedDatabase, setCopiedDatabase] = useState<DuckdbParametersSpec>(
     cloneDeep(duckdb) ?? {}
@@ -151,24 +151,24 @@ const DuckdbConnection = ({
         onChange={changeStorageTypeDirectoryPrefixes}
       />
 
-      {duckdb?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 && (
+      {copiedDatabase?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 && (
         <Select
-          label="Athena authentication option"
+          label="AWS authentication mode"
           options={awsAuthenticationOptions}
           className="mb-4"
-          value={duckdb?.aws_authentication_mode}
+          value={copiedDatabase?.aws_authentication_mode}
           onChange={(value) => {
-            handleChange({ aws_authentication_mode: value });
+            setCopiedDatabase({ aws_authentication_mode: value });
           }}
         />
       )}
 
-      {duckdb?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 
-        && duckdb?.aws_authentication_mode === DuckdbParametersSpecAwsAuthenticationModeEnum.iam && (
+      {copiedDatabase?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 
+        && copiedDatabase?.aws_authentication_mode === DuckdbParametersSpecAwsAuthenticationModeEnum.iam && (
           <>
             <FieldTypeInput
               data={sharedCredentials}
-              label="User name/Key ID"
+              label="Access Key ID"
               className="mb-4 text-sm"
               value={copiedDatabase?.user}
               onChange={(value) =>
@@ -177,7 +177,7 @@ const DuckdbConnection = ({
             />
             <FieldTypeInput
               data={sharedCredentials}
-              label="Password/Secret Key"
+              label="Secret Access Key"
               className="mb-4 text-sm"
               maskingType="password"
               value={copiedDatabase?.password}
@@ -199,7 +199,7 @@ const DuckdbConnection = ({
       )}
 
       {copiedDatabase?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 
-        && duckdb?.aws_authentication_mode === DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials && (
+        && copiedDatabase?.aws_authentication_mode === DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials && (
           <>
             <FieldTypeInput
               data={sharedCredentials}

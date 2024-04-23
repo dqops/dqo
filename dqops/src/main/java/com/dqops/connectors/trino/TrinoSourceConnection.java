@@ -20,6 +20,7 @@ import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
 import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
+import com.dqops.connectors.storage.aws.JdbcAwsProperties;
 import com.dqops.core.jobqueue.JobCancellationListenerHandle;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
@@ -146,23 +147,23 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
             );
         }
 
-        AwsAuthenticationMode awsAuthenticationMode = trinoSpec.getAthenaAwsAuthenticationMode() == null ?
-                AwsAuthenticationMode.default_credentials : trinoSpec.getAthenaAwsAuthenticationMode() ;
+        AwsAuthenticationMode awsAuthenticationMode = trinoSpec.getAwsAuthenticationMode() == null ?
+                AwsAuthenticationMode.default_credentials : trinoSpec.getAwsAuthenticationMode() ;
         switch(awsAuthenticationMode){
             case iam:
                 String user = this.getSecretValueProvider().expandValue(trinoSpec.getUser(), secretValueLookupContext);
                 if (!Strings.isNullOrEmpty(user)){
-                    dataSourceProperties.put("AccessKeyId", user);  // AccessKeyId alias for User
+                    dataSourceProperties.put(JdbcAwsProperties.ACCESS_KEY_ID, user);  // AccessKeyId alias for User
                 }
 
                 String password = this.getSecretValueProvider().expandValue(trinoSpec.getPassword(), secretValueLookupContext);
                 if (!Strings.isNullOrEmpty(password)){
-                    dataSourceProperties.put("SecretAccessKey", password);  // SecretAccessKey alias for Password
+                    dataSourceProperties.put(JdbcAwsProperties.SECRET_ACCESS_KEY, password);  // SecretAccessKey alias for Password
                 }
 
                 String region = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaRegion(), secretValueLookupContext);
                 if (!Strings.isNullOrEmpty(region)){
-                    dataSourceProperties.put("Region", region);
+                    dataSourceProperties.put(JdbcAwsProperties.REGION, region);
                 }
 
                 break;
@@ -172,14 +173,14 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
                 if(credentialProfile.isPresent()
                         && credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).isPresent()
                         && credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).isPresent()){
-                    dataSourceProperties.put("AccessKeyId", credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).get());  // AccessKeyId alias for User
-                    dataSourceProperties.put("SecretAccessKey", credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).get());  // SecretAccessKey alias for Password
+                    dataSourceProperties.put(JdbcAwsProperties.ACCESS_KEY_ID, credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).get());  // AccessKeyId alias for User
+                    dataSourceProperties.put(JdbcAwsProperties.SECRET_ACCESS_KEY, credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).get());  // SecretAccessKey alias for Password
                 } else {
                     dataSourceProperties.put("CredentialsProvider", "DefaultChain");    // The use of the local ~/.aws/credentials file with default profile
                 }
                 Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
                 if(configProfile.isPresent() && configProfile.get().property(AwsConfigProfileSettingNames.REGION).isPresent()){
-                    dataSourceProperties.put("Region", configProfile.get().property(AwsConfigProfileSettingNames.REGION).get());
+                    dataSourceProperties.put(JdbcAwsProperties.REGION, configProfile.get().property(AwsConfigProfileSettingNames.REGION).get());
                 }
                 break;
 

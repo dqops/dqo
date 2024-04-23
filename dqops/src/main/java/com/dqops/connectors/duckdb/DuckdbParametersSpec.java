@@ -37,7 +37,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
-import org.apache.parquet.Strings;
 import picocli.CommandLine;
 import software.amazon.awssdk.profiles.Profile;
 
@@ -443,19 +442,17 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
 
         switch (storageType){
             case s3:
-                if(Strings.isNullOrEmpty(this.getAwsAccessKeyId()) || Strings.isNullOrEmpty(this.getAwsSecretAccessKey())){
-                    Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
-                    if(credentialProfile.isPresent()){
-                        Optional<String> accessKeyId = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
-                        if(accessKeyId.isPresent()){
-                            String awsAccessKeyId = accessKeyId.get();
-                            this.setUser(awsAccessKeyId);
-                        }
-                        Optional<String> secretAccessKey = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
-                        if(secretAccessKey.isPresent()){
-                            String awsSecretAccessKey = secretAccessKey.get();
-                            this.setPassword(awsSecretAccessKey);
-                        }
+                Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
+                if(credentialProfile.isPresent()){
+                    Optional<String> accessKeyId = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
+                    if(accessKeyId.isPresent()){
+                        String awsAccessKeyId = accessKeyId.get();
+                        this.setUser(awsAccessKeyId);
+                    }
+                    Optional<String> secretAccessKey = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
+                    if(secretAccessKey.isPresent()){
+                        String awsSecretAccessKey = secretAccessKey.get();
+                        this.setPassword(awsSecretAccessKey);
                     }
                 }
                 fillSpecWithDefaultAwsConfig(secretValueLookupContext);

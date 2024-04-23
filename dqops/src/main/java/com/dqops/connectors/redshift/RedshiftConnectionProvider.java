@@ -106,7 +106,6 @@ public class RedshiftConnectionProvider extends AbstractSqlConnectionProvider {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--redshift-host");
             }
-
             redshiftSpec.setHost(terminalReader.prompt("Redshift host name (--redshift-host)", "${REDSHIFT_HOST}", false));
         }
 
@@ -114,33 +113,53 @@ public class RedshiftConnectionProvider extends AbstractSqlConnectionProvider {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--redshift-port");
             }
-
             redshiftSpec.setPort(terminalReader.prompt("Redshift port number (--redshift-port)", "${REDSHIFT_PORT}", false));
         }
-
 
         if (Strings.isNullOrEmpty(redshiftSpec.getDatabase())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--redshift-database");
             }
-
             redshiftSpec.setDatabase(terminalReader.prompt("Redshift database name (--redshift-database)", "${REDSHIFT_DATABASE}", false));
         }
 
-        if (Strings.isNullOrEmpty(redshiftSpec.getUser())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--redshift-user");
-            }
+        RedshiftAuthenticationMode redshiftAuthenticationMode = terminalReader.promptEnum("Redshift AWS authentication mode (--redshift-authentication-mode)", RedshiftAuthenticationMode.class, null, false);
+        redshiftSpec.setRedshiftAuthenticationMode(redshiftAuthenticationMode);
 
-            redshiftSpec.setUser(terminalReader.prompt("Redshift user name (--redshift-user)", "${REDSHIFT_USER}", false));
-        }
+        switch (redshiftAuthenticationMode){
+            case user_password:
+                if (Strings.isNullOrEmpty(redshiftSpec.getUser())) {
+                    if (isHeadless) {
+                        throw new CliRequiredParameterMissingException("--redshift-user");
+                    }
+                    redshiftSpec.setUser(terminalReader.prompt("Redshift user name (--redshift-user)", "${REDSHIFT_USER}", false));
+                }
 
-        if (Strings.isNullOrEmpty(redshiftSpec.getPassword())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--redshift-password");
-            }
-
-            redshiftSpec.setPassword(terminalReader.prompt("Redshift user password (--redshift-password)", "${REDSHIFT_PASSWORD}", false));
+                if (Strings.isNullOrEmpty(redshiftSpec.getPassword())) {
+                    if (isHeadless) {
+                        throw new CliRequiredParameterMissingException("--redshift-password");
+                    }
+                    redshiftSpec.setPassword(terminalReader.prompt("Redshift user password (--redshift-password)", "${REDSHIFT_PASSWORD}", false));
+                }
+            case iam:
+                if (Strings.isNullOrEmpty(redshiftSpec.getUser())) {
+                    if (isHeadless) {
+                        throw new CliRequiredParameterMissingException("--redshift-user");
+                    }
+                    redshiftSpec.setUser(terminalReader.prompt(" AWS AccessKeyId (--redshift-user)", "${REDSHIFT_USER}", false));
+                }
+                if (Strings.isNullOrEmpty(redshiftSpec.getPassword())) {
+                    if (isHeadless) {
+                        throw new CliRequiredParameterMissingException("--redshift-password");
+                    }
+                    redshiftSpec.setPassword(terminalReader.prompt(" AWS SecretAccessKey (--redshift-password)", "${REDSHIFT_PASSWORD}", false));
+                }
+                break;
+            case default_credentials:
+                // Default credentials are set automatically from the file when the jdbc connection string creation.
+                break;
+            default:
+                throw new RuntimeException("Given enum is not supported : " + redshiftSpec.getRedshiftAuthenticationMode());
         }
 
     }

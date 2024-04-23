@@ -161,8 +161,8 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
 
     private void promptForAthenaConnectionParameters(TrinoParametersSpec trinoSpec, boolean isHeadless, TerminalReader terminalReader) {
 
-        AwsAuthenticationMode awsAuthenticationMode = terminalReader.promptEnum("Athena authentication mode (--athena-aws-authentication-mode)", AwsAuthenticationMode.class, null, false);
-        trinoSpec.setAthenaAwsAuthenticationMode(awsAuthenticationMode);
+        AwsAuthenticationMode awsAuthenticationMode = terminalReader.promptEnum("AWS authentication mode (--aws-authentication-mode)", AwsAuthenticationMode.class, null, false);
+        trinoSpec.setAwsAuthenticationMode(awsAuthenticationMode);
 
         switch (awsAuthenticationMode){
             case iam:
@@ -179,12 +179,11 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
                     trinoSpec.setPassword(terminalReader.prompt(" AWS SecretAccessKey (--trino-password)", "${TRINO_PASSWORD}", false));
                 }
                 break;
-
             case default_credentials:
                     // Default credentials are set automatically from the file when the jdbc connection string creation.
                 break;
             default:
-                throw new RuntimeException("Given enum is not supported : " + trinoSpec.getAthenaAwsAuthenticationMode());
+                throw new RuntimeException("Given enum is not supported : " + trinoSpec.getAwsAuthenticationMode());
         }
 
         if (Strings.isNullOrEmpty(trinoSpec.getAthenaRegion())) {

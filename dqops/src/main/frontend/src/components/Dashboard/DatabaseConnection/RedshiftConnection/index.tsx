@@ -2,10 +2,12 @@ import React from 'react';
 import SectionWrapper from '../../SectionWrapper';
 import {
   RedshiftParametersSpec,
-  SharedCredentialListModel
+  SharedCredentialListModel,
+  RedshiftParametersSpecRedshiftAuthenticationModeEnum
 } from '../../../../api';
 import JdbcPropertiesView from '../JdbcProperties';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import Select from '../../../Select';
 
 interface IRedshiftConnectionProps {
   redshift?: RedshiftParametersSpec;
@@ -26,6 +28,21 @@ const RedshiftConnection = ({
       ...obj
     });
   };
+
+  const redshiftAuthenticationOptions = [
+    {
+      label: 'User/Password',
+      value: RedshiftParametersSpecRedshiftAuthenticationModeEnum.user_password
+    },
+    {
+      label: 'IAM',
+      value: RedshiftParametersSpecRedshiftAuthenticationModeEnum.iam
+    },
+    {
+      label: 'Default Credentials',
+      value: RedshiftParametersSpecRedshiftAuthenticationModeEnum.default_credentials
+    }
+  ];
 
   return (
     <SectionWrapper title="Redshift connection parameters" className="mb-4">
@@ -51,21 +68,38 @@ const RedshiftConnection = ({
         value={redshift?.database}
         onChange={(value) => handleChange({ database: value })}
       />
-      <FieldTypeInput
-        data={sharedCredentials}
-        label="User name"
+
+      <Select
+        label="Redshift authentication mode"
+        options={redshiftAuthenticationOptions}
         className="mb-4"
-        value={redshift?.user}
-        onChange={(value) => handleChange({ user: value })}
+        value={redshift?.redshift_authentication_mode}
+        onChange={(value) => {
+          handleChange({ redshift_authentication_mode: value });
+        }}
       />
-      <FieldTypeInput
-        data={sharedCredentials}
-        label="Password"
-        maskingType="password"
-        className="mb-4"
-        value={redshift?.password}
-        onChange={(value) => handleChange({ password: value })}
-      />
+
+      {redshift?.redshift_authentication_mode !== RedshiftParametersSpecRedshiftAuthenticationModeEnum.default_credentials && (
+        <>
+          <FieldTypeInput
+            data={sharedCredentials}
+            label={ redshift?.redshift_authentication_mode === RedshiftParametersSpecRedshiftAuthenticationModeEnum.user_password 
+              ? "User name" : "Access Key ID" }
+            className="mb-4"
+            value={redshift?.user}
+            onChange={(value) => handleChange({ user: value })}
+          />
+          <FieldTypeInput
+            data={sharedCredentials}
+            label={ redshift?.redshift_authentication_mode === RedshiftParametersSpecRedshiftAuthenticationModeEnum.user_password 
+              ? "Password" : "Secret Access Key" }
+            maskingType="password"
+            className="mb-4"
+            value={redshift?.password}
+            onChange={(value) => handleChange({ password: value })}
+          />
+        </>
+      )}
 
       <JdbcPropertiesView
         properties={redshift?.properties}
