@@ -164,7 +164,7 @@ const SourceTablesView = () => {
             {tables.map((item) => (
               <tr
                 key={item.tableName}
-                className="border-b border-gray-300 last:border-b-0"
+                className="border-b border-gray-300 last:border-b-0 text-sm"
               >
                 <td className="py-2 px-2 text-left">
                   <div className="flex">
@@ -176,7 +176,9 @@ const SourceTablesView = () => {
                     />
                   </div>
                 </td>
-                <td className="py-2 px-4 text-left">{item.tableName}</td>
+                <td className="py-2 px-4 text-left text-sm">
+                  {item.tableName}
+                </td>
                 <td className="py-2 pl-14">
                   <SvgIcon
                     name={item.alreadyImported ? 'check' : 'close'}
