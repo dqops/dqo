@@ -19,6 +19,7 @@ import com.dqops.connectors.ConnectorOperationFailedException;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
+import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
 import com.dqops.core.jobqueue.JobCancellationListenerHandle;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
@@ -145,9 +146,9 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
             );
         }
 
-        AthenaAuthenticationMode athenaAuthenticationMode = trinoSpec.getAthenaAuthenticationMode() == null ?
-                AthenaAuthenticationMode.default_credentials : trinoSpec.getAthenaAuthenticationMode() ;
-        switch(athenaAuthenticationMode){
+        AwsAuthenticationMode awsAuthenticationMode = trinoSpec.getAthenaAwsAuthenticationMode() == null ?
+                AwsAuthenticationMode.default_credentials : trinoSpec.getAthenaAwsAuthenticationMode() ;
+        switch(awsAuthenticationMode){
             case iam:
                 String user = this.getSecretValueProvider().expandValue(trinoSpec.getUser(), secretValueLookupContext);
                 if (!Strings.isNullOrEmpty(user)){
@@ -183,7 +184,7 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
                 break;
 
             default:
-                throw new RuntimeException("Given enum is not supported : " + athenaAuthenticationMode);
+                throw new RuntimeException("Given enum is not supported : " + awsAuthenticationMode);
         }
 
         String catalog = this.getSecretValueProvider().expandValue(trinoSpec.getCatalog(), secretValueLookupContext);

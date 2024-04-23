@@ -20,6 +20,7 @@ import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.connectors.AbstractSqlConnectionProvider;
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
@@ -160,10 +161,10 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
 
     private void promptForAthenaConnectionParameters(TrinoParametersSpec trinoSpec, boolean isHeadless, TerminalReader terminalReader) {
 
-        AthenaAuthenticationMode athenaAuthenticationMode = terminalReader.promptEnum("Athena authentication mode (--athena-authentication-mode)", AthenaAuthenticationMode.class, null, false);
-        trinoSpec.setAthenaAuthenticationMode(athenaAuthenticationMode);
+        AwsAuthenticationMode awsAuthenticationMode = terminalReader.promptEnum("Athena authentication mode (--athena-aws-authentication-mode)", AwsAuthenticationMode.class, null, false);
+        trinoSpec.setAthenaAwsAuthenticationMode(awsAuthenticationMode);
 
-        switch (athenaAuthenticationMode){
+        switch (awsAuthenticationMode){
             case iam:
                 if (Strings.isNullOrEmpty(trinoSpec.getUser())) {
                     if (isHeadless) {
@@ -183,7 +184,7 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
                     // Default credentials are set automatically from the file when the jdbc connection string creation.
                 break;
             default:
-                throw new RuntimeException("Given enum is not supported : " + trinoSpec.getAthenaAuthenticationMode());
+                throw new RuntimeException("Given enum is not supported : " + trinoSpec.getAthenaAwsAuthenticationMode());
         }
 
         if (Strings.isNullOrEmpty(trinoSpec.getAthenaRegion())) {

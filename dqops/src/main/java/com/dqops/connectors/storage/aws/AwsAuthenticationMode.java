@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.connectors.trino;
+package com.dqops.connectors.storage.aws;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Authentication mode to AWS Athena.
+ * Authentication mode to AWS.
  */
-public enum AthenaAuthenticationMode {
+public enum AwsAuthenticationMode {
     /**
-     * Uses the IAM credentials to connection to Amazon Athena, as access key id and secret access key
+     * Uses the IAM credentials to connection to AWS, as access key id and secret access key
      */
     @JsonProperty("iam")
     iam,
