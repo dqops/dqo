@@ -158,32 +158,32 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
                 if (!Strings.isNullOrEmpty(password)){
                     dataSourceProperties.put("SecretAccessKey", password);  // SecretAccessKey alias for Password
                 }
+
+                String region = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaRegion(), secretValueLookupContext);
+                if (!Strings.isNullOrEmpty(region)){
+                    dataSourceProperties.put("Region", region);
+                }
+
                 break;
 
             case default_credentials:
-                Optional<Profile> profile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
-                if(profile.isPresent()
-                        && profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).isPresent()
-                        && profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).isPresent()){
-                    dataSourceProperties.put("AccessKeyId", profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).get());  // AccessKeyId alias for User
-                    dataSourceProperties.put("SecretAccessKey", profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).get());  // SecretAccessKey alias for Password
+                Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
+                if(credentialProfile.isPresent()
+                        && credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).isPresent()
+                        && credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).isPresent()){
+                    dataSourceProperties.put("AccessKeyId", credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).get());  // AccessKeyId alias for User
+                    dataSourceProperties.put("SecretAccessKey", credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).get());  // SecretAccessKey alias for Password
                 } else {
                     dataSourceProperties.put("CredentialsProvider", "DefaultChain");    // The use of the local ~/.aws/credentials file with default profile
+                }
+                Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
+                if(configProfile.isPresent() && configProfile.get().property(AwsConfigProfileSettingNames.REGION).isPresent()){
+                    dataSourceProperties.put("Region", configProfile.get().property(AwsConfigProfileSettingNames.REGION).get());
                 }
                 break;
 
             default:
                 throw new RuntimeException("Given enum is not supported : " + athenaAuthenticationMode);
-        }
-
-        String region = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaRegion(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(region)){
-            dataSourceProperties.put("Region", region);
-        } else {
-            Optional<Profile> profile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
-            if(profile.isPresent() && profile.get().property(AwsConfigProfileSettingNames.REGION).isPresent()){
-                dataSourceProperties.put("Region", profile.get().property(AwsConfigProfileSettingNames.REGION).get());
-            }
         }
 
         String catalog = this.getSecretValueProvider().expandValue(trinoSpec.getCatalog(), secretValueLookupContext);
