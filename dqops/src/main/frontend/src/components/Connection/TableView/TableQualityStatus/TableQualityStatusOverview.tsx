@@ -91,27 +91,27 @@ export default function TableQualityStatusOverview({
     return (
       <div>
         <div className="flex gap-x-2">
-          <div className="w-42">Data quality check:</div>
+          <div className="w-49">Data quality check:</div>
           <div>{data.checkName}</div>
         </div>
         <div className="flex gap-x-2">
-          <div className="w-42">Last executed at:</div>
+          <div className="w-49">Last executed at:</div>
           <div>{moment(data.lastExecutedAt).format('YYYY-MM-DD HH:mm:ss')}</div>
         </div>
         <div className="flex gap-x-2">
-          <div className="w-42">Current severity level:</div>
+          <div className="w-49">Current severity level:</div>
           <div>{data.currentSeverity}</div>
         </div>
         <div className="flex gap-x-2">
-          <div className="w-42">Highest historical severity level:</div>
+          <div className="w-49">Highest historical severity level:</div>
           <div>{data.highestSeverity}</div>
         </div>
         <div className="flex gap-x-2">
-          <div className="w-42">Category:</div>
+          <div className="w-49">Category:</div>
           <div>{data.category}</div>
         </div>
         <div className="flex gap-x-2">
-          <div className="w-42">Quality Dimension:</div>
+          <div className="w-49">Quality Dimension:</div>
           <div>{data.qualityDimension}</div>
         </div>
       </div>
@@ -142,7 +142,7 @@ export default function TableQualityStatusOverview({
           </th>
         ))}
       </thead>
-      <tbody className='text-sm'>
+      <tbody className="text-sm">
         <TableQualityStatusCategory
           tableDataQualityStatus={tableDataQualityStatus}
           severityType={severityType}
@@ -153,22 +153,24 @@ export default function TableQualityStatusOverview({
           renderSecondLevelTooltip={renderSecondLevelTooltip}
           renderTooltipContent={renderTooltipContent}
         />
-        {Object.keys(tableDataQualityStatus.columns ?? {}).sort().map((key, index) => (
-          <TableQualityStatusColumnCategory
-            key={key}
-            customKey={key}
-            index={index}
-            tableDataQualityStatus={tableDataQualityStatus}
-            severityType={severityType}
-            extendedChecks={extendedChecks}
-            firstLevelChecks={firstLevelChecks}
-            setExtendedChecks={setExtendedChecks}
-            categoryDimension={categoryDimension}
-            renderSecondLevelTooltip={renderSecondLevelTooltip}
-            renderTooltipContent={renderTooltipContent}
-            timeScale = {timeScale}
-          />
-        ))}
+        {Object.keys(tableDataQualityStatus.columns ?? {})
+          .sort()
+          .map((key, index) => (
+            <TableQualityStatusColumnCategory
+              key={key}
+              customKey={key}
+              index={index}
+              tableDataQualityStatus={tableDataQualityStatus}
+              severityType={severityType}
+              extendedChecks={extendedChecks}
+              firstLevelChecks={firstLevelChecks}
+              setExtendedChecks={setExtendedChecks}
+              categoryDimension={categoryDimension}
+              renderSecondLevelTooltip={renderSecondLevelTooltip}
+              renderTooltipContent={renderTooltipContent}
+              timeScale={timeScale}
+            />
+          ))}
       </tbody>
     </table>
   );
