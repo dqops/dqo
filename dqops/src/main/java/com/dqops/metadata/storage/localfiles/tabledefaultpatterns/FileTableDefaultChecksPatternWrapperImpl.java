@@ -25,6 +25,7 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapperImpl;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.serialization.YamlSerializer;
@@ -110,12 +111,15 @@ public class FileTableDefaultChecksPatternWrapperImpl extends TableDefaultChecks
 
                     AbstractSpec cachedObjectInstance = deserializedSpec.deepClone();
                     cachedObjectInstance.makeReadOnly(true);
+                    if (this.getHierarchyId() != null) {
+                        cachedObjectInstance.setHierarchyId(new HierarchyId(this.getHierarchyId(), "spec"));
+                    }
                     fileContent.setCachedObjectInstance(cachedObjectInstance);
                 } else {
                     deserializedSpec = this.isReadOnly() ? deserializedSpec : (TableDefaultChecksPatternSpec) deserializedSpec.deepClone();
                 }
 				this.setSpec(deserializedSpec);
-				this.clearDirty(true);
+				this.clearDirty(false);
                 return deserializedSpec;
             }
             else {

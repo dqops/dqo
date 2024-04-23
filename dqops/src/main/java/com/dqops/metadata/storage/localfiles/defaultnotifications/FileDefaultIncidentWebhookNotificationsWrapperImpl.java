@@ -4,6 +4,7 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapperImpl;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
@@ -59,13 +60,15 @@ public class FileDefaultIncidentWebhookNotificationsWrapperImpl extends DefaultI
                     if (deserializedSpec != null) {
                         IncidentWebhookNotificationsSpec cachedObjectInstance = deserializedSpec.deepClone();
                         cachedObjectInstance.makeReadOnly(true);
+                        if (this.getHierarchyId() != null) {
+                            cachedObjectInstance.setHierarchyId(new HierarchyId(this.getHierarchyId(), "spec"));
+                        }
                         fileContent.setCachedObjectInstance(cachedObjectInstance);
                     }
                 } else {
                     deserializedSpec = this.isReadOnly() ? deserializedSpec : (IncidentWebhookNotificationsSpec) deserializedSpec.deepClone();
                 }
                 this.setSpec(deserializedSpec);
-                deserializedSpec.clearDirty(true);
                 this.clearDirty(false);
                 return deserializedSpec;
             } else {
