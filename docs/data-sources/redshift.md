@@ -186,6 +186,56 @@ Complete documentation of all connection parameters used in the `spec.redshift` 
 described in the reference section of the [RedshiftParametersSpec](../reference/yaml/ConnectionYaml.md#redshiftparametersspec)
 YAML file format.
 
+
+## Configure the credentials
+
+### Using shared credentials
+
+With DQOps, you can configure credentials to access AWS S3 directly in the platform.
+
+Please note, that any credentials and secrets shared with the DQOps Cloud or DQOps SaaS instances are stored in the .credentials folder.
+This folder also contains the default credentials file pair for AWS named AWS_default_config and AWS_default_credentials.
+
+``` { .asc .annotate hl_lines="4" }
+$DQO_USER_HOME
+├───...
+└───.credentials                                                            
+    ├───AWS_default_config
+    ├───AWS_default_credentials
+    └─...   
+```
+
+If you wish to use AWS authentication, the content of the files must be replaced with your aws_access_key_id, aws_secret_access_key and region.
+You can find more details on how to [manage access keys for IAM users](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html) in AWS documentation.
+
+!!! warning
+
+    If you do not replace the content of the files, the default credentials will be loaded from system.
+
+
+To set the credential file in DQOps, follow these steps:
+
+1. Open the Configuration section.
+2. Select Shared credentials from the tree view on the left.
+3. Click the edit link on the “AWS_default_credentials” file.
+
+![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/aws-shared-credentials-ui.png)
+
+4. In the text area, edit the aws_access_key_id and aws_secret_access_key, replacing the placeholder text.
+
+![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/edit-aws-shared-credential.png)
+
+5. Click the **Save** button, to save changes, go back to the main **Shared credentials** view.
+
+6. Edit the region in AWS_default_config file and save the file.
+
+
+!!! tip "Use the system default credentials after filling in the shared credential"
+
+    If you still want to use default credentials from AWS, 
+    you must manually delete the .credentials/AWS_default_config and .credentials/AWS_default_credentials files from the DQOps credentials.
+
+
 ## Next steps
 
 - We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
