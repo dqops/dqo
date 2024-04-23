@@ -164,6 +164,11 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
                 String region = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaRegion(), secretValueLookupContext);
                 if (!Strings.isNullOrEmpty(region)){
                     dataSourceProperties.put(JdbcAwsProperties.REGION, region);
+                } else {
+                    Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
+                    if(configProfile.isPresent() && configProfile.get().property(AwsConfigProfileSettingNames.REGION).isPresent()){
+                        dataSourceProperties.put(JdbcAwsProperties.REGION, configProfile.get().property(AwsConfigProfileSettingNames.REGION).get());
+                    }
                 }
 
                 break;

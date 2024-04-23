@@ -67,8 +67,8 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String password;
 
-    @CommandLine.Option(names = {"--aws-authentication-mode"}, description = "The authentication mode for AWS Athena. Supports also a ${AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.")
-    @JsonPropertyDescription("The authentication mode for AWS Athena. Supports also a ${AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.")
+    @CommandLine.Option(names = {"--athena-aws-authentication-mode"}, description = "The authentication mode for AWS Athena. Supports also a ${AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.")
+    @JsonPropertyDescription("The authentication mode for AWS Athena. Supports also a ${ATHENA_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.")
     private AwsAuthenticationMode awsAuthenticationMode;
 
     @CommandLine.Option(names = {"--athena-region"}, description = "The AWS Athena Region where queries will be run. Supports also a ${ATHENA_REGION} configuration with a custom environment variable.")
