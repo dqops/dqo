@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dqops.metadata.labels;
+package com.dqops.metadata.labels.labelcontainers;
 
 import org.apache.commons.lang3.StringUtils;
 

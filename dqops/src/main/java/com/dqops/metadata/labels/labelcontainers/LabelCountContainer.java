@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.dqops.metadata.labels;
+package com.dqops.metadata.labels.labelcontainers;
+
+import com.dqops.metadata.labels.LabelSetSpec;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,10 +81,28 @@ public class LabelCountContainer {
     }
 
     /**
+     * Imports all labels from a labels set. A labels set is a metadata object used in the DQOps spec objects.
+     * @param labels Source labels.
+     */
+    public void importLabelSet(LabelSetSpec labels) {
+        if (labels == null || labels.isEmpty()) {
+            return;
+        }
+
+        for (String label : labels) {
+            incrementLabelCount(label);
+        }
+    }
+
+    /**
      * Adds counts and registers new labels from a different count container.
      * @param otherContainer Other count container.
      */
     public void addCountsFromContainer(LabelCountContainer otherContainer) {
+        if (otherContainer == null || otherContainer.isEmpty()) {
+            return;
+        }
+
         synchronized (this.lock) {
             for (Map.Entry<String, LabelCounter> otherRootLabelKeyValue : otherContainer.labels.entrySet()) {
                 LabelCounter existingRootLabel = this.labels.get(otherRootLabelKeyValue.getKey());
@@ -100,6 +120,10 @@ public class LabelCountContainer {
      * @param otherContainer Other count container.
      */
     public void subtractCountsFromContainer(LabelCountContainer otherContainer) {
+        if (otherContainer == null || otherContainer.isEmpty()) {
+            return;
+        }
+
         synchronized (this.lock) {
             List<String> emptyLabelsToRemove = null;
             for (Map.Entry<String, LabelCounter> otherRootLabelKeyValue : otherContainer.labels.entrySet()) {
