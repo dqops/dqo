@@ -31354,6 +31354,13 @@ definitions:
         enum:
         - "local"
         - "s3"
+      aws_authentication_mode:
+        type: "string"
+        description: "The authentication mode for AWS. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE}\
+          \ configuration with a custom environment variable."
+        enum:
+        - "iam"
+        - "default_credentials"
       user:
         type: "string"
         description: "DuckDB user name for a remote storage type. The value can be\
@@ -32609,6 +32616,14 @@ definitions:
         type: "string"
         description: "Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
           \ format to use dynamic substitution."
+      redshift_authentication_mode:
+        type: "string"
+        description: "The authentication mode for AWS. Supports also a ${REDSHIFT_AUTHENTICATION_MODE}\
+          \ configuration with a custom environment variable."
+        enum:
+        - "iam"
+        - "default_credentials"
+        - "user_password"
       user:
         type: "string"
         description: "Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
@@ -37449,9 +37464,9 @@ definitions:
         type: "string"
         description: "Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
           \ format to use dynamic substitution."
-      athena_authentication_mode:
+      aws_authentication_mode:
         type: "string"
-        description: "The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE}\
+        description: "The authentication mode for AWS Athena. Supports also a ${ATHENA_AWS_AUTHENTICATION_MODE}\
           \ configuration with a custom environment variable."
         enum:
         - "iam"

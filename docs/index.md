@@ -12,7 +12,7 @@ title: What is DQOps Data Quality Operations Center
     <span class="center-content" style="font-size: 1.2rem;font-weight: 500">
     An open-source data quality platform for the whole data platform lifecycle
     <br/>
-    from **profiling** new data sources to automate **data quality monitoring**
+    from **profiling** new data sources to automating **data quality monitoring**
     </span>
     <br/>
     <br/>
