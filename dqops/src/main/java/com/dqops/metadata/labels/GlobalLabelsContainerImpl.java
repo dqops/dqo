@@ -21,8 +21,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * A global container of all labels, collected from all levels (connection, table, column).
@@ -30,123 +30,94 @@ import java.util.Objects;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class GlobalLabelsContainerImpl implements GlobalLabelsContainer {
-    private final LabelCountContainer connectionLabels = new LabelCountContainer();
-    private final LabelCountContainer tableLabels = new LabelCountContainer();
-    private final LabelCountContainer columnLabels = new LabelCountContainer();
-
-    private final HashMap<String, LabelCountContainer> importedConnectionLabels = new HashMap<>();
-    private final HashMap<TableLabelsKey, LabelCountContainer> importedTableLabels = new HashMap<>();
-    private final HashMap<TableLabelsKey, LabelCountContainer> importedColumnLabels = new HashMap<>();
+    private final Map<String, DataDomainLabelsContainer> dataDomains = new LinkedHashMap<>();
     private final Object lock = new Object();
 
     /**
+     * Retrieves or creates and returns a label container for a data domain.
+     * @param dataDomainName Data domain name.
+     * @return Labels container.
+     */
+    protected DataDomainLabelsContainer getDataDomainContainer(String dataDomainName) {
+        synchronized (this.lock) {
+            DataDomainLabelsContainer dataDomainLabelsContainer = this.dataDomains.get(dataDomainName);
+            if (dataDomainLabelsContainer == null) {
+                dataDomainLabelsContainer = new DataDomainLabelsContainer(dataDomainName);
+                this.dataDomains.put(dataDomainName, dataDomainLabelsContainer);
+            }
+
+            return dataDomainLabelsContainer;
+        }
+    }
+
+    /**
      * Returns the global labels container for labels defined on a connection level (assigned to the connection object).
+     * @param dataDomainName Data domain name.
      * @return Connection level labels.
      */
     @Override
-    public LabelCountContainer getConnectionLabels() {
-        return connectionLabels;
+    public LabelCountContainer getConnectionLabels(String dataDomainName) {
+        DataDomainLabelsContainer dataDomainContainer = this.getDataDomainContainer(dataDomainName);
+        return dataDomainContainer.getConnectionLabels();
     }
 
     /**
      * Returns the global labels container for labels defined on a table level (assigned to the table object).
+     * @param dataDomainName Data domain name.
      * @return Table level labels.
      */
     @Override
-    public LabelCountContainer getTableLabels() {
-        return tableLabels;
+    public LabelCountContainer getTableLabels(String dataDomainName) {
+        DataDomainLabelsContainer dataDomainContainer = this.getDataDomainContainer(dataDomainName);
+        return dataDomainContainer.getTableLabels();
     }
 
     /**
      * Returns the global labels container for labels defined on a column level (assigned to the column object).
+     * @param dataDomainName Data domain name.
      * @return Column level labels.
      */
     @Override
-    public LabelCountContainer getColumnLabels() {
-        return columnLabels;
+    public LabelCountContainer getColumnLabels(String dataDomainName) {
+        DataDomainLabelsContainer dataDomainContainer = this.getDataDomainContainer(dataDomainName);
+        return dataDomainContainer.getColumnLabels();
     }
 
     /**
      * Imports new labels from a connection level.
+     * @param dataDomainName Data domain name.
      * @param connectionName Connection name.
      * @param newLabels New labels or null if the connection was removed and the old labels should be unregistered.
      */
     @Override
-    public void importConnectionLabels(String connectionName, LabelCountContainer newLabels) {
-        synchronized (this.lock) {
-            LabelCountContainer oldLabels = this.importedConnectionLabels.get(connectionName);
-            if (Objects.equals(oldLabels, newLabels)) {
-                // no change
-                return;
-            }
-
-            if (oldLabels != null) {
-                this.connectionLabels.subtractCountsFromContainer(oldLabels);
-                this.importedConnectionLabels.remove(connectionName);
-            }
-
-            if (newLabels != null && !newLabels.isEmpty()) {
-                this.connectionLabels.addCountsFromContainer(oldLabels);
-                this.importedConnectionLabels.put(connectionName, newLabels);
-            }
-        }
+    public void importConnectionLabels(String dataDomainName, String connectionName, LabelCountContainer newLabels) {
+        DataDomainLabelsContainer dataDomainContainer = this.getDataDomainContainer(dataDomainName);
+        dataDomainContainer.importConnectionLabels(connectionName, newLabels);
     }
 
     /**
      * Imports new labels from a table level.
+     * @param dataDomainName Data domain name.
      * @param connectionName Connection name.
      * @param schemaTableName Schema and table name.
      * @param newLabels New labels or null if the table was removed and the old labels should be unregistered.
      */
     @Override
-    public void importTableLabels(String connectionName, PhysicalTableName schemaTableName, LabelCountContainer newLabels) {
-        TableLabelsKey tableLabelsKey = new TableLabelsKey(connectionName, schemaTableName);
-
-        synchronized (this.lock) {
-            LabelCountContainer oldLabels = this.importedTableLabels.get(tableLabelsKey);
-            if (Objects.equals(oldLabels, newLabels)) {
-                // no change
-                return;
-            }
-
-            if (oldLabels != null) {
-                this.tableLabels.subtractCountsFromContainer(oldLabels);
-                this.importedTableLabels.remove(tableLabelsKey);
-            }
-
-            if (newLabels != null && !newLabels.isEmpty()) {
-                this.tableLabels.addCountsFromContainer(oldLabels);
-                this.importedTableLabels.put(tableLabelsKey, newLabels);
-            }
-        }
+    public void importTableLabels(String dataDomainName, String connectionName, PhysicalTableName schemaTableName, LabelCountContainer newLabels) {
+        DataDomainLabelsContainer dataDomainContainer = this.getDataDomainContainer(dataDomainName);
+        dataDomainContainer.importTableLabels(connectionName, schemaTableName, newLabels);
     }
 
     /**
      * Imports new labels from a column level, but aggregated for a whole table.
+     * @param dataDomainName Data domain name.
      * @param connectionName Connection name.
      * @param schemaTableName Schema and table name.
      * @param newLabels New labels or null if the table was removed and the old labels should be unregistered.
      */
     @Override
-    public void importColumnLabels(String connectionName, PhysicalTableName schemaTableName, LabelCountContainer newLabels) {
-        TableLabelsKey tableLabelsKey = new TableLabelsKey(connectionName, schemaTableName);
-
-        synchronized (this.lock) {
-            LabelCountContainer oldLabels = this.importedColumnLabels.get(tableLabelsKey);
-            if (Objects.equals(oldLabels, newLabels)) {
-                // no change
-                return;
-            }
-
-            if (oldLabels != null) {
-                this.columnLabels.subtractCountsFromContainer(oldLabels);
-                this.importedColumnLabels.remove(tableLabelsKey);
-            }
-
-            if (newLabels != null && !newLabels.isEmpty()) {
-                this.columnLabels.addCountsFromContainer(oldLabels);
-                this.importedColumnLabels.put(tableLabelsKey, newLabels);
-            }
-        }
+    public void importColumnLabels(String dataDomainName, String connectionName, PhysicalTableName schemaTableName, LabelCountContainer newLabels) {
+        DataDomainLabelsContainer dataDomainContainer = this.getDataDomainContainer(dataDomainName);
+        dataDomainContainer.importColumnLabels(connectionName, schemaTableName, newLabels);
     }
 }
