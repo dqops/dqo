@@ -194,7 +194,7 @@ YAML file format.
 With DQOps, you can configure credentials to access AWS S3 directly in the platform.
 
 Please note, that any credentials and secrets shared with the DQOps Cloud or DQOps SaaS instances are stored in the .credentials folder.
-This folder also contains the default credentials file pair for AWS named AWS_default_config and AWS_default_credentials.
+This folder also contains the default credentials files pair for AWS named **AWS_default_config** and **AWS_default_credentials**.
 
 ``` { .asc .annotate hl_lines="4" }
 $DQO_USER_HOME

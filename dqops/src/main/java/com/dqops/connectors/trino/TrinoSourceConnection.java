@@ -26,7 +26,9 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsConfigProfileSettingNames;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfileSettingNames;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultConfigProfileProvider;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultCredentialProfileProvider;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
@@ -177,6 +179,11 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
         String region = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaRegion(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(region)){
             dataSourceProperties.put("Region", region);
+        } else {
+            Optional<Profile> profile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
+            if(profile.isPresent() && profile.get().property(AwsConfigProfileSettingNames.REGION).isPresent()){
+                dataSourceProperties.put("Region", profile.get().property(AwsConfigProfileSettingNames.REGION).get());
+            }
         }
 
         String catalog = this.getSecretValueProvider().expandValue(trinoSpec.getCatalog(), secretValueLookupContext);

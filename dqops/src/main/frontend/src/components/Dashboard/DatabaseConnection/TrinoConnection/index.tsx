@@ -145,6 +145,7 @@ const TrinoConnection = ({
               <FieldTypeInput
                 data={sharedCredentials}
                 label="AWS SecretAccessKey"
+                className="mb-4"
                 value={trino?.password}
                 onChange={(value) => handleChange({ password: value })}
               />
