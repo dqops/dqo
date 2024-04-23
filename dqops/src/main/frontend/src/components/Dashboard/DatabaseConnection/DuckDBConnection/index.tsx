@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   DuckdbParametersSpec,
+  DuckdbParametersSpecAwsAuthenticationModeEnum,
   DuckdbParametersSpecFilesFormatTypeEnum,
   DuckdbParametersSpecStorageTypeEnum,
   SharedCredentialListModel
@@ -51,6 +52,18 @@ const storageTypeOptions = [
 
   // remember to declare constans outside the component.
 ];
+
+const awsAuthenticationOptions = [
+  {
+    label: 'IAM',
+    value: DuckdbParametersSpecAwsAuthenticationModeEnum.iam
+  },
+  {
+    label: 'Default Credentials',
+    value: DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials
+  }
+];
+
 const DuckdbConnection = ({
   duckdb,
   onChange,
@@ -67,13 +80,6 @@ const DuckdbConnection = ({
   >(duckdb?.files_format_type ?? DuckdbParametersSpecFilesFormatTypeEnum.csv);
   const [refetchDirectoriesIndicator, setRefetchDirectoriesIndicator] =
     useState(false);
-  // const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
-  //   if (!onChange) return;
-  //   onChange({
-  //     ...copiedDatabase,
-  //     ...obj
-  //   });
-  // };
 
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
     setCopiedDatabase((prev) => ({
@@ -123,7 +129,7 @@ const DuckdbConnection = ({
     });
     setCopiedDatabase((prev) => ({ ...prev, directories, storage_type }));
   };
-
+  console.log(copiedDatabase, duckdb);
   return (
     <SectionWrapper
       title="DuckDB connection parameters"
@@ -139,38 +145,80 @@ const DuckdbConnection = ({
 
       {copiedDatabase?.storage_type ===
         DuckdbParametersSpecStorageTypeEnum.s3 && (
-        <>
-          <FieldTypeInput
-            data={sharedCredentials}
-            label="User name/Key ID"
-            className="mb-4 text-sm"
-            value={copiedDatabase?.user}
-            onChange={(value) =>
-              setCopiedDatabase((prev) => ({ ...prev, user: value }))
-            }
-          />
-          <FieldTypeInput
-            data={sharedCredentials}
-            label="Password/Secret Key"
-            className="mb-4 text-sm"
-            maskingType="password"
-            value={copiedDatabase?.password}
-            onChange={(value) =>
-              setCopiedDatabase((prev) => ({ ...prev, password: value }))
-            }
-          />
-          <FieldTypeInput
-            data={sharedCredentials}
-            label="Region"
-            className="mb-4 text-sm"
-            maskingType="region"
-            value={copiedDatabase?.region}
-            onChange={(value) =>
-              setCopiedDatabase((prev) => ({ ...prev, region: value }))
-            }
-          />
-        </>
+        <Select
+          label="AWS authentication mode"
+          options={awsAuthenticationOptions}
+          className="mb-4"
+          value={copiedDatabase?.aws_authentication_mode}
+          onChange={(value) => {
+            setCopiedDatabase((prev) => ({
+              ...prev,
+              aws_authentication_mode: value
+            }));
+          }}
+        />
       )}
+
+      {copiedDatabase?.storage_type ===
+        DuckdbParametersSpecStorageTypeEnum.s3 &&
+        copiedDatabase?.aws_authentication_mode ===
+          DuckdbParametersSpecAwsAuthenticationModeEnum.iam && (
+          <>
+            <FieldTypeInput
+              data={sharedCredentials}
+              label="Access Key ID"
+              className="mb-4 text-sm"
+              value={copiedDatabase?.user}
+              onChange={(value) =>
+                setCopiedDatabase((prev) => ({ ...prev, user: value }))
+              }
+            />
+            <FieldTypeInput
+              data={sharedCredentials}
+              label="Secret Access Key"
+              className="mb-4 text-sm"
+              maskingType="password"
+              value={copiedDatabase?.password}
+              onChange={(value) =>
+                setCopiedDatabase((prev) => ({ ...prev, password: value }))
+              }
+            />
+            <FieldTypeInput
+              data={sharedCredentials}
+              label="Region"
+              className="mb-4 text-sm"
+              maskingType="region"
+              value={copiedDatabase?.region}
+              onChange={(value) =>
+                setCopiedDatabase((prev) => ({ ...prev, region: value }))
+              }
+            />
+          </>
+        )}
+
+      {copiedDatabase?.storage_type ===
+        DuckdbParametersSpecStorageTypeEnum.s3 &&
+        copiedDatabase?.aws_authentication_mode ===
+          DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials && (
+          <>
+            <FieldTypeInput
+              data={sharedCredentials}
+              label="Region"
+              className="mb-4 text-sm"
+              maskingType="region"
+              value={copiedDatabase?.region}
+              placeholder={
+                duckdb?.aws_authentication_mode ===
+                DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials
+                  ? 'Use the value from the ".credentials/AWS_default_config" DQOps shared credential file'
+                  : ''
+              }
+              onChange={(value) =>
+                setCopiedDatabase((prev) => ({ ...prev, region: value }))
+              }
+            />
+          </>
+        )}
 
       <FileFormatConfiguration
         fileFormatType={

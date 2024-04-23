@@ -16,6 +16,7 @@
 package com.dqops.connectors.duckdb;
 
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
+import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -36,7 +37,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
-import org.apache.parquet.Strings;
 import picocli.CommandLine;
 import software.amazon.awssdk.profiles.Profile;
 
@@ -98,6 +98,10 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @CommandLine.Option(names = {"--duckdb-storage-type"}, description = "The storage type.")
     @JsonPropertyDescription("The storage type.")
     private DuckdbStorageType storageType;
+
+    @CommandLine.Option(names = {"--duckdb-aws-authentication-mode"}, description = "The authentication mode for AWS. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.")
+    @JsonPropertyDescription("The authentication mode for AWS. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.")
+    private AwsAuthenticationMode awsAuthenticationMode;
 
     @CommandLine.Option(names = {"--duckdb-user"}, description = "DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -268,6 +272,23 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Returns the AWS's authentication mode.
+     * @return AWS's authentication mode.
+     */
+    public AwsAuthenticationMode getAwsAuthenticationMode() {
+        return awsAuthenticationMode;
+    }
+
+    /**
+     * Sets AWS's authentication mode.
+     * @param awsAuthenticationMode AWS's authentication mode.
+     */
+    public void setAwsAuthenticationMode(AwsAuthenticationMode awsAuthenticationMode) {
+        setDirtyIf(!Objects.equals(this.awsAuthenticationMode, awsAuthenticationMode));
+        this.awsAuthenticationMode = awsAuthenticationMode;
+    }
+
+    /**
      * Returns the user that is used to log in to the data source.
      * @return User name.
      */
@@ -412,7 +433,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Fills the spec with the default credentials (when not set) for a cloud storage when any cloud storage is used.
+     * Fills the spec with the default credentials from the .credentials/AWS_default_credentials file for a cloud storage.
      *
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      */
@@ -421,36 +442,39 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
 
         switch (storageType){
             case s3:
-                if(Strings.isNullOrEmpty(this.getAwsAccessKeyId()) || Strings.isNullOrEmpty(this.getAwsSecretAccessKey())){
-                    Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
-                    if(credentialProfile.isPresent()){
-                        Optional<String> accessKeyId = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
-                        if(accessKeyId.isPresent()){
-                            String awsAccessKeyId = accessKeyId.get();
-                            this.setUser(awsAccessKeyId);
-                        }
-                        Optional<String> secretAccessKey = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
-                        if(secretAccessKey.isPresent()){
-                            String awsSecretAccessKey = secretAccessKey.get();
-                            this.setPassword(awsSecretAccessKey);
-                        }
+                Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
+                if(credentialProfile.isPresent()){
+                    Optional<String> accessKeyId = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
+                    if(accessKeyId.isPresent()){
+                        String awsAccessKeyId = accessKeyId.get();
+                        this.setUser(awsAccessKeyId);
+                    }
+                    Optional<String> secretAccessKey = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
+                    if(secretAccessKey.isPresent()){
+                        String awsSecretAccessKey = secretAccessKey.get();
+                        this.setPassword(awsSecretAccessKey);
                     }
                 }
-
-                if(Strings.isNullOrEmpty(this.getRegion())){
-                    Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
-                    if(configProfile.isPresent()){
-                        Optional<String> region = configProfile.get().property(AwsConfigProfileSettingNames.REGION);
-                        if(region.isPresent()){
-                            String awsRegion = region.get();
-                            this.setRegion(awsRegion);
-                        }
-                    }
-                }
-
+                fillSpecWithDefaultAwsConfig(secretValueLookupContext);
                 break;
             default:
                 throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + storageType);
+        }
+    }
+
+    /**
+     * Fills the spec with the default AWS config.
+     *
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     */
+    public void fillSpecWithDefaultAwsConfig(SecretValueLookupContext secretValueLookupContext){
+        Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
+        if(configProfile.isPresent()){
+            Optional<String> region = configProfile.get().property(AwsConfigProfileSettingNames.REGION);
+            if(region.isPresent()){
+                String awsRegion = region.get();
+                this.setRegion(awsRegion);
+            }
         }
     }
 

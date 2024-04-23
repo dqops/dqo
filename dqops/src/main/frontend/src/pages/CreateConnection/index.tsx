@@ -8,8 +8,9 @@ import {
   DuckdbParametersSpecStorageTypeEnum,
   MysqlParametersSpecMysqlEngineTypeEnum,
   SingleStoreDbParametersSpecLoadBalancingModeEnum,
-  TrinoParametersSpecAthenaAuthenticationModeEnum,
-  TrinoParametersSpecTrinoEngineTypeEnum
+  TrinoParametersSpecTrinoEngineTypeEnum,
+  DuckdbParametersSpecAwsAuthenticationModeEnum,
+  TrinoParametersSpecAwsAuthenticationModeEnum
 } from '../../api';
 import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
 import SelectDatabase from '../../components/Dashboard/SelectDatabase';
@@ -53,8 +54,11 @@ const CreateConnection = () => {
         break;
       }
       case ConnectionModelProviderTypeEnum.redshift: {
-        copiedDatabase.redshift = { port: '5439',
-        properties: { '': '' } };
+        copiedDatabase.redshift = { 
+          port: '5439',
+          redshift_authentication_mode: TrinoParametersSpecAwsAuthenticationModeEnum.default_credentials,
+          properties: { '': '' } 
+        };
         break;
       }
       case ConnectionModelProviderTypeEnum.sqlserver: {
@@ -70,10 +74,8 @@ const CreateConnection = () => {
       case ConnectionModelProviderTypeEnum.trino: {
         copiedDatabase.trino = {
           port: '8080',
-          trino_engine_type:
-            nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum,
-          athena_authentication_mode:
-            TrinoParametersSpecAthenaAuthenticationModeEnum.iam,
+          trino_engine_type: nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum,
+          aws_authentication_mode: TrinoParametersSpecAwsAuthenticationModeEnum.default_credentials,
           catalog:
             (nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum) ===
             TrinoParametersSpecTrinoEngineTypeEnum.athena
@@ -106,7 +108,6 @@ const CreateConnection = () => {
             properties: { '': '' }
           };
         }
-
         break;
       }
       case ConnectionModelProviderTypeEnum.oracle: {
@@ -142,6 +143,7 @@ const CreateConnection = () => {
           directories: { files: '' },
           files_format_type: fileFormat,
           storage_type: DuckdbParametersSpecStorageTypeEnum.local,
+          aws_authentication_mode: DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials,
           properties: { '': '' }
         };
       }

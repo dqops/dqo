@@ -16,6 +16,7 @@
 package com.dqops.connectors.trino;
 
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
+import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -66,9 +67,9 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String password;
 
-    @CommandLine.Option(names = {"--athena-authentication-mode"}, description = "The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE} configuration with a custom environment variable.")
-    @JsonPropertyDescription("The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE} configuration with a custom environment variable.")
-    private AthenaAuthenticationMode athenaAuthenticationMode;
+    @CommandLine.Option(names = {"--athena-aws-authentication-mode"}, description = "The authentication mode for AWS Athena. Supports also a ${AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.")
+    @JsonPropertyDescription("The authentication mode for AWS Athena. Supports also a ${ATHENA_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.")
+    private AwsAuthenticationMode awsAuthenticationMode;
 
     @CommandLine.Option(names = {"--athena-region"}, description = "The AWS Athena Region where queries will be run. Supports also a ${ATHENA_REGION} configuration with a custom environment variable.")
     @JsonPropertyDescription("The AWS Region where queries will be run. Supports also a ${ATHENA_REGION} configuration with a custom environment variable.")
@@ -180,19 +181,18 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
      * Returns the Athena's authentication mode.
      * @return Athena's authentication mode.
      */
-    public AthenaAuthenticationMode getAthenaAuthenticationMode() {
-        return athenaAuthenticationMode;
+    public AwsAuthenticationMode getAwsAuthenticationMode() {
+        return awsAuthenticationMode;
     }
 
     /**
      * Sets Athena's authentication mode.
-     * @param athenaAuthenticationMode Athena's authentication mode.
+     * @param awsAuthenticationMode Athena's authentication mode.
      */
-    public void setAthenaAuthenticationMode(AthenaAuthenticationMode athenaAuthenticationMode) {
-        setDirtyIf(!Objects.equals(this.athenaAuthenticationMode, athenaAuthenticationMode));
-        this.athenaAuthenticationMode = athenaAuthenticationMode;
+    public void setAwsAuthenticationMode(AwsAuthenticationMode awsAuthenticationMode) {
+        setDirtyIf(!Objects.equals(this.awsAuthenticationMode, awsAuthenticationMode));
+        this.awsAuthenticationMode = awsAuthenticationMode;
     }
-
 
     /**
      * Returns the Athena's AWS Region.

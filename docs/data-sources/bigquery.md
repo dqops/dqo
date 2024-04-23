@@ -38,14 +38,14 @@ After navigating to the BigQuery connection settings, you will need to fill in i
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-bigquery.png)
 
-| BigQuery connection settings                                                                               | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                                                                                 | 
-|------------------------------------------------------------------------------------------------------------|------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name                                                                                            |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters, hyphens and underscore.                                                                           |
-| Source GCP project ID                                                                                      | source_project_id                        | Name of the project that has datasets that will be imported.                                                                                                                                                                                                                                                                                |
-| Authentication mode to the Google Cloud                                                                    | authentication_mode                      | Type of authentication mode to the Google Cloud. You can select from the 3 options:<br/>- Google Application Credentials,<br/>- JSON Key Content<br/> - JSON Key Path                                                                                                                                                                       |
-| GCP project to create BigQuery jobs, where the authenticated principal has bigquery.jobs.create permission | jobs_create_project                      | Google Cloud Platform project which will be used to create BigQuery jobs. In this project, the authenticated user must have bigquery.jobs.create permission. You can select from the 3 options:<br/>- Create jobs in source project<br/>- Create jobs in default project from credentials<br/> - Create jobs in selected billing project ID |
-| Billing GCP project ID                                                                                     | billing_project_id                       | The ID of the selected billing GCP project. In this project, the authenticated user must have bigquery.jobs.create permission. This field is active when you select the "Create jobs in selected billing project ID" option.                                                                                                                |
-| Quota GCP project ID                                                                                       | quota_project_id                         | The Google Cloud Platform project ID which is used for invocation.                                                                                                                                                                                                                                                                          |
+| BigQuery connection settings                                                                               | Property name in YAML configuration file   | Description                                                                                                                                                                                                                                                                                                                                  | 
+|------------------------------------------------------------------------------------------------------------|--------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name                                                                                            |                                            | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters, hyphens and underscore.                                                                            |
+| Source GCP project ID                                                                                      | `source_project_id`                        | Name of the project that has datasets that will be imported.                                                                                                                                                                                                                                                                                 |
+| Authentication mode to the Google Cloud                                                                    | `authentication_mode`                      | Type of authentication mode to the Google Cloud. You can select from the 3 options:<br/>- Google Application Credentials,<br/>- JSON Key Content<br/> - JSON Key Path                                                                                                                                                                        |
+| GCP project to create BigQuery jobs, where the authenticated principal has bigquery.jobs.create permission | `jobs_create_project`                      | Google Cloud Platform project which will be used to create BigQuery jobs. In this project, the authenticated user must have bigquery.jobs.create permission. You can select from the 3 options:<br/>- Create jobs in source project<br/>- Create jobs in default project from credentials<br/> - Create jobs in selected billing project ID  |
+| Billing GCP project ID                                                                                     | `billing_project_id`                       | The ID of the selected billing GCP project. In this project, the authenticated user must have bigquery.jobs.create permission. This field is active when you select the "Create jobs in selected billing project ID" option.                                                                                                                 |
+| Quota GCP project ID                                                                                       | `quota_project_id`                         | The Google Cloud Platform project ID which is used for invocation.                                                                                                                                                                                                                                                                           |
 
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -188,6 +188,8 @@ To provide your user credentials to DQOps, use the Google Cloud CLI:
 
 ### Using shared credentials
 
+This method use the **Authentication mode to the Google Cloud** set as **Google Application Credentials**.
+
 With DQOps, you can configure credentials to access GCP Cloud directly in the platform.
 
 Please note, that any credentials and secrets shared with the DQOps Cloud or DQOps SaaS instances are stored in the .credentials folder. 
@@ -204,7 +206,9 @@ $DQO_USER_HOME
 If you wish to use JSON key authentication, the content of the file must be replaced with a service account key in JSON format.
 You can find more details on how to [Create and delete service account keys](https://cloud.google.com/iam/docs/keys-create-delete) in Google Cloud documentation.
 
-If you do not replace the content of the file, the Application Default Credentials will be used.
+!!! warning
+
+    If you do not replace the content of the file, the Application Default Credentials will be used.
 
 
 To set the credential file in DQOps, follow these steps:
@@ -213,20 +217,20 @@ To set the credential file in DQOps, follow these steps:
 2. Select Shared credentials from the tree view on the left.
 3. Click the edit link on the “GCP_application_credentials.json” file.
 
-![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/shared-credentials-ui.png)
+    ![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/shared-credentials-ui.png)
 
 4. In the text area, paste the key in JSON format, replacing the placeholder text.
 
-![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/edit-gcp-shared-credential.png)
+    ![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/edit-gcp-shared-credential.png)
 
-![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/replaced-gcp-shared-credential.png)
+    ![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/replaced-gcp-shared-credential.png)
 
 5. Click the **Save** button, to save changes.
 
 !!! tip "Use the Application Default Credentials after filling in the shared credential"
     
     If you still want to use default credentials from Google Cloud CLI, 
-    you must manually delete the .credentialsGCP_application_default_credentials.json file from the DQOps credentials.
+    you must manually delete the .credentials/GCP_application_default_credentials.json file from the DQOps credentials.
 
 
 ## Next steps

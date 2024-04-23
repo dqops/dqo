@@ -20,6 +20,7 @@ import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.connectors.AbstractSqlConnectionProvider;
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
@@ -160,10 +161,10 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
 
     private void promptForAthenaConnectionParameters(TrinoParametersSpec trinoSpec, boolean isHeadless, TerminalReader terminalReader) {
 
-        AthenaAuthenticationMode athenaAuthenticationMode = terminalReader.promptEnum("Athena authentication mode (--athena-authentication-mode)", AthenaAuthenticationMode.class, null, false);
-        trinoSpec.setAthenaAuthenticationMode(athenaAuthenticationMode);
+        AwsAuthenticationMode awsAuthenticationMode = terminalReader.promptEnum("AWS authentication mode (--aws-authentication-mode)", AwsAuthenticationMode.class, null, false);
+        trinoSpec.setAwsAuthenticationMode(awsAuthenticationMode);
 
-        switch (athenaAuthenticationMode){
+        switch (awsAuthenticationMode){
             case iam:
                 if (Strings.isNullOrEmpty(trinoSpec.getUser())) {
                     if (isHeadless) {
@@ -178,12 +179,11 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
                     trinoSpec.setPassword(terminalReader.prompt(" AWS SecretAccessKey (--trino-password)", "${TRINO_PASSWORD}", false));
                 }
                 break;
-
             case default_credentials:
                     // Default credentials are set automatically from the file when the jdbc connection string creation.
                 break;
             default:
-                throw new RuntimeException("Given enum is not supported : " + trinoSpec.getAthenaAuthenticationMode());
+                throw new RuntimeException("Given enum is not supported : " + trinoSpec.getAwsAuthenticationMode());
         }
 
         if (Strings.isNullOrEmpty(trinoSpec.getAthenaRegion())) {

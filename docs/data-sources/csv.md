@@ -44,9 +44,10 @@ After navigating to the CSV connection settings, you will need to fill in its de
 | Parallel jobs limit      |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                                                                                                       |
 | Files location           | `storage-type`                           | You have the option to import files stored locally or on AWS S3. If you choose to work with files on AWS S3, it is recommended that you create a specialized user in IAM. This user should be used as a service account and given permission to list and read objects. |
 | File format              | `files-format-type`                      | Type of source files for DuckDB.                                                                                                                                                                                                                                      |
-| User name/Key ID         | `user`                                   | DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome.                                 |
-| Password/Secret Key      | `password`                               | DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome.                                  |
-| Region                   | `region`                                 | The region for the storage credentials for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome.           |
+| Aws authentication mode | `duckdb_aws_authentication_mode`         | Available when using AWS S3. Authentication mode to AWS S3. Supports also a ${REDSHIFT_AUTHENTICATION_MODE} configuration with a custom environment variable.                                                                                                              |
+| Access Key ID           | `user`                                   | Available when using AWS S3. Access Key ID for AWS authentication. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                |
+| Secret Access Key       | `password`                               | Available when using AWS S3. Secret Access Key for AWS authentication. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                            |
+| Region                  | `region`                                 | The region for the storage credentials for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When not set the default value will be loaded from .credentials/AWS_default_config file in your DQOps' userhome |
 | Virtual schema name      | `directories`                            | An alias for the parent directory with data. The virtual schema name is a key of the directories mapping.                                                                                                                                                             |
 | Path                     | `directories`                            | The path prefix to the parent directory with data. The path must be absolute.                                                                                                                           |
 | JDBC connection property |                                          | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                                              |
@@ -107,21 +108,21 @@ The following properties can be configured for a very specific CSV format.
 |-------------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Compression                   | `compression`                            | The compression type for the file. By default, this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd. | 
 | Date format                   | `dateformat`                             | Specifies the date format used when parsing dates.                                                                                                                                            | 
-| Decimal separator             | `decimal-separator`                      | The decimal separator of numbers.                                                                                                                                                             | 
+| Decimal separator             | `decimal_separator`                      | The decimal separator of numbers.                                                                                                                                                             | 
 | Delimiter                     | `delim`                                  | Specifies a string separating the columns in each row (line) of the file.                                                                                                                     | 
 | Escape character/string       | `escape`                                 | Specifies the string that should appear before the data character sequence that matches the quote value.                                                                                      | 
-| New line                      | `new-line`                               | Set the new line character(s) in the file. Options are '\\r','\\n', or '\\r\\n'.                                                                                                              | 
+| New line                      | `new_line`                               | Set the new line character(s) in the file. Options are '\\r','\\n', or '\\r\\n'.                                                                                                              | 
 | Quote                         | `quote`                                  | Specifies the quoting string to be used when a data value is quoted.                                                                                                                          | 
-| Sample size                   | `sample-size`                            | The number of sample rows for automatic parameter detection.                                                                                                                                  | 
+| Sample size                   | `sample_size`                            | The number of sample rows for automatic parameter detection.                                                                                                                                  | 
 | Skip                          | `skip`                                   | The number of lines at the beginning of the file to be skipped.                                                                                                                               | 
 | Timestamp format              | `timestampformat`                        | Specifies the date format used when parsing timestamps.                                                                                                                                       | 
-| Treat all columns as varchar  | `all-varchar`                            | An option to skip type detection during CSV parsing and assume that all columns are of VARCHAR type.                                                                                          | 
-| Allow quoted nulls            | `allow-quoted-nulls`                     | An option to allow the conversion of quoted values to NULL values.                                                                                                                            | 
+| Treat all columns as varchar  | `all_varchar`                            | An option to skip type detection during CSV parsing and assume that all columns are of VARCHAR type.                                                                                          | 
+| Allow quoted nulls            | `allow_quoted_nulls`                     | An option to allow the conversion of quoted values to NULL values.                                                                                                                            | 
 | Filename                      | `filename`                               | Specifies whether an additional file name column should be included in the result.                                                                                                            | 
 | Header                        | `header`                                 | Specifies that the file contains a header line with the names of each column in the file.                                                                                                     | 
-| Hive partitioning             | `hive-partitioning`                      | Specifies whether to interpret the path as a hive-partitioned path.                                                                                                                           | 
-| Ignore errors                 | `ignore-errors`                          | An option to ignore any parsing errors encountered - and instead ignore rows with errors.                                                                                                     | 
-| Auto detect                   | `auto-detect`                            | (Not available in UI) Enables auto-detection of CSV parameters. Default is true                                                                                                               | 
+| Hive partitioning             | `hive_partitioning`                      | Specifies whether to interpret the path as a hive-partitioned path.                                                                                                                           | 
+| Ignore errors                 | `ignore_errors`                          | An option to ignore any parsing errors encountered - and instead ignore rows with errors.                                                                                                     | 
+| Auto detect                   | `auto_detect`                            | (Not available in UI) Enables auto-detection of CSV parameters. Default is true                                                                                                               | 
 
 ### Environment variables in parameters
 
@@ -300,6 +301,55 @@ spec:
 Complete documentation of all connection parameters used in the `spec.duckdb` node is
 described in the reference section of the [DuckdbParametersSpec](../reference/yaml/ConnectionYaml.md#duckdbparametersspec)
 YAML file format.
+
+## Configure the credentials
+
+### Using shared credentials
+
+With DQOps, you can configure credentials to access AWS S3 directly in the platform.
+
+Please note, that any credentials and secrets shared with the DQOps Cloud or DQOps SaaS instances are stored in the .credentials folder.
+This folder also contains the default credentials files pair for AWS named **AWS_default_config** and **AWS_default_credentials**.
+
+``` { .asc .annotate hl_lines="4" }
+$DQO_USER_HOME
+├───...
+└───.credentials                                                            
+    ├───AWS_default_config
+    ├───AWS_default_credentials
+    └─...   
+```
+
+If you wish to use AWS authentication, the content of the files must be replaced with your aws_access_key_id, aws_secret_access_key and region.
+You can find more details on how to [manage access keys for IAM users](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html) in AWS documentation.
+
+!!! warning
+
+    If you do not replace the content of the files, the default credentials will be loaded from system.
+
+
+To set the credential file in DQOps, follow these steps:
+
+1. Open the Configuration section.
+2. Select Shared credentials from the tree view on the left.
+3. Click the edit link on the “AWS_default_credentials” file.
+
+![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/aws-shared-credentials-ui.png)
+
+4. In the text area, edit the aws_access_key_id and aws_secret_access_key, replacing the placeholder text.
+
+![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/edit-aws-shared-credential.png)
+
+5. Click the **Save** button, to save changes, go back to the main **Shared credentials** view.
+
+6. Edit the region in AWS_default_config file and save the file.
+
+
+!!! tip "Use the system default credentials after filling in the shared credential"
+
+    If you still want to use default credentials from AWS, 
+    you must manually delete the .credentials/AWS_default_config and .credentials/AWS_default_credentials files from the DQOps credentials.
+
 
 ## Next steps
 
