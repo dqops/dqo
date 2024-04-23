@@ -38,18 +38,19 @@ After navigating to the Parquet connection settings, you will need to fill in it
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-parquet.png){ loading=lazy; width="1200px" }
 
-| Parquet connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                            | 
-|-----------------------------|------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name             |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                              |
-| Parallel jobs limit         |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                                                                                                        |
-| Files location              | `storage-type`                           | You have the option to import files stored locally or on AWS S3. If you choose to work with files on AWS S3, it is recommended that you create a specialized user in IAM. This user should be used as a service account and given permission to list and read objects. |
-| File format                 | `files-format-type`                      | Type of source files for DuckDB.                                                                                                                                                                                                                                       |
-| User name/Key ID            | `user`                                   | DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome.                                  |
-| Password/Secret Key         | `password`                               | DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome.                                   |
-| Region                      | `region`                                 | The region for the storage credentials for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When both are not set the default value will be loaded from credentials in your DQOps' userhome.            |
-| Virtual schema name         | `directories`                            | An alias for the parent directory with data. The virtual schema name is a key of the directories mapping.                                                                                                                                                              |
-| Path                        | `directories`                            | The path prefix to the parent directory with data. The path must be absolute. The virtual schema name is a value of the directories mapping.                                                                                                                           |
-| JDBC connection property    |                                          | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                                               |
+| Parquet connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                | 
+|-----------------------------|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name             |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                                  |
+| Parallel jobs limit         |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                                                               |
+| Files location              | `storage_type`                           | You have the option to import files stored locally or on AWS S3. If you choose to work with files on AWS S3, it is recommended that you create a specialized user in IAM. This user should be used as a service account and given permission to list and read objects.     |
+| File format                 | `files_format_type`                      | Type of source files for DuckDB.                                                                                                                                                                                                                                           |
+| Aws authentication mode     | `duckdb_aws_authentication_mode`         | Available when using AWS S3. Authentication mode to AWS S3. Supports also a ${REDSHIFT_AUTHENTICATION_MODE} configuration with a custom environment variable.                                                                                                              |
+| Access Key ID               | `user`                                   | Available when using AWS S3. Access Key ID for AWS authentication. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                |
+| Secret Access Key           | `password`                               | Available when using AWS S3. Secret Access Key for AWS authentication. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                            |
+| Region                      | `region`                                 | The region for the storage credentials for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When not set the default value will be loaded from .credentials/AWS_default_config file in your DQOps' userhome |
+| Virtual schema name         | `directories`                            | An alias for the parent directory with data. The virtual schema name is a key of the directories mapping.                                                                                                                                                                  |
+| Path                        | `directories`                            | The path prefix to the parent directory with data. The path must be absolute. The virtual schema name is a value of the directories mapping.                                                                                                                               |
+| JDBC connection property    |                                          | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                                                   |
 
 
 ### Setting the path to data import
@@ -287,6 +288,55 @@ spec:
 Complete documentation of all connection parameters used in the `spec.duckdb` node is
 described in the reference section of the [DuckdbParametersSpec](../reference/yaml/ConnectionYaml.md#duckdbparametersspec)
 YAML file format.
+
+## Configure the credentials
+
+### Using shared credentials
+
+With DQOps, you can configure credentials to access AWS S3 directly in the platform.
+
+Please note, that any credentials and secrets shared with the DQOps Cloud or DQOps SaaS instances are stored in the .credentials folder.
+This folder also contains the default credentials files pair for AWS named **AWS_default_config** and **AWS_default_credentials**.
+
+``` { .asc .annotate hl_lines="4" }
+$DQO_USER_HOME
+├───...
+└───.credentials                                                            
+    ├───AWS_default_config
+    ├───AWS_default_credentials
+    └─...   
+```
+
+If you wish to use AWS authentication, the content of the files must be replaced with your aws_access_key_id, aws_secret_access_key and region.
+You can find more details on how to [manage access keys for IAM users](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html) in AWS documentation.
+
+!!! warning
+
+    If you do not replace the content of the files, the default credentials will be loaded from system.
+
+
+To set the credential file in DQOps, follow these steps:
+
+1. Open the Configuration section.
+2. Select Shared credentials from the tree view on the left.
+3. Click the edit link on the “AWS_default_credentials” file.
+
+![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/aws-shared-credentials-ui.png)
+
+4. In the text area, edit the aws_access_key_id and aws_secret_access_key, replacing the placeholder text.
+
+![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/edit-aws-shared-credential.png)
+
+5. Click the **Save** button, to save changes, go back to the main **Shared credentials** view.
+
+6. Edit the region in AWS_default_config file and save the file.
+
+
+!!! tip "Use the system default credentials after filling in the shared credential"
+
+    If you still want to use default credentials from AWS, 
+    you must manually delete the .credentials/AWS_default_config and .credentials/AWS_default_credentials files from the DQOps credentials.
+
 
 ## Next steps
 
