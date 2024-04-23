@@ -70,14 +70,6 @@ const DuckdbConnection = ({
   sharedCredentials,
   freezeFileType = false
 }: IDuckdbConnectionProps) => {
-  // const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
-  //   if (!onChange) return;
-  //   onChange({
-  //     ...duckdb,
-  //     ...obj
-  //   });
-  // };
-
   const [copiedDatabase, setCopiedDatabase] = useState<DuckdbParametersSpec>(
     cloneDeep(duckdb) ?? {}
   );
