@@ -155,6 +155,8 @@ const TrinoConnection = ({
             label="Athena Region"
             className="mb-4"
             value={trino?.athena_region}
+            placeholder={trino?.athena_authentication_mode === 
+              TrinoParametersSpecAthenaAuthenticationModeEnum.default_credentials ? 'Uses the value from the ".credentials/AWS_default_config" DQOps shared credential file' : ''}
             onChange={(value) => handleChange({ athena_region: value })}
           />
           <FieldTypeInput

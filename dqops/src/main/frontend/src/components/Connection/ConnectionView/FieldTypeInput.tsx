@@ -15,6 +15,7 @@ interface FieldTypeInputProps {
   data?: any;
   credential?: boolean;
   inputClassName?: string;
+  placeholder?: string;
 }
 
 const FieldTypeInput = ({
@@ -27,7 +28,8 @@ const FieldTypeInput = ({
   disabled,
   data,
   credential,
-  inputClassName
+  inputClassName,
+  placeholder
 }: FieldTypeInputProps) => {
   const options = [
     {
@@ -133,6 +135,7 @@ const FieldTypeInput = ({
                 type={inputType}
                 disabled={disabled}
                 className={inputClassName}
+                placeholder={placeholder}
               />
             )}
           </div>
