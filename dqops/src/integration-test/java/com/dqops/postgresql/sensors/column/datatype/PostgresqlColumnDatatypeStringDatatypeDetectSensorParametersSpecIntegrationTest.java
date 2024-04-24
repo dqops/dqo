@@ -95,7 +95,7 @@ public class PostgresqlColumnDatatypeStringDatatypeDetectSensorParametersSpecInt
     }
 
     @Test
-    void runSensor_whenSensorExecutedProfilingAndCheckTimestampDataType_thenReturnsValues() {
+    void runSensor_whenSensorExecutedProfilingAndCheckDatetimeDataType_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "datetime4", this.checkSpec);
 
