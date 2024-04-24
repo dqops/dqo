@@ -147,7 +147,6 @@ public class FileTableDefaultChecksPatternWrapperImpl extends TableDefaultChecks
         }
 
         if (this.getStatus() == InstanceStatus.UNCHANGED && super.getSpec() != null && super.getSpec().isDirty()) {
-            super.getSpec().clearDirty(true);
 			this.setStatus(InstanceStatus.MODIFIED);
         }
 

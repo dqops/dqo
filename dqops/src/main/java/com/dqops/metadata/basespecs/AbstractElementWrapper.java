@@ -239,11 +239,15 @@ public abstract class AbstractElementWrapper<K, V extends DirtyStatus & Hierarch
      */
     @Override
     public boolean isDirty() {
-        if (this.spec == null && this.status == InstanceStatus.UNCHANGED) {
+        if (this.spec == null) {
             return this.isDirty(false);
         }
 
-        return super.isDirty();
+        if (this.status == InstanceStatus.MODIFIED || this.status == InstanceStatus.TO_BE_DELETED) {
+            return true;
+        }
+
+        return super.isDirty(false) || this.spec.isDirty();
     }
 
     /**
