@@ -100,7 +100,7 @@ public class SingleStoreDbColumnDatatypeStringDatatypeDetectSensorParametersSpec
     @Test
     void runSensor_whenSensorExecutedProfilingAndCheckTimestampDataType_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "timestamp4", this.checkSpec);
+                sampleTableMetadata, "datetime4", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -113,7 +113,7 @@ public class SingleStoreDbColumnDatatypeStringDatatypeDetectSensorParametersSpec
     @Test
     void runSensor_whenSensorExecutedProfilingAndCheckBoolDataType_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "bool5", this.checkSpec);
+                sampleTableMetadata, "bool6", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -126,7 +126,7 @@ public class SingleStoreDbColumnDatatypeStringDatatypeDetectSensorParametersSpec
     @Test
     void runSensor_whenSensorExecutedProfilingAndCheckStringDataType_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "string6", this.checkSpec);
+                sampleTableMetadata, "string7", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -139,7 +139,7 @@ public class SingleStoreDbColumnDatatypeStringDatatypeDetectSensorParametersSpec
     @Test
     void runSensor_whenSensorExecutedProfilingAndCheckMixedDataTypes_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "mixed7", this.checkSpec);
+                sampleTableMetadata, "mixed8", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -178,7 +178,7 @@ public class SingleStoreDbColumnDatatypeStringDatatypeDetectSensorParametersSpec
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "mixed7", this.checkSpec, CheckTimeScale.daily, "date");
+                sampleTableMetadata, "mixed8", this.checkSpec, CheckTimeScale.daily, "date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
