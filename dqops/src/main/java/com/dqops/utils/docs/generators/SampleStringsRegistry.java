@@ -125,6 +125,9 @@ public class SampleStringsRegistry {
     public static String getTableComparison() {
         return "sample_table_comparison";
     }
+    public static String getLabelSample() {
+        return "address/city";
+    }
 
     public static String getMonthStart() {
         return LocalDate.of(2007, 10,1).toString();
@@ -157,6 +160,10 @@ public class SampleStringsRegistry {
     public static String getJobId() { return "123123124324324"; }
 
     public static String getDictionaryName() { return "status_codes.csv"; };
+
+    public static String getSampleFilter() { return "fact*"; };
+
+    public static String getLabelPrefix() { return "address"; };
 
     /**
      * Gets sample string fitting the parameter.
@@ -230,6 +237,10 @@ public class SampleStringsRegistry {
             return getDictionaryName();
         } else if (parameterNameLower.contains("pattern_name")) {
             return getPatternName();
+        } else if (parameterNameLower.contains("filter")) {
+            return getSampleFilter();
+        } else if (parameterNameLower.contains("prefix")) {
+            return getLabelPrefix();
         }
 
         throw new IllegalArgumentException("No value found fitting the parameter \"" + parameterName + "\".");

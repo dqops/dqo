@@ -68,6 +68,9 @@ tags:
   description: "Jobs management controller that supports starting new jobs, such as\
     \ running selected data quality checks. Provides access to the job queue for incremental\
     \ monitoring."
+- name: "Labels"
+  description: "Operations that returns all labels that are assigned to data assets.\
+    \ Labels serve the purpose of a lazy business glossary."
 - name: "LogShipping"
   description: "Log shipping controller that accepts logs sent from a web application\
     \ or external tools and aggregates them in the local DQOps instance logs."
@@ -12736,6 +12739,159 @@ paths:
           description: "New jobs that will synchronize folders were added to the queue"
           schema:
             $ref: "#/definitions/SynchronizeMultipleFoldersQueueJobResult"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/labels/columns:
+    get:
+      tags:
+      - "Labels"
+      summary: "getAllLabelsForColumns"
+      description: "Returns a list of all labels applied to columns, including the\
+        \ count of assignments to these data assets."
+      operationId: "getAllLabelsForColumns"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "page"
+        in: "query"
+        description: "Page number, the first page is 1"
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "Page size, the default is 100 rows, but paging is disabled is\
+          \ neither page and limit parameters are provided"
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "prefix"
+        in: "query"
+        description: "Optional filter for the prefix of labels. For example, when\
+          \ the prefix is \"address\", this operation will return labels \"address/city\"\
+          \ and \"address/country\", but not \"address\"."
+        required: false
+        type: "string"
+      - name: "filter"
+        in: "query"
+        description: "Optional table name filter"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/LabelModel"
+        404:
+          description: "Label prefix not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/labels/connections:
+    get:
+      tags:
+      - "Labels"
+      summary: "getAllLabelsForConnections"
+      description: "Returns a list of all labels applied to the connections to data\
+        \ sources, including the count of assignments to these data assets."
+      operationId: "getAllLabelsForConnections"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "page"
+        in: "query"
+        description: "Page number, the first page is 1"
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "Page size, the default is 100 rows, but paging is disabled is\
+          \ neither page and limit parameters are provided"
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "prefix"
+        in: "query"
+        description: "Optional filter for the prefix of labels. For example, when\
+          \ the prefix is \"address\", this operation will return labels \"address/city\"\
+          \ and \"address/country\", but not \"address\"."
+        required: false
+        type: "string"
+      - name: "filter"
+        in: "query"
+        description: "Optional table name filter"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/LabelModel"
+        404:
+          description: "Label prefix not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/labels/tables:
+    get:
+      tags:
+      - "Labels"
+      summary: "getAllLabelsForTables"
+      description: "Returns a list of all labels applied to tables, including the\
+        \ count of assignments to these data assets."
+      operationId: "getAllLabelsForTables"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "page"
+        in: "query"
+        description: "Page number, the first page is 1"
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "Page size, the default is 100 rows, but paging is disabled is\
+          \ neither page and limit parameters are provided"
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "prefix"
+        in: "query"
+        description: "Optional filter for the prefix of labels. For example, when\
+          \ the prefix is \"address\", this operation will return labels \"address/city\"\
+          \ and \"address/country\", but not \"address\"."
+        required: false
+        type: "string"
+      - name: "filter"
+        in: "query"
+        description: "Optional table name filter"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/LabelModel"
+        404:
+          description: "Label prefix not found"
         500:
           description: "Internal Server Error"
           schema:
@@ -31970,6 +32126,26 @@ definitions:
       timestampformat:
         type: "string"
         description: "Specifies the date format to use when parsing timestamps."
+  LabelModel:
+    type: "object"
+    properties:
+      label:
+        type: "string"
+        description: "Label text."
+      labels_count:
+        type: "integer"
+        format: "int32"
+        description: "The number of data assets tagged with this label."
+      nested_labels_count:
+        type: "integer"
+        format: "int32"
+        description: "The number of data assets tagged with nested labels below this\
+          \ prefix node. For example, if the current label is \"address\", and there\
+          \ are nested labels \"address/city\" and \"address/zipcode\", this value\
+          \ returns the count of data assets tagged with these nested tags."
+    description: "Label model that is returned by the REST API. A label is a tag that\
+      \ was assigned to a data source, table, column or a single check. Labels play\
+      \ the role of a business glossary."
   MaxCountRule0ErrorParametersSpec:
     type: "object"
     properties:

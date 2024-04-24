@@ -91,7 +91,7 @@ public class DataDomainLabelsContainer {
             }
 
             if (newLabels != null && !newLabels.isEmpty()) {
-                this.connectionLabels.addCountsFromContainer(oldLabels);
+                this.connectionLabels.addCountsFromContainer(newLabels);
                 this.importedConnectionLabels.put(connectionName, newLabels);
             }
         }
@@ -119,7 +119,7 @@ public class DataDomainLabelsContainer {
             }
 
             if (newLabels != null && !newLabels.isEmpty()) {
-                this.tableLabels.addCountsFromContainer(oldLabels);
+                this.tableLabels.addCountsFromContainer(newLabels);
                 this.importedTableLabels.put(tableLabelsKey, newLabels);
             }
         }
@@ -147,7 +147,7 @@ public class DataDomainLabelsContainer {
             }
 
             if (newLabels != null && !newLabels.isEmpty()) {
-                this.columnLabels.addCountsFromContainer(oldLabels);
+                this.columnLabels.addCountsFromContainer(newLabels);
                 this.importedColumnLabels.put(tableLabelsKey, newLabels);
             }
         }

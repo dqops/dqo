@@ -17,6 +17,8 @@
 package com.dqops.metadata.labels.labelcontainers;
 
 import com.dqops.metadata.labels.LabelSetSpec;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.parquet.Strings;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,6 +38,43 @@ public class LabelCountContainer {
         synchronized (this.lock) {
             return this.labels.values().stream().collect(Collectors.toUnmodifiableList());
         }
+    }
+
+    /**
+     * Retrieves a label. Supports multi-level labels separated by /.
+     * @param label Label to find.
+     * @return Label counter or null, when the label was not found.
+     */
+    public LabelCounter getLabelCounter(String label) {
+        if (Strings.isNullOrEmpty(label)) {
+            return null;
+        }
+
+        String[] labelElements = StringUtils.split(label, '/');
+
+        LabelCounter rootLabel;
+        synchronized (this.lock) {
+            rootLabel = this.labels.get(labelElements[0]);
+        }
+
+        if (rootLabel == null) {
+            return null;
+        }
+
+        if (labelElements.length == 1) {
+            return rootLabel;
+        }
+
+        LabelCounter currentCounter = rootLabel;
+        for (int i = 1; i < labelElements.length; i++) {
+            String childLabel = labelElements[i];
+            currentCounter = currentCounter.getChildLabel(childLabel);
+            if (currentCounter == null) {
+                return null;
+            }
+        }
+
+        return currentCounter;
     }
 
     /**
