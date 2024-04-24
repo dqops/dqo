@@ -109,6 +109,19 @@ public class FileDuckdbColumnDatatypeStringDatatypeDetectSensorParametersSpecInt
     }
 
     @Test
+    void runSensor_whenSensorExecutedProfilingAndCheckTimestampDataType_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "timestamp5", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(5, ValueConverter.toInteger(resultTable.column(0).get(0)));
+    }
+
+    @Test
     void runSensor_whenSensorExecutedProfilingAndCheckBoolDataType_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "bool6", this.checkSpec);
