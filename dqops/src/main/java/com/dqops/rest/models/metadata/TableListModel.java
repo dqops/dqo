@@ -65,6 +65,12 @@ public class TableListModel {
     private PhysicalTableName target;
 
     /**
+     * List of labels applied to the table.
+     */
+    @JsonPropertyDescription("List of labels applied to the table.")
+    private String[] labels;
+
+    /**
      * Disables all data quality checks on the table. Data quality checks will not be executed.
      */
     @JsonPropertyDescription("Disables all data quality checks on the table. Data quality checks will not be executed.")
@@ -240,6 +246,7 @@ public class TableListModel {
             setConnectionName(connectionName);
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
             setTarget(tableSpec.getPhysicalTableName());
+            setLabels(tableSpec.getLabels() != null ? tableSpec.getLabels().toArray(String[]::new) : null);
             setDisabled(tableSpec.isDisabled());
             setProfilingChecksResultTruncation(tableSpec.getProfilingChecks() != null ? tableSpec.getProfilingChecks().getResultTruncation() : null);
             setPartitioningConfigurationMissing(tableSpec.getTimestampColumns() == null ||
