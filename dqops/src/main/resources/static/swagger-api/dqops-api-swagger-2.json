@@ -1831,6 +1831,16 @@
           "required" : true,
           "type" : "string"
         }, {
+          "name" : "label",
+          "in" : "query",
+          "description" : "Optional labels to filter the tables",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
+        }, {
           "name" : "page",
           "in" : "query",
           "description" : "Page number, the first page is 1",
