@@ -25,6 +25,7 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.extern.slf4j.Slf4j;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 
@@ -37,6 +38,7 @@ import java.util.Locale;
 /**
  * Base abstract class for JDBC based source connections.
  */
+@Slf4j
 public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConnection {
     private final JdbcConnectionPool jdbcConnectionPool;
     private Connection jdbcConnection;
@@ -85,6 +87,17 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
             this.jdbcConnection.setAutoCommit(true);
         }
         catch (Exception ex) {
+            if (this.jdbcConnection != null) {
+                try {
+                    this.jdbcConnection.close();
+                }
+                catch (SQLException sqlException) {
+                    log.error("Cannot close a connection during a failure, error: " + sqlException.getMessage(), sqlException);
+                } finally {
+                    this.jdbcConnection = null;
+                }
+            }
+
             if (this.getConnectionSpec().getHierarchyId() != null) {
                 String connectionName = this.getConnectionSpec().getConnectionName();
                 throw new JdbcConnectionFailedException("Connection failed for source " + connectionName + ", error: " + ex.getMessage(), ex);
