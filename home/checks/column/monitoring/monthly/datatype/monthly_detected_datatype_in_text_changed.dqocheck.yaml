@@ -6,7 +6,7 @@ spec:
   rule_name: comparison/value_changed
   help_text: "Detects that the data type of texts stored in a text column has changed\
     \ since the last verification. The sensor returns the detected type of column\
-    \ data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 -\
-    \ strings, 8 - mixed data types. Stores the most recent captured value for each\
-    \ day when the data quality check was evaluated."
+    \ data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6\
+    \ - booleans, 7 - strings, 8 - mixed data types. Stores the most recent captured\
+    \ value for each day when the data quality check was evaluated."
   standard: true

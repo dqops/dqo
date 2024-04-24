@@ -9,6 +9,9 @@ if TYPE_CHECKING:
     from ..models.column_invalid_email_format_found_check_spec import (
         ColumnInvalidEmailFormatFoundCheckSpec,
     )
+    from ..models.column_invalid_email_format_percent_check_spec import (
+        ColumnInvalidEmailFormatPercentCheckSpec,
+    )
     from ..models.column_invalid_ip_4_address_format_found_check_spec import (
         ColumnInvalidIp4AddressFormatFoundCheckSpec,
     )
@@ -54,6 +57,7 @@ class ColumnPatternsProfilingChecksSpec:
         profile_text_not_matching_regex_found (Union[Unset, ColumnTextNotMatchingRegexFoundCheckSpec]):
         profile_texts_matching_regex_percent (Union[Unset, ColumnTextsMatchingRegexPercentCheckSpec]):
         profile_invalid_email_format_found (Union[Unset, ColumnInvalidEmailFormatFoundCheckSpec]):
+        profile_invalid_email_format_percent (Union[Unset, ColumnInvalidEmailFormatPercentCheckSpec]):
         profile_text_not_matching_date_pattern_found (Union[Unset, ColumnTextNotMatchingDatePatternFoundCheckSpec]):
         profile_text_matching_date_pattern_percent (Union[Unset, ColumnTextMatchingDatePatternPercentCheckSpec]):
         profile_text_matching_name_pattern_percent (Union[Unset, ColumnTextMatchingNamePatternPercentCheckSpec]):
@@ -72,6 +76,9 @@ class ColumnPatternsProfilingChecksSpec:
     ] = UNSET
     profile_invalid_email_format_found: Union[
         Unset, "ColumnInvalidEmailFormatFoundCheckSpec"
+    ] = UNSET
+    profile_invalid_email_format_percent: Union[
+        Unset, "ColumnInvalidEmailFormatPercentCheckSpec"
     ] = UNSET
     profile_text_not_matching_date_pattern_found: Union[
         Unset, "ColumnTextNotMatchingDatePatternFoundCheckSpec"
@@ -117,6 +124,12 @@ class ColumnPatternsProfilingChecksSpec:
         if not isinstance(self.profile_invalid_email_format_found, Unset):
             profile_invalid_email_format_found = (
                 self.profile_invalid_email_format_found.to_dict()
+            )
+
+        profile_invalid_email_format_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_invalid_email_format_percent, Unset):
+            profile_invalid_email_format_percent = (
+                self.profile_invalid_email_format_percent.to_dict()
             )
 
         profile_text_not_matching_date_pattern_found: Union[
@@ -180,6 +193,10 @@ class ColumnPatternsProfilingChecksSpec:
             field_dict[
                 "profile_invalid_email_format_found"
             ] = profile_invalid_email_format_found
+        if profile_invalid_email_format_percent is not UNSET:
+            field_dict[
+                "profile_invalid_email_format_percent"
+            ] = profile_invalid_email_format_percent
         if profile_text_not_matching_date_pattern_found is not UNSET:
             field_dict[
                 "profile_text_not_matching_date_pattern_found"
@@ -215,6 +232,9 @@ class ColumnPatternsProfilingChecksSpec:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.column_invalid_email_format_found_check_spec import (
             ColumnInvalidEmailFormatFoundCheckSpec,
+        )
+        from ..models.column_invalid_email_format_percent_check_spec import (
+            ColumnInvalidEmailFormatPercentCheckSpec,
         )
         from ..models.column_invalid_ip_4_address_format_found_check_spec import (
             ColumnInvalidIp4AddressFormatFoundCheckSpec,
@@ -299,6 +319,21 @@ class ColumnPatternsProfilingChecksSpec:
             profile_invalid_email_format_found = (
                 ColumnInvalidEmailFormatFoundCheckSpec.from_dict(
                     _profile_invalid_email_format_found
+                )
+            )
+
+        _profile_invalid_email_format_percent = d.pop(
+            "profile_invalid_email_format_percent", UNSET
+        )
+        profile_invalid_email_format_percent: Union[
+            Unset, ColumnInvalidEmailFormatPercentCheckSpec
+        ]
+        if isinstance(_profile_invalid_email_format_percent, Unset):
+            profile_invalid_email_format_percent = UNSET
+        else:
+            profile_invalid_email_format_percent = (
+                ColumnInvalidEmailFormatPercentCheckSpec.from_dict(
+                    _profile_invalid_email_format_percent
                 )
             )
 
@@ -412,6 +447,7 @@ class ColumnPatternsProfilingChecksSpec:
             profile_text_not_matching_regex_found=profile_text_not_matching_regex_found,
             profile_texts_matching_regex_percent=profile_texts_matching_regex_percent,
             profile_invalid_email_format_found=profile_invalid_email_format_found,
+            profile_invalid_email_format_percent=profile_invalid_email_format_percent,
             profile_text_not_matching_date_pattern_found=profile_text_not_matching_date_pattern_found,
             profile_text_matching_date_pattern_percent=profile_text_matching_date_pattern_percent,
             profile_text_matching_name_pattern_percent=profile_text_matching_name_pattern_percent,

@@ -112,7 +112,7 @@ public class SearchController {
             @ApiParam(name = "table", value = "Optional table name filter", required = false)
             @RequestParam(required = false) Optional<String> table,
             @ApiParam(name = "label", value = "Optional labels to filter the tables", required = false)
-            @RequestParam(required = false) Optional<String[]> label,
+            @RequestParam(required = false) Optional<List<String>> label,
             @ApiParam(name = "page", value = "Page number, the first page is 1", required = false)
             @RequestParam(required = false) Optional<Integer> page,
             @ApiParam(name = "limit", value = "Page size, the default is 100 rows, but paging is disabled is neither page and limit parameters are provided", required = false)
@@ -136,8 +136,8 @@ public class SearchController {
         }
         tableSearchFilters.setFullTableName(tableNameFilter + "." + schemaNameFilter);
 
-        if (label.isPresent() && label.get().length > 0) {
-            tableSearchFilters.setLabels(label.get());
+        if (label.isPresent() && label.get().size() > 0) {
+            tableSearchFilters.setLabels(label.get().toArray(String[]::new));
         }
 
         Integer tableLimit = null;

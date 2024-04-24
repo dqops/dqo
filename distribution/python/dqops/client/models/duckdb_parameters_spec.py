@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.aws_authentication_mode import AwsAuthenticationMode
 from ..models.duckdb_files_format_type import DuckdbFilesFormatType
 from ..models.duckdb_read_mode import DuckdbReadMode
 from ..models.duckdb_storage_type import DuckdbStorageType
@@ -39,6 +40,7 @@ class DuckdbParametersSpec:
         directories (Union[Unset, DuckdbParametersSpecDirectories]): Virtual schema name to directory mappings. The path
             must be an absolute path.
         storage_type (Union[Unset, DuckdbStorageType]):
+        aws_authentication_mode (Union[Unset, AwsAuthenticationMode]):
         user (Union[Unset, str]): DuckDB user name for a remote storage type. The value can be in the
             ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
         password (Union[Unset, str]): DuckDB password for a remote storage type. The value can be in the
@@ -56,6 +58,7 @@ class DuckdbParametersSpec:
     parquet: Union[Unset, "ParquetFileFormatSpec"] = UNSET
     directories: Union[Unset, "DuckdbParametersSpecDirectories"] = UNSET
     storage_type: Union[Unset, DuckdbStorageType] = UNSET
+    aws_authentication_mode: Union[Unset, AwsAuthenticationMode] = UNSET
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
     region: Union[Unset, str] = UNSET
@@ -95,6 +98,10 @@ class DuckdbParametersSpec:
         if not isinstance(self.storage_type, Unset):
             storage_type = self.storage_type.value
 
+        aws_authentication_mode: Union[Unset, str] = UNSET
+        if not isinstance(self.aws_authentication_mode, Unset):
+            aws_authentication_mode = self.aws_authentication_mode.value
+
         user = self.user
         password = self.password
         region = self.region
@@ -120,6 +127,8 @@ class DuckdbParametersSpec:
             field_dict["directories"] = directories
         if storage_type is not UNSET:
             field_dict["storage_type"] = storage_type
+        if aws_authentication_mode is not UNSET:
+            field_dict["aws_authentication_mode"] = aws_authentication_mode
         if user is not UNSET:
             field_dict["user"] = user
         if password is not UNSET:
@@ -200,6 +209,13 @@ class DuckdbParametersSpec:
         else:
             storage_type = DuckdbStorageType(_storage_type)
 
+        _aws_authentication_mode = d.pop("aws_authentication_mode", UNSET)
+        aws_authentication_mode: Union[Unset, AwsAuthenticationMode]
+        if isinstance(_aws_authentication_mode, Unset):
+            aws_authentication_mode = UNSET
+        else:
+            aws_authentication_mode = AwsAuthenticationMode(_aws_authentication_mode)
+
         user = d.pop("user", UNSET)
 
         password = d.pop("password", UNSET)
@@ -216,6 +232,7 @@ class DuckdbParametersSpec:
             parquet=parquet,
             directories=directories,
             storage_type=storage_type,
+            aws_authentication_mode=aws_authentication_mode,
             user=user,
             password=password,
             region=region,

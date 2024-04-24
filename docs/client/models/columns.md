@@ -113,21 +113,6 @@ Container of data quality partitioned checks on a column level that are checking
 
 ___
 
-## PhysicalTableName
-Physical table name that is a combination of a schema name and a physical table name (without any quoting or escaping).
-
-
-**The structure of this object is described below**
-
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
-|---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|
-|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|
-
-
-___
-
 ## ColumnListModel
 Column list model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks.
 
@@ -138,7 +123,7 @@ Column list model that returns the basic fields from a column specification, exc
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
-|<span class="no-wrap-code">[`table`](#physicaltablename)</span>|Physical table name including the schema and table names.|*[PhysicalTableName](#physicaltablename)*|
+|<span class="no-wrap-code">[`table`](./common.md#physicaltablename)</span>|Physical table name including the schema and table names.|*[PhysicalTableName](./common.md#physicaltablename)*|
 |<span class="no-wrap-code">`column_name`</span>|Column names.|*string*|
 |<span class="no-wrap-code">`sql_expression`</span>|SQL expression.|*string*|
 |<span class="no-wrap-code">`column_hash`</span>|Column hash that identifies the column using a unique hash code.|*long*|
@@ -172,7 +157,7 @@ Table model that returns the specification of a single column in the REST Api.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
-|<span class="no-wrap-code">[`table`](./columns.md#physicaltablename)</span>|Physical table name including the schema and table names.|*[PhysicalTableName](./columns.md#physicaltablename)*|
+|<span class="no-wrap-code">[`table`](./common.md#physicaltablename)</span>|Physical table name including the schema and table names.|*[PhysicalTableName](./common.md#physicaltablename)*|
 |<span class="no-wrap-code">`column_name`</span>|Column name.|*string*|
 |<span class="no-wrap-code">`column_hash`</span>|Column hash that identifies the column using a unique hash code.|*long*|
 |<span class="no-wrap-code">[`spec`](../../reference/yaml/TableYaml.md#columnspec)</span>|Full column specification.|*[ColumnSpec](../../reference/yaml/TableYaml.md#columnspec)*|
@@ -332,7 +317,7 @@ Column model that returns the basic fields from a column specification and a sum
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
-|<span class="no-wrap-code">[`table`](./columns.md#physicaltablename)</span>|Physical table name including the schema and table names.|*[PhysicalTableName](./columns.md#physicaltablename)*|
+|<span class="no-wrap-code">[`table`](./common.md#physicaltablename)</span>|Physical table name including the schema and table names.|*[PhysicalTableName](./common.md#physicaltablename)*|
 |<span class="no-wrap-code">`column_name`</span>|Column name.|*string*|
 |<span class="no-wrap-code">`column_hash`</span>|Column hash that identifies the column using a unique hash code.|*long*|
 |<span class="no-wrap-code">`disabled`</span>|Disables all data quality checks on the column. Data quality checks will not be executed.|*boolean*|
@@ -354,7 +339,7 @@ Model that returns a summary of the column statistics (the basic profiling resul
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
-|<span class="no-wrap-code">[`table`](./columns.md#physicaltablename)</span>|Physical table name including the schema and table names.|*[PhysicalTableName](./columns.md#physicaltablename)*|
+|<span class="no-wrap-code">[`table`](./common.md#physicaltablename)</span>|Physical table name including the schema and table names.|*[PhysicalTableName](./common.md#physicaltablename)*|
 |<span class="no-wrap-code">[`collect_column_statistics_job_template`](./jobs.md#statisticscollectorsearchfilters)</span>|Configured parameters for the "collect statistics" job that should be pushed to the job queue in order to run all statistics collectors for all columns on this table.|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
 |<span class="no-wrap-code">`can_collect_statistics`</span>|Boolean flag that decides if the current user can collect statistics.|*boolean*|
 

@@ -172,7 +172,7 @@ public class TablesController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam(name = "label", value = "Optional labels to filter the tables", required = false)
-            @RequestParam(required = false) Optional<String[]> label,
+            @RequestParam(required = false) Optional<List<String>> label,
             @ApiParam(name = "page", value = "Page number, the first page is 1", required = false)
             @RequestParam(required = false) Optional<Integer> page,
             @ApiParam(name = "limit", value = "Page size, the default is 100 rows, but paging is disabled is neither page and limit parameters are provided", required = false)
@@ -191,8 +191,8 @@ public class TablesController {
         }
 
         TableSearchFilters tableSearchFilters = new TableSearchFilters();
-        if (label.isPresent() && label.get().length > 0) {
-            tableSearchFilters.setLabels(label.get());
+        if (label.isPresent() && label.get().size() > 0) {
+            tableSearchFilters.setLabels(label.get().toArray(String[]::new));
         }
         if (filter.isEmpty() || !Strings.isNullOrEmpty(filter.get())) {
             tableSearchFilters.setFullTableName(schemaName + ".*");

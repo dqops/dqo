@@ -13,6 +13,9 @@ if TYPE_CHECKING:
     from ..models.table_current_data_quality_status_model_columns import (
         TableCurrentDataQualityStatusModelColumns,
     )
+    from ..models.table_current_data_quality_status_model_dimensions import (
+        TableCurrentDataQualityStatusModelDimensions,
+    )
 
 
 T = TypeVar("T", bound="TableCurrentDataQualityStatusModel")
@@ -55,6 +58,8 @@ class TableCurrentDataQualityStatusModel:
                 describe the most current status.
             columns (Union[Unset, TableCurrentDataQualityStatusModelColumns]): Dictionary of data statues for all columns
                 that have any known data quality results. The keys in the dictionary are the column names.
+            dimensions (Union[Unset, TableCurrentDataQualityStatusModelDimensions]): Dictionary of the current data quality
+                statues for each data quality dimension.
     """
 
     connection_name: Union[Unset, str] = UNSET
@@ -72,6 +77,7 @@ class TableCurrentDataQualityStatusModel:
     data_quality_kpi: Union[Unset, float] = UNSET
     checks: Union[Unset, "TableCurrentDataQualityStatusModelChecks"] = UNSET
     columns: Union[Unset, "TableCurrentDataQualityStatusModelColumns"] = UNSET
+    dimensions: Union[Unset, "TableCurrentDataQualityStatusModelDimensions"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -101,6 +107,10 @@ class TableCurrentDataQualityStatusModel:
         columns: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.columns, Unset):
             columns = self.columns.to_dict()
+
+        dimensions: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.dimensions, Unset):
+            dimensions = self.dimensions.to_dict()
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -135,6 +145,8 @@ class TableCurrentDataQualityStatusModel:
             field_dict["checks"] = checks
         if columns is not UNSET:
             field_dict["columns"] = columns
+        if dimensions is not UNSET:
+            field_dict["dimensions"] = dimensions
 
         return field_dict
 
@@ -145,6 +157,9 @@ class TableCurrentDataQualityStatusModel:
         )
         from ..models.table_current_data_quality_status_model_columns import (
             TableCurrentDataQualityStatusModelColumns,
+        )
+        from ..models.table_current_data_quality_status_model_dimensions import (
+            TableCurrentDataQualityStatusModelDimensions,
         )
 
         d = src_dict.copy()
@@ -200,6 +215,15 @@ class TableCurrentDataQualityStatusModel:
         else:
             columns = TableCurrentDataQualityStatusModelColumns.from_dict(_columns)
 
+        _dimensions = d.pop("dimensions", UNSET)
+        dimensions: Union[Unset, TableCurrentDataQualityStatusModelDimensions]
+        if isinstance(_dimensions, Unset):
+            dimensions = UNSET
+        else:
+            dimensions = TableCurrentDataQualityStatusModelDimensions.from_dict(
+                _dimensions
+            )
+
         table_current_data_quality_status_model = cls(
             connection_name=connection_name,
             schema_name=schema_name,
@@ -216,6 +240,7 @@ class TableCurrentDataQualityStatusModel:
             data_quality_kpi=data_quality_kpi,
             checks=checks,
             columns=columns,
+            dimensions=dimensions,
         )
 
         table_current_data_quality_status_model.additional_properties = d

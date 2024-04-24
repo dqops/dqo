@@ -35,7 +35,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54,7 +54,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                     THEN 0
                 ELSE 1
             END
@@ -73,7 +73,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                WHEN {{lib.render_target_column('analyzed_table')}} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                     THEN 1
                 ELSE 0
             END
@@ -92,7 +92,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$') }}
+                WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$') }}
                     THEN 0
                 ELSE 1
             END
@@ -111,7 +111,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                     THEN 0
                 ELSE 1
             END
@@ -135,7 +135,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                     THEN 1
                 ELSE 0
             END
@@ -154,7 +154,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                     THEN 0
                 ELSE 1
             END
@@ -180,7 +180,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                     THEN 1
                 ELSE 0
             END
@@ -199,7 +199,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                     THEN 0
                 ELSE 1
             END
@@ -218,7 +218,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                     THEN 0
                 ELSE 1
             END
@@ -237,7 +237,11 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE({{ lib.render_target_column('analyzed_table') }}, '-', 'a')) = 0
+                WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                        AND len({{ lib.render_target_column('analyzed_table') }}) - len(replace({{ lib.render_target_column('analyzed_table') }}, '@', '')) = 1	-- single use of @ char
+                        AND right({{ lib.render_target_column('analyzed_table') }}, len({{ lib.render_target_column('analyzed_table') }}) - charindex('@', {{ lib.render_target_column('analyzed_table') }})) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                        AND len(left({{ lib.render_target_column('analyzed_table') }}, charindex('@', {{ lib.render_target_column('analyzed_table') }}))) < 64 -- local part length
+                        AND {{ lib.render_target_column('analyzed_table') }} not like '%@.%'
                     THEN 0
                 ELSE 1
             END
@@ -256,11 +260,337 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                     THEN 0
                 ELSE 1
             END
         ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
+
+
+## invalid email format percent
+Column level sensor that calculates the number of rows with an invalid emails value in a column.
+
+**Sensor summary**
+
+The invalid email format percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | patterns | <span class="no-wrap-code">`column/patterns/invalid_email_format_percent`</span> | [*sensors/column/patterns*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
+
+
+
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
+=== "BigQuery"
+
+    ```sql+jinja
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Databricks"
+
+    ```sql+jinja
+    {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$')
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_MATCHES({{lib.render_target_column('analyzed_table')}},
+                        '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$') IS TRUE
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "MySQL"
+
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'),
+                         '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$' ) }}
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} ,
+                         '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "PostgreSQL"
+
+    ```sql+jinja
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN SUBSTRING({{lib.render_target_column('analyzed_table')}} from
+                        '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$') IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Presto"
+
+    ```sql+jinja
+    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                        '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
+                        THEN 0
+                    ELSE 1
+                END
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END
+        AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Redshift"
+
+    ```sql+jinja
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Snowflake"
+
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                        '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Spark"
+
+    ```sql+jinja
+    {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$')
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "SQL Server"
+
+    ```sql+jinja
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN
+                        {{ lib.render_target_column('analyzed_table') }} LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                            AND len({{ lib.render_target_column('analyzed_table') }}) - len(replace({{ lib.render_target_column('analyzed_table') }}, '@', '')) = 1	-- single use of @ char
+                            AND right({{ lib.render_target_column('analyzed_table') }}, len({{ lib.render_target_column('analyzed_table') }}) - charindex('@', {{ lib.render_target_column('analyzed_table') }})) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                            AND len(left({{ lib.render_target_column('analyzed_table') }}, charindex('@', {{ lib.render_target_column('analyzed_table') }}))) < 64 -- local part length
+                            AND {{ lib.render_target_column('analyzed_table') }} not like '%@.%'
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Trino"
+
+    ```sql+jinja
+    {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                         '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
+                        THEN 0
+                    ELSE 1
+                END
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END
+        AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -878,7 +1208,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                     THEN 0
                 ELSE 1
             END
@@ -1043,7 +1373,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                     THEN 0
                 ELSE 1
             END
@@ -2396,12 +2726,8 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {%- macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro %}
-    
     {%- macro render_regex(regex) -%}
-         r{{ make_text_constant(regex) }}
+         r{{ lib.make_text_constant(regex) }}
     {%- endmacro -%}
     
     SELECT
@@ -2426,20 +2752,13 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-    {%- macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro %}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
     
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
                         THEN 0
                     ELSE 1
                 END
@@ -2457,20 +2776,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     
-    {% macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro %}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }}) IS TRUE
+                    WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }}) IS TRUE
                         THEN 0
                     ELSE 1
                 END
@@ -2511,20 +2822,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
-    {%- macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro %}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
                         THEN 0
                     ELSE 1
                 END
@@ -2548,20 +2851,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro %}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }} IS TRUE
                         THEN 0
                     ELSE 1
                 END
@@ -2579,20 +2874,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
-    {%- macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro %}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE CAST(SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
                         THEN 0
                     ELSE 1
                 END
@@ -2617,20 +2904,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {% macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro %}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ render_regex(parameters.regex) }}
+                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }}
                         THEN 0
                     ELSE 1
                 END
@@ -2648,20 +2927,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {%- macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro %}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
                         THEN 0
                     ELSE 1
                 END
@@ -2678,20 +2949,13 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-    {%- macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro %}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
     
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
                         THEN 0
                     ELSE 1
                 END
@@ -2708,20 +2972,13 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    {%- macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro %}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
     
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ render_regex(parameters.regex) }}
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.make_text_constant(parameters.regex) }}
                         THEN 0
                     ELSE 1
                 END
@@ -2739,20 +2996,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
-    {%- macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro %}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
                         THEN 0
                     ELSE 1
                 END
@@ -2808,12 +3057,8 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {%- macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro -%}
-    
     {%- macro render_regex(regex) -%}
-         r{{ make_text_constant(regex) }}
+         r{{ lib.make_text_constant(regex) }}
     {%- endmacro -%}
     
     SELECT
@@ -2839,20 +3084,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
-    {%- macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro -%}
-    
-    {%- macro render_regex(regex) -%}
-        {{ make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} RLIKE {{ render_regex(parameters.regex) }}
+                    WHEN {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
@@ -2870,20 +3107,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     
-    {% macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro %}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
+                    WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }}) IS TRUE
                         THEN 1
                     ELSE 0
                 END
@@ -2924,57 +3153,41 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
-    {%- macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro -%}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM (
-            SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
 
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro %}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }} IS TRUE
                         THEN 1
                     ELSE 0
                 END
@@ -2992,20 +3205,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
-    {%- macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro -%}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
                         THEN 1
                     ELSE 0
                 END
@@ -3030,20 +3235,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {% macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro %}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ render_regex(parameters.regex) }}
+                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
@@ -3061,20 +3258,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {%- macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro -%}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
@@ -3092,20 +3281,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
-    {%- macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro -%}
-    
-    {%- macro render_regex(regex) -%}
-        {{ make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} RLIKE {{ render_regex(parameters.regex) }}
+                    WHEN {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
@@ -3122,20 +3303,13 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    {% macro make_text_constant(string) -%}
-        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-    {%- endmacro %}
-    
-    {%- macro render_regex(regex) -%}
-         {{ make_text_constant(regex) }}
-    {%- endmacro -%}
     
     SELECT
         CASE
             WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ render_regex(parameters.regex) }}
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.make_text_constant(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
@@ -3153,16 +3327,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
-    {%- macro render_regex(regex) -%}
-         {{ lib.make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
                         THEN 1
                     ELSE 0
                 END
@@ -3238,7 +3408,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                         THEN 1
                     ELSE 0
                 END
@@ -3426,7 +3596,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                         THEN 1
                     ELSE 0
                 END

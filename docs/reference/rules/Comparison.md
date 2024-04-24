@@ -601,7 +601,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ## detected datatype equals
 Data quality rule that verifies that a data quality check readout of a string_datatype_detect (the data type detection) matches an expected data type.
- The supported values are in the range 1..8, which are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
+ The supported values are in the range 1..8, which are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types.
 
 **Rule summary**
 
@@ -618,7 +618,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`expected_datatype`</span>|Expected data type code, the values for the sensor&#x27;s actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - texts, 8 - mixed data types.|*enum*| |*integers*<br/>*floats*<br/>*dates*<br/>*datetimes*<br/>*booleans*<br/>*texts*<br/>*mixed*<br/>|
+|<span class="no-wrap-code">`expected_datatype`</span>|Expected data type code, the values for the sensor&#x27;s actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - texts, 8 - mixed data types.|*enum*| |*integers*<br/>*floats*<br/>*dates*<br/>*datetimes*<br/>*booleans*<br/>*texts*<br/>*mixed*<br/>|
 
 
 
@@ -641,8 +641,8 @@ The rule definition YAML file *comparison/detected_datatype_equals.dqorule.yaml*
       - field_name: expected_datatype
         display_name: expected_datatype
         help_text: "Expected data type code, the values for the sensor's actual values\
-          \ are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 -\
-          \ texts, 8 - mixed data types."
+          \ are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6\
+          \ - booleans, 7 - texts, 8 - mixed data types."
         data_type: enum
         allowed_values:
         - integers
@@ -3265,10 +3265,12 @@ The rule definition YAML file *comparison/value_changed.dqorule.yaml* with the t
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
     ``` { .yaml linenums="1" }
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
     spec:
       type: python
+      java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
       mode: previous_readouts
       time_window:
         prediction_time_window: 60

@@ -5,15 +5,46 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.check_type import CheckType
 from ...models.table_list_model import TableListModel
-from ...types import Response
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     connection_name: str,
     schema_name: str,
+    *,
+    label: Union[Unset, None, List[str]] = UNSET,
+    page: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    filter_: Union[Unset, None, str] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
 ) -> Dict[str, Any]:
     pass
+
+    params: Dict[str, Any] = {}
+    json_label: Union[Unset, None, List[str]] = UNSET
+    if not isinstance(label, Unset):
+        if label is None:
+            json_label = None
+        else:
+            json_label = label
+
+    params["label"] = json_label
+
+    params["page"] = page
+
+    params["limit"] = limit
+
+    params["filter"] = filter_
+
+    json_check_type: Union[Unset, None, str] = UNSET
+    if not isinstance(check_type, Unset):
+        json_check_type = check_type.value if check_type else None
+
+    params["checkType"] = json_check_type
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     return {
         "method": "get",
@@ -21,6 +52,7 @@ def _get_kwargs(
             connectionName=connection_name,
             schemaName=schema_name,
         ),
+        "params": params,
     }
 
 
@@ -58,6 +90,11 @@ def sync_detailed(
     schema_name: str,
     *,
     client: AuthenticatedClient,
+    label: Union[Unset, None, List[str]] = UNSET,
+    page: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    filter_: Union[Unset, None, str] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
 ) -> Response[List["TableListModel"]]:
     """getTables
 
@@ -66,6 +103,11 @@ def sync_detailed(
     Args:
         connection_name (str):
         schema_name (str):
+        label (Union[Unset, None, List[str]]):
+        page (Union[Unset, None, int]):
+        limit (Union[Unset, None, int]):
+        filter_ (Union[Unset, None, str]):
+        check_type (Union[Unset, None, CheckType]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -78,6 +120,11 @@ def sync_detailed(
     kwargs = _get_kwargs(
         connection_name=connection_name,
         schema_name=schema_name,
+        label=label,
+        page=page,
+        limit=limit,
+        filter_=filter_,
+        check_type=check_type,
     )
 
     response = client.get_httpx_client().request(
@@ -92,6 +139,11 @@ def sync(
     schema_name: str,
     *,
     client: AuthenticatedClient,
+    label: Union[Unset, None, List[str]] = UNSET,
+    page: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    filter_: Union[Unset, None, str] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
 ) -> Optional[List["TableListModel"]]:
     """getTables
 
@@ -100,6 +152,11 @@ def sync(
     Args:
         connection_name (str):
         schema_name (str):
+        label (Union[Unset, None, List[str]]):
+        page (Union[Unset, None, int]):
+        limit (Union[Unset, None, int]):
+        filter_ (Union[Unset, None, str]):
+        check_type (Union[Unset, None, CheckType]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -113,6 +170,11 @@ def sync(
         connection_name=connection_name,
         schema_name=schema_name,
         client=client,
+        label=label,
+        page=page,
+        limit=limit,
+        filter_=filter_,
+        check_type=check_type,
     ).parsed
 
 
@@ -121,6 +183,11 @@ async def asyncio_detailed(
     schema_name: str,
     *,
     client: AuthenticatedClient,
+    label: Union[Unset, None, List[str]] = UNSET,
+    page: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    filter_: Union[Unset, None, str] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
 ) -> Response[List["TableListModel"]]:
     """getTables
 
@@ -129,6 +196,11 @@ async def asyncio_detailed(
     Args:
         connection_name (str):
         schema_name (str):
+        label (Union[Unset, None, List[str]]):
+        page (Union[Unset, None, int]):
+        limit (Union[Unset, None, int]):
+        filter_ (Union[Unset, None, str]):
+        check_type (Union[Unset, None, CheckType]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -141,6 +213,11 @@ async def asyncio_detailed(
     kwargs = _get_kwargs(
         connection_name=connection_name,
         schema_name=schema_name,
+        label=label,
+        page=page,
+        limit=limit,
+        filter_=filter_,
+        check_type=check_type,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -153,6 +230,11 @@ async def asyncio(
     schema_name: str,
     *,
     client: AuthenticatedClient,
+    label: Union[Unset, None, List[str]] = UNSET,
+    page: Union[Unset, None, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+    filter_: Union[Unset, None, str] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
 ) -> Optional[List["TableListModel"]]:
     """getTables
 
@@ -161,6 +243,11 @@ async def asyncio(
     Args:
         connection_name (str):
         schema_name (str):
+        label (Union[Unset, None, List[str]]):
+        page (Union[Unset, None, int]):
+        limit (Union[Unset, None, int]):
+        filter_ (Union[Unset, None, str]):
+        check_type (Union[Unset, None, CheckType]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -175,5 +262,10 @@ async def asyncio(
             connection_name=connection_name,
             schema_name=schema_name,
             client=client,
+            label=label,
+            page=page,
+            limit=limit,
+            filter_=filter_,
+            check_type=check_type,
         )
     ).parsed

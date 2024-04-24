@@ -139,7 +139,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -157,7 +157,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -177,7 +177,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -195,7 +195,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -215,7 +215,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{lib.render_target_column('analyzed_table')}} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -233,7 +233,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -253,7 +253,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$') }}
+                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$') }}
                             THEN 0
                         ELSE 1
                     END
@@ -271,7 +271,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[a-zA-Z0-9.!#$%&*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -291,7 +291,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -314,7 +314,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -339,7 +339,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -357,7 +357,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -377,7 +377,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -402,7 +402,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -428,7 +428,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -446,7 +446,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -466,7 +466,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -484,7 +484,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table."target_column" REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -504,7 +504,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -522,7 +522,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -542,7 +542,11 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE({{ lib.render_target_column('analyzed_table') }}, '-', 'a')) = 0
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len({{ lib.render_target_column('analyzed_table') }}) - len(replace({{ lib.render_target_column('analyzed_table') }}, '@', '')) = 1	-- single use of @ char
+                                AND right({{ lib.render_target_column('analyzed_table') }}, len({{ lib.render_target_column('analyzed_table') }}) - charindex('@', {{ lib.render_target_column('analyzed_table') }})) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left({{ lib.render_target_column('analyzed_table') }}, charindex('@', {{ lib.render_target_column('analyzed_table') }}))) < 64 -- local part length
+                                AND {{ lib.render_target_column('analyzed_table') }} not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -560,7 +564,11 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE(analyzed_table.[target_column], '-', 'a')) = 0
+                        WHEN analyzed_table.[target_column] LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], '@', '')) = 1	-- single use of @ char
+                                AND right(analyzed_table.[target_column], len(analyzed_table.[target_column]) - charindex('@', analyzed_table.[target_column])) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left(analyzed_table.[target_column], charindex('@', analyzed_table.[target_column]))) < 64 -- local part length
+                                AND analyzed_table.[target_column] not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -578,7 +586,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -603,7 +611,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -676,7 +684,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -693,7 +701,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -714,7 +722,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -731,7 +739,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -752,7 +760,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{lib.render_target_column('analyzed_table')}} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -769,7 +777,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -790,7 +798,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$') }}
+                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$') }}
                             THEN 0
                         ELSE 1
                     END
@@ -807,7 +815,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[a-zA-Z0-9.!#$%&*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -828,7 +836,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -850,7 +858,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -881,7 +889,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -898,7 +906,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -919,7 +927,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -943,7 +951,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -975,7 +983,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -992,7 +1000,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -1013,7 +1021,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -1030,7 +1038,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table."target_column" REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -1051,7 +1059,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -1068,7 +1076,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -1089,7 +1097,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE({{ lib.render_target_column('analyzed_table') }}, '-', 'a')) = 0
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len({{ lib.render_target_column('analyzed_table') }}) - len(replace({{ lib.render_target_column('analyzed_table') }}, '@', '')) = 1	-- single use of @ char
+                                AND right({{ lib.render_target_column('analyzed_table') }}, len({{ lib.render_target_column('analyzed_table') }}) - charindex('@', {{ lib.render_target_column('analyzed_table') }})) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left({{ lib.render_target_column('analyzed_table') }}, charindex('@', {{ lib.render_target_column('analyzed_table') }}))) < 64 -- local part length
+                                AND {{ lib.render_target_column('analyzed_table') }} not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -1106,7 +1118,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE(analyzed_table.[target_column], '-', 'a')) = 0
+                        WHEN analyzed_table.[target_column] LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], '@', '')) = 1	-- single use of @ char
+                                AND right(analyzed_table.[target_column], len(analyzed_table.[target_column]) - charindex('@', analyzed_table.[target_column])) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left(analyzed_table.[target_column], charindex('@', analyzed_table.[target_column]))) < 64 -- local part length
+                                AND analyzed_table.[target_column] not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -1131,7 +1147,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -1155,7 +1171,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -1311,7 +1327,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -1329,7 +1345,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -1349,7 +1365,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -1367,7 +1383,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -1387,7 +1403,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{lib.render_target_column('analyzed_table')}} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -1405,7 +1421,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -1425,7 +1441,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$') }}
+                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$') }}
                             THEN 0
                         ELSE 1
                     END
@@ -1443,7 +1459,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[a-zA-Z0-9.!#$%&*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -1463,7 +1479,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -1486,7 +1502,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -1511,7 +1527,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -1529,7 +1545,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -1549,7 +1565,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -1574,7 +1590,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -1600,7 +1616,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -1618,7 +1634,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -1638,7 +1654,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -1656,7 +1672,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table."target_column" REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -1676,7 +1692,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -1694,7 +1710,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -1714,7 +1730,11 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE({{ lib.render_target_column('analyzed_table') }}, '-', 'a')) = 0
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len({{ lib.render_target_column('analyzed_table') }}) - len(replace({{ lib.render_target_column('analyzed_table') }}, '@', '')) = 1	-- single use of @ char
+                                AND right({{ lib.render_target_column('analyzed_table') }}, len({{ lib.render_target_column('analyzed_table') }}) - charindex('@', {{ lib.render_target_column('analyzed_table') }})) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left({{ lib.render_target_column('analyzed_table') }}, charindex('@', {{ lib.render_target_column('analyzed_table') }}))) < 64 -- local part length
+                                AND {{ lib.render_target_column('analyzed_table') }} not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -1732,7 +1752,11 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE(analyzed_table.[target_column], '-', 'a')) = 0
+                        WHEN analyzed_table.[target_column] LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], '@', '')) = 1	-- single use of @ char
+                                AND right(analyzed_table.[target_column], len(analyzed_table.[target_column]) - charindex('@', analyzed_table.[target_column])) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left(analyzed_table.[target_column], charindex('@', analyzed_table.[target_column]))) < 64 -- local part length
+                                AND analyzed_table.[target_column] not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -1750,7 +1774,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -1775,7 +1799,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -1849,7 +1873,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -1866,7 +1890,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -1887,7 +1911,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -1904,7 +1928,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -1925,7 +1949,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{lib.render_target_column('analyzed_table')}} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -1942,7 +1966,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -1963,7 +1987,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$') }}
+                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$') }}
                             THEN 0
                         ELSE 1
                     END
@@ -1980,7 +2004,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[a-zA-Z0-9.!#$%&*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -2001,7 +2025,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -2023,7 +2047,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -2054,7 +2078,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -2071,7 +2095,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -2092,7 +2116,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -2116,7 +2140,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -2148,7 +2172,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -2165,7 +2189,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -2186,7 +2210,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -2203,7 +2227,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table."target_column" REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -2224,7 +2248,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -2241,7 +2265,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -2262,7 +2286,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE({{ lib.render_target_column('analyzed_table') }}, '-', 'a')) = 0
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len({{ lib.render_target_column('analyzed_table') }}) - len(replace({{ lib.render_target_column('analyzed_table') }}, '@', '')) = 1	-- single use of @ char
+                                AND right({{ lib.render_target_column('analyzed_table') }}, len({{ lib.render_target_column('analyzed_table') }}) - charindex('@', {{ lib.render_target_column('analyzed_table') }})) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left({{ lib.render_target_column('analyzed_table') }}, charindex('@', {{ lib.render_target_column('analyzed_table') }}))) < 64 -- local part length
+                                AND {{ lib.render_target_column('analyzed_table') }} not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -2279,7 +2307,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE(analyzed_table.[target_column], '-', 'a')) = 0
+                        WHEN analyzed_table.[target_column] LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], '@', '')) = 1	-- single use of @ char
+                                AND right(analyzed_table.[target_column], len(analyzed_table.[target_column]) - charindex('@', analyzed_table.[target_column])) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left(analyzed_table.[target_column], charindex('@', analyzed_table.[target_column]))) < 64 -- local part length
+                                AND analyzed_table.[target_column] not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -2304,7 +2336,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -2328,7 +2360,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -2484,7 +2516,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -2502,7 +2534,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -2522,7 +2554,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -2540,7 +2572,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -2560,7 +2592,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{lib.render_target_column('analyzed_table')}} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -2578,7 +2610,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -2598,7 +2630,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$') }}
+                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$') }}
                             THEN 0
                         ELSE 1
                     END
@@ -2616,7 +2648,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[a-zA-Z0-9.!#$%&*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -2636,7 +2668,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -2659,7 +2691,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -2684,7 +2716,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -2702,7 +2734,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -2722,7 +2754,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -2747,7 +2779,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -2773,7 +2805,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -2791,7 +2823,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -2811,7 +2843,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -2829,7 +2861,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table."target_column" REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -2849,7 +2881,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -2867,7 +2899,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -2887,7 +2919,11 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE({{ lib.render_target_column('analyzed_table') }}, '-', 'a')) = 0
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len({{ lib.render_target_column('analyzed_table') }}) - len(replace({{ lib.render_target_column('analyzed_table') }}, '@', '')) = 1	-- single use of @ char
+                                AND right({{ lib.render_target_column('analyzed_table') }}, len({{ lib.render_target_column('analyzed_table') }}) - charindex('@', {{ lib.render_target_column('analyzed_table') }})) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left({{ lib.render_target_column('analyzed_table') }}, charindex('@', {{ lib.render_target_column('analyzed_table') }}))) < 64 -- local part length
+                                AND {{ lib.render_target_column('analyzed_table') }} not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -2905,7 +2941,11 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE(analyzed_table.[target_column], '-', 'a')) = 0
+                        WHEN analyzed_table.[target_column] LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], '@', '')) = 1	-- single use of @ char
+                                AND right(analyzed_table.[target_column], len(analyzed_table.[target_column]) - charindex('@', analyzed_table.[target_column])) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left(analyzed_table.[target_column], charindex('@', analyzed_table.[target_column]))) < 64 -- local part length
+                                AND analyzed_table.[target_column] not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -2923,7 +2963,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -2948,7 +2988,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -3022,7 +3062,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -3039,7 +3079,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -3060,7 +3100,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -3077,7 +3117,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -3098,7 +3138,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{lib.render_target_column('analyzed_table')}} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -3115,7 +3155,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -3136,7 +3176,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$') }}
+                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$') }}
                             THEN 0
                         ELSE 1
                     END
@@ -3153,7 +3193,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[a-zA-Z0-9.!#$%&*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -3174,7 +3214,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -3196,7 +3236,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -3227,7 +3267,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -3244,7 +3284,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -3265,7 +3305,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -3289,7 +3329,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -3321,7 +3361,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -3338,7 +3378,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -3359,7 +3399,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -3376,7 +3416,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table."target_column" REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -3397,7 +3437,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -3414,7 +3454,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -3435,7 +3475,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE({{ lib.render_target_column('analyzed_table') }}, '-', 'a')) = 0
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len({{ lib.render_target_column('analyzed_table') }}) - len(replace({{ lib.render_target_column('analyzed_table') }}, '@', '')) = 1	-- single use of @ char
+                                AND right({{ lib.render_target_column('analyzed_table') }}, len({{ lib.render_target_column('analyzed_table') }}) - charindex('@', {{ lib.render_target_column('analyzed_table') }})) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left({{ lib.render_target_column('analyzed_table') }}, charindex('@', {{ lib.render_target_column('analyzed_table') }}))) < 64 -- local part length
+                                AND {{ lib.render_target_column('analyzed_table') }} not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -3452,7 +3496,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE(analyzed_table.[target_column], '-', 'a')) = 0
+                        WHEN analyzed_table.[target_column] LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], '@', '')) = 1	-- single use of @ char
+                                AND right(analyzed_table.[target_column], len(analyzed_table.[target_column]) - charindex('@', analyzed_table.[target_column])) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left(analyzed_table.[target_column], charindex('@', analyzed_table.[target_column]))) < 64 -- local part length
+                                AND analyzed_table.[target_column] not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -3477,7 +3525,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -3501,7 +3549,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -3667,7 +3715,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -3685,7 +3733,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -3705,7 +3753,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -3723,7 +3771,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -3743,7 +3791,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{lib.render_target_column('analyzed_table')}} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -3761,7 +3809,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -3781,7 +3829,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$') }}
+                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$') }}
                             THEN 0
                         ELSE 1
                     END
@@ -3799,7 +3847,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[a-zA-Z0-9.!#$%&*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -3819,7 +3867,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -3842,7 +3890,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -3867,7 +3915,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -3885,7 +3933,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -3905,7 +3953,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -3930,7 +3978,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -3956,7 +4004,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -3974,7 +4022,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -3994,7 +4042,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -4012,7 +4060,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table."target_column" REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -4032,7 +4080,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -4050,7 +4098,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -4070,7 +4118,11 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE({{ lib.render_target_column('analyzed_table') }}, '-', 'a')) = 0
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len({{ lib.render_target_column('analyzed_table') }}) - len(replace({{ lib.render_target_column('analyzed_table') }}, '@', '')) = 1	-- single use of @ char
+                                AND right({{ lib.render_target_column('analyzed_table') }}, len({{ lib.render_target_column('analyzed_table') }}) - charindex('@', {{ lib.render_target_column('analyzed_table') }})) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left({{ lib.render_target_column('analyzed_table') }}, charindex('@', {{ lib.render_target_column('analyzed_table') }}))) < 64 -- local part length
+                                AND {{ lib.render_target_column('analyzed_table') }} not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -4088,7 +4140,11 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE(analyzed_table.[target_column], '-', 'a')) = 0
+                        WHEN analyzed_table.[target_column] LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], '@', '')) = 1	-- single use of @ char
+                                AND right(analyzed_table.[target_column], len(analyzed_table.[target_column]) - charindex('@', analyzed_table.[target_column])) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left(analyzed_table.[target_column], charindex('@', analyzed_table.[target_column]))) < 64 -- local part length
+                                AND analyzed_table.[target_column] not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -4110,7 +4166,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -4135,7 +4191,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -4219,7 +4275,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -4236,7 +4292,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -4257,7 +4313,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -4274,7 +4330,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -4295,7 +4351,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{lib.render_target_column('analyzed_table')}} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -4312,7 +4368,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -4333,7 +4389,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$') }}
+                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$') }}
                             THEN 0
                         ELSE 1
                     END
@@ -4350,7 +4406,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[a-zA-Z0-9.!#$%&*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -4371,7 +4427,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -4393,7 +4449,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -4424,7 +4480,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -4441,7 +4497,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -4462,7 +4518,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -4486,7 +4542,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -4518,7 +4574,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -4535,7 +4591,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -4556,7 +4612,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -4573,7 +4629,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table."target_column" REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -4594,7 +4650,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -4611,7 +4667,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -4632,7 +4688,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE({{ lib.render_target_column('analyzed_table') }}, '-', 'a')) = 0
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len({{ lib.render_target_column('analyzed_table') }}) - len(replace({{ lib.render_target_column('analyzed_table') }}, '@', '')) = 1	-- single use of @ char
+                                AND right({{ lib.render_target_column('analyzed_table') }}, len({{ lib.render_target_column('analyzed_table') }}) - charindex('@', {{ lib.render_target_column('analyzed_table') }})) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left({{ lib.render_target_column('analyzed_table') }}, charindex('@', {{ lib.render_target_column('analyzed_table') }}))) < 64 -- local part length
+                                AND {{ lib.render_target_column('analyzed_table') }} not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -4649,7 +4709,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE(analyzed_table.[target_column], '-', 'a')) = 0
+                        WHEN analyzed_table.[target_column] LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], '@', '')) = 1	-- single use of @ char
+                                AND right(analyzed_table.[target_column], len(analyzed_table.[target_column]) - charindex('@', analyzed_table.[target_column])) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left(analyzed_table.[target_column], charindex('@', analyzed_table.[target_column]))) < 64 -- local part length
+                                AND analyzed_table.[target_column] not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -4672,7 +4736,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -4696,7 +4760,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -4862,7 +4926,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -4880,7 +4944,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -4900,7 +4964,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -4918,7 +4982,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -4938,7 +5002,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{lib.render_target_column('analyzed_table')}} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -4956,7 +5020,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -4976,7 +5040,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$') }}
+                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$') }}
                             THEN 0
                         ELSE 1
                     END
@@ -4994,7 +5058,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[a-zA-Z0-9.!#$%&*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -5014,7 +5078,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -5037,7 +5101,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -5062,7 +5126,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -5080,7 +5144,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -5100,7 +5164,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -5125,7 +5189,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -5151,7 +5215,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -5169,7 +5233,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -5189,7 +5253,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -5207,7 +5271,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table."target_column" REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -5227,7 +5291,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -5245,7 +5309,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -5265,7 +5329,11 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE({{ lib.render_target_column('analyzed_table') }}, '-', 'a')) = 0
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len({{ lib.render_target_column('analyzed_table') }}) - len(replace({{ lib.render_target_column('analyzed_table') }}, '@', '')) = 1	-- single use of @ char
+                                AND right({{ lib.render_target_column('analyzed_table') }}, len({{ lib.render_target_column('analyzed_table') }}) - charindex('@', {{ lib.render_target_column('analyzed_table') }})) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left({{ lib.render_target_column('analyzed_table') }}, charindex('@', {{ lib.render_target_column('analyzed_table') }}))) < 64 -- local part length
+                                AND {{ lib.render_target_column('analyzed_table') }} not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -5283,7 +5351,11 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE(analyzed_table.[target_column], '-', 'a')) = 0
+                        WHEN analyzed_table.[target_column] LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], '@', '')) = 1	-- single use of @ char
+                                AND right(analyzed_table.[target_column], len(analyzed_table.[target_column]) - charindex('@', analyzed_table.[target_column])) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left(analyzed_table.[target_column], charindex('@', analyzed_table.[target_column]))) < 64 -- local part length
+                                AND analyzed_table.[target_column] not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -5305,7 +5377,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -5330,7 +5402,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -5414,7 +5486,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -5431,7 +5503,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -5452,7 +5524,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -5469,7 +5541,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -5490,7 +5562,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{lib.render_target_column('analyzed_table')}} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -5507,7 +5579,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -5528,7 +5600,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$') }}
+                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$') }}
                             THEN 0
                         ELSE 1
                     END
@@ -5545,7 +5617,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[a-zA-Z0-9.!#$%&*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -5566,7 +5638,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -5588,7 +5660,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -5619,7 +5691,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -5636,7 +5708,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -5657,7 +5729,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -5681,7 +5753,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -5713,7 +5785,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -5730,7 +5802,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column"  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        WHEN analyzed_table."target_column" !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 1
                         ELSE 0
                     END
@@ -5751,7 +5823,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -5768,7 +5840,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table."target_column" REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -5789,7 +5861,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -5806,7 +5878,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
+                        WHEN analyzed_table.`target_column` REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
                             THEN 0
                         ELSE 1
                     END
@@ -5827,7 +5899,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE({{ lib.render_target_column('analyzed_table') }}, '-', 'a')) = 0
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len({{ lib.render_target_column('analyzed_table') }}) - len(replace({{ lib.render_target_column('analyzed_table') }}, '@', '')) = 1	-- single use of @ char
+                                AND right({{ lib.render_target_column('analyzed_table') }}, len({{ lib.render_target_column('analyzed_table') }}) - charindex('@', {{ lib.render_target_column('analyzed_table') }})) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left({{ lib.render_target_column('analyzed_table') }}, charindex('@', {{ lib.render_target_column('analyzed_table') }}))) < 64 -- local part length
+                                AND {{ lib.render_target_column('analyzed_table') }} not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -5844,7 +5920,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] LIKE '%_@__%.__%' AND PATINDEX('%[^a-z,0-9,@,.,_]%', REPLACE(analyzed_table.[target_column], '-', 'a')) = 0
+                        WHEN analyzed_table.[target_column] LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                                AND len(analyzed_table.[target_column]) - len(replace(analyzed_table.[target_column], '@', '')) = 1	-- single use of @ char
+                                AND right(analyzed_table.[target_column], len(analyzed_table.[target_column]) - charindex('@', analyzed_table.[target_column])) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
+                                AND len(left(analyzed_table.[target_column], charindex('@', analyzed_table.[target_column]))) < 64 -- local part length
+                                AND analyzed_table.[target_column] not like '%@.%'
                             THEN 0
                         ELSE 1
                     END
@@ -5867,7 +5947,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END
@@ -5891,7 +5971,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
                             THEN 0
                         ELSE 1
                     END

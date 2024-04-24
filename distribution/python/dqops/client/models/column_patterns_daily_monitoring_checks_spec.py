@@ -9,6 +9,9 @@ if TYPE_CHECKING:
     from ..models.column_invalid_email_format_found_check_spec import (
         ColumnInvalidEmailFormatFoundCheckSpec,
     )
+    from ..models.column_invalid_email_format_percent_check_spec import (
+        ColumnInvalidEmailFormatPercentCheckSpec,
+    )
     from ..models.column_invalid_ip_4_address_format_found_check_spec import (
         ColumnInvalidIp4AddressFormatFoundCheckSpec,
     )
@@ -54,6 +57,7 @@ class ColumnPatternsDailyMonitoringChecksSpec:
         daily_text_not_matching_regex_found (Union[Unset, ColumnTextNotMatchingRegexFoundCheckSpec]):
         daily_texts_matching_regex_percent (Union[Unset, ColumnTextsMatchingRegexPercentCheckSpec]):
         daily_invalid_email_format_found (Union[Unset, ColumnInvalidEmailFormatFoundCheckSpec]):
+        daily_invalid_email_format_percent (Union[Unset, ColumnInvalidEmailFormatPercentCheckSpec]):
         daily_text_not_matching_date_pattern_found (Union[Unset, ColumnTextNotMatchingDatePatternFoundCheckSpec]):
         daily_text_matching_date_pattern_percent (Union[Unset, ColumnTextMatchingDatePatternPercentCheckSpec]):
         daily_text_matching_name_pattern_percent (Union[Unset, ColumnTextMatchingNamePatternPercentCheckSpec]):
@@ -74,6 +78,9 @@ class ColumnPatternsDailyMonitoringChecksSpec:
     ] = UNSET
     daily_invalid_email_format_found: Union[
         Unset, "ColumnInvalidEmailFormatFoundCheckSpec"
+    ] = UNSET
+    daily_invalid_email_format_percent: Union[
+        Unset, "ColumnInvalidEmailFormatPercentCheckSpec"
     ] = UNSET
     daily_text_not_matching_date_pattern_found: Union[
         Unset, "ColumnTextNotMatchingDatePatternFoundCheckSpec"
@@ -119,6 +126,12 @@ class ColumnPatternsDailyMonitoringChecksSpec:
         if not isinstance(self.daily_invalid_email_format_found, Unset):
             daily_invalid_email_format_found = (
                 self.daily_invalid_email_format_found.to_dict()
+            )
+
+        daily_invalid_email_format_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_invalid_email_format_percent, Unset):
+            daily_invalid_email_format_percent = (
+                self.daily_invalid_email_format_percent.to_dict()
             )
 
         daily_text_not_matching_date_pattern_found: Union[Unset, Dict[str, Any]] = UNSET
@@ -180,6 +193,10 @@ class ColumnPatternsDailyMonitoringChecksSpec:
             field_dict[
                 "daily_invalid_email_format_found"
             ] = daily_invalid_email_format_found
+        if daily_invalid_email_format_percent is not UNSET:
+            field_dict[
+                "daily_invalid_email_format_percent"
+            ] = daily_invalid_email_format_percent
         if daily_text_not_matching_date_pattern_found is not UNSET:
             field_dict[
                 "daily_text_not_matching_date_pattern_found"
@@ -215,6 +232,9 @@ class ColumnPatternsDailyMonitoringChecksSpec:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.column_invalid_email_format_found_check_spec import (
             ColumnInvalidEmailFormatFoundCheckSpec,
+        )
+        from ..models.column_invalid_email_format_percent_check_spec import (
+            ColumnInvalidEmailFormatPercentCheckSpec,
         )
         from ..models.column_invalid_ip_4_address_format_found_check_spec import (
             ColumnInvalidIp4AddressFormatFoundCheckSpec,
@@ -301,6 +321,21 @@ class ColumnPatternsDailyMonitoringChecksSpec:
             daily_invalid_email_format_found = (
                 ColumnInvalidEmailFormatFoundCheckSpec.from_dict(
                     _daily_invalid_email_format_found
+                )
+            )
+
+        _daily_invalid_email_format_percent = d.pop(
+            "daily_invalid_email_format_percent", UNSET
+        )
+        daily_invalid_email_format_percent: Union[
+            Unset, ColumnInvalidEmailFormatPercentCheckSpec
+        ]
+        if isinstance(_daily_invalid_email_format_percent, Unset):
+            daily_invalid_email_format_percent = UNSET
+        else:
+            daily_invalid_email_format_percent = (
+                ColumnInvalidEmailFormatPercentCheckSpec.from_dict(
+                    _daily_invalid_email_format_percent
                 )
             )
 
@@ -414,6 +449,7 @@ class ColumnPatternsDailyMonitoringChecksSpec:
             daily_text_not_matching_regex_found=daily_text_not_matching_regex_found,
             daily_texts_matching_regex_percent=daily_texts_matching_regex_percent,
             daily_invalid_email_format_found=daily_invalid_email_format_found,
+            daily_invalid_email_format_percent=daily_invalid_email_format_percent,
             daily_text_not_matching_date_pattern_found=daily_text_not_matching_date_pattern_found,
             daily_text_matching_date_pattern_percent=daily_text_matching_date_pattern_percent,
             daily_text_matching_name_pattern_percent=daily_text_matching_name_pattern_percent,

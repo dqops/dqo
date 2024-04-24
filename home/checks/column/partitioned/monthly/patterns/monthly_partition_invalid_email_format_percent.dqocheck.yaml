@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/patterns/invalid_email_format_percent
+  rule_name: comparison/max_percent
+  help_text: Verifies that the percentage of invalid emails in a text column does
+    not exceed the maximum accepted percentage.
