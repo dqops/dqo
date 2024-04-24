@@ -104,7 +104,7 @@ public final class UserHomeContextObjectMother {
     }
 
     /**
-     * Creates a default user home (target/test-user-home) folder used for init testing. It is the same user home folder
+     * Creates a default user home (target/test-user-home) folder used for unit testing. It is the same user home folder
      * that would be created by creating a user home from the Spring IoC, but we can also request to clean it.
      * @param recreateDefaultHomeFolder Recreate the temporary user home, removing all files.
      * @return User home context that uses a default (test) user home (full file based).

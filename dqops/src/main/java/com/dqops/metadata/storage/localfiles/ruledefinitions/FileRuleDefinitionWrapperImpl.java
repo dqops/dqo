@@ -24,6 +24,7 @@ import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.definitions.rules.RuleDefinitionWrapperImpl;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.serialization.YamlSerializer;
@@ -109,12 +110,15 @@ public class FileRuleDefinitionWrapperImpl extends RuleDefinitionWrapperImpl {
 
                     RuleDefinitionSpec cachedObjectInstance = deserializedSpec.deepClone();
                     cachedObjectInstance.makeReadOnly(true);
+                    if (this.getHierarchyId() != null) {
+                        cachedObjectInstance.setHierarchyId(new HierarchyId(this.getHierarchyId(), "spec"));
+                    }
                     fileContent.setCachedObjectInstance(cachedObjectInstance);
                 } else {
                     deserializedSpec = this.isReadOnly() ? deserializedSpec : deserializedSpec.deepClone();
                 }
 				this.setSpec(deserializedSpec);
-				this.clearDirty(true);
+				this.clearDirty(false);
                 return deserializedSpec;
             }
             else {

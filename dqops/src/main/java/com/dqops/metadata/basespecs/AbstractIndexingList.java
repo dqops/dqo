@@ -152,7 +152,7 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
             element.setHierarchyId(new HierarchyId(this.hierarchyId, objectName));
         }
         if (element.getStatus() != InstanceStatus.UNCHANGED) {
-			this.dirty = true;
+			this.setDirty();
         }
         return this.list.set(index, element);
     }
@@ -178,9 +178,8 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
         }
         this.index.put(objectName, element);
 		this.list.add(index, element);
-		this.dirty = true;
         if (element.getStatus() != InstanceStatus.UNCHANGED) {
-			this.dirty = true;
+			this.setDirty();
         }
         if (this.hierarchyId != null) {
             element.setHierarchyId(new HierarchyId(this.hierarchyId, objectName));
@@ -209,8 +208,8 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
         if (this.hierarchyId != null) {
             element.setHierarchyId(new HierarchyId(this.hierarchyId, objectName));
         }
-        if (element.getStatus() != InstanceStatus.UNCHANGED) {
-			this.dirty = true;
+        if (element.getStatus() != InstanceStatus.NOT_TOUCHED) {
+			this.setDirty();
         }
 
         if (this.readOnly) {
@@ -245,7 +244,7 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
         if (this.hierarchyId != null) {
             newElement.setHierarchyId(new HierarchyId(this.hierarchyId, key));
         }
-		this.dirty = true;
+		this.setDirty();
         return newElement;
     }
 
@@ -267,7 +266,7 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
         boolean removedFromList = this.list.remove(o);
         assert removedFromList;
 		this.deleted.add((V)o);
-		this.dirty = true;
+		this.setDirty();
         return true;
     }
 
@@ -283,7 +282,7 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
         K objectName = existing.getObjectName();
         this.index.remove(objectName);
 		this.deleted.add(existing);
-		this.dirty = true;
+		this.setDirty();
         return this.list.remove(index);
     }
 

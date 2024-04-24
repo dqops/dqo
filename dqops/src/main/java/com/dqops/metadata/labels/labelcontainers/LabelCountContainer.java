@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package com.dqops.metadata.labels;
+package com.dqops.metadata.labels.labelcontainers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.dqops.metadata.labels.LabelSetSpec;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.parquet.Strings;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * An object that stores all found labels and counts their occurrences.
  */
 public class LabelCountContainer {
-    private final HashMap<String, LabelCounter> labels = new HashMap<>();
+    private final TreeMap<String, LabelCounter> labels = new TreeMap<>();
     private final Object lock = new Object();
 
     /**
@@ -37,6 +38,43 @@ public class LabelCountContainer {
         synchronized (this.lock) {
             return this.labels.values().stream().collect(Collectors.toUnmodifiableList());
         }
+    }
+
+    /**
+     * Retrieves a label. Supports multi-level labels separated by /.
+     * @param label Label to find.
+     * @return Label counter or null, when the label was not found.
+     */
+    public LabelCounter getLabelCounter(String label) {
+        if (Strings.isNullOrEmpty(label)) {
+            return null;
+        }
+
+        String[] labelElements = StringUtils.split(label, '/');
+
+        LabelCounter rootLabel;
+        synchronized (this.lock) {
+            rootLabel = this.labels.get(labelElements[0]);
+        }
+
+        if (rootLabel == null) {
+            return null;
+        }
+
+        if (labelElements.length == 1) {
+            return rootLabel;
+        }
+
+        LabelCounter currentCounter = rootLabel;
+        for (int i = 1; i < labelElements.length; i++) {
+            String childLabel = labelElements[i];
+            currentCounter = currentCounter.getChildLabel(childLabel);
+            if (currentCounter == null) {
+                return null;
+            }
+        }
+
+        return currentCounter;
     }
 
     /**
@@ -79,10 +117,28 @@ public class LabelCountContainer {
     }
 
     /**
+     * Imports all labels from a labels set. A labels set is a metadata object used in the DQOps spec objects.
+     * @param labels Source labels.
+     */
+    public void importLabelSet(LabelSetSpec labels) {
+        if (labels == null || labels.isEmpty()) {
+            return;
+        }
+
+        for (String label : labels) {
+            incrementLabelCount(label);
+        }
+    }
+
+    /**
      * Adds counts and registers new labels from a different count container.
      * @param otherContainer Other count container.
      */
     public void addCountsFromContainer(LabelCountContainer otherContainer) {
+        if (otherContainer == null || otherContainer.isEmpty()) {
+            return;
+        }
+
         synchronized (this.lock) {
             for (Map.Entry<String, LabelCounter> otherRootLabelKeyValue : otherContainer.labels.entrySet()) {
                 LabelCounter existingRootLabel = this.labels.get(otherRootLabelKeyValue.getKey());
@@ -100,6 +156,10 @@ public class LabelCountContainer {
      * @param otherContainer Other count container.
      */
     public void subtractCountsFromContainer(LabelCountContainer otherContainer) {
+        if (otherContainer == null || otherContainer.isEmpty()) {
+            return;
+        }
+
         synchronized (this.lock) {
             List<String> emptyLabelsToRemove = null;
             for (Map.Entry<String, LabelCounter> otherRootLabelKeyValue : otherContainer.labels.entrySet()) {

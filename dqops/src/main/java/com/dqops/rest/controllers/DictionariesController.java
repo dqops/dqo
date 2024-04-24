@@ -52,7 +52,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Data dictionaries controller for managing dictonary CSV files that are stored in the dictionaries folder in the DQOps user's home folder.
+ * Data dictionaries controller for managing dictionary CSV files that are stored in the *dictionaries* folder in the DQOps user's home folder.
  */
 @RestController
 @RequestMapping("/api")

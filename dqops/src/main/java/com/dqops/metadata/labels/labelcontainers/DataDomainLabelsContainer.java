@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package com.dqops.metadata.labels;
+package com.dqops.metadata.labels.labelcontainers;
 
 import com.dqops.metadata.sources.PhysicalTableName;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Objects;
 
 /**
@@ -32,9 +30,9 @@ public class DataDomainLabelsContainer {
     private final LabelCountContainer tableLabels = new LabelCountContainer();
     private final LabelCountContainer columnLabels = new LabelCountContainer();
 
-    private final HashMap<String, LabelCountContainer> importedConnectionLabels = new HashMap<>();
-    private final HashMap<TableLabelsKey, LabelCountContainer> importedTableLabels = new HashMap<>();
-    private final HashMap<TableLabelsKey, LabelCountContainer> importedColumnLabels = new HashMap<>();
+    private final HashMap<String, LabelCountContainer> importedConnectionLabels = new LinkedHashMap<>();
+    private final HashMap<TableLabelsKey, LabelCountContainer> importedTableLabels = new LinkedHashMap<>();
+    private final HashMap<TableLabelsKey, LabelCountContainer> importedColumnLabels = new LinkedHashMap<>();
     private final Object lock = new Object();
     private final String domainName;
 
@@ -93,7 +91,7 @@ public class DataDomainLabelsContainer {
             }
 
             if (newLabels != null && !newLabels.isEmpty()) {
-                this.connectionLabels.addCountsFromContainer(oldLabels);
+                this.connectionLabels.addCountsFromContainer(newLabels);
                 this.importedConnectionLabels.put(connectionName, newLabels);
             }
         }
@@ -121,7 +119,7 @@ public class DataDomainLabelsContainer {
             }
 
             if (newLabels != null && !newLabels.isEmpty()) {
-                this.tableLabels.addCountsFromContainer(oldLabels);
+                this.tableLabels.addCountsFromContainer(newLabels);
                 this.importedTableLabels.put(tableLabelsKey, newLabels);
             }
         }
@@ -149,7 +147,7 @@ public class DataDomainLabelsContainer {
             }
 
             if (newLabels != null && !newLabels.isEmpty()) {
-                this.columnLabels.addCountsFromContainer(oldLabels);
+                this.columnLabels.addCountsFromContainer(newLabels);
                 this.importedColumnLabels.put(tableLabelsKey, newLabels);
             }
         }

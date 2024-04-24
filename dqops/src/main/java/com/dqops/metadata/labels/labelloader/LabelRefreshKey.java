@@ -14,41 +14,47 @@
  * limitations under the License.
  */
 
-package com.dqops.data.checkresults.statuscache;
+package com.dqops.metadata.labels.labelloader;
 
 import com.dqops.metadata.sources.PhysicalTableName;
 import lombok.Data;
 
 /**
- * A key object that identifies every table. These keys are used in a cache to store the most recent
- * table quality status for each table.
+ * A key object that a single connection or table that was loaded into the file system cache and a refresh of the labels is pending.
  */
 @Data
 @lombok.EqualsAndHashCode
 @lombok.ToString
-public final class CurrentTableStatusKey {
+public class LabelRefreshKey {
+    /**
+     * The target that is refreshed.
+     */
+    private final LabelRefreshTarget target;
+
     /**
      * Data domain name.
      */
-    private String dataDomain;
+    private final String dataDomain;
 
     /**
      * Connection name.
      */
-    private String connectionName;
+    private final String connectionName;
 
     /**
-     * Physical table name.
+     * Optional physical table name, when the target is a table.
      */
-    private PhysicalTableName physicalTableName;
+    private final PhysicalTableName physicalTableName;
 
     /**
-     * Creates a table status key.
+     * Creates a label refresh key.
+     * @param target Target to refresh.
      * @param dataDomain Data domain name.
      * @param connectionName Connection name.
-     * @param physicalTableName Physical table name.
+     * @param physicalTableName Optional table name when the target is a table.
      */
-    public CurrentTableStatusKey(String dataDomain, String connectionName, PhysicalTableName physicalTableName) {
+    public LabelRefreshKey(LabelRefreshTarget target, String dataDomain, String connectionName, PhysicalTableName physicalTableName) {
+        this.target = target;
         this.dataDomain = dataDomain;
         this.connectionName = connectionName;
         this.physicalTableName = physicalTableName;

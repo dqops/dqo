@@ -17,9 +17,10 @@
 package com.dqops.core.filesystem.cache;
 
 import com.dqops.core.configuration.DqoCacheSpecConfigurationPropertiesObjectMother;
-import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindServiceObjectMother;
 import com.dqops.data.checkresults.statuscache.TableStatusCacheProviderImpl;
+import com.dqops.metadata.labels.labelloader.DummyLabelsIndexer;
+import com.dqops.metadata.labels.labelloader.LabelsIndexerProviderImpl;
 import com.dqops.utils.BeanFactoryObjectMother;
 
 /**
@@ -49,6 +50,7 @@ public class LocalFileSystemCacheObjectMother {
     public static LocalFileSystemCache createNewCache() {
         return new LocalFileSystemCacheImpl(DqoCacheSpecConfigurationPropertiesObjectMother.getWithCacheEnabledButNoFileSystemWatching(),
                 new TableStatusCacheProviderImpl(BeanFactoryObjectMother.getBeanFactory()),
+                new LabelsIndexerProviderImpl(BeanFactoryObjectMother.getBeanFactory(), new DummyLabelsIndexer()),
                 HomeLocationFindServiceObjectMother.getDefaultHomeFinder());
     }
 
@@ -59,6 +61,7 @@ public class LocalFileSystemCacheObjectMother {
     public static LocalFileSystemCache createNewWithCachingDisabled() {
         return new LocalFileSystemCacheImpl(DqoCacheSpecConfigurationPropertiesObjectMother.createWithDisabledCache(),
                 new TableStatusCacheProviderImpl(BeanFactoryObjectMother.getBeanFactory()),
+                new LabelsIndexerProviderImpl(BeanFactoryObjectMother.getBeanFactory(), new DummyLabelsIndexer()),
                 HomeLocationFindServiceObjectMother.getDefaultHomeFinder());
     }
 }
