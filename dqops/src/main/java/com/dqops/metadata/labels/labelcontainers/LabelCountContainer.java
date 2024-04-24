@@ -18,17 +18,14 @@ package com.dqops.metadata.labels.labelcontainers;
 
 import com.dqops.metadata.labels.LabelSetSpec;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * An object that stores all found labels and counts their occurrences.
  */
 public class LabelCountContainer {
-    private final HashMap<String, LabelCounter> labels = new HashMap<>();
+    private final TreeMap<String, LabelCounter> labels = new TreeMap<>();
     private final Object lock = new Object();
 
     /**

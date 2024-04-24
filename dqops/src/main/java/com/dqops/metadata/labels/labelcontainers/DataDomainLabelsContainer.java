@@ -19,6 +19,7 @@ package com.dqops.metadata.labels.labelcontainers;
 import com.dqops.metadata.sources.PhysicalTableName;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Objects;
 
 /**
@@ -29,9 +30,9 @@ public class DataDomainLabelsContainer {
     private final LabelCountContainer tableLabels = new LabelCountContainer();
     private final LabelCountContainer columnLabels = new LabelCountContainer();
 
-    private final HashMap<String, LabelCountContainer> importedConnectionLabels = new HashMap<>();
-    private final HashMap<TableLabelsKey, LabelCountContainer> importedTableLabels = new HashMap<>();
-    private final HashMap<TableLabelsKey, LabelCountContainer> importedColumnLabels = new HashMap<>();
+    private final HashMap<String, LabelCountContainer> importedConnectionLabels = new LinkedHashMap<>();
+    private final HashMap<TableLabelsKey, LabelCountContainer> importedTableLabels = new LinkedHashMap<>();
+    private final HashMap<TableLabelsKey, LabelCountContainer> importedColumnLabels = new LinkedHashMap<>();
     private final Object lock = new Object();
     private final String domainName;
 

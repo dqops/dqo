@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  */
 public final class LabelCounter {
     private String label;
-    private HashMap<String, LabelCounter> nestedLabels;
+    private TreeMap<String, LabelCounter> nestedLabels;
     private final AtomicInteger labelCount = new AtomicInteger();
     private final AtomicInteger nestedLabelsCount = new AtomicInteger();
 
@@ -97,7 +97,7 @@ public final class LabelCounter {
     public LabelCounter addNestedLabel(String childLabel) {
         String labelWithPrefix = this.label + "/" + childLabel;
         if (this.nestedLabels == null) {
-            this.nestedLabels = new HashMap<>();
+            this.nestedLabels = new TreeMap<>();
             LabelCounter childLabelCounter = new LabelCounter(labelWithPrefix);
             this.nestedLabels.put(childLabel, childLabelCounter);
             return childLabelCounter;
@@ -169,7 +169,7 @@ public final class LabelCounter {
                     return;
                 }
 
-                HashMap<String, LabelCounter> newNestedLabels = new HashMap<>();
+                TreeMap<String, LabelCounter> newNestedLabels = new TreeMap<>();
                 this.nestedLabels = newNestedLabels;
                 for (Map.Entry<String, LabelCounter> otherRootLabelKeyValue : otherLabelCounter.nestedLabels.entrySet()) {
                     newNestedLabels.put(otherRootLabelKeyValue.getKey(), otherRootLabelKeyValue.getValue().clone());
@@ -246,7 +246,7 @@ public final class LabelCounter {
     public LabelCounter clone() {
         LabelCounter cloned = new LabelCounter(this.label, this.labelCount.get(), this.nestedLabelsCount.get());
         if (this.nestedLabels != null) {
-            HashMap<String, LabelCounter> clonedNestedLabels = new HashMap<>();
+            TreeMap<String, LabelCounter> clonedNestedLabels = new TreeMap<>();
             cloned.nestedLabels = clonedNestedLabels;
             for (Map.Entry<String, LabelCounter> nestedLabelKeyValue : this.nestedLabels.entrySet()) {
                 clonedNestedLabels.put(nestedLabelKeyValue.getKey(), nestedLabelKeyValue.getValue().clone());
