@@ -146,7 +146,7 @@ public class MysqlColumnTextTextParsableToDatePercentSensorParametersSpecIntegra
         Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
-    @Test // todo: mysql %Y should match the four digit year, instead it match to two digit year, reading the 30/02/2022 as YY/mm/dd
+    @Test
     void runSensor_whenSensorExecutedProfilingOnNotDate_thenReturnsZeroPercent() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "not_date", this.checkSpec);
@@ -156,6 +156,6 @@ public class MysqlColumnTextTextParsableToDatePercentSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(16.666669845581055, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 }
