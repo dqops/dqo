@@ -1354,7 +1354,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                     THEN 0
                 ELSE 1
             END
@@ -3574,7 +3574,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                         THEN 1
                     ELSE 0
                 END

@@ -476,16 +476,17 @@ The templates used to generate the SQL query for each data source supported by D
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                CASE
-                    WHEN CONVERT({{ lib.render_target_column('analyzed_table') }}, DATE) IS NOT NULL
-                        OR STR_TO_DATE({{lib.render_target_column('analyzed_table')}}, '%d/%m/%Y') IS NOT NULL
-                        OR STR_TO_DATE({{lib.render_target_column('analyzed_table')}}, '%d-%m-%Y') IS NOT NULL
-                        OR STR_TO_DATE({{lib.render_target_column('analyzed_table')}}, '%m-%d-%Y') IS NOT NULL
-                        OR STR_TO_DATE({{lib.render_target_column('analyzed_table')}}, '%d/%m/%Y') IS NOT NULL
-                        OR STR_TO_DATE({{lib.render_target_column('analyzed_table')}}, '%m/%d/%Y') IS NOT NULL
-                        OR STR_TO_DATE({{lib.render_target_column('analyzed_table')}}, '%Y/%m/%d') IS NOT NULL
-                        OR STR_TO_DATE({{lib.render_target_column('analyzed_table')}}, '%b %e, %Y') IS NOT NULL
-                            THEN 1
+                CASE WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$')
+                            OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(?:29(\\/|-|\\.)(?:0?2|(?:Feb))\\1(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$')
+                            OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(?:0?[1-9]|1\\d|2[0-8])(\\/|-|\\.)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\\1(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$')
+                            OR
+                            REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))(\\/|-|\\.|[ ])31)(?:[,]?\\1)|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\\/|-|\\.|[ ])(?:29|30))(?:[,]?\\2)))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$')
+                            OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(?:(?:0?2|(?:Feb)(\\/|-|\\.|[ ])29)(?:[,]?\\1)(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$')
+                            OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))(\\/|-|\\.|[ ])(?:0?[1-9]|1\\d|2[0-8]))(?:[,]?\\1)(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$')
+                            OR
+                            REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(?:(?:1[6-9]|[2-9]\\d)?\\d{2})(\\/|-|\\.)(?:(?:(?:(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\\1(?:31))|(?:(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\1(?:29|30))))|(?:(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\\1(?:0?[1-9]|1\\d|2[0-8])))$')
+                            OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\\/|-|\\.)(?:(?:0?2|(?:Feb)\\1(?:29)))$')
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -636,15 +637,20 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
-                        OR TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, 'DD-MM-YYYY') IS NOT NULL
-                        OR TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, 'MM-DD-YYYY') IS NOT NULL
-                        OR TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, 'DD/MM/YYYY') IS NOT NULL
-                        OR TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, 'MM/DD/YYYY') IS NOT NULL
-                        OR TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, 'YYYY/MM/DD') IS NOT NULL
-                        OR TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, 'YYYY.MM.DD') IS NOT NULL
-                        OR TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, 'MON DD, YYYY') IS NOT NULL
-                            THEN 1
+                    WHEN
+                        {{ lib.render_target_column('analyzed_table')}} NOT REGEXP '^\\d+$' AND TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
+                         OR
+                         {{ lib.render_target_column('analyzed_table')}} REGEXP '^((31(\\/|-|\\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\\/|-|\\.)|((29|30)(\\/|-|\\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\\/|-|\\.)))((1[6-9]|[2-9]\\d)?\\d{2})$'
+                         OR {{ lib.render_target_column('analyzed_table')}} REGEXP '^(29(\\/|-|\\.)(0?2|(Feb))(\\/|-|\\.)(((1[6-9]|[2-9]\\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$'
+                         OR {{ lib.render_target_column('analyzed_table')}} REGEXP '^(0?[1-9]|1\\d|2[0-8])(\\/|-|\\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\\/|-|\\.)((1[6-9]|[2-9]\\d)?\\d{2})$'
+                         OR
+                         {{ lib.render_target_column('analyzed_table')}} REGEXP '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\\/|-|\\.|[ ])31)([,]?(\\/|-|\\.|[ ]))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\\/|-|\\.|[ ])(29|30))([,]?(\\/|-|\\.|[ ]))))((1[6-9]|[2-9]\\d)?\\d{2})$'
+                         OR {{ lib.render_target_column('analyzed_table')}} REGEXP '^((0?2|(Feb)(\\/|-|\\.|[ ])29)([,]?(\\/|-|\\.|[ ]))(((1[6-9]|[2-9]\\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$'
+                         OR {{ lib.render_target_column('analyzed_table')}} REGEXP '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\\/|-|\\.|[ ])(0?[1-9]|1\\d|2[0-8]))([,]?(\\/|-|\\.|[ ]))((1[6-9]|[2-9]\\d)?\\d{2})$'
+                         OR
+                         {{ lib.render_target_column('analyzed_table')}} REGEXP '^((1[6-9]|[2-9]\\d)?\\d{2})(\\/|-|\\.)((((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\\/|-|\\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\\/|-|\\.)(29|30))))|(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\\/|-|\\.)(0?[1-9]|1\\d|2[0-8])))$'
+                         OR {{ lib.render_target_column('analyzed_table')}} REGEXP '^(((1[6-9]|[2-9]\\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\\/|-|\\.)((0?2|(Feb)(\\/|-|\\.)(29)))$'
+                    THEN 1
                     ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
