@@ -15,7 +15,6 @@
  */
 package com.dqops.snowflake.connectors;
 
-import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.connectors.*;
 import com.dqops.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
 import com.dqops.connectors.snowflake.SnowflakeSourceConnection;
@@ -23,6 +22,7 @@ import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +35,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-public class PostgresqlSourceConnectionIntegrationTests extends BaseBigQueryIntegrationTest {
+public class SnowflakeSourceConnectionIntegrationTests extends BaseSnowflakeIntegrationTest {
     private SnowflakeSourceConnection sut;
     private ConnectionSpec connectionSpec;
     private SecretValueLookupContext secretValueLookupContext;
