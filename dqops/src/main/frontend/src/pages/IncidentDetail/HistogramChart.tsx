@@ -96,7 +96,7 @@ export const HistogramChart = ({
             key={index}
             onClick={() =>
               onChangeFilter({
-                column: histogramFilter?.column === column ? '' : column
+                column: histogramFilter?.column === column ? undefined : column
               })
             }
           >

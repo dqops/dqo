@@ -38,8 +38,10 @@ public class FileColumnDefaultChecksPatternListImpl extends ColumnDefaultChecksP
      * Creates a default checks pattern collection using a given "defaults" folder.
      * @param defaultsFolder  Defaults folder node.
      * @param yamlSerializer  Yaml serializer.
+     * @param readOnly        Make the list read-only.
      */
-    public FileColumnDefaultChecksPatternListImpl(FolderTreeNode defaultsFolder, YamlSerializer yamlSerializer) {
+    public FileColumnDefaultChecksPatternListImpl(FolderTreeNode defaultsFolder, YamlSerializer yamlSerializer, boolean readOnly) {
+        super(readOnly);
         this.defaultsFolder = defaultsFolder;
         this.yamlSerializer = yamlSerializer;
     }
@@ -75,7 +77,8 @@ public class FileColumnDefaultChecksPatternListImpl extends ColumnDefaultChecksP
                 if (this.getByObjectName(patternName, false) != null) {
                     continue; // was already added
                 }
-				this.addWithoutFullLoad(new FileColumnDefaultChecksPatternWrapperImpl(defaultChecksSpecFolderNode, patternName, defaultChecksPatternModuleName, this.yamlSerializer));
+				this.addWithoutFullLoad(new FileColumnDefaultChecksPatternWrapperImpl(defaultChecksSpecFolderNode, patternName,
+                        defaultChecksPatternModuleName, this.yamlSerializer, this.isReadOnly()));
             }
         }
     }
@@ -97,7 +100,7 @@ public class FileColumnDefaultChecksPatternListImpl extends ColumnDefaultChecksP
         }
         FolderTreeNode ruleParentFolderNode = this.defaultsFolder.getOrAddFolderPath(patternFolderPath);
         FileColumnDefaultChecksPatternWrapperImpl checkModelWrapper =
-                new FileColumnDefaultChecksPatternWrapperImpl(ruleParentFolderNode, patternName, patternModuleName, this.yamlSerializer);
+                new FileColumnDefaultChecksPatternWrapperImpl(ruleParentFolderNode, patternName, patternModuleName, this.yamlSerializer, this.isReadOnly());
         checkModelWrapper.setSpec(new ColumnDefaultChecksPatternSpec());
         return checkModelWrapper;
     }

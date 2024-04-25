@@ -1,4 +1,7 @@
-# Monitoring data volume and detecting empty tables
+---
+title: How to monitor data volume and detect empty tables
+---
+# How to monitor data volume and detect empty tables
 Read this guide to learn how to monitor the number of rows in tables, detect empty tables, and detect unexpected increases or decreases in the volume.
 
 The table volume monitoring checks are configured in the `volume` category in DQOps.
@@ -121,12 +124,12 @@ The default configuration of the [*daily_row_count*](../checks/table/volume/row-
 check sets the value of the *min_count* parameter to 1. 
 This configuration asserts that the table is not empty, having at least one row.
 
-![Detecting empty tables with daily monitoring checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-non-empty-tables-with-row-count-check-initial-min.png){ loading=lazy }
+![Detecting empty tables with daily monitoring checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-non-empty-tables-with-row-count-check-initial-min.png){ loading=lazy; width="1200px" }
 
 ### Detect too small tables in UI
 We can also set a higher value of the *min_count* parameter, which is the desired minimum size of the table.
 
-![Monitoring minimum accepted table row count](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-minimum-table-row-count-min.png){ loading=lazy }
+![Monitoring minimum accepted table row count](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-minimum-table-row-count-min.png){ loading=lazy; width="1200px" }
 
 ### Configuring row count check in YAML
 The row count check is straightforward to configure in the table YAML file.
@@ -152,7 +155,7 @@ The **empty or too small tables** dashboard shows data volume issues identified 
 The dashboard presented below shows issues detected by daily monitoring checks. There is also a data profiling version
 of the dashboard in the *profiling* folder of the data quality dashboard tree.
 
-![Empty or too small tables data quality dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/empty-or-too-small-table-dashboard-with-warning-min.png){ loading=lazy; width="600px" }
+![Empty or too small tables data quality dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/empty-or-too-small-table-dashboard-with-warning-min2.png){ loading=lazy; width="600px" }
 
 *(click to expand)*
 
@@ -169,14 +172,14 @@ condition to the row count SQL query.
 DQOps shows the row counts of daily or monthly partitions when a partitioned version of the check is run. 
 Partitions that are below a minimum size are highlighted.
 
-![Minimum partition row count results](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-daily-partition-mininum-row-count-results-min.png){ loading=lazy }
+![Minimum partition row count results](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-daily-partition-mininum-row-count-results-min.png){ loading=lazy; width="1200px" }
 
 ### Partition sizes chart
 The view of the partition sizes can be switched from a table view to a chart view.
 
 The chart shows too small daily partitions on the yellow part of the chart, below the minimum row count threshold line.
 
-![Minimum partition row count chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-daily-partition-mininum-row-count-chart-min.png){ loading=lazy }
+![Minimum partition row count chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-daily-partition-mininum-row-count-chart-min.png){ loading=lazy; width="1200px" }
 
 ### Configuring partition volume check in YAML
 The configuration of the partition row count check requires a proper configuration of the *partition_by_column* column name. 
@@ -207,7 +210,7 @@ spec:
 ### Identifying too small partitions on dashboards
 The *daily partitions row count* dashboard shows the list of partitioned tables. The row count for each day is shown in a pivot table.
 
-![Daily partition row count monitoring data quality dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-partition-row-count-dashboard-min.png){ loading=lazy; width="600px" }
+![Daily partition row count monitoring data quality dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-partition-row-count-dashboard-min2.png){ loading=lazy; width="600px" }
 
 *(click to expand)*
 
@@ -237,14 +240,14 @@ that measures the whole table and detects daily row count increases/decreases.
 
 The anomalous partition is highlighted for the purpose of this manual.
 
-![Partition row count anomaly issue on a chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partitition-row-count-anomaly-chart-min.png){ loading=lazy }
+![Partition row count anomaly issue on a chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partitition-row-count-anomaly-chart-min.png){ loading=lazy; width="1200px" }
 
 ### Detecting anomalies at multiple severity levels
 The chart below shows how DQOps presents a row count anomaly check with different values of the *anomaly_percent* parameters
 at various [issue severity levels](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels)
 (*warning*, *error*, *fatal*).
 
-![Partition row count anomaly at multiple severity levels chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partition-row-count-anomaly-full-screen-min.png){ loading=lazy }
+![Partition row count anomaly at multiple severity levels chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partition-row-count-anomaly-full-screen-min.png){ loading=lazy; width="1200px" }
 
 ### Configuring anomaly detection in YAML
 The following example of a DQOps YAML file shows the configuration of the [*daily_row_count_anomaly*](../checks/table/volume/row-count-anomaly.md#daily-row-count-anomaly)
@@ -283,7 +286,7 @@ or a reference value at a relative point in the past.
   can be configured to compare the row count to the value from the previous day only when that value was captured.
 
 - The [*row_count_change_7_days*](../checks/table/volume/row-count-change-7-days.md) compares the current row count
-  to a count captured seven days ago. This behavior avoids the influence of weekly seasonability
+  to a count captured seven days ago. This behavior avoids the influence of weekly seasonality
   by comparing Mondays to Mondays, Tuesdays to Tuesdays, etc.
 
 - The [*row_count_change_30_days*](../checks/table/volume/row-count-change-30-days.md) compares the current row count
@@ -299,7 +302,7 @@ A value of 10.0 means that DQOps raises a data quality issue when the row count 
 The [*row_count_change*](../checks/table/volume/row-count-change.md) check takes one parameter **max_percent**. 
 It sets the maximum accepted row count change since the previous known value or a relative value a week or a month ago.
 
-![Row count relative change since the last day data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/row-count-relative-change-data-quality-check-in-dqops-min.png){ loading=lazy }
+![Row count relative change since the last day data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/row-count-relative-change-data-quality-check-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### Configuring volume relative change check in YAML
 The configuration of the [*row_count_change*](../checks/table/volume/row-count-change.md) check is simple.
@@ -326,12 +329,12 @@ spec:
 ## List of volume checks at a table level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*row_count*](../checks/table/volume/row-count.md)|Completeness|This check detects empty or too-small tables. It captures the row count of a tested table. This check raises a data quality issue when the row count is below a minimum accepted value. The default value of the rule parameter **min_count** is 1 (row), which detects empty tables. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.|:material-check-bold:|
-|[*row_count_anomaly*](../checks/table/volume/row-count-anomaly.md)|Consistency|This check detects anomalies in the day-to-day changes to the table volume (the row count). It captures the row count for each day and compares the row count change (increase or decrease) since the previous day. This check raises a data quality issue when the change is in the top **anomaly_percent** percentage of the biggest day-to-day changes.|:material-check-bold:|
-|[*row_count_change*](../checks/table/volume/row-count-change.md)|Consistency|This check compares the current table volume (the row count) to the last known row count. It raises a data quality issue when the change in row count (increase or decrease) exceeds a maximum accepted percentage of change.|:material-check-bold:|
-|[*row_count_change_1_day*](../checks/table/volume/row-count-change-1-day.md)|Consistency|This check compares the current table volume (the row count) to the row count from the previous day. It raises a data quality issue when the change in row count (increase or decrease) since yesterday exceeds a maximum accepted percentage of change.| |
-|[*row_count_change_7_days*](../checks/table/volume/row-count-change-7-days.md)|Consistency|This check compares the current table volume (the row count) to the row count seven days ago. This check compares the table volume to a value a week ago to overcome weekly seasonability and to compare Mondays to Mondays, Tuesdays to Tuesdays, etc. It raises a data quality issue when the change in row count (increase or decrease) since a week ago exceeds a maximum accepted percentage of change.| |
-|[*row_count_change_30_days*](../checks/table/volume/row-count-change-30-days.md)|Consistency|This check compares the current table volume (the row count) to the row count 30 days ago. This check compares the table volume to a month ago value to overcome monthly seasonability. It raises a data quality issue when the change in row count (increase or decrease) since a value 30 days ago exceeds a maximum accepted percentage of change.| |
+|[*row_count*](../checks/table/volume/row-count.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|This check detects empty or too-small tables. It captures the row count of a tested table. This check raises a data quality issue when the row count is below a minimum accepted value. The default value of the rule parameter **min_count** is 1 (row), which detects empty tables. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.|:material-check-bold:|
+|[*row_count_anomaly*](../checks/table/volume/row-count-anomaly.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check detects anomalies in the day-to-day changes to the table volume (the row count). It captures the row count for each day and compares the row count change (increase or decrease) since the previous day. This check raises a data quality issue when the change is in the top **anomaly_percent** percentage of the biggest day-to-day changes.|:material-check-bold:|
+|[*row_count_change*](../checks/table/volume/row-count-change.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check compares the current table volume (the row count) to the last known row count. It raises a data quality issue when the change in row count (increase or decrease) exceeds a maximum accepted percentage of change.|:material-check-bold:|
+|[*row_count_change_1_day*](../checks/table/volume/row-count-change-1-day.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check compares the current table volume (the row count) to the row count from the previous day. It raises a data quality issue when the change in row count (increase or decrease) since yesterday exceeds a maximum accepted percentage of change.| |
+|[*row_count_change_7_days*](../checks/table/volume/row-count-change-7-days.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check compares the current table volume (the row count) to the row count seven days ago. This check compares the table volume to a value a week ago to overcome weekly seasonability and to compare Mondays to Mondays, Tuesdays to Tuesdays, etc. It raises a data quality issue when the change in row count (increase or decrease) since a week ago exceeds a maximum accepted percentage of change.| |
+|[*row_count_change_30_days*](../checks/table/volume/row-count-change-30-days.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check compares the current table volume (the row count) to the row count 30 days ago. This check compares the table volume to a month ago value to overcome monthly seasonability. It raises a data quality issue when the change in row count (increase or decrease) since a value 30 days ago exceeds a maximum accepted percentage of change.| |
 
 
 **Reference and samples**

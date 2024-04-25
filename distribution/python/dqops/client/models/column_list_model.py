@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -29,6 +29,7 @@ class ColumnListModel:
             connection_name (Union[Unset, str]): Connection name.
             table (Union[Unset, PhysicalTableName]):
             column_name (Union[Unset, str]): Column names.
+            labels (Union[Unset, List[str]]): List of labels applied to the table.
             sql_expression (Union[Unset, str]): SQL expression.
             column_hash (Union[Unset, int]): Column hash that identifies the column using a unique hash code.
             disabled (Union[Unset, bool]): Disables all data quality checks on the column. Data quality checks will not be
@@ -61,6 +62,7 @@ class ColumnListModel:
     connection_name: Union[Unset, str] = UNSET
     table: Union[Unset, "PhysicalTableName"] = UNSET
     column_name: Union[Unset, str] = UNSET
+    labels: Union[Unset, List[str]] = UNSET
     sql_expression: Union[Unset, str] = UNSET
     column_hash: Union[Unset, int] = UNSET
     disabled: Union[Unset, bool] = UNSET
@@ -90,6 +92,10 @@ class ColumnListModel:
             table = self.table.to_dict()
 
         column_name = self.column_name
+        labels: Union[Unset, List[str]] = UNSET
+        if not isinstance(self.labels, Unset):
+            labels = self.labels
+
         sql_expression = self.sql_expression
         column_hash = self.column_hash
         disabled = self.disabled
@@ -147,6 +153,8 @@ class ColumnListModel:
             field_dict["table"] = table
         if column_name is not UNSET:
             field_dict["column_name"] = column_name
+        if labels is not UNSET:
+            field_dict["labels"] = labels
         if sql_expression is not UNSET:
             field_dict["sql_expression"] = sql_expression
         if column_hash is not UNSET:
@@ -223,6 +231,8 @@ class ColumnListModel:
             table = PhysicalTableName.from_dict(_table)
 
         column_name = d.pop("column_name", UNSET)
+
+        labels = cast(List[str], d.pop("labels", UNSET))
 
         sql_expression = d.pop("sql_expression", UNSET)
 
@@ -327,6 +337,7 @@ class ColumnListModel:
             connection_name=connection_name,
             table=table,
             column_name=column_name,
+            labels=labels,
             sql_expression=sql_expression,
             column_hash=column_hash,
             disabled=disabled,

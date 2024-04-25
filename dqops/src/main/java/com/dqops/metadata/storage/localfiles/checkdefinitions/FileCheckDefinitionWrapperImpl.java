@@ -24,6 +24,7 @@ import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapperImpl;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.serialization.YamlSerializer;
@@ -48,9 +49,14 @@ public class FileCheckDefinitionWrapperImpl extends CheckDefinitionWrapperImpl {
      * @param checkName Full check name as used to store in the database.
      * @param checkFileNameBaseName Check module name. This is the check specification file name inside the checks folder without the .dqocheck.yaml extension.
      * @param yamlSerializer Yaml serializer.
+     * @param readOnly Make the wrapper read-only.
      */
-    public FileCheckDefinitionWrapperImpl(FolderTreeNode customCheckFolderNode, String checkName, String checkFileNameBaseName, YamlSerializer yamlSerializer) {
-        super(checkName);
+    public FileCheckDefinitionWrapperImpl(FolderTreeNode customCheckFolderNode,
+                                          String checkName,
+                                          String checkFileNameBaseName,
+                                          YamlSerializer yamlSerializer,
+                                          boolean readOnly) {
+        super(checkName, readOnly);
         this.customCheckFolderNode = customCheckFolderNode;
         this.checkFileNameBaseName = checkFileNameBaseName;
         this.yamlSerializer = yamlSerializer;
@@ -102,12 +108,17 @@ public class FileCheckDefinitionWrapperImpl extends CheckDefinitionWrapperImpl {
                         throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
 
-                    fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+                    CheckDefinitionSpec cachedObjectInstance = deserializedSpec.deepClone();
+                    cachedObjectInstance.makeReadOnly(true);
+                    if (this.getHierarchyId() != null) {
+                        cachedObjectInstance.setHierarchyId(new HierarchyId(this.getHierarchyId(), "spec"));
+                    }
+                    fileContent.setCachedObjectInstance(cachedObjectInstance);
                 } else {
-                    deserializedSpec = deserializedSpec.deepClone();
+                    deserializedSpec = this.isReadOnly() ? deserializedSpec : deserializedSpec.deepClone();
                 }
 				this.setSpec(deserializedSpec);
-				this.clearDirty(true);
+				this.clearDirty(false);
                 return deserializedSpec;
             }
             else {

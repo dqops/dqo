@@ -65,7 +65,7 @@ public class ConnectionServiceImplTests extends BaseTest {
     }
 
     private UserHome createHierarchyTree() {
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper1 = userHome.getConnections().createAndAddNew("conn1");
         ConnectionWrapper connectionWrapper2 = userHome.getConnections().createAndAddNew("conn2");
@@ -101,7 +101,7 @@ public class ConnectionServiceImplTests extends BaseTest {
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
         this.sut.deleteConnection(connectionName, principal);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connectionList = userHome.getConnections();
@@ -119,7 +119,7 @@ public class ConnectionServiceImplTests extends BaseTest {
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
         this.sut.deleteConnection(connectionName, principal);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
 
         List<ConnectionWrapper> connectionList = this.filterDeletedConnections(userHome.getConnections());
@@ -137,7 +137,7 @@ public class ConnectionServiceImplTests extends BaseTest {
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
         this.sut.deleteConnections(connectionNames, principal);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
 
         List<ConnectionWrapper> connectionList = this.filterDeletedConnections(userHome.getConnections());
@@ -155,7 +155,7 @@ public class ConnectionServiceImplTests extends BaseTest {
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
         this.sut.deleteConnections(connectionNames, principal);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
 
         List<ConnectionWrapper> connectionList = this.filterDeletedConnections(userHome.getConnections());

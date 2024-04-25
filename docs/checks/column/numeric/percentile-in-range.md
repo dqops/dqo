@@ -1,3 +1,6 @@
+---
+title: percentile in range data quality checks
+---
 # percentile in range data quality checks
 
 This check finds a requested percentile value of numeric values. The percentile is configured as a value in the range [0, 1]. This check verifies that the given percentile is within the range of accepted values
@@ -18,7 +21,7 @@ Verifies that the percentile of all values in a column is not outside the expect
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_percentile_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`profile_percentile_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -730,7 +733,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 24-29"
+    ```yaml hl_lines="5-13 24-29"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1395,7 +1398,7 @@ Verifies that the percentile of all values in a column is not outside the expect
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_percentile_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`daily_percentile_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -2108,7 +2111,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 25-30"
+    ```yaml hl_lines="5-13 25-30"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2774,7 +2777,7 @@ Verifies that the percentile of all values in a column is not outside the expect
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_percentile_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`monthly_percentile_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -3487,7 +3490,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 25-30"
+    ```yaml hl_lines="5-13 25-30"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -4153,7 +4156,7 @@ Verifies that the percentile of all values in a column is not outside the expect
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_percentile_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`daily_partition_percentile_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -4876,7 +4879,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 35-40"
+    ```yaml hl_lines="10-4 35-40"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -5552,7 +5555,7 @@ Verifies that the percentile of all values in a column is not outside the expect
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_percentile_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`monthly_partition_percentile_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -6275,7 +6278,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 35-40"
+    ```yaml hl_lines="10-4 35-40"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table

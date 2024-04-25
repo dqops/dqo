@@ -17,7 +17,6 @@ package com.dqops.metadata.storage.localfiles.userhome;
 
 import com.dqops.core.dqocloud.datadomains.CliCurrentDataDomainService;
 import com.dqops.core.principal.UserDomainIdentity;
-import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.UserDomainIdentityFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -84,9 +83,9 @@ public class UserHomeContextCacheImpl implements UserHomeContextCache {
         }
 
         String currentRootMountedDataDomain = this.cliCurrentDataDomainService.getCurrentDataDomain();
-        UserDomainIdentity dataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(currentRootMountedDataDomain);
+        UserDomainIdentity dataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForCloudDomain(currentRootMountedDataDomain);
 
-        UserHomeContext cachedUserHomeContext = this.userHomeContextFactory.openLocalUserHome(dataDomainAdminIdentity);
+        UserHomeContext cachedUserHomeContext = this.userHomeContextFactory.openLocalUserHome(dataDomainAdminIdentity, true);
         this.cachedUserHomeContext = cachedUserHomeContext;
         this.cachedAt = Instant.now();
 

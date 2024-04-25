@@ -90,7 +90,7 @@ public class AllChecksModelFactoryImplTests extends BaseTest {
                 specToModelCheckMappingService);
 
         UserDomainIdentity adminIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
-        this.executionContext = executionContextFactory.create(adminIdentity);
+        this.executionContext = executionContextFactory.create(adminIdentity, false);
 
         UserHome userHome = this.executionContext.getUserHomeContext().getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");

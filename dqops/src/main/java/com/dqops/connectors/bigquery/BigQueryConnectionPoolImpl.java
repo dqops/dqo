@@ -104,12 +104,16 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
                         String keyContent = defaultCredentialsSharedSecret.getObject().getTextContent();
 
                         if (Objects.equals(keyContent.replace("\r\n", "\n"), DefaultCloudCredentialFileContent.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_INITIAL_CONTENT)) {
-                            throw new DqoRuntimeException("The .credentials/" + DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME +
-                                    " file contains default (fake) credentials. Please replace the content of the file with a valid GCP Service Account JSON key.");
-                        }
-
-                        try (InputStream keyReaderStream = new ByteArrayInputStream(keyContent.getBytes(StandardCharsets.UTF_8))) {
-                            googleCredentials = GoogleCredentials.fromStream(keyReaderStream);
+                            try {
+                                googleCredentials = GoogleCredentials.getApplicationDefault();
+                            } catch (Exception ex) {
+                                throw new DqoRuntimeException("The .credentials/" + DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME +
+                                        " file contains default (fake) credentials. Please replace the content of the file with a valid GCP Service Account JSON key.");
+                            }
+                        } else {
+                            try (InputStream keyReaderStream = new ByteArrayInputStream(keyContent.getBytes(StandardCharsets.UTF_8))) {
+                                googleCredentials = GoogleCredentials.fromStream(keyReaderStream);
+                            }
                         }
                     } else {
                         googleCredentials = GoogleCredentials.getApplicationDefault();

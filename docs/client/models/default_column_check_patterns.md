@@ -1,3 +1,6 @@
+---
+title: DQOps REST API default_column_check_patterns models reference
+---
 # DQOps REST API default_column_check_patterns models reference
 The references of all objects used by [default_column_check_patterns](../operations/default_column_check_patterns.md) REST API operations are listed below.
 

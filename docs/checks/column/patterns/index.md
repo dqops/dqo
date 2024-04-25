@@ -1,3 +1,6 @@
+---
+title: column level patterns data quality checks
+---
 # column level patterns data quality checks
 
 This is a list of patterns column data quality checks supported by DQOps and a brief description of what data quality issued they detect.
@@ -50,6 +53,21 @@ This check detects invalid email addresses in text columns using a regular expre
 |[<span class="no-wrap-code">`monthly_invalid_email_format_found`</span>](./invalid-email-format-found.md#monthly-invalid-email-format-found)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.|:material-check-bold:|
 |[<span class="no-wrap-code">`daily_partition_invalid_email_format_found`</span>](./invalid-email-format-found.md#daily-partition-invalid-email-format-found)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_partition_invalid_email_format_found`</span>](./invalid-email-format-found.md#monthly-partition-invalid-email-format-found)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.|:material-check-bold:|
+
+
+
+### [invalid email format percent](./invalid-email-format-percent.md)
+This check detects invalid email addresses in text columns using a regular expression.
+ It calculated the percentage of invalid emails and raises a data quality issue when the percentage is above a threshold.
+
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_invalid_email_format_percent`</span>](./invalid-email-format-percent.md#profile-invalid-email-format-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of invalid emails in a text column does not exceed the maximum accepted percentage.| |
+|[<span class="no-wrap-code">`daily_invalid_email_format_percent`</span>](./invalid-email-format-percent.md#daily-invalid-email-format-percent)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of invalid emails in a text column does not exceed the maximum accepted percentage.| |
+|[<span class="no-wrap-code">`monthly_invalid_email_format_percent`</span>](./invalid-email-format-percent.md#monthly-invalid-email-format-percent)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of invalid emails in a text column does not exceed the maximum accepted percentage.| |
+|[<span class="no-wrap-code">`daily_partition_invalid_email_format_percent`</span>](./invalid-email-format-percent.md#daily-partition-invalid-email-format-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of invalid emails in a text column does not exceed the maximum accepted percentage.| |
+|[<span class="no-wrap-code">`monthly_partition_invalid_email_format_percent`</span>](./invalid-email-format-percent.md#monthly-partition-invalid-email-format-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of invalid emails in a text column does not exceed the maximum accepted percentage.| |
 
 
 

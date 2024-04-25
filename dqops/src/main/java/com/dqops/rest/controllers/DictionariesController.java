@@ -52,7 +52,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Data dictionaries controller for managing dictonary CSV files that are stored in the dictionaries folder in the DQOps user's home folder.
+ * Data dictionaries controller for managing dictionary CSV files that are stored in the *dictionaries* folder in the DQOps user's home folder.
  */
 @RestController
 @RequestMapping("/api")
@@ -88,7 +88,7 @@ public class DictionariesController {
     @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<DataDictionaryListModel>> getAllDictionaries(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         List<DictionaryWrapper> dictionaryWrappers = userHome.getDictionaries().toList();
@@ -131,7 +131,7 @@ public class DictionariesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
         DictionaryWrapper dictionaryWrapper = userHome.getDictionaries().getByObjectName(dictionaryName, true);
 
@@ -172,7 +172,7 @@ public class DictionariesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
         DictionaryWrapper dictionaryWrapper = userHome.getDictionaries().getByObjectName(dictionaryName, true);
 
@@ -217,7 +217,7 @@ public class DictionariesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
         UserHome userHome = userHomeContext.getUserHome();
         DictionaryList dictionaryList = userHome.getDictionaries();
         DictionaryWrapper existingDictionary = dictionaryList.getByObjectName(dataDictionaryModel.getDictionaryName(), true);
@@ -270,7 +270,7 @@ public class DictionariesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
         UserHome userHome = userHomeContext.getUserHome();
         DictionaryList dictionaryList = userHome.getDictionaries();
         DictionaryWrapper dictionaryWrapper = dictionaryList.getByObjectName(dictionaryName, true);
@@ -315,7 +315,7 @@ public class DictionariesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
         UserHome userHome = userHomeContext.getUserHome();
 
         DictionaryList dictionaryList = userHome.getDictionaries();

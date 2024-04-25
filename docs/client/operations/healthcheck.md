@@ -1,3 +1,6 @@
+---
+title: DQOps REST API healthcheck operations
+---
 # DQOps REST API healthcheck operations
 Health check operations for checking if the DQOps service is up and operational. Used for monitoring by load balancers.
 

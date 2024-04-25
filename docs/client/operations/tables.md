@@ -1,3 +1,6 @@
+---
+title: DQOps REST API tables operations
+---
 # DQOps REST API tables operations
 Operations related to manage the metadata of imported tables, and managing the configuration of table-level data quality checks.
 
@@ -742,7 +745,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`table_list_model`](../models/tables.md#tablelistmodel)</span>||*[TableListModel](../models/tables.md#tablelistmodel)*|
+|<span class="no-wrap-code">[`table_list_model`](../models/common.md#tablelistmodel)</span>||*[TableListModel](../models/common.md#tablelistmodel)*|
 
 
 
@@ -9009,7 +9012,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`table_list_model`</span>||*List[[TableListModel](../models/tables.md#tablelistmodel)]*|
+|<span class="no-wrap-code">`table_list_model`</span>||*List[[TableListModel](../models/common.md#tablelistmodel)]*|
 
 
 
@@ -9020,6 +9023,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |---------------|---------------------------------|-----------|-----------------|
 |<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
 |<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`label`</span>|Optional labels to filter the tables|*List[string]*| |
+|<span class="no-wrap-code">`page`</span>|Page number, the first page is 1|*long*| |
+|<span class="no-wrap-code">`limit`</span>|Page size, the default is 100 rows, but paging is disabled is neither page and limit parameters are provided|*long*| |
+|<span class="no-wrap-code">`filter`</span>|Optional table name filter|*string*| |
+|<span class="no-wrap-code">[`check_type`](../models/common.md#checktype)</span>|Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type|*[CheckType](../models/common.md#checktype)*| |
 
 
 
@@ -9187,6 +9195,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_tables
+	from dqops.client.models import CheckType
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -9366,6 +9375,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_tables
+	from dqops.client.models import CheckType
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -9545,6 +9555,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_tables
+	from dqops.client.models import CheckType
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -9727,6 +9738,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_tables
+	from dqops.client.models import CheckType
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -10260,7 +10272,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table basic model with the updated settings|*[TableListModel](../models/tables.md#tablelistmodel)*| |
+|Table basic model with the updated settings|*[TableListModel](../models/common.md#tablelistmodel)*| |
 
 
 

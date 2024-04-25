@@ -16,6 +16,7 @@
 package com.dqops.metadata.sources;
 
 import com.dqops.BaseTest;
+import com.dqops.metadata.labels.LabelSetSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

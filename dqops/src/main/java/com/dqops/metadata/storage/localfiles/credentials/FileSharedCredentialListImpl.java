@@ -33,8 +33,10 @@ public class FileSharedCredentialListImpl extends SharedCredentialListImpl {
     /**
      * Creates a shared credentials collection using a given .credentials folder.
      * @param credentialsFolderNode Credentials folder node.
+     * @param readOnly Make the list read-only.
      */
-    public FileSharedCredentialListImpl(FolderTreeNode credentialsFolderNode) {
+    public FileSharedCredentialListImpl(FolderTreeNode credentialsFolderNode, boolean readOnly) {
+        super(readOnly);
         this.credentialsFolderNode = credentialsFolderNode;
     }
 
@@ -54,7 +56,7 @@ public class FileSharedCredentialListImpl extends SharedCredentialListImpl {
         for (FileTreeNode fileTreeNode : this.credentialsFolderNode.getFiles()) {
             String baseFileName = fileTreeNode.getFilePath().getFileName();
             String decodedFileName = FileNameSanitizer.decodeFileSystemName(baseFileName);
-            this.addWithoutFullLoad(new FileSharedCredentialWrapperImpl(this.credentialsFolderNode, decodedFileName));
+            this.addWithoutFullLoad(new FileSharedCredentialWrapperImpl(this.credentialsFolderNode, decodedFileName, this.isReadOnly()));
         }
     }
 
@@ -67,7 +69,7 @@ public class FileSharedCredentialListImpl extends SharedCredentialListImpl {
     @Override
     protected SharedCredentialWrapperImpl createNewElement(String credentialName) {
         FileSharedCredentialWrapperImpl sharedCredentialWrapper =
-                new FileSharedCredentialWrapperImpl(this.credentialsFolderNode, credentialName);
+                new FileSharedCredentialWrapperImpl(this.credentialsFolderNode, credentialName, this.isReadOnly());
         sharedCredentialWrapper.setObject(new FileContent());
         return sharedCredentialWrapper;
     }

@@ -21,7 +21,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.checkresults.services.CheckResultsOverviewParameters;
-import com.dqops.data.checkresults.services.models.CheckResultsOverviewDataModel;
+import com.dqops.data.checkresults.models.CheckResultsOverviewDataModel;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -95,7 +95,7 @@ public class CheckResultsOverviewController {
             @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "checkName", value = "Optional check name", required = false)
             @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -161,7 +161,7 @@ public class CheckResultsOverviewController {
             @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "checkName", value = "Optional check name", required = false)
             @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -227,7 +227,7 @@ public class CheckResultsOverviewController {
             @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "checkName", value = "Optional check name", required = false)
             @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -293,7 +293,7 @@ public class CheckResultsOverviewController {
             @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "checkName", value = "Optional check name", required = false)
             @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -366,7 +366,7 @@ public class CheckResultsOverviewController {
             @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "checkName", value = "Optional check name", required = false)
             @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -439,7 +439,7 @@ public class CheckResultsOverviewController {
             @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "checkName", value = "Optional check name", required = false)
             @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();

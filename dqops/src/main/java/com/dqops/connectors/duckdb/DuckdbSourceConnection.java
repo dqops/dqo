@@ -22,6 +22,7 @@ import com.dqops.connectors.duckdb.fileslisting.LocalSystemTablesLister;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
+import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
 import com.dqops.core.configuration.DqoDuckdbConfiguration;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.jobqueue.JobCancellationListenerHandle;
@@ -44,6 +45,8 @@ import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -64,6 +67,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     private final DqoDuckdbConfiguration dqoDuckdbConfiguration;
     private static final Object settingsExecutionLock = new Object();
     private static final boolean settingsConfigured = false;
+    private static final String temporaryDirectoryPrefix = "dqops_duckdb_temp_";
 
     /**
      * Injection constructor for the duckdb connection.
@@ -102,7 +106,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             jdbcConnectionBuilder.append(":memory:");
         }
 
-        String database = duckdbSpec.getDatabase();
+        String database = this.getSecretValueProvider().expandValue(duckdbSpec.getDatabase(), secretValueLookupContext);
         if(database != null){
             jdbcConnectionBuilder.append(database);
         }
@@ -195,6 +199,11 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
                 String threadsQuery = "SET GLOBAL threads = " + dqoDuckdbConfiguration.getThreads();
                 this.executeCommand(threadsQuery, JobCancellationToken.createDummyJobCancellationToken());
+
+                String temporaryDirectory = Files.createTempDirectory(temporaryDirectoryPrefix).toFile().getAbsolutePath();
+                Path.of(temporaryDirectory).toFile().deleteOnExit();
+                String tempDirectoryQuery = "SET temp_directory = '" + temporaryDirectory + "'";
+                this.executeCommand(tempDirectoryQuery, JobCancellationToken.createDummyJobCancellationToken());
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -243,8 +252,26 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             return;
         }
 
-        ConnectionSpec connectionSpecCloned = getConnectionSpec().expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
-        connectionSpecCloned.getDuckdb().fillSpecWithDefaultCredentials(secretValueLookupContext);
+        DuckdbParametersSpec duckdbSpecCloned = getConnectionSpec()
+                .expandAndTrim(getSecretValueProvider(), secretValueLookupContext).getDuckdb();
+
+        DuckdbStorageType storageType = duckdb.getStorageType();
+        if (storageType != null){
+            switch (storageType){
+                case s3:
+                    AwsAuthenticationMode awsAuthenticationMode = duckdb.getAwsAuthenticationMode() == null ?
+                            AwsAuthenticationMode.default_credentials : duckdb.getAwsAuthenticationMode();
+
+                    if(awsAuthenticationMode.equals(AwsAuthenticationMode.default_credentials)){
+                        duckdbSpecCloned.fillSpecWithDefaultCredentials(secretValueLookupContext);
+                    } else if (Strings.isNullOrEmpty(duckdbSpecCloned.getRegion())){
+                        duckdbSpecCloned.fillSpecWithDefaultAwsConfig(secretValueLookupContext);
+                    }
+                    break;
+            }
+        }
+
+        this.getConnectionSpec().setDuckdb(duckdbSpecCloned);
 
         try {
             // todo: can be used with duckdb 0.10 when aws extension is fixed,
@@ -311,11 +338,9 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             return sourceTableModels;
         }
 
-        DuckdbParametersSpec duckdbCloned = duckdb.expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
-        duckdbCloned.fillSpecWithDefaultCredentials(secretValueLookupContext);
         switch (storageType){
             case s3:
-                List<SourceTableModel> sourceTableModels = AwsTablesLister.listTables(duckdbCloned, schemaName);
+                List<SourceTableModel> sourceTableModels = AwsTablesLister.listTables(duckdb, schemaName);
                 return sourceTableModels;
             default:
                 throw new RuntimeException("This type of secretsType is not supported: " + storageType);

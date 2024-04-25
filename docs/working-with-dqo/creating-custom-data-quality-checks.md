@@ -54,7 +54,7 @@ Clicking on any of these elements will open up a check editor in the main worksp
 
 The below example shows a check editor of the `daily_invalid_email_format_found` check.
 
-![Navigate to a custom checks, sensors and rule editors](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/navigating-to-custom-checks-rules-sensors.png)
+![Navigate to a custom checks, sensors and rule editors](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/navigating-to-custom-checks-rules-sensors.png){ loading=lazy; width="1200px" }
 
 ### **Create a custom sensor**
 
@@ -74,18 +74,18 @@ To create a new sensor:
 3. Click the **Save** button to save the changes.
 
 
-![Add a new sensor](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/add-new-sensor.png)
+![Add a new sensor](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/add-new-sensor.png){ loading=lazy }
 
 
 In our example, we want to modify the `invalid-email-count` sensor, which is located in the *sensors/column/patterns* folder.
 On the sensor configuration screen, you can see a tab with the **Sensor definition** when you can choose to set that a check requires
 event and ingestion timestamps columns, set the default value when the table is empty and modify the sensor fields and parameters.
 
-![Custom sensor editor](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/custom-sensor-editor.png)
+![Custom sensor editor](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/custom-sensor-editor.png){ loading=lazy; width="1200px" }
 
 There are also tabs for different data sources which allows you to see and modify the source-specific [templated Jinja2 SQL queries](../dqo-concepts/definition-of-data-quality-sensors.md)
 
-![Sensor SQL template](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/sensor-sql-template.png)
+![Sensor SQL template](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/sensor-sql-template.png){ loading=lazy; width="1200px" }
 
 As an example, we can modify the query for the BigQuery data source to verify the number the DUNS number. We will name it `invalid_duns_format_count`.
 The sensor will calculate the number of rows with an invalid DUNS number. To do this, we need to change the fragment of templated
@@ -149,13 +149,13 @@ To create a new rule:
 3. Click the **Save** button to save the changes.
 
 
-![Add a new rule](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/add-new-rule.png)
+![Add a new rule](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/add-new-rule.png){ loading=lazy }
 
 
 The custom rule screen contains two tabs **Rule definition** and **Python code** which can be modified and allows customization of both
 the existing and new rules.
 
-![Custom rule editor](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/custom-rule-editor.png)
+![Custom rule editor](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/custom-rule-editor.png){ loading=lazy; width="1200px" }
 
 
 ### **Create a custom check**
@@ -175,7 +175,7 @@ To create a new check:
 2. Enter a new name and modify the check configuration by selecting sensor and rule from the dropdown menu.
 3. Click the **Save** button to save the changes.
 
-![Add a new check](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/add-new-check.png)
+![Add a new check](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/add-new-check.png){ loading=lazy }
 
 !!! tip "Check modification"
 
@@ -185,7 +185,7 @@ To create a new check:
 As an example, we will show how to modify the [daily_invalid_email_format_found](../checks/column/patterns/invalid-email-format-found.md) check,
 which is located in the *column/monitoring/daily/patterns/* folder.
 
-![Custom check editor](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/custom-checks-editor.png)
+![Custom check editor](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/custom-checks-editor.png){ loading=lazy; width="1200px" }
 
 On the main workspace of the check editor, you can see the names of the [sensor](../dqo-concepts/definition-of-data-quality-sensors.md)
 and [rule](../dqo-concepts/definition-of-data-quality-rules.md) associated with this check. Clicking on the **Show definition** button
@@ -200,18 +200,18 @@ and named it `daily_invalid_duns_format_found`).
 The copied check will appear in the tree view in the same folder as the check used as a template. 
 The checks that have been added are shown on the tree view in bold.
 
-![Create a copy of data quality check](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/create-a-copy-of-check.png)
+![Create a copy of data quality check](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/create-a-copy-of-check.png){ loading=lazy; width="1200px" }
 
 To change the sensor that is assigned to a check, simply select the sensor of choice from the dropdown menu and Save the changes by clicking on the **Save** button.
 We will assign to this check a newly created sensor `invalid_duns_format_count` that calculates the number of rows with invalid DUNS number.
 
-![Assign new sensor to a check](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/assign-new-sensor-to-a-check.png)
+![Assign new sensor to a check](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/assign-new-sensor-to-a-check.png){ loading=lazy; width="1200px" }
 
 If you want to change the rule, simply, choose a new rule from the dropdown menu. 
 
 After saving changes, the new check is now visible on the Check editor and can be run.
 
-![Assign new sensor to a check](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/daily-invalid-duns-format-found-check-in-check-editor.png)
+![Assign new sensor to a check](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/daily-invalid-duns-format-found-check-in-check-editor.png){ loading=lazy; width="1200px" }
 
 
 ### **Create an anomaly detection custom check**

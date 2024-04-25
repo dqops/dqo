@@ -36,9 +36,10 @@ public class FileDictionaryWrapperImpl extends DictionaryWrapperImpl {
      * Creates a data dictionary file wrapper that is file based.
      * @param dictionariesFolderNode Data dictionaries (dictionaries/) folder to store dictionary CSV files.
      * @param dictionaryName Data dictionary CSV file name.
+     * @param readOnly Make the list read-only.
      */
-    public FileDictionaryWrapperImpl(FolderTreeNode dictionariesFolderNode, String dictionaryName) {
-        super(dictionaryName);
+    public FileDictionaryWrapperImpl(FolderTreeNode dictionariesFolderNode, String dictionaryName, boolean readOnly) {
+        super(dictionaryName, readOnly);
         this.dictionariesFolderNode = dictionariesFolderNode;
     }
 

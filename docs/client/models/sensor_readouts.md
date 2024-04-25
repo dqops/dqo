@@ -1,3 +1,6 @@
+---
+title: DQOps REST API sensor_readouts models reference
+---
 # DQOps REST API sensor_readouts models reference
 The references of all objects used by [sensor_readouts](../operations/sensor_readouts.md) REST API operations are listed below.
 
@@ -14,7 +17,7 @@ Detailed results for a single sensor. Represent one row in the sensor readouts t
 |<span class="no-wrap-code">`id`</span>|Sensor readout primary key|*string*|
 |<span class="no-wrap-code">`check_name`</span>|Check name|*string*|
 |<span class="no-wrap-code">`check_display_name`</span>|Check display name|*string*|
-|<span class="no-wrap-code">[`check_type`](./table_comparisons.md#checktype)</span>|Check type|*[CheckType](./table_comparisons.md#checktype)*|
+|<span class="no-wrap-code">[`check_type`](./common.md#checktype)</span>|Check type|*[CheckType](./common.md#checktype)*|
 |<span class="no-wrap-code">`actual_value`</span>|Actual value|*double*|
 |<span class="no-wrap-code">`expected_value`</span>|Expected value|*double*|
 |<span class="no-wrap-code">`column_name`</span>|Column name|*string*|
@@ -40,7 +43,7 @@ Sensor readout detailed results. Returned in the context of a single data group,
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`check_name`</span>|Check name|*string*|
 |<span class="no-wrap-code">`check_display_name`</span>|Check display name|*string*|
-|<span class="no-wrap-code">[`check_type`](./table_comparisons.md#checktype)</span>|Check type|*[CheckType](./table_comparisons.md#checktype)*|
+|<span class="no-wrap-code">[`check_type`](./common.md#checktype)</span>|Check type|*[CheckType](./common.md#checktype)*|
 |<span class="no-wrap-code">`check_hash`</span>|Check hash|*long*|
 |<span class="no-wrap-code">`check_category`</span>|Check category name|*string*|
 |<span class="no-wrap-code">`sensor_name`</span>|Sensor name|*string*|

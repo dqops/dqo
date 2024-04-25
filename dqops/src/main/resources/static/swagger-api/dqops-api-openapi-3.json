@@ -89,6 +89,10 @@
     "description" : "Jobs management controller that supports starting new jobs, such as running selected data quality checks. Provides access to the job queue for incremental monitoring.",
     "extensions" : { }
   }, {
+    "name" : "Labels",
+    "description" : "Operations that returns all labels that are assigned to data assets. Labels serve the purpose of a lazy business glossary.",
+    "extensions" : { }
+  }, {
     "name" : "LogShipping",
     "description" : "Log shipping controller that accepts logs sent from a web application or external tools and aggregates them in the local DQOps instance logs.",
     "extensions" : { }
@@ -99,6 +103,10 @@
   }, {
     "name" : "Schemas",
     "description" : "Operations for listing imported schemas from monitored data sources. Also provides operations for activating and deactivating multiple checks at once.",
+    "extensions" : { }
+  }, {
+    "name" : "Search",
+    "description" : "Search operations for finding data assets, such as tables.",
     "extensions" : { }
   }, {
     "name" : "SensorReadouts",
@@ -2175,6 +2183,69 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "label",
+          "in" : "query",
+          "description" : "Optional labels to filter the tables",
+          "style" : "FORM",
+          "explode" : true,
+          "schema" : {
+            "type" : "array",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "extensions" : { },
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Page number, the first page is 1",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Page size, the default is 100 rows, but paging is disabled is neither page and limit parameters are provided",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "filter",
+          "in" : "query",
+          "description" : "Optional table name filter",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "checkType",
+          "in" : "query",
+          "description" : "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type",
+          "schema" : {
+            "$ref" : "#/components/schemas/CheckType",
+            "exampleSetFlag" : false
           },
           "extensions" : { }
         } ],
@@ -19391,6 +19462,249 @@
       },
       "extensions" : { }
     },
+    "api/labels/columns" : {
+      "get" : {
+        "tags" : [ "Labels" ],
+        "summary" : "getAllLabelsForColumns",
+        "description" : "Returns a list of all labels applied to columns, including the count of assignments to these data assets.",
+        "operationId" : "getAllLabelsForColumns",
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Page number, the first page is 1",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Page size, the default is 100 rows, but paging is disabled is neither page and limit parameters are provided",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "prefix",
+          "in" : "query",
+          "description" : "Optional filter for the prefix of labels. For example, when the prefix is \"address\", this operation will return labels \"address/city\" and \"address/country\", but not \"address\".",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "filter",
+          "in" : "query",
+          "description" : "Optional table name filter",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/LabelModel",
+                    "extensions" : { },
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
+    "api/labels/connections" : {
+      "get" : {
+        "tags" : [ "Labels" ],
+        "summary" : "getAllLabelsForConnections",
+        "description" : "Returns a list of all labels applied to the connections to data sources, including the count of assignments to these data assets.",
+        "operationId" : "getAllLabelsForConnections",
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Page number, the first page is 1",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Page size, the default is 100 rows, but paging is disabled is neither page and limit parameters are provided",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "prefix",
+          "in" : "query",
+          "description" : "Optional filter for the prefix of labels. For example, when the prefix is \"address\", this operation will return labels \"address/city\" and \"address/country\", but not \"address\".",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "filter",
+          "in" : "query",
+          "description" : "Optional table name filter",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/LabelModel",
+                    "extensions" : { },
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
+    "api/labels/tables" : {
+      "get" : {
+        "tags" : [ "Labels" ],
+        "summary" : "getAllLabelsForTables",
+        "description" : "Returns a list of all labels applied to tables, including the count of assignments to these data assets.",
+        "operationId" : "getAllLabelsForTables",
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Page number, the first page is 1",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Page size, the default is 100 rows, but paging is disabled is neither page and limit parameters are provided",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "prefix",
+          "in" : "query",
+          "description" : "Optional filter for the prefix of labels. For example, when the prefix is \"address\", this operation will return labels \"address/city\" and \"address/country\", but not \"address\".",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "filter",
+          "in" : "query",
+          "description" : "Optional table name filter",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/LabelModel",
+                    "extensions" : { },
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
     "api/logs/debug" : {
       "post" : {
         "tags" : [ "LogShipping" ],
@@ -19759,6 +20073,126 @@
           "204" : {
             "description" : "Custom rule definition successfully deleted",
             "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
+    "api/search/tables" : {
+      "get" : {
+        "tags" : [ "Search" ],
+        "summary" : "findTables",
+        "description" : "Finds tables in any data source and schema",
+        "operationId" : "findTables",
+        "parameters" : [ {
+          "name" : "connection",
+          "in" : "query",
+          "description" : "Optional connection name filter, accepts filters in the form: fullname, *suffix, prefix*, *contains*.",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "schema",
+          "in" : "query",
+          "description" : "Optional schema name filter, accepts filters in the form: fullname, *suffix, prefix*, *contains*.",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "table",
+          "in" : "query",
+          "description" : "Optional table name filter",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "label",
+          "in" : "query",
+          "description" : "Optional labels to filter the tables",
+          "style" : "FORM",
+          "explode" : true,
+          "schema" : {
+            "type" : "array",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "extensions" : { },
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Page number, the first page is 1",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Page size, the default is 100 rows, but paging is disabled is neither page and limit parameters are provided",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "checkType",
+          "in" : "query",
+          "description" : "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type",
+          "schema" : {
+            "$ref" : "#/components/schemas/CheckType",
+            "exampleSetFlag" : false
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/TableListModel",
+                    "extensions" : { },
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            },
             "extensions" : { }
           }
         },
@@ -21603,6 +22037,13 @@
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
           },
+          "column_name" : {
+            "type" : "string",
+            "description" : "Optional column name for column-level data quality checks.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
           "check_type" : {
             "$ref" : "#/components/schemas/CheckType",
             "exampleSetFlag" : false
@@ -21624,6 +22065,54 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
+          },
+          "executed_checks" : {
+            "type" : "integer",
+            "description" : "The total number of most recent checks that were executed on the column. Table comparison checks that are comparing groups of data are counted as the number of compared data groups.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "valid_results" : {
+            "type" : "integer",
+            "description" : "The number of most recent valid data quality checks that passed without raising any issues.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "warnings" : {
+            "type" : "integer",
+            "description" : "The number of most recent data quality checks that failed by raising a warning severity data quality issue.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "errors" : {
+            "type" : "integer",
+            "description" : "The number of most recent data quality checks that failed by raising an error severity data quality issue.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "fatals" : {
+            "type" : "integer",
+            "description" : "The number of most recent data quality checks that failed by raising a fatal severity data quality issue.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "execution_errors" : {
+            "type" : "integer",
+            "description" : "The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. When an execution error is reported, the configuration of a data quality check on a column must be updated.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
           }
         },
         "description" : "The most recent data quality status for a single data quality check. If data grouping is enabled, the *current_severity* will be the highest data quality issue status from all data quality results for all data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.",
@@ -21647,6 +22136,10 @@
               "format" : "int64",
               "description" : "The UTC timestamp when the check was recently executed."
             },
+            "column_name" : {
+              "type" : "string",
+              "description" : "Optional column name for column-level data quality checks."
+            },
             "check_type" : {
               "type" : "string",
               "description" : "The check type: profiling, monitoring, partitioned.",
@@ -21664,6 +22157,36 @@
             "quality_dimension" : {
               "type" : "string",
               "description" : "Data quality dimension, such as Completeness, Uniqueness, Validity."
+            },
+            "executed_checks" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The total number of most recent checks that were executed on the column. Table comparison checks that are comparing groups of data are counted as the number of compared data groups."
+            },
+            "valid_results" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The number of most recent valid data quality checks that passed without raising any issues."
+            },
+            "warnings" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The number of most recent data quality checks that failed by raising a warning severity data quality issue."
+            },
+            "errors" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The number of most recent data quality checks that failed by raising an error severity data quality issue."
+            },
+            "fatals" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The number of most recent data quality checks that failed by raising a fatal severity data quality issue."
+            },
+            "execution_errors" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. When an execution error is reported, the configuration of a data quality check on a column must be updated."
             }
           },
           "description" : "The most recent data quality status for a single data quality check. If data grouping is enabled, the *current_severity* will be the highest data quality issue status from all data quality results for all data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range."
@@ -21838,6 +22361,13 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
+          "friendly_name" : {
+            "type" : "string",
+            "description" : "An alternative check's name that is shown on the check editor.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
           "standard" : {
             "type" : "boolean",
             "description" : "This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.",
@@ -21895,6 +22425,10 @@
             "help_text" : {
               "type" : "string",
               "description" : "Help text that is shown in the check editor that describes the purpose and usage of the check"
+            },
+            "friendly_name" : {
+              "type" : "string",
+              "description" : "An alternative check's name that is shown on the check editor."
             },
             "standard" : {
               "type" : "boolean",
@@ -21991,6 +22525,20 @@
           "help_text" : {
             "type" : "string",
             "description" : "Help text that describes the data quality check.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "display_name" : {
+            "type" : "string",
+            "description" : "User assigned display name that is shown instead of the original data quality check name.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "friendly_name" : {
+            "type" : "string",
+            "description" : "An alternative check's name that is shown on the check editor as a hint.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -22202,6 +22750,14 @@
             "help_text" : {
               "type" : "string",
               "description" : "Help text that describes the data quality check."
+            },
+            "display_name" : {
+              "type" : "string",
+              "description" : "User assigned display name that is shown instead of the original data quality check name."
+            },
+            "friendly_name" : {
+              "type" : "string",
+              "description" : "An alternative check's name that is shown on the check editor as a hint."
             },
             "sensor_parameters" : {
               "type" : "array",
@@ -23043,6 +23599,14 @@
             },
             "types" : [ "array" ]
           },
+          "maxResults" : {
+            "type" : "integer",
+            "description" : "Optional limit for the maximum number of results to return.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
           "column" : {
             "type" : "string",
             "description" : "The column name. This field accepts search patterns in the format: 'fk_\\*', '\\*_id', 'prefix\\*suffix'.",
@@ -23079,6 +23643,13 @@
           "checkCategory" : {
             "type" : "string",
             "description" : "The target check category, for example: *nulls*, *volume*, *anomaly*.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "qualityDimension" : {
+            "type" : "string",
+            "description" : "The target data quality dimension, for example: *Completeness*, *Accuracy*, *Consistency*, *Timeliness*, *Availability*.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -23148,6 +23719,11 @@
                 "type" : "string"
               }
             },
+            "maxResults" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "Optional limit for the maximum number of results to return."
+            },
             "column" : {
               "type" : "string",
               "description" : "The column name. This field accepts search patterns in the format: 'fk_\\*', '\\*_id', 'prefix\\*suffix'."
@@ -23178,6 +23754,10 @@
             "checkCategory" : {
               "type" : "string",
               "description" : "The target check category, for example: *nulls*, *volume*, *anomaly*."
+            },
+            "qualityDimension" : {
+              "type" : "string",
+              "description" : "The target data quality dimension, for example: *Completeness*, *Accuracy*, *Consistency*, *Timeliness*, *Availability*."
             },
             "tableComparisonName" : {
               "type" : "string",
@@ -28498,6 +29078,22 @@
               "type" : "object",
               "description" : "The dictionary of statuses for data quality checks. The keys are data quality check names, the values are the current data quality check statuses that describe the most current status."
             }
+          },
+          "dimensions" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/DimensionCurrentDataQualityStatusModel",
+              "extensions" : { },
+              "exampleSetFlag" : false
+            },
+            "description" : "Dictionary of the current data quality statues for each data quality dimension.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object",
+              "description" : "Dictionary of the current data quality statues for each data quality dimension."
+            }
           }
         },
         "description" : "The column's most recent data quality status. It is a summary of the results of the most recently executed data quality checks on the column. Verify the value of the current_severity to see if there are any data quality issues on the column.",
@@ -28557,6 +29153,14 @@
               "additionalProperties" : {
                 "$ref" : "#/definitions/CheckCurrentDataQualityStatusModel",
                 "originalRef" : "#/definitions/CheckCurrentDataQualityStatusModel"
+              }
+            },
+            "dimensions" : {
+              "type" : "object",
+              "description" : "Dictionary of the current data quality statues for each data quality dimension.",
+              "additionalProperties" : {
+                "$ref" : "#/definitions/DimensionCurrentDataQualityStatusModel",
+                "originalRef" : "#/definitions/DimensionCurrentDataQualityStatusModel"
               }
             }
           },
@@ -29427,12 +30031,12 @@
               }
             },
             "daily_detected_datatype_in_text" : {
-              "description" : "Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent captured value for each day when the data quality check was evaluated.",
+              "description" : "Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent captured value for each day when the data quality check was evaluated.",
               "$ref" : "#/components/schemas/ColumnDetectedDatatypeInTextCheckSpec",
               "originalRef" : "#/components/schemas/ColumnDetectedDatatypeInTextCheckSpec"
             },
             "daily_detected_datatype_in_text_changed" : {
-              "description" : "Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.",
+              "description" : "Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.",
               "$ref" : "#/components/schemas/ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec",
               "originalRef" : "#/components/schemas/ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec"
             }
@@ -29483,12 +30087,12 @@
               }
             },
             "daily_partition_detected_datatype_in_text" : {
-              "description" : "Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each daily partition.",
+              "description" : "Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each daily partition.",
               "$ref" : "#/components/schemas/ColumnDetectedDatatypeInTextCheckSpec",
               "originalRef" : "#/components/schemas/ColumnDetectedDatatypeInTextCheckSpec"
             },
             "daily_partition_detected_datatype_in_text_changed" : {
-              "description" : "Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Stores a separate data quality check result for each daily partition.",
+              "description" : "Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types. Stores a separate data quality check result for each daily partition.",
               "$ref" : "#/components/schemas/ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec",
               "originalRef" : "#/components/schemas/ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec"
             }
@@ -29621,7 +30225,7 @@
               "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
             },
             "parameters" : {
-              "description" : "The sensor parameters for a sensor that returns a value that identifies the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.",
+              "description" : "The sensor parameters for a sensor that returns a value that identifies the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types.",
               "$ref" : "#/components/schemas/ColumnDatatypeStringDatatypeDetectSensorParametersSpec",
               "originalRef" : "#/components/schemas/ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
             },
@@ -29687,12 +30291,12 @@
               }
             },
             "monthly_detected_datatype_in_text" : {
-              "description" : "Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent check result for each month when the data quality check was evaluated.",
+              "description" : "Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent check result for each month when the data quality check was evaluated.",
               "$ref" : "#/components/schemas/ColumnDetectedDatatypeInTextCheckSpec",
               "originalRef" : "#/components/schemas/ColumnDetectedDatatypeInTextCheckSpec"
             },
             "monthly_detected_datatype_in_text_changed" : {
-              "description" : "Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.",
+              "description" : "Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.",
               "$ref" : "#/components/schemas/ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec",
               "originalRef" : "#/components/schemas/ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec"
             }
@@ -29743,12 +30347,12 @@
               }
             },
             "monthly_partition_detected_datatype_in_text" : {
-              "description" : "Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each monthly partition.",
+              "description" : "Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each monthly partition.",
               "$ref" : "#/components/schemas/ColumnDetectedDatatypeInTextCheckSpec",
               "originalRef" : "#/components/schemas/ColumnDetectedDatatypeInTextCheckSpec"
             },
             "monthly_partition_detected_datatype_in_text_changed" : {
-              "description" : "Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Stores a separate data quality check result for each monthly partition.",
+              "description" : "Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types. Stores a separate data quality check result for each monthly partition.",
               "$ref" : "#/components/schemas/ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec",
               "originalRef" : "#/components/schemas/ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec"
             }
@@ -29799,12 +30403,12 @@
               }
             },
             "profile_detected_datatype_in_text" : {
-              "description" : "Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type.",
+              "description" : "Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type.",
               "$ref" : "#/components/schemas/ColumnDetectedDatatypeInTextCheckSpec",
               "originalRef" : "#/components/schemas/ColumnDetectedDatatypeInTextCheckSpec"
             },
             "profile_detected_datatype_in_text_changed" : {
-              "description" : "Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.",
+              "description" : "Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types.",
               "$ref" : "#/components/schemas/ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec",
               "originalRef" : "#/components/schemas/ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec"
             }
@@ -30723,7 +31327,7 @@
               "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
             },
             "parameters" : {
-              "description" : "The sensor parameters for a sensor that returns a value that identifies the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.",
+              "description" : "The sensor parameters for a sensor that returns a value that identifies the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types.",
               "$ref" : "#/components/schemas/ColumnDatatypeStringDatatypeDetectSensorParametersSpec",
               "originalRef" : "#/components/schemas/ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
             },
@@ -34519,6 +35123,154 @@
           }
         }
       },
+      "ColumnInvalidEmailFormatPercentCheckSpec" : {
+        "type" : "object",
+        "properties" : {
+          "schedule_override" : {
+            "$ref" : "#/components/schemas/MonitoringScheduleSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "comments" : {
+            "type" : "array",
+            "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/CommentSpec",
+              "extensions" : { },
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          },
+          "disabled" : {
+            "type" : "boolean",
+            "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "exclude_from_kpi" : {
+            "type" : "boolean",
+            "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "include_in_sla" : {
+            "type" : "boolean",
+            "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "quality_dimension" : {
+            "type" : "string",
+            "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "display_name" : {
+            "type" : "string",
+            "description" : "Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data_grouping" : {
+            "type" : "string",
+            "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "parameters" : {
+            "$ref" : "#/components/schemas/ColumnPatternsInvalidEmailFormatPercentSensorParametersSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "warning" : {
+            "$ref" : "#/components/schemas/MaxPercentRule0WarningParametersSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "error" : {
+            "$ref" : "#/components/schemas/MaxPercentRule0ErrorParametersSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "fatal" : {
+            "$ref" : "#/components/schemas/MaxPercentRule5ParametersSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          }
+        },
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "schedule_override" : {
+              "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+              "$ref" : "#/components/schemas/MonitoringScheduleSpec",
+              "originalRef" : "#/components/schemas/MonitoringScheduleSpec"
+            },
+            "comments" : {
+              "type" : "array",
+              "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+              "items" : {
+                "$ref" : "#/components/schemas/CommentSpec",
+                "originalRef" : "#/components/schemas/CommentSpec"
+              }
+            },
+            "disabled" : {
+              "type" : "boolean",
+              "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+            },
+            "exclude_from_kpi" : {
+              "type" : "boolean",
+              "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+            },
+            "include_in_sla" : {
+              "type" : "boolean",
+              "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+            },
+            "quality_dimension" : {
+              "type" : "string",
+              "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+            },
+            "display_name" : {
+              "type" : "string",
+              "description" : "Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+            },
+            "data_grouping" : {
+              "type" : "string",
+              "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+            },
+            "parameters" : {
+              "description" : "Data quality check parameters",
+              "$ref" : "#/components/schemas/ColumnPatternsInvalidEmailFormatPercentSensorParametersSpec",
+              "originalRef" : "#/components/schemas/ColumnPatternsInvalidEmailFormatPercentSensorParametersSpec"
+            },
+            "warning" : {
+              "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+              "$ref" : "#/components/schemas/MaxPercentRule0WarningParametersSpec",
+              "originalRef" : "#/components/schemas/MaxPercentRule0WarningParametersSpec"
+            },
+            "error" : {
+              "description" : "Default alerting threshold for a maximum number of rows with empty strings in a column that raises a data quality error (alert).",
+              "$ref" : "#/components/schemas/MaxPercentRule0ErrorParametersSpec",
+              "originalRef" : "#/components/schemas/MaxPercentRule0ErrorParametersSpec"
+            },
+            "fatal" : {
+              "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+              "$ref" : "#/components/schemas/MaxPercentRule5ParametersSpec",
+              "originalRef" : "#/components/schemas/MaxPercentRule5ParametersSpec"
+            }
+          }
+        }
+      },
       "ColumnInvalidIp4AddressFormatFoundCheckSpec" : {
         "type" : "object",
         "properties" : {
@@ -35281,6 +36033,19 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
+          "labels" : {
+            "type" : "array",
+            "description" : "List of labels applied to the table.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "extensions" : { },
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
           "sql_expression" : {
             "type" : "string",
             "description" : "SQL expression.",
@@ -35413,6 +36178,13 @@
             "column_name" : {
               "type" : "string",
               "description" : "Column names."
+            },
+            "labels" : {
+              "type" : "array",
+              "description" : "List of labels applied to the table.",
+              "items" : {
+                "type" : "string"
+              }
             },
             "sql_expression" : {
               "type" : "string",
@@ -44885,6 +45657,11 @@
             "extensions" : { },
             "exampleSetFlag" : false
           },
+          "daily_invalid_email_format_percent" : {
+            "$ref" : "#/components/schemas/ColumnInvalidEmailFormatPercentCheckSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
           "daily_text_not_matching_date_pattern_found" : {
             "$ref" : "#/components/schemas/ColumnTextNotMatchingDatePatternFoundCheckSpec",
             "extensions" : { },
@@ -44948,6 +45725,11 @@
               "description" : "Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.",
               "$ref" : "#/components/schemas/ColumnInvalidEmailFormatFoundCheckSpec",
               "originalRef" : "#/components/schemas/ColumnInvalidEmailFormatFoundCheckSpec"
+            },
+            "daily_invalid_email_format_percent" : {
+              "description" : "Verifies that the percentage of invalid emails in a text column does not exceed the maximum accepted percentage.",
+              "$ref" : "#/components/schemas/ColumnInvalidEmailFormatPercentCheckSpec",
+              "originalRef" : "#/components/schemas/ColumnInvalidEmailFormatPercentCheckSpec"
             },
             "daily_text_not_matching_date_pattern_found" : {
               "description" : "Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.",
@@ -45021,6 +45803,11 @@
             "extensions" : { },
             "exampleSetFlag" : false
           },
+          "daily_partition_invalid_email_format_percent" : {
+            "$ref" : "#/components/schemas/ColumnInvalidEmailFormatPercentCheckSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
           "daily_partition_text_not_matching_date_pattern_found" : {
             "$ref" : "#/components/schemas/ColumnTextNotMatchingDatePatternFoundCheckSpec",
             "extensions" : { },
@@ -45085,6 +45872,11 @@
               "$ref" : "#/components/schemas/ColumnInvalidEmailFormatFoundCheckSpec",
               "originalRef" : "#/components/schemas/ColumnInvalidEmailFormatFoundCheckSpec"
             },
+            "daily_partition_invalid_email_format_percent" : {
+              "description" : "Verifies that the percentage of invalid emails in a text column does not exceed the maximum accepted percentage.",
+              "$ref" : "#/components/schemas/ColumnInvalidEmailFormatPercentCheckSpec",
+              "originalRef" : "#/components/schemas/ColumnInvalidEmailFormatPercentCheckSpec"
+            },
             "daily_partition_text_not_matching_date_pattern_found" : {
               "description" : "Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.",
               "$ref" : "#/components/schemas/ColumnTextNotMatchingDatePatternFoundCheckSpec",
@@ -45124,6 +45916,29 @@
         }
       },
       "ColumnPatternsInvalidEmailFormatCountSensorParametersSpec" : {
+        "type" : "object",
+        "properties" : {
+          "filter" : {
+            "type" : "string",
+            "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "filter" : {
+              "type" : "string",
+              "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+            }
+          }
+        }
+      },
+      "ColumnPatternsInvalidEmailFormatPercentSensorParametersSpec" : {
         "type" : "object",
         "properties" : {
           "filter" : {
@@ -45249,6 +46064,11 @@
             "extensions" : { },
             "exampleSetFlag" : false
           },
+          "monthly_invalid_email_format_percent" : {
+            "$ref" : "#/components/schemas/ColumnInvalidEmailFormatPercentCheckSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
           "monthly_text_not_matching_date_pattern_found" : {
             "$ref" : "#/components/schemas/ColumnTextNotMatchingDatePatternFoundCheckSpec",
             "extensions" : { },
@@ -45312,6 +46132,11 @@
               "description" : "Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.",
               "$ref" : "#/components/schemas/ColumnInvalidEmailFormatFoundCheckSpec",
               "originalRef" : "#/components/schemas/ColumnInvalidEmailFormatFoundCheckSpec"
+            },
+            "monthly_invalid_email_format_percent" : {
+              "description" : "Verifies that the percentage of invalid emails in a text column does not exceed the maximum accepted percentage.",
+              "$ref" : "#/components/schemas/ColumnInvalidEmailFormatPercentCheckSpec",
+              "originalRef" : "#/components/schemas/ColumnInvalidEmailFormatPercentCheckSpec"
             },
             "monthly_text_not_matching_date_pattern_found" : {
               "description" : "Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.",
@@ -45385,6 +46210,11 @@
             "extensions" : { },
             "exampleSetFlag" : false
           },
+          "monthly_partition_invalid_email_format_percent" : {
+            "$ref" : "#/components/schemas/ColumnInvalidEmailFormatPercentCheckSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
           "monthly_partition_text_not_matching_date_pattern_found" : {
             "$ref" : "#/components/schemas/ColumnTextNotMatchingDatePatternFoundCheckSpec",
             "extensions" : { },
@@ -45448,6 +46278,11 @@
               "description" : "Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.",
               "$ref" : "#/components/schemas/ColumnInvalidEmailFormatFoundCheckSpec",
               "originalRef" : "#/components/schemas/ColumnInvalidEmailFormatFoundCheckSpec"
+            },
+            "monthly_partition_invalid_email_format_percent" : {
+              "description" : "Verifies that the percentage of invalid emails in a text column does not exceed the maximum accepted percentage.",
+              "$ref" : "#/components/schemas/ColumnInvalidEmailFormatPercentCheckSpec",
+              "originalRef" : "#/components/schemas/ColumnInvalidEmailFormatPercentCheckSpec"
             },
             "monthly_partition_text_not_matching_date_pattern_found" : {
               "description" : "Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.",
@@ -45521,6 +46356,11 @@
             "extensions" : { },
             "exampleSetFlag" : false
           },
+          "profile_invalid_email_format_percent" : {
+            "$ref" : "#/components/schemas/ColumnInvalidEmailFormatPercentCheckSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
           "profile_text_not_matching_date_pattern_found" : {
             "$ref" : "#/components/schemas/ColumnTextNotMatchingDatePatternFoundCheckSpec",
             "extensions" : { },
@@ -45584,6 +46424,11 @@
               "description" : "Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.",
               "$ref" : "#/components/schemas/ColumnInvalidEmailFormatFoundCheckSpec",
               "originalRef" : "#/components/schemas/ColumnInvalidEmailFormatFoundCheckSpec"
+            },
+            "profile_invalid_email_format_percent" : {
+              "description" : "Verifies that the percentage of invalid emails in a text column does not exceed the maximum accepted percentage.",
+              "$ref" : "#/components/schemas/ColumnInvalidEmailFormatPercentCheckSpec",
+              "originalRef" : "#/components/schemas/ColumnInvalidEmailFormatPercentCheckSpec"
             },
             "profile_text_not_matching_date_pattern_found" : {
               "description" : "Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.",
@@ -62405,10 +63250,157 @@
           "properties" : {
             "expected_datatype" : {
               "type" : "string",
-              "description" : "Expected data type code, the values for the sensor's actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - texts, 8 - mixed data types.",
+              "description" : "Expected data type code, the values for the sensor's actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - texts, 8 - mixed data types.",
               "enum" : [ "integers", "floats", "dates", "datetimes", "booleans", "texts", "mixed" ]
             }
           }
+        }
+      },
+      "DimensionCurrentDataQualityStatusModel" : {
+        "type" : "object",
+        "properties" : {
+          "dimension" : {
+            "type" : "string",
+            "description" : "Data quality dimension name. The most popular dimensions are: Completeness, Uniqueness, Timeliness, Validity, Consistency, Accuracy, Availability.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "current_severity" : {
+            "$ref" : "#/components/schemas/RuleSeverityLevel",
+            "exampleSetFlag" : false
+          },
+          "highest_historical_severity" : {
+            "$ref" : "#/components/schemas/RuleSeverityLevel",
+            "exampleSetFlag" : false
+          },
+          "last_check_executed_at" : {
+            "type" : "integer",
+            "description" : "The UTC timestamp when the most recent data quality check was executed on the table.",
+            "format" : "int64",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "executed_checks" : {
+            "type" : "integer",
+            "description" : "The total number of most recent checks that were executed on the table for one data quality dimension. Table comparison checks that are comparing groups of data are counted as the number of compared data groups.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "valid_results" : {
+            "type" : "integer",
+            "description" : "The number of most recent valid data quality checks that passed without raising any issues.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "warnings" : {
+            "type" : "integer",
+            "description" : "The number of most recent data quality checks that failed by raising a warning severity data quality issue.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "errors" : {
+            "type" : "integer",
+            "description" : "The number of most recent data quality checks that failed by raising an error severity data quality issue.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "fatals" : {
+            "type" : "integer",
+            "description" : "The number of most recent data quality checks that failed by raising a fatal severity data quality issue.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "execution_errors" : {
+            "type" : "integer",
+            "description" : "The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. When an execution error is reported, the configuration of a data quality check on a table must be updated.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "data_quality_kpi" : {
+            "type" : "number",
+            "description" : "Data quality KPI score for the data quality dimension, measured as a percentage of passed data quality checks. DQOps counts data quality issues at a warning severity level as passed checks. The data quality KPI score is a value in the range 0..100.",
+            "format" : "double",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "number" ]
+          }
+        },
+        "description" : "The summary of the current data quality status for one data quality dimension",
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "dimension" : {
+              "type" : "string",
+              "description" : "Data quality dimension name. The most popular dimensions are: Completeness, Uniqueness, Timeliness, Validity, Consistency, Accuracy, Availability."
+            },
+            "current_severity" : {
+              "type" : "string",
+              "description" : "The most recent data quality issue severity for this table. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.",
+              "enum" : [ "valid", "warning", "error", "fatal" ]
+            },
+            "highest_historical_severity" : {
+              "type" : "string",
+              "description" : "The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.",
+              "enum" : [ "valid", "warning", "error", "fatal" ]
+            },
+            "last_check_executed_at" : {
+              "type" : "integer",
+              "format" : "int64",
+              "description" : "The UTC timestamp when the most recent data quality check was executed on the table."
+            },
+            "executed_checks" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The total number of most recent checks that were executed on the table for one data quality dimension. Table comparison checks that are comparing groups of data are counted as the number of compared data groups."
+            },
+            "valid_results" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The number of most recent valid data quality checks that passed without raising any issues."
+            },
+            "warnings" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The number of most recent data quality checks that failed by raising a warning severity data quality issue."
+            },
+            "errors" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The number of most recent data quality checks that failed by raising an error severity data quality issue."
+            },
+            "fatals" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The number of most recent data quality checks that failed by raising a fatal severity data quality issue."
+            },
+            "execution_errors" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. When an execution error is reported, the configuration of a data quality check on a table must be updated."
+            },
+            "data_quality_kpi" : {
+              "type" : "number",
+              "format" : "double",
+              "description" : "Data quality KPI score for the data quality dimension, measured as a percentage of passed data quality checks. DQOps counts data quality issues at a warning severity level as passed checks. The data quality KPI score is a value in the range 0..100."
+            }
+          },
+          "description" : "The summary of the current data quality status for one data quality dimension"
         }
       },
       "DqoCloudUserModel" : {
@@ -63290,6 +64282,10 @@
             "$ref" : "#/components/schemas/DuckdbStorageType",
             "exampleSetFlag" : false
           },
+          "aws_authentication_mode" : {
+            "$ref" : "#/components/schemas/AwsAuthenticationMode",
+            "exampleSetFlag" : false
+          },
           "user" : {
             "type" : "string",
             "description" : "DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
@@ -63364,6 +64360,11 @@
               "type" : "string",
               "description" : "The storage type.",
               "enum" : [ "local", "s3" ]
+            },
+            "aws_authentication_mode" : {
+              "type" : "string",
+              "description" : "The authentication mode for AWS. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.",
+              "enum" : [ "iam", "default_credentials" ]
             },
             "user" : {
               "type" : "string",
@@ -65096,6 +66097,57 @@
               "description" : "Specifies the date format to use when parsing timestamps."
             }
           }
+        }
+      },
+      "LabelModel" : {
+        "type" : "object",
+        "properties" : {
+          "label" : {
+            "type" : "string",
+            "description" : "Label text.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "labels_count" : {
+            "type" : "integer",
+            "description" : "The number of data assets tagged with this label.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "nested_labels_count" : {
+            "type" : "integer",
+            "description" : "The number of data assets tagged with nested labels below this prefix node. For example, if the current label is \"address\", and there are nested labels \"address/city\" and \"address/zipcode\", this value returns the count of data assets tagged with these nested tags.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        },
+        "description" : "Label model that is returned by the REST API. A label is a tag that was assigned to a data source, table, column or a single check. Labels play the role of a business glossary.",
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "label" : {
+              "type" : "string",
+              "description" : "Label text."
+            },
+            "labels_count" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The number of data assets tagged with this label."
+            },
+            "nested_labels_count" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The number of data assets tagged with nested labels below this prefix node. For example, if the current label is \"address\", and there are nested labels \"address/city\" and \"address/zipcode\", this value returns the count of data assets tagged with these nested tags."
+            }
+          },
+          "description" : "Label model that is returned by the REST API. A label is a tag that was assigned to a data source, table, column or a single check. Labels play the role of a business glossary."
         }
       },
       "MaxCountRule0ErrorParametersSpec" : {
@@ -66850,6 +67902,10 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
+          "redshift_authentication_mode" : {
+            "$ref" : "#/components/schemas/RedshiftAuthenticationMode",
+            "exampleSetFlag" : false
+          },
           "user" : {
             "type" : "string",
             "description" : "Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
@@ -66898,6 +67954,11 @@
             "database" : {
               "type" : "string",
               "description" : "Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+            },
+            "redshift_authentication_mode" : {
+              "type" : "string",
+              "description" : "The authentication mode for AWS. Supports also a ${REDSHIFT_AUTHENTICATION_MODE} configuration with a custom environment variable.",
+              "enum" : [ "iam", "default_credentials", "user_password" ]
             },
             "user" : {
               "type" : "string",
@@ -69387,6 +70448,14 @@
             },
             "types" : [ "array" ]
           },
+          "maxResults" : {
+            "type" : "integer",
+            "description" : "Optional limit for the maximum number of results to return.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
           "columnNames" : {
             "type" : "array",
             "description" : "The list of column names or column name patters. This field accepts search patterns in the format: 'fk_\\*', '\\*_id', 'prefix\\*suffix'.",
@@ -69467,6 +70536,11 @@
               "items" : {
                 "type" : "string"
               }
+            },
+            "maxResults" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "Optional limit for the maximum number of results to return."
             },
             "columnNames" : {
               "type" : "array",
@@ -71995,6 +73069,22 @@
               "type" : "object",
               "description" : "Dictionary of data statues for all columns that have any known data quality results. The keys in the dictionary are the column names."
             }
+          },
+          "dimensions" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/DimensionCurrentDataQualityStatusModel",
+              "extensions" : { },
+              "exampleSetFlag" : false
+            },
+            "description" : "Dictionary of the current data quality statues for each data quality dimension.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object",
+              "description" : "Dictionary of the current data quality statues for each data quality dimension."
+            }
           }
         },
         "description" : "The table's most recent data quality status. It is a summary of the results of the most recently executed data quality checks on the table. Verify the value of the highest_severity_level to see if there are any data quality issues on the table. The values of severity levels are: 0 - all data quality checks passed, 1 - a warning was detected, 2 - an error was detected, 3 - a fatal data quality issue was detected.",
@@ -72079,6 +73169,14 @@
               "additionalProperties" : {
                 "$ref" : "#/definitions/ColumnCurrentDataQualityStatusModel",
                 "originalRef" : "#/definitions/ColumnCurrentDataQualityStatusModel"
+              }
+            },
+            "dimensions" : {
+              "type" : "object",
+              "description" : "Dictionary of the current data quality statues for each data quality dimension.",
+              "additionalProperties" : {
+                "$ref" : "#/definitions/DimensionCurrentDataQualityStatusModel",
+                "originalRef" : "#/definitions/DimensionCurrentDataQualityStatusModel"
               }
             }
           },
@@ -73259,6 +74357,19 @@
             "extensions" : { },
             "exampleSetFlag" : false
           },
+          "labels" : {
+            "type" : "array",
+            "description" : "List of labels applied to the table.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "extensions" : { },
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
           "disabled" : {
             "type" : "boolean",
             "description" : "Disables all data quality checks on the table. Data quality checks will not be executed.",
@@ -73299,6 +74410,11 @@
           },
           "file_format" : {
             "$ref" : "#/components/schemas/FileFormatSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "data_quality_status" : {
+            "$ref" : "#/components/schemas/TableCurrentDataQualityStatusModel",
             "extensions" : { },
             "exampleSetFlag" : false
           },
@@ -73423,6 +74539,13 @@
               "$ref" : "#/components/schemas/PhysicalTableName",
               "originalRef" : "#/components/schemas/PhysicalTableName"
             },
+            "labels" : {
+              "type" : "array",
+              "description" : "List of labels applied to the table.",
+              "items" : {
+                "type" : "string"
+              }
+            },
             "disabled" : {
               "type" : "boolean",
               "description" : "Disables all data quality checks on the table. Data quality checks will not be executed."
@@ -73454,6 +74577,11 @@
               "description" : "File format for a file based table, such as a CSV or Parquet file.",
               "$ref" : "#/components/schemas/FileFormatSpec",
               "originalRef" : "#/components/schemas/FileFormatSpec"
+            },
+            "data_quality_status" : {
+              "description" : "The current data quality status for the table, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache. In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the table.",
+              "$ref" : "#/components/schemas/TableCurrentDataQualityStatusModel",
+              "originalRef" : "#/components/schemas/TableCurrentDataQualityStatusModel"
             },
             "has_any_configured_checks" : {
               "type" : "boolean",
@@ -78804,8 +79932,8 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "athena_authentication_mode" : {
-            "$ref" : "#/components/schemas/AthenaAuthenticationMode",
+          "aws_authentication_mode" : {
+            "$ref" : "#/components/schemas/AwsAuthenticationMode",
             "exampleSetFlag" : false
           },
           "athena_region" : {
@@ -78886,9 +80014,9 @@
               "type" : "string",
               "description" : "Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
             },
-            "athena_authentication_mode" : {
+            "aws_authentication_mode" : {
               "type" : "string",
-              "description" : "The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE} configuration with a custom environment variable.",
+              "description" : "The authentication mode for AWS Athena. Supports also a ${ATHENA_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.",
               "enum" : [ "iam", "default_credentials" ]
             },
             "athena_region" : {
@@ -79093,6 +80221,11 @@
         "exampleSetFlag" : false,
         "enum" : [ "local", "s3" ]
       },
+      "AwsAuthenticationMode" : {
+        "type" : "string",
+        "exampleSetFlag" : false,
+        "enum" : [ "iam", "default_credentials" ]
+      },
       "EffectiveScheduleLevelModel" : {
         "type" : "string",
         "exampleSetFlag" : false,
@@ -79137,6 +80270,11 @@
         "type" : "string",
         "exampleSetFlag" : false,
         "enum" : [ "sql_template", "java_class" ]
+      },
+      "RedshiftAuthenticationMode" : {
+        "type" : "string",
+        "exampleSetFlag" : false,
+        "enum" : [ "iam", "default_credentials", "user_password" ]
       },
       "RuleRunnerType" : {
         "type" : "string",
@@ -79202,11 +80340,6 @@
         "type" : "string",
         "exampleSetFlag" : false,
         "enum" : [ "trino", "athena" ]
-      },
-      "AthenaAuthenticationMode" : {
-        "type" : "string",
-        "exampleSetFlag" : false,
-        "enum" : [ "iam", "default_credentials" ]
       }
     },
     "securitySchemes" : {

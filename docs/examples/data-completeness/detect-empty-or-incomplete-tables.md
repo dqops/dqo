@@ -1,4 +1,7 @@
-# Detect empty tables
+---
+title: How to detect empty or incomplete tables using data quality checks
+---
+# How to detect empty or incomplete tables using data quality checks
 This sample shows how to use data quality checks in the DQOps platform to detect empty tables and view the results on data quality dashboards.
 
 ## Overview
@@ -60,7 +63,7 @@ To navigate to a list of checks prepared in the example using the [user interfac
     The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
     Here you can see that the default check warning threshold is 1 which allows you to validate whether your table is empty or not.
 
-    ![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks-warning1.png)
+    ![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks-warning1.png){ loading=lazy; width="1200px" }
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
@@ -77,14 +80,14 @@ Run the activated check using the **Run check** button.
 
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-![Run check](https://dqops.com/docs/images/examples/row-count-run-check-warning1.png)
+![Run check](https://dqops.com/docs/images/examples/row-count-run-check-warning1.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![Check details](https://dqops.com/docs/images/examples/row-count-check-details-warning1.png)
+![Check details](https://dqops.com/docs/images/examples/row-count-check-details-warning1.png){ loading=lazy; width="1200px" }
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
@@ -120,7 +123,7 @@ Set the new threshold levels:
 - error: 381
 - fatal: 150
 
-![Changing the threshold levels](https://dqops.com/docs/images/examples/row-count-changing-the-threshold-levels.png)
+![Changing the threshold levels](https://dqops.com/docs/images/examples/row-count-changing-the-threshold-levels.png){ loading=lazy; width="1200px" }
 
 ### **Run checks and view detailed results**
 
@@ -128,7 +131,7 @@ Set the new threshold levels:
 
 2. Access the results by clicking the **Results** button.
 
-    ![Check details](https://dqops.com/docs/images/examples/row-count-check-details-new-tresholds.png)
+    ![Check details](https://dqops.com/docs/images/examples/row-count-check-details-new-tresholds.png){ loading=lazy; width="1200px" }
 
     The new results will replace the previous one. 
 
@@ -157,7 +160,7 @@ This dashboard allows filtering data by:
 * stages,
 * table.
 
-![Row-count results on largest tables by number of rows dashboard](https://dqops.com/docs/images/examples/row-count-check-results-on-largest-tables-by-number-of-rows-dashboard.png)
+![Row-count results on largest tables by number of rows dashboard](https://dqops.com/docs/images/examples/row-count-check-results-on-largest-tables-by-number-of-rows-dashboard.png){ loading=lazy; width="1200px" }
 
 
 ## Change a schedule at the connection level
@@ -167,7 +170,7 @@ table, or individual check.
 
 After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
-![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png)
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the **Data Source** section.
 
@@ -183,7 +186,7 @@ After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every 
 
     By default, scheduler is active. You can turn it off by clicking on notification icon in the top right corner of the screen, and clicking the toggle button.
 
-    ![Turn off job scheduler](https://dqops.com/docs/images/examples/turning-off-scheduler.png)
+    ![Turn off job scheduler](https://dqops.com/docs/images/examples/turning-off-scheduler.png){ loading=lazy }
 
 Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
 all tables associated with that connection.

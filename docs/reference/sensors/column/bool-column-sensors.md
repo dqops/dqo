@@ -1,4 +1,7 @@
-# Data quality bool sensors
+---
+title: DQOps data quality bool sensors
+---
+# DQOps data quality bool sensors
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **bool** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
 ---

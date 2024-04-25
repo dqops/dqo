@@ -71,6 +71,9 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     @JsonPropertyDescription("The target check category, for example: *nulls*, *volume*, *anomaly*.")
     private String checkCategory;
 
+    @JsonPropertyDescription("The target data quality dimension, for example: *Completeness*, *Accuracy*, *Consistency*, *Timeliness*, *Availability*.")
+    private String qualityDimension;
+
     @JsonPropertyDescription("The name of a configured table comparison. When the table comparison is provided, DQOps will only perform table comparison checks that compare data between tables.")
     private String tableComparisonName;
 
@@ -250,6 +253,22 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      */
     public void setCheckCategory(String checkCategory) {
         this.checkCategory = checkCategory;
+    }
+
+    /**
+     * Return the data quality dimension name.
+     * @return Data quality dimension name.
+     */
+    public String getQualityDimension() {
+        return qualityDimension;
+    }
+
+    /**
+     * Sets the data quality dimension name.
+     * @param qualityDimension Data quality dimension name.
+     */
+    public void setQualityDimension(String qualityDimension) {
+        this.qualityDimension = qualityDimension;
     }
 
     /**

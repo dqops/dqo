@@ -36,20 +36,27 @@ public class ConnectionWrapperImpl extends AbstractElementWrapper<String, Connec
     @JsonIgnore
     private String name;
     @JsonIgnore
-    private TableListImpl tables = new TableListImpl();
+    protected TableListImpl tables;
 
     /**
      * Creates a new connection wrapper.
      */
     public ConnectionWrapperImpl() {
+        this.tables = new TableListImpl(false);
+    }
+
+    public ConnectionWrapperImpl(boolean readOnly) {
+        super(readOnly);
+        this.tables = new TableListImpl(readOnly);
     }
 
     /**
      * Creates a new connection wrapper given a connection name.
      * @param name Connection name.
+     * @param readOnly Make the connection read-only.
      */
-    public ConnectionWrapperImpl(String name) {
-        this();
+    public ConnectionWrapperImpl(String name, boolean readOnly) {
+        this(readOnly);
         this.name = name;
     }
 
@@ -95,7 +102,7 @@ public class ConnectionWrapperImpl extends AbstractElementWrapper<String, Connec
      * @param tables New tables collection.
      */
     public void setTables(TableListImpl tables) {
-		this.setDirtyIf(this.tables != tables); // special condition
+		this.setDirtyIf(this.tables != null && this.tables != tables); // special condition
         this.tables = tables;
 		this.propagateHierarchyIdToField(tables, "tables");
     }

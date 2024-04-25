@@ -25,6 +25,10 @@ import java.util.List;
  * Collection of shared credentials. Tracks the status of the child elements (addition, removal).
  */
 public class SharedCredentialListImpl extends AbstractIndexingList<String, SharedCredentialWrapper> implements SharedCredentialList {
+    public SharedCredentialListImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
     /**
      * Creates a new element given an object name. Derived classes should create a correct object type.
      *

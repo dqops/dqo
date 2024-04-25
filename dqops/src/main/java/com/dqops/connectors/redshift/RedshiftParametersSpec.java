@@ -57,6 +57,10 @@ public class RedshiftParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String database;
 
+    @CommandLine.Option(names = {"--redshift-authentication-mode"}, description = "The authentication mode for AWS. Supports also a ${REDSHIFT_AUTHENTICATION_MODE} configuration with a custom environment variable.")
+    @JsonPropertyDescription("The authentication mode for AWS. Supports also a ${REDSHIFT_AUTHENTICATION_MODE} configuration with a custom environment variable.")
+    private RedshiftAuthenticationMode redshiftAuthenticationMode;
+
     @CommandLine.Option(names = {"--redshift-user"}, description = "Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String user;
@@ -119,6 +123,23 @@ public class RedshiftParametersSpec extends BaseProviderParametersSpec
     public void setDatabase(String database) {
         setDirtyIf(!Objects.equals(this.database, database));
         this.database = database;
+    }
+
+    /**
+     * Returns the Redshift's authentication mode.
+     * @return Redshift's authentication mode.
+     */
+    public RedshiftAuthenticationMode getRedshiftAuthenticationMode() {
+        return redshiftAuthenticationMode;
+    }
+
+    /**
+     * Sets Redshift's authentication mode.
+     * @param redshiftAuthenticationMode Redshift's authentication mode.
+     */
+    public void setRedshiftAuthenticationMode(RedshiftAuthenticationMode redshiftAuthenticationMode) {
+        setDirtyIf(!Objects.equals(this.redshiftAuthenticationMode, redshiftAuthenticationMode));
+        this.redshiftAuthenticationMode = redshiftAuthenticationMode;
     }
 
     /**

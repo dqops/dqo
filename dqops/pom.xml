@@ -27,7 +27,7 @@
 	</parent>
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-dqops</artifactId>
-    <version>1.1.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
+    <version>1.2.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<packaging>jar</packaging>
 	<name>dqo-dqops</name>
 	<description>DQOps Data Quality Operations Center</description>
@@ -36,7 +36,7 @@
 		<tablesaw.version>0.43.1</tablesaw.version>
 		<license.licenseName>apache_v2</license.licenseName>
 		<npm.build.script>build</npm.build.script>
-		<duckdb.version>0.10.0</duckdb.version>
+		<duckdb.version>0.10.2</duckdb.version>
 	</properties>
 
 	<licenses>

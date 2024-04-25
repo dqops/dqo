@@ -36,8 +36,10 @@ public class FileConnectionListImpl extends ConnectionListImpl {
      * Creates a data source collection using a given sources folder.
      * @param sourcesFolder Sources folder node.
      * @param yamlSerializer  Yaml serializer.
+     * @param readOnly Make the list read-only.
      */
-    public FileConnectionListImpl(FolderTreeNode sourcesFolder, YamlSerializer yamlSerializer) {
+    public FileConnectionListImpl(FolderTreeNode sourcesFolder, YamlSerializer yamlSerializer, boolean readOnly) {
+        super(readOnly);
         this.sourcesFolder = sourcesFolder;
         this.yamlSerializer = yamlSerializer;
     }
@@ -60,7 +62,7 @@ public class FileConnectionListImpl extends ConnectionListImpl {
             if (this.getByObjectName(connectionName, false) != null) {
                 continue; // was already added
             }
-			this.addWithoutFullLoad(new FileConnectionWrapperImpl(sourceFolderNode, this.yamlSerializer));
+			this.addWithoutFullLoad(new FileConnectionWrapperImpl(sourceFolderNode, this.yamlSerializer, this.isReadOnly()));
         }
     }
 
@@ -73,7 +75,7 @@ public class FileConnectionListImpl extends ConnectionListImpl {
     @Override
     protected ConnectionWrapperImpl createNewElement(String objectName) {
         FolderTreeNode newSourceFolderNode = this.sourcesFolder.getOrAddFolderPath(objectName);
-        FileConnectionWrapperImpl dataSourceModelWrapper = new FileConnectionWrapperImpl(newSourceFolderNode, this.yamlSerializer);
+        FileConnectionWrapperImpl dataSourceModelWrapper = new FileConnectionWrapperImpl(newSourceFolderNode, this.yamlSerializer, this.isReadOnly());
         dataSourceModelWrapper.setName(objectName);
         dataSourceModelWrapper.setSpec(new ConnectionSpec());
         return dataSourceModelWrapper;

@@ -63,6 +63,7 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.id.HierarchyNode;
+import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.HomeType;
@@ -189,7 +190,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      */
     @Override
     public List<CheckCategoryDocumentationModel> makeDocumentationForTableChecks() {
-        UserHomeImpl userHome = new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
+        UserHomeImpl userHome = new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY, false);
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("<target_connection>");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
         TableSpec tableSpec = createTableSpec(false);
@@ -210,7 +211,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      */
     @Override
     public List<CheckCategoryDocumentationModel> makeDocumentationForColumnChecks() {
-        UserHomeImpl userHome = new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
+        UserHomeImpl userHome = new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY, false);
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("<target_connection>");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
         TableSpec tableSpec = createTableSpec(true);
@@ -252,6 +253,12 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 SimilarChecksDocumentationModel similarChecksDocumentationModel = new SimilarChecksDocumentationModel();
                 SimilarCheckModel firstCheckModel = similarChecksGroup.getSimilarChecks().get(0);
                 similarChecksDocumentationModel.setCategory(firstCheckModel.getCategory()); // the category of the first check, the other similar checks should be in the same category
+                String categoryPageName = CheckCategoryDocumentationConstants.CATEGORY_FILE_NAMES.get(firstCheckModel.getCategory());
+                if (categoryPageName == null) {
+                    categoryPageName =  "how-to-detect-" + firstCheckModel.getCategory().replace('_', '-') + "-data-quality-issues.md";
+                }
+                similarChecksDocumentationModel.setCategoryPageName(categoryPageName);
+
                 similarChecksDocumentationModel.setTarget(target.name());
                 String firstCheckName = firstCheckModel.getCheckModel().getCheckName();
                 if (firstCheckName.startsWith("profile_")) {
@@ -551,7 +558,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 int firstSectionBeginMarker = i + 1; // +1 because line in documentation is numerating from 1
                 int firstSectionEndMarker = findFirstIndex(
                         indexOfLineWithText(splitYaml, "table_comparisons:"),
-                        indexOfLineWithText(splitYaml, "_checks:"));
+                        indexOfLineWithText(splitYaml, "_checks:"),
+                        indexOfLineWithText(splitYaml, "columns:"));
 
                 checkDocumentationModel.setFirstSectionBeginMarker(firstSectionBeginMarker);
                 checkDocumentationModel.setFirstSectionEndMarker(firstSectionEndMarker);

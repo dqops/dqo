@@ -1,3 +1,6 @@
+---
+title: column level integrity data quality checks
+---
 # column level integrity data quality checks
 
 This is a list of integrity column data quality checks supported by DQOps and a brief description of what data quality issued they detect.

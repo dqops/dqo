@@ -19,6 +19,8 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.utils.serialization.YamlNotRenderWhenDefault;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -32,6 +34,8 @@ public abstract class AbstractDirtyTrackingSpecList<V extends HierarchyNode>
     private ArrayList<V> list = new ArrayList<>();
     @JsonIgnore
     private boolean dirty;
+    @JsonIgnore
+    private boolean readOnly;
     @JsonIgnore
     private HierarchyId hierarchyId;
 
@@ -56,6 +60,9 @@ public abstract class AbstractDirtyTrackingSpecList<V extends HierarchyNode>
      * Sets the dirty flag to true.
      */
     public void setDirty() {
+        if (this.readOnly) {
+            throw new ReadOnlyObjectModifiedException(this);
+        }
 		this.dirty = true;
     }
 
@@ -232,6 +239,35 @@ public abstract class AbstractDirtyTrackingSpecList<V extends HierarchyNode>
     }
 
     /**
+     * Check if the object is frozen (read only). A read-only object cannot be modified.
+     *
+     * @return True when the object is read-only and trying to apply a change will return an error.
+     */
+    @Override
+    @JsonIgnore
+    public boolean isReadOnly() {
+        return this.readOnly;
+    }
+
+    /**
+     * Sets the read-only flag on the current object, and optionally on child objects.
+     *
+     * @param propagateToChildren When true, makes also the child objects as read-only.
+     */
+    @Override
+    @JsonIgnore
+    public void makeReadOnly(boolean propagateToChildren) {
+        if (!this.readOnly) {
+            this.readOnly = true;
+            if (propagateToChildren) {
+                for (V element : this.list) {
+                    element.makeReadOnly(true);
+                }
+            }
+        }
+    }
+
+    /**
      * Performs a deep clone of the object.
      *
      * @return Deep clone of the object.
@@ -242,6 +278,7 @@ public abstract class AbstractDirtyTrackingSpecList<V extends HierarchyNode>
             AbstractDirtyTrackingSpecList<V> cloned = (AbstractDirtyTrackingSpecList<V>) super.clone();
             cloned.list = new ArrayList<>();
             cloned.dirty = false;
+            cloned.readOnly = false;
 
             if (this.list.size() == 0) {
                 return cloned;

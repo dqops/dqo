@@ -41,12 +41,16 @@ public class FileIndexWrapperImpl extends AbstractElementWrapper<FileIndexName, 
     public FileIndexWrapperImpl() {
     }
 
+    public FileIndexWrapperImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
     /**
      * Creates a new file index wrapper given an index name.
      * @param indexName File index name.
      */
-    public FileIndexWrapperImpl(FileIndexName indexName) {
-        this();
+    public FileIndexWrapperImpl(FileIndexName indexName, boolean readOnly) {
+        this(readOnly);
         this.indexName = indexName;
     }
 

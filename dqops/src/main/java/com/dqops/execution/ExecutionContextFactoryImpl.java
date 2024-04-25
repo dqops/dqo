@@ -49,7 +49,20 @@ public class ExecutionContextFactoryImpl implements ExecutionContextFactory {
      */
     @Override
     public ExecutionContext create(UserDomainIdentity userDomainIdentity) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userDomainIdentity);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userDomainIdentity, true);
+        return new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome());
+    }
+
+    /**
+     * Creates a new execution context by opening the user home context and the dqo system home context.
+     *
+     * @param userDomainIdentity Calling user identity, with the name of the data domain whose user home is opened.
+     * @param readOnly           Configures the read-only status of the user home.
+     * @return Check execution context.
+     */
+    @Override
+    public ExecutionContext create(UserDomainIdentity userDomainIdentity, boolean readOnly) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userDomainIdentity, readOnly);
         return new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome());
     }
 

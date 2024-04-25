@@ -19,6 +19,8 @@ import com.dqops.connectors.ConnectorOperationFailedException;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
+import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
+import com.dqops.connectors.storage.aws.JdbcAwsProperties;
 import com.dqops.core.jobqueue.JobCancellationListenerHandle;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
@@ -26,7 +28,9 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsConfigProfileSettingNames;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfileSettingNames;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultConfigProfileProvider;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultCredentialProfileProvider;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
@@ -143,40 +147,50 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
             );
         }
 
-        AthenaAuthenticationMode athenaAuthenticationMode = trinoSpec.getAthenaAuthenticationMode() == null ?
-                AthenaAuthenticationMode.default_credentials : trinoSpec.getAthenaAuthenticationMode() ;
-        switch(athenaAuthenticationMode){
+        AwsAuthenticationMode awsAuthenticationMode = trinoSpec.getAwsAuthenticationMode() == null ?
+                AwsAuthenticationMode.default_credentials : trinoSpec.getAwsAuthenticationMode() ;
+        switch(awsAuthenticationMode){
             case iam:
                 String user = this.getSecretValueProvider().expandValue(trinoSpec.getUser(), secretValueLookupContext);
                 if (!Strings.isNullOrEmpty(user)){
-                    dataSourceProperties.put("AccessKeyId", user);  // AccessKeyId alias for User
+                    dataSourceProperties.put(JdbcAwsProperties.ACCESS_KEY_ID, user);  // AccessKeyId alias for User
                 }
 
                 String password = this.getSecretValueProvider().expandValue(trinoSpec.getPassword(), secretValueLookupContext);
                 if (!Strings.isNullOrEmpty(password)){
-                    dataSourceProperties.put("SecretAccessKey", password);  // SecretAccessKey alias for Password
+                    dataSourceProperties.put(JdbcAwsProperties.SECRET_ACCESS_KEY, password);  // SecretAccessKey alias for Password
                 }
+
+                String region = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaRegion(), secretValueLookupContext);
+                if (!Strings.isNullOrEmpty(region)){
+                    dataSourceProperties.put(JdbcAwsProperties.REGION, region);
+                } else {
+                    Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
+                    if(configProfile.isPresent() && configProfile.get().property(AwsConfigProfileSettingNames.REGION).isPresent()){
+                        dataSourceProperties.put(JdbcAwsProperties.REGION, configProfile.get().property(AwsConfigProfileSettingNames.REGION).get());
+                    }
+                }
+
                 break;
 
             case default_credentials:
-                Optional<Profile> profile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
-                if(profile.isPresent()
-                        && profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).isPresent()
-                        && profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).isPresent()){
-                    dataSourceProperties.put("AccessKeyId", profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).get());  // AccessKeyId alias for User
-                    dataSourceProperties.put("SecretAccessKey", profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).get());  // SecretAccessKey alias for Password
+                Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
+                if(credentialProfile.isPresent()
+                        && credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).isPresent()
+                        && credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).isPresent()){
+                    dataSourceProperties.put(JdbcAwsProperties.ACCESS_KEY_ID, credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).get());  // AccessKeyId alias for User
+                    dataSourceProperties.put(JdbcAwsProperties.SECRET_ACCESS_KEY, credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).get());  // SecretAccessKey alias for Password
                 } else {
                     dataSourceProperties.put("CredentialsProvider", "DefaultChain");    // The use of the local ~/.aws/credentials file with default profile
+                }
+                Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
+                if(configProfile.isPresent() && configProfile.get().property(AwsConfigProfileSettingNames.REGION).isPresent()){
+                    dataSourceProperties.put(JdbcAwsProperties.REGION, configProfile.get().property(AwsConfigProfileSettingNames.REGION).get());
                 }
                 break;
 
             default:
-                throw new RuntimeException("Given enum is not supported : " + athenaAuthenticationMode);
-        }
-
-        String region = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaRegion(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(region)){
-            dataSourceProperties.put("Region", region);
+                throw new RuntimeException("Given enum is not supported : " + awsAuthenticationMode);
         }
 
         String catalog = this.getSecretValueProvider().expandValue(trinoSpec.getCatalog(), secretValueLookupContext);

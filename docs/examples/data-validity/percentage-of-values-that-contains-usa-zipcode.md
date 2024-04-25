@@ -1,5 +1,8 @@
-# Percentage of rows containing USA zipcodes
-This sample shows how to use data quality checks to detect the percentage of rows containing USA zipcodes and view the results on data quality dashboards.
+---
+title: How to detect invalid USA zipcodes using a data quality check
+---
+# How to detect invalid USA zipcodes using a data quality check
+This sample shows how to use data quality checks to measure the percentage of rows containing USA zipcodes and view the results on data quality dashboards.
 
 ## Overview
 
@@ -57,7 +60,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-contains-usa-zipcode-percent-checks1.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-contains-usa-zipcode-percent-checks1.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
 
@@ -80,14 +83,14 @@ Run the activated check using the **Run check** button.
 
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-![Run check](https://dqops.com/docs/images/examples/daily-contains-usa-zipcode-percent-run-checks1.png)
+![Run check](https://dqops.com/docs/images/examples/daily-contains-usa-zipcode-percent-run-checks1.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![Contains-usa-zipcode-percent check results](https://dqops.com/docs/images/examples/daily-contains-usa-zipcode-percent-checks-results1.png)
+![Contains-usa-zipcode-percent check results](https://dqops.com/docs/images/examples/daily-contains-usa-zipcode-percent-checks-results1.png){ loading=lazy; width="1200px" }
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds. The Sensor readouts category displays the values obtained by the sensors from the data source.
@@ -128,7 +131,7 @@ This dashboard allows filtering data by:
 * severity
 * table.
 
-![Contains-usa-zipcode-percent check results on PII data detected dashboard](https://dqops.com/docs/images/examples/pii-data-detected-dashboard.png)
+![Contains-usa-zipcode-percent check results on PII data detected dashboard](https://dqops.com/docs/images/examples/pii-data-detected-dashboard.png){ loading=lazy; width="1200px" }
 
 ## YAML configuration file
 

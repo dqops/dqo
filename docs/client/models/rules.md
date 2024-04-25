@@ -1,3 +1,6 @@
+---
+title: DQOps REST API rules models reference
+---
 # DQOps REST API rules models reference
 The references of all objects used by [rules](../operations/rules.md) REST API operations are listed below.
 

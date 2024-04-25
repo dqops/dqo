@@ -1,3 +1,6 @@
+---
+title: Data quality checks
+---
 # Data quality checks
 
 This is a list of data quality checks supported by DQOps, broken down by a category and a brief description of what data quality issues they detect.
@@ -614,14 +617,14 @@ Column level check that uses a custom SQL SELECT statement to retrieve a result 
 Analyzes all values in a text column to detect if all values can be safely parsed to numeric, boolean, date or timestamp data types. Used to analyze tables in the landing zone.
 
 ### [detected datatype in text](./column/datatype/detected-datatype-in-text.md)
-A column-level check that scans all values in a text column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
+A column-level check that scans all values in a text column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types.
  The check compares the data type detected in all non-null columns to an expected data type. The rule compares the value using equals and requires values in the range 1..8, which are the codes of detected data types.
 
 
 
 ### [detected datatype in text changed](./column/datatype/detected-datatype-in-text-changed.md)
 A column-level check that scans all values in a text column, finds the right data type and detects when the desired data type changes.
- The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
+ The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types.
  The check compares the data type detected during the current run to the last known data type detected during a previous run.
  For daily monitoring checks, it compares the value to yesterday&#x27;s value (or an earlier date).
  For partitioned checks, it compares the current data type to the data type in the previous daily or monthly partition. The last partition with data is used for comparison.
@@ -934,6 +937,12 @@ This check validates text values using a pattern defined as a regular expression
 ### [invalid email format found](./column/patterns/invalid-email-format-found.md)
 This check detects invalid email addresses in text columns using a regular expression.
  It counts the number of invalid emails and raises a data quality issue when the number is above a threshold.
+
+
+
+### [invalid email format percent](./column/patterns/invalid-email-format-percent.md)
+This check detects invalid email addresses in text columns using a regular expression.
+ It calculated the percentage of invalid emails and raises a data quality issue when the percentage is above a threshold.
 
 
 

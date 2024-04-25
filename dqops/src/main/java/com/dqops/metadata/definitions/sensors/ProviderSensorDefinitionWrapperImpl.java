@@ -48,11 +48,20 @@ public class ProviderSensorDefinitionWrapperImpl extends AbstractElementWrapper<
     }
 
     /**
+     * Creates a new instance of a provider specific sensor definition wrapper in possibly a read-only mode.
+     * @param readOnly Turn on read-only mode.
+     */
+    public ProviderSensorDefinitionWrapperImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
+    /**
      * Creates a provider specific sensor definition given a provider type.
      * @param provider Provider type.
+     * @param readOnly Make the wrapper read-only.
      */
-    public ProviderSensorDefinitionWrapperImpl(ProviderType provider) {
-        this();
+    public ProviderSensorDefinitionWrapperImpl(ProviderType provider, boolean readOnly) {
+        this(readOnly);
         this.provider = provider;
     }
 

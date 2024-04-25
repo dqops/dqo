@@ -1,4 +1,7 @@
-# Detecting referential integrity issues and missing keys
+---
+title: How to detect referential integrity issues and missing keys
+---
+# How to detect referential integrity issues and missing keys
 Read this guide to learn how to detect referential integrity issues, such as missing keys in dictionary tables or wrong foreign keys.
 
 The data quality checks that detect missing keys are configured in the `integrity` category in DQOps.
@@ -142,7 +145,7 @@ The checks use two parameters to identify the dictionary table and the key colum
 The [*lookup_key_not_found*](../checks/column/integrity/lookup-key-not-found.md) check also takes a **max_count** rule parameter, 
 and the [*lookup_key_found_percent*](../checks/column/integrity/lookup-key-found-percent.md) check takes a **max_percent** rule parameter.
 
-![Detecting missing keys using a lookup data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/foreign-key-lookup-check-configured-in-check-editor-min.png){ loading=lazy }
+![Detecting missing keys using a lookup data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/foreign-key-lookup-check-configured-in-check-editor-min.png){ loading=lazy; width="1200px" }
 
 Both data quality checks failed, showing that 1982 records use unknown country codes., which accounts for 0.0087% of the dataset. 
 Our target of 100% rows containing valid country codes was missed by 0.0087%.
@@ -203,8 +206,8 @@ spec:
 ## List of integrity checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*lookup_key_not_found*](../checks/column/integrity/lookup-key-not-found.md)|Integrity|This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database. This check counts the number of values not found in the dictionary table. It raises a data quality issue when too many missing keys are discovered.|:material-check-bold:|
-|[*lookup_key_found_percent*](../checks/column/integrity/lookup-key-found-percent.md)|Integrity|This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database. This check measures the percentage of valid keys found in the dictionary table. It raises a data quality issue when a percentage of valid keys is below a minimum accepted threshold.| |
+|[*lookup_key_not_found*](../checks/column/integrity/lookup-key-not-found.md)|[Integrity](../dqo-concepts/data-quality-dimensions.md#data-integrity)|This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database. This check counts the number of values not found in the dictionary table. It raises a data quality issue when too many missing keys are discovered.|:material-check-bold:|
+|[*lookup_key_found_percent*](../checks/column/integrity/lookup-key-found-percent.md)|[Integrity](../dqo-concepts/data-quality-dimensions.md#data-integrity)|This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database. This check measures the percentage of valid keys found in the dictionary table. It raises a data quality issue when a percentage of valid keys is below a minimum accepted threshold.| |
 
 
 **Reference and samples**

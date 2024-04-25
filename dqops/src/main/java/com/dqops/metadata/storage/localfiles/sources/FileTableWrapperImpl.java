@@ -21,6 +21,7 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TableWrapperImpl;
@@ -48,9 +49,14 @@ public class FileTableWrapperImpl extends TableWrapperImpl {
      * @param realBaseFileName Real base file name, it is the actual file name before the table spec file extension.
      * @param physicalTableName Physical table name.
      * @param yamlSerializer Yaml serializer.
+     * @param readOnly Make the wrapper read-only.
      */
-    public FileTableWrapperImpl(FolderTreeNode connectionFolderNode, String realBaseFileName, PhysicalTableName physicalTableName, YamlSerializer yamlSerializer) {
-        super(physicalTableName);
+    public FileTableWrapperImpl(FolderTreeNode connectionFolderNode,
+                                String realBaseFileName,
+                                PhysicalTableName physicalTableName,
+                                YamlSerializer yamlSerializer,
+                                boolean readOnly) {
+        super(physicalTableName, readOnly);
         this.connectionFolderNode = connectionFolderNode;
         this.yamlSerializer = yamlSerializer;
         this.realBaseFileName = realBaseFileName;
@@ -99,13 +105,18 @@ public class FileTableWrapperImpl extends TableWrapperImpl {
                 if (deserialized.getKind() != SpecificationKind.table) {
                     throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                 }
-                fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+                TableSpec cachedObjectInstance = deserializedSpec.deepClone();
+                cachedObjectInstance.makeReadOnly(true);
+                if (this.getHierarchyId() != null) {
+                    cachedObjectInstance.setHierarchyId(new HierarchyId(this.getHierarchyId(), "spec"));
+                }
+                fileContent.setCachedObjectInstance(cachedObjectInstance);
             } else {
-                deserializedSpec = deserializedSpec.deepClone();
+                deserializedSpec = this.isReadOnly() ? deserializedSpec : deserializedSpec.deepClone();
             }
 
 			this.setSpec(deserializedSpec);
-			this.clearDirty(true);
+			this.clearDirty(false);
             return deserializedSpec;
         }
         return spec;

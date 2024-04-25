@@ -105,7 +105,7 @@ public class DefaultTableCheckPatternsController {
     @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<DefaultTableChecksPatternListModel>> getAllDefaultTableChecksPatterns(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
         TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
         List<TableDefaultChecksPatternWrapper> patternWrappersList = defaultChecksPatternsList.toList();
@@ -144,7 +144,7 @@ public class DefaultTableCheckPatternsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
         TableDefaultChecksPatternWrapper defaultChecksPatternWrapper =
                 userHome.getTableDefaultChecksPatterns().getByObjectName(patternName, true);
@@ -185,7 +185,7 @@ public class DefaultTableCheckPatternsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
         TableDefaultChecksPatternWrapper defaultChecksPatternWrapper =
                 userHome.getTableDefaultChecksPatterns().getByObjectName(patternName, true);
@@ -235,7 +235,7 @@ public class DefaultTableCheckPatternsController {
 
         return this.lockService.callSynchronouslyOnCheckPattern(patternName,
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     UserHome userHome = userHomeContext.getUserHome();
 
                     TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
@@ -286,7 +286,7 @@ public class DefaultTableCheckPatternsController {
 
         return this.lockService.callSynchronouslyOnCheckPattern(patternName,
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     UserHome userHome = userHomeContext.getUserHome();
 
                     TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
@@ -334,7 +334,7 @@ public class DefaultTableCheckPatternsController {
 
         return this.lockService.callSynchronouslyOnCheckPattern(patternName,
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     UserHome userHome = userHomeContext.getUserHome();
 
                     TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
@@ -387,7 +387,7 @@ public class DefaultTableCheckPatternsController {
 
         return this.lockService.callSynchronouslyOnCheckPattern(patternName,
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     UserHome userHome = userHomeContext.getUserHome();
 
                     TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
@@ -433,7 +433,7 @@ public class DefaultTableCheckPatternsController {
 
         return this.lockService.callSynchronouslyOnCheckPattern(patternName,
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     UserHome userHome = userHomeContext.getUserHome();
 
                     TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
@@ -697,7 +697,7 @@ public class DefaultTableCheckPatternsController {
         return this.lockService.callSynchronouslyOnCheckPattern(patternName,
                 () -> {
                     UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
                     UserHomeContext userHomeContext = executionContext.getUserHomeContext();
                     UserHome userHome = userHomeContext.getUserHome();
 
@@ -751,7 +751,7 @@ public class DefaultTableCheckPatternsController {
         return this.lockService.callSynchronouslyOnCheckPattern(patternName,
                 () -> {
                     UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
                     UserHomeContext userHomeContext = executionContext.getUserHomeContext();
                     UserHome userHome = userHomeContext.getUserHome();
 
@@ -805,7 +805,7 @@ public class DefaultTableCheckPatternsController {
         return this.lockService.callSynchronouslyOnCheckPattern(patternName,
                 () -> {
                     UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
                     UserHomeContext userHomeContext = executionContext.getUserHomeContext();
                     UserHome userHome = userHomeContext.getUserHome();
 
@@ -859,7 +859,7 @@ public class DefaultTableCheckPatternsController {
         return this.lockService.callSynchronouslyOnCheckPattern(patternName,
                 () -> {
                     UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
                     UserHomeContext userHomeContext = executionContext.getUserHomeContext();
                     UserHome userHome = userHomeContext.getUserHome();
 
@@ -913,7 +913,7 @@ public class DefaultTableCheckPatternsController {
         return this.lockService.callSynchronouslyOnCheckPattern(patternName,
                 () -> {
                     UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
                     UserHomeContext userHomeContext = executionContext.getUserHomeContext();
                     UserHome userHome = userHomeContext.getUserHome();
 

@@ -1,4 +1,7 @@
-# Measuring data timeliness metrics
+---
+title: How to measure data timeliness, freshness and staleness metrics
+---
+# How to measure data timeliness, freshness and staleness metrics
 Read this guide to learn how to measure data timeliness metrics, such as freshness (the most recent data) or staleness (when the data was loaded).
 
 The timeliness data quality checks are configured in the `timeliness` category in DQOps.
@@ -163,7 +166,7 @@ To configure the event and/or ingestion timestamp columns:
 
 4. Click the Save button in the upper right corner.
 
-![Configure event and ingestion timestamp columns](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/event-and-ingestion-columns-configuration-for-timeliness-checks.png){ loading=lazy }
+![Configure event and ingestion timestamp columns](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/event-and-ingestion-columns-configuration-for-timeliness-checks.png){ loading=lazy; width="1200px" }
 
 
 ### Configuring timestamp columns in YAML
@@ -206,7 +209,7 @@ We advise configuring the check for warning and error severity levels.
 ### Configuring table freshness in UI
 The data timeliness checks are configured on the table level, as shown in the following screenshot.
 
-![Data freshness data quality check configured in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-freshness-data-quality-check-in-dqops-min.png){ loading=lazy }
+![Data freshness data quality check configured in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-freshness-data-quality-check-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### Configuring table freshness in YAML
 The configuration of [*data_freshness*](../checks/table/timeliness/data-freshness.md) is straightforward in YAML.
@@ -262,21 +265,21 @@ They allow to track and review all types of timeliness issues from multiple angl
 The **Table freshness - tables with most current data** dashboard shows the tables with the most recent data,
 but also shows data freshness issues for outdated tables.
 
-![Data freshness data quality dashboard in DQOps showing tables with most recent data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-freshness-dashboard-most-recent-tables-in-dqops-min.png){ loading=lazy }
+![Data freshness data quality dashboard in DQOps showing tables with most recent data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-freshness-dashboard-most-recent-tables-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### History of timeliness issues
 The **History of timeliness issues** dashboard shows an aggregated list of recent data timeliness issues.
 
-![Data quality dashboard showing a history of recent data timelines issues in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/history-of-recent-data-timeliness-issues-dashboard-in-dqops-min.png){ loading=lazy }
+![Data quality dashboard showing a history of recent data timelines issues in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/history-of-recent-data-timeliness-issues-dashboard-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 
 ## List of timeliness checks at a table level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*data_freshness*](../checks/table/timeliness/data-freshness.md)|Timeliness|A table-level check that calculates the time difference between the most recent row in the table and the current time. The timestamp column that is used for comparison is defined as the timestamp_columns.event_timestamp_column on the table configuration. This check is also known as &quot;Data Freshness&quot;.|:material-check-bold:|
-|[*data_staleness*](../checks/table/timeliness/data-staleness.md)|Timeliness|A table-level check that calculates the time difference between the last timestamp when any data was loaded into a table and the current time. This check can only be use when a data pipeline, ETL process, or trigger in the data warehouse is filling an extra column with the timestamp when the data loading job was loaded. The ingestion column used for comparison is defined as the timestamp_columns.ingestion_timestamp_column on the table configuration. This check is also known as &quot;Data Staleness&quot;.| |
-|[*data_ingestion_delay*](../checks/table/timeliness/data-ingestion-delay.md)|Timeliness|A table-level check that calculates the time difference between the most recent row in the table and the most recent timestamp when the last row was loaded into the data warehouse or data lake. To identify the most recent row, the check finds the maximum value of the timestamp column that should contain the last modification timestamp from the source. The timestamp when the row was loaded is identified by the most recent (maximum) value a timestamp column that was filled by the data pipeline, for example: &quot;loaded_at&quot;, &quot;updated_at&quot;, etc. This check requires that the data pipeline is filling an extra column with the timestamp when the data loading job has been executed. The names of both columns used for comparison should be specified in the &quot;timestamp_columns&quot; configuration entry on the table.| |
-|[*reload_lag*](../checks/table/timeliness/reload-lag.md)|Timeliness|A table-level check that calculates the maximum difference in days between ingestion timestamp and event timestamp values on any row. This check should be executed only as a partitioned check because this check finds the longest delay between the time that the row was created in the data source and the timestamp when the row was loaded into its daily or monthly partition. This check detects that a daily or monthly partition was reloaded, setting also the most recent timestamps in the created_at, loaded_at, inserted_at or other similar columns filled by the data pipeline or an ETL process during data loading.|:material-check-bold:|
+|[*data_freshness*](../checks/table/timeliness/data-freshness.md)|[Timeliness](../dqo-concepts/data-quality-dimensions.md#data-timeliness)|A table-level check that calculates the time difference between the most recent row in the table and the current time. The timestamp column that is used for comparison is defined as the timestamp_columns.event_timestamp_column on the table configuration. This check is also known as &quot;Data Freshness&quot;.|:material-check-bold:|
+|[*data_staleness*](../checks/table/timeliness/data-staleness.md)|[Timeliness](../dqo-concepts/data-quality-dimensions.md#data-timeliness)|A table-level check that calculates the time difference between the last timestamp when any data was loaded into a table and the current time. This check can only be use when a data pipeline, ETL process, or trigger in the data warehouse is filling an extra column with the timestamp when the data loading job was loaded. The ingestion column used for comparison is defined as the timestamp_columns.ingestion_timestamp_column on the table configuration. This check is also known as &quot;Data Staleness&quot;.| |
+|[*data_ingestion_delay*](../checks/table/timeliness/data-ingestion-delay.md)|[Timeliness](../dqo-concepts/data-quality-dimensions.md#data-timeliness)|A table-level check that calculates the time difference between the most recent row in the table and the most recent timestamp when the last row was loaded into the data warehouse or data lake. To identify the most recent row, the check finds the maximum value of the timestamp column that should contain the last modification timestamp from the source. The timestamp when the row was loaded is identified by the most recent (maximum) value a timestamp column that was filled by the data pipeline, for example: &quot;loaded_at&quot;, &quot;updated_at&quot;, etc. This check requires that the data pipeline is filling an extra column with the timestamp when the data loading job has been executed. The names of both columns used for comparison should be specified in the &quot;timestamp_columns&quot; configuration entry on the table.| |
+|[*reload_lag*](../checks/table/timeliness/reload-lag.md)|[Timeliness](../dqo-concepts/data-quality-dimensions.md#data-timeliness)|A table-level check that calculates the maximum difference in days between ingestion timestamp and event timestamp values on any row. This check should be executed only as a partitioned check because this check finds the longest delay between the time that the row was created in the data source and the timestamp when the row was loaded into its daily or monthly partition. This check detects that a daily or monthly partition was reloaded, setting also the most recent timestamps in the created_at, loaded_at, inserted_at or other similar columns filled by the data pipeline or an ETL process during data loading.|:material-check-bold:|
 
 
 **Reference and samples**

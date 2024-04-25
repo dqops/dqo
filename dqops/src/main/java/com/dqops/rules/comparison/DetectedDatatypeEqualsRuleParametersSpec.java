@@ -15,7 +15,6 @@
  */
 package com.dqops.rules.comparison;
 
-import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
@@ -29,7 +28,7 @@ import java.util.Objects;
 
 /**
  * Data quality rule that verifies that a data quality check readout of a string_datatype_detect (the data type detection) matches an expected data type.
- * The supported values are in the range 1..8, which are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
+ * The supported values are in the range 1..8, which are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -40,7 +39,7 @@ public class DetectedDatatypeEqualsRuleParametersSpec extends AbstractRuleParame
         }
     };
 
-    @JsonPropertyDescription("Expected data type code, the values for the sensor's actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - texts, 8 - mixed data types.")
+    @JsonPropertyDescription("Expected data type code, the values for the sensor's actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - texts, 8 - mixed data types.")
     private DetectedDatatypeCategory expectedDatatype;
 
     /**

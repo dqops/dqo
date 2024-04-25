@@ -1,3 +1,6 @@
+---
+title: contains ip4 percent data quality checks
+---
 # contains ip4 percent data quality checks
 
 This check detects IP4 addresses inside text columns. It measures the percentage of columns containing an IP4 address and raises a data quality issue when too many rows contain IP4 addresses.
@@ -17,7 +20,7 @@ Detects IP4 addresses in text columns. Verifies that the percentage of rows that
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_contains_ip4_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*contains_ip4_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip4-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`profile_contains_ip4_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_ip4_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip4-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -728,7 +731,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 27-32"
+    ```yaml hl_lines="5-13 27-32"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1394,7 +1397,7 @@ Detects IP4 addresses in text columns. Verifies that the percentage of rows that
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_contains_ip4_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*contains_ip4_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip4-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`daily_contains_ip4_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_ip4_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip4-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -2106,7 +2109,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 28-33"
+    ```yaml hl_lines="5-13 28-33"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2773,7 +2776,7 @@ Detects IP4 addresses in text columns. Verifies that the percentage of rows that
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_contains_ip4_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*contains_ip4_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip4-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`monthly_contains_ip4_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_ip4_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip4-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -3485,7 +3488,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 28-33"
+    ```yaml hl_lines="5-13 28-33"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -4152,7 +4155,7 @@ Detects IP4 addresses in text columns. Verifies that the percentage of rows that
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_contains_ip4_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*contains_ip4_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip4-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`daily_partition_contains_ip4_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_ip4_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip4-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -4878,7 +4881,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 38-43"
+    ```yaml hl_lines="10-4 38-43"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -5553,7 +5556,7 @@ Detects IP4 addresses in text columns. Verifies that the percentage of rows that
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_contains_ip4_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*contains_ip4_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip4-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`monthly_partition_contains_ip4_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_ip4_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip4-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -6279,7 +6282,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 38-43"
+    ```yaml hl_lines="10-4 38-43"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table

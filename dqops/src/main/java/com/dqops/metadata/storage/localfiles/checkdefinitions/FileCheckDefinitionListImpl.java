@@ -38,8 +38,10 @@ public class FileCheckDefinitionListImpl extends CheckDefinitionListImpl {
      * Creates a rule definition collection using a given checks folder.
      * @param checksFolder    Checks folder node.
      * @param yamlSerializer  Yaml serializer.
+     * @param readOnly        Make the list read-only.
      */
-    public FileCheckDefinitionListImpl(FolderTreeNode checksFolder, YamlSerializer yamlSerializer) {
+    public FileCheckDefinitionListImpl(FolderTreeNode checksFolder, YamlSerializer yamlSerializer, boolean readOnly) {
+        super(readOnly);
         this.checksFolder = checksFolder;
         this.yamlSerializer = yamlSerializer;
     }
@@ -58,10 +60,10 @@ public class FileCheckDefinitionListImpl extends CheckDefinitionListImpl {
     @Override
     protected void load() {
         // first: find the folders with .dqocheck.yaml check spec files (when a rule has a configuration file)
-        for(FolderTreeNode ruleSpecFolderNode : this.checksFolder.findNestedSubFoldersWithFiles(SpecFileNames.CUSTOM_CHECK_SPEC_FILE_EXT_YAML, true)) {
+        for (FolderTreeNode ruleSpecFolderNode : this.checksFolder.findNestedSubFoldersWithFiles(SpecFileNames.CUSTOM_CHECK_SPEC_FILE_EXT_YAML, true)) {
             String checksFolderName = ruleSpecFolderNode.getFolderPath().extractSubFolderAt(1).getFullObjectName();  // getting the name after skipping the "checks" folder
 
-            for(FileTreeNode specFileNode : ruleSpecFolderNode.getFiles()) {
+            for (FileTreeNode specFileNode : ruleSpecFolderNode.getFiles()) {
                 String specFileName = specFileNode.getFilePath().getFileName();
                 if (!specFileName.endsWith(SpecFileNames.CUSTOM_CHECK_SPEC_FILE_EXT_YAML)) {
                     // not a spec file, skipping
@@ -75,7 +77,7 @@ public class FileCheckDefinitionListImpl extends CheckDefinitionListImpl {
                 if (this.getByObjectName(checkName, false) != null) {
                     continue; // was already added
                 }
-				this.addWithoutFullLoad(new FileCheckDefinitionWrapperImpl(ruleSpecFolderNode, checkName, checkModuleName, this.yamlSerializer));
+				this.addWithoutFullLoad(new FileCheckDefinitionWrapperImpl(ruleSpecFolderNode, checkName, checkModuleName, this.yamlSerializer, this.isReadOnly()));
             }
         }
     }
@@ -97,7 +99,7 @@ public class FileCheckDefinitionListImpl extends CheckDefinitionListImpl {
         }
         FolderTreeNode ruleParentFolderNode = this.checksFolder.getOrAddFolderPath(checkFolderPath);
         FileCheckDefinitionWrapperImpl checkModelWrapper =
-                new FileCheckDefinitionWrapperImpl(ruleParentFolderNode, checkName, checkModuleName, this.yamlSerializer);
+                new FileCheckDefinitionWrapperImpl(ruleParentFolderNode, checkName, checkModuleName, this.yamlSerializer, this.isReadOnly());
         checkModelWrapper.setSpec(new CheckDefinitionSpec());
         return checkModelWrapper;
     }

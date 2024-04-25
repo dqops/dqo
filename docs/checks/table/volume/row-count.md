@@ -1,3 +1,6 @@
+---
+title: row count data quality checks
+---
 # row count data quality checks
 
 This check detects empty or too-small tables. It captures the row count of a tested table.
@@ -20,7 +23,7 @@ Verifies that the tested table has at least a minimum accepted number of rows. T
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_row_count`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_row_count`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -871,7 +874,7 @@ Verifies that the tested table has at least a minimum accepted number of rows. T
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_row_count`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_row_count`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1724,7 +1727,7 @@ Verifies that the tested table has at least a minimum accepted number of rows. T
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_row_count`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_row_count`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2577,7 +2580,7 @@ Verifies that each daily partition in the tested table has at least a minimum ac
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_row_count`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_row_count`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3040,7 +3043,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-18 31-36"
+    ```yaml hl_lines="10-4 31-36"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3452,7 +3455,7 @@ Verifies that each monthly partition in the tested table has at least a minimum 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_row_count`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_row_count`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3915,7 +3918,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-18 31-36"
+    ```yaml hl_lines="10-4 31-36"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table

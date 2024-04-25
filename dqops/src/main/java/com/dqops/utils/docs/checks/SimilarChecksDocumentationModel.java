@@ -41,6 +41,11 @@ public class SimilarChecksDocumentationModel {
     private String category;
 
     /**
+     * The name of the markdown file with the documentation of the category.
+     */
+    private String categoryPageName;
+
+    /**
      * Similar check root name (e.g. daily_partition_row_count -> row_count).
      */
     private String primaryCheckName;

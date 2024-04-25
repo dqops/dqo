@@ -1,4 +1,7 @@
-# Data quality text sensors
+---
+title: DQOps data quality text sensors
+---
+# DQOps data quality text sensors
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **text** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
 ---

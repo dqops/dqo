@@ -1,3 +1,6 @@
+---
+title: Data profiling checks
+---
 # Data profiling checks
 Read this guide to understand the purpose of data profiling checks in DQOps, and how they are used to evaluate the initial data quality status of tables.
 
@@ -29,7 +32,7 @@ The following screen shows the profiling results for a [profile_row_count](../..
 data quality check that detects empty tables. By setting the `min_count` rule parameter to **1**, DQOps will raise an **error** [severity](index.md#issue-severity-levels)
 data quality issue for empty tables. The data quality issue is stored in the [check_results](../../reference/parquetfiles/check_results.md) Parquet table.
 
-![data profiling screen in DQOps](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/table-profiling-checks-results-min.png)
+![data profiling screen in DQOps](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/table-profiling-checks-results-min.png){ loading=lazy; width="1200px" }
 
 The screenshot above shows the most recent data profiling results captured at *2024-01-20 16:18:49*.
 The dates in the *Executed At* column show the dates when the *profiling* checks were executed according to a [CRON schedule](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md),
@@ -42,7 +45,7 @@ The [data quality dashboard](../types-of-data-quality-dashboards.md) showing the
 The *Profiling KPIs scorecard - summary* dashboard shows the initial [data quality KPI score](../definition-of-data-quality-kpis.md),
 which is calculated as a percentage of passed data profiling checks for the current month.
 
-![data profiling initial data quality score dashboard](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/data-profiling-data-quality-kpi-scorecard-min.png)
+![data profiling initial data quality score dashboard](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/data-profiling-data-quality-kpi-scorecard-min.png){ loading=lazy; width="1200px" }
 
 ## Profiling checks pros and cons
 
@@ -68,7 +71,7 @@ Data profiling checks store only one result per month, which limit their usage o
   the DQOps [check editor](../dqops-user-interface-overview.md#check-editor) presents anomaly detection checks that cannot be run,
   because there is not enough historical data to be used for prediction.
 
-![data anomaly detection by data profiling checks](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/data-profiling-checks-not-supported-anomaly-in-editor-min.png)
+![data anomaly detection by data profiling checks](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/data-profiling-checks-not-supported-anomaly-in-editor-min.png){ loading=lazy; width="1200px" }
 
 ## Profiling check configuration in DQOps YAML files
 The configuration of active data quality profiling checks is stored in the [.dqotable.yaml](../configuring-table-metadata.md#table-yaml-file-structure)

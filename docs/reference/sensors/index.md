@@ -1,3 +1,6 @@
+---
+title: Sensors
+---
 # Sensors
 
 **This is a list of sensors in DQOps broken down by category and a brief description of what they do.**
@@ -219,7 +222,7 @@
 
 | Sensor name | Description |
 |-------------|-------------|
-|[*string_datatype_detect*](./column/datatype-column-sensors.md#string-datatype-detect)|Column level sensor that analyzes all values in a text column and detects the data type of the values. The sensor returns a value that identifies the detected data type of column: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.|
+|[*string_datatype_detect*](./column/datatype-column-sensors.md#string-datatype-detect)|Column level sensor that analyzes all values in a text column and detects the data type of the values. The sensor returns a value that identifies the detected data type of column: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types.|
 
 
 
@@ -291,6 +294,7 @@
 | Sensor name | Description |
 |-------------|-------------|
 |[*invalid_email_format_count*](./column/patterns-column-sensors.md#invalid-email-format-count)|Column level sensor that calculates the number of rows with an invalid emails value in a column.|
+|[*invalid_email_format_percent*](./column/patterns-column-sensors.md#invalid-email-format-percent)|Column level sensor that calculates the number of rows with an invalid emails value in a column.|
 |[*invalid_ip4_address_format_count*](./column/patterns-column-sensors.md#invalid-ip4-address-format-count)|Column level sensor that calculates the number of rows with an invalid IP4 address value in a column.|
 |[*invalid_ip6_address_format_count*](./column/patterns-column-sensors.md#invalid-ip6-address-format-count)|Column level sensor that calculates the number of rows with an invalid IP6 address value in a column.|
 |[*invalid_uuid_format_count*](./column/patterns-column-sensors.md#invalid-uuid-format-count)|Column level sensor that calculates the number of rows with an invalid uuid value in a column.|

@@ -147,7 +147,7 @@ This diagram shows the check execution process for running just one data quality
 after reaching an execution error. The *$D.U.H* shortcut on the diagram is the path to the *DQOps user home* folder.
 Click the image to zoom it out.
 
-![DQOps data quality checks and incidents workflow](https://dqops.com/docs/images/architecture/DQOps-data-quality-incident-flow-diagram-min.png)
+![DQOps data quality checks and incidents workflow](https://dqops.com/docs/images/architecture/DQOps-data-quality-incident-flow-diagram-min.png){ loading=lazy; width="1200px" }
 
 The steps are described below.
 
@@ -242,7 +242,7 @@ The following diagram shows DQOps internal components that are used during the d
 DQOps core engine is a Java Spring Boot application. Please notice how the DQOps core engine communicates
 with spawned Python processes that run the Jinja2 templating engine, and the Python data quality rules.
 
-![DQOps engine components](https://dqops.com/docs/images/architecture/DQOps-engine-components-min.png)
+![DQOps engine components](https://dqops.com/docs/images/architecture/DQOps-engine-components-min.png){ loading=lazy; width="1200px" }
 
 The following list describes the role of each internal component.
 

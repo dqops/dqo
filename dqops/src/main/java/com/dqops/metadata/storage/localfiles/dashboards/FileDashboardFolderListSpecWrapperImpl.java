@@ -22,6 +22,7 @@ import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
 import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.serialization.YamlSerializer;
@@ -41,8 +42,10 @@ public class FileDashboardFolderListSpecWrapperImpl extends DashboardFolderListS
      * Creates a settings wrapper for a dashboards specification that uses yaml files for storage.
      * @param dashboardsFolderNode Folder with yaml files for dashboards specifications.
      * @param yamlSerializer Yaml serializer.
+     * @param readOnly Make the list read-only.
      */
-    public FileDashboardFolderListSpecWrapperImpl(FolderTreeNode dashboardsFolderNode, YamlSerializer yamlSerializer) {
+    public FileDashboardFolderListSpecWrapperImpl(FolderTreeNode dashboardsFolderNode, YamlSerializer yamlSerializer, boolean readOnly) {
+        super(readOnly);
         this.dashboardsFolderNode = dashboardsFolderNode;
         this.yamlSerializer = yamlSerializer;
     }
@@ -73,12 +76,17 @@ public class FileDashboardFolderListSpecWrapperImpl extends DashboardFolderListS
                     if (deserialized.getKind() != SpecificationKind.dashboards) {
                         throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
-                    fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+
+                    DashboardsFolderListSpec cachedObjectInstance = deserializedSpec.deepClone();
+                    cachedObjectInstance.makeReadOnly(true);
+                    if (this.getHierarchyId() != null) {
+                        cachedObjectInstance.setHierarchyId(new HierarchyId(this.getHierarchyId(), "spec"));
+                    }
+                    fileContent.setCachedObjectInstance(cachedObjectInstance);
                 } else {
-                    deserializedSpec = deserializedSpec.deepClone();
+                    deserializedSpec = this.isReadOnly() ? deserializedSpec : deserializedSpec.deepClone();
                 }
                 this.setSpec(deserializedSpec);
-                deserializedSpec.clearDirty(true);
                 this.clearDirty(false);
                 return deserializedSpec;
             } else {

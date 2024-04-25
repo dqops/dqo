@@ -1,3 +1,6 @@
+---
+title: data freshness data quality checks
+---
 # data freshness data quality checks
 
 A table-level check that calculates the time difference between the most recent row in the table and the current time.
@@ -19,7 +22,7 @@ Calculates the number of days since the most recent event timestamp (freshness)
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_data_freshness`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_data_freshness`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Timeliness](../../../dqo-concepts/data-quality-dimensions.md#data-timeliness)|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -847,7 +850,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="8-16 33-38"
+    ```yaml hl_lines="8-4 33-38"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1630,7 +1633,7 @@ Daily  calculating the number of days since the most recent event timestamp (fre
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_data_freshness`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_data_freshness`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Timeliness](../../../dqo-concepts/data-quality-dimensions.md#data-timeliness)|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2459,7 +2462,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="8-16 34-39"
+    ```yaml hl_lines="8-4 34-39"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3243,7 +3246,7 @@ Monthly monitoring calculating the number of days since the most recent event ti
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_data_freshness`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_data_freshness`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Timeliness](../../../dqo-concepts/data-quality-dimensions.md#data-timeliness)|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -4072,7 +4075,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="8-16 34-39"
+    ```yaml hl_lines="8-4 34-39"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table

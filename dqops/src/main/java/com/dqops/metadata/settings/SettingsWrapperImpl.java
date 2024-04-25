@@ -19,6 +19,7 @@ import com.dqops.metadata.basespecs.AbstractElementWrapper;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Settings spec wrapper.
@@ -30,7 +31,12 @@ public class SettingsWrapperImpl extends AbstractElementWrapper<String, LocalSet
 	/**
 	 * Creates a new settings wrapper.
 	 */
+	@Autowired
 	public SettingsWrapperImpl() {
+	}
+
+	public SettingsWrapperImpl(boolean readOnly) {
+		super(readOnly);
 	}
 
 	/**

@@ -21,21 +21,21 @@ To import source schemas and tables:
 2. Select the connection from the tree view on the left
 3. Click on the **Import metadata** button on the right. 
 
-    ![Importing metadata](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-metadata.png)
+    ![Importing metadata](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-metadata.png){ loading=lazy; width="1200px" }
 
 4. Select the source schema name you want to import by clicking on the **Import tables** button.
 
-    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-schemas.png)
+    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-schemas.png){ loading=lazy; width="1200px" }
 
 5. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-tables.png)
+    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/importing-tables.png){ loading=lazy; width="1200px" }
 
 When new tables are imported, DQOps automatically activates profiling and monitoring checks, and opens an Advisor 
 that allows you to quickly collect basic statistics, run profiling checks, or modify the schedule for newly imported tables.
 But let's close the Advisor with the X button in the top right corner and verify the activation of the default checks.
 
-![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/advisor.png)
+![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/advisor.png){ loading=lazy; width="1200px" }
 
 ## Verify activation of the default checks 
 
@@ -44,11 +44,11 @@ the tree view on the left and the **Daily checks** tab. The main workspace on th
 The toggle button next to the name of the activated default checks will have a light green color. If the check has
 been activated manually, the toggle button will have a darker green color.
 
-![Default table checks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/default-table-checks3.png)
+![Default table checks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/default-table-checks3.png){ loading=lazy; width="1200px" }
 
 Similarly, you can view the column checks. Just select the column of interest from the tree view on the left. 
 
-![Default table checks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/default-column-checks2.png)
+![Default table checks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/default-column-checks2.png){ loading=lazy; width="1200px" }
 
 ## Verify schedule configuration
 
@@ -58,14 +58,14 @@ table, or individual check. When you import a new table, DQOPs automatically set
 To verify and modify the current schedule, go to **Data Source** section, select the data source of interest from the tree view on the left,
 and click on the **Schedule** tab on the main workspace. You can modify the schedule for each type of checks separately
 
-![Default schedule](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/default-schedule2.png)
+![Default schedule](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/default-schedule2.png){ loading=lazy; width="1200px" }
 
 ## Run default checks
 
 To run checks, navigate to the check editor: go to the **Profiling** or **Monitoring Checks** section, select a table or column from the
 tree view on the left, click on the Profiling checks or Daily Checks.
 
-![Navigating to the check editor](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/navigate-to-the-check-editor2.png)
+![Navigating to the check editor](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/navigate-to-the-check-editor2.png){ loading=lazy; width="1200px" }
 
 The table with data quality checks contains a list of checks divided into different data quality subcategories that you
 can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../dqo-concepts/definition-of-data-quality-checks/index.md)
@@ -90,17 +90,17 @@ On the left of the name of each check, there are several buttons and icons that 
 
 To run the check, just click on the **Run check** button.
 
-![Run the profiling check](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-profiling-check2.png)
+![Run the profiling check](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-profiling-check2.png){ loading=lazy; width="1200px" }
 
 You can also run all checks activated on connection or table. Click on the three dot icon next to the name of connection
 or table and click on the **Run checks** option.
 
-![Run all checks activated on connection](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-all-checks-activated-on-connection2.png)
+![Run all checks activated on connection](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-all-checks-activated-on-connection2.png){ loading=lazy; width="1200px" }
 
 
 A dialog box will appear where you can modify different options or simply click the **Run checks** button. 
 
-![Run all checks dialog box](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-all-checks-dialog-box.png)
+![Run all checks dialog box](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-all-checks-dialog-box.png){ loading=lazy; width="1000px" }
 
 
 
@@ -108,7 +108,7 @@ A dialog box will appear where you can modify different options or simply click 
 
 To access the results click on the **Results** button.
 
-![Review check results](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/review-check-results2.png)
+![Review check results](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/review-check-results2.png){ loading=lazy; width="1200px" }
 
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
@@ -126,12 +126,12 @@ To review the if incidents go to the **Incidents** section. On the left side of 
 the connections and the number of incidents that have occurred for each one. On the right panel, you can view incidents 
 for the connections you have selected, and you can filter, sort, and view detailed information about the incidents.
 
-![Navigating to the Incidents section](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/navigating-to-incidents-section.png)
+![Navigating to the Incidents section](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/navigating-to-incidents-section.png){ loading=lazy; width="1200px" }
 
 We can see that we have one incident with 10 data quality issues. To review more details click on the link in the
 **Data quality issue grouping** column.
 
-![Incidents details](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/incidents-details.png)
+![Incidents details](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/incidents-details.png){ loading=lazy; width="1200px" }
 
 Read the full [description of the Incidents section here](managing-data-quality-incidents-with-dqops.md).
 
@@ -150,7 +150,7 @@ To configure Webhooks, follow these steps:
 3. Select the **Incidents And Notifications** tab.
 4. Enter the Webhooks URL in the specified input fields and save your changes using the **Save** button.
 
-![Configuring webhooks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/configuring-webhooks.png)
+![Configuring webhooks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/configuring-webhooks.png){ loading=lazy; width="1200px" }
 
 Follow the link for [more information about Webhooks](../integrations/webhooks/index.md). 
 
@@ -197,7 +197,7 @@ These dashboards allow filtering data by:
 
 **Current table status** dashboard is a representative of this group.
 
-![Current table status ](https://dqops.com/docs/images/concepts/data-quality-dashboards/current-table-status2.png)
+![Current table status ](https://dqops.com/docs/images/concepts/data-quality-dashboards/current-table-status2.png){ loading=lazy; width="1200px" }
 
 
 ### **Data quality KPIs**
@@ -228,7 +228,7 @@ This dashboard allows filtering data by:
 * table,
 * day of the month.
 
-![KPIs per table and day](https://dqops.com/docs/images/concepts/data-quality-dashboards/kpis-per-table-and-day.png)
+![KPIs per table and day](https://dqops.com/docs/images/concepts/data-quality-dashboards/kpis-per-table-and-day.png){ loading=lazy; width="1200px" }
 
 ### **Data quality issues count**
 
@@ -253,7 +253,7 @@ This dashboard allows filtering data by:
 * table,
 * day of the month.
 
-![Data quality failed checks per table and day](https://dqops.com/docs/images/concepts/data-quality-dashboards/data-quality-failed-checks-per-table-and-day.png)
+![Data quality failed checks per table and day](https://dqops.com/docs/images/concepts/data-quality-dashboards/data-quality-failed-checks-per-table-and-day.png){ loading=lazy; width="1200px" }
 
 
 ## What's next

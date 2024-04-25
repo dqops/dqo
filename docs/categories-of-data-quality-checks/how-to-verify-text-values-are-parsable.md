@@ -1,4 +1,7 @@
-# Testing if a text value is convertible to a target type
+---
+title: How to test if a text value is convertible to a target data type
+---
+# How to test if a text value is convertible to a target data type
 Read this guide to learn if values in text columns can be safely parsed and converted to boolean, integer, numeric, and date types.
 
 The data type conversion checks are configured in the `conversions` category in DQOps.
@@ -68,7 +71,7 @@ The following example shows how to validate identifier values in a raw table sto
 The identifier column is *product_id*, which should contain only integer values. 
 The data profiling screen reveals that the column contains a non-numeric value "3Product".
 
-![Text column with integers and one invalid text that cannot be converted to a number](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/integer-with-invalid-values-column-profile-min.png){ loading=lazy }
+![Text column with integers and one invalid text that cannot be converted to a number](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/integer-with-invalid-values-column-profile-min.png){ loading=lazy; width="1200px" }
 
 ### Testing valid integers in UI
 The [*text_parsable_to_integer_percent*](../checks/column/conversions/text-parsable-to-integer-percent.md) check
@@ -77,7 +80,7 @@ It measures the percentage of valid values.
 The data quality check is configured by setting the **min_percent** parameter, 
 which is the minimum percentage of convertible values.
 
-![Data conversion data quality check to parse text values as integer values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-value-convertible-to-integer-data-quality-check-min.png){ loading=lazy }
+![Data conversion data quality check to parse text values as integer values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-value-convertible-to-integer-data-quality-check-min.png){ loading=lazy; width="1200px" }
 
 ### Testing valid integers in YAML
 The [*text_parsable_to_integer_percent*](../checks/column/conversions/text-parsable-to-integer-percent.md) data quality check is easy to configure.
@@ -103,10 +106,10 @@ spec:
 ## List of conversions checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*text_parsable_to_boolean_percent*](../checks/column/conversions/text-parsable-to-boolean-percent.md)|Validity|Verifies that values in a text column are convertible to a boolean value. Texts are convertible to a boolean value when they are one of the well-known boolean placeholders: &#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;. This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.|:material-check-bold:|
-|[*text_parsable_to_integer_percent*](../checks/column/conversions/text-parsable-to-integer-percent.md)|Validity|Verifies that values in a text column can be parsed and converted to an integer type. This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.|:material-check-bold:|
-|[*text_parsable_to_float_percent*](../checks/column/conversions/text-parsable-to-float-percent.md)|Validity|Verifies that values in a text column can be parsed and converted to a float (or numeric) type. This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.|:material-check-bold:|
-|[*text_parsable_to_date_percent*](../checks/column/conversions/text-parsable-to-date-percent.md)|Validity|Verifies that values in a text column can be parsed and converted to a date type. This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.|:material-check-bold:|
+|[*text_parsable_to_boolean_percent*](../checks/column/conversions/text-parsable-to-boolean-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|Verifies that values in a text column are convertible to a boolean value. Texts are convertible to a boolean value when they are one of the well-known boolean placeholders: &#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;. This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.|:material-check-bold:|
+|[*text_parsable_to_integer_percent*](../checks/column/conversions/text-parsable-to-integer-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|Verifies that values in a text column can be parsed and converted to an integer type. This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.|:material-check-bold:|
+|[*text_parsable_to_float_percent*](../checks/column/conversions/text-parsable-to-float-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|Verifies that values in a text column can be parsed and converted to a float (or numeric) type. This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.|:material-check-bold:|
+|[*text_parsable_to_date_percent*](../checks/column/conversions/text-parsable-to-date-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|Verifies that values in a text column can be parsed and converted to a date type. This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.|:material-check-bold:|
 
 
 **Reference and samples**

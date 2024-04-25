@@ -1,3 +1,6 @@
+---
+title: table availability data quality checks
+---
 # table availability data quality checks
 
 A table-level check that ensures a query can be successfully executed on a table without server errors. It also verifies that the table exists and is accessible (queryable).
@@ -19,7 +22,7 @@ Verifies availability of a table in a monitored database using a simple query.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_table_availability`</span>|[availability](../../../categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Availability|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_table_availability`</span>|[availability](../../../categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Availability](../../../dqo-concepts/data-quality-dimensions.md#data-availability)|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -283,6 +286,53 @@ spec:
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
                     FROM `<target_table>` AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+    ??? example "Oracle"
+
+        === "Sensor template for Oracle"
+
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                   WHEN COUNT(*) > 0 THEN COUNT(*)
+                   ELSE 1.0
+                END AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+        === "Rendered SQL for Oracle"
+
+            ```sql
+            SELECT
+                CASE
+                   WHEN COUNT(*) > 0 THEN COUNT(*)
+                   ELSE 1.0
+                END AS actual_value,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM
+                (
+                    SELECT
+                        *,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -577,7 +627,7 @@ Verifies availability of a table in a monitored database using a simple query. S
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_table_availability`</span>|[availability](../../../categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Availability|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_table_availability`</span>|[availability](../../../categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Availability](../../../dqo-concepts/data-quality-dimensions.md#data-availability)|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -842,6 +892,53 @@ spec:
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
                     FROM `<target_table>` AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+    ??? example "Oracle"
+
+        === "Sensor template for Oracle"
+
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                   WHEN COUNT(*) > 0 THEN COUNT(*)
+                   ELSE 1.0
+                END AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+        === "Rendered SQL for Oracle"
+
+            ```sql
+            SELECT
+                CASE
+                   WHEN COUNT(*) > 0 THEN COUNT(*)
+                   ELSE 1.0
+                END AS actual_value,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM
+                (
+                    SELECT
+                        *,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -1136,7 +1233,7 @@ Verifies availability of a table in a monitored database using a simple query. S
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_table_availability`</span>|[availability](../../../categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Availability|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_table_availability`</span>|[availability](../../../categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Availability](../../../dqo-concepts/data-quality-dimensions.md#data-availability)|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1401,6 +1498,53 @@ spec:
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
                     FROM `<target_table>` AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+    ??? example "Oracle"
+
+        === "Sensor template for Oracle"
+
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                   WHEN COUNT(*) > 0 THEN COUNT(*)
+                   ELSE 1.0
+                END AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+        === "Rendered SQL for Oracle"
+
+            ```sql
+            SELECT
+                CASE
+                   WHEN COUNT(*) > 0 THEN COUNT(*)
+                   ELSE 1.0
+                END AS actual_value,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM
+                (
+                    SELECT
+                        *,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan

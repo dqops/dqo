@@ -1,4 +1,7 @@
-# Detect data quality issues with data grouping
+---
+title: How to detect data quality issues with data grouping
+---
+# How to detect data quality issues with data grouping
 This guide shows how DQOps uses a *GROUP BY* clause in SQL queries to analyze the quality of data from multiple sources aggregated into a single table.
 
 ## Overview
@@ -409,7 +412,7 @@ data quality issues for different data groups.
 
 Below is an example of **Current table status** dashboard showing grouping by different product categories. 
 
-![Data grouping on current table status dashboard.png](https://dqops.com/docs/images/concepts/data-grouping-on-current-table-status-dashboard.png)
+![Data grouping on current table status dashboard.png](https://dqops.com/docs/images/concepts/data-grouping-on-current-table-status-dashboard.png){ loading=lazy; width="1200px" }
 
 
 ## What's next

@@ -17,9 +17,6 @@ package com.dqops.data.checkresults.factory;
 
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
-
 /**
  * The data quality check results table that stores the data quality check results - a copy of sensor readouts (copied from the sensor_readouts table) and evaluated by the data quality rules.
  * This table differs from the *sensor_readouts* by adding also the result of the rule evaluation. The additional columns are the 'severity' which says if the check passed (the severity is 0)
@@ -103,6 +100,7 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
 
     /**
      * List of column names that should be loaded from the parquet files when the recent result overview is needed.
+     * We only want to read the statuses.
      */
     public static final String[] COLUMN_NAMES_FOR_RESULTS_OVERVIEW = new String[] {
             COLUMN_NAME_COLUMN_NAME,
@@ -123,9 +121,10 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
     };
 
     /**
-     * List of column names that should be loaded from the parquet files when the recent result detailed view is needed.
+     * List of column names that should be loaded from the parquet files when we are not planning to make any updates.
+     * We only want to read the statuses.
      */
-    public static final String[] COLUMN_NAMES_FOR_RESULTS_DETAILED = new String[] {
+    public static final String[] CHECK_RESULTS_COLUMN_NAMES_FOR_READ_ONLY_ACCESS = new String[] {
             ID_COLUMN_NAME,
 
             ACTUAL_VALUE_COLUMN_NAME,
@@ -158,16 +157,9 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
             INCLUDE_IN_SLA_COLUMN_NAME,
             PROVIDER_COLUMN_NAME,
             QUALITY_DIMENSION_COLUMN_NAME,
-            SENSOR_NAME_COLUMN_NAME
-    };
+            SENSOR_NAME_COLUMN_NAME,
+            TIME_SERIES_ID_COLUMN_NAME,
 
-    /**
-     * List of column names that should be loaded from the parquet files when the list of failed check results related to an incident are needed.
-     */
-    public static final String[] COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS =
-            Stream.concat(
-                Arrays.stream(COLUMN_NAMES_FOR_RESULTS_DETAILED),
-                Arrays.stream(new String[] {
-                    INCIDENT_HASH_COLUMN_NAME,
-                })).toArray(String[]::new);
+            INCIDENT_HASH_COLUMN_NAME
+    };
 }

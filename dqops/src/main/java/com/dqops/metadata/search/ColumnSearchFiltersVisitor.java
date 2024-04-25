@@ -27,6 +27,7 @@ import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionList;
 import com.dqops.metadata.dictionaries.DictionaryListImpl;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.sources.*;
@@ -275,12 +276,22 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
         String columnNameFilter = this.filters.getColumnName();
         if (Strings.isNullOrEmpty(columnNameFilter)) {
             parameter.getNodes().add(columnSpec);
+
+            if (this.filters.getMaxResults() != null && parameter.getNodes().size() >= this.filters.getMaxResults()) {
+                return TreeNodeTraversalResult.STOP_TRAVERSAL;
+            }
+
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
         String columnName = columnSpec.getHierarchyId().getLast().toString();
         if (StringPatternComparer.matchSearchPattern(columnName, columnNameFilter)) {
             parameter.getNodes().add(columnSpec);
+
+            if (this.filters.getMaxResults() != null && parameter.getNodes().size() >= this.filters.getMaxResults()) {
+                return TreeNodeTraversalResult.STOP_TRAVERSAL;
+            }
+
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 

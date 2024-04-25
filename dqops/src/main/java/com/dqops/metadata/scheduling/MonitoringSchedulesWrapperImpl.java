@@ -14,6 +14,13 @@ public class MonitoringSchedulesWrapperImpl extends AbstractElementWrapper<Strin
     @JsonIgnore
     private final static String NAME = "default_schedules";
 
+    public MonitoringSchedulesWrapperImpl() {
+    }
+
+    public MonitoringSchedulesWrapperImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
     /**
      * Returns an object name that is used for indexing. The object name must correctly implement equals and hashCode.
      * @return Object name;

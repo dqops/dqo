@@ -1,4 +1,7 @@
-# Monitoring table availability issues
+---
+title: How to monitor table availability
+---
+# How to monitor table availability
 Read this guide to learn how to enable table availability monitoring. DQOps will detect when the table is not available for use.
 
 The table availability monitoring checks are configured in the `availability` category in DQOps.
@@ -72,13 +75,13 @@ spec:
 ### User interface
 The table availability monitoring can be also enabled in the [check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
-![Table availability detection configuration in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-availability-check-detection-editor-min.png){ loading=lazy }
+![Table availability detection configuration in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-availability-check-detection-editor-min.png){ loading=lazy; width="1200px" }
 
 ## Monitoring table availability on dashboards
 DQOps provides dedicated data quality dashboards for monitoring table availability issues.
 The dashboard shows a calendar for each day of month, when the table availability issue was detected.
 
-![Table availability tracking dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-availability-issues-dashboard-min.png){ loading=lazy }
+![Table availability tracking dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-availability-issues-dashboard-min.png){ loading=lazy; width="1200px" }
 
 ## Use cases
 | **Name of the example**                                                                               | **Description**                                                                                                                                                                                            |
@@ -88,7 +91,7 @@ The dashboard shows a calendar for each day of month, when the table availabilit
 ## List of availability checks at a table level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*table_availability*](../checks/table/availability/table-availability.md)|Availability|A table-level check that ensures a query can be successfully executed on a table without server errors. It also verifies that the table exists and is accessible (queryable). The actual value (the result of the check) indicates the number of failures. If the table is accessible and a simple query can be executed without errors, the result will be 0.0. A sensor result (the actual value) of 1.0 indicates that there is a failure. Any value greater than 1.0 is stored only in the check result table and represents the number of consecutive failures in the following days.|:material-check-bold:|
+|[*table_availability*](../checks/table/availability/table-availability.md)|[Availability](../dqo-concepts/data-quality-dimensions.md#data-availability)|A table-level check that ensures a query can be successfully executed on a table without server errors. It also verifies that the table exists and is accessible (queryable). The actual value (the result of the check) indicates the number of failures. If the table is accessible and a simple query can be executed without errors, the result will be 0.0. A sensor result (the actual value) of 1.0 indicates that there is a failure. Any value greater than 1.0 is stored only in the check result table and represents the number of consecutive failures in the following days.|:material-check-bold:|
 
 
 **Reference and samples**

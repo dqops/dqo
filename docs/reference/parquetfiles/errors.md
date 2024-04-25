@@ -1,3 +1,6 @@
+---
+title: DQOps errors parquet table schema
+---
 # DQOps errors parquet table schema
 The parquet file schema for the errors table stored in the *[$DQO_USER_HOME](../../dqo-concepts/dqops-user-home-folder.md)/.data/errors* folder in DQOps.
 

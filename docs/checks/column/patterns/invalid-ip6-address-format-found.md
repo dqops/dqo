@@ -1,3 +1,6 @@
+---
+title: invalid ip6 address format found data quality checks
+---
 # invalid ip6 address format found data quality checks
 
 This check detects invalid IP6 internet addresses in text columns using a regular expression.
@@ -18,7 +21,7 @@ Verifies that the number of invalid IP6 addresses in a text column does not exce
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_invalid_ip6_address_format_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`profile_invalid_ip6_address_format_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -630,7 +633,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 27-32"
+    ```yaml hl_lines="5-13 27-32"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1197,7 +1200,7 @@ Verifies that the number of invalid IP6 addresses in a text column does not exce
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_invalid_ip6_address_format_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`daily_invalid_ip6_address_format_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -1810,7 +1813,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 28-33"
+    ```yaml hl_lines="5-13 28-33"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2378,7 +2381,7 @@ Verifies that the number of invalid IP6 addresses in a text column does not exce
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_invalid_ip6_address_format_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`monthly_invalid_ip6_address_format_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -2991,7 +2994,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 28-33"
+    ```yaml hl_lines="5-13 28-33"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3559,7 +3562,7 @@ Verifies that the number of invalid IP6 addresses in a text column does not exce
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_invalid_ip6_address_format_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`daily_partition_invalid_ip6_address_format_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -4186,7 +4189,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 38-43"
+    ```yaml hl_lines="10-4 38-43"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -4762,7 +4765,7 @@ Verifies that the number of invalid IP6 addresses in a text column does not exce
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_invalid_ip6_address_format_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`monthly_partition_invalid_ip6_address_format_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -5389,7 +5392,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 38-43"
+    ```yaml hl_lines="10-4 38-43"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table

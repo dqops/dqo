@@ -1,3 +1,6 @@
+---
+title: DQOps REST API check_results operations
+---
 # DQOps REST API check_results operations
 Returns all the data quality check results of executed checks on tables and columns.
 
@@ -6163,7 +6166,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		      "last_executed_at" : "2007-10-14T14:13:42Z",
 		      "check_type" : "profiling",
 		      "category" : "sample_category",
-		      "quality_dimension" : "sample_quality_dimension"
+		      "quality_dimension" : "sample_quality_dimension",
+		      "executed_checks" : 0,
+		      "valid_results" : 0,
+		      "warnings" : 1,
+		      "errors" : 1,
+		      "fatals" : 0,
+		      "execution_errors" : 0
 		    },
 		    "table_sample_check_2" : {
 		      "current_severity" : "valid",
@@ -6171,7 +6180,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		      "last_executed_at" : "2007-10-14T14:39:42Z",
 		      "check_type" : "profiling",
 		      "category" : "sample_category",
-		      "quality_dimension" : "sample_quality_dimension"
+		      "quality_dimension" : "sample_quality_dimension",
+		      "executed_checks" : 0,
+		      "valid_results" : 0,
+		      "warnings" : 1,
+		      "errors" : 1,
+		      "fatals" : 0,
+		      "execution_errors" : 0
 		    }
 		  },
 		  "columns" : {
@@ -6192,7 +6207,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		          "last_executed_at" : "2007-10-14T14:13:42Z",
 		          "check_type" : "profiling",
 		          "category" : "sample_category",
-		          "quality_dimension" : "sample_quality_dimension"
+		          "quality_dimension" : "sample_quality_dimension",
+		          "executed_checks" : 0,
+		          "valid_results" : 0,
+		          "warnings" : 1,
+		          "errors" : 1,
+		          "fatals" : 0,
+		          "execution_errors" : 0
 		        },
 		        "sample_check_2" : {
 		          "current_severity" : "valid",
@@ -6200,7 +6221,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		          "last_executed_at" : "2007-10-14T14:45:42Z",
 		          "check_type" : "profiling",
 		          "category" : "sample_category",
-		          "quality_dimension" : "sample_quality_dimension"
+		          "quality_dimension" : "sample_quality_dimension",
+		          "executed_checks" : 0,
+		          "valid_results" : 0,
+		          "warnings" : 1,
+		          "errors" : 1,
+		          "fatals" : 0,
+		          "execution_errors" : 0
 		        },
 		        "sample_check_3" : {
 		          "current_severity" : "warning",
@@ -6208,9 +6235,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		          "last_executed_at" : "2007-10-14T16:42:42Z",
 		          "check_type" : "profiling",
 		          "category" : "sample_category",
-		          "quality_dimension" : "sample_quality_dimension"
+		          "quality_dimension" : "sample_quality_dimension",
+		          "executed_checks" : 0,
+		          "valid_results" : 0,
+		          "warnings" : 1,
+		          "errors" : 1,
+		          "fatals" : 0,
+		          "execution_errors" : 0
 		        }
-		      }
+		      },
+		      "dimensions" : { }
 		    },
 		    "sample_column_2" : {
 		      "current_severity" : "warning",
@@ -6229,7 +6263,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		          "last_executed_at" : "2007-10-14T14:13:42Z",
 		          "check_type" : "profiling",
 		          "category" : "sample_category",
-		          "quality_dimension" : "sample_quality_dimension"
+		          "quality_dimension" : "sample_quality_dimension",
+		          "executed_checks" : 0,
+		          "valid_results" : 0,
+		          "warnings" : 1,
+		          "errors" : 1,
+		          "fatals" : 0,
+		          "execution_errors" : 0
 		        },
 		        "sample_check_2" : {
 		          "current_severity" : "valid",
@@ -6237,7 +6277,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		          "last_executed_at" : "2007-10-14T14:45:42Z",
 		          "check_type" : "profiling",
 		          "category" : "sample_category",
-		          "quality_dimension" : "sample_quality_dimension"
+		          "quality_dimension" : "sample_quality_dimension",
+		          "executed_checks" : 0,
+		          "valid_results" : 0,
+		          "warnings" : 1,
+		          "errors" : 1,
+		          "fatals" : 0,
+		          "execution_errors" : 0
 		        },
 		        "sample_check_3" : {
 		          "current_severity" : "warning",
@@ -6245,11 +6291,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		          "last_executed_at" : "2007-10-14T16:42:42Z",
 		          "check_type" : "profiling",
 		          "category" : "sample_category",
-		          "quality_dimension" : "sample_quality_dimension"
+		          "quality_dimension" : "sample_quality_dimension",
+		          "executed_checks" : 0,
+		          "valid_results" : 0,
+		          "warnings" : 1,
+		          "errors" : 1,
+		          "fatals" : 0,
+		          "execution_errors" : 0
 		        }
-		      }
+		      },
+		      "dimensions" : { }
 		    }
-		  }
+		  },
+		  "dimensions" : { }
 		}
         ```
     
@@ -6303,7 +6357,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					last_executed_at='2007-10-14T14:13:42Z',
 					check_type=CheckType.PROFILING,
 					category='sample_category',
-					quality_dimension='sample_quality_dimension'
+					quality_dimension='sample_quality_dimension',
+					executed_checks=0,
+					valid_results=0,
+					warnings=1,
+					errors=1,
+					fatals=0,
+					execution_errors=0
 				),
 				'table_sample_check_2': CheckCurrentDataQualityStatusModel(
 					current_severity=CheckResultStatus.VALID,
@@ -6311,7 +6371,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					last_executed_at='2007-10-14T14:39:42Z',
 					check_type=CheckType.PROFILING,
 					category='sample_category',
-					quality_dimension='sample_quality_dimension'
+					quality_dimension='sample_quality_dimension',
+					executed_checks=0,
+					valid_results=0,
+					warnings=1,
+					errors=1,
+					fatals=0,
+					execution_errors=0
 				)
 			},
 			columns={
@@ -6332,7 +6398,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T14:13:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						),
 						'sample_check_2': CheckCurrentDataQualityStatusModel(
 							current_severity=CheckResultStatus.VALID,
@@ -6340,7 +6412,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T14:45:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						),
 						'sample_check_3': CheckCurrentDataQualityStatusModel(
 							current_severity=CheckResultStatus.WARNING,
@@ -6348,8 +6426,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T16:42:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						)
+					},
+					dimensions={
+					
 					}
 				),
 				'sample_column_2': ColumnCurrentDataQualityStatusModel(
@@ -6369,7 +6456,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T14:13:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						),
 						'sample_check_2': CheckCurrentDataQualityStatusModel(
 							current_severity=CheckResultStatus.VALID,
@@ -6377,7 +6470,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T14:45:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						),
 						'sample_check_3': CheckCurrentDataQualityStatusModel(
 							current_severity=CheckResultStatus.WARNING,
@@ -6385,10 +6484,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T16:42:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						)
+					},
+					dimensions={
+					
 					}
 				)
+			},
+			dimensions={
+			
 			}
 		)
         ```
@@ -6444,7 +6555,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					last_executed_at='2007-10-14T14:13:42Z',
 					check_type=CheckType.PROFILING,
 					category='sample_category',
-					quality_dimension='sample_quality_dimension'
+					quality_dimension='sample_quality_dimension',
+					executed_checks=0,
+					valid_results=0,
+					warnings=1,
+					errors=1,
+					fatals=0,
+					execution_errors=0
 				),
 				'table_sample_check_2': CheckCurrentDataQualityStatusModel(
 					current_severity=CheckResultStatus.VALID,
@@ -6452,7 +6569,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					last_executed_at='2007-10-14T14:39:42Z',
 					check_type=CheckType.PROFILING,
 					category='sample_category',
-					quality_dimension='sample_quality_dimension'
+					quality_dimension='sample_quality_dimension',
+					executed_checks=0,
+					valid_results=0,
+					warnings=1,
+					errors=1,
+					fatals=0,
+					execution_errors=0
 				)
 			},
 			columns={
@@ -6473,7 +6596,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T14:13:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						),
 						'sample_check_2': CheckCurrentDataQualityStatusModel(
 							current_severity=CheckResultStatus.VALID,
@@ -6481,7 +6610,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T14:45:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						),
 						'sample_check_3': CheckCurrentDataQualityStatusModel(
 							current_severity=CheckResultStatus.WARNING,
@@ -6489,8 +6624,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T16:42:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						)
+					},
+					dimensions={
+					
 					}
 				),
 				'sample_column_2': ColumnCurrentDataQualityStatusModel(
@@ -6510,7 +6654,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T14:13:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						),
 						'sample_check_2': CheckCurrentDataQualityStatusModel(
 							current_severity=CheckResultStatus.VALID,
@@ -6518,7 +6668,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T14:45:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						),
 						'sample_check_3': CheckCurrentDataQualityStatusModel(
 							current_severity=CheckResultStatus.WARNING,
@@ -6526,10 +6682,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T16:42:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						)
+					},
+					dimensions={
+					
 					}
 				)
+			},
+			dimensions={
+			
 			}
 		)
         ```
@@ -6588,7 +6756,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					last_executed_at='2007-10-14T14:13:42Z',
 					check_type=CheckType.PROFILING,
 					category='sample_category',
-					quality_dimension='sample_quality_dimension'
+					quality_dimension='sample_quality_dimension',
+					executed_checks=0,
+					valid_results=0,
+					warnings=1,
+					errors=1,
+					fatals=0,
+					execution_errors=0
 				),
 				'table_sample_check_2': CheckCurrentDataQualityStatusModel(
 					current_severity=CheckResultStatus.VALID,
@@ -6596,7 +6770,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					last_executed_at='2007-10-14T14:39:42Z',
 					check_type=CheckType.PROFILING,
 					category='sample_category',
-					quality_dimension='sample_quality_dimension'
+					quality_dimension='sample_quality_dimension',
+					executed_checks=0,
+					valid_results=0,
+					warnings=1,
+					errors=1,
+					fatals=0,
+					execution_errors=0
 				)
 			},
 			columns={
@@ -6617,7 +6797,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T14:13:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						),
 						'sample_check_2': CheckCurrentDataQualityStatusModel(
 							current_severity=CheckResultStatus.VALID,
@@ -6625,7 +6811,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T14:45:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						),
 						'sample_check_3': CheckCurrentDataQualityStatusModel(
 							current_severity=CheckResultStatus.WARNING,
@@ -6633,8 +6825,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T16:42:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						)
+					},
+					dimensions={
+					
 					}
 				),
 				'sample_column_2': ColumnCurrentDataQualityStatusModel(
@@ -6654,7 +6855,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T14:13:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						),
 						'sample_check_2': CheckCurrentDataQualityStatusModel(
 							current_severity=CheckResultStatus.VALID,
@@ -6662,7 +6869,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T14:45:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						),
 						'sample_check_3': CheckCurrentDataQualityStatusModel(
 							current_severity=CheckResultStatus.WARNING,
@@ -6670,10 +6883,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T16:42:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						)
+					},
+					dimensions={
+					
 					}
 				)
+			},
+			dimensions={
+			
 			}
 		)
         ```
@@ -6732,7 +6957,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					last_executed_at='2007-10-14T14:13:42Z',
 					check_type=CheckType.PROFILING,
 					category='sample_category',
-					quality_dimension='sample_quality_dimension'
+					quality_dimension='sample_quality_dimension',
+					executed_checks=0,
+					valid_results=0,
+					warnings=1,
+					errors=1,
+					fatals=0,
+					execution_errors=0
 				),
 				'table_sample_check_2': CheckCurrentDataQualityStatusModel(
 					current_severity=CheckResultStatus.VALID,
@@ -6740,7 +6971,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					last_executed_at='2007-10-14T14:39:42Z',
 					check_type=CheckType.PROFILING,
 					category='sample_category',
-					quality_dimension='sample_quality_dimension'
+					quality_dimension='sample_quality_dimension',
+					executed_checks=0,
+					valid_results=0,
+					warnings=1,
+					errors=1,
+					fatals=0,
+					execution_errors=0
 				)
 			},
 			columns={
@@ -6761,7 +6998,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T14:13:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						),
 						'sample_check_2': CheckCurrentDataQualityStatusModel(
 							current_severity=CheckResultStatus.VALID,
@@ -6769,7 +7012,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T14:45:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						),
 						'sample_check_3': CheckCurrentDataQualityStatusModel(
 							current_severity=CheckResultStatus.WARNING,
@@ -6777,8 +7026,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T16:42:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						)
+					},
+					dimensions={
+					
 					}
 				),
 				'sample_column_2': ColumnCurrentDataQualityStatusModel(
@@ -6798,7 +7056,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T14:13:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						),
 						'sample_check_2': CheckCurrentDataQualityStatusModel(
 							current_severity=CheckResultStatus.VALID,
@@ -6806,7 +7070,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T14:45:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						),
 						'sample_check_3': CheckCurrentDataQualityStatusModel(
 							current_severity=CheckResultStatus.WARNING,
@@ -6814,10 +7084,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							last_executed_at='2007-10-14T16:42:42Z',
 							check_type=CheckType.PROFILING,
 							category='sample_category',
-							quality_dimension='sample_quality_dimension'
+							quality_dimension='sample_quality_dimension',
+							executed_checks=0,
+							valid_results=0,
+							warnings=1,
+							errors=1,
+							fatals=0,
+							execution_errors=0
 						)
+					},
+					dimensions={
+					
 					}
 				)
+			},
+			dimensions={
+			
 			}
 		)
         ```

@@ -1,4 +1,7 @@
-# Configuring data sources
+---
+title: How to register data sources in DQOps for data observability
+---
+# How to register data sources in DQOps for data observability
 Read this guide to understand how DQOps stores the connection parameters to monitored data sources, and how to manage credentials.
 
 ## Overview
@@ -206,7 +209,7 @@ by users holding an [Admin](../working-with-dqo/access-management.md#roles) or
 [Editor](../working-with-dqo/access-management.md#roles) role. Access management is enabled only in the
 [*TEAM* and *ENTERPRISE* editions of DQOps](https://dqops.com/pricing/).
 
-![Shared credentials configuration](https://dqops.com/docs/images/concepts/configuring-data-sources/shared-credentials-configuration.png)
+![Shared credentials configuration](https://dqops.com/docs/images/concepts/configuring-data-sources/shared-credentials-configuration.png){ loading=lazy; width="1200px" }
 
 
 ## Additional connection configuration

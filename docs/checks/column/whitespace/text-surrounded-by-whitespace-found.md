@@ -1,3 +1,6 @@
+---
+title: text surrounded by whitespace found data quality checks
+---
 # text surrounded by whitespace found data quality checks
 
 This check detects text values that contain additional whitespace characters before or after the text.
@@ -20,7 +23,7 @@ Detects text values that are surrounded by whitespace characters on any side. Th
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_text_surrounded_by_whitespace_found`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/whitespace-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`profile_text_surrounded_by_whitespace_found`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/whitespace-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -808,7 +811,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 27-32"
+    ```yaml hl_lines="5-13 27-32"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1551,7 +1554,7 @@ Detects text values that are surrounded by whitespace characters on any side. Th
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_text_surrounded_by_whitespace_found`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/whitespace-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`daily_text_surrounded_by_whitespace_found`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/whitespace-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -2340,7 +2343,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 28-33"
+    ```yaml hl_lines="5-13 28-33"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3084,7 +3087,7 @@ Detects text values that are surrounded by whitespace characters on any side. Th
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_text_surrounded_by_whitespace_found`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/whitespace-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`monthly_text_surrounded_by_whitespace_found`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/whitespace-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -3873,7 +3876,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 28-33"
+    ```yaml hl_lines="5-13 28-33"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -4617,7 +4620,7 @@ Detects text values that are surrounded by whitespace characters on any side. Th
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_text_surrounded_by_whitespace_found`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/whitespace-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`daily_partition_text_surrounded_by_whitespace_found`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/whitespace-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -5420,7 +5423,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 38-43"
+    ```yaml hl_lines="10-4 38-43"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -6172,7 +6175,7 @@ Detects text values that are surrounded by whitespace characters on any side. Th
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_text_surrounded_by_whitespace_found`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Consistency|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/whitespace-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`monthly_partition_text_surrounded_by_whitespace_found`</span>|[whitespace](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/whitespace-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -6975,7 +6978,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 38-43"
+    ```yaml hl_lines="10-4 38-43"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table

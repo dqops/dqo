@@ -163,7 +163,7 @@ public class CloudLoginServiceImpl implements CloudLoginService {
      */
     public void saveApiKeyInUserSettings(String apiKey) {
         DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), false);
         UserHome userHome = userHomeContext.getUserHome();
         LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
         if (localSettingsSpec == null) {
@@ -202,7 +202,7 @@ public class CloudLoginServiceImpl implements CloudLoginService {
      */
     public void saveDisableCloudSync(boolean disableCloudSync) {
         DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), false);
         UserHome userHome = userHomeContext.getUserHome();
         LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
         if (localSettingsSpec == null) {

@@ -38,8 +38,10 @@ public class FileFileIndexListImpl extends FileIndexListImpl {
      * Creates a file index collection using a given parent connection folder.
      * @param indicesFolder Parent file connection folder node.
      * @param jsonSerializer Json serializer.
+     * @param readOnly Make the list read-only.
      */
-    public FileFileIndexListImpl(FolderTreeNode indicesFolder, JsonSerializer jsonSerializer) {
+    public FileFileIndexListImpl(FolderTreeNode indicesFolder, JsonSerializer jsonSerializer, boolean readOnly) {
+        super(readOnly);
         this.indicesFolder = indicesFolder;
         this.jsonSerializer = jsonSerializer;
     }
@@ -56,7 +58,7 @@ public class FileFileIndexListImpl extends FileIndexListImpl {
             String baseFileName = truncateFileExtension(fileTreeNode.getFilePath().getFileName());
             FileIndexName fileIndexName = FileIndexName.fromBaseFileName(baseFileName);
             if (fileIndexName != null) {
-                this.addWithoutFullLoad(new FileFileIndexWrapperImpl(this.indicesFolder, fileIndexName, this.jsonSerializer));
+                this.addWithoutFullLoad(new FileFileIndexWrapperImpl(this.indicesFolder, fileIndexName, this.jsonSerializer, this.isReadOnly()));
             }
         }
     }
@@ -80,7 +82,7 @@ public class FileFileIndexListImpl extends FileIndexListImpl {
     @Override
     protected FileIndexWrapperImpl createNewElement(FileIndexName indexName) {
         FileFileIndexWrapperImpl fileIndexWrapper = new FileFileIndexWrapperImpl(this.indicesFolder,
-               indexName, this.jsonSerializer);
+               indexName, this.jsonSerializer, this.isReadOnly());
         fileIndexWrapper.setSpec(new FileIndexSpec());
         return fileIndexWrapper;
     }

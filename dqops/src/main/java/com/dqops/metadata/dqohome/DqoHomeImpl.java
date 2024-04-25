@@ -22,6 +22,8 @@ import com.dqops.metadata.definitions.rules.RuleDefinitionListImpl;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionListImpl;
 import com.dqops.metadata.id.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Root dqo.io home model for reading and managing the definitions in the application's home (DQO_HOME).
@@ -45,15 +47,18 @@ public class DqoHomeImpl implements DqoHome, Cloneable {
     private DashboardFolderListSpecWrapperImpl dashboards;
     @JsonIgnore
     private boolean dirty;
-
+    @JsonIgnore
+    private boolean readOnly;
     /**
      * Creates a default dqo home implementation.
+     * @param readOnly Open the object in read-only mode.
      */
-    public DqoHomeImpl() {
-		this.setSensors(new SensorDefinitionListImpl());
-		this.setRules(new RuleDefinitionListImpl());
-        this.setChecks(new CheckDefinitionListImpl());
-        this.setDashboards(new DashboardFolderListSpecWrapperImpl());
+    public DqoHomeImpl(boolean readOnly) {
+		this.setSensors(new SensorDefinitionListImpl(readOnly));
+		this.setRules(new RuleDefinitionListImpl(readOnly));
+        this.setChecks(new CheckDefinitionListImpl(readOnly));
+        this.setDashboards(new DashboardFolderListSpecWrapperImpl(readOnly));
+        this.readOnly = readOnly;
     }
 
     /**
@@ -62,15 +67,20 @@ public class DqoHomeImpl implements DqoHome, Cloneable {
      * @param rules Collection of custom rule definitions.
      * @param checks Collection of check definitions.
      * @param dashboards Collection of dashboard definitions.
+     * @param readOnly Make the home read-only.
      */
     public DqoHomeImpl(SensorDefinitionListImpl sensors,
                        RuleDefinitionListImpl rules,
                        CheckDefinitionListImpl checks,
-                       DashboardFolderListSpecWrapperImpl dashboards) {
+                       DashboardFolderListSpecWrapperImpl dashboards,
+                       boolean readOnly) {
 		this.setSensors(sensors);
 		this.setRules(rules);
         this.setChecks(checks);
         this.setDashboards(dashboards);
+        if (readOnly) {
+            makeReadOnly(true);
+        }
     }
 
     /**
@@ -296,11 +306,41 @@ public class DqoHomeImpl implements DqoHome, Cloneable {
                 cloned.dashboards = (DashboardFolderListSpecWrapperImpl) cloned.dashboards.deepClone();
             }
             cloned.dirty = false;
+            cloned.readOnly = false;
 
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
             throw new UnsupportedOperationException("Cannot clone object", ex);
+        }
+    }
+
+    /**
+     * Check if the object is frozen (read only). A read-only object cannot be modified.
+     *
+     * @return True when the object is read-only and trying to apply a change will return an error.
+     */
+    @Override
+    @JsonIgnore
+    public boolean isReadOnly() {
+        return this.readOnly;
+    }
+
+    /**
+     * Sets the read-only flag on the current object, and optionally on child objects.
+     *
+     * @param propagateToChildren When true, makes also the child objects as read-only.
+     */
+    @Override
+    @JsonIgnore
+    public void makeReadOnly(boolean propagateToChildren) {
+        if (!this.readOnly) {
+            this.readOnly = true;
+            if (propagateToChildren) {
+                for (HierarchyNode element : this.children()) {
+                    element.makeReadOnly(true);
+                }
+            }
         }
     }
 }

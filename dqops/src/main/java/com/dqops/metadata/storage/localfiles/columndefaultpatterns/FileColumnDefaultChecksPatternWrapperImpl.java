@@ -21,9 +21,11 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
+import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
 import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternWrapperImpl;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.serialization.YamlSerializer;
@@ -48,9 +50,14 @@ public class FileColumnDefaultChecksPatternWrapperImpl extends ColumnDefaultChec
      * @param patternName Full pattern name as used to store in the database.
      * @param patternFileNameBaseName Pattern file module name. This is the default checks specification file name inside the defaults folder without the .dqocolumnpattern.yaml extension.
      * @param yamlSerializer Yaml serializer.
+     * @param readOnly Make the wrapper read-only.
      */
-    public FileColumnDefaultChecksPatternWrapperImpl(FolderTreeNode defaultsFolderNode, String patternName, String patternFileNameBaseName, YamlSerializer yamlSerializer) {
-        super(patternName);
+    public FileColumnDefaultChecksPatternWrapperImpl(FolderTreeNode defaultsFolderNode,
+                                                     String patternName,
+                                                     String patternFileNameBaseName,
+                                                     YamlSerializer yamlSerializer,
+                                                     boolean readOnly) {
+        super(patternName, readOnly);
         this.defaultsFolderNode = defaultsFolderNode;
         this.patternFileNameBaseName = patternFileNameBaseName;
         this.yamlSerializer = yamlSerializer;
@@ -102,12 +109,17 @@ public class FileColumnDefaultChecksPatternWrapperImpl extends ColumnDefaultChec
                         throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
 
-                    fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+                    AbstractSpec cachedObjectInstance = deserializedSpec.deepClone();
+                    cachedObjectInstance.makeReadOnly(true);
+                    if (this.getHierarchyId() != null) {
+                        cachedObjectInstance.setHierarchyId(new HierarchyId(this.getHierarchyId(), "spec"));
+                    }
+                    fileContent.setCachedObjectInstance(cachedObjectInstance);
                 } else {
-                    deserializedSpec = (ColumnDefaultChecksPatternSpec) deserializedSpec.deepClone();
+                    deserializedSpec = this.isReadOnly() ? deserializedSpec : (ColumnDefaultChecksPatternSpec) deserializedSpec.deepClone();
                 }
 				this.setSpec(deserializedSpec);
-				this.clearDirty(true);
+				this.clearDirty(false);
                 return deserializedSpec;
             }
             else {

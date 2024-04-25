@@ -1,3 +1,6 @@
+---
+title: DQOps check_results parquet table schema
+---
 # DQOps check_results parquet table schema
 The parquet file schema for the check_results table stored in the *[$DQO_USER_HOME](../../dqo-concepts/dqops-user-home-folder.md)/.data/check_results* folder in DQOps.
 

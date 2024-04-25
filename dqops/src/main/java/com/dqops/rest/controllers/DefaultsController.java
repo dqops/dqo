@@ -145,7 +145,7 @@ public class DefaultsController {
             @RequestBody Optional<MonitoringScheduleSpec> newMonitoringScheduleSpec,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
         UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
         UserHome userHome = userHomeContext.getUserHome();
@@ -231,7 +231,7 @@ public class DefaultsController {
             @ApiParam("Spec with default notification webhooks changes to be applied to the default configuration")
             @RequestBody Optional<IncidentWebhookNotificationsSpec> newIncidentWebhookNotificationsSpec) {
         UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
         UserHome userHome = userHomeContext.getUserHome();

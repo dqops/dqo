@@ -30,7 +30,7 @@ public class ConnectionListImplTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-		this.sut = new ConnectionListImpl();
+		this.sut = new ConnectionListImpl(false);
     }
 
     @Test

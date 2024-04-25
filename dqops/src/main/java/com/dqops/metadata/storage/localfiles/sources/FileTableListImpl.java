@@ -38,8 +38,10 @@ public class FileTableListImpl extends TableListImpl {
      * Creates a table collection using a given parent connection folder.
      * @param connectionFolder Parent connection folder node.
      * @param yamlSerializer  Yaml serializer.
+     * @param readOnly        Create the list in read-only mode.
      */
-    public FileTableListImpl(FolderTreeNode connectionFolder, YamlSerializer yamlSerializer) {
+    public FileTableListImpl(FolderTreeNode connectionFolder, YamlSerializer yamlSerializer, boolean readOnly) {
+        super(readOnly);
         this.connectionFolder = connectionFolder;
         this.yamlSerializer = yamlSerializer;
     }
@@ -55,7 +57,7 @@ public class FileTableListImpl extends TableListImpl {
             }
             String baseFileName = truncateFileExtension(fileTreeNode.getFilePath().getFileName());
             PhysicalTableName physicalTableName = PhysicalTableName.fromBaseFileName(baseFileName);
-			this.addWithoutFullLoad(new FileTableWrapperImpl(this.connectionFolder, baseFileName, physicalTableName, this.yamlSerializer));
+			this.addWithoutFullLoad(new FileTableWrapperImpl(this.connectionFolder, baseFileName, physicalTableName, this.yamlSerializer, this.isReadOnly()));
         }
     }
 
@@ -78,7 +80,7 @@ public class FileTableListImpl extends TableListImpl {
     @Override
     protected TableWrapperImpl createNewElement(PhysicalTableName physicalTableName) {
         FileTableWrapperImpl tableWrapper = new FileTableWrapperImpl(this.connectionFolder,
-                physicalTableName.toBaseFileName(), physicalTableName, this.yamlSerializer);
+                physicalTableName.toBaseFileName(), physicalTableName, this.yamlSerializer, this.isReadOnly());
         tableWrapper.setSpec(new TableSpec());
         return tableWrapper;
     }

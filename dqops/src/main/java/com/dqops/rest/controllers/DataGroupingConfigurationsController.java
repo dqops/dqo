@@ -90,7 +90,7 @@ public class DataGroupingConfigurationsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
@@ -147,7 +147,7 @@ public class DataGroupingConfigurationsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Data grouping configuration name") @PathVariable String groupingConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
 
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
@@ -213,7 +213,7 @@ public class DataGroupingConfigurationsController {
 
         return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
                     if (tableSpec == null) {
                         return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -285,7 +285,7 @@ public class DataGroupingConfigurationsController {
 
         return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
                     if (tableSpec == null) {
                         return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -331,7 +331,7 @@ public class DataGroupingConfigurationsController {
             @RequestParam(required = true) String dataGroupingConfigurationName) {
         return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
                     if (tableSpec == null) {
                         return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -389,7 +389,7 @@ public class DataGroupingConfigurationsController {
 
         return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
                 () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                     TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
                     if (tableSpec == null) {
                         return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404

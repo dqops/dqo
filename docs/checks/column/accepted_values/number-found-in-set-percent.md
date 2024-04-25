@@ -1,3 +1,6 @@
+---
+title: number found in set percent data quality checks
+---
 # number found in set percent data quality checks
 
 A column-level check that calculates the percentage of rows for which the tested numeric column contains a value from a set of expected values.
@@ -21,7 +24,7 @@ The check measures the percentage of rows whose value in a tested column is one 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_number_found_in_set_percent`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*number_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#number-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_number_found_in_set_percent`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*number_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#number-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -874,7 +877,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 31-36"
+    ```yaml hl_lines="5-13 31-36"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1682,7 +1685,7 @@ The check measures the percentage of rows whose value in a tested column is one 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_number_found_in_set_percent`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*number_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#number-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_number_found_in_set_percent`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*number_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#number-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2536,7 +2539,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 32-37"
+    ```yaml hl_lines="5-13 32-37"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3345,7 +3348,7 @@ The check measures the percentage of rows whose value in a tested column is one 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_number_found_in_set_percent`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*number_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#number-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_number_found_in_set_percent`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*number_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#number-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -4199,7 +4202,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 32-37"
+    ```yaml hl_lines="5-13 32-37"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -5008,7 +5011,7 @@ The check measures the percentage of rows whose value in a tested column is one 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_number_found_in_set_percent`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*number_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#number-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_number_found_in_set_percent`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*number_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#number-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -5876,7 +5879,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 42-47"
+    ```yaml hl_lines="10-4 42-47"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -6693,7 +6696,7 @@ The check measures the percentage of rows whose value in a tested column is one 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_number_found_in_set_percent`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*number_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#number-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_number_found_in_set_percent`</span>|[accepted_values](../../../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*number_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#number-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -7561,7 +7564,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 42-47"
+    ```yaml hl_lines="10-4 42-47"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table

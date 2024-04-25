@@ -22,8 +22,8 @@ import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
-import com.dqops.data.readouts.services.models.SensorReadoutEntryModel;
-import com.dqops.data.readouts.services.models.SensorReadoutsListModel;
+import com.dqops.data.readouts.models.SensorReadoutEntryModel;
+import com.dqops.data.readouts.models.SensorReadoutsListModel;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshot;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
@@ -314,7 +314,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
                                              PhysicalTableName physicalTableName,
                                              UserDomainIdentity userDomainIdentity) {
         SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, SensorReadoutsColumnNames.COLUMN_NAMES_FOR_READOUTS_DETAILED, userDomainIdentity);
+                physicalTableName, SensorReadoutsColumnNames.SENSOR_READOUT_COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
         int maxMonthsToLoad = DEFAULT_MAX_RECENT_LOADED_MONTHS;
 
         if (loadParameters.getStartMonth() != null && loadParameters.getEndMonth() != null) {

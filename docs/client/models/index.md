@@ -1,3 +1,6 @@
+---
+title: Reference of all models used by DQOps REST API
+---
 # Reference of all models used by DQOps REST API
 
 This is a list of the models in DQOps REST API Python client broken down by individual controllers.
@@ -7,6 +10,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
+|[*CheckType*](./common.md#checktype)|Enumeration of data quality check types: profiling, monitoring, partitioned.|
 |[*CheckTimeScale*](./common.md#checktimescale)|Enumeration of time scale of monitoring and partitioned data quality checks (daily, monthly, etc.)|
 |[*FieldModel*](./common.md#fieldmodel)|Model of a single field that is used to edit a parameter value for a sensor or a rule. Describes the type of the field and the current value.|
 |[*RuleParametersModel*](./common.md#ruleparametersmodel)|Model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single severity level (low, medium, high).|
@@ -32,6 +36,9 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*ProviderType*](./common.md#providertype)|Data source provider type (dialect type). We will use lower case names to avoid issues with parsing, even if the enum names are not named following the Java naming convention.|
 |[*ConnectionModel*](./common.md#connectionmodel)|Connection model returned by the rest api that is limited only to the basic fields, excluding nested nodes.|
 |[*DqoQueueJobId*](./common.md#dqoqueuejobid)|Identifies a single job.|
+|[*PhysicalTableName*](./common.md#physicaltablename)|Physical table name that is a combination of a schema name and a physical table name (without any quoting or escaping).|
+|[*ProfilingTimePeriodTruncation*](./common.md#profilingtimeperiodtruncation)|The time period for profiling checks (millisecond, daily, monthly, weekly, hourly). The default profiling check stores one value per month. When profiling checks is re-executed during the month, the previous profiling checks value is overwritten and only the most recent value is stored.|
+|[*TableListModel*](./common.md#tablelistmodel)|Table list model returned by the rest api that is limited only to the basic fields, excluding nested nodes.|
 
 
 ## check_results
@@ -42,6 +49,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*RuleSeverityLevel*](./check_results.md#ruleseveritylevel)|Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.|
 |[*CheckResultStatus*](./check_results.md#checkresultstatus)|Enumeration of check execution statuses. It is the highest severity or an error if the sensor cannot be executed due to a configuration issue.|
 |[*CheckCurrentDataQualityStatusModel*](./check_results.md#checkcurrentdataqualitystatusmodel)|The most recent data quality status for a single data quality check. If data grouping is enabled, this model will return the highest data quality issue status from all data quality results for all data groups.|
+|[*DimensionCurrentDataQualityStatusModel*](./check_results.md#dimensioncurrentdataqualitystatusmodel)|A model that describes the current data quality status for a single data quality dimension.|
 |[*ColumnCurrentDataQualityStatusModel*](./check_results.md#columncurrentdataqualitystatusmodel)|The column validity status. It is a summary of the results of the most recently executed data quality checks on the column.|
 |[*TableCurrentDataQualityStatusModel*](./check_results.md#tablecurrentdataqualitystatusmodel)|The table validity status. It is a summary of the results of the most recently executed data quality checks on the table.|
 
@@ -72,7 +80,6 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*ColumnDailyMonitoringCheckCategoriesSpec*](./columns.md#columndailymonitoringcheckcategoriesspec)|Container of column level daily monitoring checks. Contains categories of daily monitoring checks.|
 |[*ColumnComparisonDailyPartitionedChecksSpecMap*](./columns.md#columncomparisondailypartitionedchecksspecmap)|Container of comparison checks for each defined data comparison. The name of the key in this dictionary must match a name of a table comparison that is defined on the parent table. Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.|
 |[*ColumnDailyPartitionedCheckCategoriesSpec*](./columns.md#columndailypartitionedcheckcategoriesspec)|Container of data quality partitioned checks on a column level that are checking numeric values at a daily level.|
-|[*PhysicalTableName*](./columns.md#physicaltablename)|Physical table name that is a combination of a schema name and a physical table name (without any quoting or escaping).|
 |[*ColumnListModel*](./columns.md#columnlistmodel)|Column list model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks.|
 |[*ColumnModel*](./columns.md#columnmodel)|Table model that returns the specification of a single column in the REST Api.|
 |[*ColumnComparisonMonthlyMonitoringChecksSpecMap*](./columns.md#columncomparisonmonthlymonitoringchecksspecmap)|Container of comparison checks for each defined data comparison. The name of the key in this dictionary must match a name of a table comparison that is defined on the parent table. Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.|
@@ -234,6 +241,13 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*SynchronizeMultipleFoldersQueueJobResult*](./jobs.md#synchronizemultiplefoldersqueuejobresult)|Object returned from the operation that queues a &quot;synchronize multiple folders&quot; job. The result contains the job id that was started and optionally can also contain the job finish status if the operation was started with wait&#x3D;true parameter to wait for the &quot;synchronize multiple folders&quot; job to finish.|
 
 
+## labels
+
+|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|------------|---------------------------------|
+|[*LabelModel*](./labels.md#labelmodel)|Label model that is returned by the REST API. A label is a tag that was assigned to a data source, table, column or a single check. Labels play the role of a business glossary.|
+
+
 ## log_shipping
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
@@ -302,7 +316,6 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
-|[*CheckType*](./table_comparisons.md#checktype)|Enumeration of data quality check types: profiling, monitoring, partitioned.|
 |[*TableComparisonGroupingColumnPairModel*](./table_comparisons.md#tablecomparisongroupingcolumnpairmodel)|Model that identifies a pair of column names used for grouping the data on both the compared table and the reference table. The groups are then matched (joined) by DQOps to compare aggregated results.|
 |[*TableComparisonConfigurationModel*](./table_comparisons.md#tablecomparisonconfigurationmodel)|Model that contains the basic information about a table comparison configuration that specifies how the current table can be compared with another table that is a source of truth for comparison.|
 |[*CompareThresholdsModel*](./table_comparisons.md#comparethresholdsmodel)|Model with the custom compare threshold levels for raising data quality issues at different severity levels when the difference between the compared (tested) table and the reference table (the source of truth) exceed given thresholds as a percentage of difference between the actual value and the expected value from the reference table.|
@@ -319,8 +332,6 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*TableDailyMonitoringCheckCategoriesSpec*](./tables.md#tabledailymonitoringcheckcategoriesspec)|Container of table level daily monitoring. Contains categories of daily monitoring.|
 |[*TableComparisonDailyPartitionedChecksSpecMap*](./tables.md#tablecomparisondailypartitionedchecksspecmap)|Container of comparison checks for each defined data comparison. The name of the key in this dictionary must match a name of a table comparison that is defined on the parent table. Contains the daily partitioned comparison checks for each configured reference table.|
 |[*TableDailyPartitionedCheckCategoriesSpec*](./tables.md#tabledailypartitionedcheckcategoriesspec)|Container of table level daily partitioned checks. Contains categories of daily partitioned checks.|
-|[*ProfilingTimePeriodTruncation*](./tables.md#profilingtimeperiodtruncation)|The time period for profiling checks (millisecond, daily, monthly, weekly, hourly). The default profiling check stores one value per month. When profiling checks is re-executed during the month, the previous profiling checks value is overwritten and only the most recent value is stored.|
-|[*TableListModel*](./tables.md#tablelistmodel)|Table list model returned by the rest api that is limited only to the basic fields, excluding nested nodes.|
 |[*TableModel*](./tables.md#tablemodel)|Full table model that returns the specification of a single table in the REST Api.|
 |[*TableComparisonMonthlyMonitoringChecksSpecMap*](./tables.md#tablecomparisonmonthlymonitoringchecksspecmap)|Container of comparison checks for each defined data comparison. The name of the key in this dictionary must match a name of a table comparison that is defined on the parent table. Contains the monthly monitoring comparison checks for each configured reference table.|
 |[*TableMonthlyMonitoringCheckCategoriesSpec*](./tables.md#tablemonthlymonitoringcheckcategoriesspec)|Container of table level monthly monitoring checks. Contains categories of monthly monitoring checks.|

@@ -30,6 +30,7 @@ import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.conversions.ColumnTextTextParsableToDatePercentSensorParametersSpec;
 import com.dqops.snowflake.BaseSnowflakeIntegrationTest;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,33 +65,33 @@ public class SnowflakeColumnTextTextParsableToDatePercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
-    void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringDailyOnMixedValues_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "mix_of_values", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(40.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
     }
 
     @Test
-    void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedMonitoringMonthlyOnDateMDY_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "date_mdy", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -103,19 +104,58 @@ public class SnowflakeColumnTextTextParsableToDatePercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
-    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedPartitionedMonthlyOnDateYMD_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "date_ymd", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedProfilingOnDateBDY_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "date_bdy", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedProfilingOnDateDMY_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "date_dmy", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedProfilingOnNotDate_thenReturnsZeroPercent() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "not_date", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 }

@@ -2,14 +2,12 @@ import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 
 import clsx from 'clsx';
 
-import SvgIcon from '../SvgIcon';
 import {
   Menu,
-  MenuList,
-  Tooltip,
-  MenuItem,
-  MenuHandler
+  Tooltip
 } from '@material-tailwind/react';
+import usePopup from '../../hooks/usePopup';
+import SvgIcon from '../SvgIcon';
 
 export interface Option {
   label: string | number;
@@ -57,14 +55,16 @@ const Select = ({
 }: SelectProps) => {
   const [menuWidth, setMenuWidth] = useState(0);
   const ref = useRef<HTMLButtonElement>(null);
+  const { isOpen, toggleMenu, closeMenu } = usePopup(ref);
   const selectedOption = useMemo(() => {
-    return options.find((item) => item.value === value);
+    return options.find((item) => (item.value?.toString().toLowerCase() === value?.toString().toLowerCase()) || item.value === value);
   }, [options, value]);
 
   const handleClick = (option: Option) => {
     if (onChange) {
       onChange(option.value);
     }
+    closeMenu();
   };
 
   useEffect(() => {
@@ -99,7 +99,7 @@ const Select = ({
         </div>
       )}
       <Menu placement="bottom-end">
-        <MenuHandler ref={ref}>
+        <div>
           <div
             className={clsx(
               'cursor-pointer text-gray-900 h-9 py-2 px-4 pr-10 rounded flex items-center text-sm border whitespace-nowrap relative',
@@ -107,6 +107,7 @@ const Select = ({
               disabled ? 'bg-gray-300 bg-opacity-20 cursor-not-allowed' : '',
               error ? 'border-red-500' : 'border-gray-300'
             )}
+            onClick={() => (!disabled ? toggleMenu() : {})}
           >
             {selectedOption ? (
               <div className="flex items-center gap-2">
@@ -122,36 +123,32 @@ const Select = ({
               <SvgIcon name="chevron-down" className="absolute right-2 w-4" />
             )}
           </div>
-        </MenuHandler>
+        </div>
         {!disabled && (
-          <MenuList
-            className={clsx(
-              'z-50 min-w-40 bg-gray-50 !p-0 max-h-81 overflow-auto',
-              menuClassName
+        <div
+        className={clsx(
+          'absolute top-10 bg-gray-50 left-0 min-w-full z-10 shadow-lg border border-gray-300 text-left rounded transition-all duration-150 ease-in',
+          isOpen
+            ? 'max-h-80 overflow-auto py-3'
+            : 'opacity-0 max-h-0 overflow-hidden py-0',
+            menuClassName
+        )}
+      >
+        {options.map((option, index) => (
+          <div
+            data-testid="select-option"
+            key={index}
+            className={clsx("py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm h-8" , empty ? 'h-5' : '',
+            option.icon ? 'flex items-center gap-x-2' : ''
             )}
-            style={{ zIndex: '200' }}
+            onClick={() => handleClick(option)}
           >
-            {options.map((option, index) => (
-              <MenuItem
-                data-testid="select-option"
-                key={index}
-                className="h-8 py-2 px-4 z-50 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm"
-                onClick={() => handleClick(option)}
-                style={{ minWidth: menuWidth, zIndex: '100' }}
-              >
-                <div
-                  className={clsx(
-                    'flex gap-2 items-center z-50',
-                    empty ? 'h-5' : ''
-                  )}
-                >
                   {option.icon || ''}
                   {option.label}
                 </div>
-              </MenuItem>
             ))}
             {onAdd && (
-              <MenuItem
+              <div
                 data-testid="select-option"
                 className="py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm !rounded-none"
                 onClick={onAdd}
@@ -161,9 +158,9 @@ const Select = ({
                   <SvgIcon name="add" className="w-4 h-4" />
                   <div>{addLabel}</div>
                 </div>
-              </MenuItem>
+              </div>
             )}
-          </MenuList>
+          </div>
         )}
       </Menu>
     </div>

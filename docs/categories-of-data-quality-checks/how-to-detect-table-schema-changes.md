@@ -1,4 +1,7 @@
-# Detecting table schema changes
+---
+title: How to detect table schema changes
+---
+# How to detect table schema changes
 Read this guide to learn how DQOps detects table schema changes, such as missing columns, data type changes, or reordering columns.
 
 The table schema change detection checks are configured in the `schema` category in DQOps.
@@ -62,7 +65,7 @@ The change detection checks should be configured as
 [daily monitoring checks](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md#daily-monitoring-checks)
 to detect day-to-day changes.
 
-![Enabled data quality checks for table schema drift detection](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-schema-drift-monitoring-enabled-without-changes-min.png){ loading=lazy }
+![Enabled data quality checks for table schema drift detection](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-schema-drift-monitoring-enabled-without-changes-min.png){ loading=lazy; width="1200px" }
 
 ### Example of a schema change
 In the meantime, a new column was added to the table using an SQL statement shown below.
@@ -74,7 +77,7 @@ ADD COLUMN int64_field_31 INTEGER;
 
 The following screenshot shows the data quality check editor on the next day.
 
-![Data quality checks that detected table schema changes](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-schema-drift-monitoring-detected-changes-min.png){ loading=lazy }
+![Data quality checks that detected table schema changes](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-schema-drift-monitoring-detected-changes-min.png){ loading=lazy; width="1200px" }
 
 DQOps detected new data quality issues for all types of schema changes because adding a new column is detected by all table-level checks.
 You can also review the [example of detecting table schema changes](../examples/schema/detect-table-schema-changes.md),
@@ -119,7 +122,7 @@ DQOps supports the following schema change detection checks configured on a colu
 The column-level schema change detection checks are configured using the [data quality check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor)
 on a column level.
 
-![Configuring column schema change detection data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-schema-checks-enabled-in-editor-min.png){ loading=lazy }
+![Configuring column schema change detection data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-schema-checks-enabled-in-editor-min.png){ loading=lazy; width="1200px" }
 
 
 ### Configuring column-level checks in YAML
@@ -147,14 +150,14 @@ DQOps supports several data quality dashboards that are showing recent table sch
 ### Recent table schema changes
 The summary dashboard shows all recent table schema changes of any type.
 
-![Data quality dashboard showing recent table schema changes](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/summary-of-table-schema-changes-dashboard-min.png){ loading=lazy }
+![Data quality dashboard showing recent table schema changes](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/summary-of-table-schema-changes-dashboard-min.png){ loading=lazy; width="1200px" }
 
 ### Detecting column count changes
 The column count changes dashboard shows only the schema changes detected by the [*column_count_changed*](../checks/table/schema/column-count-changed.md) check.
 DQOps has similar [data quality dashboards](../dqo-concepts/types-of-data-quality-dashboards.md)
 in the schema folder for different schema changes.
 
-![Data quality dashboard showing table schema changes for a count of columns](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-count-changed-dashboard-min.png){ loading=lazy }
+![Data quality dashboard showing table schema changes for a count of columns](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-count-changed-dashboard-min.png){ loading=lazy; width="1200px" }
 
 
 ## Use cases
@@ -166,11 +169,11 @@ in the schema folder for different schema changes.
 ## List of schema checks at a table level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*column_count*](../checks/table/schema/column-count.md)|Completeness|A table-level check that retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns.|:material-check-bold:|
-|[*column_count_changed*](../checks/table/schema/column-count-changed.md)|Consistency|A table-level check that detects if the number of columns in the table has changed since the last time the check (checkpoint) was run. This check retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to the last known number of columns that was captured and is stored in the data quality check results database.|:material-check-bold:|
-|[*column_list_changed*](../checks/table/schema/column-list-changed.md)|Consistency|A table-level check that detects if the list of columns has changed since the last time the check was run. This check will retrieve the metadata of a tested table and calculate a hash of the column names. The hash will not depend on the order of columns, only on the column names. A data quality issue will be detected if new columns were added or columns that existed during the previous test were dropped.| |
-|[*column_list_or_order_changed*](../checks/table/schema/column-list-or-order-changed.md)|Consistency|A table-level check that detects if the list of columns and the order of columns have changed since the last time the check was run. This check will retrieve the metadata of a tested table and calculate a hash of the column names. The hash will depend on the order of columns. A data quality issue will be detected if new columns were added, columns that existed during the previous test were dropped or the columns were reordered.| |
-|[*column_types_changed*](../checks/table/schema/column-types-changed.md)|Consistency|A table-level check that detects if the column names or column types have changed since the last time the check was run. This check calculates a hash of the column names and all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability. A data quality issue will be detected if the hash of the column data types has changed. This check does not depend on the order of columns, the columns can be reordered as long as all columns are still present and the data types match since the last time they were tested.| |
+|[*column_count*](../checks/table/schema/column-count.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|A table-level check that retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns.|:material-check-bold:|
+|[*column_count_changed*](../checks/table/schema/column-count-changed.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|A table-level check that detects if the number of columns in the table has changed since the last time the check (checkpoint) was run. This check retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to the last known number of columns that was captured and is stored in the data quality check results database.|:material-check-bold:|
+|[*column_list_changed*](../checks/table/schema/column-list-changed.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|A table-level check that detects if the list of columns has changed since the last time the check was run. This check will retrieve the metadata of a tested table and calculate a hash of the column names. The hash will not depend on the order of columns, only on the column names. A data quality issue will be detected if new columns were added or columns that existed during the previous test were dropped.| |
+|[*column_list_or_order_changed*](../checks/table/schema/column-list-or-order-changed.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|A table-level check that detects if the list of columns and the order of columns have changed since the last time the check was run. This check will retrieve the metadata of a tested table and calculate a hash of the column names. The hash will depend on the order of columns. A data quality issue will be detected if new columns were added, columns that existed during the previous test were dropped or the columns were reordered.| |
+|[*column_types_changed*](../checks/table/schema/column-types-changed.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|A table-level check that detects if the column names or column types have changed since the last time the check was run. This check calculates a hash of the column names and all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability. A data quality issue will be detected if the hash of the column data types has changed. This check does not depend on the order of columns, the columns can be reordered as long as all columns are still present and the data types match since the last time they were tested.| |
 
 
 **Reference and samples**
@@ -183,8 +186,8 @@ that are used by those checks.
 ## List of schema checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*column_exists*](../checks/column/schema/column-exists.md)|Completeness|A column-level check that reads the metadata of the monitored table and verifies if the column still exists in the data source. The data quality sensor returns a value of 1.0 when the column is found or 0.0 when the column is not found.|:material-check-bold:|
-|[*column_type_changed*](../checks/column/schema/column-type-changed.md)|Consistency|A column-level check that detects if the data type of the column has changed since the last retrieval. This check calculates the hash of all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability. A data quality issue will be detected if the hash of the column&#x27;s data types has changed.|:material-check-bold:|
+|[*column_exists*](../checks/column/schema/column-exists.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|A column-level check that reads the metadata of the monitored table and verifies if the column still exists in the data source. The data quality sensor returns a value of 1.0 when the column is found or 0.0 when the column is not found.|:material-check-bold:|
+|[*column_type_changed*](../checks/column/schema/column-type-changed.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|A column-level check that detects if the data type of the column has changed since the last retrieval. This check calculates the hash of all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability. A data quality issue will be detected if the hash of the column&#x27;s data types has changed.|:material-check-bold:|
 
 
 **Reference and samples**

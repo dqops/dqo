@@ -26,6 +26,10 @@ import java.util.List;
  * Table collection. Tracks the status of the child elements (addition, removal).
  */
 public class TableListImpl extends AbstractIndexingList<PhysicalTableName, TableWrapper> implements TableList {
+    public TableListImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
     /**
      * Creates a new element given an object name. Derived classes should create a correct object type.
      *

@@ -23,11 +23,19 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
  */
 public interface ExecutionContextFactory {
     /**
-     * Creates a new execution context by opening the user home context and the dqo system home context.
+     * Creates a new execution context by opening the user home context and the dqo system home context. Creates the user home in read-only mode.
      * @param userDomainIdentity Calling user identity, with the name of the data domain whose user home is opened.
      * @return Check execution context.
      */
     ExecutionContext create(UserDomainIdentity userDomainIdentity);
+
+    /**
+     * Creates a new execution context by opening the user home context and the dqo system home context.
+     * @param userDomainIdentity Calling user identity, with the name of the data domain whose user home is opened.
+     * @param readOnly Configures the read-only status of the user home.
+     * @return Check execution context.
+     */
+    ExecutionContext create(UserDomainIdentity userDomainIdentity, boolean readOnly);
 
     /**
      * Creates a new execution context by using a given user context.

@@ -52,7 +52,7 @@ public class DqoHomeDefinitionFillPostProcessor {
             HandlebarsDocumentationUtilities.configure(projectDir);
 
             Path dqoHomePath = projectDir.resolve("../home").toAbsolutePath().normalize();
-            DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
+            DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath, false);
 
             updateSpecificationsForRules(projectDir, dqoHomeContext);
             updateSpecificationsForSensors(projectDir, dqoHomeContext);

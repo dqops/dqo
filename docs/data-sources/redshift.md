@@ -1,5 +1,8 @@
-# Redshift
-Read this guide to learn how to connect DQOps to AWS Redshift from the UI, command-line interface, or directly in YAML files. All parameters are documented.
+---
+title: How to activate data observability for Amazon Redshift
+---
+# How to activate data observability for Amazon Redshift
+Read this guide to learn how to connect DQOps to AWS Redshift from the UI, command-line interface, or directly in YAML files, and activate monitoring.
 
 ## Overview
 
@@ -22,26 +25,29 @@ To navigate to the Redshift connection settings:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png){ loading=lazy; width="1200px" }
 
 2. Select Redshift database type.
 
-    ![Selecting Redshift database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-redshift.png)
+    ![Selecting Redshift database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-redshift.png){ loading=lazy; width="1200px" }
 
 ### **Fill in the connection settings**
 
 After navigating to the Redshift connection settings, you will need to fill in its details.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-redshift.png)
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-redshift.png){ loading=lazy; width="1200px" }
 
 | Redshift connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               |
 |------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name              |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-| Host                         | host                                     | Redshift host name. Supports also a ${REDSHIFT_HOST} configuration with a custom environment variable.                                                                                                                                    |
-| Port                         | port                                     | Redshift port name. The default port is 5439. Supports also a ${REDSHIFT_PORT} configuration with a custom environment variable.                                                                                                          |
-| Database                     | database                                 | Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                          |
-| User name                    | user                                     | Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                              |
-| Password                     | password                                 | Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                      |
+| Host                         | `host`                                   | Redshift host name. ClusterID and Region must be set in Host. Supports also a ${REDSHIFT_HOST} configuration with a custom environment variable.                                                                                                                                  |
+| Port                         | `port`                                   | Redshift port name. The default port is 5439. Supports also a ${REDSHIFT_PORT} configuration with a custom environment variable.                                                                                                          |
+| Database                     | `database`                               | Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                          |
+| Redshift authentication mode | `redshift_authentication_mode`           | The authentication mode for Redshift. Supports also a ${REDSHIFT_AUTHENTICATION_MODE} configuration with a custom environment variable.                                                                                                   |
+| User name                    | `user`                                   | Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                              |
+| Password                     | `password`                               | Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                      |
+| Access Key ID                | `user`                                   | Available when using AWS S3. Access Key ID for AWS authentication. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                               |
+| Secret Access Key            | `password`                               | Available when using AWS S3. Secret Access Key for AWS authentication. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                           |
 | JDBC connection property     |                                          | Optional setting. DQOps supports using JDBC driver to access Redshift. [See the Redshift documentation for JDBC connection parameter references.](https://docs.aws.amazon.com/redshift/latest/mgmt/jdbc20-install-driver.html)            |
    
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
@@ -56,7 +62,7 @@ can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
     
 For example:
 
-![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png)
+![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png){ loading=lazy; width="1200px" }
     
 To remove the property click on the trash icon at the end of the input field.
 
@@ -73,11 +79,11 @@ Now we can import schemas and tables.
 1. Import the selected data resources (source schemas and tables) by clicking on the **Import Tables** button next to
     the name of the source schema from which you want to import tables.
 
-    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-schemas.png)
+    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-schemas.png){ loading=lazy; width="1200px" }
 
 2. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.png)
+    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.png){ loading=lazy; width="1200px" }
 
 
 When new tables are imported, DQOps automatically activates profiling and monitoring checks, such as row count, 
@@ -85,7 +91,7 @@ table availability, and checks detecting schema changes. These checks are schedu
 By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks 
 or modify the schedule for newly imported tables.
 
-![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png)
+![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png){ loading=lazy; width="1200px" }
 
 
 ## Add Redshift connection using DQOps Shell
@@ -182,6 +188,56 @@ spec:
 Complete documentation of all connection parameters used in the `spec.redshift` node is
 described in the reference section of the [RedshiftParametersSpec](../reference/yaml/ConnectionYaml.md#redshiftparametersspec)
 YAML file format.
+
+
+## Configure the credentials
+
+### Using shared credentials
+
+With DQOps, you can configure credentials to access AWS S3 directly in the platform.
+
+Please note, that any credentials and secrets shared with the DQOps Cloud or DQOps SaaS instances are stored in the .credentials folder.
+This folder also contains the default credentials files pair for AWS named **AWS_default_config** and **AWS_default_credentials**.
+
+``` { .asc .annotate hl_lines="4" }
+$DQO_USER_HOME
+├───...
+└───.credentials                                                            
+    ├───AWS_default_config
+    ├───AWS_default_credentials
+    └─...   
+```
+
+If you wish to use AWS authentication, the content of the files must be replaced with your aws_access_key_id, aws_secret_access_key and region.
+You can find more details on how to [manage access keys for IAM users](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html) in AWS documentation.
+
+!!! warning
+
+    If you do not replace the content of the files, the default credentials will be loaded from system.
+
+
+To set the credential file in DQOps, follow these steps:
+
+1. Open the Configuration section.
+2. Select Shared credentials from the tree view on the left.
+3. Click the edit link on the “AWS_default_credentials” file.
+
+![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/aws-shared-credentials-ui.png)
+
+4. In the text area, edit the aws_access_key_id and aws_secret_access_key, replacing the placeholder text.
+
+![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/edit-aws-shared-credential.png)
+
+5. Click the **Save** button, to save changes, go back to the main **Shared credentials** view.
+
+6. Edit the region in AWS_default_config file and save the file.
+
+
+!!! tip "Use the system default credentials after filling in the shared credential"
+
+    If you still want to use default credentials from AWS, 
+    you must manually delete the .credentials/AWS_default_config and .credentials/AWS_default_credentials files from the DQOps credentials.
+
 
 ## Next steps
 

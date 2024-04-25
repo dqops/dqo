@@ -1,4 +1,7 @@
-# Detect table schema changes
+---
+title: How to detect table schema changes using data observability checks
+---
+# How to detect table schema changes using data observability checks
 This sample shows how to use data quality checks in the DQOps platform to detect table schema changes and view the results on data quality dashboards.
 
 ## Overview
@@ -57,7 +60,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-schema-detection-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-schema-detection-checks.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
 
@@ -84,14 +87,14 @@ Run the activated check using the **Run check** button.
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 You can run all checks for the connection by clicking on the three dots icon next to the connection name in the tree view, and selecting the **Run checks** option.
 
-![Run check](https://dqops.com/docs/images/examples/schema-detection-run-checks.png)
+![Run check](https://dqops.com/docs/images/examples/schema-detection-run-checks.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![Schema detection check results](https://dqops.com/docs/images/examples/schema-detection-checks-results.png)
+![Schema detection check results](https://dqops.com/docs/images/examples/schema-detection-checks-results.png){ loading=lazy; width="1200px" }
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
@@ -150,23 +153,23 @@ each day when the data quality check was evaluated, the checks were run on the n
 - for the `product1` table where whe have remove the `date_updated` column we can see errors alerts in all run checks because
     with the removal of the column both the number of columns and the list of columns has changed (notice the orange squares to the left of the checks names).
 
-    ![Schema detection check results after removing columns](https://dqops.com/docs/images/examples/schema-detection-checks-results-after-removing-columns.png)
+    ![Schema detection check results after removing columns](https://dqops.com/docs/images/examples/schema-detection-checks-results-after-removing-columns.png){ loading=lazy; width="1200px" }
 
 - for the `product2` table where whe have renamed the column `product_id` to `id` we can see errors in checks that detects changes in the 
     list of columns i.e. [daily_column_list_changed](../../checks/table/schema/column-list-changed.md), [daily_column_list_or_order_changed](../../checks/table/schema/column-list-or-order-changed.md),
     and [daily_column_types_changed](../../checks/table/schema/column-types-changed.md).
     
-    ![Schema detection check results after renaming columns](https://dqops.com/docs/images/examples/schema-detection-checks-results-after-renaming-columns.png)
+    ![Schema detection check results after renaming columns](https://dqops.com/docs/images/examples/schema-detection-checks-results-after-renaming-columns.png){ loading=lazy; width="1200px" }
 
 - for the `product3` table where whe have changed the type of the column `date_updated` from DATETIME to DATE we can see error only in the check 
     [daily_column_types_changed](../../checks/table/schema/column-types-changed.md).
  
-    ![Schema detection check results after changing datatype](https://dqops.com/docs/images/examples/schema-detection-checks-results-after-changing-datatype.png)
+    ![Schema detection check results after changing datatype](https://dqops.com/docs/images/examples/schema-detection-checks-results-after-changing-datatype.png){ loading=lazy; width="1200px" }
 
 - for the `product4` table where whe have changed the order of columns `date_created` and `date_updated` we can see error only in the check
     [daily_column_list_or_order_changed](../../checks/table/schema/column-list-or-order-changed.md)
 
-    ![Schema detection check results after changing column order](https://dqops.com/docs/images/examples/schema-detection-checks-results-after-changing-column-order.png)
+    ![Schema detection check results after changing column order](https://dqops.com/docs/images/examples/schema-detection-checks-results-after-changing-column-order.png){ loading=lazy; width="1200px" }
 
 ### **Synchronize the results with the cloud account**
 
@@ -196,7 +199,7 @@ This dashboard allows filtering data by:
 At the bottom of the dashboard there is a table summarizing the results from all executed schema change checks. You can check other dashboards in this group for 
 details per every schema change check type. 
 
-![Schema change checks results on the Schema changes - summary of changes in columns dashboard](https://dqops.com/docs/images/examples/schema-checks-result-on-schema-summary-dashboard.png)
+![Schema change checks results on the Schema changes - summary of changes in columns dashboard](https://dqops.com/docs/images/examples/schema-checks-result-on-schema-summary-dashboard.png){ loading=lazy; width="1200px" }
 
 
 ## YAML configuration file

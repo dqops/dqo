@@ -66,7 +66,7 @@ public class DuckdbColumnPatternsTextNotMatchingRegexCountSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(18.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -81,7 +81,7 @@ public class DuckdbColumnPatternsTextNotMatchingRegexCountSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(18.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -96,7 +96,7 @@ public class DuckdbColumnPatternsTextNotMatchingRegexCountSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(18.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -110,7 +110,7 @@ public class DuckdbColumnPatternsTextNotMatchingRegexCountSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(5.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -124,6 +124,6 @@ public class DuckdbColumnPatternsTextNotMatchingRegexCountSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(18.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 }

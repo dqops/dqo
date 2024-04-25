@@ -100,7 +100,7 @@ To start DQOps in a server mode follow the steps below.
 
 3. After a few seconds open your web browser to **http://localhost:8888/**. You should see the DQOps user interface.
 
-    ![DQOps user interface](https://dqops.com/docs/images/getting-started/dqops-user-interface.png)
+    ![DQOps user interface](https://dqops.com/docs/images/getting-started/dqops-user-interface.png){ loading=lazy; width="1200px" }
 
 
 ## Build a custom DQOps container image

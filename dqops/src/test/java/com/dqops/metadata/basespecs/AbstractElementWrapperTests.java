@@ -170,6 +170,7 @@ public class AbstractElementWrapperTests extends BaseTest {
         private final String name;
 
         public TestableElementWrapper(String name) {
+            super(false);
             this.name = name;
         }
 

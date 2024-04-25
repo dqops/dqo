@@ -55,7 +55,7 @@ public class FileSettingsWrapperImplTests extends BaseTest {
 
 		Assertions.assertFalse(this.sut.getSpec().isDirty());
 		Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
-		FileSettingsWrapperImpl sut2 = new FileSettingsWrapperImpl(this.settingsFolder, this.yamlSerializer);
+		FileSettingsWrapperImpl sut2 = new FileSettingsWrapperImpl(this.settingsFolder, this.yamlSerializer, false);
 		LocalSettingsSpec spec2 = sut2.getSpec();
 		Assertions.assertEquals("vsc", spec2.getEditorName());
 	}
@@ -74,7 +74,7 @@ public class FileSettingsWrapperImplTests extends BaseTest {
 		userHomeContext.flush();
 
 		Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
-		FileSettingsWrapperImpl sut2 = new FileSettingsWrapperImpl(settingsFolder, this.yamlSerializer);
+		FileSettingsWrapperImpl sut2 = new FileSettingsWrapperImpl(settingsFolder, this.yamlSerializer, false);
 		LocalSettingsSpec spec2 = sut2.getSpec();
 		Assertions.assertEquals("intellj", spec2.getEditorName());
 	}
@@ -89,7 +89,7 @@ public class FileSettingsWrapperImplTests extends BaseTest {
 		this.sut.flush();
 		userHomeContext.flush();
 
-		FileSettingsWrapperImpl sut2 = new FileSettingsWrapperImpl(settingsFolder, this.yamlSerializer);
+		FileSettingsWrapperImpl sut2 = new FileSettingsWrapperImpl(settingsFolder, this.yamlSerializer, false);
 		LocalSettingsSpec spec2 = sut2.getSpec();
 		Assertions.assertNotNull(spec2);
 	}
@@ -103,7 +103,7 @@ public class FileSettingsWrapperImplTests extends BaseTest {
 		this.sut.flush();
 		userHomeContext.flush();
 
-		FileSettingsWrapperImpl sut2 = new FileSettingsWrapperImpl(settingsFolder, this.yamlSerializer);
+		FileSettingsWrapperImpl sut2 = new FileSettingsWrapperImpl(settingsFolder, this.yamlSerializer, false);
 		LocalSettingsSpec spec2 = sut2.getSpec();
 		Assertions.assertNotNull(spec2);
 		Assertions.assertSame(spec2, sut2.getSpec());

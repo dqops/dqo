@@ -33,6 +33,7 @@ class StatisticsCollectorSearchFilters:
         labels (Union[Unset, List[str]]): An array of labels assigned to the table. All labels must be present on a
             table to match. The labels can use patterns:  'prefix\*', '\*suffix', 'prefix\*suffix'. The labels are assigned
             on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.
+        max_results (Union[Unset, int]): Optional limit for the maximum number of results to return.
         column_names (Union[Unset, List[str]]): The list of column names or column name patters. This field accepts
             search patterns in the format: 'fk_\*', '\*_id', 'prefix\*suffix'.
         collector_name (Union[Unset, str]): The target statistics collector name to capture only selected statistics.
@@ -52,6 +53,7 @@ class StatisticsCollectorSearchFilters:
     enabled: Union[Unset, bool] = UNSET
     tags: Union[Unset, List[str]] = UNSET
     labels: Union[Unset, List[str]] = UNSET
+    max_results: Union[Unset, int] = UNSET
     column_names: Union[Unset, List[str]] = UNSET
     collector_name: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
@@ -72,6 +74,7 @@ class StatisticsCollectorSearchFilters:
         if not isinstance(self.labels, Unset):
             labels = self.labels
 
+        max_results = self.max_results
         column_names: Union[Unset, List[str]] = UNSET
         if not isinstance(self.column_names, Unset):
             column_names = self.column_names
@@ -110,6 +113,8 @@ class StatisticsCollectorSearchFilters:
             field_dict["tags"] = tags
         if labels is not UNSET:
             field_dict["labels"] = labels
+        if max_results is not UNSET:
+            field_dict["maxResults"] = max_results
         if column_names is not UNSET:
             field_dict["columnNames"] = column_names
         if collector_name is not UNSET:
@@ -139,6 +144,8 @@ class StatisticsCollectorSearchFilters:
         tags = cast(List[str], d.pop("tags", UNSET))
 
         labels = cast(List[str], d.pop("labels", UNSET))
+
+        max_results = d.pop("maxResults", UNSET)
 
         column_names = cast(List[str], d.pop("columnNames", UNSET))
 
@@ -172,6 +179,7 @@ class StatisticsCollectorSearchFilters:
             enabled=enabled,
             tags=tags,
             labels=labels,
+            max_results=max_results,
             column_names=column_names,
             collector_name=collector_name,
             sensor_name=sensor_name,

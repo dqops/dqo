@@ -36,6 +36,7 @@ import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.*;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
+import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;

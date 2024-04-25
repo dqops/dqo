@@ -28,8 +28,8 @@ import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.data.checkresults.factory.CheckResultsTableFactoryImpl;
 import com.dqops.data.checkresults.services.CheckResultsDataServiceImpl;
-import com.dqops.data.checkresults.services.models.ComparisonCheckResultModel;
-import com.dqops.data.checkresults.services.models.TableComparisonResultsModel;
+import com.dqops.data.checkresults.models.ComparisonCheckResultModel;
+import com.dqops.data.checkresults.models.TableComparisonResultsModel;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshotFactoryImpl;
 import com.dqops.data.errors.factory.ErrorsTableFactoryImpl;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactoryImpl;
@@ -94,7 +94,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
         userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithEmptyTemporaryContext();
-        userHomeContext = userHomeContextFactory.openLocalUserHome(userDomainIdentity);
+        userHomeContext = userHomeContextFactory.openLocalUserHome(userDomainIdentity, false);
         UserHomeContextObjectMother.addSampleTable(userHomeContext, comparedSampleTable);
         UserHomeContextObjectMother.addSampleTable(userHomeContext, referenceSampleTable);
         userHome = userHomeContext.getUserHome();

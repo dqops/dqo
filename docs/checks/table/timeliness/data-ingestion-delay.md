@@ -1,3 +1,6 @@
+---
+title: data ingestion delay data quality checks
+---
 # data ingestion delay data quality checks
 
 A table-level check that calculates the time difference between the most recent row in the table and the most recent timestamp when the last row was loaded into the data warehouse or data lake.
@@ -21,7 +24,7 @@ Calculates the time difference in days between the most recent event timestamp a
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
+|<span class="no-wrap-code">`profile_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Timeliness](../../../dqo-concepts/data-quality-dimensions.md#data-timeliness)|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
@@ -902,7 +905,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="8-16 33-38"
+    ```yaml hl_lines="8-4 33-38"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1738,7 +1741,7 @@ Daily  calculating the time difference in days between the most recent event tim
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
+|<span class="no-wrap-code">`daily_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Timeliness](../../../dqo-concepts/data-quality-dimensions.md#data-timeliness)|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
@@ -2620,7 +2623,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="8-16 34-39"
+    ```yaml hl_lines="8-4 34-39"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3457,7 +3460,7 @@ Monthly monitoring calculating the time difference in days between the most rece
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
+|<span class="no-wrap-code">`monthly_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Timeliness](../../../dqo-concepts/data-quality-dimensions.md#data-timeliness)|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
@@ -4339,7 +4342,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="8-16 34-39"
+    ```yaml hl_lines="8-4 34-39"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -5176,7 +5179,7 @@ Daily partitioned check calculating the time difference in days between the most
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
+|<span class="no-wrap-code">`daily_partition_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Timeliness](../../../dqo-concepts/data-quality-dimensions.md#data-timeliness)|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
@@ -6071,7 +6074,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="12-20 43-48"
+    ```yaml hl_lines="12-4 43-48"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -6915,7 +6918,7 @@ Monthly partitioned check calculating the time difference in days between the mo
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
+|<span class="no-wrap-code">`monthly_partition_data_ingestion_delay`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Timeliness](../../../dqo-concepts/data-quality-dimensions.md#data-timeliness)|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
@@ -7810,7 +7813,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="12-20 43-48"
+    ```yaml hl_lines="12-4 43-48"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table

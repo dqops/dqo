@@ -1,3 +1,6 @@
+---
+title: DQOps REST API jobs models reference
+---
 # DQOps REST API jobs models reference
 The references of all objects used by [jobs](../operations/jobs.md) REST API operations are listed below.
 
@@ -109,7 +112,7 @@ Identifies a single partition for hive partitioned tables stored as parquet file
 |<span class="no-wrap-code">`data_domain`</span>|Data domain name.|*string*|
 |<span class="no-wrap-code">[`table_type`](#dqoroot)</span>|Table type.|*[DqoRoot](#dqoroot)*|
 |<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
-|<span class="no-wrap-code">[`table_name`](./columns.md#physicaltablename)</span>|Table name (schema.table).|*[PhysicalTableName](./columns.md#physicaltablename)*|
+|<span class="no-wrap-code">[`table_name`](./common.md#physicaltablename)</span>|Table name (schema.table).|*[PhysicalTableName](./common.md#physicaltablename)*|
 |<span class="no-wrap-code">`month`</span>|The date of teh first day of the month that identifies a monthly partition.|*date*|
 
 
@@ -316,7 +319,7 @@ ___
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection`</span>|The name of the target connection.|*string*|
 |<span class="no-wrap-code">`max_jobs_per_connection`</span>|The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs.|*integer*|
-|<span class="no-wrap-code">[`table`](./columns.md#physicaltablename)</span>|The full physical name (schema.table) of the target table.|*[PhysicalTableName](./columns.md#physicaltablename)*|
+|<span class="no-wrap-code">[`table`](./common.md#physicaltablename)</span>|The full physical name (schema.table) of the target table.|*[PhysicalTableName](./common.md#physicaltablename)*|
 |<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Target data quality checks filter.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
 |<span class="no-wrap-code">[`time_window_filter`](./jobs.md#timewindowfilterparameters)</span>|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|*[TimeWindowFilterParameters](./jobs.md#timewindowfilterparameters)*|
 |<span class="no-wrap-code">`dummy_execution`</span>|Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.|*boolean*|
@@ -355,6 +358,7 @@ Hierarchy node search filters for finding enabled statistics collectors (basic p
 |<span class="no-wrap-code">`connection`</span>|The connection (data source) name. Supports search patterns in the format: 'source\*', '\*_prod', 'prefix\*suffix'.|*string*|
 |<span class="no-wrap-code">`full_table_name`</span>|The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\*', 'schema_name.*', '*.*', 'schema_name.\*_customer', 'schema_name.tab_\*_suffix'.|*string*|
 |<span class="no-wrap-code">`enabled`</span>|A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.|*boolean*|
+|<span class="no-wrap-code">`max_results`</span>|Optional limit for the maximum number of results to return.|*integer*|
 
 
 ___
@@ -400,7 +404,7 @@ ___
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection`</span>|The name of the target connection.|*string*|
 |<span class="no-wrap-code">`max_jobs_per_connection`</span>|The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs.|*integer*|
-|<span class="no-wrap-code">[`table`](./columns.md#physicaltablename)</span>|The full physical name (schema.table) of the target table.|*[PhysicalTableName](./columns.md#physicaltablename)*|
+|<span class="no-wrap-code">[`table`](./common.md#physicaltablename)</span>|The full physical name (schema.table) of the target table.|*[PhysicalTableName](./common.md#physicaltablename)*|
 |<span class="no-wrap-code">[`statistics_collector_search_filters`](./jobs.md#statisticscollectorsearchfilters)</span>|Statistics collectors search filters that identify the type of statistics collector to run.|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
 |<span class="no-wrap-code">[`data_scope`](./jobs.md#statisticsdatascope)</span>|The target scope of collecting statistics. Statistics can be collected for the entire table or for each data grouping separately.|*[StatisticsDataScope](./jobs.md#statisticsdatascope)*|
 |<span class="no-wrap-code">`dummy_sensor_execution`</span>|Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).|*boolean*|

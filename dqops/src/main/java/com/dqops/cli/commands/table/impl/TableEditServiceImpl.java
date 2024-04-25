@@ -64,7 +64,7 @@ public class TableEditServiceImpl implements TableEditService {
      */
     public int launchEditorForTable(String connectionName, String fullTableName) {
         DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
         if (connectionWrapper == null) {

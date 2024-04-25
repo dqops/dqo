@@ -57,7 +57,7 @@ public class UserHomeContextFactoryImplTests extends BaseTest {
                 new UserDomainIdentityFactoryImpl(defaultUserConfiguration));
         UserHomeContextFactoryImpl sut = new UserHomeContextFactoryImpl(yamlSerializer, jsonSerializer, factoryMock, userHomeContextCache);
 
-        UserHomeContext userHomeContext = sut.openLocalUserHome(userDomainIdentity);
+        UserHomeContext userHomeContext = sut.openLocalUserHome(userDomainIdentity, false);
         Assertions.assertNotNull(userHomeContext);
         Assertions.assertSame(localHomeFolder, userHomeContext.getHomeRoot());
         Assertions.assertNotNull(userHomeContext.getUserHome());

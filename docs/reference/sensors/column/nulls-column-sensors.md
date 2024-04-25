@@ -1,4 +1,7 @@
-# Data quality nulls sensors
+---
+title: DQOps data quality nulls sensors
+---
+# DQOps data quality nulls sensors
 All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **nulls** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
 ---

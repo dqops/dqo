@@ -86,7 +86,7 @@ public class InstanceSignatureKeyProviderImpl implements InstanceSignatureKeyPro
         }
 
         DqoUserPrincipal userPrincipalForAdministrator = this.userPrincipalProvider.createUserPrincipalForAdministrator();
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipalForAdministrator.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipalForAdministrator.getDataDomainIdentity(), false);
         SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
         LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
         String instanceKeyBase64String = null;

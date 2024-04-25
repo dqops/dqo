@@ -1,4 +1,7 @@
-# dqo connection command
+---
+title: dqo connection command-line command
+---
+# dqo connection command-line command
 The reference of the **connection** command in DQOps. Modify or list connections
 
 
@@ -74,7 +77,7 @@ Creates a new connection to the database with the specified details such as conn
 
 ```
 $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
-                [--athena-authentication-mode=<athenaAuthenticationMode>]
+                [--athena-aws-authentication-mode=<awsAuthenticationMode>]
                 [--athena-output-location=<athenaOutputLocation>]
                 [--athena-region=<athenaRegion>]
                 [--athena-work-group=<athenaWorkGroup>]
@@ -89,7 +92,9 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--databricks-catalog=<catalog>] [--databricks-host=<host>]
                 [--databricks-http-path=<httpPath>]
                 [--databricks-password=<password>] [--databricks-port=<port>]
-                [--databricks-user=<user>] [--duckdb-database=<database>]
+                [--databricks-user=<user>]
+                [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
+                [--duckdb-database=<database>]
                 [--duckdb-files-format-type=<filesFormatType>]
                 [--duckdb-password=<password>] [--duckdb-read-mode=<readMode>]
                 [--duckdb-region=<region>]
@@ -108,9 +113,11 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--postgresql-sslmode=<sslmode>] [--postgresql-user=<user>]
                 [--presto-database=<database>] [--presto-host=<host>]
                 [--presto-password=<password>] [--presto-port=<port>]
-                [--presto-user=<user>] [--redshift-database=<database>]
-                [--redshift-host=<host>] [--redshift-password=<password>]
-                [--redshift-port=<port>] [--redshift-user=<user>]
+                [--presto-user=<user>]
+                [--redshift-authentication-mode=<redshiftAuthenticationMode>]
+                [--redshift-database=<database>] [--redshift-host=<host>]
+                [--redshift-password=<password>] [--redshift-port=<port>]
+                [--redshift-user=<user>]
                 [--single-store-parameters-spec=<singleStoreDbParametersSpec>]
                 [--snowflake-account=<account>]
                 [--snowflake-database=<database>]
@@ -139,7 +146,7 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
 
 ```
 dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
-                [--athena-authentication-mode=<athenaAuthenticationMode>]
+                [--athena-aws-authentication-mode=<awsAuthenticationMode>]
                 [--athena-output-location=<athenaOutputLocation>]
                 [--athena-region=<athenaRegion>]
                 [--athena-work-group=<athenaWorkGroup>]
@@ -154,7 +161,9 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--databricks-catalog=<catalog>] [--databricks-host=<host>]
                 [--databricks-http-path=<httpPath>]
                 [--databricks-password=<password>] [--databricks-port=<port>]
-                [--databricks-user=<user>] [--duckdb-database=<database>]
+                [--databricks-user=<user>]
+                [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
+                [--duckdb-database=<database>]
                 [--duckdb-files-format-type=<filesFormatType>]
                 [--duckdb-password=<password>] [--duckdb-read-mode=<readMode>]
                 [--duckdb-region=<region>]
@@ -173,9 +182,11 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--postgresql-sslmode=<sslmode>] [--postgresql-user=<user>]
                 [--presto-database=<database>] [--presto-host=<host>]
                 [--presto-password=<password>] [--presto-port=<port>]
-                [--presto-user=<user>] [--redshift-database=<database>]
-                [--redshift-host=<host>] [--redshift-password=<password>]
-                [--redshift-port=<port>] [--redshift-user=<user>]
+                [--presto-user=<user>]
+                [--redshift-authentication-mode=<redshiftAuthenticationMode>]
+                [--redshift-database=<database>] [--redshift-host=<host>]
+                [--redshift-password=<password>] [--redshift-port=<port>]
+                [--redshift-user=<user>]
                 [--single-store-parameters-spec=<singleStoreDbParametersSpec>]
                 [--snowflake-account=<account>]
                 [--snowflake-database=<database>]
@@ -208,7 +219,7 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<div id="connection add--athena-authentication-mode" class="no-wrap-code">`--athena-authentication-mode`</div>|The authentication mode for AWS Athena. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>|
+|<div id="connection add--athena-aws-authentication-mode" class="no-wrap-code">`--athena-aws-authentication-mode`</div>|The authentication mode for AWS Athena. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>|
 |<div id="connection add--athena-output-location" class="no-wrap-code">`--athena-output-location`</div>|The location in Amazon S3 where query results will be stored. Supports also a null configuration with a custom environment variable.| ||
 |<div id="connection add--athena-region" class="no-wrap-code">`--athena-region`</div>|The AWS Athena Region where queries will be run. Supports also a null configuration with a custom environment variable.| ||
 |<div id="connection add--athena-work-group" class="no-wrap-code">`--athena-work-group`</div>|The Athena WorkGroup in which queries will run. Supports also a null configuration with a custom environment variable.| ||
@@ -226,6 +237,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add--databricks-password" class="no-wrap-code">`--databricks-password`</div>|Databricks database password.| ||
 |<div id="connection add--databricks-port" class="no-wrap-code">`--databricks-port`</div>|Databricks port number| ||
 |<div id="connection add--databricks-user" class="no-wrap-code">`--databricks-user`</div>|Databricks user name.| ||
+|<div id="connection add--duckdb-aws-authentication-mode" class="no-wrap-code">`--duckdb-aws-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>|
 |<div id="connection add--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name for in-memory read mode. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-directories" class="no-wrap-code">`--duckdb-directories`</div>|| ||
 |<div id="connection add--duckdb-files-format-type" class="no-wrap-code">`--duckdb-files-format-type`</div>|Type of source files format for DuckDB.| |*csv*<br/>*json*<br/>*parquet*<br/>|
@@ -265,6 +277,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add--presto-port" class="no-wrap-code">`--presto-port`</div>|Presto port number| ||
 |<div id="connection add--presto-user" class="no-wrap-code">`--presto-user`</div>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>|
+|<div id="connection add--redshift-authentication-mode" class="no-wrap-code">`--redshift-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>*user_password*<br/>|
 |<div id="connection add--redshift-database" class="no-wrap-code">`--redshift-database`</div>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--redshift-host" class="no-wrap-code">`--redshift-host`</div>|Redshift host name| ||
 |<div id="connection add--redshift-password" class="no-wrap-code">`--redshift-password`</div>|Redshift database password. The value can be in the null format to use dynamic substitution.| ||
@@ -378,7 +391,7 @@ Update the connection or connections that match the conditions specified in the 
 
 ```
 $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
-                   [--athena-authentication-mode=<athenaAuthenticationMode>]
+                   [--athena-aws-authentication-mode=<awsAuthenticationMode>]
                    [--athena-output-location=<athenaOutputLocation>]
                    [--athena-region=<athenaRegion>]
                    [--athena-work-group=<athenaWorkGroup>]
@@ -394,6 +407,7 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--databricks-http-path=<httpPath>]
                    [--databricks-password=<password>]
                    [--databricks-port=<port>] [--databricks-user=<user>]
+                   [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
                    [--duckdb-database=<database>]
                    [--duckdb-files-format-type=<filesFormatType>]
                    [--duckdb-password=<password>]
@@ -414,7 +428,8 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--postgresql-user=<user>] [--presto-database=<database>]
                    [--presto-host=<host>] [--presto-password=<password>]
                    [--presto-port=<port>] [--presto-user=<user>]
-                   [--redshift-database=<database>] [--redshift-host=<host>]
+                   [--redshift-authentication-mode=<redshiftAuthenticationMode>]
+                    [--redshift-database=<database>] [--redshift-host=<host>]
                    [--redshift-password=<password>] [--redshift-port=<port>]
                    [--redshift-user=<user>]
                    [--single-store-parameters-spec=<singleStoreDbParametersSpec>
@@ -446,7 +461,7 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
 
 ```
 dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
-                   [--athena-authentication-mode=<athenaAuthenticationMode>]
+                   [--athena-aws-authentication-mode=<awsAuthenticationMode>]
                    [--athena-output-location=<athenaOutputLocation>]
                    [--athena-region=<athenaRegion>]
                    [--athena-work-group=<athenaWorkGroup>]
@@ -462,6 +477,7 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--databricks-http-path=<httpPath>]
                    [--databricks-password=<password>]
                    [--databricks-port=<port>] [--databricks-user=<user>]
+                   [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
                    [--duckdb-database=<database>]
                    [--duckdb-files-format-type=<filesFormatType>]
                    [--duckdb-password=<password>]
@@ -482,7 +498,8 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--postgresql-user=<user>] [--presto-database=<database>]
                    [--presto-host=<host>] [--presto-password=<password>]
                    [--presto-port=<port>] [--presto-user=<user>]
-                   [--redshift-database=<database>] [--redshift-host=<host>]
+                   [--redshift-authentication-mode=<redshiftAuthenticationMode>]
+                    [--redshift-database=<database>] [--redshift-host=<host>]
                    [--redshift-password=<password>] [--redshift-port=<port>]
                    [--redshift-user=<user>]
                    [--single-store-parameters-spec=<singleStoreDbParametersSpec>
@@ -518,7 +535,7 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<div id="connection update--athena-authentication-mode" class="no-wrap-code">`--athena-authentication-mode`</div>|The authentication mode for AWS Athena. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>|
+|<div id="connection update--athena-aws-authentication-mode" class="no-wrap-code">`--athena-aws-authentication-mode`</div>|The authentication mode for AWS Athena. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>|
 |<div id="connection update--athena-output-location" class="no-wrap-code">`--athena-output-location`</div>|The location in Amazon S3 where query results will be stored. Supports also a null configuration with a custom environment variable.| ||
 |<div id="connection update--athena-region" class="no-wrap-code">`--athena-region`</div>|The AWS Athena Region where queries will be run. Supports also a null configuration with a custom environment variable.| ||
 |<div id="connection update--athena-work-group" class="no-wrap-code">`--athena-work-group`</div>|The Athena WorkGroup in which queries will run. Supports also a null configuration with a custom environment variable.| ||
@@ -536,6 +553,7 @@ All parameters supported by the command are listed below.
 |<div id="connection update--databricks-password" class="no-wrap-code">`--databricks-password`</div>|Databricks database password.| ||
 |<div id="connection update--databricks-port" class="no-wrap-code">`--databricks-port`</div>|Databricks port number| ||
 |<div id="connection update--databricks-user" class="no-wrap-code">`--databricks-user`</div>|Databricks user name.| ||
+|<div id="connection update--duckdb-aws-authentication-mode" class="no-wrap-code">`--duckdb-aws-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>|
 |<div id="connection update--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name for in-memory read mode. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-directories" class="no-wrap-code">`--duckdb-directories`</div>|| ||
 |<div id="connection update--duckdb-files-format-type" class="no-wrap-code">`--duckdb-files-format-type`</div>|Type of source files format for DuckDB.| |*csv*<br/>*json*<br/>*parquet*<br/>|
@@ -574,6 +592,7 @@ All parameters supported by the command are listed below.
 |<div id="connection update--presto-password" class="no-wrap-code">`--presto-password`</div>|Presto database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--presto-port" class="no-wrap-code">`--presto-port`</div>|Presto port number| ||
 |<div id="connection update--presto-user" class="no-wrap-code">`--presto-user`</div>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--redshift-authentication-mode" class="no-wrap-code">`--redshift-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>*user_password*<br/>|
 |<div id="connection update--redshift-database" class="no-wrap-code">`--redshift-database`</div>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--redshift-host" class="no-wrap-code">`--redshift-host`</div>|Redshift host name| ||
 |<div id="connection update--redshift-password" class="no-wrap-code">`--redshift-password`</div>|Redshift database password. The value can be in the null format to use dynamic substitution.| ||

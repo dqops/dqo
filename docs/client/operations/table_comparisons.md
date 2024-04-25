@@ -1,3 +1,6 @@
+---
+title: DQOps REST API table_comparisons operations
+---
 # DQOps REST API table_comparisons operations
 Operations for managing the configurations of table comparisons between tables on the same or different data sources
 
@@ -2571,7 +2574,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
 |<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
 |<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
-|<span class="no-wrap-code">[`check_type`](../models/table_comparisons.md#checktype)</span>|Optional check type filter (profiling, monitoring, partitioned).|*[CheckType](../models/table_comparisons.md#checktype)*| |
+|<span class="no-wrap-code">[`check_type`](../models/common.md#checktype)</span>|Optional check type filter (profiling, monitoring, partitioned).|*[CheckType](../models/common.md#checktype)*| |
 |<span class="no-wrap-code">[`check_time_scale`](../models/common.md#checktimescale)</span>|Optional time scale filter for table comparisons specific to the monitoring and partitioned checks (values: daily or monthly).|*[CheckTimeScale](../models/common.md#checktimescale)*| |
 
 

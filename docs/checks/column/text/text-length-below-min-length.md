@@ -1,3 +1,6 @@
+---
+title: text length below min length data quality checks
+---
 # text length below min length data quality checks
 
 This check finds texts that are shorter than the minimum accepted text length. It counts the number of texts that are too short and raises a data quality issue when too many invalid texts are found.
@@ -17,7 +20,7 @@ The check counts the number of text values in the column that is below the lengt
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_text_length_below_min_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*text_length_below_min_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`profile_text_length_below_min_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*text_length_below_min_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -719,7 +722,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 29-34"
+    ```yaml hl_lines="5-13 29-34"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1376,7 +1379,7 @@ The check counts the number of text values in the column that is below the lengt
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_text_length_below_min_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*text_length_below_min_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`daily_text_length_below_min_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*text_length_below_min_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -2079,7 +2082,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 30-35"
+    ```yaml hl_lines="5-13 30-35"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2737,7 +2740,7 @@ The check counts the number of text values in the column that is below the lengt
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_text_length_below_min_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*text_length_below_min_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`monthly_text_length_below_min_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*text_length_below_min_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -3440,7 +3443,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 30-35"
+    ```yaml hl_lines="5-13 30-35"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -4098,7 +4101,7 @@ The check counts the number of text values in the column that is below the lengt
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_text_length_below_min_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*text_length_below_min_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`daily_partition_text_length_below_min_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*text_length_below_min_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -4815,7 +4818,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 40-45"
+    ```yaml hl_lines="10-4 40-45"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -5481,7 +5484,7 @@ The check counts the number of text values in the column that is below the lengt
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_text_length_below_min_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*text_length_below_min_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`monthly_partition_text_length_below_min_length`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*text_length_below_min_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -6198,7 +6201,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 40-45"
+    ```yaml hl_lines="10-4 40-45"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table

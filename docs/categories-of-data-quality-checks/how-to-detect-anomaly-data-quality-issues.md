@@ -1,4 +1,7 @@
-# Detecting anomalies in numeric data
+---
+title: How to detect anomalies in numeric data
+---
+# How to detect anomalies in numeric data
 Read this guide to learn how to detect anomaly data quality issues in numeric data using DQOps.
 The data quality checks are configured in the `anomaly` category in DQOps.
 
@@ -15,7 +18,7 @@ which stores the latitude of the reported incident's location.
 
 The following screen shows the data profiling summary captured by DQOps for the latitude column, showing the top 10 most common values.
 
-![Data profiling column result of a latitude column with sample values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-profile-min.png){ loading=lazy }
+![Data profiling column result of a latitude column with sample values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-profile-min.png){ loading=lazy; width="1200px" }
 
 We are expecting that the majority of service requests are reported in Austin, whose coordinates is 30°16′2″N 97°44′35″W.
 The city center is at  30°16′2″N, so the values in the latitude column should be around that value.
@@ -44,11 +47,11 @@ If the value 3.44 is indeed an invalid value, it should be detected using
 the [number_below_min_value](../checks/column/numeric/number-below-min-value.md#daily-partition-number-below-min-value)
 data quality checks that find values below a minimum accepted value.
 
-![Minimum value anomalies in daily partitions chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-minimum-value-outliers-partitions-min.png){ loading=lazy }
+![Minimum value anomalies in daily partitions chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-minimum-value-outliers-partitions-min.png){ loading=lazy; width="1200px" }
 
 We can confirm that the minimum values in daily partitions are around 30.28 or 3.44 on the table with all data quality check results.
 
-![Minimum value anomalies in daily partitions results](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-minimum-value-outliers-partitions-results-min.png){ loading=lazy }
+![Minimum value anomalies in daily partitions results](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-minimum-value-outliers-partitions-results-min.png){ loading=lazy; width="1200px" }
 
 ### New maximum
 We can also detect abnormal maximum values. A similar 
@@ -56,7 +59,7 @@ We can also detect abnormal maximum values. A similar
 detects new maximum values and compares them to other maximum values for earlier daily partitions.
 The chart shows three outliers of the maximum latitude (services outside the city area) found for the last three months.
 
-![New maximum value anomaly in daily partitioned data chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-maximum-value-outliers-partitions-min.png){ loading=lazy }
+![New maximum value anomaly in daily partitioned data chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-maximum-value-outliers-partitions-min.png){ loading=lazy; width="1200px" }
 
 ## Aggregate value changed 
 A significant change in an aggregate value, such as an average or sum of values, is another type of data anomaly.
@@ -68,11 +71,11 @@ The mean and median values will change when we load many new values above or bel
 The following screen shows the mean (average) values of the latitude column calculated for each daily partition. We can interpret it as the average latitude of the location of the service request.
 An anomaly was detected on January 24th, 2024, highlighted with a yellow background on the table.
 
-![Data anomalies in a mean value of latitude in partitions table view](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-mean-anomaly-partitions-result-table-min.png){ loading=lazy }
+![Data anomalies in a mean value of latitude in partitions table view](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-mean-anomaly-partitions-result-table-min.png){ loading=lazy; width="1200px" }
 
 The chart view shows all anomalies of the maximum value in the latitude column.
 
-![Data anomalies in a mean value of latitude in partitions chart view](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-mean-anomaly-partitions-chart-min.png){ loading=lazy }
+![Data anomalies in a mean value of latitude in partitions chart view](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-mean-anomaly-partitions-chart-min.png){ loading=lazy; width="1200px" }
 
 
 ### Sum of values anomalies
@@ -117,7 +120,7 @@ The [daily_partition_mean_change_1_day](../checks/column/anomaly/mean-change-1-d
 data quality check captures a mean (average) value in every daily partition. 
 DQOps identifies a data quality issue when the mean value difference since the last day is more than 1 percent.
 
-![One day change of mean value on partitioned data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mean-change-anomaly-1-day-chart-min.png){ loading=lazy }
+![One day change of mean value on partitioned data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mean-change-anomaly-1-day-chart-min.png){ loading=lazy; width="1200px" }
 
 The blue line shows the current value of the mean measure. The gray line is the reference value, called the "expected value".
 The two lines are shifted by one day because DQOps compares values to a measure from the previous day.
@@ -126,7 +129,7 @@ The shift of the expected values by seven days is also visible on the
 chart of the [daily_partition_mean_change_7_days](../checks/column/anomaly/mean-change-7-days.md#daily-partition-mean-change-7-days)
 data quality check.
 
-![Seven days change of mean value on partitioned data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mean-change-anomaly-7-day-chart-min.png){ loading=lazy }
+![Seven days change of mean value on partitioned data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mean-change-anomaly-7-day-chart-min.png){ loading=lazy; width="1200px" }
 
 ## Anomalies at multiple severity levels
 DQOps supports configuration of the data quality rules for a [data quality check](../dqo-concepts/definition-of-data-quality-checks/index.md)
@@ -136,7 +139,7 @@ Each severity level has its own threshold value.
 DQOps analyzes the measure (the mean value for this example) using three [data quality rules](../dqo-concepts/definition-of-data-quality-rules.md),
 passing different parameters to the rule. Because the historical data is limited to ninety days, and the measures do not fit
 
-![Mean anomaly chart at three severity levels](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/anomaly-chart-at-multiple-severity-levels-min.png){ loading=lazy }
+![Mean anomaly chart at three severity levels](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/anomaly-chart-at-multiple-severity-levels-min.png){ loading=lazy; width="1200px" }
 
 DQOps raises more data quality issues than the expected percent of anomalies.
 The reason is that the historical data is limited to ninety days, and the measures do not fit a Gaussian distribution.
@@ -165,23 +168,23 @@ to learn how to detect row count changes or an inconsistent number of rows in da
 ## List of anomaly checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*sum_anomaly*](../checks/column/anomaly/sum-anomaly.md)|Consistency|This check calculates a sum of values in a numeric column and detects anomalies in a time series of previous sums. It raises a data quality issue when the sum is in the top *anomaly_percent* percentage of the most outstanding values in the time series. This data quality check uses a 90-day time window and requires a history of at least 30 days.|:material-check-bold:|
-|[*mean_anomaly*](../checks/column/anomaly/mean-anomaly.md)|Consistency|This check calculates a mean (average) of values in a numeric column and detects anomalies in a time series of previous averages. It raises a data quality issue when the mean is in the top *anomaly_percent* percentage of the most outstanding values in the time series. This data quality check uses a 90-day time window and requires a history of at least 30 days.|:material-check-bold:|
-|[*median_anomaly*](../checks/column/anomaly/median-anomaly.md)|Consistency|This check calculates a median of values in a numeric column and detects anomalies in a time series of previous medians. It raises a data quality issue when the median is in the top *anomaly_percent* percentage of the most outstanding values in the time series. This data quality check uses a 90-day time window and requires a history of at least 30 days.|:material-check-bold:|
-|[*min_anomaly*](../checks/column/anomaly/min-anomaly.md)|Consistency|This check finds a minimum value in a numeric column and detects anomalies in a time series of previous minimum values. It raises a data quality issue when the current minimum value is in the top *anomaly_percent* percentage of the most outstanding values in the time series (it is a new minimum value, far from the previous one). This data quality check uses a 90-day time window and requires a history of at least 30 days.|:material-check-bold:|
-|[*max_anomaly*](../checks/column/anomaly/max-anomaly.md)|Consistency|This check finds a maximum value in a numeric column and detects anomalies in a time series of previous maximum values. It raises a data quality issue when the current maximum value is in the top *anomaly_percent* percentage of the most outstanding values in the time series (it is a new maximum value, far from the previous one). This data quality check uses a 90-day time window and requires a history of at least 30 days.|:material-check-bold:|
-|[*mean_change*](../checks/column/anomaly/mean-change.md)|Consistency|This check detects that the mean (average) of numeric values has changed more than *max_percent* from the last measured mean.| |
-|[*mean_change_1_day*](../checks/column/anomaly/mean-change-1-day.md)|Consistency|This check detects that the mean (average) of numeric values has changed more than *max_percent* from the mean value measured one day ago (yesterday).| |
-|[*mean_change_7_days*](../checks/column/anomaly/mean-change-7-days.md)|Consistency|This check detects that the mean (average) value of numeric values has changed more than *max_percent* from the mean value measured seven days ago. This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.| |
-|[*mean_change_30_days*](../checks/column/anomaly/mean-change-30-days.md)|Consistency|This check detects that the mean (average) of numeric values has changed more than *max_percent* from the mean value measured thirty days ago. This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.| |
-|[*median_change*](../checks/column/anomaly/median-change.md)|Consistency|This check detects that the median of numeric values has changed more than *max_percent* from the last measured median.| |
-|[*median_change_1_day*](../checks/column/anomaly/median-change-1-day.md)|Consistency|This check detects that the median of numeric values has changed more than *max_percent* from the median value measured one day ago (yesterday).| |
-|[*median_change_7_days*](../checks/column/anomaly/median-change-7-days.md)|Consistency|This check detects that the median of numeric values has changed more than *max_percent* from the median value measured seven days ago. This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.| |
-|[*median_change_30_days*](../checks/column/anomaly/median-change-30-days.md)|Consistency|This check detects that the median of numeric values has changed more than *max_percent* from the median value measured thirty days ago. This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.| |
-|[*sum_change*](../checks/column/anomaly/sum-change.md)|Consistency|This check detects that the sum of numeric values has changed more than *max_percent* from the last measured sum.| |
-|[*sum_change_1_day*](../checks/column/anomaly/sum-change-1-day.md)|Consistency|This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured one day ago (yesterday).| |
-|[*sum_change_7_days*](../checks/column/anomaly/sum-change-7-days.md)|Consistency|This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured seven days ago. This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.| |
-|[*sum_change_30_days*](../checks/column/anomaly/sum-change-30-days.md)|Consistency|This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured thirty days ago. This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.| |
+|[*sum_anomaly*](../checks/column/anomaly/sum-anomaly.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check calculates a sum of values in a numeric column and detects anomalies in a time series of previous sums. It raises a data quality issue when the sum is in the top *anomaly_percent* percentage of the most outstanding values in the time series. This data quality check uses a 90-day time window and requires a history of at least 30 days.|:material-check-bold:|
+|[*mean_anomaly*](../checks/column/anomaly/mean-anomaly.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check calculates a mean (average) of values in a numeric column and detects anomalies in a time series of previous averages. It raises a data quality issue when the mean is in the top *anomaly_percent* percentage of the most outstanding values in the time series. This data quality check uses a 90-day time window and requires a history of at least 30 days.|:material-check-bold:|
+|[*median_anomaly*](../checks/column/anomaly/median-anomaly.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check calculates a median of values in a numeric column and detects anomalies in a time series of previous medians. It raises a data quality issue when the median is in the top *anomaly_percent* percentage of the most outstanding values in the time series. This data quality check uses a 90-day time window and requires a history of at least 30 days.|:material-check-bold:|
+|[*min_anomaly*](../checks/column/anomaly/min-anomaly.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check finds a minimum value in a numeric column and detects anomalies in a time series of previous minimum values. It raises a data quality issue when the current minimum value is in the top *anomaly_percent* percentage of the most outstanding values in the time series (it is a new minimum value, far from the previous one). This data quality check uses a 90-day time window and requires a history of at least 30 days.|:material-check-bold:|
+|[*max_anomaly*](../checks/column/anomaly/max-anomaly.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check finds a maximum value in a numeric column and detects anomalies in a time series of previous maximum values. It raises a data quality issue when the current maximum value is in the top *anomaly_percent* percentage of the most outstanding values in the time series (it is a new maximum value, far from the previous one). This data quality check uses a 90-day time window and requires a history of at least 30 days.|:material-check-bold:|
+|[*mean_change*](../checks/column/anomaly/mean-change.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check detects that the mean (average) of numeric values has changed more than *max_percent* from the last measured mean.| |
+|[*mean_change_1_day*](../checks/column/anomaly/mean-change-1-day.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check detects that the mean (average) of numeric values has changed more than *max_percent* from the mean value measured one day ago (yesterday).| |
+|[*mean_change_7_days*](../checks/column/anomaly/mean-change-7-days.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check detects that the mean (average) value of numeric values has changed more than *max_percent* from the mean value measured seven days ago. This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.| |
+|[*mean_change_30_days*](../checks/column/anomaly/mean-change-30-days.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check detects that the mean (average) of numeric values has changed more than *max_percent* from the mean value measured thirty days ago. This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.| |
+|[*median_change*](../checks/column/anomaly/median-change.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check detects that the median of numeric values has changed more than *max_percent* from the last measured median.| |
+|[*median_change_1_day*](../checks/column/anomaly/median-change-1-day.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check detects that the median of numeric values has changed more than *max_percent* from the median value measured one day ago (yesterday).| |
+|[*median_change_7_days*](../checks/column/anomaly/median-change-7-days.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check detects that the median of numeric values has changed more than *max_percent* from the median value measured seven days ago. This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.| |
+|[*median_change_30_days*](../checks/column/anomaly/median-change-30-days.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check detects that the median of numeric values has changed more than *max_percent* from the median value measured thirty days ago. This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.| |
+|[*sum_change*](../checks/column/anomaly/sum-change.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check detects that the sum of numeric values has changed more than *max_percent* from the last measured sum.| |
+|[*sum_change_1_day*](../checks/column/anomaly/sum-change-1-day.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured one day ago (yesterday).| |
+|[*sum_change_7_days*](../checks/column/anomaly/sum-change-7-days.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured seven days ago. This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.| |
+|[*sum_change_30_days*](../checks/column/anomaly/sum-change-30-days.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured thirty days ago. This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.| |
 
 
 **Reference and samples**

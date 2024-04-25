@@ -17,7 +17,7 @@ package com.dqops.data.errors.services;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.core.principal.UserDomainIdentity;
-import com.dqops.data.errors.services.models.ErrorsListModel;
+import com.dqops.data.errors.models.ErrorsListModel;
 
 /**
  * Service that returns data from sensor readouts.

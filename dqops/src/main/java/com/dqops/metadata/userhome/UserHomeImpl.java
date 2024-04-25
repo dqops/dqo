@@ -35,6 +35,8 @@ import com.dqops.metadata.sources.*;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapperImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.ArrayList;
+
 /**
  * Root user home model for reading and managing the definitions in the user's home.
  */
@@ -94,25 +96,30 @@ public class UserHomeImpl implements UserHome, Cloneable {
     @JsonIgnore
     private boolean dirty;
 
+    @JsonIgnore
+    private boolean readOnly;
+
     /**
      * Creates a default user home implementation.
      * @param userIdentity User identity that specifies the calling user and the data domain.
+     * @param readOnly The user home is opened in a read-only mode.
      */
-    public UserHomeImpl(UserDomainIdentity userIdentity) {
+    public UserHomeImpl(UserDomainIdentity userIdentity, boolean readOnly) {
         this.userIdentity = userIdentity;
-		this.setConnections(new ConnectionListImpl());
-		this.setSensors(new SensorDefinitionListImpl());
-		this.setRules(new RuleDefinitionListImpl());
-        this.setChecks(new CheckDefinitionListImpl());
-        this.setSettings(new SettingsWrapperImpl());
-        this.setCredentials(new SharedCredentialListImpl());
-        this.setDictionaries(new DictionaryListImpl());
-        this.setFileIndices(new FileIndexListImpl());
-        this.setDashboards(new DashboardFolderListSpecWrapperImpl());
-        this.setDefaultSchedules(new MonitoringSchedulesWrapperImpl());
-        this.setTableDefaultChecksPatterns(new TableDefaultChecksPatternListImpl());
-        this.setColumnDefaultChecksPatterns(new ColumnDefaultChecksPatternListImpl());
-        this.setDefaultNotificationWebhooks(new DefaultIncidentWebhookNotificationsWrapperImpl());
+		this.setConnections(new ConnectionListImpl(readOnly));
+		this.setSensors(new SensorDefinitionListImpl(readOnly));
+		this.setRules(new RuleDefinitionListImpl(readOnly));
+        this.setChecks(new CheckDefinitionListImpl(readOnly));
+        this.setSettings(new SettingsWrapperImpl(readOnly));
+        this.setCredentials(new SharedCredentialListImpl(readOnly));
+        this.setDictionaries(new DictionaryListImpl(readOnly));
+        this.setFileIndices(new FileIndexListImpl(readOnly));
+        this.setDashboards(new DashboardFolderListSpecWrapperImpl(readOnly));
+        this.setDefaultSchedules(new MonitoringSchedulesWrapperImpl(readOnly));
+        this.setTableDefaultChecksPatterns(new TableDefaultChecksPatternListImpl(readOnly));
+        this.setColumnDefaultChecksPatterns(new ColumnDefaultChecksPatternListImpl(readOnly));
+        this.setDefaultNotificationWebhooks(new DefaultIncidentWebhookNotificationsWrapperImpl(readOnly));
+        this.readOnly = readOnly;
     }
 
     /**
@@ -131,6 +138,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
      * @param schedules Default monitoring schedules wrapper.
      * @param tableDefaultChecksPatterns Default table-level checks.
      * @param columnDefaultChecksPatterns Default column-level checks.
+     * @param readOnly Make the user home read-only.
      */
     public UserHomeImpl(UserDomainIdentity userIdentity,
                         ConnectionListImpl connections,
@@ -145,7 +153,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
                         MonitoringSchedulesWrapperImpl schedules,
                         TableDefaultChecksPatternListImpl tableDefaultChecksPatterns,
                         ColumnDefaultChecksPatternListImpl columnDefaultChecksPatterns,
-                        DefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks) {
+                        DefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks,
+                        boolean readOnly) {
         this.userIdentity = userIdentity;
 		this.setConnections(connections);
 		this.setSensors(sensors);
@@ -160,6 +169,9 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setTableDefaultChecksPatterns(tableDefaultChecksPatterns);
         this.setColumnDefaultChecksPatterns(columnDefaultChecksPatterns);
         this.setDefaultNotificationWebhooks(notificationWebhooks);
+        if (readOnly) {
+            makeReadOnly(true);
+        }
     }
 
     /**
@@ -475,7 +487,34 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.getDefaultNotificationWebhook().flush();
 
         this.clearDirty(false); // children that were saved should be already not dirty, the next assert will detect forgotten instances
-        assert !this.isDirty();
+        assert !this.isDirty() : "Dirty node: " + this.findDirty(this).getHierarchyId().toString();
+    }
+
+    /**
+     * Scans the node tree in-depth to find the first dirty object.
+     * Returns that dirty node or null, when no node is dirty.
+     * @param node Start node to start the scan.
+     * @return Dirty node or null, when the node is not dirty.
+     */
+    private static HierarchyNode findDirty(HierarchyNode node) {
+        ArrayList<HierarchyNode> children = new ArrayList<>();
+        for (HierarchyNode childNode : node.children()) {
+            children.add(childNode);
+        }
+
+        for (HierarchyNode childNode : children) {
+            HierarchyNode dirtyChild = findDirty(childNode);
+            if (dirtyChild != null) {
+                return dirtyChild;
+            }
+        }
+
+        if (node.isDirty()) {
+            boolean revalidatedIsDirty = node.isDirty();  // this line is here not because it is needed, but to make it easier to put a breakpoint
+            return node;
+        }
+
+        return null;
     }
 
     /**
@@ -721,4 +760,32 @@ public class UserHomeImpl implements UserHome, Cloneable {
         }
     }
 
+    /**
+     * Check if the object is frozen (read only). A read-only object cannot be modified.
+     *
+     * @return True when the object is read-only and trying to apply a change will return an error.
+     */
+    @Override
+    @JsonIgnore
+    public boolean isReadOnly() {
+        return this.readOnly;
+    }
+
+    /**
+     * Sets the read-only flag on the current object, and optionally on child objects.
+     *
+     * @param propagateToChildren When true, makes also the child objects as read-only.
+     */
+    @Override
+    @JsonIgnore
+    public void makeReadOnly(boolean propagateToChildren) {
+        if (!this.readOnly) {
+            this.readOnly = true;
+            if (propagateToChildren) {
+                for (HierarchyNode element : this.children()) {
+                    element.makeReadOnly(true);
+                }
+            }
+        }
+    }
 }

@@ -1,3 +1,6 @@
+---
+title: contains usa phone percent data quality checks
+---
 # contains usa phone percent data quality checks
 
 This check detects USA phone numbers inside text columns. It measures the percentage of columns containing a phone number and raises a data quality issue when too many rows contain phone numbers.
@@ -17,7 +20,7 @@ Detects USA phone numbers in text columns. Verifies that the percentage of rows 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_contains_usa_phone_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_contains_usa_phone_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -233,8 +236,8 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -255,8 +258,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column",
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -275,21 +278,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}
-                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
-                {%- else -%}
-                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
-                {%- endif -%}
-            {% endmacro %}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])[0-9]{10,}([ \t.,:;"''`|\n\r]|$)' ) }}
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))([ \t.,:;"''`|\n\r]|$)') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -305,17 +299,14 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
-            
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '(^|[ 	.,:;"`|
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(^|[ 	.,:;"`|
             
-            ])[0-9]{10,}([ 	.,:;"`|
+            ])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))([ 	.,:;"`|
             
             ]|$)')
                                 THEN 1
@@ -341,8 +332,8 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -369,8 +360,8 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -505,7 +496,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -526,7 +517,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -639,17 +630,33 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -669,17 +676,33 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -758,7 +781,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 27-32"
+    ```yaml hl_lines="5-13 27-32"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -903,8 +926,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -924,8 +947,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column",
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -945,21 +968,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}
-                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
-                {%- else -%}
-                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
-                {%- endif -%}
-            {% endmacro %}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])[0-9]{10,}([ \t.,:;"''`|\n\r]|$)' ) }}
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))([ \t.,:;"''`|\n\r]|$)') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -974,17 +988,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
-            
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '(^|[ 	.,:;"`|
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(^|[ 	.,:;"`|
             
-            ])[0-9]{10,}([ 	.,:;"`|
+            ])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))([ 	.,:;"`|
             
             ]|$)')
                                 THEN 1
@@ -1011,8 +1022,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1038,8 +1049,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -1185,7 +1196,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1205,7 +1216,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1319,17 +1330,33 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -1348,17 +1375,33 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -1454,7 +1497,7 @@ Detects USA phone numbers in text columns. Verifies that the percentage of rows 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_contains_usa_phone_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_contains_usa_phone_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1671,8 +1714,8 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -1693,8 +1736,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column",
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -1713,21 +1756,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}
-                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
-                {%- else -%}
-                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
-                {%- endif -%}
-            {% endmacro %}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])[0-9]{10,}([ \t.,:;"''`|\n\r]|$)' ) }}
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))([ \t.,:;"''`|\n\r]|$)') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -1743,17 +1777,14 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
-            
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '(^|[ 	.,:;"`|
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(^|[ 	.,:;"`|
             
-            ])[0-9]{10,}([ 	.,:;"`|
+            ])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))([ 	.,:;"`|
             
             ]|$)')
                                 THEN 1
@@ -1779,8 +1810,8 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1807,8 +1838,8 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -1943,7 +1974,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1964,7 +1995,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2077,17 +2108,33 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -2107,17 +2154,33 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -2196,7 +2259,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 28-33"
+    ```yaml hl_lines="5-13 28-33"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2342,8 +2405,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -2363,8 +2426,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column",
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -2384,21 +2447,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}
-                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
-                {%- else -%}
-                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
-                {%- endif -%}
-            {% endmacro %}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])[0-9]{10,}([ \t.,:;"''`|\n\r]|$)' ) }}
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))([ \t.,:;"''`|\n\r]|$)') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2413,17 +2467,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
-            
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '(^|[ 	.,:;"`|
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(^|[ 	.,:;"`|
             
-            ])[0-9]{10,}([ 	.,:;"`|
+            ])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))([ 	.,:;"`|
             
             ]|$)')
                                 THEN 1
@@ -2450,8 +2501,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2477,8 +2528,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -2624,7 +2675,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2644,7 +2695,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2758,17 +2809,33 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -2787,17 +2854,33 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -2893,7 +2976,7 @@ Detects USA phone numbers in text columns. Verifies that the percentage of rows 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_contains_usa_phone_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_contains_usa_phone_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3110,8 +3193,8 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -3132,8 +3215,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column",
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -3152,21 +3235,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}
-                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
-                {%- else -%}
-                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
-                {%- endif -%}
-            {% endmacro %}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])[0-9]{10,}([ \t.,:;"''`|\n\r]|$)' ) }}
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))([ \t.,:;"''`|\n\r]|$)') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3182,17 +3256,14 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
-            
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '(^|[ 	.,:;"`|
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(^|[ 	.,:;"`|
             
-            ])[0-9]{10,}([ 	.,:;"`|
+            ])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))([ 	.,:;"`|
             
             ]|$)')
                                 THEN 1
@@ -3218,8 +3289,8 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3246,8 +3317,8 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -3382,7 +3453,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3403,7 +3474,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3516,17 +3587,33 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -3546,17 +3633,33 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -3635,7 +3738,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 28-33"
+    ```yaml hl_lines="5-13 28-33"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3781,8 +3884,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -3802,8 +3905,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column",
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -3823,21 +3926,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}
-                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
-                {%- else -%}
-                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
-                {%- endif -%}
-            {% endmacro %}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])[0-9]{10,}([ \t.,:;"''`|\n\r]|$)' ) }}
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))([ \t.,:;"''`|\n\r]|$)') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3852,17 +3946,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
-            
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '(^|[ 	.,:;"`|
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(^|[ 	.,:;"`|
             
-            ])[0-9]{10,}([ 	.,:;"`|
+            ])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))([ 	.,:;"`|
             
             ]|$)')
                                 THEN 1
@@ -3889,8 +3980,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3916,8 +4007,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -4063,7 +4154,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4083,7 +4174,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4197,17 +4288,33 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -4226,17 +4333,33 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -4332,7 +4455,7 @@ Detects USA phone numbers in text columns. Verifies that the percentage of rows 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_contains_usa_phone_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_contains_usa_phone_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -4559,8 +4682,8 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -4581,8 +4704,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column",
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -4601,21 +4724,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}
-                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
-                {%- else -%}
-                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
-                {%- endif -%}
-            {% endmacro %}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])[0-9]{10,}([ \t.,:;"''`|\n\r]|$)' ) }}
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))([ \t.,:;"''`|\n\r]|$)') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -4631,17 +4745,14 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
-            
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '(^|[ 	.,:;"`|
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(^|[ 	.,:;"`|
             
-            ])[0-9]{10,}([ 	.,:;"`|
+            ])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))([ 	.,:;"`|
             
             ]|$)')
                                 THEN 1
@@ -4667,8 +4778,8 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4695,8 +4806,8 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -4831,7 +4942,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4852,7 +4963,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4965,17 +5076,33 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -4995,17 +5122,33 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -5088,7 +5231,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 38-43"
+    ```yaml hl_lines="10-4 38-43"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -5244,8 +5387,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -5265,8 +5408,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column",
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -5286,21 +5429,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}
-                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
-                {%- else -%}
-                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
-                {%- endif -%}
-            {% endmacro %}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])[0-9]{10,}([ \t.,:;"''`|\n\r]|$)' ) }}
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))([ \t.,:;"''`|\n\r]|$)') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5315,17 +5449,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
-            
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '(^|[ 	.,:;"`|
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(^|[ 	.,:;"`|
             
-            ])[0-9]{10,}([ 	.,:;"`|
+            ])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))([ 	.,:;"`|
             
             ]|$)')
                                 THEN 1
@@ -5352,8 +5483,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5379,8 +5510,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -5526,7 +5657,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5546,7 +5677,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5660,17 +5791,33 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -5689,17 +5836,33 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -5793,7 +5956,7 @@ Detects USA phone numbers in text columns. Verifies that the percentage of rows 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_contains_usa_phone_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_contains_usa_phone_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -6020,8 +6183,8 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -6042,8 +6205,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column",
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -6062,21 +6225,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}
-                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
-                {%- else -%}
-                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
-                {%- endif -%}
-            {% endmacro %}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])[0-9]{10,}([ \t.,:;"''`|\n\r]|$)' ) }}
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))([ \t.,:;"''`|\n\r]|$)') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -6092,17 +6246,14 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
-            
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '(^|[ 	.,:;"`|
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(^|[ 	.,:;"`|
             
-            ])[0-9]{10,}([ 	.,:;"`|
+            ])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))([ 	.,:;"`|
             
             ]|$)')
                                 THEN 1
@@ -6128,8 +6279,8 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -6156,8 +6307,8 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -6292,7 +6443,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6313,7 +6464,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6426,17 +6577,33 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -6456,17 +6623,33 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -6549,7 +6732,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 38-43"
+    ```yaml hl_lines="10-4 38-43"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -6705,8 +6888,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -6726,8 +6909,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_EXTRACT(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column",
+                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -6747,21 +6930,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}
-                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
-                {%- else -%}
-                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
-                {%- endif -%}
-            {% endmacro %}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])[0-9]{10,}([ \t.,:;"''`|\n\r]|$)' ) }}
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '(^|[ \t.,:;"''`|\n\r])((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))([ \t.,:;"''`|\n\r]|$)') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -6776,17 +6950,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
-            
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '(^|[ 	.,:;"`|
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '(^|[ 	.,:;"`|
             
-            ])[0-9]{10,}([ 	.,:;"`|
+            ])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))([ 	.,:;"`|
             
             ]|$)')
                                 THEN 1
@@ -6813,8 +6984,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -6840,8 +7011,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)')
-                                THEN 1
+                                    '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)'
+                                ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -6987,7 +7158,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -7007,7 +7178,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])\\d{10}\\d?([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
+                            WHEN regexp_substr(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '(^|[ \t.,:;"''`|\n\r])((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))([ \t.,:;"''`|\n\r]|$)') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -7121,17 +7292,33 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -7150,17 +7337,33 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
-                            WHEN analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r]([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9] [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '][0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+%1%-%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + '](1.md)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
+                            WHEN analyzed_table.[target_column] LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(10) + ']%' THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG(analyzed_table.[target_column])

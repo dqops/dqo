@@ -1,3 +1,6 @@
+---
+title: DQOps REST API errors operations
+---
 # DQOps REST API errors operations
 Operations that return the execution errors captured when data quality checks were executed on data sources, and sensors or rules failed with an error.
 

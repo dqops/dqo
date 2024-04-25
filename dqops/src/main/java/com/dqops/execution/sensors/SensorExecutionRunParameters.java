@@ -592,7 +592,7 @@ public class SensorExecutionRunParameters {
 
         // todo: more and better info
 
-        if (this.connection != null && this.connection.getDuckdb() != null) {
+        if (this.connection != null && this.connection.getDuckdb() != null && this.connection.getDuckdb().getFilesFormatType() != null) {
             FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(this.connection.getDuckdb(), this.table);
             if (fileFormatSpec != null) {
                 stringBuilder.append(", file format: ");

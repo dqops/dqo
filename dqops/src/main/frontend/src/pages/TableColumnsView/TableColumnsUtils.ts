@@ -1,4 +1,4 @@
-import { TableColumnsStatisticsModel } from '../../api';
+import { DimensionCurrentDataQualityStatusModel, TableColumnsStatisticsModel } from '../../api';
 import { MyData } from './TableColumnsConstans';
 
 export const renderValue = (value: any) => {
@@ -203,14 +203,67 @@ export const getSortedData = <T extends { [key: string]: any }>(
   });
   return sortedArray;
 };
+function countDimensions(dimensions: any[] | undefined): number {
+  return dimensions ? dimensions.length : 0;
+}
+
+const getSeverityLevel = (severity: any) : number => {
+  switch (severity) {
+    case 'fatal' : 
+      return 3;
+    case 'error': 
+      return 2;
+    case 'warning': 
+      return 1;
+    case 'valid':
+      return 0;        
+  }
+  return 4;
+} 
+
+
+function getHighestSeverity(dimensions:  ({
+  [key: string]: DimensionCurrentDataQualityStatusModel;
+} | undefined)[] | undefined | undefined): number {
+  if (!dimensions || dimensions.length === 0) return -1;
+  let highestSeverity = -1;
+  let counter = 0;
+  Object.values(dimensions).forEach(dimension => {
+    if (getSeverityLevel(dimension?.current_severity) === highestSeverity) {
+      counter ++;
+    }
+    if (getSeverityLevel(dimension?.current_severity) > highestSeverity) {
+      highestSeverity = getSeverityLevel(dimension?.current_severity);
+      counter = 0;
+    }
+  });
+  return highestSeverity * 100 + counter;
+}
+function sortByDimenstion(dataArray: MyData[], direction: 'asc' | 'desc'): MyData[] {
+  const array = dataArray.sort((a, b) => {
+    const aDimensionCount = countDimensions(a.dimentions);
+    const bDimensionCount = countDimensions(b.dimentions);
+
+    if (aDimensionCount !== bDimensionCount) {
+      return direction === 'desc' ? aDimensionCount - bDimensionCount : bDimensionCount - aDimensionCount;
+    }
+
+    const aHighestSeverity = getHighestSeverity(a.dimentions);
+    const bHighestSeverity = getHighestSeverity(b.dimentions);
+
+    return direction === 'desc' ? aHighestSeverity - bHighestSeverity : bHighestSeverity - aHighestSeverity;
+  });
+  return array;
+}
+
 export const handleSorting = (
   param: string,
   dataArray: MyData[],
   sortDirection: 'asc' | 'desc',
   setSortDirection: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>,
   setSortedArray: any
-) => {
-  switch (param) {
+  ) => {
+    switch (param) {
     case 'Column name':
       setSortedArray(
         getSortedArrayAlphabetictly('nameOfCol', dataArray, sortDirection)
@@ -261,6 +314,10 @@ export const handleSorting = (
         getSortedData<MyData>('unique_value', dataArray, sortDirection)
       );
       break;
+    case 'Dimensions':   
+      setSortedArray(
+        sortByDimenstion(dataArray, sortDirection)
+      );
   }
   setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
 };

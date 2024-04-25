@@ -1,3 +1,6 @@
+---
+title: max in range data quality checks
+---
 # max in range data quality checks
 
 This check finds a maximum value in a numeric column. It verifies that the maximum value is within the range of accepted values
@@ -18,7 +21,7 @@ Verifies that the maximum value in a column is not outside the expected range.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_max_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`profile_max_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -481,7 +484,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 24-29"
+    ```yaml hl_lines="5-13 24-29"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -899,7 +902,7 @@ Verifies that the maximum value in a column is not outside the expected range. S
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_max_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`daily_max_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -1363,7 +1366,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 25-30"
+    ```yaml hl_lines="5-13 25-30"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1782,7 +1785,7 @@ Verifies that the maximum value in a column does not exceed the expected range. 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_max_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`monthly_max_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -2246,7 +2249,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 25-30"
+    ```yaml hl_lines="5-13 25-30"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2665,7 +2668,7 @@ Verifies that the maximum value in a column is not outside the expected range. S
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_max_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`daily_partition_max_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -3143,7 +3146,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 35-40"
+    ```yaml hl_lines="10-4 35-40"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3570,7 +3573,7 @@ Verifies that the maximum value in a column is not outside the expected range. S
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_max_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`monthly_partition_max_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -4048,7 +4051,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 35-40"
+    ```yaml hl_lines="10-4 35-40"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table

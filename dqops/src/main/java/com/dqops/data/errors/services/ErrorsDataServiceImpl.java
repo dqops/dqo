@@ -21,8 +21,8 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
-import com.dqops.data.errors.services.models.ErrorEntryModel;
-import com.dqops.data.errors.services.models.ErrorsListModel;
+import com.dqops.data.errors.models.ErrorEntryModel;
+import com.dqops.data.errors.models.ErrorsListModel;
 import com.dqops.data.errors.snapshot.ErrorsSnapshot;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactory;
 import com.dqops.data.normalization.CommonTableNormalizationService;
@@ -316,7 +316,7 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
                                      PhysicalTableName physicalTableName,
                                      UserDomainIdentity userDomainIdentity) {
         ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_DETAILED, userDomainIdentity);
+                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
         int maxMonthsToLoad = DEFAULT_MAX_RECENT_LOADED_MONTHS;
 
         if (loadParameters.getStartMonth() != null && loadParameters.getEndMonth() != null) {

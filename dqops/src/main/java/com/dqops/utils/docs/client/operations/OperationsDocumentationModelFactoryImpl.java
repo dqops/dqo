@@ -233,6 +233,12 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
             clazz = componentModel.getReflectedClass();
         }
 
+        if (clazz == null && Objects.equals(parameterTypeString, "array")) {
+            if (parameterSchema != null && parameterSchema.getItems() != null) {
+                clazz = KNOWN_CLASSES.get(parameterSchema.getItems().getType());
+            }
+        }
+
         Type type;
         if (parameterSchema instanceof ArraySchema) {
             type = new MoreTypes.ParameterizedTypeImpl(null, List.class, clazz);

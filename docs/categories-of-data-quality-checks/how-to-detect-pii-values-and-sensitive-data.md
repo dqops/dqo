@@ -1,4 +1,7 @@
-# Detecting PII (Personal Identifiable Information) data
+---
+title: How to detect PII (Personal Identifiable Information) data
+---
+# How to detect PII (Personal Identifiable Information) data
 Read this guide to learn how to detect the presence of Personal Identifiable Information such as emails or phone numbers in tables.
 
 The data quality checks that detect PII values are configured in the `pii` category in DQOps.
@@ -60,14 +63,14 @@ The selection of columns that should be monitored for sensitive data begins on t
 The following screenshot shows samples from a public dataset of *311 service requests* line in Austin.
 We are looking at the **complaint_description** column, a free-form field that could contain some sensitive data.
 
-![Data profiling results of a column without sensitive pii data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/profile-table-without-pii-values-min.png){ loading=lazy }
+![Data profiling results of a column without sensitive pii data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/profile-table-without-pii-values-min.png){ loading=lazy; width="1200px" }
 
 So far, the data samples do not show anything sensitive, but we will prove it later with a data quality check.
 
 The next sample comes from an *incident_address* column.We can instantly notice addresses and phone numbers.
 Please be aware that this table is public, and we do not see any visible proof of anonymization.
 
-![Data profiling results of a column without sensitive pii data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/profile-table-with-pii-values-phone-zip-min.png){ loading=lazy }
+![Data profiling results of a column without sensitive pii data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/profile-table-with-pii-values-phone-zip-min.png){ loading=lazy; width="1200px" }
 
 ## Enabling PII detection in DQOps
 DQOps contains several data quality checks that run SQL queries to identify the most common PII values.
@@ -88,12 +91,12 @@ The data quality check editor in DQOps shows the Personal Identifiable Informati
 The following example shows the result of detecting phone numbers, emails, and zip codes in the **complaint_description** column.
 DQOps did not detect sensitive data inside any value stored in the column.
 
-![Data quality check editor with PII checks enabled and valid results](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/pii-data-quality-checks-valid-results-min.png){ loading=lazy }
+![Data quality check editor with PII checks enabled and valid results](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/pii-data-quality-checks-valid-results-min.png){ loading=lazy; width="1200px" }
 
 The next example shows the result of running the same checks on the **incident_address** column.
 We can see that this public dataset contains a few phone numbers and emails.
 
-![Data quality checks editor with PII checks that found sensitive data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/pii-check-detecting-emails-and-phones-found-min.png){ loading=lazy }
+![Data quality checks editor with PII checks that found sensitive data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/pii-check-detecting-emails-and-phones-found-min.png){ loading=lazy; width="1200px" }
 
 
 ### Activate PII checks in YAML
@@ -139,11 +142,11 @@ You can make a copy of one of the built-in PII checks and adapt the regular expr
 ## List of PII checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*contains_usa_phone_percent*](../checks/column/pii/contains-usa-phone-percent.md)|Validity|This check detects USA phone numbers inside text columns. It measures the percentage of columns containing a phone number and raises a data quality issue when too many rows contain phone numbers.|:material-check-bold:|
-|[*contains_email_percent*](../checks/column/pii/contains-email-percent.md)|Validity|This check detects emails inside text columns. It measures the percentage of columns containing an email and raises a data quality issue when too many rows contain emails.|:material-check-bold:|
-|[*contains_usa_zipcode_percent*](../checks/column/pii/contains-usa-zipcode-percent.md)|Validity|This check detects USA zip code inside text columns. It measures the percentage of columns containing a zip code and raises a data quality issue when too many rows contain zip codes.| |
-|[*contains_ip4_percent*](../checks/column/pii/contains-ip4-percent.md)|Validity|This check detects IP4 addresses inside text columns. It measures the percentage of columns containing an IP4 address and raises a data quality issue when too many rows contain IP4 addresses.| |
-|[*contains_ip6_percent*](../checks/column/pii/contains-ip6-percent.md)|Validity|This check detects IP6 addresses inside text columns. It measures the percentage of columns containing an IP6 address and raises a data quality issue when too many rows contain IP6 addresses.| |
+|[*contains_usa_phone_percent*](../checks/column/pii/contains-usa-phone-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|This check detects USA phone numbers inside text columns. It measures the percentage of columns containing a phone number and raises a data quality issue when too many rows contain phone numbers.|:material-check-bold:|
+|[*contains_email_percent*](../checks/column/pii/contains-email-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|This check detects emails inside text columns. It measures the percentage of columns containing an email and raises a data quality issue when too many rows contain emails.|:material-check-bold:|
+|[*contains_usa_zipcode_percent*](../checks/column/pii/contains-usa-zipcode-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|This check detects USA zip code inside text columns. It measures the percentage of columns containing a zip code and raises a data quality issue when too many rows contain zip codes.| |
+|[*contains_ip4_percent*](../checks/column/pii/contains-ip4-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|This check detects IP4 addresses inside text columns. It measures the percentage of columns containing an IP4 address and raises a data quality issue when too many rows contain IP4 addresses.| |
+|[*contains_ip6_percent*](../checks/column/pii/contains-ip6-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|This check detects IP6 addresses inside text columns. It measures the percentage of columns containing an IP6 address and raises a data quality issue when too many rows contain IP6 addresses.| |
 
 
 **Reference and samples**

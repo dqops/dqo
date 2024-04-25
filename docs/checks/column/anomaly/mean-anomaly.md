@@ -1,3 +1,6 @@
+---
+title: mean anomaly data quality checks
+---
 # mean anomaly data quality checks
 
 This check calculates a mean (average) of values in a numeric column and detects anomalies in a time series of previous averages.
@@ -19,7 +22,7 @@ Verifies that the mean value in a column changes in a rate within a percentile b
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_mean_anomaly`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_mean_anomaly`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -485,7 +488,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 27-32"
+    ```yaml hl_lines="5-13 27-32"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -906,7 +909,7 @@ Verifies that the mean value in a column changes in a rate within a percentile b
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_mean_anomaly`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_mean_anomaly`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1373,7 +1376,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 28-33"
+    ```yaml hl_lines="5-13 28-33"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1795,7 +1798,7 @@ Verifies that the mean value in a column is within a percentile from measurement
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_mean_anomaly`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_mean_anomaly`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2276,7 +2279,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 38-43"
+    ```yaml hl_lines="10-4 38-43"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table

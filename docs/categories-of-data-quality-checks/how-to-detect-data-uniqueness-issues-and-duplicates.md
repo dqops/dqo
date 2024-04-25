@@ -1,4 +1,7 @@
-# Detecting duplicate data and measuring uniqueness
+---
+title: How to detect duplicate data and measure data uniqueness
+---
+# How to detect duplicate data and measure data uniqueness
 Read this guide to learn how to detect duplicate data and how distinct values, data uniqueness, and duplicate data are related to each other.
 
 The data uniqueness and duplicate detection checks are configured in the `uniqueness` category in DQOps.
@@ -100,12 +103,12 @@ The table-level profiling statistics screen shows only the number of distinct va
 Columns with fewer unique values are highlighted with a darker green background color.
 These are the columns that potentially contain duplicate values.
 
-![Table profiling summary screen showing duplicate counts for each column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-statistics-on-column-list-dqops-profiling-screen-min.png){ loading=lazy }
+![Table profiling summary screen showing duplicate counts for each column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-statistics-on-column-list-dqops-profiling-screen-min.png){ loading=lazy; width="1200px" }
 
 ### Column statistics
 The data profiling screen for a column shows all data uniqueness metrics captured by the DQOps data profiler.
 
-![Column level uniqueness statistics in DQOps showing duplicate and distinct count](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-and-duplicate-count-statistics-in-dqops-min.png){ loading=lazy }
+![Column level uniqueness statistics in DQOps showing duplicate and distinct count](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-and-duplicate-count-statistics-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 
 ## Distinct count
@@ -126,7 +129,7 @@ The [*distinct_count*](../checks/column/uniqueness/distinct-count.md) check
 verifies that the count of distinct values is within an accepted range.
 The range is defined by setting the **min_count** and **max_count** parameters.
 
-![Distinct count in range data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-in-range-check-in-dqops-min.png){ loading=lazy }
+![Distinct count in range data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-in-range-check-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### Validating distinct count in YAML
 The configuration of the [*distinct_count*](../checks/column/uniqueness/distinct-count.md) check is simple.
@@ -158,7 +161,7 @@ A value below 100% indicates that the column contains duplicate values.
 ### Validating distinct percent in UI
 The [*distinct_percent*](../checks/column/uniqueness/distinct-percent.md)  check has one parameter, the *max_percent* value.
 
-![Distinct percent data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-percent-data-quality-check-in-dqops-min.png){ loading=lazy }
+![Distinct percent data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-percent-data-quality-check-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### Validating distinct percent in YAML
 The configuration of the [*distinct_percent*](../checks/column/uniqueness/distinct-percent.md) check in a YAML file is shown below.
@@ -190,7 +193,7 @@ The difference calculated by the expression `COUNT(column_name) - COUNT(DISTINCT
 The [*duplicate_count*](../checks/column/uniqueness/duplicate-count.md) check
 takes one parameter **max_count**, which is the maximum accepted number of duplicate values.
 
-![Duplicate count data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/duplicate-count-check-in-dqops-min.png){ loading=lazy }
+![Duplicate count data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/duplicate-count-check-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### Finding duplicates in YAML
 The configuration of the [*duplicate_count*](../checks/column/uniqueness/duplicate-count.md) check in a YAML file is shown below.
@@ -227,7 +230,7 @@ The check will show the first values after 30 days.
 However, the check will not reveal any results if the distinct count has been unchanged for the last three months.
 That is because the time series anomaly detection rule needs to detect the scale of day-to-day changes.
 
-![Distinct count anomaly detection by DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-anomaly-detection-in-dqops-min.png){ loading=lazy }
+![Distinct count anomaly detection by DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-anomaly-detection-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### Distinct count anomaly detection in YAML
 The configuration of the [*daily_distinct_count_anomaly*](../checks/column/uniqueness/distinct-count-anomaly.md#daily-distinct-count-anomaly)
@@ -279,13 +282,13 @@ DQOps replaces the `{alias}.` token with the alias of the table.
 ### Detect multi-column duplicates in UI
 We have to add a virtual column to the monitored table. The column will be calculated using the SQL expression shown above.
 
-![Adding calculated column for concatenating values for multi-column duplicate detection in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/adding-calculated-column-concatenated-unique-values-in-dqops-min.png){ loading=lazy }
+![Adding calculated column for concatenating values for multi-column duplicate detection in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/adding-calculated-column-concatenated-unique-values-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 After adding a calculated column,
 DQOps will show it in the metadata tree. We can now configure the [*duplicate_count*](../checks/column/uniqueness/duplicate-count.md)
 data quality check.
 
-![Duplicate count detection in DQOps on multiple columns using a data quality check editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/duplicate-detection-check-in-dqops-on-multiple-columns-min.png){ loading=lazy }
+![Duplicate count detection in DQOps on multiple columns using a data quality check editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/duplicate-detection-check-in-dqops-on-multiple-columns-min.png){ loading=lazy; width="1200px" }
 
 ### Detect multi-column duplicates in YAML
 We must add our calculated column to the list of columns to detect duplicates on multiple other columns. 
@@ -311,7 +314,7 @@ spec:
 ## Configuring other uniqueness checks
 The DQOps data quality check editor shows the remaining uniqueness checks after clicking the *Show advanced checks* checkbox.
 
-![List of all uniqueness data quality checks in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/all-uniqueness-checks-in-dqops-min.png){ width="619px"; loading=lazy }
+![List of all uniqueness data quality checks in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/all-uniqueness-checks-in-dqops-min.png){ loading=lazy; width="800px" }
 
 _(click to expand)_
 
@@ -324,20 +327,20 @@ _(click to expand)_
 ## List of uniqueness checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*distinct_count*](../checks/column/uniqueness/distinct-count.md)|Uniqueness|This check counts distinct values and verifies if the distinct count is within an accepted range. It raises a data quality issue when the distinct count is below or above the accepted range.|:material-check-bold:|
-|[*distinct_percent*](../checks/column/uniqueness/distinct-percent.md)|Uniqueness|This check measures the percentage of distinct values in all non-null values. It verifies that the percentage of distinct values meets a minimum value. The default value of 100% distinct values ensures the column has no duplicate values.|:material-check-bold:|
-|[*duplicate_count*](../checks/column/uniqueness/duplicate-count.md)|Uniqueness|This check counts duplicate values. It raises a data quality issue when the number of duplicates is above a minimum accepted value. The default configuration detects duplicate values by enforcing that the *min_count* of duplicates is zero.|:material-check-bold:|
-|[*duplicate_percent*](../checks/column/uniqueness/duplicate-percent.md)|Uniqueness|This check measures the percentage of duplicate values in all non-null values. It raises a data quality issue when the percentage of duplicates is above an accepted threshold. The default threshold is 0% duplicate values.| |
-|[*distinct_count_anomaly*](../checks/column/uniqueness/distinct-count-anomaly.md)|Consistency|This check monitors the count of distinct values and detects anomalies in the changes of the distinct count. It monitors a 90-day time window. The check is configured by setting a desired percentage of anomalies to identify as data quality issues.|:material-check-bold:|
-|[*distinct_percent_anomaly*](../checks/column/uniqueness/distinct-percent-anomaly.md)|Consistency|This check monitors the percentage of distinct values and detects anomalies in the changes in this percentage. It monitors a 90-day time window. The check is configured by setting a desired percentage of anomalies to identify as data quality issues.| |
-|[*distinct_count_change*](../checks/column/uniqueness/distinct-count-change.md)|Consistency|This check monitors the count of distinct values and compares it to the last known value. It raises a data quality issue when the change exceeds an accepted threshold.| |
-|[*distinct_count_change_1_day*](../checks/column/uniqueness/distinct-count-change-1-day.md)|Consistency|This check monitors the count of distinct values and compares it to the measure from the previous day. It raises a data quality issue when the change exceeds an accepted threshold.| |
-|[*distinct_count_change_7_days*](../checks/column/uniqueness/distinct-count-change-7-days.md)|Consistency|This check monitors the count of distinct values and compares it to the measure seven days ago to overcome the weekly seasonability impact. It raises a data quality issue when the change exceeds an accepted threshold.| |
-|[*distinct_count_change_30_days*](../checks/column/uniqueness/distinct-count-change-30-days.md)|Consistency|This check monitors the count of distinct values and compares it to the measure thirty days ago to overcome the monthly seasonability impact. It raises a data quality issue when the change exceeds an accepted threshold.| |
-|[*distinct_percent_change*](../checks/column/uniqueness/distinct-percent-change.md)|Consistency|This check monitors the percentage of distinct values and compares it to the last known value. It raises a data quality issue when the change exceeds an accepted threshold.| |
-|[*distinct_percent_change_1_day*](../checks/column/uniqueness/distinct-percent-change-1-day.md)|Consistency|This check monitors the percentage of distinct values and compares it to the measure from the previous day. It raises a data quality issue when the change exceeds an accepted threshold.| |
-|[*distinct_percent_change_7_days*](../checks/column/uniqueness/distinct-percent-change-7-days.md)|Consistency|This check monitors the percentage of distinct values and compares it to the measure seven days ago to overcome the weekly seasonability impact. It raises a data quality issue when the change exceeds an accepted threshold.| |
-|[*distinct_percent_change_30_days*](../checks/column/uniqueness/distinct-percent-change-30-days.md)|Consistency|This check monitors the percentage of distinct values and compares it to the measure thirty days ago to overcome the monthly seasonability impact. It raises a data quality issue when the change exceeds an accepted threshold.| |
+|[*distinct_count*](../checks/column/uniqueness/distinct-count.md)|[Uniqueness](../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|This check counts distinct values and verifies if the distinct count is within an accepted range. It raises a data quality issue when the distinct count is below or above the accepted range.|:material-check-bold:|
+|[*distinct_percent*](../checks/column/uniqueness/distinct-percent.md)|[Uniqueness](../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|This check measures the percentage of distinct values in all non-null values. It verifies that the percentage of distinct values meets a minimum value. The default value of 100% distinct values ensures the column has no duplicate values.|:material-check-bold:|
+|[*duplicate_count*](../checks/column/uniqueness/duplicate-count.md)|[Uniqueness](../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|This check counts duplicate values. It raises a data quality issue when the number of duplicates is above a minimum accepted value. The default configuration detects duplicate values by enforcing that the *min_count* of duplicates is zero.|:material-check-bold:|
+|[*duplicate_percent*](../checks/column/uniqueness/duplicate-percent.md)|[Uniqueness](../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|This check measures the percentage of duplicate values in all non-null values. It raises a data quality issue when the percentage of duplicates is above an accepted threshold. The default threshold is 0% duplicate values.| |
+|[*distinct_count_anomaly*](../checks/column/uniqueness/distinct-count-anomaly.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check monitors the count of distinct values and detects anomalies in the changes of the distinct count. It monitors a 90-day time window. The check is configured by setting a desired percentage of anomalies to identify as data quality issues.|:material-check-bold:|
+|[*distinct_percent_anomaly*](../checks/column/uniqueness/distinct-percent-anomaly.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check monitors the percentage of distinct values and detects anomalies in the changes in this percentage. It monitors a 90-day time window. The check is configured by setting a desired percentage of anomalies to identify as data quality issues.| |
+|[*distinct_count_change*](../checks/column/uniqueness/distinct-count-change.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check monitors the count of distinct values and compares it to the last known value. It raises a data quality issue when the change exceeds an accepted threshold.| |
+|[*distinct_count_change_1_day*](../checks/column/uniqueness/distinct-count-change-1-day.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check monitors the count of distinct values and compares it to the measure from the previous day. It raises a data quality issue when the change exceeds an accepted threshold.| |
+|[*distinct_count_change_7_days*](../checks/column/uniqueness/distinct-count-change-7-days.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check monitors the count of distinct values and compares it to the measure seven days ago to overcome the weekly seasonability impact. It raises a data quality issue when the change exceeds an accepted threshold.| |
+|[*distinct_count_change_30_days*](../checks/column/uniqueness/distinct-count-change-30-days.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check monitors the count of distinct values and compares it to the measure thirty days ago to overcome the monthly seasonability impact. It raises a data quality issue when the change exceeds an accepted threshold.| |
+|[*distinct_percent_change*](../checks/column/uniqueness/distinct-percent-change.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check monitors the percentage of distinct values and compares it to the last known value. It raises a data quality issue when the change exceeds an accepted threshold.| |
+|[*distinct_percent_change_1_day*](../checks/column/uniqueness/distinct-percent-change-1-day.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check monitors the percentage of distinct values and compares it to the measure from the previous day. It raises a data quality issue when the change exceeds an accepted threshold.| |
+|[*distinct_percent_change_7_days*](../checks/column/uniqueness/distinct-percent-change-7-days.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check monitors the percentage of distinct values and compares it to the measure seven days ago to overcome the weekly seasonability impact. It raises a data quality issue when the change exceeds an accepted threshold.| |
+|[*distinct_percent_change_30_days*](../checks/column/uniqueness/distinct-percent-change-30-days.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check monitors the percentage of distinct values and compares it to the measure thirty days ago to overcome the monthly seasonability impact. It raises a data quality issue when the change exceeds an accepted threshold.| |
 
 
 **Reference and samples**

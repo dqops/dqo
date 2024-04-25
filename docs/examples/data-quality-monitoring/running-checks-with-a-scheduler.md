@@ -1,4 +1,7 @@
-# Running checks with a scheduler
+---
+title: How to schedule data quality checks using a CRON schedule
+---
+# How to schedule data quality checks using a CRON schedule
 This sample shows how to run data quality checks with a scheduler and set different schedules on multiple checks with the DQOps platform. 
 
 ## Overview
@@ -80,13 +83,13 @@ To view the connection-level schedule:
 2. In the main workspace select the **Schedule** tab and the **Monitoring Daily** tab. 
     Here, you can see that a schedule has been set to **Run every day at 12:00**.
 
-    ![Navigating to a connection-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-connection-level-schedule1.png)
+    ![Navigating to a connection-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-connection-level-schedule1.png){ loading=lazy; width="1200px" }
 
 
 In the example, we want to change the default schedule configration for Monitoring checks to 8:00 AM. 
 To do this simply change the value in the **Run every day at** and click the **Save** button.
 
-![Changing the default schedule for daily monitoring](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-changing-the-default-schedule.png)
+![Changing the default schedule for daily monitoring](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-changing-the-default-schedule.png){ loading=lazy; width="1200px" }
 
 
 ### **Set the check-level schedule**
@@ -97,7 +100,7 @@ schedules and override the connection level settings.
 
 To view and modify individual check-level schedules:
 
-![Navigating to a check-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-check-level-schedule1.png)
+![Navigating to a check-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-check-level-schedule1.png){ loading=lazy; width="1200px" }
 
 1. Go to the section with a list of checks. In our example, we have set monitoring checks, so go to the **Monitoring Checks** section.
 
@@ -113,18 +116,18 @@ To view and modify individual check-level schedules:
 
 4. Find the [daily_table_availability](../../checks/table/availability/table-availability.md) check in the Availability group, and click on the **Settings** icon.
 
-    ![Access the check-level schedule settings](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-access-check-level-settings.png)
+    ![Access the check-level schedule settings](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-access-check-level-settings.png){ loading=lazy; width="1200px" }
 
 5. Select the **Schedule Override** tab and change the option from
    **Use scheduling configuration from the connection levels** to **Run every 30 minutes**. Click the **Save** button to save the changes.
 
-    ![Check-level schedule override](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-check-level-schedule-override1.png)
+    ![Check-level schedule override](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-check-level-schedule-override1.png){ loading=lazy; width="1200px" }
 
 
 Similarly, we change the schedule of the uniqueness check [daily_distinct_percent](../../checks/column/uniqueness/distinct-percent.md)
 activated on the `id` column for **Run 15 minutes past every hour**.
 
-![Check-level schedule override on daily-distinct-percent check](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-check-level-schedule-override2.png)
+![Check-level schedule override on daily-distinct-percent check](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-check-level-schedule-override2.png){ loading=lazy; width="1200px" }
 
 ### **Disable check-level schedule**
 
@@ -140,7 +143,7 @@ To disable the check scheduling:
 
 3. Check the **Disable schedule** checkbutton and click the **Save** button.
 
-    ![Disable check-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-disable-check-level-schedule.png)
+    ![Disable check-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-disable-check-level-schedule.png){ loading=lazy; width="1200px" }
 
 ## Start and stop a scheduler
 
@@ -149,7 +152,7 @@ In DQOps, the scheduler is started as a default. Data synchronization take place
 To start or stop the scheduler use the user interface. Simply switch on or off the **Jobs scheduler** using the button in the Notifications window
 on the [right upper right corner of the navigation bar](../../dqo-concepts/dqops-user-interface-overview.md).
 
-![Start and stop a scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png)
+![Start and stop a scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png){ loading=lazy }
 
 
 ## YAML configuration file
@@ -311,7 +314,7 @@ spec:
 To start a scheduler using the user interface, simply select the **Notification** icon in the upper right corner and
 toggle the button next to the **Jobs scheduler**.
 
-![Starting scheduler](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-starting-scheduler.png)
+![Starting scheduler](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-starting-scheduler.png){ loading=lazy; width="1200px" }
 
 The scheduler has been initiated and will run checks based on the set schedules. Data synchronization will
 take place every 10 minutes.

@@ -19,6 +19,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.ProfilingTimePeriodTruncation;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
+import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.PhysicalTableName;
@@ -62,6 +63,12 @@ public class TableListModel {
      */
     @JsonPropertyDescription("Physical table details (a physical schema name and a physical table name).")
     private PhysicalTableName target;
+
+    /**
+     * List of labels applied to the table.
+     */
+    @JsonPropertyDescription("List of labels applied to the table.")
+    private String[] labels;
 
     /**
      * Disables all data quality checks on the table. Data quality checks will not be executed.
@@ -109,6 +116,14 @@ public class TableListModel {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private FileFormatSpec fileFormat;
 
+    /**
+     * The current data quality status for the table, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache.
+     * In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the table.
+     */
+    @JsonPropertyDescription("The current data quality status for the table, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache. " +
+            "In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the table.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private TableCurrentDataQualityStatusModel dataQualityStatus;
 
     /**
      * True when the table has any checks configured.
@@ -231,6 +246,7 @@ public class TableListModel {
             setConnectionName(connectionName);
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
             setTarget(tableSpec.getPhysicalTableName());
+            setLabels(tableSpec.getLabels() != null ? tableSpec.getLabels().toArray(String[]::new) : null);
             setDisabled(tableSpec.isDisabled());
             setProfilingChecksResultTruncation(tableSpec.getProfilingChecks() != null ? tableSpec.getProfilingChecks().getResultTruncation() : null);
             setPartitioningConfigurationMissing(tableSpec.getTimestampColumns() == null ||

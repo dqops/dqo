@@ -1,5 +1,8 @@
-# Athena
-Read this guide to learn how to connect DQOps to Amazon Athena from the UI, command-line interface, or directly in YAML files. All parameters are documented.
+---
+title: How to activate data observability for Amazon Athena
+---
+# How to activate data observability for Amazon Athena
+Read this guide to learn how to connect DQOps to Amazon Athena from the UI, command-line interface, or directly in YAML files, and activate monitoring. 
 
 ## Overview
 
@@ -25,32 +28,32 @@ To navigate to the Athena connection settings:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png){ loading=lazy; width="1200px" }
 
 2. Select Athena database type.
 
-    ![Selecting Athena database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-athena.png)
+    ![Selecting Athena database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-athena.png){ loading=lazy; width="1200px" }
 
 
 ### **Fill in the connection settings**
 
 After navigating to the Athena connection settings, you will need to fill in its details.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-athena.png)
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-athena.png){ loading=lazy; width="1200px" }
 
-| Athena connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                              | 
-|----------------------------|------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name            |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-| Parallel jobs limit        |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                                                                          |
-| Trino engine type          | trino_engine_type                        | Trino engine type. Supports also a ${TRINO_ENGINE} configuration with a custom environment variable.                                                                                                                                     |
-| Athena authentication mode | athena_authentication_mode               | The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE} configuration with a custom environment variable.                                                                                                  |
-| Athena AccessKeyId         | athena_access_key_id                     | The AWS access key id for the IAM that can access the Athena.                                                                                                                                                                            |
-| Athena SecretAccessKey     | athena_secret_access_key                 | The AWS secret access key for the IAM that can access the Athena.                                                                                                                                                                        |
-| Athena region              | athena_region                            | The AWS Region where queries will be run. Supports also a ${ATHENA_REGION} configuration with a custom environment variable.                                                                                                             |
-| Athena WorkGroup           | athena_work_group                        | The workgroup in which queries will run. Supports also a ${ATHENA_WORK_GROUP} configuration with a custom environment variable.                                                                                                          |
-| Athena OutputLocation      | athena_output_location                   | The location in Amazon S3 where query results will be stored. Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom environment variable.                                                                                |
-| Catalog                    | catalog                                  | The catalog that contains the databases and the tables that will be accessed with the driver. Supports also a ${TRINO_CATALOG} configuration with a custom environment variable.                                                         |
-| JDBC connection property    |                                          | Optional setting. DQOps supports using JDBC driver to access Athena. [See the Athena documentation for JDBC connection parameter references](https://docs.aws.amazon.com/athena/latest/ug/connect-with-jdbc.html).                       |
+| Athena connection settings     | Property name in YAML configuration file | Description                                                                                                                                                                                                                                  | 
+|--------------------------------|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name                |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.    |
+| Parallel jobs limit            |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                                 |
+| Trino engine type              | `trino_engine_type`                      | Trino engine type. Supports also a ${TRINO_ENGINE} configuration with a custom environment variable.                                                                                                                                         |
+| Athena AWS authentication mode | `aws_authentication_mode`                | The authentication mode for AWS Athena. Supports also a ${ATHENA_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.                                                                                                  |
+| Athena AccessKeyId             | `athena_access_key_id`                   | The AWS access key id for the IAM that can access the Athena.                                                                                                                                                                                |
+| Athena SecretAccessKey         | `athena_secret_access_key`               | The AWS secret access key for the IAM that can access the Athena.                                                                                                                                                                            |
+| Athena Region                  | `athena_region`                          | The AWS Region where queries will be run. Supports also a ${ATHENA_REGION} configuration with a custom environment variable. When not set the default value will be loaded from .credentials/AWS_default_config file in your DQOps' userhome |
+| Athena WorkGroup               | `athena_work_group`                      | The workgroup in which queries will run. Supports also a ${ATHENA_WORK_GROUP} configuration with a custom environment variable.                                                                                                              |
+| Athena OutputLocation          | `athena_output_location`                 | The location in Amazon S3 where query results will be stored. Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom environment variable.                                                                                    |
+| Catalog                        | `catalog`                                | The catalog that contains the databases and the tables that will be accessed with the driver. Supports also a ${TRINO_CATALOG} configuration with a custom environment variable.                                                             |
+| JDBC connection property       |                                          | Optional setting. DQOps supports using JDBC driver to access Athena. [See the Athena documentation for JDBC connection parameter references](https://docs.aws.amazon.com/athena/latest/ug/connect-with-jdbc.html).                           |
     
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -64,7 +67,7 @@ can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
 
 For example:
 
-![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png)
+![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png){ loading=lazy; width="1200px" }
 
 To remove the property click on the trash icon at the end of the input field.
 
@@ -81,18 +84,18 @@ Now we can import schemas and tables.
 1. Import the selected data resources (source schemas and tables) by clicking on the **Import Tables** button next to
    the name of the source schema from which you want to import tables.
 
-    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-schemas.png)
+    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-schemas.png){ loading=lazy; width="1200px" }
 
 2. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.png)
+    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.png){ loading=lazy; width="1200px" }
 
 When new tables are imported, DQOps automatically activates profiling and monitoring checks, such as row count,
 table availability, and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m.
 By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks,
 or modify the schedule for newly imported tables.
 
-![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png)
+![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png){ loading=lazy; width="1200px" }
 
 
 ## Add Athena connection using DQOps Shell
@@ -201,6 +204,54 @@ spec:
 Complete documentation of all connection parameters used in the `spec.trino` node is
 described in the reference section of the [TrinoParametersSpec](../reference/yaml/ConnectionYaml.md#trinoparametersspec)
 YAML file format.
+
+## Configure the credentials
+
+### Using shared credentials
+
+With DQOps, you can configure credentials to access AWS S3 directly in the platform.
+
+Please note, that any credentials and secrets shared with the DQOps Cloud or DQOps SaaS instances are stored in the .credentials folder.
+This folder also contains the default credentials files pair for AWS named **AWS_default_config** and **AWS_default_credentials**.
+
+``` { .asc .annotate hl_lines="4" }
+$DQO_USER_HOME
+├───...
+└───.credentials                                                            
+    ├───AWS_default_config
+    ├───AWS_default_credentials
+    └─...   
+```
+
+If you wish to use AWS authentication, the content of the files must be replaced with your aws_access_key_id, aws_secret_access_key and region.
+You can find more details on how to [manage access keys for IAM users](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html) in AWS documentation.
+
+!!! warning
+
+    If you do not replace the content of the files, the default credentials will be loaded from system.
+
+
+To set the credential file in DQOps, follow these steps:
+
+1. Open the Configuration section.
+2. Select Shared credentials from the tree view on the left.
+3. Click the edit link on the “AWS_default_credentials” file.
+
+![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/aws-shared-credentials-ui.png)
+
+4. In the text area, edit the aws_access_key_id and aws_secret_access_key, replacing the placeholder text.
+
+![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/edit-aws-shared-credential.png)
+
+5. Click the **Save** button, to save changes, go back to the main **Shared credentials** view.
+
+6. Edit the region in AWS_default_config file and save the file.
+
+
+!!! tip "Use the system default credentials after filling in the shared credential"
+
+    If you still want to use default credentials from AWS, 
+    you must manually delete the .credentials/AWS_default_config and .credentials/AWS_default_credentials files from the DQOps credentials.
 
 
 ## Next steps

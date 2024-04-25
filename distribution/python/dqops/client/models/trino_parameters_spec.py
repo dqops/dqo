@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..models.athena_authentication_mode import AthenaAuthenticationMode
+from ..models.aws_authentication_mode import AwsAuthenticationMode
 from ..models.trino_engine_type import TrinoEngineType
 from ..types import UNSET, Unset
 
@@ -27,7 +27,7 @@ class TrinoParametersSpec:
             dynamic substitution.
         password (Union[Unset, str]): Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
             format to use dynamic substitution.
-        athena_authentication_mode (Union[Unset, AthenaAuthenticationMode]):
+        aws_authentication_mode (Union[Unset, AwsAuthenticationMode]):
         athena_region (Union[Unset, str]): The AWS Region where queries will be run. Supports also a ${ATHENA_REGION}
             configuration with a custom environment variable.
         catalog (Union[Unset, str]): The catalog that contains the databases and the tables that will be accessed with
@@ -46,7 +46,7 @@ class TrinoParametersSpec:
     port: Union[Unset, str] = UNSET
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
-    athena_authentication_mode: Union[Unset, AthenaAuthenticationMode] = UNSET
+    aws_authentication_mode: Union[Unset, AwsAuthenticationMode] = UNSET
     athena_region: Union[Unset, str] = UNSET
     catalog: Union[Unset, str] = UNSET
     athena_work_group: Union[Unset, str] = UNSET
@@ -64,9 +64,9 @@ class TrinoParametersSpec:
         port = self.port
         user = self.user
         password = self.password
-        athena_authentication_mode: Union[Unset, str] = UNSET
-        if not isinstance(self.athena_authentication_mode, Unset):
-            athena_authentication_mode = self.athena_authentication_mode.value
+        aws_authentication_mode: Union[Unset, str] = UNSET
+        if not isinstance(self.aws_authentication_mode, Unset):
+            aws_authentication_mode = self.aws_authentication_mode.value
 
         athena_region = self.athena_region
         catalog = self.catalog
@@ -91,8 +91,8 @@ class TrinoParametersSpec:
             field_dict["user"] = user
         if password is not UNSET:
             field_dict["password"] = password
-        if athena_authentication_mode is not UNSET:
-            field_dict["athena_authentication_mode"] = athena_authentication_mode
+        if aws_authentication_mode is not UNSET:
+            field_dict["aws_authentication_mode"] = aws_authentication_mode
         if athena_region is not UNSET:
             field_dict["athena_region"] = athena_region
         if catalog is not UNSET:
@@ -130,14 +130,12 @@ class TrinoParametersSpec:
 
         password = d.pop("password", UNSET)
 
-        _athena_authentication_mode = d.pop("athena_authentication_mode", UNSET)
-        athena_authentication_mode: Union[Unset, AthenaAuthenticationMode]
-        if isinstance(_athena_authentication_mode, Unset):
-            athena_authentication_mode = UNSET
+        _aws_authentication_mode = d.pop("aws_authentication_mode", UNSET)
+        aws_authentication_mode: Union[Unset, AwsAuthenticationMode]
+        if isinstance(_aws_authentication_mode, Unset):
+            aws_authentication_mode = UNSET
         else:
-            athena_authentication_mode = AthenaAuthenticationMode(
-                _athena_authentication_mode
-            )
+            aws_authentication_mode = AwsAuthenticationMode(_aws_authentication_mode)
 
         athena_region = d.pop("athena_region", UNSET)
 
@@ -162,7 +160,7 @@ class TrinoParametersSpec:
             port=port,
             user=user,
             password=password,
-            athena_authentication_mode=athena_authentication_mode,
+            aws_authentication_mode=aws_authentication_mode,
             athena_region=athena_region,
             catalog=catalog,
             athena_work_group=athena_work_group,

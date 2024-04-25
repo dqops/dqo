@@ -1,3 +1,6 @@
+---
+title: DQOps REST API data_sources operations
+---
 # DQOps REST API data_sources operations
 Rest API controller that operates on data sources that are not yet imported, testing connections or retrieving the metadata (schemas and tables).
 

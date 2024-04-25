@@ -1,5 +1,8 @@
-# Percentage of texts matching a date regex
-This sample shows how to use data quality checks to detect the percentage of texts matching a date regex and view the results on data quality dashboards.
+---
+title: How to detect texts not matching a date regex pattern using a data quality check
+---
+# How to detect texts not matching a date regex pattern using a data quality check
+This sample shows how to use data quality checks to measure the percentage of texts matching a date regex and view the results on data quality dashboards.
 
 ## Overview
 
@@ -60,7 +63,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-match-date-regex-percent-checks1.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-match-date-regex-percent-checks1.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
 
@@ -87,14 +90,14 @@ Run the activated check using the **Run check** button.
 
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-![Run check](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-run-checks1.png)
+![Run check](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-run-checks1.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![text_matching_date_pattern_percent check results](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-checks-results1.png)
+![text_matching_date_pattern_percent check results](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-checks-results1.png){ loading=lazy; width="1200px" }
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
@@ -137,7 +140,7 @@ This dashboard allows filtering data by:
 * check name,
 * column and day of the month.
 
-![text_matching_date_pattern_percent results on Current column status per data quality dimension dashboard](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-checks-results-on-kpis-dashboard.png)
+![text_matching_date_pattern_percent results on Current column status per data quality dimension dashboard](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-checks-results-on-kpis-dashboard.png){ loading=lazy; width="1200px" }
 
 ## Change a schedule at the connection level
 
@@ -146,7 +149,7 @@ table, or individual check.
 
 After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
-![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png)
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the **Data Source** section.
 

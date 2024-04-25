@@ -1,5 +1,8 @@
-# PostgreSQL
-Read this guide to learn how to connect DQOps to PostgreSQL from the UI, command-line interface, or directly in YAML files. All parameters are documented.
+---
+title: How to activate data observability for PostgreSQL
+---
+# How to activate data observability for PostgreSQL
+Read this guide to learn how to connect DQOps to PostgreSQL from the UI, command-line interface, or directly in YAML files, and activate monitoring.
 
 ## Overview
 
@@ -22,26 +25,26 @@ To navigate to the PostgreSQL connection settings:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png){ loading=lazy; width="1200px" }
 
 2. Select PostgreSQL database type.
 
-    ![Selecting PostgreSQL database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-postgresql.png)
+    ![Selecting PostgreSQL database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-postgresql.png){ loading=lazy; width="1200px" }
 
 
 ### **Fill in the connection settings**
 
 After navigating to the PostgreSQL connection settings, you will need to fill in its details.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-postgresql.png)
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-postgresql.png){ loading=lazy; width="1200px" }
 
 | PostgreSQL connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               |
 |--------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name                |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-| Host                           | host                                     | PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.                                                                                                                                |
-| Port                           | port                                     | PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.                                                                                                      |
-| Password                       | password                                 | PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                    |
-| sslmode                        | sslmode                                  | PostgreSQL sslmode parameter. The default value is disabled. [See the PostgreSQL documentation for more information about using SSL.](https://jdbc.postgresql.org/documentation/ssl/)                                                     |  
+| Host                           | `host`                                   | PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.                                                                                                                                |
+| Port                           | `port`                                   | PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.                                                                                                      |
+| Password                       | `password`                               | PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                    |
+| sslmode                        | `sslmode`                                | PostgreSQL sslmode parameter. The default value is disabled. [See the PostgreSQL documentation for more information about using SSL.](https://jdbc.postgresql.org/documentation/ssl/)                                                     |  
 | JDBC connection property       |                                          | Optional setting. DQOps supports using JDBC driver to access PostgreSQL. [See the PostgreSQL documentation for JDBC connection parameter references.](https://jdbc.postgresql.org/documentation/use/)                                     |
     
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
@@ -56,7 +59,7 @@ can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
     
 For example:
 
-![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png)
+![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png){ loading=lazy; width="1200px" }
     
 To remove the property click on the trash icon at the end of the input field.
 
@@ -69,7 +72,7 @@ Click the **Save** connection button when the test is successful otherwise, you 
 1. Import the selected data resources (source schemas and tables) by clicking on the **Import Tables** button next to
    the name of the source schema from which you want to import tables. 
 
-    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-schemas.png)
+    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-schemas.png){ loading=lazy; width="1200px" }
 
 2. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
@@ -81,7 +84,7 @@ table availability, and checks detecting schema changes. These checks are schedu
 By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks,
 or modify the schedule for newly imported tables.
 
-![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png)
+![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png){ loading=lazy; width="1200px" }
 
 ## Add PostgreSQL connection using DQOps Shell
 

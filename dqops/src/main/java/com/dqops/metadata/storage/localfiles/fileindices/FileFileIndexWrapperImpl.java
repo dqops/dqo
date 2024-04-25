@@ -45,9 +45,10 @@ public class FileFileIndexWrapperImpl extends FileIndexWrapperImpl {
      * @param indicesFolderNode Folder with json files for file index specifications.
      * @param indexName Real base file name, it is the actual file name before the table spec file extension.
      * @param jsonSerializer Json serializer.
+     * @param readOnly Make the list read-only.
      */
-    public FileFileIndexWrapperImpl(FolderTreeNode indicesFolderNode, FileIndexName indexName, JsonSerializer jsonSerializer) {
-        super(indexName);
+    public FileFileIndexWrapperImpl(FolderTreeNode indicesFolderNode, FileIndexName indexName, JsonSerializer jsonSerializer, boolean readOnly) {
+        super(indexName, readOnly);
         this.indicesFolderNode = indicesFolderNode;
         this.jsonSerializer = jsonSerializer;
     }

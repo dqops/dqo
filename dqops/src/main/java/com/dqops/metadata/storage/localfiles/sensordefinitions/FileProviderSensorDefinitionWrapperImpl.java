@@ -24,6 +24,7 @@ import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionWrapperImpl;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.serialization.YamlSerializer;
@@ -47,9 +48,13 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
      * @param sensorDefinitionFolderNode Folder in the virtual file system that holds the sensor definition.
      * @param providerType Provider type.
      * @param yamlSerializer Yaml serializer.
+     * @param readOnly Make the list read-only.
      */
-    public FileProviderSensorDefinitionWrapperImpl(FolderTreeNode sensorDefinitionFolderNode, ProviderType providerType, YamlSerializer yamlSerializer) {
-        super(providerType);
+    public FileProviderSensorDefinitionWrapperImpl(FolderTreeNode sensorDefinitionFolderNode,
+                                                   ProviderType providerType,
+                                                   YamlSerializer yamlSerializer,
+                                                   boolean readOnly) {
+        super(providerType, readOnly);
         this.sensorDefinitionFolderNode = sensorDefinitionFolderNode;
         this.yamlSerializer = yamlSerializer;
     }
@@ -84,13 +89,18 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
                         throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
 
-                    fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+                    ProviderSensorDefinitionSpec cachedObjectInstance = deserializedSpec.deepClone();
+                    cachedObjectInstance.makeReadOnly(true);
+                    if (this.getHierarchyId() != null) {
+                        cachedObjectInstance.setHierarchyId(new HierarchyId(this.getHierarchyId(), "spec"));
+                    }
+                    fileContent.setCachedObjectInstance(cachedObjectInstance);
                 } else {
-                    deserializedSpec = deserializedSpec.deepClone();
+                    deserializedSpec = this.isReadOnly() ? deserializedSpec : deserializedSpec.deepClone();
                 }
 
 				this.setSpec(deserializedSpec);
-				this.clearDirty(true);
+				this.clearDirty(false);
                 return deserializedSpec;
             }
         }

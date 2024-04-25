@@ -26,6 +26,7 @@ import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionList;
 import com.dqops.metadata.dictionaries.DictionaryListImpl;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.sources.*;
@@ -187,6 +188,10 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
         }
 
         parameter.getNodes().add(tableWrapper);
+
+        if (this.filters.getMaxResults() != null && parameter.getNodes().size() >= this.filters.getMaxResults()) {
+            return TreeNodeTraversalResult.STOP_TRAVERSAL;
+        }
 
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }

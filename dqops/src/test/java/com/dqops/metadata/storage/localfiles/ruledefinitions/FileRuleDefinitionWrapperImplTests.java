@@ -46,7 +46,7 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
 		this.fileRuleDefinitionList = (FileRuleDefinitionListImpl) userHomeContext.getUserHome().getRules();
 		this.ruleFolder = this.fileRuleDefinitionList.getRulesFolder().getOrAddDirectFolder("conn");
 		this.yamlSerializer = YamlSerializerObjectMother.createNew();
-		this.sut = new FileRuleDefinitionWrapperImpl(ruleFolder, "rule", "rule", yamlSerializer);
+		this.sut = new FileRuleDefinitionWrapperImpl(ruleFolder, "rule", "rule", yamlSerializer, false);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
 
         Assertions.assertFalse(this.sut.getSpec().isDirty());
         Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
-        FileRuleDefinitionWrapperImpl sut2 = new FileRuleDefinitionWrapperImpl(ruleFolder, "rule", "rule", this.yamlSerializer);
+        FileRuleDefinitionWrapperImpl sut2 = new FileRuleDefinitionWrapperImpl(ruleFolder, "rule", "rule", this.yamlSerializer, false);
         RuleDefinitionSpec spec2 = sut2.getSpec();
         Assertions.assertEquals(false, spec2.isDirty());
     }
@@ -106,7 +106,7 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
 
         Assertions.assertFalse(this.sut.getSpec().isDirty());
         Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
-        FileRuleDefinitionWrapperImpl sut2 = new FileRuleDefinitionWrapperImpl(ruleFolder, "rule", "rule", this.yamlSerializer);
+        FileRuleDefinitionWrapperImpl sut2 = new FileRuleDefinitionWrapperImpl(ruleFolder, "rule", "rule", this.yamlSerializer, false);
         RuleDefinitionSpec spec2 = sut2.getSpec();
         Assertions.assertEquals(false, spec2.isDirty());
         Assertions.assertEquals("def fun()", sut2.getRulePythonModuleContent().getTextContent());
@@ -128,7 +128,7 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
 		userHomeContext.flush();
 
         Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
-        FileRuleDefinitionWrapperImpl sut2 = new FileRuleDefinitionWrapperImpl(ruleFolder,"rule", "rule", this.yamlSerializer);
+        FileRuleDefinitionWrapperImpl sut2 = new FileRuleDefinitionWrapperImpl(ruleFolder,"rule", "rule", this.yamlSerializer, false);
         RuleDefinitionSpec spec2 = sut2.getSpec();
         Assertions.assertEquals("val", spec2.getParameters().get("p1"));
     }
@@ -152,7 +152,7 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
         Assertions.assertFalse(this.sut.isDirty());
 
         Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
-        FileRuleDefinitionWrapperImpl sut2 = new FileRuleDefinitionWrapperImpl(ruleFolder,"rule", "rule", this.yamlSerializer);
+        FileRuleDefinitionWrapperImpl sut2 = new FileRuleDefinitionWrapperImpl(ruleFolder,"rule", "rule", this.yamlSerializer, false);
         RuleDefinitionSpec spec2 = sut2.getSpec();
         Assertions.assertEquals("def fun2()", sut2.getRulePythonModuleContent().getTextContent());
     }
@@ -176,7 +176,7 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
         Assertions.assertFalse(this.sut.isDirty());
 
         Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
-        FileRuleDefinitionWrapperImpl sut2 = new FileRuleDefinitionWrapperImpl(ruleFolder,"rule", "rule", this.yamlSerializer);
+        FileRuleDefinitionWrapperImpl sut2 = new FileRuleDefinitionWrapperImpl(ruleFolder,"rule", "rule", this.yamlSerializer, false);
         RuleDefinitionSpec spec2 = sut2.getSpec();
         Assertions.assertNull(sut2.getRulePythonModuleContent().getTextContent());
     }
@@ -213,7 +213,7 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
 		this.sut.flush();
 		userHomeContext.flush();
 
-        FileRuleDefinitionWrapperImpl sut2 = new FileRuleDefinitionWrapperImpl(ruleFolder, "rule", "rule", this.yamlSerializer);
+        FileRuleDefinitionWrapperImpl sut2 = new FileRuleDefinitionWrapperImpl(ruleFolder, "rule", "rule", this.yamlSerializer, false);
         RuleDefinitionSpec spec2 = sut2.getSpec();
         Assertions.assertNotNull(spec2);
     }
@@ -229,7 +229,7 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
 		this.sut.flush();
 		userHomeContext.flush();
 
-        FileRuleDefinitionWrapperImpl sut2 = new FileRuleDefinitionWrapperImpl(ruleFolder,"rule", "rule", this.yamlSerializer);
+        FileRuleDefinitionWrapperImpl sut2 = new FileRuleDefinitionWrapperImpl(ruleFolder,"rule", "rule", this.yamlSerializer, false);
         RuleDefinitionSpec spec2 = sut2.getSpec();
         Assertions.assertNotNull(spec2);
         Assertions.assertSame(spec2, sut2.getSpec());

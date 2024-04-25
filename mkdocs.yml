@@ -200,6 +200,7 @@ nav:
       - errors: 'client/models/errors.md'
       - incidents: 'client/models/incidents.md'
       - jobs: 'client/models/jobs.md'
+      - labels: 'client/models/labels.md'
       - log_shipping: 'client/models/log_shipping.md'
       - rules: 'client/models/rules.md'
       - schemas: 'client/models/schemas.md'
@@ -229,9 +230,11 @@ nav:
       - healthcheck: 'client/operations/healthcheck.md'
       - incidents: 'client/operations/incidents.md'
       - jobs: 'client/operations/jobs.md'
+      - labels: 'client/operations/labels.md'
       - log_shipping: 'client/operations/log_shipping.md'
       - rules: 'client/operations/rules.md'
       - schemas: 'client/operations/schemas.md'
+      - search: 'client/operations/search.md'
       - sensor_readouts: 'client/operations/sensor_readouts.md'
       - sensors: 'client/operations/sensors.md'
       - shared_credentials: 'client/operations/shared_credentials.md'
@@ -403,6 +406,7 @@ nav:
         - text not matching regex found: 'checks/column/patterns/text-not-matching-regex-found.md'
         - texts matching regex percent: 'checks/column/patterns/texts-matching-regex-percent.md'
         - invalid email format found: 'checks/column/patterns/invalid-email-format-found.md'
+        - invalid email format percent: 'checks/column/patterns/invalid-email-format-percent.md'
         - text not matching date pattern found: 'checks/column/patterns/text-not-matching-date-pattern-found.md'
         - text matching date pattern percent: 'checks/column/patterns/text-matching-date-pattern-percent.md'
         - text matching name pattern percent: 'checks/column/patterns/text-matching-name-pattern-percent.md'
@@ -620,6 +624,8 @@ markdown_extensions:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - meta
+hooks:
+  - tools/mkdocs/hooks.py
 extra:
   analytics:
     provider: google

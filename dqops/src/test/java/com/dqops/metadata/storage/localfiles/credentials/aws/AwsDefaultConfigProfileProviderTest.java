@@ -40,7 +40,7 @@ public class AwsDefaultConfigProfileProviderTest extends BaseTest {
         LocalUserHomeCreatorObjectMother.initializeDqoUserHomeAt(testUserHome.toString());
 
         UserHomeContextFactory userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithEmptyTemporaryContext();
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY, false);
         userHomePath = userHomeContext.getHomeRoot().getPhysicalAbsolutePath();
 
         secretValueLookupContext = new SecretValueLookupContext(userHomeContext.getUserHome());
@@ -78,13 +78,13 @@ public class AwsDefaultConfigProfileProviderTest extends BaseTest {
     }
 
     @Test
-    void provideProfile_defaultInitializationConfig_thenThrowsException() throws IOException {
+    void provideProfile_defaultInitializationConfig_thenDoesNotThrowException() throws IOException {
 
         Path defaultAwsCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
                 .resolve(DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME);
         Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CONFIG_INITIAL_CONTENT);
 
-        Assertions.assertThrows(DqoRuntimeException.class, () -> {
+        Assertions.assertDoesNotThrow(() -> {
                     Optional<Profile> profile = this.sut.provideProfile(secretValueLookupContext);
         });
     }

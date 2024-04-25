@@ -1,3 +1,6 @@
+---
+title: column level nulls data quality checks
+---
 # column level nulls data quality checks
 
 This is a list of nulls column data quality checks supported by DQOps and a brief description of what data quality issued they detect.

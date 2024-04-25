@@ -1,3 +1,6 @@
+---
+title: table level timeliness data quality checks
+---
 # table level timeliness data quality checks
 
 This is a list of timeliness table data quality checks supported by DQOps and a brief description of what data quality issued they detect.

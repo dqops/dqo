@@ -19,22 +19,23 @@ import com.dqops.connectors.ConnectorOperationFailedException;
 import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
+import com.dqops.connectors.storage.aws.JdbcAwsProperties;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfileSettingNames;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultCredentialProfileProvider;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import software.amazon.awssdk.profiles.Profile;
 import tech.tablesaw.api.Table;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -91,7 +92,18 @@ public class RedshiftSourceConnection extends AbstractJdbcSourceConnection {
 
         String host = this.getSecretValueProvider().expandValue(redshiftSpec.getHost(), secretValueLookupContext);
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
-        jdbcConnectionBuilder.append("jdbc:redshift://");
+        jdbcConnectionBuilder.append("jdbc:redshift:");
+
+        RedshiftAuthenticationMode redshiftAuthenticationMode = redshiftSpec.getRedshiftAuthenticationMode() == null ?
+                RedshiftAuthenticationMode.default_credentials : redshiftSpec.getRedshiftAuthenticationMode();
+
+        if(redshiftAuthenticationMode.equals(RedshiftAuthenticationMode.iam)
+            || redshiftAuthenticationMode.equals(RedshiftAuthenticationMode.default_credentials)
+        ){
+            jdbcConnectionBuilder.append("iam://");
+        }
+
+        jdbcConnectionBuilder.append("//");
         jdbcConnectionBuilder.append(host);
 
         String port = this.getSecretValueProvider().expandValue(redshiftSpec.getPort(), secretValueLookupContext);
@@ -123,11 +135,39 @@ public class RedshiftSourceConnection extends AbstractJdbcSourceConnection {
             );
         }
 
-        String userName = this.getSecretValueProvider().expandValue(redshiftSpec.getUser(), secretValueLookupContext);
-        hikariConfig.setUsername(userName);
-
+        String user = this.getSecretValueProvider().expandValue(redshiftSpec.getUser(), secretValueLookupContext);
         String password = this.getSecretValueProvider().expandValue(redshiftSpec.getPassword(), secretValueLookupContext);
-        hikariConfig.setPassword(password);
+
+        switch(redshiftAuthenticationMode){
+            case user_password:
+                hikariConfig.setUsername(user);
+                hikariConfig.setPassword(password);
+                break;
+
+            case iam:
+                if (!Strings.isNullOrEmpty(user)){
+                    dataSourceProperties.put(JdbcAwsProperties.ACCESS_KEY_ID, user);  // AccessKeyId alias for User
+                }
+                if (!Strings.isNullOrEmpty(password)){
+                    dataSourceProperties.put(JdbcAwsProperties.SECRET_ACCESS_KEY, password);  // SecretAccessKey alias for Password
+                }
+                break;
+
+            case default_credentials:
+                Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
+                if(credentialProfile.isPresent()
+                        && credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).isPresent()
+                        && credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).isPresent()){
+                    dataSourceProperties.put(JdbcAwsProperties.ACCESS_KEY_ID, credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).get());  // AccessKeyId alias for User
+                    dataSourceProperties.put(JdbcAwsProperties.SECRET_ACCESS_KEY, credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).get());  // SecretAccessKey alias for Password
+                } else {
+                    dataSourceProperties.put("CredentialsProvider", "DefaultChain");    // The use of the local ~/.aws/credentials file with default profile
+                }
+                break;
+
+            default:
+                throw new RuntimeException("Given enum is not supported : " + redshiftAuthenticationMode);
+        }
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;

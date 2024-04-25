@@ -95,7 +95,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
             throw new DqoCloudInvalidKeyException("Invalid DQOps Cloud Pairing API Key or synchronization with DQOps Cloud is disabled, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud Pairing API Key.");
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
 
         FileIndexName localIndexName = new FileIndexName(dqoRoot, FileLocation.LOCAL);

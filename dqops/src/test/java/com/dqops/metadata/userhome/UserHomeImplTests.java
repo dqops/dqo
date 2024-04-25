@@ -32,7 +32,7 @@ public class UserHomeImplTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-		this.sut = new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
+		this.sut = new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY, false);
     }
 
     @Test

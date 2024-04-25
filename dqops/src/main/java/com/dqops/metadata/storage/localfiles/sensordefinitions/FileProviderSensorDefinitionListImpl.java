@@ -44,8 +44,10 @@ public class FileProviderSensorDefinitionListImpl extends ProviderSensorDefiniti
      * Creates a table collection using a given parent connection folder.
      * @param sensorDefinitionFolder Parent sensor definition folder node.
      * @param yamlSerializer  Yaml serializer.
+     * @param readOnly Make the list read-only.
      */
-    public FileProviderSensorDefinitionListImpl(FolderTreeNode sensorDefinitionFolder, YamlSerializer yamlSerializer) {
+    public FileProviderSensorDefinitionListImpl(FolderTreeNode sensorDefinitionFolder, YamlSerializer yamlSerializer, boolean readOnly) {
+        super(readOnly);
         this.sensorDefinitionFolder = sensorDefinitionFolder;
         this.yamlSerializer = yamlSerializer;
     }
@@ -64,7 +66,7 @@ public class FileProviderSensorDefinitionListImpl extends ProviderSensorDefiniti
             String baseFileName = truncateFileExtension(fileTreeNode.getFilePath().getFileName());
             try {
                 ProviderType providerType = ProviderType.valueOf(baseFileName.toLowerCase(Locale.ROOT));
-				this.addWithoutFullLoad(new FileProviderSensorDefinitionWrapperImpl(this.sensorDefinitionFolder, providerType, this.yamlSerializer));
+				this.addWithoutFullLoad(new FileProviderSensorDefinitionWrapperImpl(this.sensorDefinitionFolder, providerType, this.yamlSerializer, this.isReadOnly()));
             }
             catch (Exception ex) {
 				LOG.error("Failed to load " + fileTreeNode.getFilePath().toString() + " provider sensor definition, probably the provider name is unsupported", ex);
@@ -90,7 +92,7 @@ public class FileProviderSensorDefinitionListImpl extends ProviderSensorDefiniti
      */
     @Override
     protected ProviderSensorDefinitionWrapperImpl createNewElement(ProviderType providerType) {
-        ProviderSensorDefinitionWrapperImpl tableWrapper = new FileProviderSensorDefinitionWrapperImpl(this.sensorDefinitionFolder, providerType, this.yamlSerializer);
+        ProviderSensorDefinitionWrapperImpl tableWrapper = new FileProviderSensorDefinitionWrapperImpl(this.sensorDefinitionFolder, providerType, this.yamlSerializer, this.isReadOnly());
         tableWrapper.setProvider(providerType);
         tableWrapper.setSpec(new ProviderSensorDefinitionSpec());
         return tableWrapper;

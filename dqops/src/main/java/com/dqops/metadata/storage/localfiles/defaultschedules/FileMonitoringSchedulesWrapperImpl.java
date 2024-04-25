@@ -4,6 +4,7 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapperImpl;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
@@ -27,8 +28,10 @@ public class FileMonitoringSchedulesWrapperImpl extends MonitoringSchedulesWrapp
      * Creates a monitoring schedules wrapper for a monitoring schedules specification that uses yaml files for storage.
      * @param settingsFolderNode Folder with yaml files for settings specifications.
      * @param yamlSerializer Yaml serializer.
+     * @param readOnly Make the wrapper read-only.
      */
-    public FileMonitoringSchedulesWrapperImpl(FolderTreeNode settingsFolderNode, YamlSerializer yamlSerializer) {
+    public FileMonitoringSchedulesWrapperImpl(FolderTreeNode settingsFolderNode, YamlSerializer yamlSerializer, boolean readOnly) {
+        super(readOnly);
         this.settingsFolderNode = settingsFolderNode;
         this.yamlSerializer = yamlSerializer;
     }
@@ -55,13 +58,17 @@ public class FileMonitoringSchedulesWrapperImpl extends MonitoringSchedulesWrapp
 //                        throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
                     if (deserializedSpec != null) {
-                        fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
+                        DefaultSchedulesSpec cachedObjectInstance = deserializedSpec.deepClone();
+                        cachedObjectInstance.makeReadOnly(true);
+                        if (this.getHierarchyId() != null) {
+                            cachedObjectInstance.setHierarchyId(new HierarchyId(this.getHierarchyId(), "spec"));
+                        }
+                        fileContent.setCachedObjectInstance(cachedObjectInstance);
                     }
                 } else {
-                    deserializedSpec = deserializedSpec.deepClone();
+                    deserializedSpec = this.isReadOnly() ? deserializedSpec : deserializedSpec.deepClone();
                 }
                 this.setSpec(deserializedSpec);
-                deserializedSpec.clearDirty(true);
                 this.clearDirty(false);
                 return deserializedSpec;
             } else {

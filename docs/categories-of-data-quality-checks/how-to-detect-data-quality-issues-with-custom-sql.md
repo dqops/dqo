@@ -1,4 +1,7 @@
-# Detecting data quality issues with custom SQL expressions
+---
+title: How to detect data quality issues with custom SQL expressions
+---
+# How to detect data quality issues with custom SQL expressions
 Read this guide to learn how to use custom SQL expressions in data quality checks, assert custom conditions, and evaluate multi-column expressions.
 
 The data quality checks that support custom SQL expressions are configured in the `custom_sql` category in DQOps.
@@ -74,7 +77,7 @@ We want to accept a maximum number of rows that fail the condition by setting th
 
 The example of running the check on the *311_service_requests* table found 41276 rows that are not uppercase.
 
-![SQL condition failed data quality check in editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-condition-failed-count-data-quality-check-editor-min.png){ loading=lazy }
+![SQL condition failed data quality check in editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-condition-failed-count-data-quality-check-editor-min.png){ loading=lazy; width="1200px" }
 
 ### Activating failed check in YAML
 The [`sql_condition_failed_on_column`](../checks/column/custom_sql/sql-condition-failed-on-column.md) 
@@ -110,7 +113,7 @@ and [`sql_condition_passed_percent_on_table`](../checks/table/custom_sql/sql-con
 data quality checks measure the percentage of rows passing the SQL condition. 
 The percentage is compared to a minimum accepted percentage by a data quality rule.
 
-![SQL condition passed percent data quality check in editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-condition-passed-percent-check-editor-min.png){ loading=lazy }
+![SQL condition passed percent data quality check in editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-condition-passed-percent-check-editor-min.png){ loading=lazy; width="1200px" }
 
 ### Activating percent check in YAML
 The [`sql_condition_passed_percent_on_column`](../checks/column/custom_sql/sql-condition-passed-percent-on-column.md)
@@ -159,7 +162,7 @@ The following example uses the
 [`sql_condition_passed_percent_on_column`](../checks/column/custom_sql/sql-condition-passed-percent-on-column.md)
 daily monitoring data quality check.
 
-![Compare columns in a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/compare-column-values-data-quality-check-in-editor-min.png){ loading=lazy }
+![Compare columns in a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/compare-column-values-data-quality-check-in-editor-min.png){ loading=lazy; width="1200px" }
 
 ### Activate compare check in YAML
 The following example uses the
@@ -209,7 +212,7 @@ Please turn on advanced checks to see it in the check editor.
 The following example shows running the check on the *state_plane_x_coordinate* column, 
 which is a text column and needs casting to a float value. The aggregate expression is `AVG(SAFE_CAST({column} as FLOAT64))`.
 
-![SQL aggregate expression value in range data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-aggregate-expression-in-range-data-quality-check-min.png){ loading=lazy }
+![SQL aggregate expression value in range data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-aggregate-expression-in-range-data-quality-check-min.png){ loading=lazy; width="1200px" }
 
 ### Activating aggregate check in YAML
 The [`sql_aggregate_expression_on_column`](../checks/column/custom_sql/sql-aggregate-expression-on-column.md)
@@ -422,10 +425,10 @@ spec:
 ## List of custom sql checks at a table level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*sql_condition_failed_on_table*](../checks/table/custom_sql/sql-condition-failed-on-table.md)|Validity|A table-level check that uses a custom SQL expression on each row to verify (assert) that all rows pass a custom condition defined as an SQL condition. Use the {alias} token to reference the tested table. This data quality check can be used to compare columns on the same table. For example, the condition can verify that the value in the *col_price* column is higher than the *col_tax* column using an SQL expression: &#x60;{alias}.col_price &gt; {alias}.col_tax&#x60;. Use an SQL expression that returns a *true* value for valid values and a *false* one for invalid values, because it is an assertion.|:material-check-bold:|
-|[*sql_condition_passed_percent_on_table*](../checks/table/custom_sql/sql-condition-passed-percent-on-table.md)|Validity|A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression). Measures the percentage of rows passing the condition. Raises a data quality issue when the percent of valid rows is below the *min_percent* parameter.| |
-|[*sql_aggregate_expression_on_table*](../checks/table/custom_sql/sql-aggregate-expression-on-table.md)|Reasonableness|A table-level check that calculates a given SQL aggregate expression on a table and verifies if the value is within a range of accepted values.| |
-|[*import_custom_result_on_table*](../checks/table/custom_sql/import-custom-result-on-table.md)|Validity|A table-level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check that was hardcoded in the data pipeline, and the result was stored in a separate table. The SQL query that is configured in this external data quality results importer must be a complete SELECT statement that queries a dedicated table (created by the data engineers) that stores the results of custom data quality checks. The SQL query must return a *severity* column with values: 0 - data quality check passed, 1 - warning issue, 2 - error severity issue, 3 - fatal severity issue.| |
+|[*sql_condition_failed_on_table*](../checks/table/custom_sql/sql-condition-failed-on-table.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|A table-level check that uses a custom SQL expression on each row to verify (assert) that all rows pass a custom condition defined as an SQL condition. Use the {alias} token to reference the tested table. This data quality check can be used to compare columns on the same table. For example, the condition can verify that the value in the *col_price* column is higher than the *col_tax* column using an SQL expression: &#x60;{alias}.col_price &gt; {alias}.col_tax&#x60;. Use an SQL expression that returns a *true* value for valid values and a *false* one for invalid values, because it is an assertion.|:material-check-bold:|
+|[*sql_condition_passed_percent_on_table*](../checks/table/custom_sql/sql-condition-passed-percent-on-table.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression). Measures the percentage of rows passing the condition. Raises a data quality issue when the percent of valid rows is below the *min_percent* parameter.| |
+|[*sql_aggregate_expression_on_table*](../checks/table/custom_sql/sql-aggregate-expression-on-table.md)|[Reasonableness](../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|A table-level check that calculates a given SQL aggregate expression on a table and verifies if the value is within a range of accepted values.| |
+|[*import_custom_result_on_table*](../checks/table/custom_sql/import-custom-result-on-table.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|A table-level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check that was hardcoded in the data pipeline, and the result was stored in a separate table. The SQL query that is configured in this external data quality results importer must be a complete SELECT statement that queries a dedicated table (created by the data engineers) that stores the results of custom data quality checks. The SQL query must return a *severity* column with values: 0 - data quality check passed, 1 - warning issue, 2 - error severity issue, 3 - fatal severity issue.| |
 
 
 **Reference and samples**
@@ -438,10 +441,10 @@ that are used by those checks.
 ## List of custom sql checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*sql_condition_failed_on_column*](../checks/column/custom_sql/sql-condition-failed-on-column.md)|Validity|A column-level check that uses a custom SQL expression on each column to verify (assert) that all rows pass a custom condition defined as an SQL expression. Use the {alias} token to reference the tested table, and the {column} to reference the column that is tested. This data quality check can be used to compare columns on the same table. For example, when this check is applied on a *col_price* column, the condition can verify that the *col_price* is higher than the *col_tax* using an SQL expression: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60; Use an SQL expression that returns a *true* value for valid values and *false* for invalid values, because it is an assertion.|:material-check-bold:|
-|[*sql_condition_passed_percent_on_column*](../checks/column/custom_sql/sql-condition-passed-percent-on-column.md)|Validity|A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression). Measures the percentage of rows passing the condition. Raises a data quality issue when the percent of valid rows is below the *min_percent* parameter.| |
-|[*sql_aggregate_expression_on_column*](../checks/column/custom_sql/sql-aggregate-expression-on-column.md)|Reasonableness|A column-level check that calculates a given SQL aggregate expression on a column and verifies if the value is within a range of accepted values.| |
-|[*import_custom_result_on_column*](../checks/column/custom_sql/import-custom-result-on-column.md)|Validity|Column level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check on a column by a custom data quality check, hardcoded in the data pipeline. The result is retrieved by querying a separate **logging table**, whose schema is not fixed. The logging table should have columns that identify a table and a column for which they store custom data quality check results, and a *severity* column of the data quality issue. The SQL query that is configured in this external data quality results importer must be a complete SELECT statement that queries a dedicated logging table, created by the data engineering team.| |
+|[*sql_condition_failed_on_column*](../checks/column/custom_sql/sql-condition-failed-on-column.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|A column-level check that uses a custom SQL expression on each column to verify (assert) that all rows pass a custom condition defined as an SQL expression. Use the {alias} token to reference the tested table, and the {column} to reference the column that is tested. This data quality check can be used to compare columns on the same table. For example, when this check is applied on a *col_price* column, the condition can verify that the *col_price* is higher than the *col_tax* using an SQL expression: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60; Use an SQL expression that returns a *true* value for valid values and *false* for invalid values, because it is an assertion.|:material-check-bold:|
+|[*sql_condition_passed_percent_on_column*](../checks/column/custom_sql/sql-condition-passed-percent-on-column.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression). Measures the percentage of rows passing the condition. Raises a data quality issue when the percent of valid rows is below the *min_percent* parameter.| |
+|[*sql_aggregate_expression_on_column*](../checks/column/custom_sql/sql-aggregate-expression-on-column.md)|[Reasonableness](../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|A column-level check that calculates a given SQL aggregate expression on a column and verifies if the value is within a range of accepted values.| |
+|[*import_custom_result_on_column*](../checks/column/custom_sql/import-custom-result-on-column.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|Column level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check on a column by a custom data quality check, hardcoded in the data pipeline. The result is retrieved by querying a separate **logging table**, whose schema is not fixed. The logging table should have columns that identify a table and a column for which they store custom data quality check results, and a *severity* column of the data quality issue. The SQL query that is configured in this external data quality results importer must be a complete SELECT statement that queries a dedicated logging table, created by the data engineering team.| |
 
 
 **Reference and samples**

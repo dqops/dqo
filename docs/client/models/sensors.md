@@ -1,3 +1,6 @@
+---
+title: DQOps REST API sensors models reference
+---
 # DQOps REST API sensors models reference
 The references of all objects used by [sensors](../operations/sensors.md) REST API operations are listed below.
 

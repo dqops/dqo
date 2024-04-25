@@ -97,7 +97,7 @@ public class TableServiceImplTests extends BaseTest {
     }
 
     private UserHome createHierarchyTree() {
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
         TableWrapper table1 = connectionWrapper.getTables().createAndAddNew(
@@ -151,7 +151,7 @@ public class TableServiceImplTests extends BaseTest {
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
         this.sut.deleteTable(connectionName, tableName, principal);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
 
@@ -172,7 +172,7 @@ public class TableServiceImplTests extends BaseTest {
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
         this.sut.deleteTable(connectionName, tableName, principal);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
 
@@ -194,7 +194,7 @@ public class TableServiceImplTests extends BaseTest {
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
         this.sut.deleteTables(connToTablesMap, principal);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
 
@@ -216,7 +216,7 @@ public class TableServiceImplTests extends BaseTest {
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
         this.sut.deleteTables(connToTablesMap, principal);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
 

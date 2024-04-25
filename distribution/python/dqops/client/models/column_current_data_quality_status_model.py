@@ -10,6 +10,9 @@ if TYPE_CHECKING:
     from ..models.column_current_data_quality_status_model_checks import (
         ColumnCurrentDataQualityStatusModelChecks,
     )
+    from ..models.column_current_data_quality_status_model_dimensions import (
+        ColumnCurrentDataQualityStatusModelDimensions,
+    )
 
 
 T = TypeVar("T", bound="ColumnCurrentDataQualityStatusModel")
@@ -43,6 +46,8 @@ class ColumnCurrentDataQualityStatusModel:
             checks (Union[Unset, ColumnCurrentDataQualityStatusModelChecks]): The dictionary of statuses for data quality
                 checks. The keys are data quality check names, the values are the current data quality check statuses that
                 describe the most current status.
+            dimensions (Union[Unset, ColumnCurrentDataQualityStatusModelDimensions]): Dictionary of the current data quality
+                statues for each data quality dimension.
     """
 
     current_severity: Union[Unset, RuleSeverityLevel] = UNSET
@@ -55,6 +60,7 @@ class ColumnCurrentDataQualityStatusModel:
     fatals: Union[Unset, int] = UNSET
     execution_errors: Union[Unset, int] = UNSET
     checks: Union[Unset, "ColumnCurrentDataQualityStatusModelChecks"] = UNSET
+    dimensions: Union[Unset, "ColumnCurrentDataQualityStatusModelDimensions"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -76,6 +82,10 @@ class ColumnCurrentDataQualityStatusModel:
         checks: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.checks, Unset):
             checks = self.checks.to_dict()
+
+        dimensions: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.dimensions, Unset):
+            dimensions = self.dimensions.to_dict()
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -100,6 +110,8 @@ class ColumnCurrentDataQualityStatusModel:
             field_dict["execution_errors"] = execution_errors
         if checks is not UNSET:
             field_dict["checks"] = checks
+        if dimensions is not UNSET:
+            field_dict["dimensions"] = dimensions
 
         return field_dict
 
@@ -107,6 +119,9 @@ class ColumnCurrentDataQualityStatusModel:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.column_current_data_quality_status_model_checks import (
             ColumnCurrentDataQualityStatusModelChecks,
+        )
+        from ..models.column_current_data_quality_status_model_dimensions import (
+            ColumnCurrentDataQualityStatusModelDimensions,
         )
 
         d = src_dict.copy()
@@ -147,6 +162,15 @@ class ColumnCurrentDataQualityStatusModel:
         else:
             checks = ColumnCurrentDataQualityStatusModelChecks.from_dict(_checks)
 
+        _dimensions = d.pop("dimensions", UNSET)
+        dimensions: Union[Unset, ColumnCurrentDataQualityStatusModelDimensions]
+        if isinstance(_dimensions, Unset):
+            dimensions = UNSET
+        else:
+            dimensions = ColumnCurrentDataQualityStatusModelDimensions.from_dict(
+                _dimensions
+            )
+
         column_current_data_quality_status_model = cls(
             current_severity=current_severity,
             highest_historical_severity=highest_historical_severity,
@@ -158,6 +182,7 @@ class ColumnCurrentDataQualityStatusModel:
             fatals=fatals,
             execution_errors=execution_errors,
             checks=checks,
+            dimensions=dimensions,
         )
 
         column_current_data_quality_status_model.additional_properties = d

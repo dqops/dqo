@@ -27,7 +27,7 @@ when you import the data source.
 
 To change the default schedule configuration, follow these steps:
 
-![Change default schedule configuration](https://dqops.com/docs/images/working-with-dqo/schedules/default-schedules-configuration.png)
+![Change default schedule configuration](https://dqops.com/docs/images/working-with-dqo/schedules/default-schedules-configuration.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Configuration** section.
 2. Click on the **Default schedules** option in the three view on the left.
@@ -39,7 +39,7 @@ To change the default schedule configuration, follow these steps:
 
 To set up or modify a schedule for the entire connection or table, follow these steps:
 
-![Navigating to schedule configuration](https://dqops.com/docs/images/working-with-dqo/schedules/navigating-to-schedule-configuration.png)
+![Navigating to schedule configuration](https://dqops.com/docs/images/working-with-dqo/schedules/navigating-to-schedule-configuration.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the **Data Source** section.
 2. Choose the connection or table where you want to set or modify the schedule from the tree view on the left.
@@ -65,14 +65,14 @@ On the [Check editor screen](../../dqo-concepts/dqops-user-interface-overview.md
 check if the schedule is enabled, where it is configured, what the effective cron expression is, and when the next check
 execution will take place.
 
-![Scheduling status](https://dqops.com/docs/images/working-with-dqo/schedules/scheduling-status.png).
+![Scheduling status](https://dqops.com/docs/images/working-with-dqo/schedules/scheduling-status.png){ loading=lazy; width="1200px" }
 
 
 ## Configure a schedule at check level.
 
 To set up a schedule for a specific check, follow these steps:
 
-![Configuring a schedule at check level](https://dqops.com/docs/images/working-with-dqo/schedules/configuring-schedule-at-check-level.png)
+![Configuring a schedule at check level](https://dqops.com/docs/images/working-with-dqo/schedules/configuring-schedule-at-check-level.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the section with a check type of interest (**Profiling**, **Monitoring checks** or **Partition checks**).
 2. Choose table or column of interest from the tree view on the left.

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Tab, { TabOption } from './tab';
 import { useTree } from '../../contexts/treeContext';
+import Tab, { TabOption } from './tab';
 
 export interface TabsProps {
   tabs: TabOption[];
@@ -25,7 +25,7 @@ const Tabs = ({
 
   return (
     <div
-      className={`flex overflow-auto pb-2 ${className}`}
+      className={`flex overflow-auto ${className}`}
       style={{ maxWidth: `calc(100vw - ${sidebarWidth + 40}px` }}
     >
       {tabs.map((tab) => (

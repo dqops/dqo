@@ -4,7 +4,7 @@ SELECT
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
         ELSE 100.0 * SUM(
             CASE
-                WHEN {{lib.render_target_column('analyzed_table')}} ~ '(^|[ \t.,:;"''`|\n\r])[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(/.D/:\.[a-zA-Z0-9-]+)*([ \t.,:;"''`|\n\r]|$)'
+                WHEN {{lib.render_target_column('analyzed_table')}} ~ '(^|[ \t.,:;"''`|\n\r])[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}([ \t.,:;"''`|\n\r]|$)'
                     THEN 1
                 ELSE 0
             END

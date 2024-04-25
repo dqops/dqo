@@ -1,3 +1,6 @@
+---
+title: median change data quality checks
+---
 # median change data quality checks
 
 This check detects that the median of numeric values has changed more than *max_percent* from the last measured median.
@@ -17,7 +20,7 @@ Verifies that the median in a column changed in a fixed rate since the last read
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_median_change`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
+|<span class="no-wrap-code">`profile_median_change`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
@@ -734,7 +737,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 29-34"
+    ```yaml hl_lines="5-13 29-34"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1404,7 +1407,7 @@ Verifies that the median in a column changed in a fixed rate since the last read
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_median_change`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
+|<span class="no-wrap-code">`daily_median_change`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
@@ -2122,7 +2125,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 30-35"
+    ```yaml hl_lines="5-13 30-35"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2793,7 +2796,7 @@ Verifies that the median in a column changed in a fixed rate since the last read
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_median_change`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
+|<span class="no-wrap-code">`daily_partition_median_change`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
@@ -3521,7 +3524,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 40-45"
+    ```yaml hl_lines="10-4 40-45"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table

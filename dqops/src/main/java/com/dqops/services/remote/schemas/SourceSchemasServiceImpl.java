@@ -61,7 +61,7 @@ public class SourceSchemasServiceImpl implements SourceSchemasService {
      * @return Schema list acquired remotely. Null in case of object not found.
      */
     public List<SchemaRemoteModel> showSchemas(String connectionName, DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();

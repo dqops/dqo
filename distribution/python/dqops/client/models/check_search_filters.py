@@ -36,6 +36,7 @@ class CheckSearchFilters:
         labels (Union[Unset, List[str]]): An array of labels assigned to the table. All labels must be present on a
             table to match. The labels can use patterns:  'prefix\*', '\*suffix', 'prefix\*suffix'. The labels are assigned
             on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.
+        max_results (Union[Unset, int]): Optional limit for the maximum number of results to return.
         column (Union[Unset, str]): The column name. This field accepts search patterns in the format: 'fk_\*', '\*_id',
             'prefix\*suffix'.
         column_data_type (Union[Unset, str]): The column data type that was imported from the data source and is stored
@@ -48,6 +49,8 @@ class CheckSearchFilters:
         check_type (Union[Unset, CheckType]):
         time_scale (Union[Unset, CheckTimeScale]):
         check_category (Union[Unset, str]): The target check category, for example: *nulls*, *volume*, *anomaly*.
+        quality_dimension (Union[Unset, str]): The target data quality dimension, for example: *Completeness*,
+            *Accuracy*, *Consistency*, *Timeliness*, *Availability*.
         table_comparison_name (Union[Unset, str]): The name of a configured table comparison. When the table comparison
             is provided, DQOps will only perform table comparison checks that compare data between tables.
         check_name (Union[Unset, str]): The target check name to run only this named check. Uses the short check name
@@ -64,6 +67,7 @@ class CheckSearchFilters:
     enabled: Union[Unset, bool] = UNSET
     tags: Union[Unset, List[str]] = UNSET
     labels: Union[Unset, List[str]] = UNSET
+    max_results: Union[Unset, int] = UNSET
     column: Union[Unset, str] = UNSET
     column_data_type: Union[Unset, str] = UNSET
     column_nullable: Union[Unset, bool] = UNSET
@@ -71,6 +75,7 @@ class CheckSearchFilters:
     check_type: Union[Unset, CheckType] = UNSET
     time_scale: Union[Unset, CheckTimeScale] = UNSET
     check_category: Union[Unset, str] = UNSET
+    quality_dimension: Union[Unset, str] = UNSET
     table_comparison_name: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
@@ -89,6 +94,7 @@ class CheckSearchFilters:
         if not isinstance(self.labels, Unset):
             labels = self.labels
 
+        max_results = self.max_results
         column = self.column
         column_data_type = self.column_data_type
         column_nullable = self.column_nullable
@@ -105,6 +111,7 @@ class CheckSearchFilters:
             time_scale = self.time_scale.value
 
         check_category = self.check_category
+        quality_dimension = self.quality_dimension
         table_comparison_name = self.table_comparison_name
         check_name = self.check_name
         sensor_name = self.sensor_name
@@ -131,6 +138,8 @@ class CheckSearchFilters:
             field_dict["tags"] = tags
         if labels is not UNSET:
             field_dict["labels"] = labels
+        if max_results is not UNSET:
+            field_dict["maxResults"] = max_results
         if column is not UNSET:
             field_dict["column"] = column
         if column_data_type is not UNSET:
@@ -145,6 +154,8 @@ class CheckSearchFilters:
             field_dict["timeScale"] = time_scale
         if check_category is not UNSET:
             field_dict["checkCategory"] = check_category
+        if quality_dimension is not UNSET:
+            field_dict["qualityDimension"] = quality_dimension
         if table_comparison_name is not UNSET:
             field_dict["tableComparisonName"] = table_comparison_name
         if check_name is not UNSET:
@@ -170,6 +181,8 @@ class CheckSearchFilters:
         tags = cast(List[str], d.pop("tags", UNSET))
 
         labels = cast(List[str], d.pop("labels", UNSET))
+
+        max_results = d.pop("maxResults", UNSET)
 
         column = d.pop("column", UNSET)
 
@@ -200,6 +213,8 @@ class CheckSearchFilters:
 
         check_category = d.pop("checkCategory", UNSET)
 
+        quality_dimension = d.pop("qualityDimension", UNSET)
+
         table_comparison_name = d.pop("tableComparisonName", UNSET)
 
         check_name = d.pop("checkName", UNSET)
@@ -221,6 +236,7 @@ class CheckSearchFilters:
             enabled=enabled,
             tags=tags,
             labels=labels,
+            max_results=max_results,
             column=column,
             column_data_type=column_data_type,
             column_nullable=column_nullable,
@@ -228,6 +244,7 @@ class CheckSearchFilters:
             check_type=check_type,
             time_scale=time_scale,
             check_category=check_category,
+            quality_dimension=quality_dimension,
             table_comparison_name=table_comparison_name,
             check_name=check_name,
             sensor_name=sensor_name,

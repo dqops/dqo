@@ -68,9 +68,9 @@ public class ErrorsColumnNames extends SensorReadoutsColumnNames {
     };
 
     /**
-     * List of column names that should be loaded from the parquet files when the recent error detailed view is needed.
+     * List of column names that should be loaded from the parquet files when we will be only reading, not updating.
      */
-    public static final String[] COLUMN_NAMES_FOR_ERRORS_DETAILED = new String[] {
+    public static final String[] COLUMN_NAMES_FOR_READ_ONLY_ACCESS = new String[] {
             ACTUAL_VALUE_COLUMN_NAME,
             EXPECTED_VALUE_COLUMN_NAME,
 

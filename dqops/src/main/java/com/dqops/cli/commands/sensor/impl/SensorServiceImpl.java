@@ -58,7 +58,7 @@ public class SensorServiceImpl implements SensorService {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		DqoUserPrincipal userPrincipalForAdministrator = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipalForAdministrator.getDataDomainIdentity());
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipalForAdministrator.getDataDomainIdentity(), false);
 		UserHome userHome = userHomeContext.getUserHome();
 
 		DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();

@@ -37,6 +37,40 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
     }
 
     /**
+     * Pivots a list of check categories into a list of data quality dimensions, with checks only for that dimension.
+     * @param checkCategories Source list of checks divided by a category.
+     * @return New list of checks divided by the data quality dimension and the target (table or column).
+     */
+    public List<CheckDimensionDocumentationModel> pivotCheckByDimension(List<CheckCategoryDocumentationModel> checkCategories) {
+        Map<String, CheckDimensionDocumentationModel> tableChecksByDimension = new HashMap<>();
+        Map<String, CheckDimensionDocumentationModel> columnChecksByDimension = new HashMap<>();
+
+        for (CheckCategoryDocumentationModel checkCategoryDocumentationModel : checkCategories) {
+            Map<String, CheckDimensionDocumentationModel> targetMap =
+                    Objects.equals(checkCategoryDocumentationModel.getTarget(), "table") ? tableChecksByDimension :
+                            Objects.equals(checkCategoryDocumentationModel.getTarget(), "column") ? columnChecksByDimension : null;
+
+            for (SimilarChecksDocumentationModel similarChecksDocumentationModel : checkCategoryDocumentationModel.getCheckGroups()) {
+                CheckDimensionDocumentationModel checkDimensionDocumentationModel = targetMap.get(similarChecksDocumentationModel.getQualityDimension());
+                if (checkDimensionDocumentationModel == null) {
+                    checkDimensionDocumentationModel = new CheckDimensionDocumentationModel();
+                    checkDimensionDocumentationModel.setTarget(checkCategoryDocumentationModel.getTarget());
+                    checkDimensionDocumentationModel.setQualityDimension(similarChecksDocumentationModel.getQualityDimension());
+                    checkDimensionDocumentationModel.setQualityDimensionLowercase(similarChecksDocumentationModel.getQualityDimension().toLowerCase(Locale.ROOT));
+                    targetMap.put(similarChecksDocumentationModel.getQualityDimension(), checkDimensionDocumentationModel);
+                }
+
+                checkDimensionDocumentationModel.getCheckGroups().add(similarChecksDocumentationModel);
+            }
+        }
+
+        List<CheckDimensionDocumentationModel> combinedTableColumnChecksByDimension = new ArrayList<>();
+        combinedTableColumnChecksByDimension.addAll(tableChecksByDimension.values());
+        combinedTableColumnChecksByDimension.addAll(columnChecksByDimension.values());
+        return combinedTableColumnChecksByDimension;
+    }
+
+    /**
      * Renders documentation for all checks as markdown files.
      * @param projectRootPath Path to the project root folder, used to find the target/classes folder and scan for classes.
      * @param currentRootFolder Current documentation that was loaded from files.
@@ -182,11 +216,55 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
             }
         }
 
+        Template checkDimensionTemplate = HandlebarsDocumentationUtilities.compileTemplate("checks/check_dimension_index");
+        DocumentationFolder dqoConceptsFolder = new DocumentationFolder("dqo-concepts");
+        dqoConceptsFolder.setLinkName("DQOps concepts");
+        dqoConceptsFolder.setDirectPath(projectRootPath.resolve("../docs")
+                .resolve(dqoConceptsFolder.getFolderName()).toAbsolutePath().normalize());
+        DocumentationFolder currentDqoConceptsFolder = currentRootFolder.getFolderByName("dqo-concepts");
+        DocumentationMarkdownFile oldDataQualityDimensionsFileContent = currentDqoConceptsFolder != null ?
+                currentDqoConceptsFolder.getFileByName("data-quality-dimensions.md") : null;
+        DocumentationMarkdownFile newDataQualityDimensionsFileContent = dqoConceptsFolder.addNestedFile("data-quality-dimensions.md");
+        String dataQualityDimensionsFileContent = oldDataQualityDimensionsFileContent.getFileContent();
+        newDataQualityDimensionsFileContent.setFileContent(dataQualityDimensionsFileContent);
+
+        List<CheckDimensionDocumentationModel> checkDimensionDocumentationModels = pivotCheckByDimension(checkCategoryDocumentationModels);
+
+        for (CheckDimensionDocumentationModel checkDimensionModel : checkDimensionDocumentationModels) {
+            String renderedDimensionContent = HandlebarsDocumentationUtilities.renderTemplate(checkDimensionTemplate, checkDimensionModel);
+
+            String listOfChecksBeginMarker = "### " +
+                    Character.toUpperCase(checkDimensionModel.getTarget().charAt(0)) + checkDimensionModel.getTarget().substring(1) +
+                    " " + checkDimensionModel.getQualityDimension().toLowerCase(Locale.ROOT) + " checks";
+
+            if (!dataQualityDimensionsFileContent.contains(listOfChecksBeginMarker)) {
+                dataQualityDimensionsFileContent +=
+                        "\n" +
+                        listOfChecksBeginMarker + "\n"+
+                        "\n" +
+                        "## End of list, remove this entry and move the content up\n";
+            }
+
+            List<String> originalFileLines = dataQualityDimensionsFileContent.lines().collect(Collectors.toList());
+            List<String> renderedDimensionContentLines = renderedDimensionContent.lines().collect(Collectors.toList());
+            List<String> newReplacedLines = FileContentIndexReplaceUtility.replaceLinesBetweenMarkers(originalFileLines, renderedDimensionContentLines,
+                    listOfChecksBeginMarker, "## ");
+
+            if (newReplacedLines != null) {
+                dataQualityDimensionsFileContent = String.join("\n", newReplacedLines) + "\n";
+            }
+        }
+
+        if (!Objects.equals(newDataQualityDimensionsFileContent.getFileContent(), dataQualityDimensionsFileContent)) {
+            newDataQualityDimensionsFileContent.setFileContent(dataQualityDimensionsFileContent);
+        }
+
         DocumentationFolder rootFolder = new DocumentationFolder();
         rootFolder.setFolderName("");
         rootFolder.setDirectPath(projectRootPath.resolve("../docs").toAbsolutePath().normalize());
         rootFolder.getSubFolders().add(checksFolder);
         rootFolder.getSubFolders().add(typesOfChecksFolder);
+        rootFolder.getSubFolders().add(dqoConceptsFolder);
 
         return rootFolder;
     }

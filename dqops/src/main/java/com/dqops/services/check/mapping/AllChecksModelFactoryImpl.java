@@ -71,7 +71,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
     public List<AllChecksModel> findAllConfiguredAndPossibleChecks(CheckSearchFilters checkSearchFilters,
                                                                    DqoUserPrincipal principal) {
         UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
         boolean canManageChecks = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
@@ -110,7 +110,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
             CheckSearchFilters checkSearchFilters,
             DqoUserPrincipal principal) {
         UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, true);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
         boolean canManageChecks = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
@@ -121,7 +121,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
             return null;
         }
 
-        ConnectionWrapperImpl templatedConnectionWrapper = new ConnectionWrapperImpl(connectionName);
+        ConnectionWrapperImpl templatedConnectionWrapper = new ConnectionWrapperImpl(connectionName, false);
         templatedConnectionWrapper.setHierarchyId(originalConnectionWrapper.getHierarchyId());
         templatedConnectionWrapper.setSpec(originalConnectionWrapper.getSpec().deepClone());
         TableWrapper templatedTable = templatedConnectionWrapper.getTables().createAndAddNew(new PhysicalTableName(schemaName, "sample_table"));

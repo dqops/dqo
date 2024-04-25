@@ -44,6 +44,7 @@ public class ColumnPatternsDailyMonitoringChecksSpec extends AbstractCheckCatego
             put("daily_text_not_matching_regex_found", o -> o.dailyTextNotMatchingRegexFound);
             put("daily_texts_matching_regex_percent", o -> o.dailyTextsMatchingRegexPercent);
             put("daily_invalid_email_format_found", o -> o.dailyInvalidEmailFormatFound);
+            put("daily_invalid_email_format_percent", o -> o.dailyInvalidEmailFormatPercent);
             put("daily_text_not_matching_date_pattern_found", o -> o.dailyTextNotMatchingDatePatternFound);
             put("daily_text_matching_date_pattern_percent", o -> o.dailyTextMatchingDatePatternPercent);
             put("daily_text_matching_name_pattern_percent", o -> o.dailyTextMatchingNamePatternPercent);
@@ -63,6 +64,9 @@ public class ColumnPatternsDailyMonitoringChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidEmailFormatFoundCheckSpec dailyInvalidEmailFormatFound;
+
+    @JsonPropertyDescription("Verifies that the percentage of invalid emails in a text column does not exceed the maximum accepted percentage.")
+    private ColumnInvalidEmailFormatPercentCheckSpec dailyInvalidEmailFormatPercent;
 
     @JsonPropertyDescription("Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.")
     private ColumnTextNotMatchingDatePatternFoundCheckSpec dailyTextNotMatchingDatePatternFound;
@@ -137,6 +141,24 @@ public class ColumnPatternsDailyMonitoringChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyInvalidEmailFormatFound, dailyInvalidEmailFormatFound));
         this.dailyInvalidEmailFormatFound = dailyInvalidEmailFormatFound;
         propagateHierarchyIdToField(dailyInvalidEmailFormatFound, "daily_invalid_email_format_found");
+    }
+
+    /**
+     * Returns a maximum invalid email percent check.
+     * @return Maximum invalid email percent check.
+     */
+    public ColumnInvalidEmailFormatPercentCheckSpec getDailyInvalidEmailFormatPercent() {
+        return dailyInvalidEmailFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of an invalid email percent check.
+     * @param dailyInvalidEmailFormatPercent Invalid email percent check.
+     */
+    public void setDailyInvalidEmailFormatPercent(ColumnInvalidEmailFormatPercentCheckSpec dailyInvalidEmailFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyInvalidEmailFormatPercent, dailyInvalidEmailFormatPercent));
+        this.dailyInvalidEmailFormatPercent = dailyInvalidEmailFormatPercent;
+        propagateHierarchyIdToField(dailyInvalidEmailFormatPercent, "daily_invalid_email_format_percent");
     }
 
     /**

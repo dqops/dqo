@@ -31,7 +31,9 @@ import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.core.synchronization.status.FileSynchronizationChangeDetectionService;
+import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.data.storage.TablesawParquetSupportFix;
+import com.dqops.metadata.labels.labelloader.LabelsIndexer;
 import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeCreator;
 import com.dqops.rest.server.LocalUrlAddresses;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
@@ -67,6 +69,8 @@ public class CliInitializerImpl implements CliInitializer {
     private PythonVirtualEnvService pythonVirtualEnvService;
     private RootConfigurationProperties rootConfigurationProperties;
     private DqoUserPrincipalProvider dqoUserPrincipalProvider;
+    private TableStatusCache tableStatusCache;
+    private LabelsIndexer labelsIndexer;
 
     /**
      * Called by the dependency injection container to provide dependencies.
@@ -87,6 +91,8 @@ public class CliInitializerImpl implements CliInitializer {
      * @param pythonVirtualEnvService Python virtual environment service. Used to initialize a private python venv.
      * @param rootConfigurationProperties Root configuration parameters that are mapped to parameters not configured without any prefix, such as --silent.
      * @param dqoUserPrincipalProvider User principal provider.
+     * @param tableStatusCache Table status cache.
+     * @param labelsIndexer Label indexer service that finds all labels.
      */
     @Autowired
     public CliInitializerImpl(LocalUserHomeCreator localUserHomeCreator,
@@ -105,7 +111,9 @@ public class CliInitializerImpl implements CliInitializer {
                               LocalUrlAddresses localUrlAddresses,
                               PythonVirtualEnvService pythonVirtualEnvService,
                               RootConfigurationProperties rootConfigurationProperties,
-                              DqoUserPrincipalProvider dqoUserPrincipalProvider) {
+                              DqoUserPrincipalProvider dqoUserPrincipalProvider,
+                              TableStatusCache tableStatusCache,
+                              LabelsIndexer labelsIndexer) {
         this.localUserHomeCreator = localUserHomeCreator;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.terminalReader = terminalReader;
@@ -123,6 +131,8 @@ public class CliInitializerImpl implements CliInitializer {
         this.pythonVirtualEnvService = pythonVirtualEnvService;
         this.rootConfigurationProperties = rootConfigurationProperties;
         this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
+        this.tableStatusCache = tableStatusCache;
+        this.labelsIndexer = labelsIndexer;
     }
 
     /**
@@ -204,6 +214,8 @@ public class CliInitializerImpl implements CliInitializer {
         }
         finally {
             this.jobQueueMonitoringService.start();
+            this.labelsIndexer.start();
+            this.tableStatusCache.start();
             this.dqoJobQueue.start();
             this.parentDqoJobQueue.start();
 

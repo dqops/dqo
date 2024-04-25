@@ -20,9 +20,12 @@ import com.dqops.core.incidents.IncidentImportQueueService;
 import com.dqops.core.incidents.IncidentIssueUrlChangeParameters;
 import com.dqops.core.incidents.IncidentStatusChangeParameters;
 import com.dqops.core.principal.DqoPermissionNames;
-import com.dqops.data.checkresults.services.models.*;
+import com.dqops.data.checkresults.models.*;
 import com.dqops.data.incidents.factory.IncidentStatus;
-import com.dqops.data.incidents.services.models.*;
+import com.dqops.data.incidents.models.IncidentListFilterParameters;
+import com.dqops.data.incidents.models.IncidentModel;
+import com.dqops.data.incidents.models.IncidentSortOrder;
+import com.dqops.data.incidents.models.IncidentsPerConnectionModel;
 import com.dqops.data.incidents.services.IncidentsDataService;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
@@ -406,7 +409,7 @@ public class IncidentsController {
             @ApiParam("Incident id") @PathVariable String incidentId,
             @ApiParam(name = "status", value = "New incident status, supported values: open, acknowledged, resolved, muted")
                 @RequestParam IncidentStatus status) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();

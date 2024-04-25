@@ -1,3 +1,6 @@
+---
+title: DQOps REST API tables models reference
+---
 # DQOps REST API tables models reference
 The references of all objects used by [tables](../operations/tables.md) REST API operations are listed below.
 
@@ -84,60 +87,6 @@ Container of table level daily partitioned checks. Contains categories of daily 
 |<span class="no-wrap-code">[`custom_sql`](../../reference/yaml/partitioned/table-daily-partitioned-checks.md#tablecustomsqldailypartitionedchecksspec)</span>|Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately|*[TableCustomSqlDailyPartitionedChecksSpec](../../reference/yaml/partitioned/table-daily-partitioned-checks.md#tablecustomsqldailypartitionedchecksspec)*|
 |<span class="no-wrap-code">[`comparisons`](#tablecomparisondailypartitionedchecksspecmap)</span>|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|*[TableComparisonDailyPartitionedChecksSpecMap](#tablecomparisondailypartitionedchecksspecmap)*|
 |<span class="no-wrap-code">[`custom`](#customcheckspecmap)</span>|Dictionary of custom checks. The keys are check names within this category.|*[CustomCheckSpecMap](#customcheckspecmap)*|
-
-
-___
-
-## ProfilingTimePeriodTruncation
-The time period for profiling checks (millisecond, daily, monthly, weekly, hourly).
- The default profiling check stores one value per month. When profiling checks is re-executed during the month,
- the previous profiling checks value is overwritten and only the most recent value is stored.
-
-
-**The structure of this object is described below**
-
-
-|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
-|-----------|-------------|
-|string|store_the_most_recent_result_per_month<br/>store_the_most_recent_result_per_week<br/>store_the_most_recent_result_per_day<br/>store_the_most_recent_result_per_hour<br/>store_all_results_without_date_truncation<br/>|
-
-___
-
-## TableListModel
-Table list model returned by the rest api that is limited only to the basic fields, excluding nested nodes.
-
-
-**The structure of this object is described below**
-
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
-|---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
-|<span class="no-wrap-code">`table_hash`</span>|Table hash that identifies the table using a unique hash code.|*long*|
-|<span class="no-wrap-code">[`target`](./columns.md#physicaltablename)</span>|Physical table details (a physical schema name and a physical table name).|*[PhysicalTableName](./columns.md#physicaltablename)*|
-|<span class="no-wrap-code">`disabled`</span>|Disables all data quality checks on the table. Data quality checks will not be executed.|*boolean*|
-|<span class="no-wrap-code">`stage`</span>|Stage name.|*string*|
-|<span class="no-wrap-code">`filter`</span>|SQL WHERE clause added to the sensor queries.|*string*|
-|<span class="no-wrap-code">`priority`</span>|Table priority (1, 2, 3, 4, ...). The tables can be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.|*integer*|
-|<span class="no-wrap-code">[`owner`](../../reference/yaml/TableYaml.md#tableownerspec)</span>|Table owner information like the data steward name or the business application name.|*[TableOwnerSpec](../../reference/yaml/TableYaml.md#tableownerspec)*|
-|<span class="no-wrap-code">[`profiling_checks_result_truncation`](#profilingtimeperiodtruncation)</span>|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|*[ProfilingTimePeriodTruncation](#profilingtimeperiodtruncation)*|
-|<span class="no-wrap-code">[`file_format`](../../reference/yaml/TableYaml.md#fileformatspec)</span>|File format for a file based table, such as a CSV or Parquet file.|*[FileFormatSpec](../../reference/yaml/TableYaml.md#fileformatspec)*|
-|<span class="no-wrap-code">`has_any_configured_checks`</span>|True when the table has any checks configured.|*boolean*|
-|<span class="no-wrap-code">`has_any_configured_profiling_checks`</span>|True when the table has any profiling checks configured.|*boolean*|
-|<span class="no-wrap-code">`has_any_configured_monitoring_checks`</span>|True when the table has any monitoring checks configured.|*boolean*|
-|<span class="no-wrap-code">`has_any_configured_partition_checks`</span>|True when the table has any partition checks configured.|*boolean*|
-|<span class="no-wrap-code">`partitioning_configuration_missing`</span>|True when the table has missing configuration of the "partition_by_column" column, making any partition checks fail when executed.|*boolean*|
-|<span class="no-wrap-code">[`run_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this table.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
-|<span class="no-wrap-code">[`run_profiling_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run profiling checks within this table.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
-|<span class="no-wrap-code">[`run_monitoring_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run monitoring checks within this table.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
-|<span class="no-wrap-code">[`run_partition_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run partition partitioned checks within this table.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
-|<span class="no-wrap-code">[`collect_statistics_job_template`](./jobs.md#statisticscollectorsearchfilters)</span>|Configured parameters for the "collect statistics" job that should be pushed to the job queue in order to run all statistics collectors within this table.|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
-|<span class="no-wrap-code">[`data_clean_job_template`](./jobs.md#deletestoreddataqueuejobparameters)</span>|Configured parameters for the "data clean" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this table.|*[DeleteStoredDataQueueJobParameters](./jobs.md#deletestoreddataqueuejobparameters)*|
-|<span class="no-wrap-code">`can_edit`</span>|Boolean flag that decides if the current user can update or delete this object.|*boolean*|
-|<span class="no-wrap-code">`can_collect_statistics`</span>|Boolean flag that decides if the current user can collect statistics.|*boolean*|
-|<span class="no-wrap-code">`can_run_checks`</span>|Boolean flag that decides if the current user can run checks.|*boolean*|
-|<span class="no-wrap-code">`can_delete_data`</span>|Boolean flag that decides if the current user can delete data (results).|*boolean*|
-|<span class="no-wrap-code">`yaml_parsing_error`</span>|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|*string*|
 
 
 ___
@@ -241,7 +190,7 @@ Rest model that returns the configuration of table partitioning information.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
-|<span class="no-wrap-code">[`target`](./columns.md#physicaltablename)</span>|Physical table details (a physical schema name and a physical table name)|*[PhysicalTableName](./columns.md#physicaltablename)*|
+|<span class="no-wrap-code">[`target`](./common.md#physicaltablename)</span>|Physical table details (a physical schema name and a physical table name)|*[PhysicalTableName](./common.md#physicaltablename)*|
 |<span class="no-wrap-code">[`timestamp_columns`](../../reference/yaml/TableYaml.md#timestampcolumnsspec)</span>|Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).|*[TimestampColumnsSpec](../../reference/yaml/TableYaml.md#timestampcolumnsspec)*|
 |<span class="no-wrap-code">[`incremental_time_window`](../../reference/yaml/TableYaml.md#partitionincrementaltimewindowspec)</span>|Configuration of time windows for executing partition checks incrementally, configures the number of recent days to analyze for daily partitioned tables or the number of recent months for monthly partitioned data.|*[PartitionIncrementalTimeWindowSpec](../../reference/yaml/TableYaml.md#partitionincrementaltimewindowspec)*|
 |<span class="no-wrap-code">`can_edit`</span>|Boolean flag that decides if the current user can update or delete this object.|*boolean*|
@@ -273,7 +222,7 @@ Container of table level checks that are activated on a table level.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`result_truncation`](./tables.md#profilingtimeperiodtruncation)</span>|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|*[ProfilingTimePeriodTruncation](./tables.md#profilingtimeperiodtruncation)*|
+|<span class="no-wrap-code">[`result_truncation`](./common.md#profilingtimeperiodtruncation)</span>|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|*[ProfilingTimePeriodTruncation](./common.md#profilingtimeperiodtruncation)*|
 |<span class="no-wrap-code">[`volume`](../../reference/yaml/profiling/table-profiling-checks.md#tablevolumeprofilingchecksspec)</span>|Configuration of volume data quality checks on a table level.|*[TableVolumeProfilingChecksSpec](../../reference/yaml/profiling/table-profiling-checks.md#tablevolumeprofilingchecksspec)*|
 |<span class="no-wrap-code">[`timeliness`](../../reference/yaml/profiling/table-profiling-checks.md#tabletimelinessprofilingchecksspec)</span>|Configuration of timeliness checks on a table level. Timeliness checks detect anomalies like rapid row count changes.|*[TableTimelinessProfilingChecksSpec](../../reference/yaml/profiling/table-profiling-checks.md#tabletimelinessprofilingchecksspec)*|
 |<span class="no-wrap-code">[`accuracy`](../../reference/yaml/profiling/table-profiling-checks.md#tableaccuracyprofilingchecksspec)</span>|Configuration of accuracy checks on a table level. Accuracy checks compare the tested table with another reference table.|*[TableAccuracyProfilingChecksSpec](../../reference/yaml/profiling/table-profiling-checks.md#tableaccuracyprofilingchecksspec)*|
@@ -296,7 +245,7 @@ Model that returns a summary of the table level statistics (the basic profiling 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
-|<span class="no-wrap-code">[`table`](./columns.md#physicaltablename)</span>|Physical table name including the schema and table names.|*[PhysicalTableName](./columns.md#physicaltablename)*|
+|<span class="no-wrap-code">[`table`](./common.md#physicaltablename)</span>|Physical table name including the schema and table names.|*[PhysicalTableName](./common.md#physicaltablename)*|
 |<span class="no-wrap-code">[`collect_table_statistics_job_template`](./jobs.md#statisticscollectorsearchfilters)</span>|Configured parameters for the "collect statistics" job that should be pushed to the job queue in order to run all statistics collectors within this table, limited only to the table level statistics (row count, etc).|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
 |<span class="no-wrap-code">[`collect_table_and_column_statistics_job_template`](./jobs.md#statisticscollectorsearchfilters)</span>|Configured parameters for the "collect statistics" job that should be pushed to the job queue in order to run all statistics collectors within this table, including statistics for all columns.|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
 |<span class="no-wrap-code">`can_collect_statistics`</span>|Boolean flag that decides if the current user can collect statistics.|*boolean*|

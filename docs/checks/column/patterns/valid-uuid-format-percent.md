@@ -1,3 +1,6 @@
+---
+title: valid uuid format percent data quality checks
+---
 # valid uuid format percent data quality checks
 
 This check validates the format of UUID values in text columns.
@@ -18,7 +21,7 @@ Verifies that the percentage of valid UUID in a text column does not fall below 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`profile_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -182,7 +185,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -203,7 +206,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -521,7 +524,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -542,7 +545,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -565,7 +568,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -586,7 +589,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -706,7 +709,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 27-32"
+    ```yaml hl_lines="5-13 27-32"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -799,7 +802,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -819,7 +822,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -1148,7 +1151,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -1168,7 +1171,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -1192,7 +1195,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -1212,7 +1215,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -1349,7 +1352,7 @@ Verifies that the percentage of valid UUID in a text column does not fall below 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`daily_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -1514,7 +1517,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -1535,7 +1538,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -1853,7 +1856,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -1874,7 +1877,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -1897,7 +1900,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -1918,7 +1921,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -2038,7 +2041,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 28-33"
+    ```yaml hl_lines="5-13 28-33"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2132,7 +2135,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -2152,7 +2155,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -2481,7 +2484,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -2501,7 +2504,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -2525,7 +2528,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -2545,7 +2548,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -2682,7 +2685,7 @@ Verifies that the percentage of valid UUID in a text column does not fall below 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`monthly_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -2847,7 +2850,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -2868,7 +2871,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -3186,7 +3189,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -3207,7 +3210,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -3230,7 +3233,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -3251,7 +3254,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -3371,7 +3374,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 28-33"
+    ```yaml hl_lines="5-13 28-33"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3465,7 +3468,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -3485,7 +3488,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -3814,7 +3817,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -3834,7 +3837,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -3858,7 +3861,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -3878,7 +3881,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -4015,7 +4018,7 @@ Verifies that the percentage of valid UUID in a text column does not fall below 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`daily_partition_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -4190,7 +4193,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -4211,7 +4214,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -4529,7 +4532,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -4550,7 +4553,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -4573,7 +4576,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -4594,7 +4597,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -4718,7 +4721,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 38-43"
+    ```yaml hl_lines="10-4 38-43"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -4822,7 +4825,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -4842,7 +4845,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -5171,7 +5174,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -5191,7 +5194,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -5215,7 +5218,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -5235,7 +5238,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -5370,7 +5373,7 @@ Verifies that the percentage of valid UUID in a text column does not fall below 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`monthly_partition_valid_uuid_format_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -5545,7 +5548,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -5566,7 +5569,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -5884,7 +5887,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -5905,7 +5908,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -5928,7 +5931,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -5949,7 +5952,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -6073,7 +6076,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 38-43"
+    ```yaml hl_lines="10-4 38-43"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -6177,7 +6180,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -6197,7 +6200,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -6526,7 +6529,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -6546,7 +6549,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -6570,7 +6573,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END
@@ -6590,7 +6593,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
                                 THEN 1
                             ELSE 0
                         END

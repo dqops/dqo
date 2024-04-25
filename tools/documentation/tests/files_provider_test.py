@@ -1,6 +1,5 @@
 import unittest
-from files_provider import get_all_files
-import os 
+from scripts.files_provider import get_all_files
 from os.path import abspath, dirname, join, realpath
 
 class FilesProviderTest(unittest.TestCase):

@@ -110,7 +110,7 @@ public class GenerateDocumentationPostProcessor {
             HandlebarsDocumentationUtilities.configure(projectDir);
 
             Path dqoHomePath = projectDir.resolve("../home").toAbsolutePath().normalize();
-            DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
+            DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath, true);
             LinkageStore<Class<?>> linkageStore = new LinkageStore<>();
 
             pythonCaller = createPythonCaller(projectDir);
@@ -242,12 +242,16 @@ public class GenerateDocumentationPostProcessor {
 
         Path categoriesConceptDocPath = docsRootFolderPath.resolve("categories-of-data-quality-checks").toAbsolutePath().normalize();
         DocumentationFolder currentCheckCategoriesConceptDocFiles = DocumentationFolderFactory.loadCurrentFiles(categoriesConceptDocPath);
-
         currentCheckCategoriesConceptDocFiles.setFolderName("categories-of-data-quality-checks");
+
+        Path dqoConceptsDocPath = docsRootFolderPath.resolve("dqo-concepts").toAbsolutePath().normalize();
+        DocumentationFolder currentDqoConceptsDocFiles = DocumentationFolderFactory.loadCurrentFiles(dqoConceptsDocPath);
+        currentDqoConceptsDocFiles.setFolderName("dqo-concepts");
 
         DocumentationFolder currentRootFolder = new DocumentationFolder("", docsRootFolderPath);
         currentRootFolder.getSubFolders().add(currentCheckDocFiles);
         currentRootFolder.getSubFolders().add(currentCheckCategoriesConceptDocFiles);
+        currentRootFolder.getSubFolders().add(currentDqoConceptsDocFiles);
 
         DocumentationFolder renderedDocumentation = checkDocumentationGenerator.renderCheckDocumentation(projectRoot, currentRootFolder);
         renderedDocumentation.writeModifiedFiles(currentRootFolder);

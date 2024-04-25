@@ -1,4 +1,7 @@
-# Detect null values
+---
+title: How to detect null values using data quality checks
+---
+# How to detect null values using data quality checks
 This sample shows how to use data quality checks to detect null values in the table and view the results on data quality dashboards.
 
 ## Overview
@@ -59,7 +62,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-null-count-checks2.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-null-count-checks2.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
     
@@ -82,14 +85,14 @@ Run the activated check using the **Run check** button.
 
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-![Run check](https://dqops.com/docs/images/examples/daily-null-count-run-checks2.png)
+![Run check](https://dqops.com/docs/images/examples/daily-null-count-run-checks2.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![Null-count check results](https://dqops.com/docs/images/examples/daily-null-count-check-results1.png)
+![Null-count check results](https://dqops.com/docs/images/examples/daily-null-count-check-results1.png){ loading=lazy; width="1200px" }
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
@@ -131,7 +134,7 @@ This dashboard allows filtering data by:
 * column,
 * issue severity
 
-![Null-count check results on current completeness issues on columns dashboard](https://dqops.com/docs/images/examples/current-completeness-issues-on-columns-dashboard.png)
+![Null-count check results on current completeness issues on columns dashboard](https://dqops.com/docs/images/examples/current-completeness-issues-on-columns-dashboard.png){ loading=lazy; width="1200px" }
 
 ## Change a schedule at the connection level
 
@@ -140,7 +143,7 @@ table, or individual check.
 
 After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
-![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png)
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the **Data Source** section.
 

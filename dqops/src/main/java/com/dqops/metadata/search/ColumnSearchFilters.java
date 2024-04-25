@@ -55,6 +55,9 @@ public class ColumnSearchFilters {
             "The labels are assigned on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.")
     private String[] labels;
 
+    @JsonPropertyDescription("Optional limit for the maximum number of results to return.")
+    private Integer maxResults;
+
     @JsonIgnore
     private SearchPattern connectionNameSearchPattern;
     @JsonIgnore
@@ -202,6 +205,22 @@ public class ColumnSearchFilters {
      */
     public void setLabels(String[] labels) {
         this.labels = labels;
+    }
+
+    /**
+     * Sets the limit for the maximum number of results to return.
+     * @return Limit or null.
+     */
+    public Integer getMaxResults() {
+        return maxResults;
+    }
+
+    /**
+     * Sets the limit for the maximum number of results to return.
+     * @param maxResults New limit of rows or null to disable limiting the results.
+     */
+    public void setMaxResults(Integer maxResults) {
+        this.maxResults = maxResults;
     }
 
     /**

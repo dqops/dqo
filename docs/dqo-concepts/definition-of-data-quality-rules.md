@@ -157,12 +157,12 @@ the [percent moving average](../reference/rules/Averages.md#percent-moving-avera
 This screen is responsible for editing the specification files for a custom data quality rule
 stored in the [*$DQO_USER_HOME/checks/\*\*/\*.dqocheck.yaml*](../reference/yaml/RuleDefinitionYaml.md) files.
 
-![Rule definition configuration](https://dqops.com/docs/images/concepts/rule-definition-configuration.png)
+![Rule definition configuration](https://dqops.com/docs/images/concepts/rule-definition-configuration.png){ loading=lazy; width="1200px" }
 
 ### **Python code editor**
 The Python source code of the data quality rule is defined on the *Python code* tab.
 
-![Rule Python code configuration](https://dqops.com/docs/images/concepts/rule-python-code-configuration.png)
+![Rule Python code configuration](https://dqops.com/docs/images/concepts/rule-python-code-configuration.png){ loading=lazy; width="1200px" }
 
 
 ## What's next

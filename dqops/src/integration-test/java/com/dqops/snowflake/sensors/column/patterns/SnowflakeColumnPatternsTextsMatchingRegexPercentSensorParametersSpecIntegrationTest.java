@@ -30,6 +30,7 @@ import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.patterns.ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec;
 import com.dqops.snowflake.BaseSnowflakeIntegrationTest;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,7 +57,7 @@ public class SnowflakeColumnPatternsTextsMatchingRegexPercentSensorParametersSpe
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,4}$");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "email", this.checkSpec);
@@ -66,12 +67,12 @@ public class SnowflakeColumnPatternsTextsMatchingRegexPercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(50.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(33.333, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,4}$");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.daily);
 
@@ -80,12 +81,12 @@ public class SnowflakeColumnPatternsTextsMatchingRegexPercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(50.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(33.333, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,4}$");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.monthly);
 
@@ -94,12 +95,12 @@ public class SnowflakeColumnPatternsTextsMatchingRegexPercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(50.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(33.333, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,4}$");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.daily,"date");
 
@@ -108,12 +109,12 @@ public class SnowflakeColumnPatternsTextsMatchingRegexPercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((float) 83.333, (float)resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(16.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,4}$");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.monthly,"date");
@@ -123,6 +124,6 @@ public class SnowflakeColumnPatternsTextsMatchingRegexPercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(50.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(33.333, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 }

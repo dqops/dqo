@@ -37,8 +37,10 @@ public class FileSensorDefinitionListImpl extends SensorDefinitionListImpl {
      * Creates a sensor definition collection using a given sensor's folder.
      * @param sensorsFolder Sensor definitions folder node.
      * @param yamlSerializer Yaml serializer.
+     * @param readOnly Create the list in a read-only mode.
      */
-    public FileSensorDefinitionListImpl(FolderTreeNode sensorsFolder, YamlSerializer yamlSerializer) {
+    public FileSensorDefinitionListImpl(FolderTreeNode sensorsFolder, YamlSerializer yamlSerializer, boolean readOnly) {
+        super(readOnly);
         this.sensorsFolder = sensorsFolder;
         this.yamlSerializer = yamlSerializer;
     }
@@ -61,7 +63,7 @@ public class FileSensorDefinitionListImpl extends SensorDefinitionListImpl {
             if (this.getByObjectName(sensorName, false) != null) {
                 continue; // was already added
             }
-			this.addWithoutFullLoad(new FileSensorDefinitionWrapperImpl(sensorDefinitionFolderNode, this.yamlSerializer));
+			this.addWithoutFullLoad(new FileSensorDefinitionWrapperImpl(sensorDefinitionFolderNode, this.yamlSerializer, this.isReadOnly()));
         }
     }
 
@@ -74,7 +76,7 @@ public class FileSensorDefinitionListImpl extends SensorDefinitionListImpl {
     @Override
     protected SensorDefinitionWrapperImpl createNewElement(String sensorName) {
         FolderTreeNode newSensorFolderNode = this.sensorsFolder.getOrAddFolderPath(sensorName);
-        FileSensorDefinitionWrapperImpl sensorDefinitionModelWrapper = new FileSensorDefinitionWrapperImpl(newSensorFolderNode, this.yamlSerializer);
+        FileSensorDefinitionWrapperImpl sensorDefinitionModelWrapper = new FileSensorDefinitionWrapperImpl(newSensorFolderNode, this.yamlSerializer, this.isReadOnly());
         sensorDefinitionModelWrapper.setName(sensorName);
         sensorDefinitionModelWrapper.setSpec(new SensorDefinitionSpec());
         sensorDefinitionModelWrapper.setStatus(InstanceStatus.ADDED);

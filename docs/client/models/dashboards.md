@@ -1,3 +1,6 @@
+---
+title: DQOps REST API dashboards models reference
+---
 # DQOps REST API dashboards models reference
 The references of all objects used by [dashboards](../operations/dashboards.md) REST API operations are listed below.
 

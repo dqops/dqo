@@ -1,4 +1,7 @@
-# dqo sensor command
+---
+title: dqo sensor command-line command
+---
+# dqo sensor command-line command
 The reference of the **sensor** command in DQOps. Edit sensor template
 
 

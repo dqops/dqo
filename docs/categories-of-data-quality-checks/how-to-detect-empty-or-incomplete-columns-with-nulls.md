@@ -1,4 +1,7 @@
-# Detecting empty and incomplete columns
+---
+title: How to detect empty and incomplete columns
+---
+# How to detect empty and incomplete columns
 Read this guide to learn how to detect empty columns or incomplete columns containing too many null values in a dataset.
 
 The data quality checks that detect empty and incomplete columns are configured in the `nulls` category in DQOps.
@@ -49,7 +52,7 @@ Null values can cause problems in several data analytics and data transformation
 We say that a column is incomplete when it contains some null values.
 The following example shows the data profiling statistics of a column with over 16% of null values.
 
-![Column with null values profiling statistics](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/null-count-profiling-statistics-min.png){ loading=lazy }
+![Column with null values profiling statistics](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/null-count-profiling-statistics-min.png){ loading=lazy; width="1200px" }
 
 ### Detect incomplete columns with UI
 DQOps uses a [*nulls_count*](../checks/column/nulls/nulls-count.md) data quality check to count null values. 
@@ -57,7 +60,7 @@ It raises a data quality issue when any null values are found.
 
 The default value of the *max_count* parameter is 0, which asserts that no null values are present.
 
-![Detect incomplete columns with some null values using a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/incomplete-column-with-some-nulls-check-in-editor-min.png){ loading=lazy }
+![Detect incomplete columns with some null values using a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/incomplete-column-with-some-nulls-check-in-editor-min.png){ loading=lazy; width="1200px" }
 
 ### Detect incomplete columns in YAML
 The following example shows a [*nulls_count*](../checks/column/nulls/nulls-count.md) check configured in a YAML file.
@@ -104,7 +107,7 @@ DQOps supports configuring multiple alert severity levels by using a different t
 The following example raises a warning severity issue when the percent of the null value is above 16%.
 An issue at an error severity level is raised when the percent of null values exceeds 20%.
 
-![Detect incomplete columns with a minimum accepted percentage of nulls](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-incomplete-columns-with-accepted-percent-of-nulls-min.png){ loading=lazy }
+![Detect incomplete columns with a minimum accepted percentage of nulls](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-incomplete-columns-with-accepted-percent-of-nulls-min.png){ loading=lazy; width="1200px" }
 
 ### Detect in YAML
 The configuration of the [*nulls_percent*](../checks/column/nulls/nulls-percent.md) check is straightforward in YAML.
@@ -142,7 +145,7 @@ The default value is 1 row, which finds empty columns not passing that limit.
 The [*not_nulls_count*](../checks/column/nulls/not-nulls-count.md) check configured with the default settings finds empty columns.
 The following screen shows a valid column that was not empty.
 
-![Detect empty columns in tables with a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-empty-tables-check-min.png){ loading=lazy }
+![Detect empty columns in tables with a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-empty-tables-check-min.png){ loading=lazy; width="1200px" }
 
 ### Detect empty columns in UI
 The configuration of the [*not_nulls_count*](../checks/column/nulls/not-nulls-count.md) that detects empty columns is shown below.
@@ -175,7 +178,7 @@ The minimum accepted number of non-null values is configured by setting the *min
 ### Detect in UI
 The following example shows how to assert that a column contains at least 1500000 non-null values.
 
-![Detect columns with too little non-null values in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-columns-with-too-little-not-null-values-min.png){ loading=lazy }
+![Detect columns with too little non-null values in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-columns-with-too-little-not-null-values-min.png){ loading=lazy; width="1200px" }
 
 ### Detect in YAML
 The configuration of the [*not_nulls_count*](../checks/column/nulls/not-nulls-count.md) check in a YAML file only uses a different value of the *min_count* parameter.
@@ -224,7 +227,7 @@ that monitors the whole table every day is the same,
 but the [*daily_nulls_percent_anomaly*](../checks/column/nulls/nulls-percent-anomaly.md#daily-nulls-percent-anomaly) check 
 requires 30 days of monitoring before it will show any results.
 
-![Detect anomalies in the percentage of null values in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-anomalies-in-percent-of-null-values-in-date-partitions-min.png){ loading=lazy }
+![Detect anomalies in the percentage of null values in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-anomalies-in-percent-of-null-values-in-date-partitions-min.png){ loading=lazy; width="1200px" }
 
 ### Configuring completeness anomaly detection in YAML
 The [*nulls_percent_anomaly*](../checks/column/nulls/nulls-percent-anomaly.md) check only requires the configuration of the *anomaly_percent* parameters
@@ -288,7 +291,7 @@ This dashboard shows only the status of the most recent evaluation of all data q
 When the data is fixed in the data source, and the failed data quality check is rerun,
 the issue will disappear from the dashboard.
 
-![Data quality dashboard showing empty and incomplete detected by data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/empty-and-incomplete-columns-issues-shown-on-monitoring-dashboard-min.png){ loading=lazy }
+![Data quality dashboard showing empty and incomplete detected by data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/empty-and-incomplete-columns-issues-shown-on-monitoring-dashboard-min3.png){ loading=lazy; width="1200px" }
 
 ### Partition monitoring dashboards
 DQOps has a separate set of data quality dashboards for partitioned data.
@@ -297,12 +300,12 @@ These dashboards are found in the "Partitions" folder. They show issues for ever
 The top section of the partition's *Current completeness issues on columns" dashboard shows the data sources, 
 affected tables, and the types of completeness issues.
 
-![Partitions with nulls shown on a dashboard - the filters](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partition-completeness-status-dashboard-top-min.png){ loading=lazy }
+![Partitions with nulls shown on a dashboard - the filters](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partition-completeness-status-dashboard-top-min3.png){ loading=lazy; width="1200px" }
 
 The next section shows more details about incomplete or empty columns. 
 The status identifies the highest severity issue by color.
 
-![List of columns in a partitioned table that have incomplete data shown on a data quality dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/completeness-issues-dashboard-column-details-min.png){ loading=lazy }
+![List of columns in a partitioned table that have incomplete data shown on a data quality dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/completeness-issues-dashboard-column-details-min.png){ loading=lazy; width="1200px" }
 
 
 ## Use cases
@@ -313,15 +316,15 @@ The status identifies the highest severity issue by color.
 ## List of nulls checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*nulls_count*](../checks/column/nulls/nulls-count.md)|Completeness|Detects incomplete columns that contain any *null* values. Counts the number of rows having a null value. Raises a data quality issue when the count of null values is above a *max_count* threshold.|:material-check-bold:|
-|[*nulls_percent*](../checks/column/nulls/nulls-percent.md)|Completeness|Detects incomplete columns that contain any *null* values. Measures the percentage of rows having a null value. Raises a data quality issue when the percentage of null values is above a *max_percent* threshold. Configure this check to accept a given percentage of null values by setting the *max_percent* parameter.|:material-check-bold:|
-|[*nulls_percent_anomaly*](../checks/column/nulls/nulls-percent-anomaly.md)|Completeness|Detects day-to-day anomalies in the percentage of *null* values. Measures the percentage of rows having a *null* value. Raises a data quality issue when the rate of null values increases or decreases too much.|:material-check-bold:|
-|[*not_nulls_count*](../checks/column/nulls/not-nulls-count.md)|Completeness|Detects empty columns that contain only *null* values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below *min_count*. The default value of the *min_count* parameter is 1, but DQOps supports setting a higher number to assert that a column has at least that many non-null values.|:material-check-bold:|
-|[*not_nulls_percent*](../checks/column/nulls/not-nulls-percent.md)|Completeness|Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below *min_percentage*. The default value of the *min_percentage* parameter is 100.0, but DQOps supports setting a lower value to accept some nulls.| |
-|[*nulls_percent_change*](../checks/column/nulls/nulls-percent-change.md)|Completeness|Detects relative increases or decreases in the percentage of null values since the last measured percentage. Measures the percentage of null values for each day. Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.| |
-|[*nulls_percent_change_1_day*](../checks/column/nulls/nulls-percent-change-1-day.md)|Completeness|Detects relative increases or decreases in the percentage of null values since the previous day. Measures the percentage of null values for each day. Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.| |
-|[*nulls_percent_change_7_days*](../checks/column/nulls/nulls-percent-change-7-days.md)|Completeness|Detects relative increases or decreases in the percentage of null values since the last week (seven days ago). Measures the percentage of null values for each day. Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.| |
-|[*nulls_percent_change_30_days*](../checks/column/nulls/nulls-percent-change-30-days.md)|Completeness|Detects relative increases or decreases in the percentage of null values since the last month (30 days ago). Measures the percentage of null values for each day. Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.| |
+|[*nulls_count*](../checks/column/nulls/nulls-count.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|Detects incomplete columns that contain any *null* values. Counts the number of rows having a null value. Raises a data quality issue when the count of null values is above a *max_count* threshold.|:material-check-bold:|
+|[*nulls_percent*](../checks/column/nulls/nulls-percent.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|Detects incomplete columns that contain any *null* values. Measures the percentage of rows having a null value. Raises a data quality issue when the percentage of null values is above a *max_percent* threshold. Configure this check to accept a given percentage of null values by setting the *max_percent* parameter.|:material-check-bold:|
+|[*nulls_percent_anomaly*](../checks/column/nulls/nulls-percent-anomaly.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|Detects day-to-day anomalies in the percentage of *null* values. Measures the percentage of rows having a *null* value. Raises a data quality issue when the rate of null values increases or decreases too much.|:material-check-bold:|
+|[*not_nulls_count*](../checks/column/nulls/not-nulls-count.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|Detects empty columns that contain only *null* values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below *min_count*. The default value of the *min_count* parameter is 1, but DQOps supports setting a higher number to assert that a column has at least that many non-null values.|:material-check-bold:|
+|[*not_nulls_percent*](../checks/column/nulls/not-nulls-percent.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below *min_percentage*. The default value of the *min_percentage* parameter is 100.0, but DQOps supports setting a lower value to accept some nulls.| |
+|[*nulls_percent_change*](../checks/column/nulls/nulls-percent-change.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|Detects relative increases or decreases in the percentage of null values since the last measured percentage. Measures the percentage of null values for each day. Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.| |
+|[*nulls_percent_change_1_day*](../checks/column/nulls/nulls-percent-change-1-day.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|Detects relative increases or decreases in the percentage of null values since the previous day. Measures the percentage of null values for each day. Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.| |
+|[*nulls_percent_change_7_days*](../checks/column/nulls/nulls-percent-change-7-days.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|Detects relative increases or decreases in the percentage of null values since the last week (seven days ago). Measures the percentage of null values for each day. Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.| |
+|[*nulls_percent_change_30_days*](../checks/column/nulls/nulls-percent-change-30-days.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|Detects relative increases or decreases in the percentage of null values since the last month (30 days ago). Measures the percentage of null values for each day. Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.| |
 
 
 **Reference and samples**

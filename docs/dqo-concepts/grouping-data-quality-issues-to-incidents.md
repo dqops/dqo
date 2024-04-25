@@ -1,4 +1,7 @@
-# Data quality incidents
+---
+title: Data quality incident management, grouping and notifications
+---
+# Data quality incident management, grouping and notifications
 This guide shows how DQOps correlates similar data quality issues into data quality incidents, and how the incident notification workflow works. 
 
 ## What is a data quality incident?
@@ -32,14 +35,8 @@ and data quality incident is described below.
 ## Incident workflow
 The data quality incident management workflow is shown on the following diagram.
 
-``` mermaid
-graph LR
-  S[New data quality<br/>incident identified] --> |New incident created| O(Open);
-  O --> |Assigned to be fixed by<br/> the 3rd level support| A(Acknowledged);
-  O --> |False alarm, mute| M(Muted);
-  A --> |Incident solved| R(Resolved);
-  A --> |Not an issue,<br/>do not raise it again| M(Muted);
-```
+![Incident workflow](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-workflow.png){ loading=lazy; width="1200px" }
+
 
 The following statuses are used in the data quality incident workflow.
 
@@ -59,7 +56,7 @@ The following statuses are used in the data quality incident workflow.
 ## Grouping issues into incidents
 The **data quality issue** grouping is configured on a connection level a shown on the *Incidents and Notifications* screen below.
 
-![Incidents And Notifications tab](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-and-notifications-settings.png)
+![Incidents And Notifications tab](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-and-notifications-settings.png){ loading=lazy; width="1200px" }
 
 The following grouping levels are supported:
 
@@ -115,7 +112,7 @@ but the support team decided that they will not be resolved.
 The list of incidents is shown in the *Incidents* section of the [DQOps user interface](dqops-user-interface-overview.md).
 The incident review begins on the incident list screen shown below.
 
-![Data quality incident list screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-screen.png)
+![Data quality incident list screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-screen.png){ loading=lazy; width="1200px" }
 
 The incidents are grouped by the data source. The user can search for incidents by all the fields shown on the incident list screen,
 including the affected table name, the parent schema of the table, and the columns used for incident grouping: data quality dimension,
@@ -131,7 +128,7 @@ When a single incident is clicked, DQOps shows the incident detail screen. The u
 to the clipboard and send to another DQOps user, who can review the issue. Also, the link is shown
 in the [Slack incident notifications](../integrations/slack/configuring-slack-notifications.md).
 
-![Incident details screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incident-details-screen.png)
+![Incident details screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incident-details-screen.png){ loading=lazy; width="1200px" }
 
 The incident management screens are described on the 
 [working with incidents and notifications](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) page.

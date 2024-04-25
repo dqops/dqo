@@ -1,3 +1,6 @@
+---
+title: DQOps REST API users models reference
+---
 # DQOps REST API users models reference
 The references of all objects used by [users](../operations/users.md) REST API operations are listed below.
 

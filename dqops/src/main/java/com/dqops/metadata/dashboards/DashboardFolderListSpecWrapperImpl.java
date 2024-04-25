@@ -33,6 +33,10 @@ public class DashboardFolderListSpecWrapperImpl extends AbstractElementWrapper<S
     public DashboardFolderListSpecWrapperImpl() {
     }
 
+    public DashboardFolderListSpecWrapperImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
     /**
      * Gets the data quality dashboard name.
      * @return Data quality dashboard name.

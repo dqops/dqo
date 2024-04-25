@@ -1,3 +1,6 @@
+---
+title: row count change 1 day data quality checks
+---
 # row count change 1 day data quality checks
 
 This check compares the current table volume (the row count) to the row count from the previous day.
@@ -18,7 +21,7 @@ Detects when the volume&#x27;s change (increase or decrease of the row count) si
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_row_count_change_1_day`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
+|<span class="no-wrap-code">`profile_row_count_change_1_day`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 
@@ -883,7 +886,7 @@ Detects when the volume&#x27;s change (increase or decrease of the row count) si
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_row_count_change_1_day`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
+|<span class="no-wrap-code">`daily_row_count_change_1_day`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 
@@ -1750,7 +1753,7 @@ Detects when the partition volume change (increase or decrease of the row count)
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_row_count_change_1_day`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
+|<span class="no-wrap-code">`daily_partition_row_count_change_1_day`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 
@@ -2220,7 +2223,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-18 38-43"
+    ```yaml hl_lines="10-4 38-43"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table

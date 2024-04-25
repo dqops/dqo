@@ -1,4 +1,7 @@
-# Detecting values not matching patterns
+---
+title: How to detect values not matching patterns
+---
+# How to detect values not matching patterns
 Read this guide to learn how to validate column values if they match patterns, such as phone numbers, emails, or any regular expression.
 
 The pattern match checks are configured in the `patterns` category in DQOps.
@@ -50,7 +53,7 @@ The DQOps data quality checks that detect the most popular patterns are listed i
 The [*invalid_email_format_found*](../checks/column/patterns/invalid-email-format-found.md) check detects invalid emails that do not match the typical email patterns.
 The following column profile summary shows a sample email column that contains one invalid email.
 
-![Email column profile with an invalid email](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/email-column-profile-min.png){ loading=lazy }
+![Email column profile with an invalid email](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/email-column-profile-min.png){ loading=lazy; width="1200px" }
 
 
 ### Detecting invalid emails in UI
@@ -58,7 +61,7 @@ The [*invalid_email_format_found*](../checks/column/patterns/invalid-email-forma
 check is located in the *patterns* category. The parameter **max_count** configures the maximum accepted number of invalid emails.
 The check has found one invalid email.
 
-![Invalid email format data quality check in DQOps editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/invalid-email-data-quality-check-in-dqops-editor-min.png){ loading=lazy }
+![Invalid email format data quality check in DQOps editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/invalid-email-data-quality-check-in-dqops-editor-min.png){ loading=lazy; width="1200px" }}
 
 ### Detecting invalid emails in UI
 The configuration of the [*invalid_email_format_found*](../checks/column/patterns/invalid-email-format-found.md) check is simple.
@@ -89,14 +92,14 @@ use regular expressions to validate if text columns contain valid date strings t
 
 The following summary of column profiling shows a text column that contains one invalid date.
 
-![Date column profile with dates as strings in an invalid format](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-date-column-profile-min.png){ loading=lazy }
+![Date column profile with dates as strings in an invalid format](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-date-column-profile-min.png){ loading=lazy; width="1200px" }
 
 ### Detecting invalid dates in UI
 We will use the [*text_matching_date_pattern_percent*](../checks/column/patterns/text-matching-date-pattern-percent.md)
 check to detect invalid date patterns and measure the percentage of valid rows.
 The tested table has three rows, and only two contain valid dates. We are expecting that the rate of valid values is 66.6%.
 
-![Text in valid date format data quality check in DQOps editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/validating-dates-in-text-columns-dqops-data-quality-check-min.png){ loading=lazy }
+![Text in valid date format data quality check in DQOps editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/validating-dates-in-text-columns-dqops-data-quality-check-min.png){ loading=lazy; width="1200px" }
 
 ### Detecting invalid dates in YAML
 The configuration of the [*text_matching_date_pattern_percent*](../checks/column/patterns/text-matching-date-pattern-percent.md)
@@ -156,7 +159,7 @@ check is configured by setting the regular expression pattern and a  minimum acc
 We will validate the text column that should contain dates but using a custom regular expression.
 The regular expression will be `^[0-9]{4}-[0-9]{2}-[0-9]{2}$`.
 
-![Validate date text with a custom regular expression using DQOps check editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/regex-match-data-quality-check-validating-date-string-in-dqops-min.png){ loading=lazy }
+![Validate date text with a custom regular expression using DQOps check editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/regex-match-data-quality-check-validating-date-string-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 ### Validating regular expressions in YAML
 The configuration of the [*texts_matching_regex_percent*](../checks/column/patterns/texts-matching-regex-percent.md)
@@ -196,16 +199,17 @@ spec:
 ## List of patterns checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*text_not_matching_regex_found*](../checks/column/patterns/text-not-matching-regex-found.md)|Validity|This check validates text values using a pattern defined as a regular expression. It counts the number of invalid values and raises a data quality issue when the number exceeds a threshold.|:material-check-bold:|
-|[*texts_matching_regex_percent*](../checks/column/patterns/texts-matching-regex-percent.md)|Validity|This check validates text values using a pattern defined as a regular expression. It measures the percentage of valid values and raises a data quality issue when the rate is below a threshold.|:material-check-bold:|
-|[*invalid_email_format_found*](../checks/column/patterns/invalid-email-format-found.md)|Validity|This check detects invalid email addresses in text columns using a regular expression. It counts the number of invalid emails and raises a data quality issue when the number is above a threshold.|:material-check-bold:|
-|[*text_not_matching_date_pattern_found*](../checks/column/patterns/text-not-matching-date-pattern-found.md)|Validity|This check detects dates in the wrong format inside text columns using a regular expression. It counts the number of incorrectly formatted dates and raises a data quality issue when the number exceeds a threshold.| |
-|[*text_matching_date_pattern_percent*](../checks/column/patterns/text-matching-date-pattern-percent.md)|Validity|This check validates the date format of dates stored in text columns. It measures the percentage of correctly formatted dates and raises a data quality issue when the rate is below a threshold.| |
-|[*text_matching_name_pattern_percent*](../checks/column/patterns/text-matching-name-pattern-percent.md)|Validity|This check verifies if values stored in a text column contain only letters and are usable as literal identifiers. It measures the percentage of valid literal identifiers and raises a data quality issue when the rate is below a threshold.| |
-|[*invalid_uuid_format_found*](../checks/column/patterns/invalid-uuid-format-found.md)|Validity|This check detects invalid UUID identifiers in text columns using a regular expression. It counts the number of invalid UUIDs and raises a data quality issue when the number is above a threshold.| |
-|[*valid_uuid_format_percent*](../checks/column/patterns/valid-uuid-format-percent.md)|Validity|This check validates the format of UUID values in text columns. It measures the percentage of valid UUIDs and raises a data quality issue when the rate is below a threshold.| |
-|[*invalid_ip4_address_format_found*](../checks/column/patterns/invalid-ip4-address-format-found.md)|Validity|This check detects invalid IP4 internet addresses in text columns using a regular expression. It counts the number of invalid addresses and raises a data quality issue when the number is above a threshold.| |
-|[*invalid_ip6_address_format_found*](../checks/column/patterns/invalid-ip6-address-format-found.md)|Validity|This check detects invalid IP6 internet addresses in text columns using a regular expression. It counts the number of invalid addresses and raises a data quality issue when the number is above a threshold.| |
+|[*text_not_matching_regex_found*](../checks/column/patterns/text-not-matching-regex-found.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|This check validates text values using a pattern defined as a regular expression. It counts the number of invalid values and raises a data quality issue when the number exceeds a threshold.|:material-check-bold:|
+|[*texts_matching_regex_percent*](../checks/column/patterns/texts-matching-regex-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|This check validates text values using a pattern defined as a regular expression. It measures the percentage of valid values and raises a data quality issue when the rate is below a threshold.|:material-check-bold:|
+|[*invalid_email_format_found*](../checks/column/patterns/invalid-email-format-found.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|This check detects invalid email addresses in text columns using a regular expression. It counts the number of invalid emails and raises a data quality issue when the number is above a threshold.|:material-check-bold:|
+|[*invalid_email_format_percent*](../checks/column/patterns/invalid-email-format-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|This check detects invalid email addresses in text columns using a regular expression. It calculated the percentage of invalid emails and raises a data quality issue when the percentage is above a threshold.| |
+|[*text_not_matching_date_pattern_found*](../checks/column/patterns/text-not-matching-date-pattern-found.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|This check detects dates in the wrong format inside text columns using a regular expression. It counts the number of incorrectly formatted dates and raises a data quality issue when the number exceeds a threshold.| |
+|[*text_matching_date_pattern_percent*](../checks/column/patterns/text-matching-date-pattern-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|This check validates the date format of dates stored in text columns. It measures the percentage of correctly formatted dates and raises a data quality issue when the rate is below a threshold.| |
+|[*text_matching_name_pattern_percent*](../checks/column/patterns/text-matching-name-pattern-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|This check verifies if values stored in a text column contain only letters and are usable as literal identifiers. It measures the percentage of valid literal identifiers and raises a data quality issue when the rate is below a threshold.| |
+|[*invalid_uuid_format_found*](../checks/column/patterns/invalid-uuid-format-found.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|This check detects invalid UUID identifiers in text columns using a regular expression. It counts the number of invalid UUIDs and raises a data quality issue when the number is above a threshold.| |
+|[*valid_uuid_format_percent*](../checks/column/patterns/valid-uuid-format-percent.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|This check validates the format of UUID values in text columns. It measures the percentage of valid UUIDs and raises a data quality issue when the rate is below a threshold.| |
+|[*invalid_ip4_address_format_found*](../checks/column/patterns/invalid-ip4-address-format-found.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|This check detects invalid IP4 internet addresses in text columns using a regular expression. It counts the number of invalid addresses and raises a data quality issue when the number is above a threshold.| |
+|[*invalid_ip6_address_format_found*](../checks/column/patterns/invalid-ip6-address-format-found.md)|[Validity](../dqo-concepts/data-quality-dimensions.md#data-validity)|This check detects invalid IP6 internet addresses in text columns using a regular expression. It counts the number of invalid addresses and raises a data quality issue when the number is above a threshold.| |
 
 
 **Reference and samples**

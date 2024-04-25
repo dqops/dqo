@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,6 +16,9 @@ if TYPE_CHECKING:
     from ..models.statistics_collector_search_filters import (
         StatisticsCollectorSearchFilters,
     )
+    from ..models.table_current_data_quality_status_model import (
+        TableCurrentDataQualityStatusModel,
+    )
     from ..models.table_owner_spec import TableOwnerSpec
 
 
@@ -30,6 +33,7 @@ class TableListModel:
         connection_name (Union[Unset, str]): Connection name.
         table_hash (Union[Unset, int]): Table hash that identifies the table using a unique hash code.
         target (Union[Unset, PhysicalTableName]):
+        labels (Union[Unset, List[str]]): List of labels applied to the table.
         disabled (Union[Unset, bool]): Disables all data quality checks on the table. Data quality checks will not be
             executed.
         stage (Union[Unset, str]): Stage name.
@@ -41,6 +45,11 @@ class TableListModel:
         owner (Union[Unset, TableOwnerSpec]):
         profiling_checks_result_truncation (Union[Unset, ProfilingTimePeriodTruncation]):
         file_format (Union[Unset, FileFormatSpec]):
+        data_quality_status (Union[Unset, TableCurrentDataQualityStatusModel]): The table's most recent data quality
+            status. It is a summary of the results of the most recently executed data quality checks on the table. Verify
+            the value of the highest_severity_level to see if there are any data quality issues on the table. The values of
+            severity levels are: 0 - all data quality checks passed, 1 - a warning was detected, 2 - an error was detected,
+            3 - a fatal data quality issue was detected.
         has_any_configured_checks (Union[Unset, bool]): True when the table has any checks configured.
         has_any_configured_profiling_checks (Union[Unset, bool]): True when the table has any profiling checks
             configured.
@@ -73,6 +82,7 @@ class TableListModel:
     connection_name: Union[Unset, str] = UNSET
     table_hash: Union[Unset, int] = UNSET
     target: Union[Unset, "PhysicalTableName"] = UNSET
+    labels: Union[Unset, List[str]] = UNSET
     disabled: Union[Unset, bool] = UNSET
     stage: Union[Unset, str] = UNSET
     filter_: Union[Unset, str] = UNSET
@@ -82,6 +92,7 @@ class TableListModel:
         Unset, ProfilingTimePeriodTruncation
     ] = UNSET
     file_format: Union[Unset, "FileFormatSpec"] = UNSET
+    data_quality_status: Union[Unset, "TableCurrentDataQualityStatusModel"] = UNSET
     has_any_configured_checks: Union[Unset, bool] = UNSET
     has_any_configured_profiling_checks: Union[Unset, bool] = UNSET
     has_any_configured_monitoring_checks: Union[Unset, bool] = UNSET
@@ -109,6 +120,10 @@ class TableListModel:
         if not isinstance(self.target, Unset):
             target = self.target.to_dict()
 
+        labels: Union[Unset, List[str]] = UNSET
+        if not isinstance(self.labels, Unset):
+            labels = self.labels
+
         disabled = self.disabled
         stage = self.stage
         filter_ = self.filter_
@@ -126,6 +141,10 @@ class TableListModel:
         file_format: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.file_format, Unset):
             file_format = self.file_format.to_dict()
+
+        data_quality_status: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.data_quality_status, Unset):
+            data_quality_status = self.data_quality_status.to_dict()
 
         has_any_configured_checks = self.has_any_configured_checks
         has_any_configured_profiling_checks = self.has_any_configured_profiling_checks
@@ -179,6 +198,8 @@ class TableListModel:
             field_dict["table_hash"] = table_hash
         if target is not UNSET:
             field_dict["target"] = target
+        if labels is not UNSET:
+            field_dict["labels"] = labels
         if disabled is not UNSET:
             field_dict["disabled"] = disabled
         if stage is not UNSET:
@@ -195,6 +216,8 @@ class TableListModel:
             ] = profiling_checks_result_truncation
         if file_format is not UNSET:
             field_dict["file_format"] = file_format
+        if data_quality_status is not UNSET:
+            field_dict["data_quality_status"] = data_quality_status
         if has_any_configured_checks is not UNSET:
             field_dict["has_any_configured_checks"] = has_any_configured_checks
         if has_any_configured_profiling_checks is not UNSET:
@@ -257,6 +280,9 @@ class TableListModel:
         from ..models.statistics_collector_search_filters import (
             StatisticsCollectorSearchFilters,
         )
+        from ..models.table_current_data_quality_status_model import (
+            TableCurrentDataQualityStatusModel,
+        )
         from ..models.table_owner_spec import TableOwnerSpec
 
         d = src_dict.copy()
@@ -270,6 +296,8 @@ class TableListModel:
             target = UNSET
         else:
             target = PhysicalTableName.from_dict(_target)
+
+        labels = cast(List[str], d.pop("labels", UNSET))
 
         disabled = d.pop("disabled", UNSET)
 
@@ -303,6 +331,15 @@ class TableListModel:
             file_format = UNSET
         else:
             file_format = FileFormatSpec.from_dict(_file_format)
+
+        _data_quality_status = d.pop("data_quality_status", UNSET)
+        data_quality_status: Union[Unset, TableCurrentDataQualityStatusModel]
+        if isinstance(_data_quality_status, Unset):
+            data_quality_status = UNSET
+        else:
+            data_quality_status = TableCurrentDataQualityStatusModel.from_dict(
+                _data_quality_status
+            )
 
         has_any_configured_checks = d.pop("has_any_configured_checks", UNSET)
 
@@ -400,6 +437,7 @@ class TableListModel:
             connection_name=connection_name,
             table_hash=table_hash,
             target=target,
+            labels=labels,
             disabled=disabled,
             stage=stage,
             filter_=filter_,
@@ -407,6 +445,7 @@ class TableListModel:
             owner=owner,
             profiling_checks_result_truncation=profiling_checks_result_truncation,
             file_format=file_format,
+            data_quality_status=data_quality_status,
             has_any_configured_checks=has_any_configured_checks,
             has_any_configured_profiling_checks=has_any_configured_profiling_checks,
             has_any_configured_monitoring_checks=has_any_configured_monitoring_checks,

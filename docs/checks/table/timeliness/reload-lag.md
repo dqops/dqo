@@ -1,3 +1,6 @@
+---
+title: reload lag data quality checks
+---
 # reload lag data quality checks
 
 A table-level check that calculates the maximum difference in days between ingestion timestamp and event timestamp values on any row.
@@ -21,7 +24,7 @@ Daily partitioned check calculating the longest time a row waited to be loaded, 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_reload_lag`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Timeliness|[*partition_reload_lag*](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_reload_lag`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Timeliness](../../../dqo-concepts/data-quality-dimensions.md#data-timeliness)|[*partition_reload_lag*](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -972,7 +975,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="12-20 43-48"
+    ```yaml hl_lines="12-4 43-48"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1872,7 +1875,7 @@ Monthly partitioned check calculating the longest time a row waited to be loaded
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_reload_lag`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Timeliness|[*partition_reload_lag*](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_reload_lag`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Timeliness](../../../dqo-concepts/data-quality-dimensions.md#data-timeliness)|[*partition_reload_lag*](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2823,7 +2826,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="12-20 43-48"
+    ```yaml hl_lines="12-4 43-48"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table

@@ -19,8 +19,10 @@ import com.dqops.core.configuration.DqoJdbcConnectionsConfigurationProperties;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.RemovalNotification;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -31,10 +33,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
- * JDDB connection pool that supports multiple connections.
+ * JDBC connection pool that supports multiple connections.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Slf4j
 public class JdbcConnectionPoolImpl implements JdbcConnectionPool {
     /**
      * Data sources cache.
@@ -51,7 +54,22 @@ public class JdbcConnectionPoolImpl implements JdbcConnectionPool {
                 CacheBuilder.newBuilder()
                         .maximumSize(jdbcConnectionsConfigurationProperties.getMaxConnectionInPool())
                         .expireAfterAccess(jdbcConnectionsConfigurationProperties.getExpireAfterAccessSeconds(), TimeUnit.SECONDS)
+                        .removalListener(notification -> onRemoveDataSource(notification))
                         .build();
+    }
+
+    /**
+     * Notification called when the cache decided to remove a data source.
+     * @param notification Notification that a data source is removed.
+     */
+    private void onRemoveDataSource(RemovalNotification<Object, Object> notification) {
+        try {
+            HikariDataSource dataSource = (HikariDataSource)notification.getValue();
+            dataSource.close();
+        }
+        catch (Exception ex) {
+            log.error("Cannot close a data source for the connection: " + notification.getKey().toString() + ", error: " + ex.getMessage(), ex);
+        }
     }
 
     /**

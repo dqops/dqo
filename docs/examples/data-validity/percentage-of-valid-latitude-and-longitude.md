@@ -1,5 +1,8 @@
-# Percentage of valid latitude and longitude values
-This sample shows how to use data quality checks to detect the percentage of valid latitude and longitude values and view the results on dashboards.
+---
+title: How to detect invalid latitude and longitude values using a data quality check
+---
+# How to detect invalid latitude and longitude values using a data quality check
+This sample shows how to use data quality checks to measure the percentage of valid latitude and longitude values and view the results on dashboards.
 
 ## Overview
 
@@ -63,7 +66,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-valid-latitude-and-longitude-percent-checks1.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-valid-latitude-and-longitude-percent-checks1.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
 
@@ -87,14 +90,14 @@ Run the activated check using the **Run check** button. Run checks on latitude a
 You can also run all the checks for an entire connection. Click on the three dots icon next to the name of the 
 connection in the tree view and click on **Run checks**. 
 
-![Run check](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-run-checks1.png)
+![Run check](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-run-checks1.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![Valid-latitude-and-longitude-percent check results](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results1.png)
+![Valid-latitude-and-longitude-percent check results](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results1.png){ loading=lazy; width="1200px" }
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
@@ -137,7 +140,7 @@ This dashboard allow filtering data by:
 * table,
 * column.
 
-![Valid-latitude-and-longitude-percent check results on Highest issue severity per check and day dashboard](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results-on-dashboard1.png)
+![Valid-latitude-and-longitude-percent check results on Highest issue severity per check and day dashboard](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results-on-dashboard1.png){ loading=lazy; width="1200px" }
 
 ## Change a schedule at the connection level
 
@@ -146,7 +149,7 @@ table, or individual check.
 
 After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
-![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png)
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the **Data Source** section.
 
@@ -162,7 +165,7 @@ After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every 
 
     By default, scheduler is active. You can turn it off by clicking on notification icon in the top right corner of the screen, and clicking the toggle button.
 
-    ![Turn off scheduler](https://dqops.com/docs/images/examples/turning-off-scheduler.png)
+    ![Turn off scheduler](https://dqops.com/docs/images/examples/turning-off-scheduler.png){ loading=lazy }
 
 Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
 all tables associated with that connection.

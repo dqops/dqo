@@ -1,3 +1,6 @@
+---
+title: DQOps REST API defaults operations
+---
 # DQOps REST API defaults operations
 Default settings management for configuring the default data quality checks that are configured for all imported tables and columns.
 

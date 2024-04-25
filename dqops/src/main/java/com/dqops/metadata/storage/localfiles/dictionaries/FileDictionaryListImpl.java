@@ -33,8 +33,10 @@ public class FileDictionaryListImpl extends DictionaryListImpl {
     /**
      * Creates a data dictionaries collection using a given "dictionaries" folder.
      * @param dictionariesFolderNode Data dictionaries folder node.
+     * @param readOnly Make the list read-only.
      */
-    public FileDictionaryListImpl(FolderTreeNode dictionariesFolderNode) {
+    public FileDictionaryListImpl(FolderTreeNode dictionariesFolderNode, boolean readOnly) {
+        super(readOnly);
         this.dictionariesFolderNode = dictionariesFolderNode;
     }
 
@@ -54,7 +56,7 @@ public class FileDictionaryListImpl extends DictionaryListImpl {
         for (FileTreeNode fileTreeNode : this.dictionariesFolderNode.getFiles()) {
             String baseFileName = fileTreeNode.getFilePath().getFileName();
             String decodedFileName = FileNameSanitizer.decodeFileSystemName(baseFileName);
-            this.addWithoutFullLoad(new FileDictionaryWrapperImpl(this.dictionariesFolderNode, decodedFileName));
+            this.addWithoutFullLoad(new FileDictionaryWrapperImpl(this.dictionariesFolderNode, decodedFileName, this.isReadOnly()));
         }
     }
 
@@ -67,7 +69,7 @@ public class FileDictionaryListImpl extends DictionaryListImpl {
     @Override
     protected DictionaryWrapperImpl createNewElement(String dictionaryName) {
         FileDictionaryWrapperImpl sharedCredentialWrapper =
-                new FileDictionaryWrapperImpl(this.dictionariesFolderNode, dictionaryName);
+                new FileDictionaryWrapperImpl(this.dictionariesFolderNode, dictionaryName, this.isReadOnly());
         sharedCredentialWrapper.setObject(new FileContent());
         return sharedCredentialWrapper;
     }

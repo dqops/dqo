@@ -24,6 +24,10 @@ import java.util.List;
  * Collection of table-level default checks patterns definitions. Tracks the status of the child elements (addition, removal).
  */
 public class TableDefaultChecksPatternListImpl extends AbstractIndexingList<String, TableDefaultChecksPatternWrapper> implements TableDefaultChecksPatternList {
+    public TableDefaultChecksPatternListImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
     /**
      * Creates a new element given an object name. Derived classes should create a correct object type.
      *

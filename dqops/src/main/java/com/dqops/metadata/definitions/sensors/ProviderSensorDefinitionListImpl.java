@@ -24,7 +24,12 @@ import java.util.List;
 /**
  * Data quality provider specific check definition collection. Tracks the status of the child elements (addition, removal).
  */
-public class ProviderSensorDefinitionListImpl extends AbstractIndexingList<ProviderType, ProviderSensorDefinitionWrapper> implements ProviderSensorDefinitionList {
+public class ProviderSensorDefinitionListImpl extends AbstractIndexingList<ProviderType, ProviderSensorDefinitionWrapper>
+        implements ProviderSensorDefinitionList {
+    public ProviderSensorDefinitionListImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
     /**
      * Creates a new element given an object name. Derived classes should create a correct object type.
      *

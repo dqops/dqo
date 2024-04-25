@@ -33,6 +33,7 @@ import com.dqops.metadata.dictionaries.DictionaryListImpl;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.sources.*;
@@ -320,6 +321,14 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             }
         }
 
+        String qualityDimensionFilter = this.filters.getQualityDimension();
+        if (!Strings.isNullOrEmpty(qualityDimensionFilter)) {
+            String qualityDimension = abstractCheckSpec.getQualityDimension();
+            if (!StringPatternComparer.matchSearchPattern(qualityDimension, qualityDimensionFilter)) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+
         String sensorNameFilter = this.filters.getSensorName();
         if (!Strings.isNullOrEmpty(sensorNameFilter)) {
             if (sensorParameters == null) {
@@ -349,6 +358,10 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
         }
 
         parameter.getNodes().add(abstractCheckSpec);
+
+        if (this.filters.getMaxResults() != null && parameter.getNodes().size() >= this.filters.getMaxResults()) {
+            return TreeNodeTraversalResult.STOP_TRAVERSAL;
+        }
 
         return TreeNodeTraversalResult.SKIP_CHILDREN; // no need to search any deeper, we have found what we were looking for
     }

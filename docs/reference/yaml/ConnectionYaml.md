@@ -1,3 +1,6 @@
+---
+title: DQOps YAML file definitions
+---
 # DQOps YAML file definitions
 The definition of YAML files used by DQOps to configure the data sources, monitored tables, and the configuration of activated data quality checks.
 
@@ -205,6 +208,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`parquet`](./ConnectionYaml.md#parquetfileformatspec)</span>|Parquet file format specification.|*[ParquetFileFormatSpec](./ConnectionYaml.md#parquetfileformatspec)*| | | |
 |<span class="no-wrap-code ">`directories`</span>|Virtual schema name to directory mappings. The path must be an absolute path.|*Dict[string, string]*| | | |
 |<span class="no-wrap-code ">`storage_type`</span>|The storage type.|*enum*|*local*<br/>*s3*<br/>| | |
+|<span class="no-wrap-code ">`aws_authentication_mode`</span>|The authentication mode for AWS. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.|*enum*|*iam*<br/>*default_credentials*<br/>| | |
 |<span class="no-wrap-code ">`user`</span>|DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`region`</span>|The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
@@ -354,6 +358,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`host`</span>|Redshift host name. Supports also a ${REDSHIFT_HOST} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`port`</span>|Redshift port number. The default port is 5432. Supports also a ${REDSHIFT_PORT} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`database`</span>|Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
+|<span class="no-wrap-code ">`redshift_authentication_mode`</span>|The authentication mode for AWS. Supports also a ${REDSHIFT_AUTHENTICATION_MODE} configuration with a custom environment variable.|*enum*|*iam*<br/>*default_credentials*<br/>*user_password*<br/>| | |
 |<span class="no-wrap-code ">`user`</span>|Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
@@ -457,7 +462,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`port`</span>|Trino port number. The default port is 8080. Supports also a ${TRINO_PORT} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`user`</span>|Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
-|<span class="no-wrap-code ">`athena_authentication_mode`</span>|The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE} configuration with a custom environment variable.|*enum*|*iam*<br/>*default_credentials*<br/>| | |
+|<span class="no-wrap-code ">`aws_authentication_mode`</span>|The authentication mode for AWS Athena. Supports also a ${ATHENA_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.|*enum*|*iam*<br/>*default_credentials*<br/>| | |
 |<span class="no-wrap-code ">`athena_region`</span>|The AWS Region where queries will be run. Supports also a ${ATHENA_REGION} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`catalog`</span>|The catalog that contains the databases and the tables that will be accessed with the driver. Supports also a ${TRINO_CATALOG} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`athena_work_group`</span>|The workgroup in which queries will run. Supports also a ${ATHENA_WORK_GROUP} configuration with a custom environment variable.|*string*| | | |

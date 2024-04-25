@@ -1,4 +1,7 @@
-# Data reconciliation with table comparison checks
+---
+title: How to reconcile data with table comparison checks
+---
+# How to reconcile data with table comparison checks
 Read this guide to learn how to reconcile data across data sources to find discrepancies using table comparison data quality checks.
 
 Data reconciliation checks are defined in the `comparisons` category in DQOps.
@@ -77,7 +80,7 @@ The following image shows the **table comparison** configuration in DQOps.
 The table comparison is defined on the *compared table* and specifies the reference table.
 The tables are compared by grouping rows by the *county* and *city* columns and comparing aggregated measures.
 
-![Table reconciliation configuration of compared tables and identity columns](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-table-mapping-min.png){ loading=lazy }
+![Table reconciliation configuration of compared tables and identity columns](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-table-mapping-min.png){ loading=lazy; width="1200px" }
 
 Please read the manual for [comparing tables](../working-with-dqo/compare-tables-between-data-sources.md)
 in the working with DQOps section to see an entire process,
@@ -115,7 +118,7 @@ The default alerting thresholds enabled by DQOps are listed below.
 
 The configuration of thresholds is collapsed by default. Please use the expand icon to show the detailed settings.
 
-![Configuration of discrepancy tolerance in data reconciliation](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-enable-column-mapping-and-activate-measures-min.png){ loading=lazy }
+![Configuration of discrepancy tolerance in data reconciliation](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-enable-column-mapping-and-activate-measures-min.png){ loading=lazy; width="1200px" }
 
 
 ### Comparing data for time periods
@@ -146,14 +149,14 @@ using a background color of each  [data quality issue severity levels](../dqo-co
 ### Tables match
 When all metrics match, DQOps shows the cells using a green background.
 
-![Table reconciliation valid result tables match](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-tables-match-result-min.png){ loading=lazy }
+![Table reconciliation valid result tables match](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-tables-match-result-min.png){ loading=lazy; width="1200px" }
 
 ### Discrepancies detected
 We are introducing a discrepancy on the rows whose city value is MANOR. 
 For the purpose of this example, the error is injected by configuring
 a [table filter](../dqo-concepts/configuring-table-metadata.md#table-filter-predicate) `city <> 'MANOR'`.
 
-![Table reconciliation summary with discrepancies on columns](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-difference-on-group-min.png){ loading=lazy }
+![Table reconciliation summary with discrepancies on columns](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-difference-on-group-min.png){ loading=lazy; width="1200px" }
 
 
 ## Configuring table comparison in YAML
@@ -262,8 +265,8 @@ spec:
 ## List of comparisons checks at a table level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*row_count_match*](../checks/table/comparisons/row-count-match.md)|Accuracy|Table level comparison check that compares the row count of the current (parent) table with the row count of the reference table.|:material-check-bold:|
-|[*column_count_match*](../checks/table/comparisons/column-count-match.md)|Accuracy|Table level comparison check that compares the column count of the current (parent) table with the column count of the reference table.|:material-check-bold:|
+|[*row_count_match*](../checks/table/comparisons/row-count-match.md)|[Accuracy](../dqo-concepts/data-quality-dimensions.md#data-accuracy)|Table level comparison check that compares the row count of the current (parent) table with the row count of the reference table.|:material-check-bold:|
+|[*column_count_match*](../checks/table/comparisons/column-count-match.md)|[Accuracy](../dqo-concepts/data-quality-dimensions.md#data-accuracy)|Table level comparison check that compares the column count of the current (parent) table with the column count of the reference table.|:material-check-bold:|
 
 
 **Reference and samples**
@@ -276,12 +279,12 @@ that are used by those checks.
 ## List of comparisons checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*sum_match*](../checks/column/comparisons/sum-match.md)|Accuracy|A column-level check that ensures that compares the sum of the values in the tested column to the sum of values in a reference column from the reference table. Compares the sum of values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).|:material-check-bold:|
-|[*min_match*](../checks/column/comparisons/min-match.md)|Accuracy|A column-level check that ensures that compares the minimum value in the tested column to the minimum value in a reference column from the reference table. Compares the minimum values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).|:material-check-bold:|
-|[*max_match*](../checks/column/comparisons/max-match.md)|Accuracy|A column-level check that ensures that compares the maximum value in the tested column to maximum value in a reference column from the reference table. Compares the maximum values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).|:material-check-bold:|
-|[*mean_match*](../checks/column/comparisons/mean-match.md)|Accuracy|A column-level check that ensures that compares the mean (average) of the values in the tested column to the mean (average) of values in a reference column from the reference table. Compares the mean (average) value for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).|:material-check-bold:|
-|[*not_null_count_match*](../checks/column/comparisons/not-null-count-match.md)|Accuracy|A column-level check that ensures that compares the count of not null values in the tested column to the count of not null values in a reference column from the reference table. Compares the count of not null values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).|:material-check-bold:|
-|[*null_count_match*](../checks/column/comparisons/null-count-match.md)|Accuracy|A column-level check that ensures that compares the count of null values in the tested column to the count of null values in a reference column from the reference table. Compares the count of null values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).|:material-check-bold:|
+|[*sum_match*](../checks/column/comparisons/sum-match.md)|[Accuracy](../dqo-concepts/data-quality-dimensions.md#data-accuracy)|A column-level check that ensures that compares the sum of the values in the tested column to the sum of values in a reference column from the reference table. Compares the sum of values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).|:material-check-bold:|
+|[*min_match*](../checks/column/comparisons/min-match.md)|[Accuracy](../dqo-concepts/data-quality-dimensions.md#data-accuracy)|A column-level check that ensures that compares the minimum value in the tested column to the minimum value in a reference column from the reference table. Compares the minimum values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).|:material-check-bold:|
+|[*max_match*](../checks/column/comparisons/max-match.md)|[Accuracy](../dqo-concepts/data-quality-dimensions.md#data-accuracy)|A column-level check that ensures that compares the maximum value in the tested column to maximum value in a reference column from the reference table. Compares the maximum values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).|:material-check-bold:|
+|[*mean_match*](../checks/column/comparisons/mean-match.md)|[Accuracy](../dqo-concepts/data-quality-dimensions.md#data-accuracy)|A column-level check that ensures that compares the mean (average) of the values in the tested column to the mean (average) of values in a reference column from the reference table. Compares the mean (average) value for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).|:material-check-bold:|
+|[*not_null_count_match*](../checks/column/comparisons/not-null-count-match.md)|[Accuracy](../dqo-concepts/data-quality-dimensions.md#data-accuracy)|A column-level check that ensures that compares the count of not null values in the tested column to the count of not null values in a reference column from the reference table. Compares the count of not null values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).|:material-check-bold:|
+|[*null_count_match*](../checks/column/comparisons/null-count-match.md)|[Accuracy](../dqo-concepts/data-quality-dimensions.md#data-accuracy)|A column-level check that ensures that compares the count of null values in the tested column to the count of null values in a reference column from the reference table. Compares the count of null values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).|:material-check-bold:|
 
 
 **Reference and samples**

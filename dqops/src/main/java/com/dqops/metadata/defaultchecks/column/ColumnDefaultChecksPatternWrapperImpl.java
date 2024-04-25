@@ -41,12 +41,16 @@ public class ColumnDefaultChecksPatternWrapperImpl extends AbstractElementWrappe
     public ColumnDefaultChecksPatternWrapperImpl() {
     }
 
+    public ColumnDefaultChecksPatternWrapperImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
     /**
      * Creates a default checks pattern wrapper given a pattern name.
      * @param patternName Pattern name.
      */
-    public ColumnDefaultChecksPatternWrapperImpl(String patternName) {
-        this();
+    public ColumnDefaultChecksPatternWrapperImpl(String patternName, boolean readOnly) {
+        this(readOnly);
         this.patternName = patternName;
     }
 

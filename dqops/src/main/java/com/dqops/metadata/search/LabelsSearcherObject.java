@@ -15,7 +15,7 @@
  */
 package com.dqops.metadata.search;
 
-import com.dqops.metadata.sources.LabelSetSpec;
+import com.dqops.metadata.labels.LabelSetSpec;
 
 public class LabelsSearcherObject {
 	private LabelSetSpec connectionLabels;

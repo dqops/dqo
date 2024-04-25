@@ -102,7 +102,7 @@ public class DashboardsController {
         UserDomainIdentity userIdentity = principal.getDataDomainIdentity();
         DqoCloudApiKey cloudApiKey = this.cloudApiKeyProvider.getApiKey(userIdentity);
         if (cloudApiKey != null && cloudApiKey.getApiKeyPayload().getLicenseType() != DqoCloudLicenseType.FREE) {
-            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity, true);
             UserHome userHome = userHomeContext.getUserHome();
             DashboardsFolderListSpec userDashboardsList = userHome.getDashboards().getSpec();
             combinedDefaultAndUserDashboards = dashboardList.merge(userDashboardsList);
@@ -131,7 +131,7 @@ public class DashboardsController {
             return null;
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
         DashboardsFolderListSpec userDashboardsList = userHome.getDashboards().getSpec();
         if (userDashboardsList == null || userDashboardsList.size() == 0) {

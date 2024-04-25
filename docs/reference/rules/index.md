@@ -1,3 +1,6 @@
+---
+title: Data quality rules supported by DQOps
+---
 # Data quality rules supported by DQOps
 The full list of data quality rules supported by DQOps. The source code is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-architecture.md#dqops-home)/rules/* folder in the DQOps distribution.
 
@@ -45,7 +48,7 @@ The full list of data quality rules supported by DQOps. The source code is found
 |[*between_ints*](./Comparison.md#between-ints)|Data quality rule that verifies if a data quality check readout is between begin and end values.|
 |[*between_percent*](./Comparison.md#between-percent)|Data quality rule that verifies if a data quality check percentage readout is between an accepted range of percentages.|
 |[*count_between*](./Comparison.md#count-between)|Data quality rule that verifies if a data quality check readout is between begin and end values, defined as min_count and max_count.|
-|[*detected_datatype_equals*](./Comparison.md#detected-datatype-equals)|Data quality rule that verifies that a data quality check readout of a string_datatype_detect (the data type detection) matches an expected data type. The supported values are in the range 1..8, which are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.|
+|[*detected_datatype_equals*](./Comparison.md#detected-datatype-equals)|Data quality rule that verifies that a data quality check readout of a string_datatype_detect (the data type detection) matches an expected data type. The supported values are in the range 1..8, which are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types.|
 |[*diff_percent*](./Comparison.md#diff-percent)|Data quality rule that verifies if a data quality check readout is less or equal a maximum value.|
 |[*equals*](./Comparison.md#equals)|Data quality rule that verifies that a data quality check readout equals a given value. A margin of error may be configured.|
 |[*equals_0*](./Comparison.md#equals-0)|Data quality rule that verifies that a data quality check readout equals 0. It is used in data quality checks that have an expected value &quot;0&quot;.|

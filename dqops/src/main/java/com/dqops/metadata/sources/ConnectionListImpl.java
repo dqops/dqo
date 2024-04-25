@@ -24,6 +24,10 @@ import java.util.List;
  * Data source collection. Tracks the status of the child elements (addition, removal).
  */
 public class ConnectionListImpl extends AbstractIndexingList<String, ConnectionWrapper> implements ConnectionList {
+    public ConnectionListImpl(boolean readOnly) {
+        super(readOnly);
+    }
+
     /**
      * Creates a new element given an object name. Derived classes should create a correct object type.
      *

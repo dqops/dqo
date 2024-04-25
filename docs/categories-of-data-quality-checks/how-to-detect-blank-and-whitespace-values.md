@@ -1,4 +1,7 @@
-# Detecting whitespace and null value placeholders
+---
+title: How to detect whitespace and null value placeholders
+---
+# How to detect whitespace and null value placeholders
 Read this guide to learn how to detect data quality issues in text columns containing spaces, tabs, or special texts equivalent to a null value.
 
 The data quality checks for detecting whitespace and empty value placeholders are configured in the `whitespace` category in DQOps.
@@ -63,7 +66,7 @@ Enable the `_found` data quality checks to find blank values or accept a limited
 ### Configure checks in UI
 The blank detection checks are standard data quality checks in the "whitespace" category.
 
-![Enable whitespace and null placeholder values detection in column values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/enable-whitespace-and-null-placeholder-detection-data-quality-checks-min1.png){ loading=lazy }
+![Enable whitespace and null placeholder values detection in column values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/enable-whitespace-and-null-placeholder-detection-data-quality-checks-min1.png){ loading=lazy; width="1200px" }
 
 ### Configure checks in YAML
 The blank detection checks are configured in the YAML file inside the `whitespace` node.
@@ -100,7 +103,7 @@ The blank percent measurement checks are advanced checks, not always visible in 
 ### Configure checks in UI
 Turn on the "Advanced checks" checkbox. DQOps will also show non-standard checks, revealing the percentage of whitespace checks.
 
-![Enable percentage of empty values, whitespace only values and null placeholders using data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/enable-empty-values-whitespace-only-values-and-null-placeholders-data-quality-checks-min.png){ loading=lazy }
+![Enable percentage of empty values, whitespace only values and null placeholders using data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/enable-empty-values-whitespace-only-values-and-null-placeholders-data-quality-checks-min.png){ loading=lazy; width="1200px" }
 
 ### Configure checks in YAML
 The percentage checks are easy to configure in a YAML file. The parameter `max_percent` controls the maximum accepted percentage.
@@ -174,7 +177,7 @@ When the default value 0% is used, DQOps will raise a data quality issue when an
 Please note that the [DQOps data quality check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor)
 shows this check after clicking the *Show advanced checks* checkbox.
 
-![Detect texts surrounded by whitespace characters using DQOps data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-text-surrounded-with-whitespace-data-quality-check-in-dqops-min.png){ loading=lazy }
+![Detect texts surrounded by whitespace characters using DQOps data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-text-surrounded-with-whitespace-data-quality-check-in-dqops-min.png){ loading=lazy; width="1200px" }
 
 The results in DQOps show that 75% of non-null values (three out of four) contained whitespace characters around the text.
 
@@ -203,14 +206,14 @@ spec:
 ## List of whitespace checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*empty_text_found*](../checks/column/whitespace/empty-text-found.md)|Completeness|This check detects empty texts that are not null. Empty texts have a length of zero. The database treats them as values different than nulls, and some databases allow the storage of both null and empty values. This check counts empty texts and raises a data quality issue when the number of empty values exceeds a *max_count* parameter value.|:material-check-bold:|
-|[*whitespace_text_found*](../checks/column/whitespace/whitespace-text-found.md)|Completeness|This check detects empty texts containing only spaces and other whitespace characters. This check counts whitespace-only texts and raises a data quality issue when their count exceeds a *max_count* parameter value.|:material-check-bold:|
-|[*null_placeholder_text_found*](../checks/column/whitespace/null-placeholder-text-found.md)|Completeness|This check detects text values that are well-known equivalents (placeholders) of a null value, such as *null*, *None*, *n/a*. This check counts null placeholder values and raises a data quality issue when their count exceeds a *max_count* parameter value.|:material-check-bold:|
-|[*empty_text_percent*](../checks/column/whitespace/empty-text-percent.md)|Completeness|This check detects empty texts that are not null. Empty texts have a length of zero. This check measures the percentage of empty texts and raises a data quality issue when the rate of empty values exceeds a *max_percent* parameter value.| |
-|[*whitespace_text_percent*](../checks/column/whitespace/whitespace-text-percent.md)|Completeness|This check detects empty texts containing only spaces and other whitespace characters. This check measures the percentage of whitespace-only texts and raises a data quality issue when their rate exceeds a *max_percent* parameter value.| |
-|[*null_placeholder_text_percent*](../checks/column/whitespace/null-placeholder-text-percent.md)|Completeness|This check detects text values that are well-known equivalents (placeholders) of a null value, such as *null*, *None*, *n/a*. This check measures the percentage of null placeholder values and raises a data quality issue when their rate exceeds a *max_percent* parameter value.| |
-|[*text_surrounded_by_whitespace_found*](../checks/column/whitespace/text-surrounded-by-whitespace-found.md)|Consistency|This check detects text values that contain additional whitespace characters before or after the text. This check counts text values surrounded by whitespace characters (on any side) and raises a data quality issue when their count exceeds a *max_count* parameter value. Whitespace-surrounded texts should be trimmed before loading to another table.| |
-|[*text_surrounded_by_whitespace_percent*](../checks/column/whitespace/text-surrounded-by-whitespace-percent.md)|Consistency|This check detects text values that contain additional whitespace characters before or after the text. This check measures the percentage of text value surrounded by whitespace characters (on any side) and raises a data quality issue when their rate exceeds a *max_percent* parameter value.| |
+|[*empty_text_found*](../checks/column/whitespace/empty-text-found.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|This check detects empty texts that are not null. Empty texts have a length of zero. The database treats them as values different than nulls, and some databases allow the storage of both null and empty values. This check counts empty texts and raises a data quality issue when the number of empty values exceeds a *max_count* parameter value.|:material-check-bold:|
+|[*whitespace_text_found*](../checks/column/whitespace/whitespace-text-found.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|This check detects empty texts containing only spaces and other whitespace characters. This check counts whitespace-only texts and raises a data quality issue when their count exceeds a *max_count* parameter value.|:material-check-bold:|
+|[*null_placeholder_text_found*](../checks/column/whitespace/null-placeholder-text-found.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|This check detects text values that are well-known equivalents (placeholders) of a null value, such as *null*, *None*, *n/a*. This check counts null placeholder values and raises a data quality issue when their count exceeds a *max_count* parameter value.|:material-check-bold:|
+|[*empty_text_percent*](../checks/column/whitespace/empty-text-percent.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|This check detects empty texts that are not null. Empty texts have a length of zero. This check measures the percentage of empty texts and raises a data quality issue when the rate of empty values exceeds a *max_percent* parameter value.| |
+|[*whitespace_text_percent*](../checks/column/whitespace/whitespace-text-percent.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|This check detects empty texts containing only spaces and other whitespace characters. This check measures the percentage of whitespace-only texts and raises a data quality issue when their rate exceeds a *max_percent* parameter value.| |
+|[*null_placeholder_text_percent*](../checks/column/whitespace/null-placeholder-text-percent.md)|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|This check detects text values that are well-known equivalents (placeholders) of a null value, such as *null*, *None*, *n/a*. This check measures the percentage of null placeholder values and raises a data quality issue when their rate exceeds a *max_percent* parameter value.| |
+|[*text_surrounded_by_whitespace_found*](../checks/column/whitespace/text-surrounded-by-whitespace-found.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check detects text values that contain additional whitespace characters before or after the text. This check counts text values surrounded by whitespace characters (on any side) and raises a data quality issue when their count exceeds a *max_count* parameter value. Whitespace-surrounded texts should be trimmed before loading to another table.| |
+|[*text_surrounded_by_whitespace_percent*](../checks/column/whitespace/text-surrounded-by-whitespace-percent.md)|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check detects text values that contain additional whitespace characters before or after the text. This check measures the percentage of text value surrounded by whitespace characters (on any side) and raises a data quality issue when their rate exceeds a *max_percent* parameter value.| |
 
 
 **Reference and samples**

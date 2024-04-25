@@ -17,7 +17,7 @@ package com.dqops.data.readouts.services;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.core.principal.UserDomainIdentity;
-import com.dqops.data.readouts.services.models.SensorReadoutsListModel;
+import com.dqops.data.readouts.models.SensorReadoutsListModel;
 
 /**
  * Service that returns data from sensor readouts.
