@@ -18,6 +18,7 @@ package com.dqops.cli.exceptions;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.core.configuration.DqoCoreConfigurationProperties;
 import com.dqops.utils.exceptions.DqoErrorUserMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.parquet.Strings;
 import org.jline.reader.UserInterruptException;
 import org.slf4j.Logger;
@@ -28,9 +29,8 @@ import picocli.CommandLine;
 /**
  * Command error handler.
  */
+@Slf4j
 public class CommandExecutionErrorHandler implements CommandLine.IExecutionExceptionHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(CommandExecutionErrorHandler.class);
-
     private final TerminalFactory terminalFactory;
     private final DqoCoreConfigurationProperties coreConfigurationProperties;
 
@@ -88,7 +88,7 @@ public class CommandExecutionErrorHandler implements CommandLine.IExecutionExcep
             }
         }
 
-        LOG.debug("Command " + parseResult.toString() + " failed", e);
+        log.error("Command " + parseResult.toString() + " failed", e);
         return -1;
     }
 }

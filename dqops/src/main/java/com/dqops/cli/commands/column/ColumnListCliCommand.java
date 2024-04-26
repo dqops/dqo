@@ -25,10 +25,7 @@ import com.dqops.cli.completion.completedcommands.ITableNameCommand;
 import com.dqops.cli.completion.completers.ColumnNameCompleter;
 import com.dqops.cli.completion.completers.ConnectionNameCompleter;
 import com.dqops.cli.completion.completers.FullTableNameCompleter;
-import com.dqops.cli.terminal.FileWriter;
-import com.dqops.cli.terminal.TablesawDatasetTableModel;
-import com.dqops.cli.terminal.TerminalTableWritter;
-import com.dqops.cli.terminal.TerminalWriter;
+import com.dqops.cli.terminal.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -44,8 +41,8 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "list", header = "List the columns that match a given condition", description = "List all the columns in a table or filter them based on a specified condition.")
 public class ColumnListCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
+	private TerminalFactory terminalFactory;
 	private ColumnCliService columnCliService;
-	private TerminalWriter terminalWriter;
 	private TerminalTableWritter terminalTableWritter;
 	private FileWriter fileWriter;
 
@@ -53,11 +50,11 @@ public class ColumnListCliCommand extends BaseCommand implements ICommand, IConn
 	}
 
 	@Autowired
-	public ColumnListCliCommand(TerminalWriter terminalWriter,
-							   ColumnCliService columnCliService,
+	public ColumnListCliCommand(TerminalFactory terminalFactory,
+								ColumnCliService columnCliService,
 								TerminalTableWritter terminalTableWritter,
 								FileWriter fileWriter) {
-		this.terminalWriter = terminalWriter;
+		this.terminalFactory = terminalFactory;
 		this.columnCliService = columnCliService;
 		this.terminalTableWritter = terminalTableWritter;
 		this.fileWriter = fileWriter;
@@ -164,24 +161,24 @@ public class ColumnListCliCommand extends BaseCommand implements ICommand, IConn
 					TableBuilder tableBuilder = new TableBuilder(new TablesawDatasetTableModel(cliOperationStatus.getTable()));
 					tableBuilder.addInnerBorder(BorderStyle.oldschool);
 					tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-					String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+					String renderedTable = tableBuilder.build().render(this.terminalFactory.getWriter().getTerminalWidth() - 1);
 					CliOperationStatus cliOperationStatus2 = this.fileWriter.writeStringToFile(renderedTable);
-					this.terminalWriter.writeLine(cliOperationStatus2.getMessage());
+					this.terminalFactory.getWriter().writeLine(cliOperationStatus2.getMessage());
 				} else {
 					this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
 				}
 			} else {
 				if (this.isWriteToFile()) {
 					CliOperationStatus cliOperationStatus2 = this.fileWriter.writeStringToFile(cliOperationStatus.getMessage());
-					this.terminalWriter.writeLine(cliOperationStatus2.getMessage());
+					this.terminalFactory.getWriter().writeLine(cliOperationStatus2.getMessage());
 				}
 				else {
-					this.terminalWriter.write(cliOperationStatus.getMessage());
+					this.terminalFactory.getWriter().write(cliOperationStatus.getMessage());
 				}
 			}
 			return 0;
 		} else {
-			this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+			this.terminalFactory.getWriter().writeLine(cliOperationStatus.getMessage());
 			return -1;
 		}
 	}

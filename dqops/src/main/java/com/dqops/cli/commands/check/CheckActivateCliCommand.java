@@ -24,10 +24,7 @@ import com.dqops.cli.commands.check.impl.models.AllChecksModelCliPatchParameters
 import com.dqops.cli.completion.completedcommands.ITableNameCommand;
 import com.dqops.cli.completion.completers.*;
 import com.dqops.cli.output.OutputFormatService;
-import com.dqops.cli.terminal.FileWriter;
-import com.dqops.cli.terminal.TerminalReader;
-import com.dqops.cli.terminal.TerminalTableWritter;
-import com.dqops.cli.terminal.TerminalWriter;
+import com.dqops.cli.terminal.*;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.utils.serialization.JsonSerializer;
 import com.google.common.base.Strings;
@@ -48,8 +45,7 @@ import java.util.Map;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "activate", description = "Activates data quality checks matching specified filters")
 public class CheckActivateCliCommand extends BaseCommand implements ICommand, ITableNameCommand {
-    private TerminalReader terminalReader;
-    private TerminalWriter terminalWriter;
+    private TerminalFactory terminalFactory;
     private TerminalTableWritter terminalTableWritter;
     private CheckCliService checkService;
     private JsonSerializer jsonSerializer;
@@ -60,15 +56,13 @@ public class CheckActivateCliCommand extends BaseCommand implements ICommand, IT
     }
 
     @Autowired
-    public CheckActivateCliCommand(TerminalReader terminalReader,
-                                   TerminalWriter terminalWriter,
+    public CheckActivateCliCommand(TerminalFactory terminalFactory,
                                    TerminalTableWritter terminalTableWritter,
                                    CheckCliService checkService,
                                    JsonSerializer jsonSerializer,
                                    OutputFormatService outputFormatService,
                                    FileWriter fileWriter) {
-        this.terminalReader = terminalReader;
-        this.terminalWriter = terminalWriter;
+        this.terminalFactory = terminalFactory;
         this.terminalTableWritter = terminalTableWritter;
         this.checkService = checkService;
         this.jsonSerializer = jsonSerializer;
@@ -338,11 +332,11 @@ public class CheckActivateCliCommand extends BaseCommand implements ICommand, IT
     public Integer call() throws Exception {
         if (Strings.isNullOrEmpty(this.connection)) {
             throwRequiredParameterMissingIfHeadless("--connection");
-            this.connection = this.terminalReader.prompt("Connection name (--connection)", null, false);
+            this.connection = this.terminalFactory.getReader().prompt("Connection name (--connection)", null, false);
         }
         if (Strings.isNullOrEmpty(this.check)) {
             throwRequiredParameterMissingIfHeadless("--check");
-            this.check = this.terminalReader.prompt("Data quality check name (--check)", null, false);
+            this.check = this.terminalFactory.getReader().prompt("Data quality check name (--check)", null, false);
         }
 
         CheckSearchFilters filters = new CheckSearchFilters();

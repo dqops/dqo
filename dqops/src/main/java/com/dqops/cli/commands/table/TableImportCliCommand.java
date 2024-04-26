@@ -23,6 +23,7 @@ import com.dqops.cli.commands.table.impl.TableImportFailedException;
 import com.dqops.cli.completion.completedcommands.IConnectionNameCommand;
 import com.dqops.cli.completion.completers.ConnectionNameCompleter;
 import com.dqops.cli.completion.completers.SchemaNameCompleter;
+import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalTableWritter;
 import com.dqops.cli.terminal.TerminalWriter;
@@ -42,8 +43,7 @@ import tech.tablesaw.api.Table;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "import", header = "Import tables from a specified database", description = "Import the tables from the specified database into the application. It allows the user to import the tables from the database into the application for performing various database operations.")
 public class TableImportCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
-    private TerminalReader terminalReader;
-    private TerminalWriter terminalWriter;
+    private TerminalFactory terminalFactory;
     private TerminalTableWritter terminalTableWriter;
     private TableCliService tableImportService;
 
@@ -51,12 +51,10 @@ public class TableImportCliCommand extends BaseCommand implements ICommand, ICon
     }
 
     @Autowired
-    public TableImportCliCommand(TerminalReader terminalReader,
-								 TerminalWriter terminalWriter,
+    public TableImportCliCommand(TerminalFactory terminalFactory,
                                  TerminalTableWritter terminalTableWriter,
 								 TableCliService tableImportService) {
-        this.terminalReader = terminalReader;
-        this.terminalWriter = terminalWriter;
+        this.terminalFactory = terminalFactory;
         this.terminalTableWriter = terminalTableWriter;
         this.tableImportService = tableImportService;
     }
@@ -142,7 +140,7 @@ public class TableImportCliCommand extends BaseCommand implements ICommand, ICon
 
         if (Strings.isNullOrEmpty(this.connection)) {
 			throwRequiredParameterMissingIfHeadless("--connection");
-			this.connection = this.terminalReader.prompt("Connection name (--connection)", null, false);
+			this.connection = this.terminalFactory.getReader().prompt("Connection name (--connection)", null, false);
         }
 
         if (Strings.isNullOrEmpty(this.schema) || StringPatternComparer.isSearchPattern(this.schema)) {
@@ -151,14 +149,14 @@ public class TableImportCliCommand extends BaseCommand implements ICommand, ICon
             try {
                 schemaTable = this.tableImportService.loadSchemaList(this.connection, this.schema);
             } catch (TableImportFailedException ex) {
-				this.terminalWriter.writeLine(String.format("Cannot read schemas from the connection %s, error: %s", this.connection, ex.getMessage()));
+                this.terminalFactory.getWriter().writeLine(String.format("Cannot read schemas from the connection %s, error: %s", this.connection, ex.getMessage()));
                 return -1;
             }
 
             Integer schemaIndex = this.terminalTableWriter.pickTableRowWithPaging("Select the schema (database, etc.) from which tables will be imported:",
                     schemaTable);
             if (schemaIndex == null) {
-				this.terminalWriter.writeLine("No schema was selected.");
+                this.terminalFactory.getWriter().writeLine("No schema was selected.");
                 return -1;
             }
 
@@ -167,11 +165,11 @@ public class TableImportCliCommand extends BaseCommand implements ICommand, ICon
 
         CliOperationStatus cliOperationStatus = this.tableImportService.importTables(this.getConnection(), this.getSchema(), this.getTable());
         if (cliOperationStatus.isSuccess()) {
-            this.terminalWriter.writeLine("\nThe following tables were imported:");
-            this.terminalWriter.writeTable(cliOperationStatus.getTable(), true);
+            this.terminalFactory.getWriter().writeLine("\nThe following tables were imported:");
+            this.terminalFactory.getWriter().writeTable(cliOperationStatus.getTable(), true);
             return 0;
         } else {
-            this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+            this.terminalFactory.getWriter().writeLine(cliOperationStatus.getMessage());
             return -1;
         }
     }

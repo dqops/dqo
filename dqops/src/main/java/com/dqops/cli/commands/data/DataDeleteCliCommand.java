@@ -27,10 +27,7 @@ import com.dqops.cli.completion.completers.ConnectionNameCompleter;
 import com.dqops.cli.completion.completers.FullTableNameCompleter;
 import com.dqops.cli.converters.StringToLocalDateCliConverterMonthEnd;
 import com.dqops.cli.converters.StringToLocalDateCliConverterMonthStart;
-import com.dqops.cli.terminal.TablesawDatasetTableModel;
-import com.dqops.cli.terminal.TerminalReader;
-import com.dqops.cli.terminal.TerminalTableWritter;
-import com.dqops.cli.terminal.TerminalWriter;
+import com.dqops.cli.terminal.*;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.data.statistics.factory.StatisticsCollectorTarget;
 import org.apache.parquet.Strings;
@@ -53,8 +50,7 @@ import java.util.List;
 @CommandLine.Command(name = "delete", header = "Deletes stored data that matches the specified conditions", description = "Deletes stored data that matches specified conditions. Be careful when using this command, as it permanently deletes the selected data and cannot be undone.")
 public class DataDeleteCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
     private DataCliService dataCliService;
-    private TerminalReader terminalReader;
-    private TerminalWriter terminalWriter;
+    private TerminalFactory terminalFactory;
     private TerminalTableWritter terminalTableWritter;
 
 
@@ -65,16 +61,15 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand, IConn
      * Dependency injection constructor.
      *
      * @param dataCliService       Data CLI service.
-     * @param terminalReader       Terminal reader.
-     * @param terminalWriter       Terminal writer.
+     * @param terminalFactory      Terminal factory.
      * @param terminalTableWritter Terminal table writer.
      */
     @Autowired
     public DataDeleteCliCommand(DataCliService dataCliService,
-                                TerminalReader terminalReader, TerminalWriter terminalWriter, TerminalTableWritter terminalTableWritter) {
+                                TerminalFactory terminalFactory,
+                                TerminalTableWritter terminalTableWritter) {
         this.dataCliService = dataCliService;
-        this.terminalReader = terminalReader;
-        this.terminalWriter = terminalWriter;
+        this.terminalFactory = terminalFactory;
         this.terminalTableWritter = terminalTableWritter;
     }
 
@@ -260,12 +255,12 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand, IConn
     public Integer call() throws Exception {
         if (Strings.isNullOrEmpty(this.connection)) {
             throwRequiredParameterMissingIfHeadless("--connection");
-            this.connection = this.terminalReader.prompt("Connection name (--connection)", null, false);
+            this.connection = this.terminalFactory.getReader().prompt("Connection name (--connection)", null, false);
         }
 
         DeleteStoredDataQueueJobParameters deletionParameters = this.createDeletionParameters();
         CliOperationStatus cliOperationStatus = this.dataCliService.deleteStoredData(deletionParameters);
-        this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+        this.terminalFactory.getWriter().writeLine(cliOperationStatus.getMessage());
 
         Table cliOperationStatusTable = cliOperationStatus.getTable();
         if (cliOperationStatusTable != null) {
