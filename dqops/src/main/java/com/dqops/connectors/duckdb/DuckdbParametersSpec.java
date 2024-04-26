@@ -90,10 +90,13 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ParquetFileFormatSpec parquet;
 
-    @CommandLine.Option(names = "--duckdb-directories", split = ",")
     @JsonPropertyDescription("Virtual schema name to directory mappings. The path must be an absolute path.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> directories = new HashMap<>();
+
+    @CommandLine.Option(names = {"--duckdb-directories"}, description = "Virtual schema name to directory mappings. The path must be an absolute path.")
+    @JsonIgnore
+    private String directoriesString;
 
     @CommandLine.Option(names = {"--duckdb-storage-type"}, description = "The storage type.")
     @JsonPropertyDescription("The storage type.")
@@ -252,6 +255,23 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     public void setDirectories(Map<String, String> directories) {
         setDirtyIf(!Objects.equals(this.directories, directories));
         this.directories = directories != null ? Collections.unmodifiableMap(directories) : null;
+    }
+
+    /**
+     * Returns a raw directories string containing mapping between schemas and directories
+     * @return Raw directories string containing mapping between schemas and directories
+     */
+    public String getDirectoriesString() {
+        return directoriesString;
+    }
+
+    /**
+     * Sets a raw directories string containing mapping between schemas and directories
+     * @param directoriesString Raw directories string containing mapping between schemas and directories
+     */
+    public void setDirectoriesString(String directoriesString) {
+        setDirtyIf(!Objects.equals(this.directoriesString, directoriesString));
+        this.directoriesString = directoriesString;
     }
 
     /**
