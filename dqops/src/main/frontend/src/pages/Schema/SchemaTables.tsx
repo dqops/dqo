@@ -1,7 +1,15 @@
+import { Tooltip } from '@material-tailwind/react';
+import clsx from 'clsx';
+import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { TableListModel } from '../../api';
+import {
+  DimensionCurrentDataQualityStatusModel,
+  DimensionCurrentDataQualityStatusModelCurrentSeverityEnum,
+  TableListModel
+} from '../../api';
 import Button from '../../components/Button';
+import { getColor } from '../../components/Connection/TableView/TableQualityStatus/TableQualityStatusUtils';
 import SvgIcon from '../../components/SvgIcon';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { TableApiClient } from '../../services/apiClient';
@@ -157,10 +165,43 @@ export const SchemaTables = () => {
     );
   };
 
+  const getDimensionKey = () => {
+    const uniqueDimensions: string[] = [];
+    tables.forEach((table) => {
+      Object.keys(table.data_quality_status?.dimensions ?? {}).forEach((x) => {
+        if (!uniqueDimensions.includes(x) && !basicDimensionTypes.includes(x)) {
+          uniqueDimensions.push(x);
+        }
+      });
+    });
+
+    return uniqueDimensions;
+  };
+  const getBasicDimmensionsKeys = (dimentions: any, type: string) => {
+    const basicDimensions = Object.keys(dimentions ?? {})?.find(
+      (x) => x === type
+    );
+    return basicDimensions;
+  };
+  const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
+
+  const getAdditionalDimentionsKeys = (dimentions: any) => {
+    return (
+      Object.keys(dimentions ?? {})?.filter(
+        (x) => !basicDimensionTypes.includes(x)
+      ) ?? []
+    );
+  };
   return (
     <table className="min-w-350 max-w-400">
       <thead>
-        <tr>{headeritems.map((item) => renderItem(item.label, item.value))}</tr>
+        <tr>
+          {[
+            ...headeritems,
+            ...basicDimensionTypes.map((x) => ({ label: x, value: x })),
+            ...getDimensionKey().map((x) => ({ label: x, value: x }))
+          ].map((item) => renderItem(item.label, item.value))}
+        </tr>
       </thead>
       <tbody>
         {tables.map((item, index) => (
@@ -182,16 +223,105 @@ export const SchemaTables = () => {
             </td>
             <td className="px-4 text-sm">{item?.stage}</td>
             <td className="px-4 text-sm">{item?.filter}</td>
-            {buttonTabs.map((button) => {
+            {/* {Object.entries(item.data_quality_status?.dimensions ?? {}).map(
+              ([key, value]) => {
+                return (
+                  <td className="px-4 " key={value.dimension}>
+                    <Tooltip content={renderSecondLevelTooltip(value)}>
+                      <div
+                        className={clsx(
+                          'w-3 h-3',
+                          getColor(
+                            value?.current_severity as
+                              | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
+                              | undefined
+                          ).length === 0
+                            ? 'bg-gray-150'
+                            : getColor(
+                                value?.current_severity as
+                                  | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
+                                  | undefined
+                              )
+                        )}
+                        style={{ borderRadius: '6px' }}
+                      />
+                    </Tooltip>
+                  </td>
+                );
+              }
+            )} */}
+
+            {basicDimensionTypes.map((dimType) => {
+              const dimensionKey = getBasicDimmensionsKeys(
+                item.data_quality_status?.dimensions,
+                dimType
+              );
+              const currentSeverity = (item.data_quality_status?.dimensions ??
+                {})[dimensionKey as any]?.current_severity;
+              const lastCheckExecutedAt = (item.data_quality_status
+                ?.dimensions ?? {})?.[dimensionKey as any]
+                ?.last_check_executed_at;
+              const severityColor = getColor(currentSeverity as any);
+              const hasNoSeverity = severityColor.length === 0;
+
+              const dimensionsClassNames = clsx('w-3 h-3', {
+                'bg-gray-150': hasNoSeverity && lastCheckExecutedAt,
+                [severityColor]: !hasNoSeverity,
+                'border border-gray-150': hasNoSeverity
+              });
               return (
-                <td className="px-4 " key={button.value}>
-                  <Button
-                    variant="text"
-                    label={button.label}
-                    color="primary"
-                    className="text-sm"
-                    onClick={() => goToTable(item, button.value)}
-                  />
+                <td key={`Dimensionindex${dimType}`}>
+                  <Tooltip
+                    content={renderSecondLevelTooltip(
+                      (item.data_quality_status?.dimensions ?? {})?.[
+                        dimensionKey as any
+                      ] ?? {
+                        dimension: dimType
+                      }
+                    )}
+                  >
+                    <div
+                      className={dimensionsClassNames}
+                      style={{ borderRadius: '6px' }}
+                    />
+                  </Tooltip>
+                </td>
+              );
+            })}
+            {getAdditionalDimentionsKeys(
+              item.data_quality_status?.dimensions ?? {}
+            ).map((dimensionKey: string, dimIndex) => {
+              return (
+                <td key={`DimensionTooltipindex${dimIndex}`}>
+                  <Tooltip
+                    content={renderSecondLevelTooltip(
+                      (item.data_quality_status?.dimensions ?? {})?.[
+                        dimensionKey as any
+                      ]
+                    )}
+                  >
+                    <div
+                      className={clsx(
+                        'w-3 h-3',
+                        getColor(
+                          (item.data_quality_status?.dimensions ?? {})?.[
+                            dimensionKey as any
+                          ]?.current_severity as
+                            | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
+                            | undefined
+                        ).length === 0
+                          ? 'bg-gray-150'
+                          : getColor(
+                              (item.data_quality_status?.dimensions ?? {})?.[
+                                dimensionKey as any
+                              ]?.current_severity as
+                                | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
+                                | undefined
+                            )
+                      )}
+                      style={{ borderRadius: '6px' }}
+                    />
+                  </Tooltip>
                 </td>
               );
             })}
@@ -199,5 +329,43 @@ export const SchemaTables = () => {
         ))}
       </tbody>
     </table>
+  );
+};
+
+const renderSecondLevelTooltip = (
+  data: DimensionCurrentDataQualityStatusModel | undefined
+) => {
+  if (data && data.last_check_executed_at) {
+    return (
+      <div>
+        <div className="flex gap-x-2">
+          <div className="w-49">Last executed at:</div>
+          <div>
+            {moment(data?.last_check_executed_at).format('YYYY-MM-DD HH:mm:ss')}
+          </div>
+        </div>
+        <div className="flex gap-x-2">
+          <div className="w-49">Current severity level:</div>
+          <div>{data?.current_severity}</div>
+        </div>
+        <div className="flex gap-x-2">
+          <div className="w-49">Highest historical severity level:</div>
+          <div>{data?.highest_historical_severity}</div>
+        </div>
+        <div className="flex gap-x-2">
+          <div className="w-49">Quality Dimension:</div>
+          <div>{data?.dimension}</div>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div>
+      <div className="flex gap-x-2">
+        <div className="w-42">Quality Dimension:</div>
+        <div>{data?.dimension}</div>
+      </div>
+      <div className="w-full">No data quality checks configured</div>
+    </div>
   );
 };
