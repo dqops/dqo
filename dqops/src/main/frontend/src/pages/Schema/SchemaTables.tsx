@@ -10,6 +10,7 @@ import SchemaTableItem from './SchemaTableItem';
 type TButtonTabs = {
   label: string;
   value: string;
+  sortable?: boolean;
 };
 const headeritems: TButtonTabs[] = [
   {
@@ -27,7 +28,8 @@ const headeritems: TButtonTabs[] = [
   {
     label: 'Filter',
     value: 'filter'
-  }
+  },
+  { label: 'Data Quality KPI', value: 'data-quality-kpi', sortable: false }
 ];
 
 function getValueForKey<T>(obj: T, key: string): string | undefined {
@@ -95,19 +97,21 @@ export const SchemaTables = () => {
     });
   };
 
-  const renderItem = (label: string, key: string) => {
+  const renderItem = (label: string, key: string, sortable?: boolean) => {
     return (
       <th
         className="px-4 text-left cursor-pointer"
-        onClick={() => sortTables(key)}
+        onClick={() => sortable !== false && sortTables(key)}
         key={key}
       >
         <div className="flex text-sm">
           {label}
-          <div className="flex flex-col items-center">
-            <SvgIcon name="chevron-up" className="w-3 h-2" />
-            <SvgIcon name="chevron-down" className="w-3 h-2" />
-          </div>
+          {sortable !== false && (
+            <div className="flex flex-col items-center">
+              <SvgIcon name="chevron-up" className="w-3 h-2" />
+              <SvgIcon name="chevron-down" className="w-3 h-2" />
+            </div>
+          )}
         </div>
       </th>
     );
@@ -130,20 +134,30 @@ export const SchemaTables = () => {
 
   const headerItems = [
     ...headeritems,
-    ...basicDimensionTypes.map((x) => ({ label: x, value: x })),
-    ...getDimensionKey().map((x) => ({ label: x, value: x }))
+    ...basicDimensionTypes.map((x) => ({
+      label: x,
+      value: x,
+      sortable: false
+    })),
+    ...getDimensionKey().map((x) => ({ label: x, value: x, sortable: false }))
   ];
   return (
     <>
       <table className="min-w-350 max-w-400">
         <thead>
           <tr>
-            {headerItems.map((item) => renderItem(item.label, item.value))}
+            {headerItems.map((item) =>
+              renderItem(item.label, item.value, item.sortable)
+            )}
           </tr>
         </thead>
         <tbody>
           {tables.map((item, index) => (
-            <SchemaTableItem key={index} item={item} />
+            <SchemaTableItem
+              key={index}
+              item={item}
+              dimensionKeys={getDimensionKey()}
+            />
           ))}
         </tbody>
       </table>

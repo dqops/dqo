@@ -13,7 +13,13 @@ type TButtonTabs = {
   value: string;
 };
 
-export default function SchemaTableItem({ item }: { item: TableListModel }) {
+export default function SchemaTableItem({
+  item,
+  dimensionKeys
+}: {
+  item: TableListModel;
+  dimensionKeys: string[];
+}) {
   const {
     checkTypes
   }: {
@@ -98,7 +104,7 @@ export default function SchemaTableItem({ item }: { item: TableListModel }) {
       <td className="px-4 text-sm">{item?.stage}</td>
       <td className="px-4 text-sm">{item?.filter}</td>
       {item?.data_quality_status?.dimensions ? (
-        <SchemaTableItemDimensions item={item} />
+        <SchemaTableItemDimensions item={item} dimensionKeys={dimensionKeys} />
       ) : (
         <SvgIcon name="hourglass" className="w-4 h-4" />
       )}
