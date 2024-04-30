@@ -292,6 +292,16 @@ Jobs management controller that supports starting new jobs, such as running sele
 |<span class="no-wrap-code">[`wait_for_run_checks_job`</span>](./jobs.md#wait_for_run_checks_job)|GET|Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.|
 
 
+## labels
+Operations that returns all labels that are assigned to data assets. Labels serve the purpose of a lazy business glossary.
+
+|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|----------------|------|---------------------------------|
+|<span class="no-wrap-code">[`get_all_labels_for_columns`</span>](./labels.md#get_all_labels_for_columns)|GET|Returns a list of all labels applied to columns, including the count of assignments to these data assets.|
+|<span class="no-wrap-code">[`get_all_labels_for_connections`</span>](./labels.md#get_all_labels_for_connections)|GET|Returns a list of all labels applied to the connections to data sources, including the count of assignments to these data assets.|
+|<span class="no-wrap-code">[`get_all_labels_for_tables`</span>](./labels.md#get_all_labels_for_tables)|GET|Returns a list of all labels applied to tables, including the count of assignments to these data assets.|
+
+
 ## log_shipping
 Log shipping controller that accepts logs sent from a web application or external tools and aggregates them in the local DQOps instance logs.
 
@@ -328,6 +338,14 @@ Operations for listing imported schemas from monitored data sources. Also provid
 |<span class="no-wrap-code">[`get_schema_profiling_checks_model`</span>](./schemas.md#get_schema_profiling_checks_model)|GET|Return a flat list of configurations for profiling checks on a schema|
 |<span class="no-wrap-code">[`get_schema_profiling_checks_templates`</span>](./schemas.md#get_schema_profiling_checks_templates)|GET|Return available data quality checks on a requested schema.|
 |<span class="no-wrap-code">[`get_schemas`</span>](./schemas.md#get_schemas)|GET|Returns a list of schemas inside a connection|
+
+
+## search
+Search operations for finding data assets, such as tables.
+
+|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|----------------|------|---------------------------------|
+|<span class="no-wrap-code">[`find_tables`</span>](./search.md#find_tables)|GET|Finds tables in any data source and schema|
 
 
 ## sensor_readouts

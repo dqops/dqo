@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
  */
 public final class LabelCounter {
     private String label;
-    private HashMap<String, LabelCounter> nestedLabels;
-    private final AtomicInteger labelCount = new AtomicInteger();
+    private TreeMap<String, LabelCounter> nestedLabels;
+    private final AtomicInteger labelsCount = new AtomicInteger();
     private final AtomicInteger nestedLabelsCount = new AtomicInteger();
 
     public LabelCounter() {
@@ -38,14 +38,14 @@ public final class LabelCounter {
         this.label = label;
     }
 
-    public LabelCounter(String label, int labelCount) {
+    public LabelCounter(String label, int labelsCount) {
         this.label = label;
-        this.labelCount.addAndGet(labelCount);
+        this.labelsCount.addAndGet(labelsCount);
     }
 
-    public LabelCounter(String label, int labelCount, int nestedLabelsCount) {
+    public LabelCounter(String label, int labelsCount, int nestedLabelsCount) {
         this.label = label;
-        this.labelCount.addAndGet(labelCount);
+        this.labelsCount.addAndGet(labelsCount);
         if (nestedLabelsCount > 0) {
             this.nestedLabelsCount.addAndGet(nestedLabelsCount);
         }
@@ -74,11 +74,24 @@ public final class LabelCounter {
     }
 
     /**
+     * Retrieves a child label by name.
+     * @param childLabel Child label (text) to find.
+     * @return Label counter of the child label or null, when the child label was not found.
+     */
+    public synchronized LabelCounter getChildLabel(String childLabel) {
+        if (this.nestedLabels == null) {
+            return null;
+        }
+
+        return this.nestedLabels.get(childLabel);
+    }
+
+    /**
      * Returns the number of occurrences of this label.
      * @return Number of occurrences.
      */
-    public int getLabelCount() {
-        return this.labelCount.get();
+    public int getLabelsCount() {
+        return this.labelsCount.get();
     }
 
     /**
@@ -97,7 +110,7 @@ public final class LabelCounter {
     public LabelCounter addNestedLabel(String childLabel) {
         String labelWithPrefix = this.label + "/" + childLabel;
         if (this.nestedLabels == null) {
-            this.nestedLabels = new HashMap<>();
+            this.nestedLabels = new TreeMap<>();
             LabelCounter childLabelCounter = new LabelCounter(labelWithPrefix);
             this.nestedLabels.put(childLabel, childLabelCounter);
             return childLabelCounter;
@@ -139,7 +152,7 @@ public final class LabelCounter {
      */
     public void incrementDeepChildLabel(String fullLabel) {
         if (label.indexOf('/') < 0) {
-            this.labelCount.incrementAndGet();
+            this.labelsCount.incrementAndGet();
             return;
         }
 
@@ -149,7 +162,7 @@ public final class LabelCounter {
             currentLabelLevel.nestedLabelsCount.incrementAndGet();
             currentLabelLevel = currentLabelLevel.addNestedLabel(labelElements[i]);
         }
-        currentLabelLevel.labelCount.incrementAndGet();
+        currentLabelLevel.labelsCount.incrementAndGet();
     }
 
     /**
@@ -160,7 +173,7 @@ public final class LabelCounter {
     public void addCounts(LabelCounter otherLabelCounter) {
         assert Objects.equals(this.label, otherLabelCounter.label);
 
-        this.labelCount.addAndGet(otherLabelCounter.labelCount.get());
+        this.labelsCount.addAndGet(otherLabelCounter.labelsCount.get());
         this.nestedLabelsCount.addAndGet(otherLabelCounter.nestedLabelsCount.get());
 
         synchronized (this) {
@@ -169,7 +182,7 @@ public final class LabelCounter {
                     return;
                 }
 
-                HashMap<String, LabelCounter> newNestedLabels = new HashMap<>();
+                TreeMap<String, LabelCounter> newNestedLabels = new TreeMap<>();
                 this.nestedLabels = newNestedLabels;
                 for (Map.Entry<String, LabelCounter> otherRootLabelKeyValue : otherLabelCounter.nestedLabels.entrySet()) {
                     newNestedLabels.put(otherRootLabelKeyValue.getKey(), otherRootLabelKeyValue.getValue().clone());
@@ -199,7 +212,7 @@ public final class LabelCounter {
     public void subtractCounts(LabelCounter otherLabelCounter) {
         assert Objects.equals(this.label, otherLabelCounter.label);
 
-        this.labelCount.addAndGet(-otherLabelCounter.labelCount.get());
+        this.labelsCount.addAndGet(-otherLabelCounter.labelsCount.get());
         this.nestedLabelsCount.addAndGet(-otherLabelCounter.nestedLabelsCount.get());
 
         synchronized (this) {
@@ -237,16 +250,16 @@ public final class LabelCounter {
      * @return True - the label is in use, false - no more usages.
      */
     public boolean isEmpty() {
-        return this.labelCount.get() == 0 && this.nestedLabelsCount.get() == 0; // if nestedLabelsCount is 0, the list of child labels should be empty
+        return this.labelsCount.get() == 0 && this.nestedLabelsCount.get() == 0; // if nestedLabelsCount is 0, the list of child labels should be empty
     }
 
     /**
      * Creates and returns a deep copy of this object.
      */
     public LabelCounter clone() {
-        LabelCounter cloned = new LabelCounter(this.label, this.labelCount.get(), this.nestedLabelsCount.get());
+        LabelCounter cloned = new LabelCounter(this.label, this.labelsCount.get(), this.nestedLabelsCount.get());
         if (this.nestedLabels != null) {
-            HashMap<String, LabelCounter> clonedNestedLabels = new HashMap<>();
+            TreeMap<String, LabelCounter> clonedNestedLabels = new TreeMap<>();
             cloned.nestedLabels = clonedNestedLabels;
             for (Map.Entry<String, LabelCounter> nestedLabelKeyValue : this.nestedLabels.entrySet()) {
                 clonedNestedLabels.put(nestedLabelKeyValue.getKey(), nestedLabelKeyValue.getValue().clone());
@@ -263,7 +276,7 @@ public final class LabelCounter {
 
         LabelCounter that = (LabelCounter) o;
 
-        if (labelCount.get() != that.labelCount.get()) return false;
+        if (labelsCount.get() != that.labelsCount.get()) return false;
         if (nestedLabelsCount.get() != that.nestedLabelsCount.get()) return false;
         if (!Objects.equals(label, that.label)) return false;
         return Objects.equals(nestedLabels, that.nestedLabels);
@@ -273,7 +286,7 @@ public final class LabelCounter {
     public int hashCode() {
         int result = label != null ? label.hashCode() : 0;
         result = 31 * result + (nestedLabels != null ? nestedLabels.hashCode() : 0);
-        result = 31 * result + labelCount.get();
+        result = 31 * result + labelsCount.get();
         result = 31 * result + nestedLabelsCount.get();
         return result;
     }
@@ -282,7 +295,7 @@ public final class LabelCounter {
     public String toString() {
         return "LabelCounter{" +
                 "label='" + label + '\'' +
-                ", labelCount=" + labelCount.get() +
+                ", labelCount=" + labelsCount.get() +
                 ", nestedLabelsCount=" + nestedLabelsCount.get() +
                 '}';
     }

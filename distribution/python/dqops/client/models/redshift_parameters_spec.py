@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.redshift_authentication_mode import RedshiftAuthenticationMode
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -24,6 +25,7 @@ class RedshiftParametersSpec:
             configuration with a custom environment variable.
         database (Union[Unset, str]): Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
             format to use dynamic substitution.
+        redshift_authentication_mode (Union[Unset, RedshiftAuthenticationMode]):
         user (Union[Unset, str]): Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use
             dynamic substitution.
         password (Union[Unset, str]): Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
@@ -35,6 +37,7 @@ class RedshiftParametersSpec:
     host: Union[Unset, str] = UNSET
     port: Union[Unset, str] = UNSET
     database: Union[Unset, str] = UNSET
+    redshift_authentication_mode: Union[Unset, RedshiftAuthenticationMode] = UNSET
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
     properties: Union[Unset, "RedshiftParametersSpecProperties"] = UNSET
@@ -44,6 +47,10 @@ class RedshiftParametersSpec:
         host = self.host
         port = self.port
         database = self.database
+        redshift_authentication_mode: Union[Unset, str] = UNSET
+        if not isinstance(self.redshift_authentication_mode, Unset):
+            redshift_authentication_mode = self.redshift_authentication_mode.value
+
         user = self.user
         password = self.password
         properties: Union[Unset, Dict[str, Any]] = UNSET
@@ -59,6 +66,8 @@ class RedshiftParametersSpec:
             field_dict["port"] = port
         if database is not UNSET:
             field_dict["database"] = database
+        if redshift_authentication_mode is not UNSET:
+            field_dict["redshift_authentication_mode"] = redshift_authentication_mode
         if user is not UNSET:
             field_dict["user"] = user
         if password is not UNSET:
@@ -81,6 +90,15 @@ class RedshiftParametersSpec:
 
         database = d.pop("database", UNSET)
 
+        _redshift_authentication_mode = d.pop("redshift_authentication_mode", UNSET)
+        redshift_authentication_mode: Union[Unset, RedshiftAuthenticationMode]
+        if isinstance(_redshift_authentication_mode, Unset):
+            redshift_authentication_mode = UNSET
+        else:
+            redshift_authentication_mode = RedshiftAuthenticationMode(
+                _redshift_authentication_mode
+            )
+
         user = d.pop("user", UNSET)
 
         password = d.pop("password", UNSET)
@@ -96,6 +114,7 @@ class RedshiftParametersSpec:
             host=host,
             port=port,
             database=database,
+            redshift_authentication_mode=redshift_authentication_mode,
             user=user,
             password=password,
             properties=properties,

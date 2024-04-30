@@ -50,6 +50,12 @@ public class ColumnListModel {
     @JsonPropertyDescription("Column names.")
     private String columnName;
 
+    /**
+     * List of labels applied to the table.
+     */
+    @JsonPropertyDescription("List of labels applied to the table.")
+    private String[] labels;
+
     @JsonPropertyDescription("SQL expression.")
     private String sqlExpression;
 
@@ -144,6 +150,7 @@ public class ColumnListModel {
             setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
             setTable(physicalTableName);
             setColumnName(columnName);
+            setLabels(columnSpec.getLabels() != null ? columnSpec.getLabels().toArray(String[]::new) : null);
             setSqlExpression(columnSpec.getSqlExpression());
             setDisabled(columnSpec.isDisabled());
             setTypeSnapshot(columnSpec.getTypeSnapshot());

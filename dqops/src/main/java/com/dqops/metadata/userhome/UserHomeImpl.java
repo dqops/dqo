@@ -35,6 +35,8 @@ import com.dqops.metadata.sources.*;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapperImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.ArrayList;
+
 /**
  * Root user home model for reading and managing the definitions in the user's home.
  */
@@ -485,7 +487,34 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.getDefaultNotificationWebhook().flush();
 
         this.clearDirty(false); // children that were saved should be already not dirty, the next assert will detect forgotten instances
-        assert !this.isDirty();
+        assert !this.isDirty() : "Dirty node: " + this.findDirty(this).getHierarchyId().toString();
+    }
+
+    /**
+     * Scans the node tree in-depth to find the first dirty object.
+     * Returns that dirty node or null, when no node is dirty.
+     * @param node Start node to start the scan.
+     * @return Dirty node or null, when the node is not dirty.
+     */
+    private static HierarchyNode findDirty(HierarchyNode node) {
+        ArrayList<HierarchyNode> children = new ArrayList<>();
+        for (HierarchyNode childNode : node.children()) {
+            children.add(childNode);
+        }
+
+        for (HierarchyNode childNode : children) {
+            HierarchyNode dirtyChild = findDirty(childNode);
+            if (dirtyChild != null) {
+                return dirtyChild;
+            }
+        }
+
+        if (node.isDirty()) {
+            boolean revalidatedIsDirty = node.isDirty();  // this line is here not because it is needed, but to make it easier to put a breakpoint
+            return node;
+        }
+
+        return null;
     }
 
     /**

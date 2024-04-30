@@ -27,6 +27,16 @@ import java.util.concurrent.CompletableFuture;
  */
 public interface TableStatusCache {
     /**
+     * The number of milliseconds that the service waits to collect a list of changes, before the next batch of table status update is started.
+     */
+    long BATCH_COLLECTION_TIMEOUT_MS = 50L;
+
+    /**
+     * The default delay to wait until the queue of awaiting table status load operations finish.
+     */
+    long EMPTY_QUEUE_WAIT_TIMEOUT_MS = BATCH_COLLECTION_TIMEOUT_MS + 100L;
+
+    /**
      * Retrieves the current table status for a requested table.
      *
      * @param tableStatusKey Table status key.

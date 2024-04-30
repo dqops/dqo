@@ -107,8 +107,10 @@ public class LabelsIndexerImpl implements LabelsIndexer {
      */
     protected LabelsLoadEntry loadEntryCore(LabelRefreshKey targetKey) {
         LabelsLoadEntry labelsLoadEntry = new LabelsLoadEntry(targetKey, LabelRefreshStatus.LOADING_QUEUED);
-        this.loadObjectRequestSink.emitNext(targetKey, this.emitFailureHandlerPublisher);
-        incrementAwaitingOperationsCount();
+        if (this.loadObjectRequestSink != null) {
+            this.loadObjectRequestSink.emitNext(targetKey, this.emitFailureHandlerPublisher);
+            incrementAwaitingOperationsCount();
+        }
         return labelsLoadEntry;
     }
 

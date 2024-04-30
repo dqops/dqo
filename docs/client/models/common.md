@@ -5,6 +5,19 @@ title: DQOps REST API common models reference
 The references of all objects used as shared REST API models in all operations are listed below.
 
 
+## CheckType
+Enumeration of data quality check types: profiling, monitoring, partitioned.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|profiling<br/>monitoring<br/>partitioned<br/>|
+
+___
+
 ## CheckTimeScale
 Enumeration of time scale of monitoring and partitioned data quality checks (daily, monthly, etc.)
 
@@ -75,7 +88,7 @@ Model containing fundamental configuration of a single data quality check.
 |<span class="no-wrap-code">`table_name`</span>|Table name.|*string*|
 |<span class="no-wrap-code">`column_name`</span>|Column name, if the check is set up on a column.|*string*|
 |<span class="no-wrap-code">[`check_target`](./schemas.md#checktarget)</span>|Check target (table or column).|*[CheckTarget](./schemas.md#checktarget)*|
-|<span class="no-wrap-code">[`check_type`](./table_comparisons.md#checktype)</span>|Check type (profiling, monitoring, partitioned).|*[CheckType](./table_comparisons.md#checktype)*|
+|<span class="no-wrap-code">[`check_type`](./common.md#checktype)</span>|Check type (profiling, monitoring, partitioned).|*[CheckType](./common.md#checktype)*|
 |<span class="no-wrap-code">[`check_time_scale`](./common.md#checktimescale)</span>|Check timescale (for monitoring and partitioned checks).|*[CheckTimeScale](./common.md#checktimescale)*|
 |<span class="no-wrap-code">`category_name`</span>|Category to which this check belongs.|*string*|
 |<span class="no-wrap-code">`check_name`</span>|Check name that is used in YAML file.|*string*|
@@ -255,7 +268,7 @@ Target data quality checks filter, identifies which checks on which tables and c
 |<span class="no-wrap-code">`column_data_type`</span>|The column data type that was imported from the data source and is stored in the [columns -> column_name -> type_snapshot -> column_type](../../reference/yaml/TableYaml.md#columntypesnapshotspec) field in the *.dqotable.yaml* file.|*string*|
 |<span class="no-wrap-code">`column_nullable`</span>|Optional filter to find only nullable (when the value is *true*) or not nullable (when the value is *false*) columns, based on the value of the [columns -> column_name -> type_snapshot -> nullable](../../reference/yaml/TableYaml.md#columntypesnapshotspec) field in the *.dqotable.yaml* file.|*boolean*|
 |<span class="no-wrap-code">[`check_target`](./schemas.md#checktarget)</span>|The target type of object to run checks. Supported values are: *table* to run only table level checks or *column* to run only column level checks.|*[CheckTarget](./schemas.md#checktarget)*|
-|<span class="no-wrap-code">[`check_type`](./table_comparisons.md#checktype)</span>|The target type of checks to run. Supported values are *profiling*, *monitoring* and *partitioned*.|*[CheckType](./table_comparisons.md#checktype)*|
+|<span class="no-wrap-code">[`check_type`](./common.md#checktype)</span>|The target type of checks to run. Supported values are *profiling*, *monitoring* and *partitioned*.|*[CheckType](./common.md#checktype)*|
 |<span class="no-wrap-code">[`time_scale`](./common.md#checktimescale)</span>|The time scale of *monitoring* or *partitioned* checks to run. Supports running only *daily* or *monthly* checks. Daily monitoring checks will replace today's value for all captured check results.|*[CheckTimeScale](./common.md#checktimescale)*|
 |<span class="no-wrap-code">`check_category`</span>|The target check category, for example: *nulls*, *volume*, *anomaly*.|*string*|
 |<span class="no-wrap-code">`quality_dimension`</span>|The target data quality dimension, for example: *Completeness*, *Accuracy*, *Consistency*, *Timeliness*, *Availability*.|*string*|
@@ -265,6 +278,7 @@ Target data quality checks filter, identifies which checks on which tables and c
 |<span class="no-wrap-code">`connection`</span>|The connection (data source) name. Supports search patterns in the format: 'source\*', '\*_prod', 'prefix\*suffix'.|*string*|
 |<span class="no-wrap-code">`full_table_name`</span>|The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\*', 'schema_name.*', '*.*', 'schema_name.\*_customer', 'schema_name.tab_\*_suffix'.|*string*|
 |<span class="no-wrap-code">`enabled`</span>|A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.|*boolean*|
+|<span class="no-wrap-code">`max_results`</span>|Optional limit for the maximum number of results to return.|*integer*|
 
 
 ___
@@ -292,7 +306,7 @@ Describes a single check that is similar to other checks in other check types.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`check_target`](./schemas.md#checktarget)</span>|The check target (table or column).|*[CheckTarget](./schemas.md#checktarget)*|
-|<span class="no-wrap-code">[`check_type`](./table_comparisons.md#checktype)</span>|The check type.|*[CheckType](./table_comparisons.md#checktype)*|
+|<span class="no-wrap-code">[`check_type`](./common.md#checktype)</span>|The check type.|*[CheckType](./common.md#checktype)*|
 |<span class="no-wrap-code">[`time_scale`](./common.md#checktimescale)</span>|The time scale (daily, monthly). The time scale is optional and can be null (for profiling checks).|*[CheckTimeScale](./common.md#checktimescale)*|
 |<span class="no-wrap-code">`category`</span>|The check's category.|*string*|
 |<span class="no-wrap-code">`check_name`</span>|Similar check name in another category.|*string*|
@@ -394,7 +408,7 @@ Model identifying the check type and timescale of checks belonging to a containe
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`check_type`](./table_comparisons.md#checktype)</span>|Check type.|*[CheckType](./table_comparisons.md#checktype)*|
+|<span class="no-wrap-code">[`check_type`](./common.md#checktype)</span>|Check type.|*[CheckType](./common.md#checktype)*|
 |<span class="no-wrap-code">[`check_time_scale`](./common.md#checktimescale)</span>|Check timescale.|*[CheckTimeScale](./common.md#checktimescale)*|
 
 
@@ -488,6 +502,76 @@ Identifies a single job.
 |<span class="no-wrap-code">`job_id`</span>|Job id.|*long*|
 |<span class="no-wrap-code">`job_business_key`</span>|Optional job business key that was assigned to the job. A business key is an alternative user assigned unique job identifier used to find the status of a job finding it by the business key.|*string*|
 |<span class="no-wrap-code">[`parent_job_id`](./common.md#dqoqueuejobid)</span>|Parent job id. Filled only for nested jobs, for example a sub-job that runs data quality checks on a single table.|*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
+
+
+___
+
+## PhysicalTableName
+Physical table name that is a combination of a schema name and a physical table name (without any quoting or escaping).
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|
+
+
+___
+
+## ProfilingTimePeriodTruncation
+The time period for profiling checks (millisecond, daily, monthly, weekly, hourly).
+ The default profiling check stores one value per month. When profiling checks is re-executed during the month,
+ the previous profiling checks value is overwritten and only the most recent value is stored.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|store_the_most_recent_result_per_month<br/>store_the_most_recent_result_per_week<br/>store_the_most_recent_result_per_day<br/>store_the_most_recent_result_per_hour<br/>store_all_results_without_date_truncation<br/>|
+
+___
+
+## TableListModel
+Table list model returned by the rest api that is limited only to the basic fields, excluding nested nodes.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
+|<span class="no-wrap-code">`table_hash`</span>|Table hash that identifies the table using a unique hash code.|*long*|
+|<span class="no-wrap-code">[`target`](#physicaltablename)</span>|Physical table details (a physical schema name and a physical table name).|*[PhysicalTableName](#physicaltablename)*|
+|<span class="no-wrap-code">`disabled`</span>|Disables all data quality checks on the table. Data quality checks will not be executed.|*boolean*|
+|<span class="no-wrap-code">`stage`</span>|Stage name.|*string*|
+|<span class="no-wrap-code">`filter`</span>|SQL WHERE clause added to the sensor queries.|*string*|
+|<span class="no-wrap-code">`priority`</span>|Table priority (1, 2, 3, 4, ...). The tables can be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.|*integer*|
+|<span class="no-wrap-code">[`owner`](../../reference/yaml/TableYaml.md#tableownerspec)</span>|Table owner information like the data steward name or the business application name.|*[TableOwnerSpec](../../reference/yaml/TableYaml.md#tableownerspec)*|
+|<span class="no-wrap-code">[`profiling_checks_result_truncation`](#profilingtimeperiodtruncation)</span>|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|*[ProfilingTimePeriodTruncation](#profilingtimeperiodtruncation)*|
+|<span class="no-wrap-code">[`file_format`](../../reference/yaml/TableYaml.md#fileformatspec)</span>|File format for a file based table, such as a CSV or Parquet file.|*[FileFormatSpec](../../reference/yaml/TableYaml.md#fileformatspec)*|
+|<span class="no-wrap-code">[`data_quality_status`](./check_results.md#tablecurrentdataqualitystatusmodel)</span>|The current data quality status for the table, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache. In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the table.|*[TableCurrentDataQualityStatusModel](./check_results.md#tablecurrentdataqualitystatusmodel)*|
+|<span class="no-wrap-code">`has_any_configured_checks`</span>|True when the table has any checks configured.|*boolean*|
+|<span class="no-wrap-code">`has_any_configured_profiling_checks`</span>|True when the table has any profiling checks configured.|*boolean*|
+|<span class="no-wrap-code">`has_any_configured_monitoring_checks`</span>|True when the table has any monitoring checks configured.|*boolean*|
+|<span class="no-wrap-code">`has_any_configured_partition_checks`</span>|True when the table has any partition checks configured.|*boolean*|
+|<span class="no-wrap-code">`partitioning_configuration_missing`</span>|True when the table has missing configuration of the "partition_by_column" column, making any partition checks fail when executed.|*boolean*|
+|<span class="no-wrap-code">[`run_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this table.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`run_profiling_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run profiling checks within this table.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`run_monitoring_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run monitoring checks within this table.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`run_partition_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run partition partitioned checks within this table.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`collect_statistics_job_template`](./jobs.md#statisticscollectorsearchfilters)</span>|Configured parameters for the "collect statistics" job that should be pushed to the job queue in order to run all statistics collectors within this table.|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
+|<span class="no-wrap-code">[`data_clean_job_template`](./jobs.md#deletestoreddataqueuejobparameters)</span>|Configured parameters for the "data clean" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this table.|*[DeleteStoredDataQueueJobParameters](./jobs.md#deletestoreddataqueuejobparameters)*|
+|<span class="no-wrap-code">`can_edit`</span>|Boolean flag that decides if the current user can update or delete this object.|*boolean*|
+|<span class="no-wrap-code">`can_collect_statistics`</span>|Boolean flag that decides if the current user can collect statistics.|*boolean*|
+|<span class="no-wrap-code">`can_run_checks`</span>|Boolean flag that decides if the current user can run checks.|*boolean*|
+|<span class="no-wrap-code">`can_delete_data`</span>|Boolean flag that decides if the current user can delete data (results).|*boolean*|
+|<span class="no-wrap-code">`yaml_parsing_error`</span>|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|*string*|
 
 
 ___

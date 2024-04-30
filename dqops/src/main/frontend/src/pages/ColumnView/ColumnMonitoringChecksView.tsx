@@ -108,7 +108,7 @@ const ColumnMonitoringChecksView = () => {
 
   const onUpdate = async () => {
     if (tab === 'daily') {
-      if (!dailyMonitoring) return;
+      if (!dailyMonitoring || !isUpdatedDailyMonitoring) return;
 
       await dispatch(
         updateColumnDailyMonitoringChecks(
@@ -133,7 +133,7 @@ const ColumnMonitoringChecksView = () => {
         )
       );
     } else {
-      if (!monthlyMonitoring) return;
+      if (!monthlyMonitoring || !isUpdatedMonthlyMonitoring) return;
 
       await dispatch(
         updateColumnMonthlyMonitoringChecks(

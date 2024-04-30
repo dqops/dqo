@@ -9,6 +9,9 @@ if TYPE_CHECKING:
     from ..models.column_invalid_email_format_found_check_spec import (
         ColumnInvalidEmailFormatFoundCheckSpec,
     )
+    from ..models.column_invalid_email_format_percent_check_spec import (
+        ColumnInvalidEmailFormatPercentCheckSpec,
+    )
     from ..models.column_invalid_ip_4_address_format_found_check_spec import (
         ColumnInvalidIp4AddressFormatFoundCheckSpec,
     )
@@ -54,6 +57,7 @@ class ColumnPatternsMonthlyPartitionedChecksSpec:
         monthly_partition_text_not_matching_regex_found (Union[Unset, ColumnTextNotMatchingRegexFoundCheckSpec]):
         monthly_partition_texts_matching_regex_percent (Union[Unset, ColumnTextsMatchingRegexPercentCheckSpec]):
         monthly_partition_invalid_email_format_found (Union[Unset, ColumnInvalidEmailFormatFoundCheckSpec]):
+        monthly_partition_invalid_email_format_percent (Union[Unset, ColumnInvalidEmailFormatPercentCheckSpec]):
         monthly_partition_text_not_matching_date_pattern_found (Union[Unset,
             ColumnTextNotMatchingDatePatternFoundCheckSpec]):
         monthly_partition_text_matching_date_pattern_percent (Union[Unset,
@@ -77,6 +81,9 @@ class ColumnPatternsMonthlyPartitionedChecksSpec:
     ] = UNSET
     monthly_partition_invalid_email_format_found: Union[
         Unset, "ColumnInvalidEmailFormatFoundCheckSpec"
+    ] = UNSET
+    monthly_partition_invalid_email_format_percent: Union[
+        Unset, "ColumnInvalidEmailFormatPercentCheckSpec"
     ] = UNSET
     monthly_partition_text_not_matching_date_pattern_found: Union[
         Unset, "ColumnTextNotMatchingDatePatternFoundCheckSpec"
@@ -128,6 +135,14 @@ class ColumnPatternsMonthlyPartitionedChecksSpec:
         if not isinstance(self.monthly_partition_invalid_email_format_found, Unset):
             monthly_partition_invalid_email_format_found = (
                 self.monthly_partition_invalid_email_format_found.to_dict()
+            )
+
+        monthly_partition_invalid_email_format_percent: Union[
+            Unset, Dict[str, Any]
+        ] = UNSET
+        if not isinstance(self.monthly_partition_invalid_email_format_percent, Unset):
+            monthly_partition_invalid_email_format_percent = (
+                self.monthly_partition_invalid_email_format_percent.to_dict()
             )
 
         monthly_partition_text_not_matching_date_pattern_found: Union[
@@ -213,6 +228,10 @@ class ColumnPatternsMonthlyPartitionedChecksSpec:
             field_dict[
                 "monthly_partition_invalid_email_format_found"
             ] = monthly_partition_invalid_email_format_found
+        if monthly_partition_invalid_email_format_percent is not UNSET:
+            field_dict[
+                "monthly_partition_invalid_email_format_percent"
+            ] = monthly_partition_invalid_email_format_percent
         if monthly_partition_text_not_matching_date_pattern_found is not UNSET:
             field_dict[
                 "monthly_partition_text_not_matching_date_pattern_found"
@@ -248,6 +267,9 @@ class ColumnPatternsMonthlyPartitionedChecksSpec:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.column_invalid_email_format_found_check_spec import (
             ColumnInvalidEmailFormatFoundCheckSpec,
+        )
+        from ..models.column_invalid_email_format_percent_check_spec import (
+            ColumnInvalidEmailFormatPercentCheckSpec,
         )
         from ..models.column_invalid_ip_4_address_format_found_check_spec import (
             ColumnInvalidIp4AddressFormatFoundCheckSpec,
@@ -336,6 +358,21 @@ class ColumnPatternsMonthlyPartitionedChecksSpec:
             monthly_partition_invalid_email_format_found = (
                 ColumnInvalidEmailFormatFoundCheckSpec.from_dict(
                     _monthly_partition_invalid_email_format_found
+                )
+            )
+
+        _monthly_partition_invalid_email_format_percent = d.pop(
+            "monthly_partition_invalid_email_format_percent", UNSET
+        )
+        monthly_partition_invalid_email_format_percent: Union[
+            Unset, ColumnInvalidEmailFormatPercentCheckSpec
+        ]
+        if isinstance(_monthly_partition_invalid_email_format_percent, Unset):
+            monthly_partition_invalid_email_format_percent = UNSET
+        else:
+            monthly_partition_invalid_email_format_percent = (
+                ColumnInvalidEmailFormatPercentCheckSpec.from_dict(
+                    _monthly_partition_invalid_email_format_percent
                 )
             )
 
@@ -449,6 +486,7 @@ class ColumnPatternsMonthlyPartitionedChecksSpec:
             monthly_partition_text_not_matching_regex_found=monthly_partition_text_not_matching_regex_found,
             monthly_partition_texts_matching_regex_percent=monthly_partition_texts_matching_regex_percent,
             monthly_partition_invalid_email_format_found=monthly_partition_invalid_email_format_found,
+            monthly_partition_invalid_email_format_percent=monthly_partition_invalid_email_format_percent,
             monthly_partition_text_not_matching_date_pattern_found=monthly_partition_text_not_matching_date_pattern_found,
             monthly_partition_text_matching_date_pattern_percent=monthly_partition_text_matching_date_pattern_percent,
             monthly_partition_text_matching_name_pattern_percent=monthly_partition_text_matching_name_pattern_percent,

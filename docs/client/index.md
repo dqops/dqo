@@ -480,7 +480,13 @@ TableCurrentDataQualityStatusModel(
 			last_executed_at='2007-10-14T14:13:42Z',
 			check_type=CheckType.PROFILING,
 			category='sample_category',
-			quality_dimension='sample_quality_dimension'
+			quality_dimension='sample_quality_dimension',
+			executed_checks=0,
+			valid_results=0,
+			warnings=1,
+			errors=1,
+			fatals=0,
+			execution_errors=0
 		),
 		'table_sample_check_2': CheckCurrentDataQualityStatusModel(
 			current_severity=CheckResultStatus.VALID,
@@ -488,7 +494,13 @@ TableCurrentDataQualityStatusModel(
 			last_executed_at='2007-10-14T14:39:42Z',
 			check_type=CheckType.PROFILING,
 			category='sample_category',
-			quality_dimension='sample_quality_dimension'
+			quality_dimension='sample_quality_dimension',
+			executed_checks=0,
+			valid_results=0,
+			warnings=1,
+			errors=1,
+			fatals=0,
+			execution_errors=0
 		)
 	},
 	columns={
@@ -509,7 +521,13 @@ TableCurrentDataQualityStatusModel(
 					last_executed_at='2007-10-14T14:13:42Z',
 					check_type=CheckType.PROFILING,
 					category='sample_category',
-					quality_dimension='sample_quality_dimension'
+					quality_dimension='sample_quality_dimension',
+					executed_checks=0,
+					valid_results=0,
+					warnings=1,
+					errors=1,
+					fatals=0,
+					execution_errors=0
 				),
 				'sample_check_2': CheckCurrentDataQualityStatusModel(
 					current_severity=CheckResultStatus.VALID,
@@ -517,7 +535,13 @@ TableCurrentDataQualityStatusModel(
 					last_executed_at='2007-10-14T14:45:42Z',
 					check_type=CheckType.PROFILING,
 					category='sample_category',
-					quality_dimension='sample_quality_dimension'
+					quality_dimension='sample_quality_dimension',
+					executed_checks=0,
+					valid_results=0,
+					warnings=1,
+					errors=1,
+					fatals=0,
+					execution_errors=0
 				),
 				'sample_check_3': CheckCurrentDataQualityStatusModel(
 					current_severity=CheckResultStatus.WARNING,
@@ -525,8 +549,17 @@ TableCurrentDataQualityStatusModel(
 					last_executed_at='2007-10-14T16:42:42Z',
 					check_type=CheckType.PROFILING,
 					category='sample_category',
-					quality_dimension='sample_quality_dimension'
+					quality_dimension='sample_quality_dimension',
+					executed_checks=0,
+					valid_results=0,
+					warnings=1,
+					errors=1,
+					fatals=0,
+					execution_errors=0
 				)
+			},
+			dimensions={
+			
 			}
 		),
 		'sample_column_2': ColumnCurrentDataQualityStatusModel(
@@ -546,7 +579,13 @@ TableCurrentDataQualityStatusModel(
 					last_executed_at='2007-10-14T14:13:42Z',
 					check_type=CheckType.PROFILING,
 					category='sample_category',
-					quality_dimension='sample_quality_dimension'
+					quality_dimension='sample_quality_dimension',
+					executed_checks=0,
+					valid_results=0,
+					warnings=1,
+					errors=1,
+					fatals=0,
+					execution_errors=0
 				),
 				'sample_check_2': CheckCurrentDataQualityStatusModel(
 					current_severity=CheckResultStatus.VALID,
@@ -554,7 +593,13 @@ TableCurrentDataQualityStatusModel(
 					last_executed_at='2007-10-14T14:45:42Z',
 					check_type=CheckType.PROFILING,
 					category='sample_category',
-					quality_dimension='sample_quality_dimension'
+					quality_dimension='sample_quality_dimension',
+					executed_checks=0,
+					valid_results=0,
+					warnings=1,
+					errors=1,
+					fatals=0,
+					execution_errors=0
 				),
 				'sample_check_3': CheckCurrentDataQualityStatusModel(
 					current_severity=CheckResultStatus.WARNING,
@@ -562,10 +607,22 @@ TableCurrentDataQualityStatusModel(
 					last_executed_at='2007-10-14T16:42:42Z',
 					check_type=CheckType.PROFILING,
 					category='sample_category',
-					quality_dimension='sample_quality_dimension'
+					quality_dimension='sample_quality_dimension',
+					executed_checks=0,
+					valid_results=0,
+					warnings=1,
+					errors=1,
+					fatals=0,
+					execution_errors=0
 				)
+			},
+			dimensions={
+			
 			}
 		)
+	},
+	dimensions={
+	
 	}
 )
 ```
@@ -629,9 +686,11 @@ Are you looking to address a specific issue? Head down here for full reference d
 |[Healthcheck](./operations/healthcheck.md)|Health check operations for checking if the DQOps service is up and operational. Used for monitoring by load balancers.|
 |[Incidents](./operations/incidents.md)|Data quality incidents controller that supports reading and updating data quality incidents, such as changing the incident status or assigning an external ticket number.|
 |[Jobs](./operations/jobs.md)|Jobs management controller that supports starting new jobs, such as running selected data quality checks. Provides access to the job queue for incremental monitoring.|
+|[Labels](./operations/labels.md)|Operations that returns all labels that are assigned to data assets. Labels serve the purpose of a lazy business glossary.|
 |[LogShipping](./operations/log_shipping.md)|Log shipping controller that accepts logs sent from a web application or external tools and aggregates them in the local DQOps instance logs.|
 |[Rules](./operations/rules.md)|Operations for managing custom data quality rule definitions in DQOps. The custom rules are stored in the DQOps user home folder.|
 |[Schemas](./operations/schemas.md)|Operations for listing imported schemas from monitored data sources. Also provides operations for activating and deactivating multiple checks at once.|
+|[Search](./operations/search.md)|Search operations for finding data assets, such as tables.|
 |[SensorReadouts](./operations/sensor_readouts.md)|Operations that are retrieving the data quality sensor readouts of executed checks on tables and columns.|
 |[Sensors](./operations/sensors.md)|Operations for managing custom data quality sensor definitions in DQOps. The custom sensors are stored in the DQOps user home folder.|
 |[SharedCredentials](./operations/shared_credentials.md)|Operations for managing shared credentials in DQOps. Credentials that are stored in the shared .credentials folder in the DQOps user&#x27;s home folder.|

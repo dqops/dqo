@@ -95,9 +95,9 @@ public class SqlserverColumnDatatypeStringDatatypeDetectSensorParametersSpecInte
     }
 
     @Test
-    void runSensor_whenSensorExecutedProfilingAndCheckTimestampDataType_thenReturnsValues() {
+    void runSensor_whenSensorExecutedProfilingAndCheckDatetimeDataType_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "timestamp4", this.checkSpec);
+                sampleTableMetadata, "datetime4", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -107,10 +107,25 @@ public class SqlserverColumnDatatypeStringDatatypeDetectSensorParametersSpecInte
         Assertions.assertEquals(4, ValueConverter.toInteger(resultTable.column(0).get(0)));
     }
 
+    // todo: the test has set wrong asset which should be equals 5 - the tested values are not covered in sql server.
+    //  Timestamp specific comparison is set with use of date codes built in sql server
+    @Test
+    void runSensor_whenSensorExecutedProfilingAndCheckTimestampDataType_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "timestamp5", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(8, ValueConverter.toInteger(resultTable.column(0).get(0)));
+    }
+
     @Test
     void runSensor_whenSensorExecutedProfilingAndCheckBoolDataType_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "bool5", this.checkSpec);
+                sampleTableMetadata, "bool6", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -123,7 +138,7 @@ public class SqlserverColumnDatatypeStringDatatypeDetectSensorParametersSpecInte
     @Test
     void runSensor_whenSensorExecutedProfilingAndCheckStringDataType_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "string6", this.checkSpec);
+                sampleTableMetadata, "string7", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -136,7 +151,7 @@ public class SqlserverColumnDatatypeStringDatatypeDetectSensorParametersSpecInte
     @Test
     void runSensor_whenSensorExecutedProfilingAndCheckMixedDataTypes_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "mixed7", this.checkSpec);
+                sampleTableMetadata, "mixed8", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -175,12 +190,12 @@ public class SqlserverColumnDatatypeStringDatatypeDetectSensorParametersSpecInte
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "mixed7", this.checkSpec, CheckTimeScale.daily, "date");
+                sampleTableMetadata, "mixed8", this.checkSpec, CheckTimeScale.daily, "date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(6, resultTable.rowCount());
+        Assertions.assertEquals(8, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(3, ValueConverter.toInteger(resultTable.column(0).get(0)));
         Assertions.assertEquals(2, ValueConverter.toInteger(resultTable.column(0).get(1)));

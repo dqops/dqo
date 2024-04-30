@@ -10,7 +10,7 @@ id:INTEGER,email:STRING,email_ok:INTEGER,surrounded_by_whitespace:STRING,surroun
 9,allowed}character@mail.com,1,Ohio,1,,1,y,1,West New York,1,56,21561,2022-02-09,
 10,allowed|character@mail.com,1,Alaska,1,undefined,1,yes,1,Margarets Avenue,1,78,86045,2022-02-10,
 11,allowed~character@mail.com,1,Arizona,1,married,0,no,1,Benton Harbor,1,,2345,2022-02-11,1
-12,dot.is.allowes.in.email@mail.com,1,,1,blank,1,no,1,Poplar Court,1,89.6,86435,2022-02-12,
+12,dot.is.allowed.in.email@mail.com,1,,1,blank,1,no,1,Poplar Court,1,89.6,86435,2022-02-12,
 13,_specialcharonbeginning@mail.com,1,,1,married,0,no,1,Liberty Court,1,,86024,2022-02-13,1
 14,specialcharonend_@mail.com,1,Colorado,1,-,1,yes,1,,0,76,30601306,2022-02-14,
 15,invalid.single.char.top.domain@mail.a,0,Connecticu,1,missing,1,y,1,,0,34,3060830,2022-02-15,0

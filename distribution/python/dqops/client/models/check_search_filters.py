@@ -36,6 +36,7 @@ class CheckSearchFilters:
         labels (Union[Unset, List[str]]): An array of labels assigned to the table. All labels must be present on a
             table to match. The labels can use patterns:  'prefix\*', '\*suffix', 'prefix\*suffix'. The labels are assigned
             on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.
+        max_results (Union[Unset, int]): Optional limit for the maximum number of results to return.
         column (Union[Unset, str]): The column name. This field accepts search patterns in the format: 'fk_\*', '\*_id',
             'prefix\*suffix'.
         column_data_type (Union[Unset, str]): The column data type that was imported from the data source and is stored
@@ -66,6 +67,7 @@ class CheckSearchFilters:
     enabled: Union[Unset, bool] = UNSET
     tags: Union[Unset, List[str]] = UNSET
     labels: Union[Unset, List[str]] = UNSET
+    max_results: Union[Unset, int] = UNSET
     column: Union[Unset, str] = UNSET
     column_data_type: Union[Unset, str] = UNSET
     column_nullable: Union[Unset, bool] = UNSET
@@ -92,6 +94,7 @@ class CheckSearchFilters:
         if not isinstance(self.labels, Unset):
             labels = self.labels
 
+        max_results = self.max_results
         column = self.column
         column_data_type = self.column_data_type
         column_nullable = self.column_nullable
@@ -135,6 +138,8 @@ class CheckSearchFilters:
             field_dict["tags"] = tags
         if labels is not UNSET:
             field_dict["labels"] = labels
+        if max_results is not UNSET:
+            field_dict["maxResults"] = max_results
         if column is not UNSET:
             field_dict["column"] = column
         if column_data_type is not UNSET:
@@ -176,6 +181,8 @@ class CheckSearchFilters:
         tags = cast(List[str], d.pop("tags", UNSET))
 
         labels = cast(List[str], d.pop("labels", UNSET))
+
+        max_results = d.pop("maxResults", UNSET)
 
         column = d.pop("column", UNSET)
 
@@ -229,6 +236,7 @@ class CheckSearchFilters:
             enabled=enabled,
             tags=tags,
             labels=labels,
+            max_results=max_results,
             column=column,
             column_data_type=column_data_type,
             column_nullable=column_nullable,

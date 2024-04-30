@@ -322,7 +322,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         }
 
         boolean replacingCachedFile = this.fileContentsCache.getIfPresent(filePath) != null;
-        this.fileContentsCache.put(filePath, fileContent);
+        this.fileContentsCache.put(filePath, fileContent.clone());
         this.invalidateTableStatusCacheAndLabelsIndexer(filePath, replacingCachedFile);
 
         Path parentFolderPath = filePath.getParent();

@@ -73,6 +73,28 @@ SELECT
         WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
             SUM(
                 CASE
+                    WHEN TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 120) IS NOT NULL     --  yyyy-mm-dd hh:mm:ss
+                        OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 121) IS NOT NULL   --  yyyy-mm-dd hh:mm:ss:nnn
+                        OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 126) IS NOT NULL   --  yyyy-mm-dd T hh:mm:ss:nnn
+                        OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 127) IS NOT NULL   --  yyyy-mm-dd T hh:mm:ss:nnn
+                        OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 20) IS NOT NULL    --  yyyy-mm-dd hh:mm:ss
+                        OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 21) IS NOT NULL    --  yyyy-mm-dd hh:mm:ss:nnn
+                        OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 25) IS NOT NULL    --  yyyyy-mm-dd hh:mm:ss:nnn
+                        OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 26) IS NOT NULL    --  yyyyy-dd-mm hh:mm:ss:nnn
+                        OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 27) IS NOT NULL    --  ymm-dd-yyyy hh:mm:ss:nnn
+                        OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 28) IS NOT NULL    --  ymm-yyyy-dd hh:mm:ss:nnn
+                        OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 29) IS NOT NULL    --  ydd-mm-yyyy hh:mm:ss:nnn
+                        OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 30) IS NOT NULL    --  ydd-yyyy-mm hh:mm:ss:nnn
+                        OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 109) IS NOT NULL   --  ydd-yyyy-mm hh:mm:ss:nnn
+                        OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 113) IS NOT NULL   --  ydd-yyyy-mm hh:mm:ss:nnn
+                    THEN 1
+                    ELSE 0
+                END
+            )
+            THEN 5
+        WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
+            SUM(
+                CASE
                     WHEN LOWER(CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX))) IN ('TRUE', 'FALSE', 'YES', 'NO', 'Y', 'N', 'T', 'F')
                         THEN 1
                     ELSE 0
@@ -119,6 +141,21 @@ SELECT
                                     OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[2][0-3][:][0-5][0-9][:][0-5][0-9]'
                                     OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '% [0-9][:][0-5][0-9][:][0-5][0-9]'
                                )
+                         OR
+                            TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 120) IS NOT NULL               --  yyyy-mm-dd hh:mm:ss
+                                OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 121) IS NOT NULL        --  yyyy-mm-dd hh:mm:ss:nnn
+                                OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 126) IS NOT NULL        --  yyyy-mm-dd T hh:mm:ss:nnn
+                                OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 127) IS NOT NULL        --  yyyy-mm-dd T hh:mm:ss:nnn
+                                OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 20) IS NOT NULL         --  yyyy-mm-dd hh:mm:ss
+                                OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 21) IS NOT NULL         --  yyyy-mm-dd hh:mm:ss:nnn
+                                OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 25) IS NOT NULL         --  yyyyy-mm-dd hh:mm:ss:nnn
+                                OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 26) IS NOT NULL         --  yyyyy-dd-mm hh:mm:ss:nnn
+                                OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 27) IS NOT NULL         --  ymm-dd-yyyy hh:mm:ss:nnn
+                                OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 28) IS NOT NULL         --  ymm-yyyy-dd hh:mm:ss:nnn
+                                OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 29) IS NOT NULL         --  ydd-mm-yyyy hh:mm:ss:nnn
+                                OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 30) IS NOT NULL         --  ydd-yyyy-mm hh:mm:ss:nnn
+                                OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 109) IS NOT NULL        --  ydd-yyyy-mm hh:mm:ss:nnn
+                                OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 113) IS NOT NULL        --  ydd-yyyy-mm hh:mm:ss:nnn
                          OR LOWER(CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX))) IN ('TRUE', 'FALSE', 'YES', 'NO', 'Y', 'N', 'T', 'F')
                         THEN 0
                     WHEN TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX))) <> ''

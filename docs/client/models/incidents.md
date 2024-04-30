@@ -19,7 +19,7 @@ Detailed results for a single check. Represent one row in the check results tabl
 |<span class="no-wrap-code">`check_category`</span>|Check category name|*string*|
 |<span class="no-wrap-code">`check_name`</span>|Check name|*string*|
 |<span class="no-wrap-code">`check_display_name`</span>|Check display name|*string*|
-|<span class="no-wrap-code">[`check_type`](./table_comparisons.md#checktype)</span>|Check type|*[CheckType](./table_comparisons.md#checktype)*|
+|<span class="no-wrap-code">[`check_type`](./common.md#checktype)</span>|Check type|*[CheckType](./common.md#checktype)*|
 |<span class="no-wrap-code">`actual_value`</span>|Actual value|*double*|
 |<span class="no-wrap-code">`expected_value`</span>|Expected value|*double*|
 |<span class="no-wrap-code">`warning_lower_bound`</span>|Warning lower bound|*double*|

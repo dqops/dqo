@@ -22,8 +22,8 @@ from .anomaly_stationary_percentile_moving_average_rule_fatal_01_pct_parameters_
 from .anomaly_stationary_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
     AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec,
 )
-from .athena_authentication_mode import AthenaAuthenticationMode
 from .authenticated_dashboard_model import AuthenticatedDashboardModel
+from .aws_authentication_mode import AwsAuthenticationMode
 from .between_floats_rule_parameters_spec import BetweenFloatsRuleParametersSpec
 from .between_ints_rule_parameters_spec import BetweenIntsRuleParametersSpec
 from .between_percent_rule_parameters_spec import BetweenPercentRuleParametersSpec
@@ -306,6 +306,9 @@ from .column_current_data_quality_status_model import (
 from .column_current_data_quality_status_model_checks import (
     ColumnCurrentDataQualityStatusModelChecks,
 )
+from .column_current_data_quality_status_model_dimensions import (
+    ColumnCurrentDataQualityStatusModelDimensions,
+)
 from .column_custom_sql_daily_monitoring_checks_spec import (
     ColumnCustomSqlDailyMonitoringChecksSpec,
 )
@@ -518,6 +521,9 @@ from .column_integrity_profiling_checks_spec_custom_checks import (
 )
 from .column_invalid_email_format_found_check_spec import (
     ColumnInvalidEmailFormatFoundCheckSpec,
+)
+from .column_invalid_email_format_percent_check_spec import (
+    ColumnInvalidEmailFormatPercentCheckSpec,
 )
 from .column_invalid_ip_4_address_format_found_check_spec import (
     ColumnInvalidIp4AddressFormatFoundCheckSpec,
@@ -808,6 +814,9 @@ from .column_patterns_daily_partitioned_checks_spec_custom_checks import (
 )
 from .column_patterns_invalid_email_format_count_sensor_parameters_spec import (
     ColumnPatternsInvalidEmailFormatCountSensorParametersSpec,
+)
+from .column_patterns_invalid_email_format_percent_sensor_parameters_spec import (
+    ColumnPatternsInvalidEmailFormatPercentSensorParametersSpec,
 )
 from .column_patterns_invalid_ip_4_address_format_count_sensor_parameters_spec import (
     ColumnPatternsInvalidIp4AddressFormatCountSensorParametersSpec,
@@ -1357,6 +1366,9 @@ from .detected_datatype_category import DetectedDatatypeCategory
 from .detected_datatype_equals_rule_parameters_spec import (
     DetectedDatatypeEqualsRuleParametersSpec,
 )
+from .dimension_current_data_quality_status_model import (
+    DimensionCurrentDataQualityStatusModel,
+)
 from .display_hint import DisplayHint
 from .dqo_cloud_user_model import DqoCloudUserModel
 from .dqo_job_change_model import DqoJobChangeModel
@@ -1417,6 +1429,7 @@ from .incidents_per_connection_model import IncidentsPerConnectionModel
 from .json_file_format_spec import JsonFileFormatSpec
 from .json_format_type import JsonFormatType
 from .json_records_type import JsonRecordsType
+from .label_model import LabelModel
 from .max_count_rule_0_error_parameters_spec import MaxCountRule0ErrorParametersSpec
 from .max_count_rule_0_warning_parameters_spec import MaxCountRule0WarningParametersSpec
 from .max_count_rule_100_parameters_spec import MaxCountRule100ParametersSpec
@@ -1485,6 +1498,7 @@ from .provider_sensor_model import ProviderSensorModel
 from .provider_sensor_runner_type import ProviderSensorRunnerType
 from .provider_type import ProviderType
 from .quality_category_model import QualityCategoryModel
+from .redshift_authentication_mode import RedshiftAuthenticationMode
 from .redshift_parameters_spec import RedshiftParametersSpec
 from .redshift_parameters_spec_properties import RedshiftParametersSpecProperties
 from .remote_table_list_model import RemoteTableListModel
@@ -1662,6 +1676,9 @@ from .table_current_data_quality_status_model_checks import (
 )
 from .table_current_data_quality_status_model_columns import (
     TableCurrentDataQualityStatusModelColumns,
+)
+from .table_current_data_quality_status_model_dimensions import (
+    TableCurrentDataQualityStatusModelDimensions,
 )
 from .table_custom_sql_daily_monitoring_checks_spec import (
     TableCustomSqlDailyMonitoringChecksSpec,
@@ -1918,8 +1935,8 @@ __all__ = (
     "AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
     "AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
     "AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
-    "AthenaAuthenticationMode",
     "AuthenticatedDashboardModel",
+    "AwsAuthenticationMode",
     "BetweenFloatsRuleParametersSpec",
     "BetweenIntsRuleParametersSpec",
     "BetweenPercentRuleParametersSpec",
@@ -2044,6 +2061,7 @@ __all__ = (
     "ColumnConversionsProfilingChecksSpecCustomChecks",
     "ColumnCurrentDataQualityStatusModel",
     "ColumnCurrentDataQualityStatusModelChecks",
+    "ColumnCurrentDataQualityStatusModelDimensions",
     "ColumnCustomSqlDailyMonitoringChecksSpec",
     "ColumnCustomSqlDailyMonitoringChecksSpecCustomChecks",
     "ColumnCustomSqlDailyPartitionedChecksSpec",
@@ -2123,6 +2141,7 @@ __all__ = (
     "ColumnIntegrityProfilingChecksSpec",
     "ColumnIntegrityProfilingChecksSpecCustomChecks",
     "ColumnInvalidEmailFormatFoundCheckSpec",
+    "ColumnInvalidEmailFormatPercentCheckSpec",
     "ColumnInvalidIp4AddressFormatFoundCheckSpec",
     "ColumnInvalidIp6AddressFormatFoundCheckSpec",
     "ColumnInvalidLatitudeCountCheckSpec",
@@ -2239,6 +2258,7 @@ __all__ = (
     "ColumnPatternsDailyPartitionedChecksSpec",
     "ColumnPatternsDailyPartitionedChecksSpecCustomChecks",
     "ColumnPatternsInvalidEmailFormatCountSensorParametersSpec",
+    "ColumnPatternsInvalidEmailFormatPercentSensorParametersSpec",
     "ColumnPatternsInvalidIp4AddressFormatCountSensorParametersSpec",
     "ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpec",
     "ColumnPatternsInvalidUuidFormatCountSensorParametersSpec",
@@ -2469,6 +2489,7 @@ __all__ = (
     "DeleteStoredDataResultPartitionResults",
     "DetectedDatatypeCategory",
     "DetectedDatatypeEqualsRuleParametersSpec",
+    "DimensionCurrentDataQualityStatusModel",
     "DisplayHint",
     "DqoCloudUserModel",
     "DqoJobChangeModel",
@@ -2525,6 +2546,7 @@ __all__ = (
     "JsonFileFormatSpec",
     "JsonFormatType",
     "JsonRecordsType",
+    "LabelModel",
     "MaxCountRule0ErrorParametersSpec",
     "MaxCountRule0WarningParametersSpec",
     "MaxCountRule100ParametersSpec",
@@ -2581,6 +2603,7 @@ __all__ = (
     "ProviderSensorRunnerType",
     "ProviderType",
     "QualityCategoryModel",
+    "RedshiftAuthenticationMode",
     "RedshiftParametersSpec",
     "RedshiftParametersSpecProperties",
     "RemoteTableListModel",
@@ -2681,6 +2704,7 @@ __all__ = (
     "TableCurrentDataQualityStatusModel",
     "TableCurrentDataQualityStatusModelChecks",
     "TableCurrentDataQualityStatusModelColumns",
+    "TableCurrentDataQualityStatusModelDimensions",
     "TableCustomSqlDailyMonitoringChecksSpec",
     "TableCustomSqlDailyMonitoringChecksSpecCustomChecks",
     "TableCustomSqlDailyPartitionedChecksSpec",
