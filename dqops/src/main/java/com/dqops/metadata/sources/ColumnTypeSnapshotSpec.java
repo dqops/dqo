@@ -21,6 +21,7 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.conversion.NumericTypeConverter;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -151,12 +152,11 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
                 }
                 catch (NumberFormatException ex) {
                     // ignore, probably "MAX" in SQL Server
-                    result.setColumnType(dataType);
                 }
             }
             else {
-                result.setPrecision(Integer.parseInt(numberComponents[0].trim()));
-                result.setScale(Integer.parseInt(numberComponents[1].trim()));
+                result.setPrecision(NumericTypeConverter.tryParseInteger(numberComponents[0].trim()));
+                result.setScale(NumericTypeConverter.tryParseInteger(numberComponents[1].trim()));
             }
         }
 
