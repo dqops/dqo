@@ -1796,7 +1796,7 @@ function TreeProvider(props: any) {
   };
 
   const reimportTableMetadata = async (node: CustomTreeNode, closeMenuCallBack?: () => void) => {
-    const [connection, schema, table] = node.id.toString().split('.');
+    const { connection, schema, table } = parseNodeId(node.id);
     await JobApiClient.importTables(undefined, false, undefined, {
       connectionName: connection,
       schemaName: schema,

@@ -33,6 +33,7 @@ import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
 import com.dqops.metadata.sources.fileformat.FilePathListSpec;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -365,14 +366,14 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
         DuckdbParametersSpec duckdbParametersSpec = getConnectionSpec().getDuckdb();
 
-        if(duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
+        if (duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
             return super.retrieveTableMetadata(schemaName, tableNames, connectionWrapper, secretValueLookupContext);
         }
 
         List<TableSpec> tableSpecs = new ArrayList<>();
 
         Map<String, TableSpec> physicalTableNameToTableSpec = new HashMap<>();
-        if(connectionWrapper != null){
+        if (connectionWrapper != null){
             List<TableWrapper> tableWrappers = connectionWrapper.getTables().toList();
             physicalTableNameToTableSpec = tableWrappers.stream()
                     .filter(tableWrapper -> tableWrapper.getPhysicalTableName().getSchemaName().equals(schemaName))
@@ -391,7 +392,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             }
 
             FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpecTemp);
-            if(fileFormatSpec == null){
+            if (fileFormatSpec == null){
                 return tableSpecs;
             }
 
@@ -414,8 +415,8 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                     tableSpec.getColumns().put(columnName, columnSpec);
                 }
             } catch (Exception e){
-                if(!e.getMessage().contains("SQL query failed: java.sql.SQLException: IO Error: No files found that match the pattern")){
-                    throw new RuntimeException(e);
+                if (!e.getMessage().contains("SQL query failed: java.sql.SQLException: IO Error: No files found that match the pattern")){
+                    throw new DqoRuntimeException(e);
                 }
             }
 
@@ -470,7 +471,9 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                                                         SecretValueLookupContext secretValueLookupContext){
         ConnectionSpec connectionSpec = getConnectionSpec().expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
         DuckdbParametersSpec duckdb = connectionSpec.getDuckdb();
-        String tableString = fileFormatSpec.buildTableOptionsString(duckdb, tableSpec);
+        TableSpec tableSpecWithoutColumns = tableSpec.deepClone();
+        tableSpecWithoutColumns.getColumns().clear();
+        String tableString = fileFormatSpec.buildTableOptionsString(duckdb, tableSpecWithoutColumns);
         String query = String.format("DESCRIBE SELECT * FROM %s", tableString);
         return this.executeQuery(query, JobCancellationToken.createDummyJobCancellationToken(), null, false);
     }
