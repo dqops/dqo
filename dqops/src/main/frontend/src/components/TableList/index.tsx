@@ -1,6 +1,8 @@
+import clsx from 'clsx';
 import React, { useState } from 'react';
-import { TableListModel } from '../../api';
+import { LabelModel, TableListModel } from '../../api';
 import SchemaTableItem from '../../pages/Schema/SchemaTableItem';
+import SectionWrapper from '../Dashboard/SectionWrapper';
 import { Pagination } from '../Pagination';
 import SvgIcon from '../SvgIcon';
 function getValueForKey<T>(obj: T, key: string): string | undefined {
@@ -48,13 +50,19 @@ type TTableListProps = {
   setTables: any;
   filters: any;
   onChangeFilters: (filters: any) => void;
+  labels: TLabel[];
+  onChangeLabels: (index: number) => void;
 };
+
+type TLabel = LabelModel & { clicked: boolean };
 
 export default function index({
   tables,
   setTables,
   filters,
-  onChangeFilters
+  onChangeFilters,
+  labels,
+  onChangeLabels
 }: TTableListProps) {
   const [sortingDir, setSortingDir] = useState<'asc' | 'desc'>('asc');
 
@@ -119,6 +127,26 @@ export default function index({
   ];
   return (
     <>
+      <SectionWrapper
+        title="Filter by labels"
+        className="text-sm w-[150px] mx-4 mb-4"
+      >
+        {labels.map((label, index) => (
+          <div
+            className={clsx(
+              'flex gap-2 mb-2 cursor-pointer whitespace-normal break-all',
+              {
+                'font-bold text-gray-700': label.clicked,
+                'text-gray-500': !label.clicked
+              }
+            )}
+            key={index}
+            onClick={() => onChangeLabels(index)}
+          >
+            <span>{label.label}</span>({label.labels_count})
+          </div>
+        ))}
+      </SectionWrapper>
       <table className="min-w-350 max-w-400">
         <thead>
           <tr>

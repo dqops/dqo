@@ -53,7 +53,7 @@ export default function SchemaTableItemDimensions({
           )}
         >
           {item.data_quality_status?.data_quality_kpi
-            ? item.data_quality_status?.data_quality_kpi.toPrecision(2) + '%'
+            ? item.data_quality_status?.data_quality_kpi.toPrecision(3) + '%'
             : ''}
         </div>
       </td>

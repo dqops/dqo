@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { TableListModel } from '../../api';
+import { LabelModel, TableListModel } from '../../api';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
 import TableList from '../../components/TableList';
-import { TableApiClient } from '../../services/apiClient';
+import { LabelsApiClient, TableApiClient } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
+
+type TLabel = LabelModel & { clicked: boolean };
 
 export const SchemaTables = () => {
   const {
@@ -17,6 +21,8 @@ export const SchemaTables = () => {
   } = useDecodedParams();
   const [tables, setTables] = useState<TableListModel[]>([]);
   const [filters, setFilters] = useState<any>({ page: 1, limit: 50 });
+  const [table, setTable] = useState('');
+  const [labels, setLabels] = useState<TLabel[]>([]);
 
   const onChangeFilters = (obj: Partial<any>) => {
     setFilters((prev: any) => ({
@@ -25,14 +31,30 @@ export const SchemaTables = () => {
     }));
   };
 
-  const getTables = async () => {
+  const onChangeLabels = (index: number) => {
+    const arr = [...labels];
+    arr[index] = { ...arr[index], clicked: !arr[index].clicked };
+
+    const filteredlabels: string[] = arr
+      .filter((x) => x.clicked && x.label)
+      .map((x) => x.label)
+      .filter((x): x is string => typeof x === 'string');
+
+    getTables(filteredlabels);
+    setLabels(arr);
+  };
+
+  const getTables = async (labels: string[] = []) => {
+    const filter =
+      table.includes('*') || table.length === 0 ? table : table + '*';
+
     return TableApiClient.getTables(
       connection,
       schema,
-      [],
+      labels,
       filters.page,
       filters.pageSize,
-      filters.filter,
+      filter,
       checkTypes === CheckTypes.SOURCES ? CheckTypes.PROFILING : checkTypes
     ).then((res) => {
       setTables(res.data);
@@ -41,9 +63,8 @@ export const SchemaTables = () => {
   };
 
   const refetchTables = (tables?: TableListModel[]) => {
-    console.log(tables);
     tables?.forEach((table) => {
-      if (!table.data_quality_status?.dimensions) {
+      if (!table?.data_quality_status) {
         setTimeout(() => {
           getTables();
         }, 5000);
@@ -55,39 +76,42 @@ export const SchemaTables = () => {
     getTables().then((res) => {
       refetchTables(res.data);
     });
+    const getLabels = () => {
+      LabelsApiClient.getAllLabelsForTables().then((res) => {
+        const array: TLabel[] = res.data.map((item) => {
+          return { ...item, clicked: false };
+        });
+        setLabels(array);
+      });
+    };
+    getLabels();
   }, [schema, connection, filters]);
 
   return (
     <>
-      {/* <div className="flex items-center gap-x-4 mb-4 px-4">
-        <Input
-          label="Connection name"
-          value={filters.connection}
-          onChange={(e) => onChangeFilters({ connection: e.target.value })}
-        />
-        <Input
-          label="Schema name"
-          value={filters.schema}
-          onChange={(e) => onChangeFilters({ schema: e.target.value })}
-        />
+      <div className="flex items-center gap-x-4 mb-4 px-4">
         <Input
           label="Table name"
-          value={filters.filter}
-          onChange={(e) => onChangeFilters({ filter: e.target.value })}
+          value={table}
+          onChange={(e) => setTable(e.target.value)}
         />
         <Button
           label="Search"
           onClick={getTables}
           color="primary"
-          className="mt-"
+          className="mt-5"
         />
-      </div> */}
+      </div>
       <TableList
         tables={tables}
         setTables={setTables}
         filters={filters}
         onChangeFilters={onChangeFilters}
+        labels={labels}
+        onChangeLabels={onChangeLabels}
       />
     </>
   );
 };
+
+// jezeli dluzsze niz 50 znakow to 3 kropki, wyswietlamy wszystkie labelki, posortowane
