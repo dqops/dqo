@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { TableListModel } from '../../api';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
 import { Pagination } from '../../components/Pagination';
 import SvgIcon from '../../components/SvgIcon';
 import { TableApiClient } from '../../services/apiClient';
@@ -12,6 +14,15 @@ type TButtonTabs = {
   value: string;
   sortable?: boolean;
 };
+
+type TFilters = {
+  connection: string;
+  schema: string;
+  page: number;
+  pageSize: number;
+  filter?: string;
+};
+
 const headeritems: TButtonTabs[] = [
   {
     label: 'Table',
@@ -58,7 +69,13 @@ export const SchemaTables = () => {
   } = useDecodedParams();
   const [tables, setTables] = useState<TableListModel[]>([]);
   const [sortingDir, setSortingDir] = useState<'asc' | 'desc'>('asc');
-  const [filters, setFilters] = useState<any>({ page: 1, limit: 50 });
+  const [filters, setFilters] = useState<TFilters>({
+    connection,
+    schema,
+    page: 1,
+    pageSize: 50,
+    filter: undefined
+  });
 
   const onChangeFilters = (obj: Partial<any>) => {
     setFilters((prev: any) => ({
@@ -67,18 +84,32 @@ export const SchemaTables = () => {
     }));
   };
 
-  useEffect(() => {
-    TableApiClient.getTables(
-      connection,
-      schema,
-      filters.page,
-      filters.pageSize,
-      filters.filter,
+  const getTables = async () => {
+    return TableApiClient.getTables(
+      ...(Object.values(filters) as [string, string, number, number, any]),
       checkTypes === CheckTypes.SOURCES ? CheckTypes.PROFILING : checkTypes
     ).then((res) => {
       setTables(res.data);
+      return res;
     });
-  }, [schema, connection, filters]);
+  };
+
+  const refetchTables = (tables?: TableListModel[]) => {
+    console.log(tables);
+    tables?.forEach((table) => {
+      if (!table.data_quality_status?.dimensions) {
+        setTimeout(() => {
+          getTables();
+        }, 5000);
+      }
+    });
+  };
+
+  useEffect(() => {
+    getTables().then((res) => {
+      refetchTables(res.data);
+    });
+  }, [schema, connection]);
 
   const sortTables = (key: string): void => {
     setTables((prev) => {
@@ -143,6 +174,29 @@ export const SchemaTables = () => {
   ];
   return (
     <>
+      <div className="flex items-center gap-x-4 mb-4 px-4">
+        <Input
+          label="Connection name"
+          value={filters.connection}
+          onChange={(e) => onChangeFilters({ connection: e.target.value })}
+        />
+        <Input
+          label="Schema name"
+          value={filters.schema}
+          onChange={(e) => onChangeFilters({ schema: e.target.value })}
+        />
+        <Input
+          label="Table name"
+          value={filters.filter}
+          onChange={(e) => onChangeFilters({ filter: e.target.value })}
+        />
+        <Button
+          label="Search"
+          onClick={getTables}
+          color="primary"
+          className="mt-"
+        />
+      </div>
       <table className="min-w-350 max-w-400">
         <thead>
           <tr>
