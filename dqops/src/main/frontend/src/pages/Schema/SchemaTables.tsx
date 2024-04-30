@@ -18,8 +18,9 @@ type TButtonTabs = {
 type TFilters = {
   connection: string;
   schema: string;
-  page: number;
-  pageSize: number;
+  labels?: string[];
+  page?: number;
+  pageSize?: number;
   filter?: string;
 };
 
@@ -86,7 +87,14 @@ export const SchemaTables = () => {
 
   const getTables = async () => {
     return TableApiClient.getTables(
-      ...(Object.values(filters) as [string, string, number, number, any]),
+      ...(Object.values(filters) as [
+        string,
+        string,
+        string[],
+        number,
+        number,
+        any
+      ]),
       checkTypes === CheckTypes.SOURCES ? CheckTypes.PROFILING : checkTypes
     ).then((res) => {
       setTables(res.data);
