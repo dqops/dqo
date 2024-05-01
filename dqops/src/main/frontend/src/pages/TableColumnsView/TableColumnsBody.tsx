@@ -189,6 +189,33 @@ export default function TableColumnsBody({
     );
   };
 
+  const getMidSectionItems = (column: MyData) => {
+    return [
+      { label: 'Length', value: column.length },
+      { label: 'Scale', value: column.scale },
+      {
+        label: 'Min value',
+        value: column.minimalValue
+          ? dateToString(String(column.minimalValue))
+            ? dateToString(String(column.minimalValue))
+            : cutString(String(column.minimalValue))
+          : ''
+      },
+      {
+        label: 'Max value',
+        value: column.maximumValue
+          ? dateToString(String(column.maximumValue))
+            ? dateToString(String(column.maximumValue))
+            : cutString(String(column.maximumValue))
+          : ''
+      },
+      {
+        label: 'Nulls count',
+        value: isNaN(Number(column.null_count)) ? '' : column.null_count
+      }
+    ];
+  };
+
   return (
     <tbody className="text-sm">
       {columns.map((column, index) => (
@@ -296,15 +323,15 @@ export default function TableColumnsBody({
           <td className="border-b border-gray-100 text-left px-4 py-2">
             <span className="float-right">{column.scale}</span>
           </td>
-          <td className="border-b border-gray-100 text-left px-4 py-2">
-            <div key={index} className="text-right float-right">
-              {column.minimalValue
-                ? dateToString(String(column.minimalValue))
-                  ? dateToString(String(column.minimalValue))
-                  : cutString(String(column.minimalValue))
-                : ''}
-            </div>
-          </td>
+          {getMidSectionItems(column).map((item, jIndex) => (
+            <td
+              key={jIndex}
+              className="border-b border-gray-100 text-left px-4 py-2"
+            >
+              <div className="text-right float-right">{item.value}</div>
+            </td>
+          ))}
+
           <td className="border-b border-gray-100 text-left px-4 py-2">
             <div key={index} className="text-right float-right">
               {column.maximumValue
