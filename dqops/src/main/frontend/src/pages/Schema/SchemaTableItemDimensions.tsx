@@ -74,8 +74,8 @@ export default function SchemaTableItemDimensions({
           'w-13 h-6 text-center flex items-center justify-center',
           {
             'bg-gray-150': hasNoSeverity && lastCheckExecutedAt,
-            [severityColor]: !hasNoSeverity,
-            'border border-gray-150': hasNoSeverity
+            [severityColor]: !hasNoSeverity
+            // 'border border-gray-150': hasNoSeverity
           }
         );
         return (

@@ -25,17 +25,17 @@ export default function SchemaTableItem({
   const history = useHistory();
   const goToTable = (item: TableListModel) => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
-      checkTypes ?? CheckTypes.SOURCES,
+      checkTypes ?? CheckTypes.MONITORING,
       item.connection_name ?? '',
       item.target?.schema_name ?? '',
       item.target?.table_name ?? '',
       'detail'
     );
     dispatch(
-      addFirstLevelTab(checkTypes ?? CheckTypes.SOURCES, {
+      addFirstLevelTab(checkTypes ?? CheckTypes.MONITORING, {
         url,
         value: ROUTES.TABLE_LEVEL_VALUE(
-          checkTypes ?? CheckTypes.SOURCES,
+          checkTypes ?? CheckTypes.MONITORING,
           item.connection_name ?? '',
           item.target?.schema_name ?? '',
           item.target?.table_name ?? ''
@@ -50,8 +50,8 @@ export default function SchemaTableItem({
 
   const prepareLabel = (label: string | undefined) => {
     if (!label) return;
-    if (label.length > 50) {
-      return label.slice(0, 50) + '...';
+    if (label.length > 20) {
+      return label.slice(0, 20) + '...';
     }
     return label;
   };

@@ -131,8 +131,8 @@ export default function index({
   ];
   const prepareLabel = (label: string | undefined) => {
     if (!label) return;
-    if (label.length > 50) {
-      return label.slice(0, 50) + '...';
+    if (label.length > 20) {
+      return label.slice(0, 20) + '...';
     }
     return label;
   };
@@ -159,7 +159,7 @@ export default function index({
           </div>
         ))}
       </SectionWrapper>
-      <table className="min-w-350 max-w-400">
+      <table className="overflow-x-auto">
         <thead>
           <tr>
             {headerItems.map((item) =>
