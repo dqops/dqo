@@ -9,10 +9,6 @@ type TSearchFilters = {
   connection?: string | undefined;
   schema?: string | undefined;
   table?: string | undefined;
-  label?: string[] | undefined;
-  page?: number | undefined;
-  limit?: number | undefined;
-  checkType?: 'profiling' | 'monitoring' | 'partitioned' | undefined;
 };
 
 type TLabel = LabelModel & { clicked: boolean };
@@ -50,16 +46,16 @@ export default function GlobalTables() {
 
   const getTables = (labels: string[] = []) => {
     const addPrefix = (str: string) => {
-      return str.includes('*') || str.length === 0 ? str : str + '*';
+      return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
     };
     SearchApiClient.findTables(
       addPrefix(searchFilters.connection ?? ''),
       addPrefix(searchFilters.schema ?? ''),
       addPrefix(searchFilters.table ?? ''),
       labels,
-      searchFilters.page,
-      searchFilters.limit,
-      searchFilters.checkType
+      filters.page,
+      filters.pageSize,
+      filters.checkType
     ).then((res) => setTables(res.data));
   };
 
@@ -75,7 +71,7 @@ export default function GlobalTables() {
 
     getTables();
     getLabels();
-  }, []);
+  }, [filters]);
 
   return (
     <>

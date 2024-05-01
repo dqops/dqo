@@ -177,7 +177,7 @@ export default function index({
           ))}
         </tbody>
       </table>
-      <div className="px-4">
+      <div className="px-4 mb-50">
         <Pagination
           page={filters.page || 1}
           pageSize={filters.pageSize || 50}

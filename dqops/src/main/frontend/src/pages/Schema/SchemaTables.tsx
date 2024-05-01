@@ -46,7 +46,7 @@ export const SchemaTables = () => {
 
   const getTables = async (labels: string[] = []) => {
     const filter =
-      table.includes('*') || table.length === 0 ? table : table + '*';
+      table.includes('*') || table.length === 0 ? table : '*' + table + '*';
 
     return TableApiClient.getTables(
       connection,
