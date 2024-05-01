@@ -31,7 +31,6 @@ export default function SchemaTableItemDimensions({
       ) ?? [];
 
     const arr: (string | undefined)[] = [];
-
     dimensionKeys.forEach((item) => {
       if (additionalDimensions.includes(item)) {
         arr.push(item);
@@ -147,7 +146,7 @@ export default function SchemaTableItemDimensions({
             </td>
           );
         } else {
-          <td>No data </td>;
+          return <td key={`DimensionTooltipindex${dimIndex}`}></td>;
         }
       })}
     </>
