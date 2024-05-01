@@ -49,15 +49,6 @@ export default function GlobalTables() {
   };
 
   const getTables = (labels: string[] = []) => {
-    console.log(
-      searchFilters.connection,
-      searchFilters.schema,
-      searchFilters.table,
-      labels,
-      searchFilters.page,
-      searchFilters.limit,
-      searchFilters.checkType
-    );
     const addPrefix = (str: string) => {
       return str.includes('*') || str.length === 0 ? str : str + '*';
     };
