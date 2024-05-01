@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { TableListModel } from '../../api';
 import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
@@ -7,11 +8,6 @@ import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import SchemaTableItemDimensions from './SchemaTableItemDimensions';
-
-type TButtonTabs = {
-  label: string;
-  value: string;
-};
 
 export default function SchemaTableItem({
   item,
@@ -26,19 +22,20 @@ export default function SchemaTableItem({
     checkTypes: CheckTypes;
   } = useDecodedParams();
   const dispatch = useDispatch();
-
-  const goToTable = (item: TableListModel, tab: string) => {
+  const history = useHistory();
+  const goToTable = (item: TableListModel) => {
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      checkTypes ?? CheckTypes.SOURCES,
+      item.connection_name ?? '',
+      item.target?.schema_name ?? '',
+      item.target?.table_name ?? '',
+      'detail'
+    );
     dispatch(
-      addFirstLevelTab(checkTypes, {
-        url: ROUTES.TABLE_LEVEL_PAGE(
-          checkTypes,
-          item.connection_name ?? '',
-          item.target?.schema_name ?? '',
-          item.target?.table_name ?? '',
-          tab
-        ),
+      addFirstLevelTab(checkTypes ?? CheckTypes.SOURCES, {
+        url,
         value: ROUTES.TABLE_LEVEL_VALUE(
-          checkTypes,
+          checkTypes ?? CheckTypes.SOURCES,
           item.connection_name ?? '',
           item.target?.schema_name ?? '',
           item.target?.table_name ?? ''
@@ -47,8 +44,10 @@ export default function SchemaTableItem({
         label: item.target?.table_name ?? ''
       })
     );
+    history.push(url);
     return;
   };
+
   const prepareLabel = (label: string | undefined) => {
     if (!label) return;
     if (label.length > 50) {
@@ -60,46 +59,13 @@ export default function SchemaTableItem({
   const getLabelsOverview = (labels: string[]) => {
     return labels.map((x) => prepareLabel(x)).join(',');
   };
-  const buttonTabs: TButtonTabs[] = useMemo(() => {
-    switch (checkTypes) {
-      case CheckTypes.PROFILING:
-        return [
-          {
-            label: 'Basic statistics',
-            value: 'statistics'
-          },
-          { label: 'Profiling checks', value: 'advanced' },
-          { label: 'Profiling table status', value: 'table-quality-status' }
-        ];
-
-      case CheckTypes.SOURCES:
-        return [
-          {
-            label: 'Table configuration',
-            value: 'detail'
-          },
-          { label: 'Date and time column', value: 'timestamps' },
-          { label: 'Incident configuration', value: 'incident_configuration' }
-        ];
-
-      case CheckTypes.MONITORING:
-      case CheckTypes.PARTITIONED:
-        return [
-          { label: 'Daily table status', value: 'table-quality-status-daily' },
-          { label: 'Daily checks', value: 'daily' }
-        ];
-
-      default:
-        return [];
-    }
-  }, [checkTypes]);
 
   return (
     <tr className="text-sm">
       <Button
         className="px-4 underline cursor-pointer text-sm"
         label={item.target?.table_name}
-        onClick={() => goToTable(item, buttonTabs[0].value)}
+        onClick={() => goToTable(item)}
       />
       <td className="px-4">
         {item?.disabled ? (

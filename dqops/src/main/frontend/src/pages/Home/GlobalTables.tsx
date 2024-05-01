@@ -49,10 +49,22 @@ export default function GlobalTables() {
   };
 
   const getTables = (labels: string[] = []) => {
-    SearchApiClient.findTables(
+    console.log(
       searchFilters.connection,
       searchFilters.schema,
       searchFilters.table,
+      labels,
+      searchFilters.page,
+      searchFilters.limit,
+      searchFilters.checkType
+    );
+    const addPrefix = (str: string) => {
+      return str.includes('*') || str.length === 0 ? str : str + '*';
+    };
+    SearchApiClient.findTables(
+      addPrefix(searchFilters.connection ?? ''),
+      addPrefix(searchFilters.schema ?? ''),
+      addPrefix(searchFilters.table ?? ''),
       labels,
       searchFilters.page,
       searchFilters.limit,
@@ -96,7 +108,14 @@ export default function GlobalTables() {
         />
         <Button
           label="Search"
-          onClick={getTables}
+          onClick={() =>
+            getTables(
+              labels
+                .filter((x) => x.clicked && x.label)
+                .map((x) => x.label)
+                .filter((x): x is string => typeof x === 'string')
+            )
+          }
           color="primary"
           className="mt-5"
         />
