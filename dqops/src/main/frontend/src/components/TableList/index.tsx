@@ -42,6 +42,10 @@ const headeritems: TButtonTabs[] = [
     label: 'Filter',
     value: 'filter'
   },
+  {
+    label: 'Labels',
+    value: 'labels'
+  },
   { label: 'Data Quality KPI', value: 'data-quality-kpi', sortable: false }
 ];
 
@@ -125,6 +129,14 @@ export default function index({
     })),
     ...getDimensionKey().map((x) => ({ label: x, value: x, sortable: false }))
   ];
+  const prepareLabel = (label: string | undefined) => {
+    if (!label) return;
+    if (label.length > 50) {
+      return label.slice(0, 50) + '...';
+    }
+    return label;
+  };
+
   return (
     <>
       <SectionWrapper
@@ -143,7 +155,7 @@ export default function index({
             key={index}
             onClick={() => onChangeLabels(index)}
           >
-            <span>{label.label}</span>({label.labels_count})
+            <span>{prepareLabel(label.label)}</span>({label.labels_count})
           </div>
         ))}
       </SectionWrapper>

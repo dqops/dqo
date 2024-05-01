@@ -49,7 +49,17 @@ export default function SchemaTableItem({
     );
     return;
   };
+  const prepareLabel = (label: string | undefined) => {
+    if (!label) return;
+    if (label.length > 50) {
+      return label.slice(0, 50) + '...';
+    }
+    return label;
+  };
 
+  const getLabelsOverview = (labels: string[]) => {
+    return labels.map((x) => prepareLabel(x)).join(',');
+  };
   const buttonTabs: TButtonTabs[] = useMemo(() => {
     switch (checkTypes) {
       case CheckTypes.PROFILING:
@@ -103,6 +113,7 @@ export default function SchemaTableItem({
       </td>
       <td className="px-4 text-sm">{item?.stage}</td>
       <td className="px-4 text-sm">{item?.filter}</td>
+      <td className="px-4 text-sm">{getLabelsOverview(item?.labels ?? [])}</td>
       {item?.data_quality_status?.dimensions ? (
         <SchemaTableItemDimensions item={item} dimensionKeys={dimensionKeys} />
       ) : (
