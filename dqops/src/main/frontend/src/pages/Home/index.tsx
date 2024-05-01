@@ -16,7 +16,7 @@ const HomePage = () => {
     history.push('/' + activeTab);
   };
   return (
-    <div className="min-h-screen overflow-hidden">
+    <div className="min-h-screen">
       <Header />
       tabs
       <div className="w-full mt-12 border-b border-gray-300 px-0">
