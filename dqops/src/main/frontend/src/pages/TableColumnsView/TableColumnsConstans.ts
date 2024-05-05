@@ -49,7 +49,8 @@ export interface MyData {
   isColumnSelected: boolean;
   dimentions?: ({
     [key: string]: DimensionCurrentDataQualityStatusModel;
-} | undefined)[]
+} | undefined)[];
+  labels?: string;
 }
 
 export interface ITableColumnsProps {
@@ -67,6 +68,7 @@ export interface ITableColumnsProps {
 export const labels = [
   'Dimensions',
   'Column name',
+  'Labels',
   'Detected data type',
   'Imported data type',
   'Length',
