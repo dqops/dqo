@@ -334,6 +334,9 @@ export default function TableColumnsBody({
             {column.nameOfCol}
           </td>
           <td className="border-b border-gray-100 text-left px-4 py-2">
+            {column.labels}
+          </td>
+          <td className="border-b border-gray-100 text-left px-4 py-2">
             <div key={index} className="truncate">
               {getDetectedDatatype(column.detectedDatatypeVar)}
             </div>
