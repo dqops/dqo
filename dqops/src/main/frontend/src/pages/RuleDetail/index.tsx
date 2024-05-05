@@ -18,6 +18,7 @@ import { IRootState } from '../../redux/reducers';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import { RulesApi } from '../../services/apiClient';
 import { ROUTES } from '../../shared/routes';
+import { urlencodeDecoder } from '../../utils';
 import PythonCode from './PythonCode';
 import RuleDefinition from './RuleDefinition';
 
@@ -76,6 +77,7 @@ export const RuleDetail = () => {
 
   const onCreateRule = async () => {
     const fullName = [...(path || []), ruleName].join('/');
+    if (!ruleName.length) return;
     if (type === 'create' && copied !== true) {
       await dispatch(
         createRule(fullName, {
@@ -136,10 +138,12 @@ export const RuleDetail = () => {
     dispatch(refreshRuleFolderTree(refreshRulesTreeIndicator ? false : true));
     dispatch(
       closeFirstLevelTab(
-        '/definitions/rules/' +
-          String(full_rule_name).split('/')[
-            String(full_rule_name).split('/').length - 1
-          ]
+        urlencodeDecoder(
+          '/definitions/rules/' +
+            String(full_rule_name).split('/')[
+              String(full_rule_name).split('/').length - 1
+            ]
+        )
       )
     );
   };
@@ -245,8 +249,10 @@ export const RuleDetail = () => {
         <div className="border-b border-gray-300 relative">
           <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         </div>
-        {activeTab === 'definition' && <RuleDefinition rule={ruleDetail} />}
-        {activeTab === 'python_code' && <PythonCode rule={ruleDetail} />}
+        {activeTab === 'definition' && (
+          <RuleDefinition rule={ruleDetail ?? {}} />
+        )}
+        {activeTab === 'python_code' && <PythonCode rule={ruleDetail ?? {}} />}
       </div>
       <ConfirmDialog
         open={deleteDialogOpen}
