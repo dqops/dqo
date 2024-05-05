@@ -80,6 +80,7 @@ const DuckdbConnection = ({
   >(duckdb?.files_format_type ?? DuckdbParametersSpecFilesFormatTypeEnum.csv);
   const [refetchDirectoriesIndicator, setRefetchDirectoriesIndicator] =
     useState(false);
+  const [selectedInput, setSelectedInput] = useState<number | string>();
 
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
     setCopiedDatabase((prev) => ({
@@ -129,7 +130,7 @@ const DuckdbConnection = ({
     });
     setCopiedDatabase((prev) => ({ ...prev, directories, storage_type }));
   };
-  console.log(copiedDatabase, duckdb);
+
   return (
     <SectionWrapper
       title="DuckDB connection parameters"
@@ -141,6 +142,8 @@ const DuckdbConnection = ({
         className="mb-4 text-sm"
         value={copiedDatabase?.storage_type}
         onChange={changeStorageTypeDirectoryPrefixes}
+        onClickValue={setSelectedInput}
+        selectedMenu={selectedInput}
       />
 
       {copiedDatabase?.storage_type ===
@@ -156,6 +159,8 @@ const DuckdbConnection = ({
               aws_authentication_mode: value
             }));
           }}
+          onClickValue={setSelectedInput}
+          selectedMenu={selectedInput}
         />
       )}
 
