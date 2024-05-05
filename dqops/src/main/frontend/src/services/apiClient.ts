@@ -17,34 +17,36 @@
 import axios from 'axios';
 
 import {
-  ConnectionsApiFactory,
-  Configuration,
-  SchemasApiFactory,
-  TablesApiFactory,
-  ColumnsApiFactory,
-  JobsApiFactory,
-  DataSourcesApiFactory,
-  DataGroupingConfigurationsApiFactory,
-  CheckResultsOverviewApiFactory,
-  DashboardsApiFactory,
-  TimezonesApiFactory,
   CheckResultsApiFactory,
-  SensorReadoutsApiFactory,
-  ErrorsApiFactory,
-  SensorsApiFactory,
-  RulesApiFactory,
-  IncidentsApiFactory,
-  LogShippingApiFactory,
-  EnvironmentApiFactory,
+  CheckResultsOverviewApiFactory,
   ChecksApiFactory,
-  TableComparisonsApiFactory,
-  TableComparisonResultsApiFactory,
-  DefaultsApiFactory,
-  UsersApiFactory,
-  SharedCredentialsApiFactory,
-  DictionariesApiFactory,
+  ColumnsApiFactory,
+  Configuration,
+  ConnectionsApiFactory,
+  DashboardsApiFactory,
+  DataGroupingConfigurationsApiFactory,
+  DataSourcesApiFactory,
+  DefaultColumnCheckPatternsApiFactory,
   DefaultTableCheckPatternsApiFactory,
-  DefaultColumnCheckPatternsApiFactory
+  DefaultsApiFactory,
+  DictionariesApiFactory,
+  EnvironmentApiFactory,
+  ErrorsApiFactory,
+  IncidentsApiFactory,
+  JobsApiFactory,
+  LabelsApiFactory,
+  LogShippingApiFactory,
+  RulesApiFactory,
+  SchemasApiFactory,
+  SearchApiFactory,
+  SensorReadoutsApiFactory,
+  SensorsApiFactory,
+  SharedCredentialsApiFactory,
+  TableComparisonResultsApiFactory,
+  TableComparisonsApiFactory,
+  TablesApiFactory,
+  TimezonesApiFactory,
+  UsersApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -142,10 +144,24 @@ export const SettingsApi = DefaultsApiFactory(new Configuration(), '', axios);
 
 export const UsersApi = UsersApiFactory(new Configuration(), '', axios);
 
-export const SharedCredentialsApi = SharedCredentialsApiFactory(new Configuration(), '', axios);
+export const SharedCredentialsApi = SharedCredentialsApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
 
-export const DataDictionaryApiClient = DictionariesApiFactory(new Configuration(), '', axios);
+export const DataDictionaryApiClient = DictionariesApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
 
-export const DefaultTableCheckPatternsApiClient = DefaultTableCheckPatternsApiFactory(new Configuration(), '', axios);
+export const DefaultTableCheckPatternsApiClient =
+  DefaultTableCheckPatternsApiFactory(new Configuration(), '', axios);
 
-export const DefaultColumnCheckPatternsApiClient = DefaultColumnCheckPatternsApiFactory(new Configuration(), '', axios);
+export const DefaultColumnCheckPatternsApiClient =
+  DefaultColumnCheckPatternsApiFactory(new Configuration(), '', axios);
+
+export const SearchApiClient = SearchApiFactory(new Configuration(), '', axios);
+
+export const LabelsApiClient = LabelsApiFactory(new Configuration(), '', axios);
