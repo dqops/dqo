@@ -22,6 +22,7 @@ import { IRootState } from '../../redux/reducers';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import { SensorsApi } from '../../services/apiClient';
 import { ROUTES } from '../../shared/routes';
+import { urlencodeDecoder } from '../../utils';
 import ProvideSensor from './ProvideSensor';
 import SensorDefinition from './SensorDefinition';
 
@@ -123,10 +124,12 @@ export const SensorDetail = () => {
     );
     dispatch(
       closeFirstLevelTab(
-        '/definitions/sensors/' +
-          String(full_sensor_name).split('/')[
-            String(full_sensor_name).split('/').length - 1
-          ]
+        urlencodeDecoder(
+          '/definitions/sensors/' +
+            String(full_sensor_name).split('/')[
+              String(full_sensor_name).split('/').length - 1
+            ]
+        )
       )
     );
   };

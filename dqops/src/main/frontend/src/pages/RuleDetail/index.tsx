@@ -18,6 +18,7 @@ import { IRootState } from '../../redux/reducers';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import { RulesApi } from '../../services/apiClient';
 import { ROUTES } from '../../shared/routes';
+import { urlencodeDecoder } from '../../utils';
 import PythonCode from './PythonCode';
 import RuleDefinition from './RuleDefinition';
 
@@ -136,10 +137,12 @@ export const RuleDetail = () => {
     dispatch(refreshRuleFolderTree(refreshRulesTreeIndicator ? false : true));
     dispatch(
       closeFirstLevelTab(
-        '/definitions/rules/' +
-          String(full_rule_name).split('/')[
-            String(full_rule_name).split('/').length - 1
-          ]
+        urlencodeDecoder(
+          '/definitions/rules/' +
+            String(full_rule_name).split('/')[
+              String(full_rule_name).split('/').length - 1
+            ]
+        )
       )
     );
   };
