@@ -77,6 +77,7 @@ export const RuleDetail = () => {
 
   const onCreateRule = async () => {
     const fullName = [...(path || []), ruleName].join('/');
+    if (!ruleName.length) return;
     if (type === 'create' && copied !== true) {
       await dispatch(
         createRule(fullName, {
@@ -248,8 +249,10 @@ export const RuleDetail = () => {
         <div className="border-b border-gray-300 relative">
           <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         </div>
-        {activeTab === 'definition' && <RuleDefinition rule={ruleDetail} />}
-        {activeTab === 'python_code' && <PythonCode rule={ruleDetail} />}
+        {activeTab === 'definition' && (
+          <RuleDefinition rule={ruleDetail ?? {}} />
+        )}
+        {activeTab === 'python_code' && <PythonCode rule={ruleDetail ?? {}} />}
       </div>
       <ConfirmDialog
         open={deleteDialogOpen}

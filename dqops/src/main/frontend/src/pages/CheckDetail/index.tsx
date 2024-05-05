@@ -116,6 +116,7 @@ export const SensorDetail = () => {
 
   const onCreateUpdateCheck = async () => {
     const fullName = [...(path || []), checkName].join('/');
+    if (!checkName.length) return;
     setIsUpdating(true);
     if (type === 'create') {
       if (copied === true) {
