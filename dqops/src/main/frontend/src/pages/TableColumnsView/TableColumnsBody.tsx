@@ -189,6 +189,57 @@ export default function TableColumnsBody({
     );
   };
 
+  const getMidSectionItemsBasedOnWidth = (column: MyData) => {
+    const width = window.innerWidth;
+    const excludedItems: string[] = [];
+
+    if (width < 1700) {
+      excludedItems.push(
+        'Nulls count',
+        'Max value',
+        'Min value',
+        'Scale',
+        'Length'
+      );
+    } else if (width < 1800) {
+      excludedItems.push('Nulls count', 'Max value', 'Min value', 'Scale');
+    } else if (width < 1900) {
+      excludedItems.push('Nulls count', 'Max value', 'Min value');
+    } else if (width < 2000) {
+      excludedItems.push('Nulls count', 'Max value');
+    } else if (width < 2200) {
+      excludedItems.push('Nulls count');
+    }
+
+    const items = [
+      { label: 'Length', value: column.length },
+      { label: 'Scale', value: column.scale },
+      {
+        label: 'Min value',
+        value: column.minimalValue
+          ? dateToString(String(column.minimalValue))
+            ? dateToString(String(column.minimalValue))
+            : cutString(String(column.minimalValue))
+          : ''
+      },
+      {
+        label: 'Max value',
+        value: column.maximumValue
+          ? dateToString(String(column.maximumValue))
+            ? dateToString(String(column.maximumValue))
+            : cutString(String(column.maximumValue))
+          : ''
+      },
+      {
+        label: 'Nulls count',
+        value: isNaN(Number(column.null_count)) ? '' : column.null_count
+      }
+    ];
+
+    const arr = items.filter((item) => !excludedItems.includes(item.label));
+    return arr;
+  };
+
   return (
     <tbody className="text-sm">
       {columns.map((column, index) => (
@@ -293,35 +344,15 @@ export default function TableColumnsBody({
           <td className="border-b border-gray-100 text-left px-4 py-2">
             {column.importedDatatype}
           </td>
-          <td className="border-b border-gray-100 text-right px-4 py-2">
-            <span className="float-right">{column.length}</span>
-          </td>
-          <td className="border-b border-gray-100 text-left px-4 py-2">
-            <span className="float-right">{column.scale}</span>
-          </td>
-          <td className="border-b border-gray-100 text-left px-4 py-2">
-            <div key={index} className="text-right float-right">
-              {column.minimalValue
-                ? dateToString(String(column.minimalValue))
-                  ? dateToString(String(column.minimalValue))
-                  : cutString(String(column.minimalValue))
-                : ''}
-            </div>
-          </td>
-          <td className="border-b border-gray-100 text-left px-4 py-2">
-            <div key={index} className="text-right float-right">
-              {column.maximumValue
-                ? dateToString(String(column.maximumValue))
-                  ? dateToString(String(column.maximumValue))
-                  : cutString(String(column.maximumValue))
-                : ''}
-            </div>
-          </td>
-          <td className="border-b border-gray-100 text-left px-4 py-2">
-            <div key={index} className="text-right float-right">
-              {isNaN(Number(column.null_count)) ? '' : column.null_count}
-            </div>
-          </td>
+          {getMidSectionItemsBasedOnWidth(column).map((item, jIndex) => (
+            <td
+              key={jIndex}
+              className="border-b border-gray-100 text-left px-4 py-2"
+            >
+              <div className="text-right float-right">{item.value}</div>
+            </td>
+          ))}
+
           <td className="border-b border-gray-100 text-right px-4 py-2">
             <div className="flex justify-center items-center">
               <div className="flex justify-center items-center">
