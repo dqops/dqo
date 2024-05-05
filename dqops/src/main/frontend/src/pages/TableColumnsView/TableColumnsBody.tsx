@@ -159,6 +159,30 @@ export default function TableColumnsBody({
             <div className="w-49">Quality Dimension:</div>
             <div>{data?.dimension}</div>
           </div>
+          <div className="flex gap-x-2">
+            <div className="w-49">Executed checks:</div>
+            <div>{data?.executed_checks}</div>
+          </div>
+          <div className="flex gap-x-2">
+            <div className="w-49">Valid results:</div>
+            <div>{data?.valid_results}</div>
+          </div>
+          <div className="flex gap-x-2">
+            <div className="w-49">Warnings:</div>
+            <div>{data?.warnings}</div>
+          </div>
+          <div className="flex gap-x-2">
+            <div className="w-49">Errors:</div>
+            <div>{data?.errors}</div>
+          </div>
+          <div className="flex gap-x-2">
+            <div className="w-49">Fatals:</div>
+            <div>{data?.fatals}</div>
+          </div>
+          <div className="flex gap-x-2">
+            <div className="w-49">Data quality KPI:</div>
+            <div>{data?.data_quality_kpi}</div>
+          </div>
         </div>
       );
     }
@@ -272,11 +296,13 @@ export default function TableColumnsBody({
                 const severityColor = getColor(currentSeverity as any);
                 const hasNoSeverity = severityColor.length === 0;
 
-                const dimensionsClassNames = clsx('w-3 h-3', {
-                  'bg-gray-150': hasNoSeverity && lastCheckExecutedAt,
-                  [severityColor]: !hasNoSeverity,
-                  'border border-gray-150': hasNoSeverity
-                });
+                const dimensionsClassNames = clsx(
+                  'w-3 h-3 border border-gray-150',
+                  {
+                    'bg-gray-150': hasNoSeverity && lastCheckExecutedAt,
+                    [severityColor]: !hasNoSeverity
+                  }
+                );
                 return (
                   <Tooltip
                     key={`Dimensionindex${dimType}`}
@@ -304,7 +330,7 @@ export default function TableColumnsBody({
                     >
                       <div
                         className={clsx(
-                          'w-3 h-3',
+                          'w-3 h-3 border border-gray-150',
                           getColor(
                             column.dimentions?.[dimensionKey as any]
                               ?.current_severity as
