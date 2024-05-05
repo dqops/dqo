@@ -20,6 +20,7 @@ import {
 } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
 import { ROUTES } from '../../shared/routes';
+import { urlencodeEncoder } from '../../utils';
 import SvgIcon from '../SvgIcon';
 import DataQualityContextMenu from './DataQualityContextMenu';
 import RuleContextMenu from './RuleContextMenu';
@@ -77,9 +78,9 @@ export const DefinitionTree = () => {
     toggleTree(tabs);
   }, [activeTab]);
 
-  const highlightedNode = activeTab
-    ?.split('/')
-    .at(activeTab?.split('/').length - 1);
+  const highlightedNode = urlencodeEncoder(
+    activeTab?.split('/').at(activeTab?.split('/').length - 1)
+  );
 
   const renderSensorFolderTree = (
     folder?: SensorFolderModel,
@@ -139,10 +140,7 @@ export const DefinitionTree = () => {
                 className={clsx(
                   'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
                   sensor.custom ? 'font-bold' : '',
-                  activeTab?.split('/').at(activeTab?.split('/').length - 1) ===
-                    sensor.sensor_name
-                    ? 'bg-gray-300'
-                    : ''
+                  highlightedNode === sensor.sensor_name ? 'bg-gray-300' : ''
                 )}
                 onClick={() => {
                   !(
@@ -249,10 +247,7 @@ export const DefinitionTree = () => {
                 className={clsx(
                   'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300',
                   rule.custom ? 'font-bold ' : '',
-                  activeTab?.split('/').at(activeTab?.split('/').length - 1) ===
-                    rule.rule_name
-                    ? 'bg-gray-300'
-                    : ''
+                  highlightedNode === rule.rule_name ? 'bg-gray-300' : ''
                 )}
                 onClick={() => {
                   !(
@@ -364,12 +359,7 @@ export const DefinitionTree = () => {
                     className={clsx(
                       'cursor-pointer flex w-full space-between items-center mb-1 h-5  hover:bg-gray-300',
                       check.custom ? 'font-bold' : '',
-                      activeTab
-                        ?.split('/')
-                        .at(activeTab?.split('/').length - 1) ===
-                        check.check_name
-                        ? 'bg-gray-300'
-                        : ''
+                      highlightedNode === check.check_name ? 'bg-gray-300' : ''
                     )}
                     onClick={() => {
                       !(

@@ -48,7 +48,9 @@ export const SensorDetail = () => {
   const [isUpdated, setIsUpdated] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [helpText, setHelpText] = useState(activeCheckDetail?.help_text ?? '');
-  const [friendlyName, setFriendlyName] = useState(activeCheckDetail?.friendly_name ?? '');
+  const [friendlyName, setFriendlyName] = useState(
+    activeCheckDetail?.friendly_name ?? ''
+  );
   const [standard, setStandard] = useState(
     activeCheckDetail?.standard ?? false
   );
@@ -64,7 +66,7 @@ export const SensorDetail = () => {
   const onChangeHelpText = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setHelpText(e.target.value);
   };
-  
+
   const onChangeFriendlyName = (e: ChangeEvent<HTMLInputElement>) => {
     setFriendlyName(e.target.value);
   };
