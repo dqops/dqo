@@ -20,12 +20,15 @@ public class DuckdbQueriesProvider {
         StringBuilder loadSecretsString = new StringBuilder();
         String secretName = "secret_" + secretHash;
         loadSecretsString.append("CREATE SECRET ").append(secretName).append(" (\n");
+        loadSecretsString.append(indent).append("TYPE ").append(storageType.toString().toUpperCase()).append(",\n");
         switch (storageType){
             case s3:
-                loadSecretsString.append(indent).append("TYPE ").append(storageType.toString().toUpperCase()).append(",\n");
                 loadSecretsString.append(indent).append("KEY_ID '").append(duckdbParametersSpec.getUser()).append("',\n");
                 loadSecretsString.append(indent).append("SECRET '").append(duckdbParametersSpec.getPassword()).append("',\n");
                 loadSecretsString.append(indent).append("REGION '").append(duckdbParametersSpec.getRegion()).append("'");
+                break;
+            case azure:
+                loadSecretsString.append(indent).append("CONNECTION_STRING '").append(duckdbParametersSpec.getPassword()).append("'");
                 break;
             default:
                 throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + storageType);
@@ -33,7 +36,6 @@ public class DuckdbQueriesProvider {
         loadSecretsString.append("\n);");
         return loadSecretsString.toString();
     }
-
 
     /**
      * Provides query to set extension directory.

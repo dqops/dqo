@@ -35,15 +35,15 @@ const storageTypeOptions = [
   {
     label: 'AWS S3',
     value: DuckdbParametersSpecStorageTypeEnum.s3
-  }
+  },
+  {
+    label: 'Azure Blob Storage',
+    value: DuckdbParametersSpecStorageTypeEnum.azure
+  },
   // todo: uncomment below when implemented
   // {
   //   label: 'Google Cloud Storage',
   //   value: DuckdbParametersSpecStorageTypeEnum.gcs
-  // },
-  // {
-  //   label: 'Azure Blob Storage',
-  //   value: DuckdbParametersSpecStorageTypeEnum.azure
   // },
   // {
   //   label: 'Cloudflare R2',

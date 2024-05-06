@@ -2,8 +2,8 @@ package com.dqops.connectors.duckdb.fileslisting;
 
 import com.dqops.BaseTest;
 import com.dqops.connectors.SourceTableModel;
-import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderImpl;
@@ -18,11 +18,11 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class AwsTablesListerIntegrationTest extends BaseTest {
+class AzureTablesListerIntegrationTest extends BaseTest {
 
     private DuckdbParametersSpec duckdbParametersSpec;
     private String schemaName = "files";
-    private AwsTablesLister sut;
+    private AzureTablesLister sut;
 
     @BeforeEach
     void setUp() {
@@ -30,18 +30,16 @@ class AwsTablesListerIntegrationTest extends BaseTest {
         SecretValueProviderImpl secretValueProvider = beanFactory.getBean(SecretValueProviderImpl.class);
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
 
-        this.sut = (AwsTablesLister)TablesListerProvider.createTablesLister(DuckdbStorageType.s3);
+        this.sut = (AzureTablesLister)TablesListerProvider.createTablesLister(DuckdbStorageType.azure);
 
         this.duckdbParametersSpec = new DuckdbParametersSpec();
-        duckdbParametersSpec.setUser(secretValueProvider.expandValue("${DQOPS_TEST_AWS_ACCESS_KEY_ID}", secretValueLookupContext));
-        duckdbParametersSpec.setPassword(secretValueProvider.expandValue("${DQOPS_TEST_AWS_SECRET_ACCESS_KEY}", secretValueLookupContext));
-        duckdbParametersSpec.setRegion(secretValueProvider.expandValue("${DQOPS_TEST_AWS_REGION}", secretValueLookupContext));
+        duckdbParametersSpec.setPassword(secretValueProvider.expandValue("${DQOPS_TEST_AZURE_STORAGE_CONNECTION_STRING}", secretValueLookupContext));
         duckdbParametersSpec.setFilesFormatType(DuckdbFilesFormatType.csv);
     }
 
     @Test
     void listTables_straightlyFromBucket_returnFileAndFolder() {
-        duckdbParametersSpec.getDirectories().put(schemaName, "s3://dqops-duckdb-test/");
+        duckdbParametersSpec.getDirectories().put(schemaName, "az://duckdb-container/");
 
         List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
 
@@ -56,7 +54,7 @@ class AwsTablesListerIntegrationTest extends BaseTest {
 
     @Test
     void listTables_straightlyFromBucketWithNoTrailingSlash_returnFileAndFolder() {
-        duckdbParametersSpec.getDirectories().put(schemaName, "s3://dqops-duckdb-test");
+        duckdbParametersSpec.getDirectories().put(schemaName, "az://duckdb-container");
 
         List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
 
@@ -71,7 +69,7 @@ class AwsTablesListerIntegrationTest extends BaseTest {
 
     @Test
     void listTables_fromBucketPrefixWithSingleFile_returnOnlyOneFile() {
-        duckdbParametersSpec.getDirectories().put(schemaName, "s3://dqops-duckdb-test/test-folder-1/data-set-1/");
+        duckdbParametersSpec.getDirectories().put(schemaName, "az://duckdb-container/test-folder-1/data-set-1/");
 
         List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
 
