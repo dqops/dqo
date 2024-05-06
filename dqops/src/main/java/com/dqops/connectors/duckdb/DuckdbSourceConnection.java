@@ -19,6 +19,8 @@ import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.fileslisting.AwsTablesLister;
 import com.dqops.connectors.duckdb.fileslisting.LocalSystemTablesLister;
+import com.dqops.connectors.duckdb.schema.DuckDBDataTypeParser;
+import com.dqops.connectors.duckdb.schema.DuckDBField;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
@@ -66,6 +68,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     private static final Object registerExtensionsLock = new Object();
     private static boolean extensionsRegistered = false;
     private final DqoDuckdbConfiguration dqoDuckdbConfiguration;
+    private final DuckDBDataTypeParser dataTypeParser;
     private static final Object settingsExecutionLock = new Object();
     private static final boolean settingsConfigured = false;
     private static final String temporaryDirectoryPrefix = "dqops_duckdb_temp_";
@@ -77,16 +80,19 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      * @param secretValueProvider     Secret value provider for the environment variable expansion.
      * @param homeLocationFindService Home location find service.
      * @param dqoDuckdbConfiguration  Configuration settings for duckdb.
+     * @param dataTypeParser          Data type parser that parses the schema of structures.
      */
     @Autowired
     public DuckdbSourceConnection(JdbcConnectionPool jdbcConnectionPool,
                                   SecretValueProvider secretValueProvider,
                                   DuckdbConnectionProvider duckdbConnectionProvider,
                                   HomeLocationFindService homeLocationFindService,
-                                  DqoDuckdbConfiguration dqoDuckdbConfiguration) {
+                                  DqoDuckdbConfiguration dqoDuckdbConfiguration,
+                                  DuckDBDataTypeParser dataTypeParser) {
         super(jdbcConnectionPool, secretValueProvider, duckdbConnectionProvider);
         this.homeLocationFindService = homeLocationFindService;
         this.dqoDuckdbConfiguration = dqoDuckdbConfiguration;
+        this.dataTypeParser = dataTypeParser;
     }
 
     /**
@@ -412,7 +418,16 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                     String dataType = colRow.getString("column_type");
                     boolean isNullable = Objects.equals(colRow.getString("null"), "YES");
                     ColumnSpec columnSpec = prepareNewColumnSpec(dataType, isNullable);
+                    if (dataType != null && (dataType.startsWith("STRUCT") || dataType.startsWith("UNION") || dataType.startsWith("MAP"))) {
+                        columnSpec.setTypeSnapshot(new ColumnTypeSnapshotSpec(dataType, isNullable));
+                    }
                     tableSpec.getColumns().put(columnName, columnSpec);
+
+                    DuckDBField parsedField = this.dataTypeParser.parseFieldType(dataType, columnName);
+                    if (parsedField.isStruct()) {
+                        String parentColumnPrefix = parsedField.isArray() ? columnName + "[0]" : columnName;
+                        addNestedFieldsFromStructs(parentColumnPrefix, parsedField, tableSpec.getColumns());
+                    }
                 }
             } catch (Exception e){
                 if (!e.getMessage().contains("SQL query failed: java.sql.SQLException: IO Error: No files found that match the pattern")){
@@ -422,6 +437,28 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
         }
         return tableSpecs;
+    }
+
+    /**
+     * Traverses a structure of nested fields inside STRUCT data types and adds all nested fields.
+     * @param parentColumnName Parent column name used as a prefix to access nested fields.
+     * @param structField DuckDB field schema that as parsed - must be a STRUCT field.
+     * @param targetColumnsMap Target column map to add generated columns.
+     */
+    private void addNestedFieldsFromStructs(String parentColumnName, DuckDBField structField, ColumnSpecMap targetColumnsMap) {
+        if (structField.isStruct() && structField.getNestedFields() != null) {
+            for (DuckDBField childField : structField.getNestedFields()) {
+                ColumnSpec columnSpec = prepareNewColumnSpec(childField.getTypeName(), childField.isNullable());
+                columnSpec.getTypeSnapshot().setNested(true);
+                String nestedFieldName = parentColumnName + "." + childField.getFieldName();
+                targetColumnsMap.put(nestedFieldName, columnSpec);
+
+                if (childField.isStruct()) {
+                    String childColumnPrefix = childField.isArray() ? nestedFieldName + "[0]" : nestedFieldName;
+                    addNestedFieldsFromStructs(childColumnPrefix, childField, targetColumnsMap);
+                }
+            }
+        }
     }
 
     /**
