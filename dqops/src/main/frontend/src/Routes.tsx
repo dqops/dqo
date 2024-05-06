@@ -1,18 +1,19 @@
 import React from 'react';
-import { Route, Switch, Redirect } from 'react-router';
-import HomePage from './pages/Home';
-import { ROUTES } from "./shared/routes";
-import NotFound from "./pages/NotFound";
+import { Redirect, Route, Switch } from 'react-router';
 import ConnectionLayout from "./components/ConnectionLayout";
-import DefinitionLayout from "./components/DefinitionLayout";
 import DashboardLayout from "./components/DashboardLayout";
+import DefinitionLayout from "./components/DefinitionLayout";
 import IncidentsLayout from "./components/IncidentsLayout";
 import CreateConnection from './pages/CreateConnection';
+import HomePage from './pages/Home';
+import NotFound from "./pages/NotFound";
+import { ROUTES } from "./shared/routes";
 
 const Routes = () => {
   return (
     <Switch>
       <Route exact path={ROUTES.PATTERNS.HOME} component={HomePage} />
+      <Route exact path={ROUTES.PATTERNS.TABLES} component={HomePage} />
 
       {/* Dashboard Layout pages */}
       <Route exact path={ROUTES.PATTERNS.DASHBOARDS} render={() => <DashboardLayout route={ROUTES.PATTERNS.DASHBOARDS} />} />

@@ -34,6 +34,7 @@ public class BigQueryInternalConnection {
      * @param quotaProjectId GCP quota project id.
      */
     public BigQueryInternalConnection(String connectionName, BigQuery bigQueryClient, String billingProjectId, String quotaProjectId) {
+        this.connectionName = connectionName;
         this.bigQueryClient = bigQueryClient;
         this.billingProjectId = billingProjectId;
         this.quotaProjectId = quotaProjectId;

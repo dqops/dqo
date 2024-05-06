@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import SectionWrapper from '../../SectionWrapper';
+import clsx from 'clsx';
 import {
-  TrinoParametersSpec,
   SharedCredentialListModel,
-  TrinoParametersSpecTrinoEngineTypeEnum,
-  TrinoParametersSpecAwsAuthenticationModeEnum
+  TrinoParametersSpec,
+  TrinoParametersSpecAwsAuthenticationModeEnum,
+  TrinoParametersSpecTrinoEngineTypeEnum
 } from '../../../../api';
-import JdbcPropertiesView from '../JdbcProperties';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import Select from '../../../Select';
-import clsx from 'clsx';
+import SectionWrapper from '../../SectionWrapper';
+import JdbcPropertiesView from '../JdbcProperties';
 
 interface ITrinoConnectionProps {
   trino?: TrinoParametersSpec;
@@ -49,6 +49,7 @@ const TrinoConnection = ({
   nameOfDatabase,
   onNameOfDatabaseChange
 }: ITrinoConnectionProps) => {
+  const [selectedInput, setSelectedInput] = useState<number | string>();
   const handleChange = (obj: Partial<TrinoParametersSpec>) => {
     if (!onChange) return;
     onChange({
@@ -85,6 +86,8 @@ const TrinoConnection = ({
                 String(value).replace(/\w/, (x) => x.toUpperCase())
               );
         }}
+        onClickValue={setSelectedInput}
+        selectedMenu={selectedInput}
       />
       {trino?.trino_engine_type ===
         TrinoParametersSpecTrinoEngineTypeEnum.trino && (
@@ -131,6 +134,8 @@ const TrinoConnection = ({
             onChange={(value) => {
               handleChange({ aws_authentication_mode: value });
             }}
+            onClickValue={setSelectedInput}
+            selectedMenu={selectedInput}
           />
           {trino?.aws_authentication_mode ===
             TrinoParametersSpecAwsAuthenticationModeEnum.iam && (
@@ -156,8 +161,12 @@ const TrinoConnection = ({
             label="Athena Region"
             className="mb-4"
             value={trino?.athena_region}
-            placeholder={trino?.aws_authentication_mode === 
-              TrinoParametersSpecAwsAuthenticationModeEnum.default_credentials ? 'Use the value from the ".credentials/AWS_default_config" DQOps shared credential file' : ''}
+            placeholder={
+              trino?.aws_authentication_mode ===
+              TrinoParametersSpecAwsAuthenticationModeEnum.default_credentials
+                ? 'Use the value from the ".credentials/AWS_default_config" DQOps shared credential file'
+                : ''
+            }
             onChange={(value) => handleChange({ athena_region: value })}
           />
           <FieldTypeInput

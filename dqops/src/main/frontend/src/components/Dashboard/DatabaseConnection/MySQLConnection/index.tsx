@@ -1,19 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 
+import clsx from 'clsx';
 import {
   MysqlParametersSpec,
-  MysqlParametersSpecSslmodeEnum,
-  SingleStoreDbParametersSpecLoadBalancingModeEnum,
-  SharedCredentialListModel,
   MysqlParametersSpecMysqlEngineTypeEnum,
-  SingleStoreDbParametersSpec
+  MysqlParametersSpecSslmodeEnum,
+  SharedCredentialListModel,
+  SingleStoreDbParametersSpecLoadBalancingModeEnum
 } from '../../../../api';
-import JdbcPropertiesView from '../JdbcProperties';
+import Checkbox from '../../../Checkbox';
+import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import Select from '../../../Select';
 import SectionWrapper from '../../SectionWrapper';
-import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
-import Checkbox from '../../../Checkbox';
-import clsx from 'clsx';
+import JdbcPropertiesView from '../JdbcProperties';
 
 interface IMySQLConnectionProps {
   mysql?: MysqlParametersSpec;
@@ -82,6 +81,7 @@ const MySQLConnection = ({
   nameOfDatabase,
   onNameOfDatabaseChange
 }: IMySQLConnectionProps) => {
+  const [selectedInput, setSelectedInput] = useState<number | string>();
   const handleChange = (obj: Partial<MysqlParametersSpec>) => {
     if (!onChange) return;
     onChange({
@@ -119,6 +119,8 @@ const MySQLConnection = ({
                 String(value).replace(/\w/, (x) => x.toUpperCase())
               );
         }}
+        onClickValue={setSelectedInput}
+        selectedMenu={selectedInput}
       />
 
       {mysql?.mysql_engine_type ===
@@ -154,6 +156,8 @@ const MySQLConnection = ({
                 single_store_db_parameters_spec: { load_balancing_mode: value }
               })
             }
+            onClickValue={setSelectedInput}
+            selectedMenu={selectedInput}
           />
           <FieldTypeInput
             data={sharedCredentials}
@@ -219,6 +223,8 @@ const MySQLConnection = ({
           className="mb-4"
           value={mysql?.sslmode}
           onChange={(value) => handleChange({ sslmode: value })}
+          onClickValue={setSelectedInput}
+          selectedMenu={selectedInput}
         />
       )}
 

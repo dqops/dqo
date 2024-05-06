@@ -108,7 +108,7 @@ const ColumnPartitionedChecksView = () => {
 
   const onUpdate = async () => {
     if (tab === 'daily') {
-      if (!dailyPartitionedChecks) return;
+      if (!dailyPartitionedChecks || !isUpdatedDailyPartitionedChecks) return;
 
       await dispatch(
         updateColumnDailyPartitionedChecks(
@@ -133,7 +133,7 @@ const ColumnPartitionedChecksView = () => {
         )
       );
     } else {
-      if (!monthlyPartitionedChecks) return;
+      if (!monthlyPartitionedChecks || !isUpdatedMonthlyPartitionedChecks) return;
 
       await dispatch(
         updateColumnMonthlyPartitionedChecks(

@@ -114,6 +114,7 @@ export const ROUTES = {
     COLUMN_PARTITIONED_FILTER: '/:checkTypes/connection/:connection/schema/:schema/table/:table/columns/:column/partitioned/:timePartitioned/:category/:checkName',
     QUALITY_CHECKS: '/:checkTypes',
     HOME: '/home',
+    TABLES: '/tables',
     DASHBOARDS: '/dashboards',
     CREATE: '/:checkTypes/create',
     DEFINITIONS: '/definitions',

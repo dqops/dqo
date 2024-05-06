@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { BigQueryAuthenticationMode } from '../../../../shared/enums/bigquery.enum';
-import Select from '../../../Select';
-import SectionWrapper from '../../SectionWrapper';
+import { useSelector } from 'react-redux';
 import {
   BigQueryParametersSpec,
   BigQueryParametersSpecAuthenticationModeEnum,
   BigQueryParametersSpecJobsCreateProjectEnum,
   SharedCredentialListModel
 } from '../../../../api';
+import { IRootState } from '../../../../redux/reducers';
+import { BigQueryAuthenticationMode } from '../../../../shared/enums/bigquery.enum';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import FieldTypeTextarea from '../../../Connection/ConnectionView/FieldTypeTextarea';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../../redux/reducers';
+import Select from '../../../Select';
+import SectionWrapper from '../../SectionWrapper';
 
 const options = [
   {
@@ -41,6 +41,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
   sharedCredentials
 }) => {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
+  const [selectedInput, setSelectedInput] = useState<number | string>();
   const handleChange = (obj: Partial<BigQueryParametersSpec>) => {
     if (!onChange) return;
 
@@ -49,6 +50,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
       ...obj
     });
   };
+
   return (
     <SectionWrapper title="BigQuery connection parameters" className="mb-4">
       <FieldTypeInput
@@ -70,6 +72,8 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         value={bigquery?.authentication_mode}
         onChange={(value) => handleChange({ authentication_mode: value })}
         disabled={userProfile.can_manage_data_sources !== true}
+        onClickValue={setSelectedInput}
+        selectedMenu={selectedInput}
       />
       <Select
         label="GCP project to create BigQuery jobs, where the authenticated principal has bigquery.jobs.create permission"
@@ -85,6 +89,8 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         value={bigquery?.jobs_create_project}
         onChange={(value) => handleChange({ jobs_create_project: value })}
         disabled={userProfile.can_manage_data_sources !== true}
+        onClickValue={setSelectedInput}
+        selectedMenu={selectedInput}
       />
       <FieldTypeInput
         className="mb-4"

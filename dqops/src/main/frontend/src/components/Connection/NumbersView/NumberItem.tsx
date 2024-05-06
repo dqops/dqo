@@ -1,6 +1,6 @@
+import { IconButton } from '@material-tailwind/react';
 import React, { ChangeEvent } from 'react';
 import Input from '../../Input';
-import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../SvgIcon';
 
 interface INumberItemProps {
@@ -22,7 +22,7 @@ const NumberItem = ({
     if (!e.target.value) {
       onRemove(idx);
     }
-    if (/^[1-9][0-9]*$/.test(e.target.value)) {
+    if (/^[0-9][0-9]*$/.test(e.target.value)) {
       onChange(idx, +e.target.value);
     }
   };
@@ -33,7 +33,7 @@ const NumberItem = ({
         <Input
           value={integer}
           onChange={handleChange}
-          error={!isLast && !integer}
+          error={!isLast && !integer && integer !== 0}
         />
       </td>
       <td className="px-8 min-w-20 py-2">

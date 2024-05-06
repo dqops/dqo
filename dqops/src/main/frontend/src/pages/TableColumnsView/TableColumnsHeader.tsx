@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SvgIcon from '../../components/SvgIcon';
 import { MyData, labels } from './TableColumnsConstans';
 import { handleSorting } from './TableColumnsUtils';
@@ -15,12 +15,36 @@ export default function TableColumnsHeader({
   updateData
 }: ITableColumnsHeaderProps) {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-
+  const [headerItems, setHeaderItems] = useState<Array<string>>([]);
+  const getHeaderitemsBasedOnWidth = () => {
+    const width = window.innerWidth;
+    const excludedItems : string[]= []
+    if (width < 1700) {
+      excludedItems.push('Nulls count', 'Max value', 'Min value', 'Scale', 'Length')
+    } else if (width < 1800) {
+      excludedItems.push('Nulls count', 'Max value', 'Min value', 'Scale')
+    } 
+    else if (width < 1900) {
+      excludedItems.push('Nulls count', 'Max value', 'Min value')
+    } 
+    else if (width < 2000) {
+      excludedItems.push('Nulls count', 'Max value')
+    } 
+    else if (width < 2200) {
+      excludedItems.push('Nulls count')
+    } 
+    const arr = labels.filter((item) => !excludedItems.includes(item));
+    setHeaderItems(arr);
+    return arr;
+  }
+  useEffect(() => {
+    getHeaderitemsBasedOnWidth()
+  }, [window.innerWidth])
   return (
     <thead className="text-sm">
       <tr>
         <th className="border-b border-gray-100 " style={{ width: '6px' }}></th>
-        {labels.map((x, index) => (
+        {headerItems.map((x, index) => (
           <th
             className="border-b border-gray-100 text-left px-4 py-2 cursor-pointer"
             key={index}

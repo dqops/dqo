@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import {
   CheckCurrentDataQualityStatusModelCurrentSeverityEnum,
   ColumnCurrentDataQualityStatusModel,
+  ColumnListModel,
   ColumnStatisticsModel,
   DataGroupingConfigurationSpec
 } from '../../api';
@@ -43,6 +44,18 @@ const rewriteDimensions = (columnStatus : { [key: string]: ColumnCurrentDataQual
   return obj;
 }
 
+const prepareLabel = (label: string | undefined) => {
+  if (!label) return;
+  if (label.length > 20) {
+    return label.slice(0, 20) + '...';
+  }
+  return label;
+};
+
+const getLabelsOverview = (labels: string[]) => {
+  return labels.map((x) => prepareLabel(x)).join(',');
+};
+
 const TableColumns = ({
   connectionName,
   schemaName,
@@ -63,6 +76,7 @@ const TableColumns = ({
   );
   const [shouldResetCheckboxes, setShouldResetCheckboxes] = useState(false);
   const [status, setStatus] = useState<{ [key: string]: ColumnCurrentDataQualityStatusModel }>({})
+  const [columns, setColumns] = useState<ColumnListModel[]>([])
 
   const handleButtonClick = (name: string) => {
     setObjectStates((prevStates) => ({
@@ -166,7 +180,8 @@ const TableColumns = ({
         importedDatatype: typeData?.[i],
         columnHash: Number(hashData?.[i]),
         isColumnSelected: false,
-        dimentions: rewriteDimensions(status)[columnNameData?.[i] ?? '']
+        dimentions: rewriteDimensions(status)[columnNameData?.[i] ?? ''],
+        labels: getLabelsOverview(columns[i].labels ?? [])
       };
 
       dataArray.push(newData);
@@ -266,7 +281,8 @@ const TableColumns = ({
   }
 
   useEffect(() => {
-    CheckResultApi.getTableDataQualityStatus(connectionName, schemaName, tableName, undefined, undefined, checkTypes === CheckTypes.PROFILING ? true : undefined).then((res) =>  setStatus(res.data.columns ?? {}))
+    CheckResultApi.getTableDataQualityStatus(connectionName, schemaName, tableName, undefined, undefined, checkTypes === CheckTypes.PROFILING ? true : undefined).then((res) =>  setStatus(res.data.columns ?? {}));
+    ColumnApiClient.getColumns(connectionName, schemaName, tableName).then((res) => setColumns(res.data))
   }, [connectionName, schemaName, tableName]);
 
   return (
