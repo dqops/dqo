@@ -52,30 +52,18 @@ public class AzureTablesLister extends RemoteTablesLister {
     private List<String> listBucketObjects(BlobContainerClient blobContainerClient, URI uri) {
         List<String> paths = new ArrayList<>();
 
-        if(uri.getPath().isEmpty()){
-            return paths;
-        }
-
-        String prefixRaw = uri.getPath().substring(1);
-        String folderPrefix = prefixRaw + (prefixRaw.equals("") || prefixRaw.endsWith("/") ? "" : "/");
+        String prefixRaw = uri.getPath();
+        String folderPrefix = prefixRaw.isEmpty() ? prefixRaw : prefixRaw.substring(1);
 
         try {
-
             ListBlobsOptions listBlobsOptions = new ListBlobsOptions().setPrefix(folderPrefix);
-
             List<BlobItem> blobItems = blobContainerClient
                     .listBlobsByHierarchy("/", listBlobsOptions, null)
                     .stream()
                     .collect(Collectors.toList());
-
             for (BlobItem blobItem : blobItems) {
-//                System.out.println(blobItem.getName());
                 paths.add(blobItem.getName());
             }
-//            paths.add(content.key());
-//            for (CommonPrefix commonPrefix : response.commonPrefixes()) {
-//                paths.add(commonPrefix.prefix());
-//            }
         } catch (Exception e) {
             log.error(e.getMessage());
         }

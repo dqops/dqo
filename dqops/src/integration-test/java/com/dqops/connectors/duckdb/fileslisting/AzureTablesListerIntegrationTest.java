@@ -5,6 +5,7 @@ import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.core.secrets.DevelopmentCredentialsSecretNames;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderImpl;
 import com.dqops.utils.BeanFactoryObjectMother;
@@ -33,7 +34,8 @@ class AzureTablesListerIntegrationTest extends BaseTest {
         this.sut = (AzureTablesLister)TablesListerProvider.createTablesLister(DuckdbStorageType.azure);
 
         this.duckdbParametersSpec = new DuckdbParametersSpec();
-        duckdbParametersSpec.setPassword(secretValueProvider.expandValue("${DQOPS_TEST_AZURE_STORAGE_CONNECTION_STRING}", secretValueLookupContext));
+        duckdbParametersSpec.setPassword(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_STORAGE_CONNECTION_STRING, secretValueLookupContext));
+
         duckdbParametersSpec.setFilesFormatType(DuckdbFilesFormatType.csv);
     }
 

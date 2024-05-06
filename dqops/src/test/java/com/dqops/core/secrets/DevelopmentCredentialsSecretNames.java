@@ -84,4 +84,9 @@ public class DevelopmentCredentialsSecretNames {
      */
     public static final String REDSHIFT_PASSWORD = "${sm://redshift-password}";
 
+    /**
+     * Property to retrieve the Azure Blob Storage connection string.
+     */
+    public static final String AZURE_STORAGE_CONNECTION_STRING = "${sm://azure-storage-connection-string}";
+
 }
