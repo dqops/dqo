@@ -160,15 +160,6 @@ public class DatabricksConnectionProvider extends AbstractSqlConnectionProvider 
 
             databricksSpec.setHttpPath(terminalReader.prompt("Databricks http path (--databricks-http-path)", "${DATABRICKS_HTTP_PATH}", true));
         }
-
-        if (Strings.isNullOrEmpty(databricksSpec.getAccessToken())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--databricks-access-token");
-            }
-
-            databricksSpec.setAccessToken(terminalReader.prompt("Databricks access token (--databricks-access-token)", "${DATABRICKS_ACCESS_TOKEN}", true));
-        }
-
     }
 
     /**

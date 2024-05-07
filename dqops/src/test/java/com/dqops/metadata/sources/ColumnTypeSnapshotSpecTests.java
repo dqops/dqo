@@ -55,10 +55,10 @@ public class ColumnTypeSnapshotSpecTests extends BaseTest {
     }
 
     @Test
-    void fromType_whenTypeWithUnparseableLength_thenReturnsColumnTypeNameAsIs() {
+    void fromType_whenTypeWithUnparseableLength_thenReturnsColumnTypeCorrectly() {
         ColumnTypeSnapshotSpec spec = ColumnTypeSnapshotSpec.fromType("VARCHAR(MAX)");
         Assertions.assertNotNull(spec);
-        Assertions.assertEquals("VARCHAR(MAX)", spec.getColumnType());
+        Assertions.assertEquals("VARCHAR", spec.getColumnType());
         Assertions.assertNull(spec.getLength());
         Assertions.assertNull(spec.getPrecision());
         Assertions.assertNull(spec.getScale());

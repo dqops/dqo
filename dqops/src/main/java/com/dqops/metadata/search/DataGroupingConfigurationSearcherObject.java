@@ -22,6 +22,7 @@ import org.apache.parquet.Strings;
 /**
  * Helper object used when a search visitor is traversing nodes to find target checks to execute, given the data grouping configuration hierarchy tags.
  */
+@Deprecated
 public class DataGroupingConfigurationSearcherObject {
 	private DataGroupingConfigurationSpecMap tableDataGroupingConfigurations;
 	private String defaultDataGrouping;

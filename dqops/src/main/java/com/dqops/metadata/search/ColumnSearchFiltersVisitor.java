@@ -138,12 +138,9 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
     public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
         String schemaTableName = this.filters.getSchemaTableName();
 
-        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         labelsSearcherObject.setTableLabels(tableWrapper.getSpec().getLabels());
-        dataGroupingConfigurationSearcherObject.setTableDataGroupingConfigurations(tableWrapper.getSpec().getGroupings());
-        dataGroupingConfigurationSearcherObject.setDefaultDataGrouping(tableWrapper.getSpec().getDefaultGroupingName());
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -171,12 +168,9 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
     public TreeNodeTraversalResult accept(TableSpec tableSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
-        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
-
         labelsSearcherObject.setTableLabels(tableSpec.getLabels());
-        dataGroupingConfigurationSearcherObject.setTableDataGroupingConfigurations(tableSpec.getGroupings());
-        dataGroupingConfigurationSearcherObject.setDefaultDataGrouping(tableSpec.getDefaultGroupingName());
+
         if (enabledFilter != null) {
             if (enabledFilter && tableSpec.isDisabled()) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
@@ -227,7 +221,6 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
     public TreeNodeTraversalResult accept(ColumnSpec columnSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
-        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
@@ -250,8 +243,6 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
 
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
 
-        DataGroupingConfigurationSpec overriddenDataGroupingConfiguration =
-                dataGroupingConfigurationSearcherObject.getDefaultGroupingConfiguration();
         LabelSetSpec overriddenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getColumnLabels() != null) {
@@ -266,9 +257,6 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
             overriddenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
-        if (!DataStreamsTagsSearchMatcher.matchAllColumnDataGroupingTags(this.filters, overriddenDataGroupingConfiguration)) {
-            return TreeNodeTraversalResult.SKIP_CHILDREN;
-        }
         if (!LabelsSearchMatcher.matchColumnLabels(this.filters, overriddenLabels)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
