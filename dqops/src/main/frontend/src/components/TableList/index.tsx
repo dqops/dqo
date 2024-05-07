@@ -130,7 +130,7 @@ export default function index({
 
   const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
   const headerItems = [
-    checkTypes && connection && schema
+    checkTypes && connection
       ? undefined
       : {
           label: 'Connection',
