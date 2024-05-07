@@ -19,11 +19,11 @@ export default function ConnectionTables() {
   const [tables, setTables] = useState<TableListModel[]>([]);
   const [filters, setFilters] = useState<any>({
     page: 1,
-    limit: 50,
+    pageSize: 50,
     checkType: checkTypes
   });
-  const [table, setTable] = useState('');
-  const [schema, setSchema] = useState('');
+  const [table, setTable] = useState<string>();
+  const [schema, setSchema] = useState<string>();
   const [labels, setLabels] = useState<TLabel[]>([]);
 
   const onChangeFilters = (obj: Partial<any>) => {
@@ -47,7 +47,8 @@ export default function ConnectionTables() {
   };
 
   const getTables = async (labels: string[] = []) => {
-    const addPrefix = (str: string) => {
+    const addPrefix = (str?: string) => {
+      if (!str) return undefined;
       return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
     };
     return SearchApiClient.findTables(
