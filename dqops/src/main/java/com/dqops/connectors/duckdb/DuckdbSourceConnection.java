@@ -280,10 +280,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         this.getConnectionSpec().setDuckdb(duckdbSpecCloned);
 
         try {
-            // todo: used for azure only, aws should be updated to use the secret manager as well
-            //  (search for makeFilePathsAccessible which solves secrets for 0.9.2 version for aws)
-             DuckdbSecretManager.getInstance().ensureCreated(this.getConnectionSpec(), this);
-
+            DuckdbSecretManager.getInstance().ensureCreated(this.getConnectionSpec(), this);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
