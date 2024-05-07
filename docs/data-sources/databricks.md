@@ -124,7 +124,6 @@ Databricks catalog name (--databricks-catalog) [${DATABRICKS_CATALOG}]: samples
 Databricks user name (--databricks-user) [${DATABRICKS_USER}]: 
 Databricks user password (--databricks-password) [${DATABRICKS_PASSWORD}]: 
 Databricks http path (--databricks-http-path) [${DATABRICKS_HTTP_PATH}]: /sql/1.0/warehouses/<warehouse_id>
-Databricks access token (--databricks-access-token) [${DATABRICKS_ACCESS_TOKEN}]: <access_token>
 Connection connection1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
