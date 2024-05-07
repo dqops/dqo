@@ -17,8 +17,7 @@ package com.dqops.connectors.duckdb;
 
 import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
-import com.dqops.connectors.duckdb.fileslisting.AwsTablesLister;
-import com.dqops.connectors.duckdb.fileslisting.LocalSystemTablesLister;
+import com.dqops.connectors.duckdb.fileslisting.*;
 import com.dqops.connectors.duckdb.schema.DuckDBDataTypeParser;
 import com.dqops.connectors.duckdb.schema.DuckDBField;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
@@ -275,16 +274,14 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                         duckdbSpecCloned.fillSpecWithDefaultAwsConfig(secretValueLookupContext);
                     }
                     break;
+                    // todo: add default azure credentials
             }
         }
 
         this.getConnectionSpec().setDuckdb(duckdbSpecCloned);
 
         try {
-            // todo: can be used with duckdb 0.10 when aws extension is fixed,
-            //  then search for makeFilePathsAccessible which solves secrets for 0.9.2 version
-//             DuckdbSecretManager.getInstance().ensureCreated(connectionSpecCloned, this);
-
+            DuckdbSecretManager.getInstance().ensureCreated(this.getConnectionSpec(), this);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -297,7 +294,8 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     private List<String> getAvailableExtensions(){
         return Arrays.asList(
                 "httpfs",
-                "aws"
+                "aws",
+                "azure"
         );
     }
 
@@ -340,18 +338,9 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
 
         DuckdbStorageType storageType = duckdb.getStorageType();
-        if(storageType == null || storageType.equals(DuckdbStorageType.local)){
-            List<SourceTableModel> sourceTableModels = LocalSystemTablesLister.listTables(duckdb, schemaName);
-            return sourceTableModels;
-        }
-
-        switch (storageType){
-            case s3:
-                List<SourceTableModel> sourceTableModels = AwsTablesLister.listTables(duckdb, schemaName);
-                return sourceTableModels;
-            default:
-                throw new RuntimeException("This type of secretsType is not supported: " + storageType);
-        }
+        TablesLister remoteTablesLister = TablesListerProvider.createTablesLister(storageType);
+        List<SourceTableModel> sourceTableModels = remoteTablesLister.listTables(duckdb, schemaName);
+        return sourceTableModels;
     }
 
     /**

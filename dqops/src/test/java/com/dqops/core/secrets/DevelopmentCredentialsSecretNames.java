@@ -84,4 +84,24 @@ public class DevelopmentCredentialsSecretNames {
      */
     public static final String REDSHIFT_PASSWORD = "${sm://redshift-password}";
 
+    /**
+     * Property to retrieve the Azure Blob Storage connection string.
+     */
+    public static final String AZURE_STORAGE_CONNECTION_STRING = "${sm://azure-storage-connection-string}";
+
+    /**
+     * Property to retrieve the AWS Access Key ID to testing storage.
+     */
+    public static final String AWS_S3_ACCESS_KEY_ID = "${sm://aws-s3-access-key-id}";
+
+    /**
+     * Property to retrieve the AWS Secret Access Key to testing storage.
+     */
+    public static final String AWS_S3_SECRET_ACCESS_KEY = "${sm://aws-s3-secret-access-key}";
+
+    /**
+     * Property to retrieve the AWS Region to testing storage.
+     */
+    public static final String AWS_S3_REGION = "${sm://aws-s3-region}";
+
 }

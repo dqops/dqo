@@ -48,12 +48,25 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
                 if(pathWithInvalidPrefix.isPresent()){
                     throw new RuntimeException("S3 path for the schema " + pathWithInvalidPrefix.get().getKey() + " must start with " + AwsConstants.S3_URI_PREFIX);
                 }
+            }
 
-                tables = AwsTablesLister.listTables(duckdbParametersSpec, schema);
+            if(storageType != null && storageType.equals(DuckdbStorageType.azure)) {
+
+                Optional<Map.Entry<String, String>> pathWithInvalidPrefix = directories.entrySet().stream()
+                        .filter(x -> !x.getValue().toLowerCase().startsWith(AzureConstants.BLOB_STORAGE_URI_PREFIX)
+                            && !x.getValue().toLowerCase().startsWith(AzureConstants.DATA_LAKE_STORAGE_URI_PREFIX)
+                        )
+                        .findAny();
+
+                if(pathWithInvalidPrefix.isPresent()){
+                    throw new RuntimeException("Azure path for the schema " + pathWithInvalidPrefix.get().getKey()
+                            + " must start with " + AzureConstants.BLOB_STORAGE_URI_PREFIX
+                            + " or " + AzureConstants.DATA_LAKE_STORAGE_URI_PREFIX);
+                }
             }
-            else {
-                tables = LocalSystemTablesLister.listTables(duckdbParametersSpec, schema);
-            }
+
+            TablesLister tablesLister = TablesListerProvider.createTablesLister(storageType);
+            tables = tablesLister.listTables(duckdbParametersSpec, schema);
 
             if(tables == null || tables.isEmpty()){
                 throw new RuntimeException("No files found in the path " + directories.get(schema));

@@ -35,15 +35,15 @@ const storageTypeOptions = [
   {
     label: 'AWS S3',
     value: DuckdbParametersSpecStorageTypeEnum.s3
-  }
+  },
+  {
+    label: 'Azure Blob Storage',
+    value: DuckdbParametersSpecStorageTypeEnum.azure
+  },
   // todo: uncomment below when implemented
   // {
   //   label: 'Google Cloud Storage',
   //   value: DuckdbParametersSpecStorageTypeEnum.gcs
-  // },
-  // {
-  //   label: 'Azure Blob Storage',
-  //   value: DuckdbParametersSpecStorageTypeEnum.azure
   // },
   // {
   //   label: 'Cloudflare R2',
@@ -63,6 +63,11 @@ const awsAuthenticationOptions = [
     value: DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials
   }
 ];
+
+enum StoragePrefixes {
+  S3 = "s3://",
+  AZ = "az://",
+}
 
 const DuckdbConnection = ({
   duckdb,
@@ -119,35 +124,26 @@ const DuckdbConnection = ({
     const directories = { ...copiedDatabase?.directories };
 
     Object.keys(directories ?? {}).forEach((key) => {
-      if (directories[key].length && directories[key] !== 's3://') {
+
+      if (directories[key].length && directories[key] !== StoragePrefixes.S3 && directories[key] !== StoragePrefixes.AZ) {
         return;
       }
+
       if (storage_type === DuckdbParametersSpecStorageTypeEnum.s3) {
-        directories[key] = 's3://';
+        directories[key] = StoragePrefixes.S3;
+      } else if (storage_type === DuckdbParametersSpecStorageTypeEnum.azure) {
+        directories[key] = StoragePrefixes.AZ;
       } else {
         directories[key] = '';
       }
+
     });
     setCopiedDatabase((prev) => ({ ...prev, directories, storage_type }));
   };
 
-  return (
-    <SectionWrapper
-      title="DuckDB connection parameters"
-      className="mb-4 text-sm"
-    >
-      <Select
-        label="Files location"
-        options={storageTypeOptions}
-        className="mb-4 text-sm"
-        value={copiedDatabase?.storage_type}
-        onChange={changeStorageTypeDirectoryPrefixes}
-        onClickValue={setSelectedInput}
-        selectedMenu={selectedInput}
-      />
-
-      {copiedDatabase?.storage_type ===
-        DuckdbParametersSpecStorageTypeEnum.s3 && (
+  const awsStorageForm = (): JSX.Element => {
+    return (
+      <>
         <Select
           label="AWS authentication mode"
           options={awsAuthenticationOptions}
@@ -162,11 +158,8 @@ const DuckdbConnection = ({
           onClickValue={setSelectedInput}
           selectedMenu={selectedInput}
         />
-      )}
 
-      {copiedDatabase?.storage_type ===
-        DuckdbParametersSpecStorageTypeEnum.s3 &&
-        copiedDatabase?.aws_authentication_mode ===
+        {copiedDatabase?.aws_authentication_mode ===
           DuckdbParametersSpecAwsAuthenticationModeEnum.iam && (
           <>
             <FieldTypeInput
@@ -201,29 +194,85 @@ const DuckdbConnection = ({
           </>
         )}
 
-      {copiedDatabase?.storage_type ===
-        DuckdbParametersSpecStorageTypeEnum.s3 &&
-        copiedDatabase?.aws_authentication_mode ===
+        {copiedDatabase?.aws_authentication_mode ===
           DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials && (
+          <FieldTypeInput
+            data={sharedCredentials}
+            label="Region"
+            className="mb-4 text-sm"
+            maskingType="region"
+            value={copiedDatabase?.region}
+            placeholder={
+              duckdb?.aws_authentication_mode ===
+              DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials
+                ? 'Use the value from the ".credentials/AWS_default_config" DQOps shared credential file'
+                : ''
+            }
+            onChange={(value) =>
+              setCopiedDatabase((prev) => ({ ...prev, region: value }))
+            }
+          />
+        )}
+      </>
+    )
+  }
+
+  const azureStorageForm = (): JSX.Element => {
+    return (
+      <>
+        {/* <Select
+          label="AWS authentication mode"
+          options={awsAuthenticationOptions}
+          className="mb-4"
+          value={copiedDatabase?.aws_authentication_mode}
+          onChange={(value) => {
+            setCopiedDatabase((prev) => ({
+              ...prev,
+              aws_authentication_mode: value
+            }));
+          }}
+          onClickValue={setSelectedInput}
+          selectedMenu={selectedInput}
+        /> */}
+{/* 
+        {copiedDatabase?.aws_authentication_mode ===
+          DuckdbParametersSpecAwsAuthenticationModeEnum.iam && ( */}
           <>
             <FieldTypeInput
               data={sharedCredentials}
-              label="Region"
+              label="Connection string"
               className="mb-4 text-sm"
-              maskingType="region"
-              value={copiedDatabase?.region}
-              placeholder={
-                duckdb?.aws_authentication_mode ===
-                DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials
-                  ? 'Use the value from the ".credentials/AWS_default_config" DQOps shared credential file'
-                  : ''
-              }
+              maskingType="password"
+              value={copiedDatabase?.password}
               onChange={(value) =>
-                setCopiedDatabase((prev) => ({ ...prev, region: value }))
+                setCopiedDatabase((prev) => ({ ...prev, password: value }))
               }
             />
           </>
-        )}
+        {/* )} */}
+        
+      </>
+    )
+  }
+
+  return (
+    <SectionWrapper
+      title="DuckDB connection parameters"
+      className="mb-4 text-sm"
+    >
+      <Select
+        label="Files location"
+        options={storageTypeOptions}
+        className="mb-4 text-sm"
+        value={copiedDatabase?.storage_type}
+        onChange={changeStorageTypeDirectoryPrefixes}
+        onClickValue={setSelectedInput}
+        selectedMenu={selectedInput}
+      />
+
+      {copiedDatabase?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 && awsStorageForm()}
+
+      {copiedDatabase?.storage_type === DuckdbParametersSpecStorageTypeEnum.azure && azureStorageForm()}
 
       <FileFormatConfiguration
         fileFormatType={
@@ -261,6 +310,7 @@ const DuckdbConnection = ({
       />
     </SectionWrapper>
   );
+
 };
 
 export default DuckdbConnection;

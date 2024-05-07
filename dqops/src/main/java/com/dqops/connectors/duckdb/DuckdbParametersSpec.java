@@ -477,6 +477,9 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
                 }
                 fillSpecWithDefaultAwsConfig(secretValueLookupContext);
                 break;
+
+             // todo: azure credentials
+
             default:
                 throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + storageType);
         }
