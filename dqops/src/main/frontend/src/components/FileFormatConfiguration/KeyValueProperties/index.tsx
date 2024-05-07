@@ -1,12 +1,13 @@
 import { Tooltip } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
-import { SharedCredentialListModel } from '../../../api';
+import { DuckdbParametersSpecStorageTypeEnum, SharedCredentialListModel } from '../../../api';
 import SvgIcon from '../../SvgIcon';
 import KeyValuePropertyItem from './KeyValuePropertyItem';
 
 interface IKeyValueProperties {
   properties?: { [key: string]: string };
   onChange: (properties: { [key: string]: string }) => void;
+  storageType?: DuckdbParametersSpecStorageTypeEnum;
   sharedCredentials?: SharedCredentialListModel[];
   refetchDirectoriesIndicator?: any;
 }
@@ -33,6 +34,7 @@ function convertArrayToObject(array: { [key: string]: string }[]): {
 const KeyValueProperties = ({
   properties,
   onChange,
+  storageType,
   sharedCredentials,
   refetchDirectoriesIndicator
 }: IKeyValueProperties) => {
@@ -100,6 +102,8 @@ const KeyValueProperties = ({
             key={index}
             index={index}
             properties={arr}
+            valuePlaceholder={storageType === DuckdbParametersSpecStorageTypeEnum.s3 ? "s3://bucketname" : 
+              storageType === DuckdbParametersSpecStorageTypeEnum.local ? "/path/to/folder" : undefined }
             onChange={onChangeArr}
             sharedCredentials={sharedCredentials}
           />

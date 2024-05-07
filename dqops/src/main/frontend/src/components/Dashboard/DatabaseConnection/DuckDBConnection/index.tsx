@@ -248,6 +248,7 @@ const DuckdbConnection = ({
             }));
           }}
           sharedCredentials={sharedCredentials}
+          storageType={copiedDatabase?.storage_type}
           refetchDirectoriesIndicator={refetchDirectoriesIndicator}
         />
       </FileFormatConfiguration>

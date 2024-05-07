@@ -11,13 +11,15 @@ interface IKeyValuePropertyItemProps {
   onChange: (properties: { [key: string]: string }[]) => void;
   sharedCredentials?: SharedCredentialListModel[];
   index: number;
+  valuePlaceholder?: string;
 }
 
 const KeyValuePropertyItem = ({
   properties,
   onChange,
   sharedCredentials,
-  index
+  index,
+  valuePlaceholder
 }: IKeyValuePropertyItemProps) => {
   const value = Object.values(properties[index])[0];
   const key = Object.keys(properties[index])[0];
@@ -63,6 +65,7 @@ const KeyValuePropertyItem = ({
           value={value}
           onChange={(val) => onChangeValue(key, val)}
           data={sharedCredentials}
+          placeholder={valuePlaceholder}
           credential={true}
           inputClassName={isValueRed ? 'border border-red-500' : ''}
         />
