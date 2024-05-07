@@ -12,9 +12,10 @@ type TSearchFilters = {
 };
 
 type TLabel = LabelModel & { clicked: boolean };
+type TTableWithSchema = TableListModel & { schema?: string };
 
 export default function GlobalTables() {
-  const [tables, setTables] = useState<TableListModel[]>([]);
+  const [tables, setTables] = useState<TTableWithSchema[]>([]);
   const [filters, setFilters] = useState<any>({ page: 1, limit: 50 });
   const [searchFilters, setSearchFilters] = useState<TSearchFilters>({});
   const [labels, setLabels] = useState<TLabel[]>([]);
@@ -56,7 +57,14 @@ export default function GlobalTables() {
       filters.page,
       filters.pageSize,
       filters.checkType
-    ).then((res) => setTables(res.data));
+    ).then((res) => {
+      const arr: TTableWithSchema[] = [];
+      res.data.forEach((item) => {
+        const jItem = { ...item, schema: item.target?.schema_name };
+        arr.push(jItem);
+      });
+      setTables(arr);
+    });
   };
 
   useEffect(() => {
