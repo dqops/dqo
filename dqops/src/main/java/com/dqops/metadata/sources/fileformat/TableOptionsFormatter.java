@@ -2,6 +2,7 @@ package com.dqops.metadata.sources.fileformat;
 
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnSpecMap;
+import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.google.common.base.CaseFormat;
 
@@ -81,7 +82,7 @@ public class TableOptionsFormatter {
      */
     public void formatColumns(String fieldName, TableSpec tableSpec){
 
-        if(tableSpec != null && tableSpec.getColumns() != null && !tableSpec.getColumns().isEmpty()){
+        if (tableSpec != null && tableSpec.getColumns() != null && !tableSpec.getColumns().isEmpty()){
             ColumnSpecMap columnSpecMap = tableSpec.getColumns();
 
             sourceTable.append(commaNewLineIdentTwo);
@@ -92,8 +93,14 @@ public class TableOptionsFormatter {
             sourceTable.append("\n    '").append(firstEntry.getKey()).append("': '").append(firstColumnType).append("'");
 
             columnSpecMap.entrySet().stream().skip(1).forEachOrdered(columnSpecEntry -> {
-                String columnType = columnSpecEntry.getValue().getTypeSnapshot().getColumnType();
-                sourceTable.append(",\n    '").append(columnSpecEntry.getKey()).append("': '").append(columnType).append("'");
+                ColumnTypeSnapshotSpec typeSnapshot = columnSpecEntry.getValue().getTypeSnapshot();
+                String columnType = typeSnapshot.getColumnType();
+                String columnName = columnSpecEntry.getKey();
+
+                if (typeSnapshot.getNested() != null && typeSnapshot.getNested() || columnName.indexOf('.') > 0) {
+                    return;
+                }
+                sourceTable.append(",\n    '").append(columnName).append("': '").append(columnType).append("'");
             });
             sourceTable.append("\n  }");
         }

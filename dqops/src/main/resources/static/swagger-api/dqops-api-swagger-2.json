@@ -30158,6 +30158,10 @@
           "type" : "integer",
           "format" : "int32",
           "description" : "Scale of a numeric (decimal) data type."
+        },
+        "nested" : {
+          "type" : "boolean",
+          "description" : "This field is a nested field inside another STRUCT. It is used to identify nested fields in JSON files."
         }
       }
     },
