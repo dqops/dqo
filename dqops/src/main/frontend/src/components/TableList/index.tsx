@@ -169,7 +169,7 @@ export default function index({
   return (
     <>
       <div className="flex">
-        <div className="w-250">
+        <div className="w-[280px]">
           <SectionWrapper
             title="Filter by labels"
             className="text-sm w-[250px] mx-4 mb-4 mt-6 "
