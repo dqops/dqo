@@ -274,6 +274,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                         duckdbSpecCloned.fillSpecWithDefaultAwsConfig(secretValueLookupContext);
                     }
                     break;
+                    // todo: add default azure credentials
             }
         }
 
