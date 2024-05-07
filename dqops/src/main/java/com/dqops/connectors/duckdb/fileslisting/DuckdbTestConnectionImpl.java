@@ -54,7 +54,8 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
 
                 Optional<Map.Entry<String, String>> pathWithInvalidPrefix = directories.entrySet().stream()
                         .filter(x -> !x.getValue().toLowerCase().startsWith(AzureConstants.BLOB_STORAGE_URI_PREFIX)
-                            && !x.getValue().toLowerCase().startsWith(AzureConstants.DATA_LAKE_STORAGE_URI_PREFIX))
+                            && !x.getValue().toLowerCase().startsWith(AzureConstants.DATA_LAKE_STORAGE_URI_PREFIX)
+                        )
                         .findAny();
 
                 if(pathWithInvalidPrefix.isPresent()){

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -57,15 +58,19 @@ public class AzureTablesLister extends RemoteTablesLister {
 
         try {
             ListBlobsOptions listBlobsOptions = new ListBlobsOptions().setPrefix(folderPrefix);
-            List<BlobItem> blobItems = blobContainerClient
+
+            List<BlobItem> blobs = CompletableFuture.supplyAsync(() -> blobContainerClient
                     .listBlobsByHierarchy("/", listBlobsOptions, null)
                     .stream()
-                    .collect(Collectors.toList());
-            for (BlobItem blobItem : blobItems) {
+                    .collect(Collectors.toList())).get();
+
+            blobs.forEach(blobItem -> {
                 paths.add(blobItem.getName());
-            }
+            });
+
         } catch (Exception e) {
             log.error(e.getMessage());
+            throw new RuntimeException(e);
         }
         return paths;
     }
