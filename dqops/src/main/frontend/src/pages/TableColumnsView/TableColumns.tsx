@@ -181,7 +181,7 @@ const TableColumns = ({
         columnHash: Number(hashData?.[i]),
         isColumnSelected: false,
         dimentions: rewriteDimensions(status)[columnNameData?.[i] ?? ''],
-        labels: getLabelsOverview(columns[i].labels ?? [])
+        labels: getLabelsOverview(columns[i]?.labels ?? [])
       };
 
       dataArray.push(newData);
