@@ -2,9 +2,10 @@ package com.dqops.connectors.duckdb.fileslisting;
 
 import com.dqops.BaseTest;
 import com.dqops.connectors.SourceTableModel;
-import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.core.secrets.DevelopmentCredentialsSecretNames;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderImpl;
 import com.dqops.utils.BeanFactoryObjectMother;
@@ -33,9 +34,9 @@ class AwsTablesListerIntegrationTest extends BaseTest {
         this.sut = (AwsTablesLister)TablesListerProvider.createTablesLister(DuckdbStorageType.s3);
 
         this.duckdbParametersSpec = new DuckdbParametersSpec();
-        duckdbParametersSpec.setUser(secretValueProvider.expandValue("${DQOPS_TEST_AWS_ACCESS_KEY_ID}", secretValueLookupContext));
-        duckdbParametersSpec.setPassword(secretValueProvider.expandValue("${DQOPS_TEST_AWS_SECRET_ACCESS_KEY}", secretValueLookupContext));
-        duckdbParametersSpec.setRegion(secretValueProvider.expandValue("${DQOPS_TEST_AWS_REGION}", secretValueLookupContext));
+        duckdbParametersSpec.setUser(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AWS_S3_ACCESS_KEY_ID, secretValueLookupContext));
+        duckdbParametersSpec.setPassword(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AWS_S3_SECRET_ACCESS_KEY, secretValueLookupContext));
+        duckdbParametersSpec.setRegion(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AWS_S3_REGION, secretValueLookupContext));
         duckdbParametersSpec.setFilesFormatType(DuckdbFilesFormatType.csv);
     }
 
