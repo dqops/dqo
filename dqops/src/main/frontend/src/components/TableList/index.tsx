@@ -194,7 +194,7 @@ export default function index({
 
         <table className="overflow-x-auto">
           <thead>
-            <tr>
+            <tr className="mb-2">
               {headerItems.map(
                 (item) =>
                   item?.label &&
@@ -214,7 +214,7 @@ export default function index({
           </tbody>
         </table>
       </div>
-      <div className="px-4 mb-50 mt-2">
+      <div className="px-4 mb-50">
         <Pagination
           page={filters.page || 1}
           pageSize={filters.pageSize || 50}

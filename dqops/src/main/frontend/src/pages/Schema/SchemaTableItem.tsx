@@ -111,32 +111,32 @@ export default function SchemaTableItem({
   };
 
   return (
-    <tr className="text-sm h-10">
+    <tr className="text-sm">
       {(!checkTypes || !connection || !schema) && (
         <>
           {!connection && (
-            <td>
+            <td className="content-start pt-2">
               <div className="flex items-start">
                 <Button
-                  className="px-4 underline cursor-pointer text-sm"
+                  className="px-4 underline cursor-pointer text-sm py-0"
                   label={item.connection_name}
                   onClick={() => goToConnection(item)}
                 />
               </div>
             </td>
           )}
-          <td>
+          <td className="content-start pt-2">
             <Button
-              className="px-4 underline cursor-pointer text-sm"
+              className="px-4 underline cursor-pointer text-sm py-0"
               label={item.schema}
               onClick={() => goToSchema(item)}
             />
           </td>
         </>
       )}
-      <td>
+      <td className="content-start pt-2">
         <Button
-          className="px-4 underline cursor-pointer text-sm"
+          className="px-4 underline cursor-pointer text-sm py-0"
           label={item.target?.table_name}
           onClick={() => goToTable(item)}
         />
@@ -151,12 +151,16 @@ export default function SchemaTableItem({
           />
         ) : null}
       </td>
-      <td className="px-4 text-sm">{item?.stage}</td>
-      <td className="px-4 text-sm">{getLabelsOverview(item?.labels ?? [])}</td>
+      <td className="px-4 text-sm content-start pt-2">{item?.stage}</td>
+      <td className="px-4 text-sm content-start pt-2">
+        {getLabelsOverview(item?.labels ?? [])}
+      </td>
       {item?.data_quality_status?.dimensions ? (
         <SchemaTableItemDimensions item={item} dimensionKeys={dimensionKeys} />
       ) : (
-        <SvgIcon name="hourglass" className="w-4 h-4" />
+        <td className="content-start pt-2">
+          <SvgIcon name="hourglass" className="w-4 h-4" />
+        </td>
       )}
     </tr>
   );
