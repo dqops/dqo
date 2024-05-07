@@ -56,7 +56,7 @@ export const SchemaTables = () => {
       filters.page,
       filters.pageSize,
       filter,
-      checkTypes === CheckTypes.SOURCES ? CheckTypes.MONITORING : checkTypes
+      checkTypes === CheckTypes.SOURCES ? undefined : checkTypes
     ).then((res) => {
       const arr: TTableWithSchema[] = [];
       res.data.forEach((item) => {

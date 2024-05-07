@@ -20,8 +20,7 @@ export default function ConnectionTables() {
   const [filters, setFilters] = useState<any>({
     page: 1,
     pageSize: 50,
-    checkType:
-      checkTypes == CheckTypes.SOURCES ? CheckTypes.MONITORING : checkTypes
+    checkType: checkTypes == CheckTypes.SOURCES ? undefined : checkTypes
   });
   const [table, setTable] = useState<string>();
   const [schema, setSchema] = useState<string>();
