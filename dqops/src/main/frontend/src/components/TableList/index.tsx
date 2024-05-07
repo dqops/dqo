@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { LabelModel, TableListModel } from '../../api';
 import SchemaTableItem from '../../pages/Schema/SchemaTableItem';
+import { CheckTypes } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import { Pagination } from '../Pagination';
 import SvgIcon from '../SvgIcon';
@@ -25,6 +27,8 @@ type TButtonTabs = {
   sortable?: boolean;
 };
 
+type TTableWithSchema = TableListModel & { schema?: string };
+
 const headeritems: TButtonTabs[] = [
   {
     label: 'Table',
@@ -39,10 +43,6 @@ const headeritems: TButtonTabs[] = [
     value: 'stage'
   },
   {
-    label: 'Filter',
-    value: 'filter'
-  },
-  {
     label: 'Labels',
     value: 'labels'
   },
@@ -50,7 +50,7 @@ const headeritems: TButtonTabs[] = [
 ];
 
 type TTableListProps = {
-  tables: TableListModel[];
+  tables: TTableWithSchema[];
   setTables: any;
   filters: any;
   onChangeFilters: (filters: any) => void;
@@ -68,6 +68,15 @@ export default function index({
   labels,
   onChangeLabels
 }: TTableListProps) {
+  const {
+    checkTypes,
+    connection,
+    schema
+  }: {
+    checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
+  } = useDecodedParams();
   const [sortingDir, setSortingDir] = useState<'asc' | 'desc'>('asc');
 
   const renderItem = (label: string, key: string, sortable?: boolean) => {
@@ -121,14 +130,34 @@ export default function index({
 
   const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
   const headerItems = [
+    checkTypes && connection && schema
+      ? undefined
+      : {
+          label: 'Connection',
+          value: 'connection_name'
+        },
+    checkTypes && connection && schema
+      ? undefined
+      : {
+          label: 'Schema',
+          value: 'schema'
+        },
+
     ...headeritems,
+
     ...basicDimensionTypes.map((x) => ({
       label: x,
       value: x,
       sortable: false
     })),
-    ...getDimensionKey().map((x) => ({ label: x, value: x, sortable: false }))
+
+    ...getDimensionKey().map((x) => ({
+      label: x,
+      value: x,
+      sortable: false
+    }))
   ];
+
   const prepareLabel = (label: string | undefined) => {
     if (!label) return;
     if (label.length > 20) {
@@ -139,44 +168,52 @@ export default function index({
 
   return (
     <>
-      <SectionWrapper
-        title="Filter by labels"
-        className="text-sm w-[150px] mx-4 mb-4"
-      >
-        {labels.map((label, index) => (
-          <div
-            className={clsx(
-              'flex gap-2 mb-2 cursor-pointer whitespace-normal break-all',
-              {
-                'font-bold text-gray-700': label.clicked,
-                'text-gray-500': !label.clicked
-              }
-            )}
-            key={index}
-            onClick={() => onChangeLabels(index)}
+      <div className="flex">
+        <div className="w-[280px]">
+          <SectionWrapper
+            title="Filter by labels"
+            className="text-sm w-[250px] mx-4 mb-4 mt-6 "
           >
-            <span>{prepareLabel(label.label)}</span>({label.labels_count})
-          </div>
-        ))}
-      </SectionWrapper>
-      <table className="overflow-x-auto">
-        <thead>
-          <tr>
-            {headerItems.map((item) =>
-              renderItem(item.label, item.value, item.sortable)
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {tables.map((item, index) => (
-            <SchemaTableItem
-              key={index}
-              item={item}
-              dimensionKeys={getDimensionKey()}
-            />
-          ))}
-        </tbody>
-      </table>
+            {labels.map((label, index) => (
+              <div
+                className={clsx(
+                  'flex gap-2 mb-2 cursor-pointer whitespace-normal break-all',
+                  {
+                    'font-bold text-gray-700': label.clicked,
+                    'text-gray-500': !label.clicked
+                  }
+                )}
+                key={index}
+                onClick={() => onChangeLabels(index)}
+              >
+                <span>{prepareLabel(label.label)}</span>({label.labels_count})
+              </div>
+            ))}
+          </SectionWrapper>
+        </div>
+
+        <table className="overflow-x-auto">
+          <thead>
+            <tr>
+              {headerItems.map(
+                (item) =>
+                  item?.label &&
+                  item.value &&
+                  renderItem(item.label, item.value, item.sortable)
+              )}
+            </tr>
+          </thead>
+          <tbody>
+            {tables.map((item, index) => (
+              <SchemaTableItem
+                key={index}
+                item={item}
+                dimensionKeys={getDimensionKey()}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
       <div className="px-4 mb-50">
         <Pagination
           page={filters.page || 1}

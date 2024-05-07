@@ -51,7 +51,7 @@ export default function SchemaTableItemDimensions({
             getColor(item.data_quality_status?.current_severity)
           )}
         >
-          {item.data_quality_status?.data_quality_kpi
+          {item.data_quality_status?.data_quality_kpi !== undefined
             ? item.data_quality_status?.data_quality_kpi.toPrecision(3) + '%'
             : ''}
         </div>
@@ -91,7 +91,7 @@ export default function SchemaTableItemDimensions({
               <div className={dimensionsClassNames}>
                 {(item.data_quality_status?.dimensions ?? {})?.[
                   dimensionKey as any
-                ]?.data_quality_kpi
+                ]?.data_quality_kpi !== undefined
                   ? (item.data_quality_status?.dimensions ?? {})?.[
                       dimensionKey as any
                     ].data_quality_kpi?.toPrecision(2 | 3) + '%'
@@ -136,7 +136,7 @@ export default function SchemaTableItemDimensions({
                 >
                   {(item.data_quality_status?.dimensions ?? {})?.[
                     dimensionKey as any
-                  ]?.data_quality_kpi
+                  ]?.data_quality_kpi !== undefined
                     ? (item.data_quality_status?.dimensions ?? {})?.[
                         dimensionKey as any
                       ].data_quality_kpi?.toPrecision(2 | 3) + '%'
