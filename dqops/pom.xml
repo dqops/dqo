@@ -855,6 +855,7 @@
 						<DQO_TEST_TEMPORARY_FOLDER>${project.build.directory}</DQO_TEST_TEMPORARY_FOLDER>
 						<SAMPLE_DATA_FOLDER>${project.basedir}/sampledata/</SAMPLE_DATA_FOLDER>
 						<HADOOP_HOME>${project.basedir}/../home</HADOOP_HOME>
+						<AZURE_ENABLE_HTTP_CLIENT_SHARING>true</AZURE_ENABLE_HTTP_CLIENT_SHARING>
 					</environmentVariables>
 					<enableAssertions>true</enableAssertions>
 					<excludes>

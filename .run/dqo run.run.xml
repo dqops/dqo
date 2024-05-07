@@ -14,6 +14,7 @@
       <env name="DQO_HOME" value="$PROJECT_DIR$/home" />
       <env name="DQO_USER_HOME" value="$PROJECT_DIR$/userhome" />
       <env name="HADOOP_HOME" value="$PROJECT_DIR$/home" />
+      <env name="AZURE_ENABLE_HTTP_CLIENT_SHARING" value="true" />
     </envs>
     <method v="2" />
   </configuration>

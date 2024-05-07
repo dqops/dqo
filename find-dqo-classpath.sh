@@ -61,3 +61,8 @@ fi
 if [ -z $HADOOP_HOME ]; then
     export HADOOP_HOME=$DQO_HOME
 fi
+
+if [ -z $AZURE_ENABLE_HTTP_CLIENT_SHARING ]; then
+    export AZURE_ENABLE_HTTP_CLIENT_SHARING=true
+fi
+
