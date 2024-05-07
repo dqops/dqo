@@ -8,8 +8,17 @@ import com.dqops.metadata.sources.PhysicalTableName;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Used to retrieve the list of files from a remote file storage that are used as tables by duckdb's listTables.
+ */
 public abstract class RemoteTablesLister implements TablesLister {
 
+    /**
+     * Returns list of SourceTableModel from a file storage.
+     * @param duckdb DuckdbParametersSpec
+     * @param schemaName The name of a virtual schema.
+     * @return The list of SourceTableModel.
+     */
     public abstract List<SourceTableModel> listTables(DuckdbParametersSpec duckdb, String schemaName);
 
     /**

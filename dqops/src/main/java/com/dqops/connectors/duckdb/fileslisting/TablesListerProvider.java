@@ -2,8 +2,16 @@ package com.dqops.connectors.duckdb.fileslisting;
 
 import com.dqops.connectors.duckdb.DuckdbStorageType;
 
+/**
+ * Factory for the table listers based on file system.
+ */
 public class TablesListerProvider {
 
+    /**
+     * Created the table lister depending on the storage type.
+     * @param storageType The storage type supported in duckdb
+     * @return TableLister
+     */
     public static TablesLister createTablesLister(DuckdbStorageType storageType){
 
         if(storageType == null || storageType.equals(DuckdbStorageType.local)){
