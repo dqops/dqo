@@ -17,6 +17,8 @@ class ColumnTypeSnapshotSpec:
         length (Union[Unset, int]): Maximum length of text and binary columns.
         precision (Union[Unset, int]): Precision of a numeric (decimal) data type.
         scale (Union[Unset, int]): Scale of a numeric (decimal) data type.
+        nested (Union[Unset, bool]): This field is a nested field inside another STRUCT. It is used to identify nested
+            fields in JSON files.
     """
 
     column_type: Union[Unset, str] = UNSET
@@ -24,6 +26,7 @@ class ColumnTypeSnapshotSpec:
     length: Union[Unset, int] = UNSET
     precision: Union[Unset, int] = UNSET
     scale: Union[Unset, int] = UNSET
+    nested: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -32,6 +35,7 @@ class ColumnTypeSnapshotSpec:
         length = self.length
         precision = self.precision
         scale = self.scale
+        nested = self.nested
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -46,6 +50,8 @@ class ColumnTypeSnapshotSpec:
             field_dict["precision"] = precision
         if scale is not UNSET:
             field_dict["scale"] = scale
+        if nested is not UNSET:
+            field_dict["nested"] = nested
 
         return field_dict
 
@@ -62,12 +68,15 @@ class ColumnTypeSnapshotSpec:
 
         scale = d.pop("scale", UNSET)
 
+        nested = d.pop("nested", UNSET)
+
         column_type_snapshot_spec = cls(
             column_type=column_type,
             nullable=nullable,
             length=length,
             precision=precision,
             scale=scale,
+            nested=nested,
         )
 
         column_type_snapshot_spec.additional_properties = d

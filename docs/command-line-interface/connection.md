@@ -95,6 +95,7 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--databricks-user=<user>]
                 [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
                 [--duckdb-database=<database>]
+                [--duckdb-directories=<directoriesString>]
                 [--duckdb-files-format-type=<filesFormatType>]
                 [--duckdb-password=<password>] [--duckdb-read-mode=<readMode>]
                 [--duckdb-region=<region>]
@@ -133,7 +134,6 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--trino-host=<host>] [--trino-password=<password>]
                 [--trino-port=<port>] [--trino-user=<user>]
                 [-D=<String=String>]... [-Duck=<String=String>]...
-                [--duckdb-directories=<String=String>[,<String=String>...]]...
                 [-E=<String=String>]... [-F=<String=String>]...
                 [-K=<String=String>]... [-M=<String=String>]...
                 [-O=<String=String>]... [-P=<String=String>]...
@@ -164,6 +164,7 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--databricks-user=<user>]
                 [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
                 [--duckdb-database=<database>]
+                [--duckdb-directories=<directoriesString>]
                 [--duckdb-files-format-type=<filesFormatType>]
                 [--duckdb-password=<password>] [--duckdb-read-mode=<readMode>]
                 [--duckdb-region=<region>]
@@ -202,7 +203,6 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--trino-host=<host>] [--trino-password=<password>]
                 [--trino-port=<port>] [--trino-user=<user>]
                 [-D=<String=String>]... [-Duck=<String=String>]...
-                [--duckdb-directories=<String=String>[,<String=String>...]]...
                 [-E=<String=String>]... [-F=<String=String>]...
                 [-K=<String=String>]... [-M=<String=String>]...
                 [-O=<String=String>]... [-P=<String=String>]...
@@ -239,12 +239,12 @@ All parameters supported by the command are listed below.
 |<div id="connection add--databricks-user" class="no-wrap-code">`--databricks-user`</div>|Databricks user name.| ||
 |<div id="connection add--duckdb-aws-authentication-mode" class="no-wrap-code">`--duckdb-aws-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>|
 |<div id="connection add--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name for in-memory read mode. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection add--duckdb-directories" class="no-wrap-code">`--duckdb-directories`</div>|| ||
+|<div id="connection add--duckdb-directories" class="no-wrap-code">`--duckdb-directories`</div>|Virtual schema name to directory mappings. The path must be an absolute path.| ||
 |<div id="connection add--duckdb-files-format-type" class="no-wrap-code">`--duckdb-files-format-type`</div>|Type of source files format for DuckDB.| |*csv*<br/>*json*<br/>*parquet*<br/>|
 |<div id="connection add--duckdb-password" class="no-wrap-code">`--duckdb-password`</div>|DuckDB password for a remote storage type. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-read-mode" class="no-wrap-code">`--duckdb-read-mode`</div>|DuckDB read mode.| |*in_memory*<br/>*files*<br/>|
 |<div id="connection add--duckdb-region" class="no-wrap-code">`--duckdb-region`</div>|The region for the storage credentials. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection add--duckdb-storage-type" class="no-wrap-code">`--duckdb-storage-type`</div>|The storage type.| |*local*<br/>*s3*<br/>|
+|<div id="connection add--duckdb-storage-type" class="no-wrap-code">`--duckdb-storage-type`</div>|The storage type.| |*local*<br/>*s3*<br/>*azure*<br/>|
 |<div id="connection add--duckdb-user" class="no-wrap-code">`--duckdb-user`</div>|DuckDB user name for a remote storage type. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add-fw" class="no-wrap-code">`-fw`</div><div id="connection add--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
 |<div id="connection add--headless" class="no-wrap-code">`--headless`</div><div id="connection add-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
@@ -409,6 +409,7 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--databricks-port=<port>] [--databricks-user=<user>]
                    [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
                    [--duckdb-database=<database>]
+                   [--duckdb-directories=<directoriesString>]
                    [--duckdb-files-format-type=<filesFormatType>]
                    [--duckdb-password=<password>]
                    [--duckdb-read-mode=<readMode>] [--duckdb-region=<region>]
@@ -447,9 +448,7 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
                    [--trino-password=<password>] [--trino-port=<port>]
                    [--trino-user=<user>] [-D=<String=String>]...
-                   [-Duck=<String=String>]...
-                   [--duckdb-directories=<String=String>[,
-                   <String=String>...]]... [-E=<String=String>]...
+                   [-Duck=<String=String>]... [-E=<String=String>]...
                    [-F=<String=String>]... [-K=<String=String>]...
                    [-M=<String=String>]... [-O=<String=String>]...
                    [-P=<String=String>]... [-R=<String=String>]...
@@ -479,6 +478,7 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--databricks-port=<port>] [--databricks-user=<user>]
                    [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
                    [--duckdb-database=<database>]
+                   [--duckdb-directories=<directoriesString>]
                    [--duckdb-files-format-type=<filesFormatType>]
                    [--duckdb-password=<password>]
                    [--duckdb-read-mode=<readMode>] [--duckdb-region=<region>]
@@ -517,9 +517,7 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
                    [--trino-password=<password>] [--trino-port=<port>]
                    [--trino-user=<user>] [-D=<String=String>]...
-                   [-Duck=<String=String>]...
-                   [--duckdb-directories=<String=String>[,
-                   <String=String>...]]... [-E=<String=String>]...
+                   [-Duck=<String=String>]... [-E=<String=String>]...
                    [-F=<String=String>]... [-K=<String=String>]...
                    [-M=<String=String>]... [-O=<String=String>]...
                    [-P=<String=String>]... [-R=<String=String>]...
@@ -555,12 +553,12 @@ All parameters supported by the command are listed below.
 |<div id="connection update--databricks-user" class="no-wrap-code">`--databricks-user`</div>|Databricks user name.| ||
 |<div id="connection update--duckdb-aws-authentication-mode" class="no-wrap-code">`--duckdb-aws-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>|
 |<div id="connection update--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name for in-memory read mode. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection update--duckdb-directories" class="no-wrap-code">`--duckdb-directories`</div>|| ||
+|<div id="connection update--duckdb-directories" class="no-wrap-code">`--duckdb-directories`</div>|Virtual schema name to directory mappings. The path must be an absolute path.| ||
 |<div id="connection update--duckdb-files-format-type" class="no-wrap-code">`--duckdb-files-format-type`</div>|Type of source files format for DuckDB.| |*csv*<br/>*json*<br/>*parquet*<br/>|
 |<div id="connection update--duckdb-password" class="no-wrap-code">`--duckdb-password`</div>|DuckDB password for a remote storage type. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-read-mode" class="no-wrap-code">`--duckdb-read-mode`</div>|DuckDB read mode.| |*in_memory*<br/>*files*<br/>|
 |<div id="connection update--duckdb-region" class="no-wrap-code">`--duckdb-region`</div>|The region for the storage credentials. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection update--duckdb-storage-type" class="no-wrap-code">`--duckdb-storage-type`</div>|The storage type.| |*local*<br/>*s3*<br/>|
+|<div id="connection update--duckdb-storage-type" class="no-wrap-code">`--duckdb-storage-type`</div>|The storage type.| |*local*<br/>*s3*<br/>*azure*<br/>|
 |<div id="connection update--duckdb-user" class="no-wrap-code">`--duckdb-user`</div>|DuckDB user name for a remote storage type. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update-fw" class="no-wrap-code">`-fw`</div><div id="connection update--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
 |<div id="connection update--headless" class="no-wrap-code">`--headless`</div><div id="connection update-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||

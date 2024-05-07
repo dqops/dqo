@@ -56960,6 +56960,13 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
+          },
+          "nested" : {
+            "type" : "boolean",
+            "description" : "This field is a nested field inside another STRUCT. It is used to identify nested fields in JSON files.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
           }
         },
         "exampleSetFlag" : false,
@@ -56989,6 +56996,10 @@
               "type" : "integer",
               "format" : "int32",
               "description" : "Scale of a numeric (decimal) data type."
+            },
+            "nested" : {
+              "type" : "boolean",
+              "description" : "This field is a nested field inside another STRUCT. It is used to identify nested fields in JSON files."
             }
           }
         }
@@ -64359,7 +64370,7 @@
             "storage_type" : {
               "type" : "string",
               "description" : "The storage type.",
-              "enum" : [ "local", "s3" ]
+              "enum" : [ "local", "s3", "azure" ]
             },
             "aws_authentication_mode" : {
               "type" : "string",
@@ -80219,7 +80230,7 @@
       "DuckdbStorageType" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "local", "s3" ]
+        "enum" : [ "local", "s3", "azure" ]
       },
       "AwsAuthenticationMode" : {
         "type" : "string",

@@ -299,7 +299,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -317,7 +317,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) > 100
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -972,7 +972,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -989,7 +989,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) > 100
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -1743,7 +1743,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -1761,7 +1761,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) > 100
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -2417,7 +2417,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -2434,7 +2434,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) > 100
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -3188,7 +3188,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -3206,7 +3206,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) > 100
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -3862,7 +3862,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -3879,7 +3879,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) > 100
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -4643,7 +4643,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -4661,7 +4661,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) > 100
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -5331,7 +5331,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -5348,7 +5348,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) > 100
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -6110,7 +6110,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -6128,7 +6128,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) > 100
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -6798,7 +6798,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -6815,7 +6815,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) > 100
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                             THEN 1
                         ELSE 0
                     END

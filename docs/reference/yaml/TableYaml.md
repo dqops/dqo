@@ -631,6 +631,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`length`</span>|Maximum length of text and binary columns.|*integer*| | | |
 |<span class="no-wrap-code ">`precision`</span>|Precision of a numeric (decimal) data type.|*integer*| | | |
 |<span class="no-wrap-code ">`scale`</span>|Scale of a numeric (decimal) data type.|*integer*| | | |
+|<span class="no-wrap-code ">`nested`</span>|This field is a nested field inside another STRUCT. It is used to identify nested fields in JSON files.|*boolean*| | | |
 
 
 
