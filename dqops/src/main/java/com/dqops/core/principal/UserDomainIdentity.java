@@ -44,7 +44,8 @@ public class UserDomainIdentity {
     /**
      * The default identity of the local instance, a user who manages the root data domain on this DQOps instance.
      */
-    public static final UserDomainIdentity LOCAL_INSTANCE_ADMIN_IDENTITY = new UserDomainIdentity(SYSTEM_USER, DqoUserRole.ADMIN, DEFAULT_DATA_DOMAIN, DEFAULT_DATA_DOMAIN, null, null);
+    public static final UserDomainIdentity LOCAL_INSTANCE_ADMIN_IDENTITY = new UserDomainIdentity(SYSTEM_USER, DqoUserRole.ADMIN, DEFAULT_DATA_DOMAIN,
+            DEFAULT_DATA_DOMAIN, null, null, null);
 
     private final String userName;
     private final DqoUserRole domainRole;
@@ -52,6 +53,7 @@ public class UserDomainIdentity {
     private final String dataDomainCloud;
     private final String tenantOwner;
     private final String tenantId;
+    private final Integer tenantGroupId;
 
     /**
      * Creates a user identity object.
@@ -61,19 +63,22 @@ public class UserDomainIdentity {
      * @param dataDomainCloud The real data domain on DQOps cloud that is mounted.
      * @param tenantOwner The email of the tenant owner.
      * @param tenantId The tenant id.
+     * @param tenantGroupId Tenant group id.
      */
     public UserDomainIdentity(String userName,
                               DqoUserRole domainRole,
                               String dataDomainFolder,
                               String dataDomainCloud,
                               String tenantOwner,
-                              String tenantId) {
+                              String tenantId,
+                              Integer tenantGroupId) {
         this.userName = userName;
         this.domainRole = domainRole;
         this.dataDomainFolder = !Strings.isNullOrEmpty(dataDomainFolder) ? dataDomainFolder : DEFAULT_DATA_DOMAIN;
         this.dataDomainCloud = dataDomainCloud;
         this.tenantOwner = tenantOwner;
         this.tenantId = tenantId;
+        this.tenantGroupId = tenantGroupId;
     }
 
     /**
@@ -83,7 +88,7 @@ public class UserDomainIdentity {
      * @return System user identity for the given data domain.
      */
     public static UserDomainIdentity createDataDomainAdminIdentity(String dataDomainFolder, String dataDomainCloud) {
-        return  new UserDomainIdentity(SYSTEM_USER, DqoUserRole.ADMIN, dataDomainFolder, dataDomainCloud, null, null);
+        return  new UserDomainIdentity(SYSTEM_USER, DqoUserRole.ADMIN, dataDomainFolder, dataDomainCloud, null, null, null);
     }
 
     /**
@@ -133,6 +138,14 @@ public class UserDomainIdentity {
      */
     public String getTenantId() {
         return tenantId;
+    }
+
+    /**
+     * Returns the tenant group id.
+     * @return Tenant group id.
+     */
+    public Integer getTenantGroupId() {
+        return tenantGroupId;
     }
 
     @Override
