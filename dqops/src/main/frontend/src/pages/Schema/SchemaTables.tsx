@@ -8,6 +8,7 @@ import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 
 type TLabel = LabelModel & { clicked: boolean };
+type TTableWithSchema = TableListModel & { schema?: string };
 
 export const SchemaTables = () => {
   const {
@@ -57,8 +58,13 @@ export const SchemaTables = () => {
       filter,
       checkTypes === CheckTypes.SOURCES ? CheckTypes.PROFILING : checkTypes
     ).then((res) => {
-      setTables(res.data);
-      return res;
+      const arr: TTableWithSchema[] = [];
+      res.data.forEach((item) => {
+        const jItem = { ...item, schema: item.target?.schema_name };
+        arr.push(jItem);
+      });
+      setTables(arr);
+      return arr;
     });
   };
 
@@ -74,7 +80,7 @@ export const SchemaTables = () => {
 
   useEffect(() => {
     getTables().then((res) => {
-      refetchTables(res.data);
+      refetchTables(res);
     });
     const getLabels = () => {
       LabelsApiClient.getAllLabelsForTables().then((res) => {
@@ -97,7 +103,14 @@ export const SchemaTables = () => {
         />
         <Button
           label="Search"
-          onClick={getTables}
+          onClick={() =>
+            getTables(
+              labels
+                .filter((x) => x.clicked && x.label)
+                .map((x) => x.label)
+                .filter((x): x is string => typeof x === 'string')
+            )
+          }
           color="primary"
           className="mt-5"
         />

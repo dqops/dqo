@@ -111,16 +111,20 @@ export default function SchemaTableItem({
   };
 
   return (
-    <tr className="text-sm">
+    <tr className="text-sm h-10">
       {(!checkTypes || !connection || !schema) && (
         <>
-          <td>
-            <Button
-              className="px-4 underline cursor-pointer text-sm"
-              label={item.connection_name}
-              onClick={() => goToConnection(item)}
-            />
-          </td>
+          {!connection && (
+            <td>
+              <div className="flex items-start">
+                <Button
+                  className="px-4 underline cursor-pointer text-sm"
+                  label={item.connection_name}
+                  onClick={() => goToConnection(item)}
+                />
+              </div>
+            </td>
+          )}
           <td>
             <Button
               className="px-4 underline cursor-pointer text-sm"
@@ -130,11 +134,13 @@ export default function SchemaTableItem({
           </td>
         </>
       )}
-      <Button
-        className="px-4 underline cursor-pointer text-sm"
-        label={item.target?.table_name}
-        onClick={() => goToTable(item)}
-      />
+      <td>
+        <Button
+          className="px-4 underline cursor-pointer text-sm"
+          label={item.target?.table_name}
+          onClick={() => goToTable(item)}
+        />
+      </td>
       <td className="px-4">
         {item?.disabled ? (
           <SvgIcon

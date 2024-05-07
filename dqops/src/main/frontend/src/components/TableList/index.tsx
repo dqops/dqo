@@ -130,7 +130,7 @@ export default function index({
 
   const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
   const headerItems = [
-    checkTypes && connection && schema
+    checkTypes && connection
       ? undefined
       : {
           label: 'Connection',
@@ -214,7 +214,7 @@ export default function index({
           </tbody>
         </table>
       </div>
-      <div className="px-4 mb-50">
+      <div className="px-4 mb-50 mt-2">
         <Pagination
           page={filters.page || 1}
           pageSize={filters.pageSize || 50}
