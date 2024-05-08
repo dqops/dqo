@@ -41,6 +41,7 @@ import picocli.CommandLine;
 import software.amazon.awssdk.profiles.Profile;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * DuckDB connection parameters.
@@ -408,6 +409,20 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
             case parquet: return this.getParquet() != null;
             default: throw new RuntimeException("The file format is not supported : " + filesFormatType);
         }
+    }
+
+    /**
+     * Returns scopes based on directories. Scopes are
+     * @return scopes based on directories.
+     */
+    @JsonIgnore
+    public List<String> getScopes(){
+        List<String> scopes = getDirectories().values().stream().map(pathString -> {
+            int wildcardIndex = pathString.indexOf("*");
+            String absolutePath = wildcardIndex != -1 ? pathString.substring(0, wildcardIndex) : pathString;
+            return absolutePath;
+        }).collect(Collectors.toList());
+        return scopes;
     }
 
     /**
