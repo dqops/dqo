@@ -18,12 +18,12 @@ import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
 import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 import Button from '../Button';
 import Loader from '../Loader';
 import Select from '../Select';
 import CheckCategoriesView from './CheckCategoriesView';
 import TableHeader from './CheckTableHeader';
-import { useDecodedParams } from '../../utils';
 
 interface IDataQualityChecksProps {
   checksUI?: CheckContainerModel;
@@ -378,6 +378,22 @@ const DataQualityChecks = ({
     return groupedArray ?? [];
   };
 
+  const getScheduleLevelBasedOnEnum = (
+    schedule?: EffectiveScheduleModelScheduleLevelEnum
+  ) => {
+    switch (schedule) {
+      case EffectiveScheduleModelScheduleLevelEnum.check_override: {
+        return 'Check level';
+      }
+      case EffectiveScheduleModelScheduleLevelEnum.connection: {
+        return 'Connection level';
+      }
+      case EffectiveScheduleModelScheduleLevelEnum.table_override: {
+        return 'Table level';
+      }
+    }
+  };
+
   return (
     <div
       className={clsx(className, 'p-1 overflow-y-auto')}
@@ -408,7 +424,9 @@ const DataQualityChecks = ({
                     className="underline cursor-pointer"
                     onClick={goToSchedule}
                   >
-                    {checksUI?.effective_schedule?.schedule_level}
+                    {getScheduleLevelBasedOnEnum(
+                      checksUI?.effective_schedule?.schedule_level
+                    )}
                   </a>
                 </div>
                 <div className="flex items-center space-x-1">
@@ -438,7 +456,9 @@ const DataQualityChecks = ({
           <div className="flex items-center justify-between">
             <span className="pr-2">Schedule configuration: </span>
             <a className="underline cursor-pointer" onClick={goToScheduleTab}>
-              {checksUI?.effective_schedule?.schedule_group}
+              {checksUI?.effective_schedule?.schedule_group
+                ?.replace(/_/, ' ')
+                .replace(/./, (c) => c.toUpperCase())}
             </a>
 
             {checksUI?.effective_schedule_enabled_status ===
