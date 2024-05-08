@@ -24,7 +24,7 @@ class DuckdbQueriesProviderTest extends BaseTest {
                         "TYPE S3,\\s*" +
                         "KEY_ID 'aws_example_key_id',\\s*" +
                         "SECRET 'aws_example_secret',\\s*" +
-                        "REGION 'eu-central-1'\\s*" +
+                        "REGION 'eu-central-1',\\s*" +
                         "SCOPE 's3://path'\\s*" +
                         "\\);");
     }

@@ -23,10 +23,10 @@ public class DuckdbQueriesProvider {
             case s3:
                 loadSecretsString.append(indent).append("KEY_ID '").append(duckdbParametersSpec.getUser()).append("',\n");
                 loadSecretsString.append(indent).append("SECRET '").append(duckdbParametersSpec.getPassword()).append("',\n");
-                loadSecretsString.append(indent).append("REGION '").append(duckdbParametersSpec.getRegion()).append("'\n");
+                loadSecretsString.append(indent).append("REGION '").append(duckdbParametersSpec.getRegion()).append("',\n");
                 break;
             case azure:
-                loadSecretsString.append(indent).append("CONNECTION_STRING '").append(duckdbParametersSpec.getPassword()).append("'\n");
+                loadSecretsString.append(indent).append("CONNECTION_STRING '").append(duckdbParametersSpec.getPassword()).append("',\n");
                 break;
             default:
                 throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + storageType);
