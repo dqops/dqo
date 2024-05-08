@@ -22,6 +22,7 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
+import com.dqops.metadata.sources.fileformat.CompressionType;
 import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.JsonFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.ParquetFileFormatSpec;
@@ -388,6 +389,21 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
                 case csv: return getCsv() != null && getCsv().getHivePartitioning() != null && getCsv().getHivePartitioning();
                 case json: return getJson() != null && getJson().getHivePartitioning() != null && getJson().getHivePartitioning();
                 case parquet: return getParquet() != null && getParquet().getHivePartitioning() != null && getParquet().getHivePartitioning();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Whether the compression option is set to gzip.
+     * @return Whether the compression option is set to gzip.
+     */
+    @JsonIgnore
+    public boolean isSetGzipCompression(){
+        if(filesFormatType != null){
+            switch(filesFormatType){
+                case csv: return getCsv() != null && getCsv().getCompression() != null && getCsv().getCompression().equals(CompressionType.gzip);
+                case json: return getJson() != null && getJson().getCompression() != null && getJson().getCompression().equals(CompressionType.gzip);
             }
         }
         return false;
