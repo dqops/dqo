@@ -1,5 +1,6 @@
 package com.dqops.connectors.duckdb;
 
+import com.dqops.connectors.storage.azure.AzureAuthenticationMode;
 import com.dqops.metadata.sources.ConnectionSpec;
 
 /**
@@ -26,7 +27,23 @@ public class DuckdbQueriesProvider {
                 loadSecretsString.append(indent).append("REGION '").append(duckdbParametersSpec.getRegion()).append("',\n");
                 break;
             case azure:
-                loadSecretsString.append(indent).append("CONNECTION_STRING '").append(duckdbParametersSpec.getPassword()).append("',\n");
+                if(duckdbParametersSpec.getAzureAuthenticationMode().equals(AzureAuthenticationMode.connection_string)){
+                    loadSecretsString.append(indent).append(AzureAuthenticationMode.connection_string.toString().toUpperCase())
+                            .append(" '").append(duckdbParametersSpec.getPassword()).append("',\n");
+                }
+                if(duckdbParametersSpec.getAzureAuthenticationMode().equals(AzureAuthenticationMode.credential_chain)) {
+                    loadSecretsString.append(indent).append("PROVIDER ")
+                            .append(AzureAuthenticationMode.credential_chain.toString().toUpperCase()).append("',\n");
+                    loadSecretsString.append(indent).append("ACCOUNT_NAME '").append(duckdbParametersSpec.getAccountName()).append("',\n");
+                }
+                if(duckdbParametersSpec.getAzureAuthenticationMode().equals(AzureAuthenticationMode.service_principal)) {
+                    loadSecretsString.append(indent).append("PROVIDER ")
+                            .append(AzureAuthenticationMode.service_principal.toString().toUpperCase()).append("',\n");
+                    loadSecretsString.append(indent).append("TENANT_ID '").append(duckdbParametersSpec.getTenantId()).append("',\n");
+                    loadSecretsString.append(indent).append("CLIENT_ID '").append(duckdbParametersSpec.getClientId()).append("',\n");
+                    loadSecretsString.append(indent).append("CLIENT_SECRET '").append(duckdbParametersSpec.getClientSecret()).append("',\n");
+                    loadSecretsString.append(indent).append("ACCOUNT_NAME '").append(duckdbParametersSpec.getAccountName()).append("',\n");
+                }
                 break;
             default:
                 throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + storageType);
