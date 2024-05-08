@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import {
   DuckdbParametersSpec,
   DuckdbParametersSpecAwsAuthenticationModeEnum,
+  DuckdbParametersSpecAzureAuthenticationModeEnum,
   DuckdbParametersSpecFilesFormatTypeEnum,
   DuckdbParametersSpecStorageTypeEnum,
   SharedCredentialListModel
@@ -61,6 +62,21 @@ const awsAuthenticationOptions = [
   {
     label: 'Default Credentials',
     value: DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials
+  }
+];
+
+const azureAuthenticationOptions = [
+  {
+    label: 'Connection String',
+    value: DuckdbParametersSpecAzureAuthenticationModeEnum.connection_string
+  },
+  {
+    label: 'Credential Chain',
+    value: DuckdbParametersSpecAzureAuthenticationModeEnum.credential_chain
+  },
+  {
+    label: 'Service Principal',
+    value: DuckdbParametersSpecAzureAuthenticationModeEnum.service_principal
   }
 ];
 
@@ -220,23 +236,23 @@ const DuckdbConnection = ({
   const azureStorageForm = (): JSX.Element => {
     return (
       <>
-        {/* <Select
-          label="AWS authentication mode"
-          options={awsAuthenticationOptions}
+        <Select
+          label="Azure authentication mode"
+          options={azureAuthenticationOptions}
           className="mb-4"
-          value={copiedDatabase?.aws_authentication_mode}
+          value={copiedDatabase?.azure_authentication_mode}
           onChange={(value) => {
             setCopiedDatabase((prev) => ({
               ...prev,
-              aws_authentication_mode: value
+              azure_authentication_mode: value
             }));
           }}
           onClickValue={setSelectedInput}
           selectedMenu={selectedInput}
-        /> */}
-{/* 
-        {copiedDatabase?.aws_authentication_mode ===
-          DuckdbParametersSpecAwsAuthenticationModeEnum.iam && ( */}
+        />
+
+        {copiedDatabase?.azure_authentication_mode ===
+          DuckdbParametersSpecAzureAuthenticationModeEnum.connection_string && (
           <>
             <FieldTypeInput
               data={sharedCredentials}
@@ -249,8 +265,64 @@ const DuckdbConnection = ({
               }
             />
           </>
-        {/* )} */}
+        )}
         
+        {copiedDatabase?.azure_authentication_mode ===
+          DuckdbParametersSpecAzureAuthenticationModeEnum.credential_chain && (
+          <>
+            <FieldTypeInput
+              data={sharedCredentials}
+              label="Storage account name"
+              className="mb-4 text-sm"
+              value={copiedDatabase?.account_name}
+              onChange={(value) =>
+                setCopiedDatabase((prev) => ({ ...prev, account_name: value }))
+              }
+            />
+          </>
+        )}
+
+        {copiedDatabase?.azure_authentication_mode ===
+          DuckdbParametersSpecAzureAuthenticationModeEnum.service_principal && (
+          <>
+            <FieldTypeInput
+              data={sharedCredentials}
+              label="Tenant ID"
+              className="mb-4 text-sm"
+              value={copiedDatabase?.tenant_id}
+              onChange={(value) =>
+                setCopiedDatabase((prev) => ({ ...prev, tenant_id: value }))
+              }
+            />
+            <FieldTypeInput
+              data={sharedCredentials}
+              label="Client ID"
+              className="mb-4 text-sm"
+              value={copiedDatabase?.client_id}
+              onChange={(value) =>
+                setCopiedDatabase((prev) => ({ ...prev, client_id: value }))
+              }
+            />
+            <FieldTypeInput
+              data={sharedCredentials}
+              label="Client Secret"
+              className="mb-4 text-sm"
+              value={copiedDatabase?.client_secret}
+              onChange={(value) =>
+                setCopiedDatabase((prev) => ({ ...prev, client_secret: value }))
+              }
+            />
+            <FieldTypeInput
+              data={sharedCredentials}
+              label="Storage account name"
+              className="mb-4 text-sm"
+              value={copiedDatabase?.account_name}
+              onChange={(value) =>
+                setCopiedDatabase((prev) => ({ ...prev, account_name: value }))
+              }
+            />
+          </>
+        )}
       </>
     )
   }
