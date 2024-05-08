@@ -64,7 +64,7 @@ public class HivePartitionPathUtility {
 
         stringBuilder.append(ParquetPartitioningKeys.CONNECTION);
         stringBuilder.append('=');
-        String encodedConnection = URLEncoder.encode(connectionName, StandardCharsets.UTF_8);
+        String encodedConnection = FileNameSanitizer.encodeForFileSystem(connectionName);
         stringBuilder.append(encodedConnection);
         stringBuilder.append('/');
 
@@ -72,7 +72,7 @@ public class HivePartitionPathUtility {
         if (tableName != null) {
             stringBuilder.append(ParquetPartitioningKeys.SCHEMA_TABLE);
             stringBuilder.append('=');
-            String encodedTable = URLEncoder.encode(tableName.toString(), StandardCharsets.UTF_8);
+            String encodedTable = FileNameSanitizer.encodeForFileSystem(tableName.toString());
             stringBuilder.append(encodedTable);
             stringBuilder.append('/');
         }
