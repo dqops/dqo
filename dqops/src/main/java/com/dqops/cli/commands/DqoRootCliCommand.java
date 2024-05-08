@@ -236,6 +236,11 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "The size of the data quality check histogram that is generated for a preview of a data quality incident.", defaultValue = "10")
     private Integer dqoIncidentsCheckHistogramSize;
 
+    @CommandLine.Option(names = {"--dqo.incidents.partitioned-checks-time-window-days"},
+            description = "The time window for the maximum age of a daily or monthly partition whose data quality issues are included in new data quality incidents when an issue is detected. " +
+                    "Data quality issues on older partitions will not trigger creating a new incident.", defaultValue = "45")
+    private Integer dqoIncidentsPartitionedChecksTimeWindowDays;
+
     @CommandLine.Option(names = {"--dqo.jdbc.max-connection-in-pool"},
             description = "Sets the maximum number of connections in the JDBC connection pool, shared across all data sources using JDBC drivers.", defaultValue = "1000")
     private Integer dqoJdbcMaxConnectionInPool;

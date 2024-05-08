@@ -154,6 +154,7 @@ dqo:
     count-open-incidents-days: 60
     column-histogram-size: 10
     check-histogram-size: 10
+    partitioned-checks-time-window-days: 45
   jdbc:
     max-connection-in-pool: 1000
     expire-after-access-seconds: 1800

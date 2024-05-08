@@ -17,6 +17,7 @@
 package com.dqops.core.incidents;
 
 import com.dqops.checks.CheckType;
+import com.dqops.core.configuration.DqoIncidentsConfigurationProperties;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityFactory;
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
@@ -28,6 +29,7 @@ import com.dqops.metadata.incidents.IncidentGroupingLevel;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.google.common.collect.Lists;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
@@ -40,10 +42,9 @@ import tech.tablesaw.api.*;
 import tech.tablesaw.selection.Selection;
 
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -62,6 +63,8 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
     private final Map<DataDomainConnectionKey, ConnectionIncidentTableUpdater> connectionIncidentLoaders = new LinkedHashMap<>();
     private final IncidentNotificationMessageFormatter incidentNotificationMessageFormatter;
     private final UserDomainIdentityFactory userDomainIdentityFactory;
+    private final DqoIncidentsConfigurationProperties incidentsConfigurationProperties;
+    private final DefaultTimeZoneProvider defaultTimeZoneProvider;
 
     /**
      * Creates an incident import queue service.
@@ -70,16 +73,22 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
      * @param incidentNotificationService            Incident notification service. Sends notifications to webhooks.
      * @param incidentNotificationMessageFormatter   Message formatter that creates formatted messages for Slack.
      * @param userDomainIdentityFactory              User data domain identity factory.
+     * @param incidentsConfigurationProperties       Incidents configuration parameters.
+     * @param defaultTimeZoneProvider                Default time zone provider.
      */
     @Autowired
     public IncidentImportQueueServiceImpl(IncidentsSnapshotFactory incidentsSnapshotFactory,
                                           IncidentNotificationService incidentNotificationService,
                                           IncidentNotificationMessageFormatter incidentNotificationMessageFormatter,
-                                          UserDomainIdentityFactory userDomainIdentityFactory) {
+                                          UserDomainIdentityFactory userDomainIdentityFactory,
+                                          DqoIncidentsConfigurationProperties incidentsConfigurationProperties,
+                                          DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.incidentsSnapshotFactory = incidentsSnapshotFactory;
         this.incidentNotificationService = incidentNotificationService;
         this.incidentNotificationMessageFormatter = incidentNotificationMessageFormatter;
         this.userDomainIdentityFactory = userDomainIdentityFactory;
+        this.incidentsConfigurationProperties = incidentsConfigurationProperties;
+        this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
 
     /**
@@ -347,11 +356,24 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             int minimumSeverityLevel = incidentGroupingAtConnection.getMinimumSeverity().getSeverityLevel();
             IntColumn severityColumn = newCheckResults.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
             InstantColumn executedAtColumn = newCheckResults.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+            DateTimeColumn timePeriodColumn = newCheckResults.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME);
             LongColumn checkResultIncidentHashColumn = newCheckResults.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME);
             TextColumn checkTypeColumn = newCheckResults.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME);
             Selection selectionOfNotProfilingCheckResults = checkTypeColumn.isNotEqualTo(CheckType.profiling.getDisplayName());
+            Selection selectionOfPartitionedCheckResults = checkTypeColumn.isEqualTo(CheckType.partitioned.getDisplayName());
+
+            ZoneId defaultTimeZoneId = defaultTimeZoneProvider.getDefaultTimeZoneId();
+            int partitionedChecksTimeWindowDays = incidentsConfigurationProperties.getPartitionedChecksTimeWindowDays();
+            LocalDateTime oldestIncludedPartitionedCheck = Instant.now().atZone(defaultTimeZoneId).truncatedTo(ChronoUnit.DAYS)
+                    .minus(partitionedChecksTimeWindowDays, ChronoUnit.DAYS)
+                    .toLocalDateTime();
+            Selection selectionOfPartitionChecksInTimeWindowCheckResults = timePeriodColumn.isOnOrAfter(oldestIncludedPartitionedCheck)
+                    .and(selectionOfPartitionedCheckResults);
+
             Selection selectionOfIssuesAboveMinSeverity = severityColumn.isGreaterThanOrEqualTo(minimumSeverityLevel);
-            Selection selectionOfNewAlerts = selectionOfNotProfilingCheckResults.and(selectionOfIssuesAboveMinSeverity);
+            Selection selectionOfNewAlerts = selectionOfNotProfilingCheckResults // issues detected in profiling checks are not generating data quality incidents
+                    .and(selectionOfIssuesAboveMinSeverity) // incidents generated only for severity above a threshold
+                    .and(selectionOfPartitionChecksInTimeWindowCheckResults); // incidents for issues related to old partitioned checks cover results only for a specified time window
             List<Integer> newIncidentsRowIndexes = new ArrayList<>();
 
             if (selectionOfNewAlerts.isEmpty()) {

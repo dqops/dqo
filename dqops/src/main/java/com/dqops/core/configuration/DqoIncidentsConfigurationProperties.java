@@ -29,6 +29,7 @@ public class DqoIncidentsConfigurationProperties implements Cloneable {
     private int countOpenIncidentsDays = 15;
     private int columnHistogramSize = 10;
     private int checkHistogramSize = 10;
+    private int partitionedChecksTimeWindowDays = 45;
 
     /**
      * Returns the number of days back that DQOps counts open incidents per day.
@@ -76,6 +77,23 @@ public class DqoIncidentsConfigurationProperties implements Cloneable {
      */
     public void setCheckHistogramSize(int checkHistogramSize) {
         this.checkHistogramSize = checkHistogramSize;
+    }
+
+    /**
+     * Returns the time window (in days) for partitioned checks that should be not included in new data quality incidents.
+     * When a data quality issue is detected for a daily partition that is older than that number of days, it is not included in the incident and will not trigger creating new incidents.
+     * @return The age of a check result for a partitioned check that should not trigger creating new incidents and is not counted.
+     */
+    public int getPartitionedChecksTimeWindowDays() {
+        return partitionedChecksTimeWindowDays;
+    }
+
+    /**
+     * Sets the time window for the maximum age of a daily or monthly partition whose data quality issues are included in new data quality incidents when an issue is detected.
+     * @param partitionedChecksTimeWindowDays Time window in days.
+     */
+    public void setPartitionedChecksTimeWindowDays(int partitionedChecksTimeWindowDays) {
+        this.partitionedChecksTimeWindowDays = partitionedChecksTimeWindowDays;
     }
 
     /**
