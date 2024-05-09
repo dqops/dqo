@@ -151,7 +151,7 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
                             sensorRunParameters.getRowCountLimit(),
                             sensorRunParameters.isFailOnSensorReadoutLimitExceeded());
                     Double defaultValue = sensorPrepareResult.getSensorDefinition().getSensorDefinitionSpec().getDefaultValue();
-                    if (sensorResultRows.rowCount() == 0 && defaultValue != null) {
+                    if (sensorResultRows.rowCount() == 0 && defaultValue != null && sensorRunParameters.getCheckType() != CheckType.partitioned) {
                         Table defaultValueResultTable = GenericSensorResultsFactory.createResultTableWithResult(defaultValue,
                                 this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorRunParameters.getTimePeriodGradient());
                         return new SensorExecutionResult(sensorRunParameters, defaultValueResultTable);
