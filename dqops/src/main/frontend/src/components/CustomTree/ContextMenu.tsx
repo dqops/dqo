@@ -71,7 +71,7 @@ const ContextMenu = ({
   ) => {
     console.log(filter, value);
     runPartitionedChecks({
-      run_checks_job_template: filter,
+      check_search_filters: filter,
       time_window_filter: value
     });
     setOpen(false);
