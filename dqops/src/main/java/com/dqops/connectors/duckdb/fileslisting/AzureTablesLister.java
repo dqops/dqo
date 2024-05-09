@@ -2,6 +2,8 @@ package com.dqops.connectors.duckdb.fileslisting;
 
 import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
+import com.azure.identity.DefaultAzureCredential;
+import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.azure.storage.blob.models.BlobItem;
@@ -35,12 +37,6 @@ public class AzureTablesLister extends RemoteTablesLister {
 
         String containerName = uri.getHost();
 
-        ClientSecretCredential clientSecretCredential = new ClientSecretCredentialBuilder()
-                .tenantId(duckdb.getTenantId())
-                .clientId(duckdb.getClientId())
-                .clientSecret(duckdb.getClientSecret())
-                .build();
-
         BlobContainerClient blobContainerClient = null;
 
         switch(duckdb.getAzureAuthenticationMode()){
@@ -51,15 +47,30 @@ public class AzureTablesLister extends RemoteTablesLister {
                         .getBlobContainerClient(containerName);
                 break;
             case service_principal:
+
+                ClientSecretCredential clientSecretCredential = new ClientSecretCredentialBuilder()
+                        .tenantId(duckdb.getTenantId())
+                        .clientId(duckdb.getClientId())
+                        .clientSecret(duckdb.getClientSecret())
+                        .build();
+
                 blobContainerClient = new BlobServiceClientBuilder()
                         .credential(clientSecretCredential)
                         .endpoint("https://" + duckdb.getAccountName() + ".blob.core.windows.net")
                         .buildClient()
                         .getBlobContainerClient(containerName);
                 break;
-//            case credential_chain: // todo
-//
-//                break;
+            case credential_chain:
+                DefaultAzureCredential defaultAzureCredential = new DefaultAzureCredentialBuilder()
+                        .build();
+
+                blobContainerClient = new BlobServiceClientBuilder()
+                        .credential(defaultAzureCredential)
+                        .endpoint("https://" + duckdb.getAccountName() + ".blob.core.windows.net")
+                        .buildClient()
+                        .getBlobContainerClient(containerName);
+
+                break;
             default:
                 throw new RuntimeException("Azure authentication mode " + duckdb.getAzureAuthenticationMode() + " is not supported for listing tables.");
         }

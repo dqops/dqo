@@ -25,12 +25,14 @@ class AzureTablesListerIntegrationTest extends BaseTest {
     private DuckdbParametersSpec duckdbParametersSpec;
     private String schemaName = "files";
     private AzureTablesLister sut;
+    private SecretValueProviderImpl secretValueProvider;
+    private SecretValueLookupContext secretValueLookupContext;
 
     @BeforeEach
     void setUp() {
         BeanFactory beanFactory = BeanFactoryObjectMother.getBeanFactory();
-        SecretValueProviderImpl secretValueProvider = beanFactory.getBean(SecretValueProviderImpl.class);
-        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
+        secretValueProvider = beanFactory.getBean(SecretValueProviderImpl.class);
+        secretValueLookupContext = new SecretValueLookupContext(null);
 
         this.sut = (AzureTablesLister)TablesListerProvider.createTablesLister(DuckdbStorageType.azure);
 
@@ -88,10 +90,10 @@ class AzureTablesListerIntegrationTest extends BaseTest {
         duckdbParametersSpec.getDirectories().put(schemaName, "az://duckdb-container/test-folder-1/data-set-1/");
 
         duckdbParametersSpec.setAzureAuthenticationMode(AzureAuthenticationMode.service_principal);
-        duckdbParametersSpec.setTenantId(DevelopmentCredentialsSecretNames.AZURE_SERVICE_PRINCIPAL_TENANT_ID);
-        duckdbParametersSpec.setClientId(DevelopmentCredentialsSecretNames.AZURE_SERVICE_PRINCIPAL_CLIENT_ID);
-        duckdbParametersSpec.setClientSecret(DevelopmentCredentialsSecretNames.AZURE_SERVICE_PRINCIPAL_CLIENT_SECRET);
-        duckdbParametersSpec.setAccountName(DevelopmentCredentialsSecretNames.AZURE_STORAGE_ACCOUNT_NAME);
+        duckdbParametersSpec.setTenantId(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_SERVICE_PRINCIPAL_TENANT_ID, secretValueLookupContext));
+        duckdbParametersSpec.setClientId(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_SERVICE_PRINCIPAL_CLIENT_ID, secretValueLookupContext));
+        duckdbParametersSpec.setClientSecret(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_SERVICE_PRINCIPAL_CLIENT_SECRET, secretValueLookupContext));
+        duckdbParametersSpec.setAccountName(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_STORAGE_ACCOUNT_NAME, secretValueLookupContext));
 
         List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
 
