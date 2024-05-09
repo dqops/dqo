@@ -16,6 +16,7 @@
 package com.dqops.connectors.duckdb;
 
 import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.storage.azure.AzureAuthenticationMode;
 import com.dqops.metadata.sources.ConnectionSpec;
 
 /**
@@ -74,6 +75,27 @@ public class DuckdbConnectionSpecObjectMother {
                 setUser("aws_example_key_id");
                 setPassword("aws_example_secret");
                 setRegion("eu-central-1");
+            }});
+        }};
+
+        return connectionSpec;
+    }
+
+    /**
+     * Creates a default connection spec to DuckDB with Azure setup.
+     * @return Connection spec to a DuckDB.
+     */
+    public static ConnectionSpec createForFilesOnAzure(DuckdbFilesFormatType duckdbFilesFormatType,
+                                                       AzureAuthenticationMode azureAuthenticationMode) {
+        ConnectionSpec connectionSpec = new ConnectionSpec()
+        {{
+            setProviderType(ProviderType.duckdb);
+            setDuckdb(new DuckdbParametersSpec()
+            {{
+                setReadMode(DuckdbReadMode.files);
+                setFilesFormatType(duckdbFilesFormatType);
+                setStorageType(DuckdbStorageType.azure);
+                setAzureAuthenticationMode(azureAuthenticationMode);
             }});
         }};
 

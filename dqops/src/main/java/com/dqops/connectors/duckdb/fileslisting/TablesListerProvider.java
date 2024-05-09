@@ -1,6 +1,7 @@
 package com.dqops.connectors.duckdb.fileslisting;
 
 import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.duckdb.fileslisting.azure.AzureTablesLister;
 
 /**
  * Factory for the table listers based on file system.

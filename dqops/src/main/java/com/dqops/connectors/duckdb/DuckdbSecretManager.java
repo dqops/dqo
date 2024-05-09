@@ -9,7 +9,6 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.Hex;
 import tech.tablesaw.api.Table;
 
 import java.nio.charset.StandardCharsets;
@@ -44,11 +43,12 @@ public class DuckdbSecretManager {
      * @param sourceConnection The source connection that executes a secret creation query.
      */
     public synchronized void createSecrets(ConnectionSpec connectionSpec, AbstractJdbcSourceConnection sourceConnection){
-        List<String> scopes = connectionSpec.getDuckdb().getScopes();
-        scopes.forEach(scope -> {
-            String secretName = "s_" + calculateSecretHex(scope);
+        DuckdbParametersSpec duckdb = connectionSpec.getDuckdb();
 
-            String createSecretQuery = DuckdbQueriesProvider.provideCreateSecretQuery(connectionSpec, secretName, scope);
+        List<String> scopes = duckdb.getScopes();
+        scopes.forEach(scope -> {
+
+            String createSecretQuery = DuckdbQueriesProvider.provideCreateSecretQuery(connectionSpec, scope);
             try {
                 Table tableResult = sourceConnection.executeQuery(createSecretQuery, JobCancellationToken.createDummyJobCancellationToken(), null, false);
                 Boolean success = (Boolean) tableResult.column(tableResult.columnIndex("success")).get(0);
@@ -61,17 +61,6 @@ public class DuckdbSecretManager {
                 }
             }
         });
-    }
-
-    /**
-     * Calculates a hex for secret using scope and a name of a thread.
-     * @return Hex string.
-     */
-    public static String calculateSecretHex(String scope) {
-        Thread thread = Thread.currentThread();
-        String threadedScope = (thread != null ? thread.getName() : "") + scope;
-        String hex = new String(Hex.encodeHex((threadedScope).getBytes(StandardCharsets.UTF_8)));
-        return hex;
     }
 
     /**

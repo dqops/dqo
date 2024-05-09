@@ -1,7 +1,11 @@
 package com.dqops.connectors.duckdb;
 
+import com.dqops.connectors.duckdb.fileslisting.azure.AzureStoragePath;
 import com.dqops.connectors.storage.azure.AzureAuthenticationMode;
 import com.dqops.metadata.sources.ConnectionSpec;
+import org.apache.commons.codec.binary.Hex;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * Provides a queries specific to DuckDB with the human-readable formatting.
@@ -13,11 +17,21 @@ public class DuckdbQueriesProvider {
      * @param connectionSpec Connection spec with DuckDB parameters with credentials and setup.
      * @return Ready to execute create secrets query string.
      */
-    public static String provideCreateSecretQuery(ConnectionSpec connectionSpec, String secretName, String scope){
+    public static String provideCreateSecretQuery(ConnectionSpec connectionSpec,String scope){
         DuckdbParametersSpec duckdbParametersSpec = connectionSpec.getDuckdb();
         DuckdbStorageType storageType = duckdbParametersSpec.getStorageType();
         String indent = "    ";
         StringBuilder loadSecretsString = new StringBuilder();
+
+        if(connectionSpec.getDuckdb().getStorageType().equals(DuckdbStorageType.azure)){
+            AzureStoragePath azureStoragePath = AzureStoragePath.from(scope, resolveAccountName(connectionSpec.getDuckdb()));
+            if(!scope.contains(azureStoragePath.getDomain())){
+                scope = azureStoragePath.getAzFullPathPrefix();
+            }
+        }
+
+        String secretName = "s_" + calculateSecretHex(scope);
+
         loadSecretsString.append("CREATE SECRET ").append(secretName).append(" (\n");
         loadSecretsString.append(indent).append("TYPE ").append(storageType.toString().toUpperCase()).append(",\n");
         switch (storageType){
@@ -66,6 +80,38 @@ public class DuckdbQueriesProvider {
         setCustomRepository.append("/bin/.duckdb/extensions");  // use only "/bin" for DuckDB < 0.10
         setCustomRepository.append("'");
         return setCustomRepository.toString();
+    }
+
+    /**
+     * Resolves storage account name for azure. It parses the connection string.
+     * @param duckdb DuckdbParametersSpec
+     * @return Storage account name.
+     */
+    private static String resolveAccountName(DuckdbParametersSpec duckdb){
+        if(duckdb.getAzureAuthenticationMode().equals(AzureAuthenticationMode.connection_string)){
+            String connectionString = duckdb.getPassword();
+            try {
+                int start = connectionString.indexOf("AccountName") + "AccountName".length() + 1;
+                String accountName = connectionString.substring(start, start + connectionString.substring(start).indexOf(";"));
+                return accountName;
+            } catch (Exception ex){
+                throw new RuntimeException("The connection string does not contain the AccountName part");
+            }
+
+        } else {
+            return duckdb.getAccountName();
+        }
+    }
+
+    /**
+     * Calculates a hex for secret using scope and a name of a thread.
+     * @return Hex string.
+     */
+    public static String calculateSecretHex(String scope) {
+        Thread thread = Thread.currentThread();
+        String threadedScope = (thread != null ? thread.getName() : "") + scope;
+        String hex = new String(Hex.encodeHex((threadedScope).getBytes(StandardCharsets.UTF_8)));
+        return hex;
     }
 
 }
