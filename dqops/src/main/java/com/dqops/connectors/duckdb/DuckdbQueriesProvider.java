@@ -33,12 +33,12 @@ public class DuckdbQueriesProvider {
                 }
                 if(duckdbParametersSpec.getAzureAuthenticationMode().equals(AzureAuthenticationMode.credential_chain)) {
                     loadSecretsString.append(indent).append("PROVIDER ")
-                            .append(AzureAuthenticationMode.credential_chain.toString().toUpperCase()).append("',\n");
+                            .append(AzureAuthenticationMode.credential_chain.toString().toUpperCase()).append(",\n");
                     loadSecretsString.append(indent).append("ACCOUNT_NAME '").append(duckdbParametersSpec.getAccountName()).append("',\n");
                 }
                 if(duckdbParametersSpec.getAzureAuthenticationMode().equals(AzureAuthenticationMode.service_principal)) {
                     loadSecretsString.append(indent).append("PROVIDER ")
-                            .append(AzureAuthenticationMode.service_principal.toString().toUpperCase()).append("',\n");
+                            .append(AzureAuthenticationMode.service_principal.toString().toUpperCase()).append(",\n");
                     loadSecretsString.append(indent).append("TENANT_ID '").append(duckdbParametersSpec.getTenantId()).append("',\n");
                     loadSecretsString.append(indent).append("CLIENT_ID '").append(duckdbParametersSpec.getClientId()).append("',\n");
                     loadSecretsString.append(indent).append("CLIENT_SECRET '").append(duckdbParametersSpec.getClientSecret()).append("',\n");

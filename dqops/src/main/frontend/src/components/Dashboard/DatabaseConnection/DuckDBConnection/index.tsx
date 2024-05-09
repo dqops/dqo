@@ -307,6 +307,7 @@ const DuckdbConnection = ({
               data={sharedCredentials}
               label="Client Secret"
               className="mb-4 text-sm"
+              maskingType="password"
               value={copiedDatabase?.client_secret}
               onChange={(value) =>
                 setCopiedDatabase((prev) => ({ ...prev, client_secret: value }))

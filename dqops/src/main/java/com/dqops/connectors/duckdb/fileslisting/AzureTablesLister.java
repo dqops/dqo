@@ -1,5 +1,7 @@
 package com.dqops.connectors.duckdb.fileslisting;
 
+import com.azure.identity.ClientSecretCredential;
+import com.azure.identity.ClientSecretCredentialBuilder;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.azure.storage.blob.models.BlobItem;
@@ -33,10 +35,34 @@ public class AzureTablesLister extends RemoteTablesLister {
 
         String containerName = uri.getHost();
 
-        BlobContainerClient blobContainerClient = new BlobServiceClientBuilder()
-                .connectionString(duckdb.getPassword())
-                .buildClient()
-                .getBlobContainerClient(containerName);
+        ClientSecretCredential clientSecretCredential = new ClientSecretCredentialBuilder()
+                .tenantId(duckdb.getTenantId())
+                .clientId(duckdb.getClientId())
+                .clientSecret(duckdb.getClientSecret())
+                .build();
+
+        BlobContainerClient blobContainerClient = null;
+
+        switch(duckdb.getAzureAuthenticationMode()){
+            case connection_string:
+                blobContainerClient = new BlobServiceClientBuilder()
+                        .connectionString(duckdb.getPassword())
+                        .buildClient()
+                        .getBlobContainerClient(containerName);
+                break;
+            case service_principal:
+                blobContainerClient = new BlobServiceClientBuilder()
+                        .credential(clientSecretCredential)
+                        .endpoint("https://" + duckdb.getAccountName() + ".blob.core.windows.net")
+                        .buildClient()
+                        .getBlobContainerClient(containerName);
+                break;
+//            case credential_chain: // todo
+//
+//                break;
+            default:
+                throw new RuntimeException("Azure authentication mode " + duckdb.getAzureAuthenticationMode() + " is not supported for listing tables.");
+        }
 
         List<String> files = listBucketObjects(blobContainerClient, uri);
 
