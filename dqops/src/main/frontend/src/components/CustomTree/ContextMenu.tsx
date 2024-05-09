@@ -25,7 +25,6 @@ import SvgIcon from '../SvgIcon';
 import CollectStatisticsDialog from './CollectStatisticsDialog';
 import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
 import RunChecksDialog from './RunChecksDialog';
-import RunChecksPartitionedMenu from './RunChecksPartitionedMenu';
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -66,12 +65,15 @@ const ContextMenu = ({
     setOpen(false);
   };
 
-  const handleRunChecks = (filter?: CheckSearchFilters) => {
-    if (filter) {
-      runChecks({ ...node, run_checks_job_template: filter });
-    } else {
-      runChecks(node);
-    }
+  const handleRunChecks = (
+    filter?: CheckSearchFilters,
+    value?: TimeWindowFilterParameters
+  ) => {
+    console.log(filter, value);
+    runPartitionedChecks({
+      check_search_filters: filter,
+      time_window_filter: value
+    });
     setOpen(false);
   };
 
@@ -100,7 +102,11 @@ const ContextMenu = ({
     setOpen(false);
     dispatch(
       addFirstLevelTab(checkTypes, {
-        url: ROUTES.CONNECTION_DETAIL(checkTypes, node.label, 'schemas?import_schema=true'),
+        url: ROUTES.CONNECTION_DETAIL(
+          checkTypes,
+          node.label,
+          'schemas?import_schema=true'
+        ),
         value: ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, node.label),
         label: `${node.label}`
       })
@@ -172,35 +178,41 @@ const ContextMenu = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div onClick={(e) => e.stopPropagation()}>
-          {node.level !== TREE_LEVEL.COLUMNS &&
-            checkTypes !== 'partitioned' && (
-              <>
-                <div
-                  className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-                  onClick={() => {
-                    userProfile.can_manage_data_sources
-                      ? setRunChecksDialogOpened(true)
-                      : undefined;
-                  }}
-                >
-                  Run checks
-                </div>
-                <RunChecksDialog
-                  open={runChecksDialogOpened}
-                  onClose={() => {
-                    setRunChecksDialogOpened(false), 
-                    setOpen(false);
-                  }}
-                  onClick={() => {
-                    handleRunChecks();
-                    setOpen(false);
-                    setRunChecksDialogOpened(false);
-                  }}
-                  runChecksJobTemplate={node.run_checks_job_template ?? {}}
-                />
-              </>
-            )}
-          {checkTypes === 'partitioned' &&
+          {node.level !== TREE_LEVEL.COLUMNS && (
+            <>
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 pl-4 py-2 rounded flex items-center justify-between"
+                onClick={() => {
+                  userProfile.can_manage_data_sources
+                    ? setRunChecksDialogOpened(true)
+                    : undefined;
+                }}
+              >
+                Run checks
+                {checkTypes === CheckTypes.PARTITIONED && (
+                  <SvgIcon name="options" className="w-5 h-5" />
+                )}
+              </div>
+
+              <RunChecksDialog
+                checkType={checkTypes}
+                open={runChecksDialogOpened}
+                onClose={() => {
+                  setRunChecksDialogOpened(false), setOpen(false);
+                }}
+                onClick={(
+                  filter: CheckSearchFilters,
+                  timeWindowFilter?: TimeWindowFilterParameters
+                ) => {
+                  handleRunChecks(filter, timeWindowFilter);
+                  setOpen(false);
+                  setRunChecksDialogOpened(false);
+                }}
+                runChecksJobTemplate={node.run_checks_job_template ?? {}}
+              />
+            </>
+          )}
+          {/* {checkTypes === 'partitioned' &&
             [
               TREE_LEVEL.DATABASE,
               TREE_LEVEL.SCHEMA,
@@ -208,7 +220,7 @@ const ContextMenu = ({
               TREE_LEVEL.COLUMN
             ].includes(node.level) && (
               <RunChecksPartitionedMenu onClick={onRunPartitionedChecks} />
-            )}
+            )} */}
           {[
             TREE_LEVEL.DATABASE,
             TREE_LEVEL.SCHEMA,
@@ -233,8 +245,8 @@ const ContextMenu = ({
                   setOpen(false);
                 }}
                 onClick={(filter) => {
-                  handleCollectStatisticsOnTable(filter), 
-                  setCollectStatisticsDialogOpened(false);
+                  handleCollectStatisticsOnTable(filter),
+                    setCollectStatisticsDialogOpened(false);
                   setOpen(false);
                 }}
                 collectStatisticsJobTemplate={
@@ -423,7 +435,9 @@ const ContextMenu = ({
             checkTypes === CheckTypes.SOURCES && (
               <div
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-                onClick={() => reimportTableMetadata(node, () => setOpen(false))}
+                onClick={() =>
+                  reimportTableMetadata(node, () => setOpen(false))
+                }
               >
                 Reimport metadata
               </div>

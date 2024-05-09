@@ -148,6 +148,26 @@ public class NumericTypeConverter {
     }
 
     /**
+     * Tries to parse a string value to an integer (int 32 bit) value.
+     * Captures exceptions and returns null when the value is not parsable to an integer.
+     * @param value String value to parse.
+     * @return Parsed integer value when it is parsable or null when the value is not a valid integer value.
+     */
+    public static Integer tryParseInteger(String value) {
+        if (Strings.isNullOrEmpty(value)) {
+            return null;
+        }
+
+        try {
+            int parsedLong = Integer.parseInt(value);
+            return parsedLong;
+        }
+        catch (NumberFormatException ex) {
+            return null;
+        }
+    }
+
+    /**
      * Tries to parse a string value to a long (int 64 bit) value.
      * Captures exceptions and returns null when the value is not parsable to a long integer.
      * @param value String value to parse.

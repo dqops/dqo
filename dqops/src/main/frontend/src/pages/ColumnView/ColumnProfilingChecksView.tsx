@@ -149,7 +149,7 @@ const ColumnProfilingChecksView = ({
   ]);
 
   const onUpdate = async () => {
-    if (!checksUI) {
+    if (!checksUI || !isUpdatedChecksUi) {
       return;
     }
     await dispatch(

@@ -194,7 +194,7 @@ public class TablesController {
         if (label.isPresent() && label.get().size() > 0) {
             tableSearchFilters.setLabels(label.get().toArray(String[]::new));
         }
-        if (filter.isEmpty() || !Strings.isNullOrEmpty(filter.get())) {
+        if (filter.isEmpty() || Strings.isNullOrEmpty(filter.get())) {
             tableSearchFilters.setFullTableName(schemaName + ".*");
         } else {
             tableSearchFilters.setFullTableName(schemaName + "." + filter.get());

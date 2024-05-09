@@ -24,6 +24,7 @@ from .anomaly_stationary_percentile_moving_average_rule_warning_1_pct_parameters
 )
 from .authenticated_dashboard_model import AuthenticatedDashboardModel
 from .aws_authentication_mode import AwsAuthenticationMode
+from .azure_authentication_mode import AzureAuthenticationMode
 from .between_floats_rule_parameters_spec import BetweenFloatsRuleParametersSpec
 from .between_ints_rule_parameters_spec import BetweenIntsRuleParametersSpec
 from .between_percent_rule_parameters_spec import BetweenPercentRuleParametersSpec
@@ -1937,6 +1938,7 @@ __all__ = (
     "AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
     "AuthenticatedDashboardModel",
     "AwsAuthenticationMode",
+    "AzureAuthenticationMode",
     "BetweenFloatsRuleParametersSpec",
     "BetweenIntsRuleParametersSpec",
     "BetweenPercentRuleParametersSpec",

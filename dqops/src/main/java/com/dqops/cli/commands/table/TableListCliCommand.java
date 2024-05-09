@@ -23,10 +23,7 @@ import com.dqops.cli.commands.table.impl.TableCliService;
 import com.dqops.cli.completion.completedcommands.IConnectionNameCommand;
 import com.dqops.cli.completion.completers.ConnectionNameCompleter;
 import com.dqops.cli.completion.completers.TableNameCompleter;
-import com.dqops.cli.terminal.FileWriter;
-import com.dqops.cli.terminal.TablesawDatasetTableModel;
-import com.dqops.cli.terminal.TerminalTableWritter;
-import com.dqops.cli.terminal.TerminalWriter;
+import com.dqops.cli.terminal.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -43,8 +40,8 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "list", header = "List tables filtered by the given conditions", description = "List all the tables that match a given condition. It allows the user to use various filters, such as table name or schema names to list filtered tables.")
 public class TableListCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
+    private TerminalFactory terminalFactory;
     private TableCliService tableImportService;
-    private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWritter;
     private FileWriter fileWriter;
 
@@ -52,12 +49,12 @@ public class TableListCliCommand extends BaseCommand implements ICommand, IConne
     }
 
     @Autowired
-    public TableListCliCommand(TerminalWriter terminalWriter,
-							   TableCliService tableImportService,
+    public TableListCliCommand(TerminalFactory terminalFactory,
+                               TableCliService tableImportService,
                                TerminalTableWritter terminalTableWritter,
                                FileWriter fileWriter) {
+        this.terminalFactory = terminalFactory;
         this.tableImportService = tableImportService;
-        this.terminalWriter = terminalWriter;
         this.terminalTableWritter = terminalTableWritter;
         this.fileWriter = fileWriter;
     }
@@ -142,24 +139,24 @@ public class TableListCliCommand extends BaseCommand implements ICommand, IConne
                     TableBuilder tableBuilder = new TableBuilder(new TablesawDatasetTableModel(cliOperationStatus.getTable()));
                     tableBuilder.addInnerBorder(BorderStyle.oldschool);
                     tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-                    String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+                    String renderedTable = tableBuilder.build().render(this.terminalFactory.getWriter().getTerminalWidth() - 1);
                     CliOperationStatus cliOperationStatus2 = this.fileWriter.writeStringToFile(renderedTable);
-                    this.terminalWriter.writeLine(cliOperationStatus2.getMessage());
+                    this.terminalFactory.getWriter().writeLine(cliOperationStatus2.getMessage());
                 } else {
                     this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
                 }
             } else {
                 if (this.isWriteToFile()) {
                     CliOperationStatus cliOperationStatus2 = this.fileWriter.writeStringToFile(cliOperationStatus.getMessage());
-                    this.terminalWriter.writeLine(cliOperationStatus2.getMessage());
+                    this.terminalFactory.getWriter().writeLine(cliOperationStatus2.getMessage());
                 }
                 else {
-                    this.terminalWriter.write(cliOperationStatus.getMessage());
+                    this.terminalFactory.getWriter().write(cliOperationStatus.getMessage());
                 }
             }
             return 0;
         } else {
-            this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+            this.terminalFactory.getWriter().writeLine(cliOperationStatus.getMessage());
             return -1;
         }
     }

@@ -283,6 +283,15 @@ export const handleSorting = (
         )
       );
       break;
+    case 'Labels':
+        setSortedArray(
+          getSortedArrayAlphabetictly(
+            'labels',
+            dataArray,
+            sortDirection
+          )
+        );
+        break;  
     case 'Length':
       setSortedArray(getSortedData<MyData>('length', dataArray, sortDirection));
       break;

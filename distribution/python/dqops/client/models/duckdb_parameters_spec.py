@@ -4,6 +4,7 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..models.aws_authentication_mode import AwsAuthenticationMode
+from ..models.azure_authentication_mode import AzureAuthenticationMode
 from ..models.duckdb_files_format_type import DuckdbFilesFormatType
 from ..models.duckdb_read_mode import DuckdbReadMode
 from ..models.duckdb_storage_type import DuckdbStorageType
@@ -41,12 +42,21 @@ class DuckdbParametersSpec:
             must be an absolute path.
         storage_type (Union[Unset, DuckdbStorageType]):
         aws_authentication_mode (Union[Unset, AwsAuthenticationMode]):
+        azure_authentication_mode (Union[Unset, AzureAuthenticationMode]):
         user (Union[Unset, str]): DuckDB user name for a remote storage type. The value can be in the
             ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
         password (Union[Unset, str]): DuckDB password for a remote storage type. The value can be in the
             ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
         region (Union[Unset, str]): The region for the storage credentials. The value can be in the
             ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
+        tenant_id (Union[Unset, str]): Azure Tenant ID used by DuckDB Secret Manager. The value can be in the
+            ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
+        client_id (Union[Unset, str]): Azure Client ID used by DuckDB Secret Manager. The value can be in the
+            ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
+        client_secret (Union[Unset, str]): Azure Client Secret used by DuckDB Secret Manager. The value can be in the
+            ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
+        account_name (Union[Unset, str]): Azure Storage Account Name used by DuckDB Secret Manager. The value can be in
+            the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
     """
 
     read_mode: Union[Unset, DuckdbReadMode] = UNSET
@@ -59,9 +69,14 @@ class DuckdbParametersSpec:
     directories: Union[Unset, "DuckdbParametersSpecDirectories"] = UNSET
     storage_type: Union[Unset, DuckdbStorageType] = UNSET
     aws_authentication_mode: Union[Unset, AwsAuthenticationMode] = UNSET
+    azure_authentication_mode: Union[Unset, AzureAuthenticationMode] = UNSET
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
     region: Union[Unset, str] = UNSET
+    tenant_id: Union[Unset, str] = UNSET
+    client_id: Union[Unset, str] = UNSET
+    client_secret: Union[Unset, str] = UNSET
+    account_name: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -102,9 +117,17 @@ class DuckdbParametersSpec:
         if not isinstance(self.aws_authentication_mode, Unset):
             aws_authentication_mode = self.aws_authentication_mode.value
 
+        azure_authentication_mode: Union[Unset, str] = UNSET
+        if not isinstance(self.azure_authentication_mode, Unset):
+            azure_authentication_mode = self.azure_authentication_mode.value
+
         user = self.user
         password = self.password
         region = self.region
+        tenant_id = self.tenant_id
+        client_id = self.client_id
+        client_secret = self.client_secret
+        account_name = self.account_name
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -129,12 +152,22 @@ class DuckdbParametersSpec:
             field_dict["storage_type"] = storage_type
         if aws_authentication_mode is not UNSET:
             field_dict["aws_authentication_mode"] = aws_authentication_mode
+        if azure_authentication_mode is not UNSET:
+            field_dict["azure_authentication_mode"] = azure_authentication_mode
         if user is not UNSET:
             field_dict["user"] = user
         if password is not UNSET:
             field_dict["password"] = password
         if region is not UNSET:
             field_dict["region"] = region
+        if tenant_id is not UNSET:
+            field_dict["tenant_id"] = tenant_id
+        if client_id is not UNSET:
+            field_dict["client_id"] = client_id
+        if client_secret is not UNSET:
+            field_dict["client_secret"] = client_secret
+        if account_name is not UNSET:
+            field_dict["account_name"] = account_name
 
         return field_dict
 
@@ -216,11 +249,28 @@ class DuckdbParametersSpec:
         else:
             aws_authentication_mode = AwsAuthenticationMode(_aws_authentication_mode)
 
+        _azure_authentication_mode = d.pop("azure_authentication_mode", UNSET)
+        azure_authentication_mode: Union[Unset, AzureAuthenticationMode]
+        if isinstance(_azure_authentication_mode, Unset):
+            azure_authentication_mode = UNSET
+        else:
+            azure_authentication_mode = AzureAuthenticationMode(
+                _azure_authentication_mode
+            )
+
         user = d.pop("user", UNSET)
 
         password = d.pop("password", UNSET)
 
         region = d.pop("region", UNSET)
+
+        tenant_id = d.pop("tenant_id", UNSET)
+
+        client_id = d.pop("client_id", UNSET)
+
+        client_secret = d.pop("client_secret", UNSET)
+
+        account_name = d.pop("account_name", UNSET)
 
         duckdb_parameters_spec = cls(
             read_mode=read_mode,
@@ -233,9 +283,14 @@ class DuckdbParametersSpec:
             directories=directories,
             storage_type=storage_type,
             aws_authentication_mode=aws_authentication_mode,
+            azure_authentication_mode=azure_authentication_mode,
             user=user,
             password=password,
             region=region,
+            tenant_id=tenant_id,
+            client_id=client_id,
+            client_secret=client_secret,
+            account_name=account_name,
         )
 
         duckdb_parameters_spec.additional_properties = d

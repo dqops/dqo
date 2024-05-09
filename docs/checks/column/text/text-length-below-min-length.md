@@ -298,7 +298,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -316,7 +316,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) < 5
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -929,7 +929,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -946,7 +946,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) < 5
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -1658,7 +1658,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -1676,7 +1676,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) < 5
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -2290,7 +2290,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -2307,7 +2307,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) < 5
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -3019,7 +3019,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -3037,7 +3037,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) < 5
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -3651,7 +3651,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -3668,7 +3668,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) < 5
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -4390,7 +4390,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -4408,7 +4408,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) < 5
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -5036,7 +5036,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -5053,7 +5053,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) < 5
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -5773,7 +5773,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -5791,7 +5791,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) < 5
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -6419,7 +6419,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -6436,7 +6436,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table.`target_column`) < 5
+                        WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) < 5
                             THEN 1
                         ELSE 0
                     END

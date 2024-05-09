@@ -8,21 +8,21 @@ import com.dqops.utils.serialization.JsonSerializerImpl;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
+import lombok.extern.slf4j.Slf4j;
+import tech.tablesaw.api.Table;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
  * DuckDB secret manager that handles of the secrets creation in DuckDB.
  */
+@Slf4j
 public class DuckdbSecretManager {
 
     private static DuckdbSecretManager secretsManager;
-    private final Set<HashCode> secrets;
 
     public DuckdbSecretManager() {
-        secrets = new HashSet<HashCode>();
     }
 
     /**
@@ -37,19 +37,30 @@ public class DuckdbSecretManager {
     }
 
     /**
-     * Creates a secret for a connection spec which secret has not been created yet or when the conneciton spec has changed.
+     * Creates a secret for a connection spec.
      *
-     * @param connectionSpec Connection spec which hash is compared for the creation of a new secret.
-     * @param sourceConnection The source connection that executes a query with that creates a new secret.
+     * @param connectionSpec Connection spec with credential details.
+     * @param sourceConnection The source connection that executes a secret creation query.
      */
-    public synchronized void ensureCreated(ConnectionSpec connectionSpec, AbstractJdbcSourceConnection sourceConnection){
-        HashCode secretHash = calculateHash64(connectionSpec);
-        if(secrets.contains(secretHash)){
-            return;
-        }
-        String createSecretQuery = DuckdbQueriesProvider.provideCreateSecretQuery(connectionSpec, secretHash);
-        sourceConnection.executeQuery(createSecretQuery, JobCancellationToken.createDummyJobCancellationToken(), null, false);
-        secrets.add(secretHash);
+    public synchronized void createSecrets(ConnectionSpec connectionSpec, AbstractJdbcSourceConnection sourceConnection){
+        DuckdbParametersSpec duckdb = connectionSpec.getDuckdb();
+
+        List<String> scopes = duckdb.getScopes();
+        scopes.forEach(scope -> {
+
+            String createSecretQuery = DuckdbQueriesProvider.provideCreateSecretQuery(connectionSpec, scope);
+            try {
+                Table tableResult = sourceConnection.executeQuery(createSecretQuery, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+                Boolean success = (Boolean) tableResult.column(tableResult.columnIndex("success")).get(0);
+                if(!success){
+                    log.error("Creation of a new DuckDB secret key for storage " + connectionSpec.getDuckdb().getStorageType() + " failed !");
+                }
+            } catch (Exception e){
+                if(!e.getMessage().contains("already exists")) { // Temporary secret with name xxx already exists
+                    log.error("Cannot create a secret for the " + connectionSpec.getConnectionName() + " connection.");
+                }
+            }
+        });
     }
 
     /**
@@ -60,8 +71,15 @@ public class DuckdbSecretManager {
         JsonSerializer jsonSerializer = new JsonSerializerImpl();
         String serialized = jsonSerializer.serialize(connectionSpec);
         HashFunction hashFunction = Hashing.farmHashFingerprint64();
-        HashCode hash = hashFunction.hashString(serialized, StandardCharsets.UTF_8);
-        return hash;
+        Thread thread = Thread.currentThread();
+        if(thread != null){
+            String threadName = Thread.currentThread().getName();
+            HashCode hash = hashFunction.hashString(threadName + serialized, StandardCharsets.UTF_8);
+            return hash;
+        } else {
+            HashCode hash = hashFunction.hashString(serialized, StandardCharsets.UTF_8);
+            return hash;
+        }
     }
 
 }

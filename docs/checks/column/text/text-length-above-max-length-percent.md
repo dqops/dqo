@@ -320,7 +320,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                            WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                                 THEN 1
                             ELSE 0
                         END
@@ -341,7 +341,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(analyzed_table.`target_column`) > 100
+                            WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -1065,7 +1065,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                            WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                                 THEN 1
                             ELSE 0
                         END
@@ -1085,7 +1085,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(analyzed_table.`target_column`) > 100
+                            WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -1908,7 +1908,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                            WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                                 THEN 1
                             ELSE 0
                         END
@@ -1929,7 +1929,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(analyzed_table.`target_column`) > 100
+                            WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -2654,7 +2654,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                            WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                                 THEN 1
                             ELSE 0
                         END
@@ -2674,7 +2674,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(analyzed_table.`target_column`) > 100
+                            WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -3497,7 +3497,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                            WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                                 THEN 1
                             ELSE 0
                         END
@@ -3518,7 +3518,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(analyzed_table.`target_column`) > 100
+                            WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -4243,7 +4243,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                            WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                                 THEN 1
                             ELSE 0
                         END
@@ -4263,7 +4263,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(analyzed_table.`target_column`) > 100
+                            WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -5096,7 +5096,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                            WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                                 THEN 1
                             ELSE 0
                         END
@@ -5117,7 +5117,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(analyzed_table.`target_column`) > 100
+                            WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -5856,7 +5856,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                            WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                                 THEN 1
                             ELSE 0
                         END
@@ -5876,7 +5876,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(analyzed_table.`target_column`) > 100
+                            WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -6707,7 +6707,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                            WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                                 THEN 1
                             ELSE 0
                         END
@@ -6728,7 +6728,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(analyzed_table.`target_column`) > 100
+                            WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -7467,7 +7467,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                            WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                                 THEN 1
                             ELSE 0
                         END
@@ -7487,7 +7487,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(analyzed_table.`target_column`) > 100
+                            WHEN LENGTH(CAST(analyzed_table.`target_column` AS CHAR)) > 100
                                 THEN 1
                             ELSE 0
                         END

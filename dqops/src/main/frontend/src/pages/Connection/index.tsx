@@ -6,6 +6,7 @@ import ConnectionCommentView from '../../components/Connection/ConnectionView/Co
 import ConnectionDefaultGroupingConfiguration from '../../components/Connection/ConnectionView/ConnectionDataStream';
 import ConnectionDetail from '../../components/Connection/ConnectionView/ConnectionDetail';
 import ConnectionLabelsView from '../../components/Connection/ConnectionView/ConnectionLabelsView';
+import ConnectionTables from '../../components/Connection/ConnectionView/ConnectionTables';
 import { IncidentsNotificationsView } from '../../components/Connection/ConnectionView/IncidentsNotificationsView';
 import ScheduleDetail from '../../components/Connection/ConnectionView/ScheduleDetail';
 import SchemasView from '../../components/Connection/ConnectionView/SchemasView';
@@ -43,6 +44,10 @@ const initSourceTabs = [
     value: 'schemas'
   },
   {
+    label: 'Tables',
+    value: 'tables'
+  },
+  {
     label: 'Default grouping template',
     value: 'data-groupings'
   },
@@ -67,7 +72,11 @@ const ConnectionPage = () => {
     connection,
     tab: activeTab,
     checkTypes
-  }: { connection: string; tab: string; checkTypes: CheckTypes } = useDecodedParams();
+  }: {
+    connection: string;
+    tab: string;
+    checkTypes: CheckTypes;
+  } = useDecodedParams();
   const [tabs, setTabs] = useState(
     checkTypes === CheckTypes.SOURCES ? initSourceTabs : initCheckTabs
   );
@@ -159,6 +168,10 @@ const ConnectionPage = () => {
       {
         label: 'Schemas',
         value: 'schemas'
+      },
+      {
+        label: 'Tables',
+        value: 'tables'
       }
     ]);
     // } else {
@@ -193,6 +206,7 @@ const ConnectionPage = () => {
           <ConnectionDefaultGroupingConfiguration />
         )}
         {activeTab === 'incidents' && <IncidentsNotificationsView />}
+        {activeTab === 'tables' && <ConnectionTables />}
       </div>
     </>
   );

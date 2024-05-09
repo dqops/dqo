@@ -44,7 +44,7 @@ public class DqoUserPrincipal {
     public DqoUserPrincipal(String dataDomainFolder, String dataDomainCloud) {
         this.accountRole = DqoUserRole.NONE;
         this.privileges = Collections.unmodifiableList(new ArrayList<>());
-        this.dataDomainIdentity = new UserDomainIdentity(UNAUTHENTICATED_PRINCIPAL_NAME, DqoUserRole.NONE, dataDomainFolder, dataDomainCloud, null, null);
+        this.dataDomainIdentity = new UserDomainIdentity(UNAUTHENTICATED_PRINCIPAL_NAME, DqoUserRole.NONE, dataDomainFolder, dataDomainCloud, null, null, null);
     }
 
     /**
@@ -56,6 +56,7 @@ public class DqoUserPrincipal {
      * @param dataDomainCloud The real data domain on DQOps cloud that is mounted.
      * @param tenantOwner Tenant owner's email.
      * @param tenantId Tenant id.
+     * @param tenantGroupId Tenant group id.
      */
     public DqoUserPrincipal(String name,
                             DqoUserRole accountRole,
@@ -63,10 +64,11 @@ public class DqoUserPrincipal {
                             String dataDomainFolder,
                             String dataDomainCloud,
                             String tenantOwner,
-                            String tenantId) {
+                            String tenantId,
+                            Integer tenantGroupId) {
         this.accountRole = accountRole;
         this.privileges = privileges;
-        this.dataDomainIdentity = new UserDomainIdentity(name, accountRole, dataDomainFolder, dataDomainCloud, tenantOwner, tenantId);
+        this.dataDomainIdentity = new UserDomainIdentity(name, accountRole, dataDomainFolder, dataDomainCloud, tenantOwner, tenantId, tenantGroupId);
     }
 
     /**
@@ -82,7 +84,8 @@ public class DqoUserPrincipal {
                             DqoCloudApiKeyPayload apiKeyPayload, String dataDomainFolder, String dataDomainCloud) {
         this(name, accountRole, privileges, dataDomainFolder, dataDomainCloud,
                 apiKeyPayload != null ? apiKeyPayload.getSubject() : null,
-                apiKeyPayload != null ? apiKeyPayload.getTenantId() : null);
+                apiKeyPayload != null ? apiKeyPayload.getTenantId() : null,
+                apiKeyPayload != null ? apiKeyPayload.getTenantGroup() : null);
         this.apiKeyPayload = apiKeyPayload;
     }
 
@@ -95,10 +98,11 @@ public class DqoUserPrincipal {
      * @param dataDomainFolder The data domain folder name.
      * @param dataDomainCloud The real data domain on DQOps cloud that is mounted.
      * @param tenantId Tenant id.
+     * @param tenantGroupId Tenant group id.
      */
     public DqoUserPrincipal(String name, DqoUserRole accountRole, Collection<GrantedAuthority> privileges, DqoUserTokenPayload userTokenPayload,
-                            String dataDomainFolder, String dataDomainCloud, String tenantId) {
-        this(name, accountRole, privileges, dataDomainFolder, dataDomainCloud, name, tenantId);
+                            String dataDomainFolder, String dataDomainCloud, String tenantId, Integer tenantGroupId) {
+        this(name, accountRole, privileges, dataDomainFolder, dataDomainCloud, name, tenantId, tenantGroupId);
         this.userTokenPayload = userTokenPayload;
     }
 

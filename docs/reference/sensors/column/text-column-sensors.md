@@ -142,7 +142,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -566,7 +566,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) > {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) > {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -1002,7 +1002,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) < {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -1383,7 +1383,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) < {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -1780,7 +1780,7 @@ The templates used to generate the SQL query for each data source supported by D
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_target_column('analyzed_table')}} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS CHAR)) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2110,7 +2110,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         MAX(
-            LENGTH({{ lib.render_target_column('analyzed_table') }})
+            LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS CHAR))
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2381,7 +2381,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         AVG(
-            LENGTH({{ lib.render_target_column('analyzed_table') }})
+            LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS CHAR))
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2736,7 +2736,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         MIN(
-            LENGTH({{ lib.render_target_column('analyzed_table') }})
+            LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS CHAR))
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}

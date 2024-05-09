@@ -41,7 +41,7 @@ public class RunChecksParameters implements Cloneable {
      * Target data quality checks filter.
      */
     @JsonPropertyDescription("Target data quality checks filter.")
-    private CheckSearchFilters checkSearchFilters;
+    private CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
 
     /**
      * Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.

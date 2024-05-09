@@ -33,6 +33,12 @@ public enum DuckdbStorageType {
     @JsonProperty("s3")
     s3,
 
+    /**
+     * Uses the Azure Blob Storage.
+     */
+    @JsonProperty("azure")
+    azure,
+
     // todo: uncomment when implemented
 //    /**
 //     * Uses the Google Cloud Storage.
@@ -45,11 +51,5 @@ public enum DuckdbStorageType {
 //     */
 //    @JsonProperty("r2")
 //    r2,
-//
-//    /**
-//     * Uses the Azure Blob Storage.
-//     */
-//    @JsonProperty("azure")
-//    azure
 
 }

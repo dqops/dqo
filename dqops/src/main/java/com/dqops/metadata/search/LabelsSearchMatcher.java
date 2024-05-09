@@ -28,17 +28,24 @@ public class LabelsSearchMatcher {
 	 * @return Boolean value if labels contains searched label.
 	 */
 	private static boolean containsPattern(String label, LabelSetSpec labelSetSpec) {
-		if (label == null || labelSetSpec == null || labelSetSpec.size() == 0) {
+		if (label == null) {
 			return true;
 		}
+
+		if (labelSetSpec == null || labelSetSpec.size() == 0) {
+			return false;
+		}
+
 		if (labelSetSpec.contains(label)) {
 			return true;
 		}
+
 		for (String labelSpec : labelSetSpec) {
 			if (StringPatternComparer.matchSearchPattern(labelSpec, label)) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 	/**

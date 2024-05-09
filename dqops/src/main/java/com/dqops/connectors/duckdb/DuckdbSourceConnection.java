@@ -17,8 +17,9 @@ package com.dqops.connectors.duckdb;
 
 import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
-import com.dqops.connectors.duckdb.fileslisting.AwsTablesLister;
-import com.dqops.connectors.duckdb.fileslisting.LocalSystemTablesLister;
+import com.dqops.connectors.duckdb.fileslisting.*;
+import com.dqops.connectors.duckdb.schema.DuckDBDataTypeParser;
+import com.dqops.connectors.duckdb.schema.DuckDBField;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
@@ -33,6 +34,7 @@ import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
 import com.dqops.metadata.sources.fileformat.FilePathListSpec;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -63,8 +65,9 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
     private final HomeLocationFindService homeLocationFindService;
     private static final Object registerExtensionsLock = new Object();
-    private static boolean extensionsRegistered = false;
+    private static Set<String> extensionsRegisteredPerThread = new HashSet<>();
     private final DqoDuckdbConfiguration dqoDuckdbConfiguration;
+    private final DuckDBDataTypeParser dataTypeParser;
     private static final Object settingsExecutionLock = new Object();
     private static final boolean settingsConfigured = false;
     private static final String temporaryDirectoryPrefix = "dqops_duckdb_temp_";
@@ -76,16 +79,19 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      * @param secretValueProvider     Secret value provider for the environment variable expansion.
      * @param homeLocationFindService Home location find service.
      * @param dqoDuckdbConfiguration  Configuration settings for duckdb.
+     * @param dataTypeParser          Data type parser that parses the schema of structures.
      */
     @Autowired
     public DuckdbSourceConnection(JdbcConnectionPool jdbcConnectionPool,
                                   SecretValueProvider secretValueProvider,
                                   DuckdbConnectionProvider duckdbConnectionProvider,
                                   HomeLocationFindService homeLocationFindService,
-                                  DqoDuckdbConfiguration dqoDuckdbConfiguration) {
+                                  DqoDuckdbConfiguration dqoDuckdbConfiguration,
+                                  DuckDBDataTypeParser dataTypeParser) {
         super(jdbcConnectionPool, secretValueProvider, duckdbConnectionProvider);
         this.homeLocationFindService = homeLocationFindService;
         this.dqoDuckdbConfiguration = dqoDuckdbConfiguration;
+        this.dataTypeParser = dataTypeParser;
     }
 
     /**
@@ -179,10 +185,15 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Override
     public void open(SecretValueLookupContext secretValueLookupContext) {
+        try {
+            Class.forName("org.duckdb.DuckDBDriver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         super.open(secretValueLookupContext);
         configureSettings();
         registerExtensions();
-        ensureSecretsLoaded(secretValueLookupContext);
+        loadSecrets(secretValueLookupContext);
     }
 
     private void configureSettings(){
@@ -202,7 +213,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
                 String temporaryDirectory = Files.createTempDirectory(temporaryDirectoryPrefix).toFile().getAbsolutePath();
                 Path.of(temporaryDirectory).toFile().deleteOnExit();
-                String tempDirectoryQuery = "SET temp_directory = '" + temporaryDirectory + "'";
+                String tempDirectoryQuery = "SET GLOBAL temp_directory = '" + temporaryDirectory + "'";
                 this.executeCommand(tempDirectoryQuery, JobCancellationToken.createDummyJobCancellationToken());
             }
         } catch (Exception e) {
@@ -214,7 +225,8 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      * Registers extensions for duckdb from the local extension repository.
      */
     private void registerExtensions(){
-        if(extensionsRegistered){
+        String currentThreadName = Thread.currentThread().getName();
+        if(extensionsRegisteredPerThread.contains(currentThreadName)){
             return;
         }
         try {
@@ -234,7 +246,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                         log.error(exception.getMessage());
                     }
                 });
-                extensionsRegistered = true;
+                extensionsRegisteredPerThread.add(currentThreadName);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -246,7 +258,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      *
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      */
-    private void ensureSecretsLoaded(SecretValueLookupContext secretValueLookupContext){
+    private void loadSecrets(SecretValueLookupContext secretValueLookupContext){
         DuckdbParametersSpec duckdb = getConnectionSpec().getDuckdb();
         if(duckdb.getStorageType() == null || duckdb.getStorageType().equals(DuckdbStorageType.local)){
             return;
@@ -268,16 +280,14 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                         duckdbSpecCloned.fillSpecWithDefaultAwsConfig(secretValueLookupContext);
                     }
                     break;
+                    // todo: add default azure credentials
             }
         }
 
         this.getConnectionSpec().setDuckdb(duckdbSpecCloned);
 
         try {
-            // todo: can be used with duckdb 0.10 when aws extension is fixed,
-            //  then search for makeFilePathsAccessible which solves secrets for 0.9.2 version
-//             DuckdbSecretManager.getInstance().ensureCreated(connectionSpecCloned, this);
-
+            DuckdbSecretManager.getInstance().createSecrets(this.getConnectionSpec(), this);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -290,7 +300,8 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     private List<String> getAvailableExtensions(){
         return Arrays.asList(
                 "httpfs",
-                "aws"
+                "aws",
+                "azure"
         );
     }
 
@@ -333,18 +344,9 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
 
         DuckdbStorageType storageType = duckdb.getStorageType();
-        if(storageType == null || storageType.equals(DuckdbStorageType.local)){
-            List<SourceTableModel> sourceTableModels = LocalSystemTablesLister.listTables(duckdb, schemaName);
-            return sourceTableModels;
-        }
-
-        switch (storageType){
-            case s3:
-                List<SourceTableModel> sourceTableModels = AwsTablesLister.listTables(duckdb, schemaName);
-                return sourceTableModels;
-            default:
-                throw new RuntimeException("This type of secretsType is not supported: " + storageType);
-        }
+        TablesLister remoteTablesLister = TablesListerProvider.createTablesLister(storageType);
+        List<SourceTableModel> sourceTableModels = remoteTablesLister.listTables(duckdb, schemaName);
+        return sourceTableModels;
     }
 
     /**
@@ -365,14 +367,14 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
         DuckdbParametersSpec duckdbParametersSpec = getConnectionSpec().getDuckdb();
 
-        if(duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
+        if (duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
             return super.retrieveTableMetadata(schemaName, tableNames, connectionWrapper, secretValueLookupContext);
         }
 
         List<TableSpec> tableSpecs = new ArrayList<>();
 
         Map<String, TableSpec> physicalTableNameToTableSpec = new HashMap<>();
-        if(connectionWrapper != null){
+        if (connectionWrapper != null){
             List<TableWrapper> tableWrappers = connectionWrapper.getTables().toList();
             physicalTableNameToTableSpec = tableWrappers.stream()
                     .filter(tableWrapper -> tableWrapper.getPhysicalTableName().getSchemaName().equals(schemaName))
@@ -391,7 +393,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             }
 
             FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpecTemp);
-            if(fileFormatSpec == null){
+            if (fileFormatSpec == null){
                 return tableSpecs;
             }
 
@@ -411,16 +413,47 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                     String dataType = colRow.getString("column_type");
                     boolean isNullable = Objects.equals(colRow.getString("null"), "YES");
                     ColumnSpec columnSpec = prepareNewColumnSpec(dataType, isNullable);
+                    if (dataType != null && (dataType.startsWith("STRUCT") || dataType.startsWith("UNION") || dataType.startsWith("MAP"))) {
+                        columnSpec.setTypeSnapshot(new ColumnTypeSnapshotSpec(dataType, isNullable));
+                    }
                     tableSpec.getColumns().put(columnName, columnSpec);
+
+                    DuckDBField parsedField = this.dataTypeParser.parseFieldType(dataType, columnName);
+                    if (parsedField.isStruct()) {
+                        String parentColumnPrefix = parsedField.isArray() ? columnName + "[0]" : columnName;
+                        addNestedFieldsFromStructs(parentColumnPrefix, parsedField, tableSpec.getColumns());
+                    }
                 }
             } catch (Exception e){
-                if(!e.getMessage().contains("SQL query failed: java.sql.SQLException: IO Error: No files found that match the pattern")){
-                    throw new RuntimeException(e);
+                if (!e.getMessage().contains("SQL query failed: java.sql.SQLException: IO Error: No files found that match the pattern")){
+                    throw new DqoRuntimeException(e);
                 }
             }
 
         }
         return tableSpecs;
+    }
+
+    /**
+     * Traverses a structure of nested fields inside STRUCT data types and adds all nested fields.
+     * @param parentColumnName Parent column name used as a prefix to access nested fields.
+     * @param structField DuckDB field schema that as parsed - must be a STRUCT field.
+     * @param targetColumnsMap Target column map to add generated columns.
+     */
+    private void addNestedFieldsFromStructs(String parentColumnName, DuckDBField structField, ColumnSpecMap targetColumnsMap) {
+        if (structField.isStruct() && structField.getNestedFields() != null) {
+            for (DuckDBField childField : structField.getNestedFields()) {
+                ColumnSpec columnSpec = prepareNewColumnSpec(childField.getTypeName(), childField.isNullable());
+                columnSpec.getTypeSnapshot().setNested(true);
+                String nestedFieldName = parentColumnName + "." + childField.getFieldName();
+                targetColumnsMap.put(nestedFieldName, columnSpec);
+
+                if (childField.isStruct()) {
+                    String childColumnPrefix = childField.isArray() ? nestedFieldName + "[0]" : nestedFieldName;
+                    addNestedFieldsFromStructs(childColumnPrefix, childField, targetColumnsMap);
+                }
+            }
+        }
     }
 
     /**
@@ -470,7 +503,9 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                                                         SecretValueLookupContext secretValueLookupContext){
         ConnectionSpec connectionSpec = getConnectionSpec().expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
         DuckdbParametersSpec duckdb = connectionSpec.getDuckdb();
-        String tableString = fileFormatSpec.buildTableOptionsString(duckdb, tableSpec);
+        TableSpec tableSpecWithoutColumns = tableSpec.deepClone();
+        tableSpecWithoutColumns.getColumns().clear();
+        String tableString = fileFormatSpec.buildTableOptionsString(duckdb, tableSpecWithoutColumns);
         String query = String.format("DESCRIBE SELECT * FROM %s", tableString);
         return this.executeQuery(query, JobCancellationToken.createDummyJobCancellationToken(), null, false);
     }

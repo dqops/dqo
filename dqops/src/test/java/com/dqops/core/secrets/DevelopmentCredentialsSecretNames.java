@@ -84,4 +84,45 @@ public class DevelopmentCredentialsSecretNames {
      */
     public static final String REDSHIFT_PASSWORD = "${sm://redshift-password}";
 
+    /**
+     * Property to retrieve the Azure Blob Storage connection string.
+     */
+    public static final String AZURE_STORAGE_CONNECTION_STRING = "${sm://azure-storage-connection-string}";
+
+    /**
+     * Property to retrieve the AWS Access Key ID to testing storage.
+     */
+    public static final String AWS_S3_ACCESS_KEY_ID = "${sm://aws-s3-access-key-id}";
+
+    /**
+     * Property to retrieve the AWS Secret Access Key to testing storage.
+     */
+    public static final String AWS_S3_SECRET_ACCESS_KEY = "${sm://aws-s3-secret-access-key}";
+
+    /**
+     * Property to retrieve the AWS Region to testing storage.
+     */
+    public static final String AWS_S3_REGION = "${sm://aws-s3-region}";
+
+    /**
+     * Property to retrieve the Azure Service Principal Tenant ID
+     */
+    public static final String AZURE_SERVICE_PRINCIPAL_TENANT_ID = "${sm://azure-service-principal-tenant-id}";
+
+    /**
+     * Property to retrieve the Azure Service Principal Client ID
+     */
+    public static final String AZURE_SERVICE_PRINCIPAL_CLIENT_ID = "${sm://azure-service-principal-client-id}";
+
+    /**
+     * Property to retrieve the Azure Service Principal Client Secret
+     */
+    public static final String AZURE_SERVICE_PRINCIPAL_CLIENT_SECRET = "${sm://azure-service-principal-client-secret}";
+
+
+    /**
+     * Property to retrieve the Azure Storage Account name
+     */
+    public static final String AZURE_STORAGE_ACCOUNT_NAME = "${sm://azure-storage-account-name}";
+
 }

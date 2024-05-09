@@ -17,11 +17,13 @@ package com.dqops.connectors.duckdb;
 
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
 import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
+import com.dqops.connectors.storage.azure.AzureAuthenticationMode;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
+import com.dqops.metadata.sources.fileformat.CompressionType;
 import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.JsonFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.ParquetFileFormatSpec;
@@ -41,6 +43,7 @@ import picocli.CommandLine;
 import software.amazon.awssdk.profiles.Profile;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * DuckDB connection parameters.
@@ -90,10 +93,13 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ParquetFileFormatSpec parquet;
 
-    @CommandLine.Option(names = "--duckdb-directories", split = ",")
     @JsonPropertyDescription("Virtual schema name to directory mappings. The path must be an absolute path.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> directories = new HashMap<>();
+
+    @CommandLine.Option(names = {"--duckdb-directories"}, description = "Virtual schema name to directory mappings. The path must be an absolute path.")
+    @JsonIgnore
+    private String directoriesString;
 
     @CommandLine.Option(names = {"--duckdb-storage-type"}, description = "The storage type.")
     @JsonPropertyDescription("The storage type.")
@@ -102,6 +108,10 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @CommandLine.Option(names = {"--duckdb-aws-authentication-mode"}, description = "The authentication mode for AWS. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.")
     @JsonPropertyDescription("The authentication mode for AWS. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.")
     private AwsAuthenticationMode awsAuthenticationMode;
+
+    @CommandLine.Option(names = {"--duckdb-azure-authentication-mode"}, description = "The authentication mode for Azure. Supports also a ${DUCKDB_AZURE_AUTHENTICATION_MODE} configuration with a custom environment variable.")
+    @JsonPropertyDescription("The authentication mode for Azure. Supports also a ${DUCKDB_AZURE_AUTHENTICATION_MODE} configuration with a custom environment variable.")
+    private AzureAuthenticationMode azureAuthenticationMode;
 
     @CommandLine.Option(names = {"--duckdb-user"}, description = "DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -114,6 +124,22 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @CommandLine.Option(names = {"--duckdb-region"}, description = "The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String region;
+
+    @CommandLine.Option(names = {"--duckdb-azure-tenant-id"}, description = "Azure Tenant ID used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Azure Tenant ID used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String tenantId;
+
+    @CommandLine.Option(names = {"--duckdb-azure-client-id"}, description = "Azure Client ID used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Azure Client ID used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String clientId;
+
+    @CommandLine.Option(names = {"--duckdb-azure-client-secret"}, description = "Azure Client Secret used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Azure Client Secret used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String clientSecret;
+
+    @CommandLine.Option(names = {"--duckdb-azure-account-name"}, description = "Azure Storage Account Name used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Azure Storage Account Name used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String accountName;
 
     /**
      * Returns a readMode value.
@@ -255,6 +281,23 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Returns a raw directories string containing mapping between schemas and directories
+     * @return Raw directories string containing mapping between schemas and directories
+     */
+    public String getDirectoriesString() {
+        return directoriesString;
+    }
+
+    /**
+     * Sets a raw directories string containing mapping between schemas and directories
+     * @param directoriesString Raw directories string containing mapping between schemas and directories
+     */
+    public void setDirectoriesString(String directoriesString) {
+        setDirtyIf(!Objects.equals(this.directoriesString, directoriesString));
+        this.directoriesString = directoriesString;
+    }
+
+    /**
      * Returns the storage type.
      * @return the storage type.
      */
@@ -286,6 +329,23 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     public void setAwsAuthenticationMode(AwsAuthenticationMode awsAuthenticationMode) {
         setDirtyIf(!Objects.equals(this.awsAuthenticationMode, awsAuthenticationMode));
         this.awsAuthenticationMode = awsAuthenticationMode;
+    }
+
+    /**
+     * Returns the Azure's authentication mode.
+     * @return Azure's authentication mode.
+     */
+    public AzureAuthenticationMode getAzureAuthenticationMode() {
+        return azureAuthenticationMode;
+    }
+
+    /**
+     * Sets Azure's authentication mode.
+     * @param azureAuthenticationMode Azure's authentication mode.
+     */
+    public void setAzureAuthenticationMode(AzureAuthenticationMode azureAuthenticationMode) {
+        setDirtyIf(!Objects.equals(this.azureAuthenticationMode, azureAuthenticationMode));
+        this.azureAuthenticationMode = azureAuthenticationMode;
     }
 
     /**
@@ -340,6 +400,74 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Returns the tenantId
+     * @return tenantId.
+     */
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    /**
+     * Sets tenantId.
+     * @param tenantId tenantId.
+     */
+    public void setTenantId(String tenantId) {
+        setDirtyIf(!Objects.equals(this.tenantId, tenantId));
+        this.tenantId = tenantId;
+    }
+
+    /**
+     * Returns the clientId
+     * @return clientId.
+     */
+    public String getClientId() {
+        return clientId;
+    }
+
+    /**
+     * Sets clientId.
+     * @param clientId clientId.
+     */
+    public void setClientId(String clientId) {
+        setDirtyIf(!Objects.equals(this.clientId, clientId));
+        this.clientId = clientId;
+    }
+
+    /**
+     * Returns the clientSecret
+     * @return clientSecret.
+     */
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    /**
+     * Sets clientSecret.
+     * @param clientSecret clientSecret.
+     */
+    public void setClientSecret(String clientSecret) {
+        setDirtyIf(!Objects.equals(this.clientSecret, clientSecret));
+        this.clientSecret = clientSecret;
+    }
+
+    /**
+     * Returns the accountName
+     * @return accountName.
+     */
+    public String getAccountName() {
+        return accountName;
+    }
+
+    /**
+     * Sets accountName.
+     * @param accountName accountName.
+     */
+    public void setAccountName(String accountName) {
+        setDirtyIf(!Objects.equals(this.accountName, accountName));
+        this.accountName = accountName;
+    }
+
+    /**
      * Returns the AWS AccessKeyID which is placed in user field when configured.
      * @return region.
      */
@@ -374,6 +502,21 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Whether the compression option is set to gzip.
+     * @return Whether the compression option is set to gzip.
+     */
+    @JsonIgnore
+    public boolean isSetGzipCompression(){
+        if(filesFormatType != null){
+            switch(filesFormatType){
+                case csv: return getCsv() != null && getCsv().getCompression() != null && getCsv().getCompression().equals(CompressionType.gzip);
+                case json: return getJson() != null && getJson().getCompression() != null && getJson().getCompression().equals(CompressionType.gzip);
+            }
+        }
+        return false;
+    }
+
+    /**
      * Returns state that whether the file format for the specific file type is set.
      * @return State that whether the file format for the specific file type is set.
      */
@@ -388,6 +531,42 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
             case parquet: return this.getParquet() != null;
             default: throw new RuntimeException("The file format is not supported : " + filesFormatType);
         }
+    }
+
+    /**
+     * Returns scopes based on directories. Scopes are
+     * @return scopes based on directories.
+     */
+    @JsonIgnore
+    public List<String> getScopes(){
+        List<String> scopes = getDirectories().values().stream().map(pathString -> {
+            int wildcardIndex = pathString.indexOf("*");
+            String absolutePath = wildcardIndex != -1 ? pathString.substring(0, wildcardIndex) : pathString;
+            return absolutePath;
+        }).collect(Collectors.toList());
+        return scopes;
+    }
+
+    /**
+     * Resolves storage account name for azure. It parses the connection string.
+     * @return Storage account name.
+     */
+    @JsonIgnore
+    public String resolveAccountName(){
+        if(accountName != null){
+            return accountName;
+        }
+        if(this.getAzureAuthenticationMode().equals(AzureAuthenticationMode.connection_string)){
+            String connectionString = this.getPassword();
+            try {
+                int start = connectionString.indexOf("AccountName") + "AccountName".length() + 1;
+                String accountName = connectionString.substring(start, start + connectionString.substring(start).indexOf(";"));
+                return accountName;
+            } catch (Exception ex){
+                throw new RuntimeException("The connection string does not contain the AccountName part");
+            }
+        }
+        return null;
     }
 
     /**
@@ -429,6 +608,11 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
         cloned.region = secretValueProvider.expandValue(cloned.region, lookupContext);
 
+        cloned.tenantId = secretValueProvider.expandValue(cloned.tenantId, lookupContext);
+        cloned.clientId = secretValueProvider.expandValue(cloned.clientId, lookupContext);
+        cloned.clientSecret = secretValueProvider.expandValue(cloned.clientSecret, lookupContext);
+        cloned.accountName = secretValueProvider.expandValue(cloned.accountName, lookupContext);
+
         return cloned;
     }
 
@@ -457,6 +641,9 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
                 }
                 fillSpecWithDefaultAwsConfig(secretValueLookupContext);
                 break;
+
+             // todo: azure credentials
+
             default:
                 throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + storageType);
         }

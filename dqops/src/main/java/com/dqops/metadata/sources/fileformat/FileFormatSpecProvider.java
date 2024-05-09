@@ -4,6 +4,7 @@ import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
 import com.dqops.connectors.duckdb.fileslisting.AwsConstants;
+import com.dqops.connectors.duckdb.fileslisting.azure.AzureConstants;
 import com.dqops.metadata.sources.TableSpec;
 
 import java.io.File;
@@ -81,7 +82,7 @@ public class FileFormatSpecProvider {
         boolean isSetHivePartitioning = duckdb.isSetHivePartitioning() || (tableSpec.getFileFormat() != null && tableSpec.getFileFormat().isSetHivePartitioning(filesType));
 
         // todo: what if the file extension eg. json will not match the source file types e.g. csv on the parameter spec??
-        String fileExtension = "." + filesType.toString();
+        String fileExtension = "." + filesType.toString() + (duckdb.isSetGzipCompression() ? ".gz" : "");
         String separator = (storageType == null || storageType.equals(DuckdbStorageType.local)) ? File.separator : "/";
         if(!filePath.toLowerCase().endsWith(fileExtension)){
             filePath = filePath + separator + (isSetHivePartitioning ? "**" + separator : "") + "*" + fileExtension;
@@ -116,6 +117,7 @@ public class FileFormatSpecProvider {
         return path.startsWith("/")
                 || path.startsWith("\\")
                 || path.startsWith(AwsConstants.S3_URI_PREFIX)
+                || path.startsWith(AzureConstants.BLOB_STORAGE_URI_PREFIX)
                 || Path.of(path).isAbsolute();
     }
 

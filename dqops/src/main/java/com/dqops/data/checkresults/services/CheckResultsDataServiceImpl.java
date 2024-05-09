@@ -446,6 +446,10 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
         }
 
+        if (startTimestamp.isBefore(firstSeen)) {
+            startTimestamp = firstSeen;
+        }
+
         List<CheckResultEntryModel> resultsList = new ArrayList<>();
 
         Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = checkResultsSnapshot.getLoadedMonthlyPartitions();

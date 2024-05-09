@@ -269,7 +269,7 @@ spec:
             
             SELECT
                 AVG(
-                    LENGTH({{ lib.render_target_column('analyzed_table') }})
+                    LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS CHAR))
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -283,7 +283,7 @@ spec:
             ```sql
             SELECT
                 AVG(
-                    LENGTH(analyzed_table.`target_column`)
+                    LENGTH(CAST(analyzed_table.`target_column` AS CHAR))
                 ) AS actual_value,
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
@@ -838,7 +838,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 AVG(
-                    LENGTH({{ lib.render_target_column('analyzed_table') }})
+                    LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS CHAR))
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -851,7 +851,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 AVG(
-                    LENGTH(analyzed_table.`target_column`)
+                    LENGTH(CAST(analyzed_table.`target_column` AS CHAR))
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -1505,7 +1505,7 @@ spec:
             
             SELECT
                 AVG(
-                    LENGTH({{ lib.render_target_column('analyzed_table') }})
+                    LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS CHAR))
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1519,7 +1519,7 @@ spec:
             ```sql
             SELECT
                 AVG(
-                    LENGTH(analyzed_table.`target_column`)
+                    LENGTH(CAST(analyzed_table.`target_column` AS CHAR))
                 ) AS actual_value,
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
@@ -2075,7 +2075,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 AVG(
-                    LENGTH({{ lib.render_target_column('analyzed_table') }})
+                    LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS CHAR))
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2088,7 +2088,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 AVG(
-                    LENGTH(analyzed_table.`target_column`)
+                    LENGTH(CAST(analyzed_table.`target_column` AS CHAR))
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -2742,7 +2742,7 @@ spec:
             
             SELECT
                 AVG(
-                    LENGTH({{ lib.render_target_column('analyzed_table') }})
+                    LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS CHAR))
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2756,7 +2756,7 @@ spec:
             ```sql
             SELECT
                 AVG(
-                    LENGTH(analyzed_table.`target_column`)
+                    LENGTH(CAST(analyzed_table.`target_column` AS CHAR))
                 ) AS actual_value,
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
@@ -3312,7 +3312,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 AVG(
-                    LENGTH({{ lib.render_target_column('analyzed_table') }})
+                    LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS CHAR))
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3325,7 +3325,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 AVG(
-                    LENGTH(analyzed_table.`target_column`)
+                    LENGTH(CAST(analyzed_table.`target_column` AS CHAR))
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -3989,7 +3989,7 @@ spec:
             
             SELECT
                 AVG(
-                    LENGTH({{ lib.render_target_column('analyzed_table') }})
+                    LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS CHAR))
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4003,7 +4003,7 @@ spec:
             ```sql
             SELECT
                 AVG(
-                    LENGTH(analyzed_table.`target_column`)
+                    LENGTH(CAST(analyzed_table.`target_column` AS CHAR))
                 ) AS actual_value,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
@@ -4573,7 +4573,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 AVG(
-                    LENGTH({{ lib.render_target_column('analyzed_table') }})
+                    LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS CHAR))
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4586,7 +4586,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 AVG(
-                    LENGTH(analyzed_table.`target_column`)
+                    LENGTH(CAST(analyzed_table.`target_column` AS CHAR))
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -5248,7 +5248,7 @@ spec:
             
             SELECT
                 AVG(
-                    LENGTH({{ lib.render_target_column('analyzed_table') }})
+                    LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS CHAR))
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5262,7 +5262,7 @@ spec:
             ```sql
             SELECT
                 AVG(
-                    LENGTH(analyzed_table.`target_column`)
+                    LENGTH(CAST(analyzed_table.`target_column` AS CHAR))
                 ) AS actual_value,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
@@ -5832,7 +5832,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 AVG(
-                    LENGTH({{ lib.render_target_column('analyzed_table') }})
+                    LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS CHAR))
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5845,7 +5845,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 AVG(
-                    LENGTH(analyzed_table.`target_column`)
+                    LENGTH(CAST(analyzed_table.`target_column` AS CHAR))
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,

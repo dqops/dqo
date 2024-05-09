@@ -44,12 +44,14 @@ import picocli.shell.jline3.PicocliCommands;
 import java.io.PushbackInputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 /**
  * Configuration class to configure the terminal and line reader beans.
  */
-@Lazy
+@Lazy(false)
 @Configuration
 public class CliConfiguration {
     /**
@@ -186,5 +188,14 @@ public class CliConfiguration {
 
         LineReader cliLineReader = (LineReader) StaticBeanFactory.getBeanFactory().getBean("cliLineReader");
         return new TerminalReaderImpl(terminalWriter, cliLineReader);
+    }
+
+    /**
+     * Creates an empty hashmap.
+     * @return Empty hashmap.
+     */
+    @Bean(name = "java.util.Map")
+    public Map createEmptyMap() {
+        return new LinkedHashMap();
     }
 }

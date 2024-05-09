@@ -39,8 +39,7 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "list", header = "List tables for the specified connection and schema name.", description = "List all the tables available in the database for the specified connection and schema. It allows the user to view all the tables in the database.")
 public class ConnectionTableListCliCommand extends BaseCommand implements ICommand {
 	private ConnectionCliService connectionCliService;
-	private TerminalReader terminalReader;
-	private TerminalWriter terminalWriter;
+	private TerminalFactory terminalFactory;
 	private TerminalTableWritter terminalTableWritter;
 	private FileWriter fileWriter;
 
@@ -49,13 +48,11 @@ public class ConnectionTableListCliCommand extends BaseCommand implements IComma
 
 	@Autowired
 	public ConnectionTableListCliCommand(ConnectionCliService connectionCliService,
-                                         TerminalReader terminalReader,
-                                         TerminalWriter terminalWriter,
+										 TerminalFactory terminalFactory,
                                          TerminalTableWritter terminalTableWritter,
                                          FileWriter fileWriter) {
 		this.connectionCliService = connectionCliService;
-		this.terminalWriter = terminalWriter;
-		this.terminalReader = terminalReader;
+		this.terminalFactory = terminalFactory;
 		this.terminalTableWritter = terminalTableWritter;
 		this.fileWriter = fileWriter;
 	}
@@ -85,12 +82,12 @@ public class ConnectionTableListCliCommand extends BaseCommand implements IComma
 	public Integer call() throws Exception {
 		if (Strings.isNullOrEmpty(this.connection)) {
 			throwRequiredParameterMissingIfHeadless("--connection");
-			this.connection = this.terminalReader.prompt("Connection name (--connection)", null, false);
+			this.connection = this.terminalFactory.getReader().prompt("Connection name (--connection)", null, false);
 		}
 
 		if (Strings.isNullOrEmpty(this.schema)) {
 			throwRequiredParameterMissingIfHeadless("--schema");
-			this.schema = this.terminalReader.prompt("Schema name (--schema)", null, false);
+			this.schema = this.terminalFactory.getReader().prompt("Schema name (--schema)", null, false);
 		}
 
 		CliOperationStatus cliOperationStatus = this.connectionCliService.loadTableList(connection, schema, table, this.getOutputFormat(), dimensions, labels);
@@ -100,24 +97,24 @@ public class ConnectionTableListCliCommand extends BaseCommand implements IComma
 					TableBuilder tableBuilder = new TableBuilder(new TablesawDatasetTableModel(cliOperationStatus.getTable()));
 					tableBuilder.addInnerBorder(BorderStyle.oldschool);
 					tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-					String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+					String renderedTable = tableBuilder.build().render(this.terminalFactory.getWriter().getTerminalWidth() - 1);
 					CliOperationStatus cliOperationStatus2 = this.fileWriter.writeStringToFile(renderedTable);
-					this.terminalWriter.writeLine(cliOperationStatus2.getMessage());
+					this.terminalFactory.getWriter().writeLine(cliOperationStatus2.getMessage());
 				} else {
 					this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
 				}
 			} else {
 				if (this.isWriteToFile()) {
 					CliOperationStatus cliOperationStatus2 = this.fileWriter.writeStringToFile(cliOperationStatus.getMessage());
-					this.terminalWriter.writeLine(cliOperationStatus2.getMessage());
+					this.terminalFactory.getWriter().writeLine(cliOperationStatus2.getMessage());
 				}
 				else {
-					this.terminalWriter.write(cliOperationStatus.getMessage());
+					this.terminalFactory.getWriter().write(cliOperationStatus.getMessage());
 				}
 			}
 			return 0;
 		} else {
-			this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+			this.terminalFactory.getWriter().writeLine(cliOperationStatus.getMessage());
 			return -1;
 		}
 	}

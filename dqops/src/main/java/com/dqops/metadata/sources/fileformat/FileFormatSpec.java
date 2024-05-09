@@ -3,6 +3,7 @@ package com.dqops.metadata.sources.fileformat;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.duckdb.fileslisting.azure.AzureStoragePath;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -19,7 +20,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * File format specification for data loaded from the physical files of one of supported formats.
@@ -147,53 +150,27 @@ public class FileFormatSpec extends AbstractSpec {
 
     /**
      * Builds the table options string for use in SQL query that contains file paths to the source data files and options for the files.
+     *
+     * @param duckdb DuckdbParametersSpec with setting of format specific options.
+     * @param tableSpec The table spec object with columns names that are used for formatting the columns string.
      * @return Table options string.
      */
     public String buildTableOptionsString(DuckdbParametersSpec duckdb, TableSpec tableSpec){
-        ArrayList<String> readyFilePaths = makeFilePathsAccessible(duckdb);
+        List<String> filePathList = new ArrayList<>(filePaths);
+
+        if(duckdb.getStorageType().equals(DuckdbStorageType.azure)){
+            filePathList = filePathList.stream()
+                    .map(s -> AzureStoragePath.from(s, duckdb.resolveAccountName()).getAzFullPathPrefix())
+                    .collect(Collectors.toList());
+        }
 
         DuckdbFilesFormatType sourceFilesType = duckdb.getFilesFormatType();
         switch(sourceFilesType){
-            case csv: return csv.buildSourceTableOptionsString(readyFilePaths, tableSpec);
-            case json: return json.buildSourceTableOptionsString(readyFilePaths, tableSpec);
-            case parquet: return parquet.buildSourceTableOptionsString(readyFilePaths, tableSpec);
-            default: throw new RuntimeException("Cant create table options string for the given files: " + readyFilePaths);
+            case csv: return csv.buildSourceTableOptionsString(filePathList, tableSpec);
+            case json: return json.buildSourceTableOptionsString(filePathList, tableSpec);
+            case parquet: return parquet.buildSourceTableOptionsString(filePathList, tableSpec);
+            default: throw new RuntimeException("Cant create table options string for the given files: " + filePathList);
         }
-    }
-
-    /**
-     * Modifies each file path appending secrets to a cloud storage.
-     * Local file paths are not modified.
-     *
-     * @param duckdb DuckdbParametersSpec object with secret type and a bunch of secrets.
-     * @return List of modified filepaths that are accessible for duckdb (with valid credentials).
-     */
-    private ArrayList<String> makeFilePathsAccessible(DuckdbParametersSpec duckdb){
-        ArrayList<String> accessibleFilePaths = new ArrayList<>();
-        DuckdbStorageType storageType = duckdb.getStorageType();
-        if(storageType == null || storageType.equals(DuckdbStorageType.local)){
-            return new ArrayList<>(filePaths);
-        }
-
-        switch(storageType){
-            case s3:
-                filePaths.iterator().forEachRemaining(filePath -> {
-
-                    StringBuilder newPath = new StringBuilder();
-                    newPath.append(filePath);
-                    newPath.append("?");
-                    newPath.append("s3_access_key_id=").append(duckdb.getUser());
-                    newPath.append("&");
-                    newPath.append("s3_secret_access_key=").append(duckdb.getPassword().replace("/", "%2F"));   // todo: url encoding do not work since not only slash (/) char is replaced but also the plus (+). Replacing plus to %2B do not pass through duckdb due to HTTP GET error
-                    newPath.append("&");
-                    newPath.append("s3_region=").append(duckdb.getRegion());
-                    accessibleFilePaths.add(newPath.toString());
-                });
-                break;
-            default:
-                throw new RuntimeException("Secrets type is not supported : " + storageType);
-        }
-        return accessibleFilePaths;
     }
 
     /**

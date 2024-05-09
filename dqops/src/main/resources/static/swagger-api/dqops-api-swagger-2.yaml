@@ -28672,6 +28672,10 @@ definitions:
         type: "integer"
         format: "int32"
         description: "Scale of a numeric (decimal) data type."
+      nested:
+        type: "boolean"
+        description: "This field is a nested field inside another STRUCT. It is used\
+          \ to identify nested fields in JSON files."
   ColumnUniquenessDailyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -31603,6 +31607,7 @@ definitions:
         enum:
         - "local"
         - "s3"
+        - "azure"
       aws_authentication_mode:
         type: "string"
         description: "The authentication mode for AWS. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE}\
@@ -31610,6 +31615,14 @@ definitions:
         enum:
         - "iam"
         - "default_credentials"
+      azure_authentication_mode:
+        type: "string"
+        description: "The authentication mode for Azure. Supports also a ${DUCKDB_AZURE_AUTHENTICATION_MODE}\
+          \ configuration with a custom environment variable."
+        enum:
+        - "connection_string"
+        - "credential_chain"
+        - "service_principal"
       user:
         type: "string"
         description: "DuckDB user name for a remote storage type. The value can be\
@@ -31622,6 +31635,23 @@ definitions:
         type: "string"
         description: "The region for the storage credentials. The value can be in\
           \ the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+      tenant_id:
+        type: "string"
+        description: "Azure Tenant ID used by DuckDB Secret Manager. The value can\
+          \ be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+      client_id:
+        type: "string"
+        description: "Azure Client ID used by DuckDB Secret Manager. The value can\
+          \ be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+      client_secret:
+        type: "string"
+        description: "Azure Client Secret used by DuckDB Secret Manager. The value\
+          \ can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+      account_name:
+        type: "string"
+        description: "Azure Storage Account Name used by DuckDB Secret Manager. The\
+          \ value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic\
+          \ substitution."
   Duration:
     type: "object"
     properties:

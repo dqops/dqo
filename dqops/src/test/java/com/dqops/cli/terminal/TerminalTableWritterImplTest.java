@@ -28,7 +28,7 @@ class TerminalTableWritterImplTest extends BaseTest {
         lineReader = new LineReaderWrapper();
         TerminalReaderImpl terminalReader = new TerminalReaderImpl(terminalFactory.getWriter(), lineReader);
         FileWriter fileWriter = BeanFactoryObjectMother.getBeanFactory().getBean(FileWriter.class);
-        sut = new TerminalTableWritterImpl(terminalWriter, terminalReader, fileWriter);
+        sut = new TerminalTableWritterImpl(new TerminalFactoryStub(terminalReader, terminalWriter), fileWriter);
         terminalWriter.setTerminalWidth(50);
         terminalWriter.setTerminalHeight(10);
     }

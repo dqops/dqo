@@ -19,6 +19,7 @@ package com.dqops.cli.commands.table.impl;
 import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.TabularOutputFormat;
 import com.dqops.cli.output.OutputFormatService;
+import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalTableWritter;
 import com.dqops.cli.terminal.TerminalWriter;
@@ -62,10 +63,9 @@ import java.util.stream.Collectors;
 public class TableCliServiceImpl implements TableCliService {
     private final TableService tableService;
     private final UserHomeContextFactory userHomeContextFactory;
-    private final TerminalReader terminalReader;
-    private final TerminalWriter terminalWriter;
     private final SecretValueProvider secretValueProvider;
     private final ConnectionProviderRegistry connectionProviderRegistry;
+    private final TerminalFactory terminalFactory;
     private final TerminalTableWritter terminalTableWritter;
     private final OutputFormatService outputFormatService;
     private final DqoJobQueue dqoJobQueue;
@@ -76,8 +76,7 @@ public class TableCliServiceImpl implements TableCliService {
     public TableCliServiceImpl(TableService tableService,
                                UserHomeContextFactory userHomeContextFactory,
                                ConnectionProviderRegistry connectionProviderRegistry,
-                               TerminalReader terminalReader,
-                               TerminalWriter terminalWriter,
+                               TerminalFactory terminalFactory,
                                SecretValueProvider secretValueProvider,
                                TerminalTableWritter terminalTableWritter,
                                OutputFormatService outputFormatService,
@@ -87,8 +86,7 @@ public class TableCliServiceImpl implements TableCliService {
         this.tableService = tableService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
-        this.terminalReader = terminalReader;
-        this.terminalWriter = terminalWriter;
+        this.terminalFactory = terminalFactory;
         this.secretValueProvider = secretValueProvider;
         this.terminalTableWritter = terminalTableWritter;
         this.outputFormatService = outputFormatService;
@@ -322,8 +320,8 @@ public class TableCliServiceImpl implements TableCliService {
 
         CliOperationStatus listingStatus = listTables(connectionName, fullTableName, TabularOutputFormat.TABLE, null, null);
         this.terminalTableWritter.writeTable(listingStatus.getTable(), true);
-        this.terminalWriter.writeLine("Do you want to remove these " + tableWrappers.size() + " tables?");
-        boolean response = this.terminalReader.promptBoolean("Yes or No", false);
+        this.terminalFactory.getWriter().writeLine("Do you want to remove these " + tableWrappers.size() + " tables?");
+        boolean response = this.terminalFactory.getReader().promptBoolean("Yes or No", false);
         if (!response) {
             cliOperationStatus.setFailedMessage("Delete operation cancelled.");
             return cliOperationStatus;

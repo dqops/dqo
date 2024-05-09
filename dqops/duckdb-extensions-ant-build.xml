@@ -21,13 +21,22 @@
              dest="${local_temp_path}/httpfs.duckdb_extension.gz"
              verbose="true"
              usetimestamp="true"/>
-        <gunzip src="${local_temp_path}/httpfs.duckdb_extension.gz" dest="${local_platform_path}/httpfs.duckdb_extension" />
+        <gunzip src="${local_temp_path}/httpfs.duckdb_extension.gz"
+                dest="${local_platform_path}/httpfs.duckdb_extension" />
 
         <get src="${remote_platform_path}/aws.duckdb_extension.gz"
              dest="${local_temp_path}/aws.duckdb_extension.gz"
              verbose="true"
              usetimestamp="true"/>
-        <gunzip src="${local_temp_path}/aws.duckdb_extension.gz" dest="${local_platform_path}/aws.duckdb_extension" />
+        <gunzip src="${local_temp_path}/aws.duckdb_extension.gz"
+                dest="${local_platform_path}/aws.duckdb_extension" />
+
+        <get src="${remote_platform_path}/azure.duckdb_extension.gz"
+             dest="${local_temp_path}/azure.duckdb_extension.gz"
+             verbose="true"
+             usetimestamp="true"/>
+        <gunzip src="${local_temp_path}/azure.duckdb_extension.gz"
+                dest="${local_platform_path}/azure.duckdb_extension" />
 
         <!-- IMPORTANT! Remember to add the extension in DuckdbSourceConnection -->
 

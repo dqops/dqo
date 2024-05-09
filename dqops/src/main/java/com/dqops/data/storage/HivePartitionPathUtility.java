@@ -53,7 +53,7 @@ public class HivePartitionPathUtility {
         if (!Strings.isNullOrEmpty(partitionId.getDataDomain())) {
             stringBuilder.append(BuiltInFolderNames.DATA_DOMAINS);
             stringBuilder.append('/');
-            stringBuilder.append(FileNameSanitizer.encodeForFileSystem(partitionId.getDataDomain()));
+            stringBuilder.append(FileNameSanitizer.encodeForFileSystem(partitionId.getDataDomain()).replace(' ', '+'));
             stringBuilder.append('/');
         }
 
@@ -64,7 +64,7 @@ public class HivePartitionPathUtility {
 
         stringBuilder.append(ParquetPartitioningKeys.CONNECTION);
         stringBuilder.append('=');
-        String encodedConnection = URLEncoder.encode(connectionName, StandardCharsets.UTF_8);
+        String encodedConnection = FileNameSanitizer.encodeForFileSystem(connectionName).replace(' ', '+');
         stringBuilder.append(encodedConnection);
         stringBuilder.append('/');
 
@@ -72,7 +72,7 @@ public class HivePartitionPathUtility {
         if (tableName != null) {
             stringBuilder.append(ParquetPartitioningKeys.SCHEMA_TABLE);
             stringBuilder.append('=');
-            String encodedTable = URLEncoder.encode(tableName.toString(), StandardCharsets.UTF_8);
+            String encodedTable = FileNameSanitizer.encodeForFileSystem(tableName.toString()).replace(' ', '+');
             stringBuilder.append(encodedTable);
             stringBuilder.append('/');
         }

@@ -21,6 +21,7 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.conversion.NumericTypeConverter;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -122,6 +123,9 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Scale of a numeric (decimal) data type.")
     private Integer scale;
 
+    @JsonPropertyDescription("This field is a nested field inside another STRUCT. It is used to identify nested fields in JSON files.")
+    private Boolean nested;
+
     /**
      * Creates a column type snapshot given a database column type with a possible length and precision/scale.
      * Supported types could be "INT", "FLOAT" - are just parsed as a data type. "STRING(100), VARCHAR(100)" are parsed
@@ -151,12 +155,11 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
                 }
                 catch (NumberFormatException ex) {
                     // ignore, probably "MAX" in SQL Server
-                    result.setColumnType(dataType);
                 }
             }
             else {
-                result.setPrecision(Integer.parseInt(numberComponents[0].trim()));
-                result.setScale(Integer.parseInt(numberComponents[1].trim()));
+                result.setPrecision(NumericTypeConverter.tryParseInteger(numberComponents[0].trim()));
+                result.setScale(NumericTypeConverter.tryParseInteger(numberComponents[1].trim()));
             }
         }
 
@@ -248,17 +251,34 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
         this.scale = scale;
     }
 
+    /**
+     * Returns true if this field is nested inside another STRUCT.
+     * @return True when this is a nested field.
+     */
+    public Boolean getNested() {
+        return nested;
+    }
+
+    /**
+     * Sets a flag to identify nested fields.
+     * @param nested This field is a nested field.
+     */
+    public void setNested(Boolean nested) {
+        this.setDirtyIf(!Objects.equals(this.nested, nested));
+        this.nested = nested;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ColumnTypeSnapshotSpec that = (ColumnTypeSnapshotSpec) o;
-        return Objects.equals(columnType, that.columnType) && Objects.equals(nullable, that.nullable) && Objects.equals(length, that.length) && Objects.equals(scale, that.scale) && Objects.equals(precision, that.precision);
+        return Objects.equals(columnType, that.columnType) && Objects.equals(nullable, that.nullable) && Objects.equals(length, that.length) && Objects.equals(scale, that.scale) && Objects.equals(precision, that.precision) && Objects.equals(nested, that.nested);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(columnType, nullable, length, scale, precision);
+        return Objects.hash(columnType, nullable, length, scale, precision, nested);
     }
 
     /**
@@ -272,6 +292,7 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
             add(getScale() != null ? HashCode.fromLong(getScale()) : HashCode.fromLong(-1L));
             add(getPrecision() != null ? HashCode.fromLong(getPrecision()) : HashCode.fromLong(-1L));
             add(getNullable() != null ? HashCode.fromLong(getNullable() ? 1L : 0L) : HashCode.fromLong(-1L));
+            add(getNested() != null ? HashCode.fromLong(getNested().hashCode()) : HashCode.fromLong(-1L));
         }};
 
         return Math.abs(Hashing.combineOrdered(hashCodes).asLong()); // we return only positive hashes which limits the hash space to 2^63, but positive hashes are easier for users

@@ -15,6 +15,7 @@
  */
 package com.dqops.execution.sqltemplates.rendering;
 
+import com.dqops.checks.CheckType;
 import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.SourceConnection;
@@ -150,7 +151,7 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
                             sensorRunParameters.getRowCountLimit(),
                             sensorRunParameters.isFailOnSensorReadoutLimitExceeded());
                     Double defaultValue = sensorPrepareResult.getSensorDefinition().getSensorDefinitionSpec().getDefaultValue();
-                    if (sensorResultRows.rowCount() == 0 && defaultValue != null) {
+                    if (sensorResultRows.rowCount() == 0 && defaultValue != null && sensorRunParameters.getCheckType() != CheckType.partitioned) {
                         Table defaultValueResultTable = GenericSensorResultsFactory.createResultTableWithResult(defaultValue,
                                 this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorRunParameters.getTimePeriodGradient());
                         return new SensorExecutionResult(sensorRunParameters, defaultValueResultTable);
@@ -197,7 +198,9 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
         Double sensorDefaultValuePlaceholder = sensorPrepareResult.getSensorDefinition().getSensorDefinitionSpec().getDefaultValue();
         if (multiSensorTableResult.rowCount() == 0 && sensorDefaultValuePlaceholder != null) {
             DoubleColumn defaultValueColumn = DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
-            defaultValueColumn.append(sensorDefaultValuePlaceholder);
+            if (sensorPrepareResult.getSensorRunParameters().getCheckType() != CheckType.partitioned) {
+                defaultValueColumn.append(sensorDefaultValuePlaceholder);
+            }
             sensorResultRows.addColumns(defaultValueColumn);
         } else {
             Column<?> actualValueColumn = TableColumnUtility.findColumn(multiSensorTableResult, sensorPrepareResult.getActualValueAlias());

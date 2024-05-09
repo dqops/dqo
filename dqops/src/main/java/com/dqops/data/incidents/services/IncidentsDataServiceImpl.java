@@ -37,6 +37,7 @@ import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
+import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,7 @@ import tech.tablesaw.selection.Selection;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -59,6 +61,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
     private CheckResultsDataService checkResultsDataService;
     private UserHomeContextFactory userHomeContextFactory;
     private DqoIncidentsConfigurationProperties dqoIncidentsConfigurationProperties;
+    private DefaultTimeZoneProvider defaultTimeZoneProvider;
 
     /**
      * Creates a new incident data service, given all required dependencies.
@@ -66,16 +69,19 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
      * @param checkResultsDataService Data quality check results data service, used to load results (matching issues).
      * @param userHomeContextFactory User home context factory, used to load a list of connections.
      * @param dqoIncidentsConfigurationProperties DQOps incidents configuration parameters.
+     * @param defaultTimeZoneProvider Defautl time zone provider.
      */
     @Autowired
     public IncidentsDataServiceImpl(IncidentsSnapshotFactory incidentsSnapshotFactory,
                                     CheckResultsDataService checkResultsDataService,
                                     UserHomeContextFactory userHomeContextFactory,
-                                    DqoIncidentsConfigurationProperties dqoIncidentsConfigurationProperties) {
+                                    DqoIncidentsConfigurationProperties dqoIncidentsConfigurationProperties,
+                                    DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.incidentsSnapshotFactory = incidentsSnapshotFactory;
         this.checkResultsDataService = checkResultsDataService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoIncidentsConfigurationProperties = dqoIncidentsConfigurationProperties;
+        this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
 
     /**
@@ -89,7 +95,8 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
     public Collection<IncidentModel> loadRecentIncidentsOnConnection(
             String connectionName, IncidentListFilterParameters filterParameters, UserDomainIdentity userDomainIdentity) {
         IncidentsSnapshot incidentsSnapshot = this.incidentsSnapshotFactory.createSnapshot(connectionName, userDomainIdentity);
-        LocalDate endDate = Instant.now().atOffset(ZoneOffset.UTC).toLocalDate();
+        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
+        LocalDate endDate = Instant.now().atZone(defaultTimeZoneId).toLocalDate();
         LocalDate startDate = filterParameters.getRecentMonths() > 1 ?
                 endDate.minusMonths(filterParameters.getRecentMonths() - 1) : endDate;
         if (!incidentsSnapshot.ensureMonthsAreLoaded(startDate, endDate)) {
@@ -346,8 +353,9 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
         IncidentsSnapshot incidentsSnapshot = this.incidentsSnapshotFactory.createSnapshot(connectionName, userDomainIdentity);
         Instant now = Instant.now();
         Instant since = now.minus(this.dqoIncidentsConfigurationProperties.getCountOpenIncidentsDays(), ChronoUnit.DAYS);
-        LocalDate dateUntil = now.atOffset(ZoneOffset.UTC).toLocalDate();
-        LocalDate dateSince = since.atOffset(ZoneOffset.UTC).toLocalDate();
+        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
+        LocalDate dateUntil = now.atZone(defaultTimeZoneId).toLocalDate();
+        LocalDate dateSince = since.atZone(defaultTimeZoneId).toLocalDate();
         if (!incidentsSnapshot.ensureMonthsAreLoaded(dateSince, dateUntil)) {
             return model; // no incident parquet files
         }

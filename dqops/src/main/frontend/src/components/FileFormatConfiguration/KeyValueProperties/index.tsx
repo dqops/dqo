@@ -1,12 +1,13 @@
 import { Tooltip } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
-import { SharedCredentialListModel } from '../../../api';
+import { DuckdbParametersSpecStorageTypeEnum, SharedCredentialListModel } from '../../../api';
 import SvgIcon from '../../SvgIcon';
 import KeyValuePropertyItem from './KeyValuePropertyItem';
 
 interface IKeyValueProperties {
   properties?: { [key: string]: string };
   onChange: (properties: { [key: string]: string }) => void;
+  storageType?: DuckdbParametersSpecStorageTypeEnum;
   sharedCredentials?: SharedCredentialListModel[];
   refetchDirectoriesIndicator?: any;
 }
@@ -33,6 +34,7 @@ function convertArrayToObject(array: { [key: string]: string }[]): {
 const KeyValueProperties = ({
   properties,
   onChange,
+  storageType,
   sharedCredentials,
   refetchDirectoriesIndicator
 }: IKeyValueProperties) => {
@@ -79,7 +81,7 @@ const KeyValueProperties = ({
               Path
               <Tooltip
                 className="max-w-80 py-4 px-4 bg-gray-800 m-4"
-                content="The absolute path to a folder containing either files or another folder with files. E.g.: /usr/share/data/ or s3://bucket_name/data/"
+                content="The absolute path to a folder containing either files or another folder with files. E.g.: /usr/share/data/, s3://bucket_name/data/ or az://container_name/data/"
                 placement="top-start"
               >
                 <div>
@@ -100,6 +102,11 @@ const KeyValueProperties = ({
             key={index}
             index={index}
             properties={arr}
+            valuePlaceholder={
+              storageType === DuckdbParametersSpecStorageTypeEnum.s3 ? "s3://bucket_name" : 
+              storageType === DuckdbParametersSpecStorageTypeEnum.azure ? "az://container_name" : 
+              storageType === DuckdbParametersSpecStorageTypeEnum.local ? "/path/to/folder" : undefined 
+            }
             onChange={onChangeArr}
             sharedCredentials={sharedCredentials}
           />

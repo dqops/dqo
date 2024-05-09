@@ -27,7 +27,7 @@
 	</parent>
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-dqops</artifactId>
-    <version>1.2.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
+    <version>1.3.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<packaging>jar</packaging>
 	<name>dqo-dqops</name>
 	<description>DQOps Data Quality Operations Center</description>
@@ -436,6 +436,16 @@
 			<groupId>net.logstash.logback</groupId>
 			<artifactId>logstash-logback-encoder</artifactId>
 			<version>7.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.azure</groupId>
+			<artifactId>azure-storage-blob</artifactId>
+			<version>12.22.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.azure</groupId>
+			<artifactId>azure-identity</artifactId>
+			<version>1.8.2</version>
 		</dependency>
 
 		<!-- JDBC driver dependencies, make sure that they are the same as those in the lib/pom.xml file, because they are distributed in a separate folder -->
@@ -855,6 +865,7 @@
 						<DQO_TEST_TEMPORARY_FOLDER>${project.build.directory}</DQO_TEST_TEMPORARY_FOLDER>
 						<SAMPLE_DATA_FOLDER>${project.basedir}/sampledata/</SAMPLE_DATA_FOLDER>
 						<HADOOP_HOME>${project.basedir}/../home</HADOOP_HOME>
+						<AZURE_ENABLE_HTTP_CLIENT_SHARING>true</AZURE_ENABLE_HTTP_CLIENT_SHARING>
 					</environmentVariables>
 					<enableAssertions>true</enableAssertions>
 					<excludes>

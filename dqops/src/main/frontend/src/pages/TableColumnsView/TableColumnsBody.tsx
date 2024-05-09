@@ -159,6 +159,30 @@ export default function TableColumnsBody({
             <div className="w-49">Quality Dimension:</div>
             <div>{data?.dimension}</div>
           </div>
+          <div className="flex gap-x-2">
+            <div className="w-49">Executed checks:</div>
+            <div>{data?.executed_checks}</div>
+          </div>
+          <div className="flex gap-x-2">
+            <div className="w-49">Valid results:</div>
+            <div>{data?.valid_results}</div>
+          </div>
+          <div className="flex gap-x-2">
+            <div className="w-49">Warnings:</div>
+            <div>{data?.warnings}</div>
+          </div>
+          <div className="flex gap-x-2">
+            <div className="w-49">Errors:</div>
+            <div>{data?.errors}</div>
+          </div>
+          <div className="flex gap-x-2">
+            <div className="w-49">Fatals:</div>
+            <div>{data?.fatals}</div>
+          </div>
+          <div className="flex gap-x-2">
+            <div className="w-49">Data quality KPI:</div>
+            <div>{data?.data_quality_kpi}</div>
+          </div>
         </div>
       );
     }
@@ -187,6 +211,57 @@ export default function TableColumnsBody({
         (x) => !basicDimensionTypes.includes(x)
       ) ?? []
     );
+  };
+
+  const getMidSectionItemsBasedOnWidth = (column: MyData) => {
+    const width = window.innerWidth;
+    const excludedItems: string[] = [];
+
+    if (width < 1700) {
+      excludedItems.push(
+        'Nulls count',
+        'Max value',
+        'Min value',
+        'Scale',
+        'Length'
+      );
+    } else if (width < 1800) {
+      excludedItems.push('Nulls count', 'Max value', 'Min value', 'Scale');
+    } else if (width < 1900) {
+      excludedItems.push('Nulls count', 'Max value', 'Min value');
+    } else if (width < 2000) {
+      excludedItems.push('Nulls count', 'Max value');
+    } else if (width < 2200) {
+      excludedItems.push('Nulls count');
+    }
+
+    const items = [
+      { label: 'Length', value: column.length },
+      { label: 'Scale', value: column.scale },
+      {
+        label: 'Min value',
+        value: column.minimalValue
+          ? dateToString(String(column.minimalValue))
+            ? dateToString(String(column.minimalValue))
+            : cutString(String(column.minimalValue))
+          : ''
+      },
+      {
+        label: 'Max value',
+        value: column.maximumValue
+          ? dateToString(String(column.maximumValue))
+            ? dateToString(String(column.maximumValue))
+            : cutString(String(column.maximumValue))
+          : ''
+      },
+      {
+        label: 'Nulls count',
+        value: isNaN(Number(column.null_count)) ? '' : column.null_count
+      }
+    ];
+
+    const arr = items.filter((item) => !excludedItems.includes(item.label));
+    return arr;
   };
 
   return (
@@ -221,11 +296,13 @@ export default function TableColumnsBody({
                 const severityColor = getColor(currentSeverity as any);
                 const hasNoSeverity = severityColor.length === 0;
 
-                const dimensionsClassNames = clsx('w-3 h-3', {
-                  'bg-gray-150': hasNoSeverity && lastCheckExecutedAt,
-                  [severityColor]: !hasNoSeverity,
-                  'border border-gray-150': hasNoSeverity
-                });
+                const dimensionsClassNames = clsx(
+                  'w-3 h-3 border border-gray-150',
+                  {
+                    'bg-gray-150': hasNoSeverity && lastCheckExecutedAt,
+                    [severityColor]: !hasNoSeverity
+                  }
+                );
                 return (
                   <Tooltip
                     key={`Dimensionindex${dimType}`}
@@ -253,7 +330,7 @@ export default function TableColumnsBody({
                     >
                       <div
                         className={clsx(
-                          'w-3 h-3',
+                          'w-3 h-3 border border-gray-150',
                           getColor(
                             column.dimentions?.[dimensionKey as any]
                               ?.current_severity as
@@ -283,6 +360,9 @@ export default function TableColumnsBody({
             {column.nameOfCol}
           </td>
           <td className="border-b border-gray-100 text-left px-4 py-2">
+            {column.labels}
+          </td>
+          <td className="border-b border-gray-100 text-left px-4 py-2">
             <div key={index} className="truncate">
               {getDetectedDatatype(column.detectedDatatypeVar)}
             </div>
@@ -290,35 +370,15 @@ export default function TableColumnsBody({
           <td className="border-b border-gray-100 text-left px-4 py-2">
             {column.importedDatatype}
           </td>
-          <td className="border-b border-gray-100 text-right px-4 py-2">
-            <span className="float-right">{column.length}</span>
-          </td>
-          <td className="border-b border-gray-100 text-left px-4 py-2">
-            <span className="float-right">{column.scale}</span>
-          </td>
-          <td className="border-b border-gray-100 text-left px-4 py-2">
-            <div key={index} className="text-right float-right">
-              {column.minimalValue
-                ? dateToString(String(column.minimalValue))
-                  ? dateToString(String(column.minimalValue))
-                  : cutString(String(column.minimalValue))
-                : ''}
-            </div>
-          </td>
-          <td className="border-b border-gray-100 text-left px-4 py-2">
-            <div key={index} className="text-right float-right">
-              {column.maximumValue
-                ? dateToString(String(column.maximumValue))
-                  ? dateToString(String(column.maximumValue))
-                  : cutString(String(column.maximumValue))
-                : ''}
-            </div>
-          </td>
-          <td className="border-b border-gray-100 text-left px-4 py-2">
-            <div key={index} className="text-right float-right">
-              {isNaN(Number(column.null_count)) ? '' : column.null_count}
-            </div>
-          </td>
+          {getMidSectionItemsBasedOnWidth(column).map((item, jIndex) => (
+            <td
+              key={jIndex}
+              className="border-b border-gray-100 text-left px-4 py-2"
+            >
+              <div className="text-right float-right">{item.value}</div>
+            </td>
+          ))}
+
           <td className="border-b border-gray-100 text-right px-4 py-2">
             <div className="flex justify-center items-center">
               <div className="flex justify-center items-center">

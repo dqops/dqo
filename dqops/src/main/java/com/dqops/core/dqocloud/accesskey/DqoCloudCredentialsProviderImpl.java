@@ -55,45 +55,46 @@ public class DqoCloudCredentialsProviderImpl implements DqoCloudCredentialsProvi
     public TenantAccessTokenModel issueTenantAccessToken(DqoRoot rootType, UserDomainIdentity userIdentity) {
         ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userIdentity);
         AccessTokenIssueApi accessTokenIssueApi = new AccessTokenIssueApi(authenticatedClient);
+        String tenantIdFull = userIdentity.getTenantId() + "/" + userIdentity.getTenantGroupId();
         switch (rootType) {
             case data_sensor_readouts:
-                return accessTokenIssueApi.issueBucketSensorReadoutsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), userIdentity.getTenantId());
+                return accessTokenIssueApi.issueBucketSensorReadoutsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), tenantIdFull);
 
             case data_check_results:
-                return accessTokenIssueApi.issueBucketCheckResultsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), userIdentity.getTenantId());
+                return accessTokenIssueApi.issueBucketCheckResultsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), tenantIdFull);
 
             case data_errors:
-                return accessTokenIssueApi.issueBucketErrorsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), userIdentity.getTenantId());
+                return accessTokenIssueApi.issueBucketErrorsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), tenantIdFull);
 
             case data_statistics:
-                return accessTokenIssueApi.issueBucketStatisticsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), userIdentity.getTenantId());
+                return accessTokenIssueApi.issueBucketStatisticsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), tenantIdFull);
 
             case data_incidents:
-                return accessTokenIssueApi.issueBucketIncidentsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), userIdentity.getTenantId());
+                return accessTokenIssueApi.issueBucketIncidentsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), tenantIdFull);
 
             case sources:
-                return accessTokenIssueApi.issueBucketSourcesRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), userIdentity.getTenantId());
+                return accessTokenIssueApi.issueBucketSourcesRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), tenantIdFull);
 
             case sensors:
-                return accessTokenIssueApi.issueBucketSensorsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), userIdentity.getTenantId());
+                return accessTokenIssueApi.issueBucketSensorsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), tenantIdFull);
 
             case rules:
-                return accessTokenIssueApi.issueBucketRulesRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), userIdentity.getTenantId());
+                return accessTokenIssueApi.issueBucketRulesRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), tenantIdFull);
 
             case checks:
-                return accessTokenIssueApi.issueBucketChecksRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), userIdentity.getTenantId());
+                return accessTokenIssueApi.issueBucketChecksRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), tenantIdFull);
 
             case settings:
-                return accessTokenIssueApi.issueBucketSettingsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), userIdentity.getTenantId());
+                return accessTokenIssueApi.issueBucketSettingsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), tenantIdFull);
 
             case credentials:
-                return accessTokenIssueApi.issueBucketCredentialsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), userIdentity.getTenantId());
+                return accessTokenIssueApi.issueBucketCredentialsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), tenantIdFull);
 
             case dictionaries:
-                return accessTokenIssueApi.issueBucketDictionariesRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), userIdentity.getTenantId());
+                return accessTokenIssueApi.issueBucketDictionariesRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), tenantIdFull);
 
             case patterns:
-                return accessTokenIssueApi.issueBucketPatternsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), userIdentity.getTenantId());
+                return accessTokenIssueApi.issueBucketPatternsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), tenantIdFull);
 
             default:
                 throw new RuntimeException("Unknown root: " + rootType);

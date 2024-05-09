@@ -26,8 +26,8 @@ import com.dqops.cli.completion.completers.*;
 import com.dqops.cli.output.OutputFormatService;
 import com.dqops.cli.terminal.FileWriter;
 import com.dqops.cli.terminal.TablesawDatasetTableModel;
+import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalTableWritter;
-import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.execution.checks.CheckExecutionErrorSummary;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
@@ -51,7 +51,7 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "run", header = "Run data quality checks that match a given condition", description = "Run data quality checks on your dataset that match a given condition. The command output is a table with the results that provides insight into the data quality.")
 public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITableNameCommand {
-    private TerminalWriter terminalWriter;
+    private TerminalFactory terminalFactory;
     private TerminalTableWritter terminalTableWritter;
     private CheckCliService checkService;
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
@@ -64,19 +64,18 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
 
     /**
      * Dependency injection constructor.
-     * @param terminalWriter Terminal writer.
      * @param checkService Check implementation service.
      * @param jsonSerializer  Json serializer.
      */
     @Autowired
-    public CheckRunCliCommand(TerminalWriter terminalWriter,
+    public CheckRunCliCommand(TerminalFactory terminalFactory,
                               TerminalTableWritter terminalTableWritter,
                               CheckCliService checkService,
                               CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
                               JsonSerializer jsonSerializer,
                               OutputFormatService outputFormatService,
                               FileWriter fileWriter) {
-        this.terminalWriter = terminalWriter;
+        this.terminalFactory = terminalFactory;
         this.terminalTableWritter = terminalTableWritter;
         this.checkService = checkService;
         this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
@@ -388,22 +387,22 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, this.timeWindowFilterParameters, progressListener, this.dummyRun);
 
         if (checkExecutionSummary.getTotalChecksExecutedCount() == 0) {
-            this.terminalWriter.writeLine("No checks with these filters were found.");
+            this.terminalFactory.getWriter().writeLine("No checks with these filters were found.");
             return 0;
         }
 
         if (this.mode != CheckRunReportingMode.silent) {
             TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable());
-			this.terminalWriter.writeLine("Check evaluation summary per table:");
+			this.terminalFactory.getWriter().writeLine("Check evaluation summary per table:");
             switch(this.getOutputFormat()) {
                 case CSV: {
                     String csvContent = this.outputFormatService.tableToCsv(tablesawDatasetTableModel);
                     if (this.isWriteToFile()) {
                         CliOperationStatus cliOperationStatus = this.fileWriter.writeStringToFile(csvContent);
-                        this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+                        this.terminalFactory.getWriter().writeLine(cliOperationStatus.getMessage());
                     }
                     else {
-                        this.terminalWriter.write(csvContent);
+                        this.terminalFactory.getWriter().write(csvContent);
                     }
                     break;
                 }
@@ -411,10 +410,10 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
                     String jsonContent = this.outputFormatService.tableToJson(tablesawDatasetTableModel);
                     if (this.isWriteToFile()) {
                         CliOperationStatus cliOperationStatus = this.fileWriter.writeStringToFile(jsonContent);
-                        this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+                        this.terminalFactory.getWriter().writeLine(cliOperationStatus.getMessage());
                     }
                     else {
-                        this.terminalWriter.write(jsonContent);
+                        this.terminalFactory.getWriter().write(jsonContent);
                     }
                     break;
                 }
@@ -423,9 +422,9 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
                         TableBuilder tableBuilder = new TableBuilder(tablesawDatasetTableModel);
                         tableBuilder.addInnerBorder(BorderStyle.oldschool);
                         tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-                        String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+                        String renderedTable = tableBuilder.build().render(this.terminalFactory.getWriter().getTerminalWidth() - 1);
                         CliOperationStatus cliOperationStatus = this.fileWriter.writeStringToFile(renderedTable);
-                        this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+                        this.terminalFactory.getWriter().writeLine(cliOperationStatus.getMessage());
                     }
                     else {
                         this.terminalTableWritter.writeTable(tablesawDatasetTableModel, true);
@@ -437,9 +436,9 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
             CheckExecutionErrorSummary checkExecutionErrorSummary = checkExecutionSummary.getCheckExecutionErrorSummary();
             if (checkExecutionErrorSummary != null) {
                 if (this.mode == CheckRunReportingMode.debug) {
-                    this.terminalWriter.writeLine(checkExecutionErrorSummary.getDebugMessage());
+                    this.terminalFactory.getWriter().writeLine(checkExecutionErrorSummary.getDebugMessage());
                 } else {
-                    this.terminalWriter.writeLine(checkExecutionErrorSummary.getSummaryMessage());
+                    this.terminalFactory.getWriter().writeLine(checkExecutionErrorSummary.getSummaryMessage());
                 }
             }
         }

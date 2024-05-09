@@ -7,6 +7,7 @@ import { closeFirstLevelTab } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import { DataDictionaryApiClient } from '../../services/apiClient';
+import { urlencodeDecoder } from '../../utils';
 
 export default function DataDictionaryItemOverview() {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
@@ -32,7 +33,9 @@ export default function DataDictionaryItemOverview() {
     }).catch((err) => console.error(err));
 
     dispatch(
-      closeFirstLevelTab('/definitions/data-dictionary/' + dictionary_name)
+      closeFirstLevelTab(
+        '/definitions/data-dictionary/' + urlencodeDecoder(dictionary_name)
+      )
     );
   };
 

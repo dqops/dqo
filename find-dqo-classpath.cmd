@@ -58,3 +58,7 @@ if exist "%~dp0dqops\pom.xml" (
 if not "x%HADOOP_HOME%"=="x" (
   set HADOOP_HOME=%DQO_HOME%
 )
+
+if not "x%AZURE_ENABLE_HTTP_CLIENT_SHARING%"=="x" (
+  set AZURE_ENABLE_HTTP_CLIENT_SHARING=true
+)

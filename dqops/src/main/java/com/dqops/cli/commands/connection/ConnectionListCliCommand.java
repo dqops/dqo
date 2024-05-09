@@ -21,10 +21,7 @@ import com.dqops.cli.commands.ICommand;
 import com.dqops.cli.commands.connection.impl.ConnectionCliService;
 import com.dqops.cli.commands.connection.impl.models.ConnectionListModel;
 import com.dqops.cli.output.OutputFormatService;
-import com.dqops.cli.terminal.FileWriter;
-import com.dqops.cli.terminal.FormattedTableDto;
-import com.dqops.cli.terminal.TerminalTableWritter;
-import com.dqops.cli.terminal.TerminalWriter;
+import com.dqops.cli.terminal.*;
 import com.google.api.client.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -44,7 +41,7 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "list", header = "List connections that match a given condition", description = "Lists all the created connections for the logged-in user that match the conditions specified in the options. It allows the user to filter connections based on various parameters.")
 public class ConnectionListCliCommand extends BaseCommand implements ICommand {
     private ConnectionCliService connectionCliService;
-    private TerminalWriter terminalWriter;
+    private TerminalFactory terminalFactory;
     private TerminalTableWritter terminalTableWritter;
     private OutputFormatService outputFormatService;
     private FileWriter fileWriter;
@@ -54,12 +51,12 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
 
     @Autowired
     public ConnectionListCliCommand(ConnectionCliService connectionCliService,
-                                    TerminalWriter terminalWriter,
+                                    TerminalFactory terminalFactory,
                                     TerminalTableWritter terminalTableWritter,
                                     OutputFormatService outputFormatService,
                                     FileWriter fileWriter) {
         this.connectionCliService = connectionCliService;
-        this.terminalWriter = terminalWriter;
+        this.terminalFactory = terminalFactory;
         this.terminalTableWritter = terminalTableWritter;
         this.outputFormatService = outputFormatService;
         this.fileWriter = fileWriter;
@@ -107,10 +104,10 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
                 String csvContent = this.outputFormatService.tableToCsv(formattedTable);
                 if (this.isWriteToFile()) {
                     CliOperationStatus cliOperationStatus = this.fileWriter.writeStringToFile(csvContent);
-                    this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+                    this.terminalFactory.getWriter().writeLine(cliOperationStatus.getMessage());
                 }
                 else {
-                    this.terminalWriter.write(csvContent);
+                    this.terminalFactory.getWriter().write(csvContent);
                 }
                 break;
             }
@@ -118,10 +115,10 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
                 String jsonContent = this.outputFormatService.tableToJson(formattedTable);
                 if (this.isWriteToFile()) {
                     CliOperationStatus cliOperationStatus = this.fileWriter.writeStringToFile(jsonContent);
-                    this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+                    this.terminalFactory.getWriter().writeLine(cliOperationStatus.getMessage());
                 }
                 else {
-                    this.terminalWriter.write(jsonContent);
+                    this.terminalFactory.getWriter().write(jsonContent);
                 }
                 break;
             }
@@ -131,9 +128,9 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
                     TableBuilder tableBuilder = new TableBuilder(model);
                     tableBuilder.addInnerBorder(BorderStyle.oldschool);
                     tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-                    String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+                    String renderedTable = tableBuilder.build().render(this.terminalFactory.getWriter().getTerminalWidth() - 1);
                     CliOperationStatus cliOperationStatus = this.fileWriter.writeStringToFile(renderedTable);
-                    this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+                    this.terminalFactory.getWriter().writeLine(cliOperationStatus.getMessage());
                 }
                 else {
                     this.terminalTableWritter.writeTable(formattedTable, true);

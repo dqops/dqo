@@ -6,10 +6,15 @@
 {% set timestamp_column_data_type = table.columns[time_series.timestamp_column].type_snapshot.column_type | upper | default(none, true) -%}
 {% set data_groupings = effective_data_groupings | default(none, true) -%}
 {% set target_column_data_type = table.columns[column_name].type_snapshot.column_type | default(none, true) -%}
+{% set target_column_is_nested = table.columns[column_name].type_snapshot.nested | default(none, true) -%}
 {% set calculated_column_expression = table.columns[column_name].sql_expression | default('', true) -%}
 
 {% macro quote_identifier(name) -%}
-    {{ dialect_settings.quote_begin }}{{ name | replace(dialect_settings.quote_end, dialect_settings.quote_escape) }}{{ dialect_settings.quote_end }}
+    {%- if name == column_name and target_column_is_nested is not none and target_column_is_nested is true -%}
+        {{ name }}
+    {%- else -%}
+        {{ dialect_settings.quote_begin }}{{ name | replace(dialect_settings.quote_end, dialect_settings.quote_escape) }}{{ dialect_settings.quote_end }}
+    {%- endif -%}
 {%- endmacro %}
 
 {% macro make_text_constant(string) -%}
