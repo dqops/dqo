@@ -13,9 +13,7 @@ import org.apache.commons.codec.binary.Hex;
 import tech.tablesaw.api.Table;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * DuckDB secret manager that handles of the secrets creation in DuckDB.
@@ -24,10 +22,8 @@ import java.util.Set;
 public class DuckdbSecretManager {
 
     private static DuckdbSecretManager secretsManager;
-    private final Set<String> secrets;
 
     public DuckdbSecretManager() {
-        secrets = new HashSet<>();
     }
 
     /**
@@ -42,26 +38,27 @@ public class DuckdbSecretManager {
     }
 
     /**
-     * Creates a secret for a connection spec which secret has not been created yet or when the connection spec has changed.
+     * Creates a secret for a connection spec.
      *
-     * @param connectionSpec Connection spec which hash is compared for the creation of a new secret.
-     * @param sourceConnection The source connection that executes a query with that creates a new secret.
+     * @param connectionSpec Connection spec with credential details.
+     * @param sourceConnection The source connection that executes a secret creation query.
      */
-    public synchronized void ensureCreated(ConnectionSpec connectionSpec, AbstractJdbcSourceConnection sourceConnection){
+    public synchronized void createSecrets(ConnectionSpec connectionSpec, AbstractJdbcSourceConnection sourceConnection){
         List<String> scopes = connectionSpec.getDuckdb().getScopes();
         scopes.forEach(scope -> {
             String secretName = "s_" + calculateSecretHex(scope);
-            if(secrets.contains(secretName)){
-                return;
-            }
 
             String createSecretQuery = DuckdbQueriesProvider.provideCreateSecretQuery(connectionSpec, secretName, scope);
-            Table tableResult = sourceConnection.executeQuery(createSecretQuery, JobCancellationToken.createDummyJobCancellationToken(), null, false);
-            Boolean success = (Boolean) tableResult.column(tableResult.columnIndex("success")).get(0);
-            if(success){
-                secrets.add(secretName);
-            } else {
-                log.error("Creation of a new DuckDB secret key for storage " + connectionSpec.getDuckdb().getStorageType() + " failed !");
+            try {
+                Table tableResult = sourceConnection.executeQuery(createSecretQuery, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+                Boolean success = (Boolean) tableResult.column(tableResult.columnIndex("success")).get(0);
+                if(!success){
+                    log.error("Creation of a new DuckDB secret key for storage " + connectionSpec.getDuckdb().getStorageType() + " failed !");
+                }
+            } catch (Exception e){
+                if(!e.getMessage().contains("already exists")) { // Temporary secret with name xxx already exists
+                    log.error("Cannot create a secret for the " + connectionSpec.getConnectionName() + " connection.");
+                }
             }
         });
     }
