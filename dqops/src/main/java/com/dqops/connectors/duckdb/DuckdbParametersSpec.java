@@ -17,6 +17,7 @@ package com.dqops.connectors.duckdb;
 
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
 import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
+import com.dqops.connectors.storage.azure.AzureAuthenticationMode;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -108,6 +109,10 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("The authentication mode for AWS. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.")
     private AwsAuthenticationMode awsAuthenticationMode;
 
+    @CommandLine.Option(names = {"--duckdb-azure-authentication-mode"}, description = "The authentication mode for Azure. Supports also a ${DUCKDB_AZURE_AUTHENTICATION_MODE} configuration with a custom environment variable.")
+    @JsonPropertyDescription("The authentication mode for Azure. Supports also a ${DUCKDB_AZURE_AUTHENTICATION_MODE} configuration with a custom environment variable.")
+    private AzureAuthenticationMode azureAuthenticationMode;
+
     @CommandLine.Option(names = {"--duckdb-user"}, description = "DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String user;
@@ -119,6 +124,22 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @CommandLine.Option(names = {"--duckdb-region"}, description = "The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String region;
+
+    @CommandLine.Option(names = {"--duckdb-azure-tenant-id"}, description = "Azure Tenant ID used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Azure Tenant ID used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String tenantId;
+
+    @CommandLine.Option(names = {"--duckdb-azure-client-id"}, description = "Azure Client ID used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Azure Client ID used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String clientId;
+
+    @CommandLine.Option(names = {"--duckdb-azure-client-secret"}, description = "Azure Client Secret used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Azure Client Secret used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String clientSecret;
+
+    @CommandLine.Option(names = {"--duckdb-azure-account-name"}, description = "Azure Storage Account Name used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Azure Storage Account Name used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String accountName;
 
     /**
      * Returns a readMode value.
@@ -311,6 +332,23 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Returns the Azure's authentication mode.
+     * @return Azure's authentication mode.
+     */
+    public AzureAuthenticationMode getAzureAuthenticationMode() {
+        return azureAuthenticationMode;
+    }
+
+    /**
+     * Sets Azure's authentication mode.
+     * @param azureAuthenticationMode Azure's authentication mode.
+     */
+    public void setAzureAuthenticationMode(AzureAuthenticationMode azureAuthenticationMode) {
+        setDirtyIf(!Objects.equals(this.azureAuthenticationMode, azureAuthenticationMode));
+        this.azureAuthenticationMode = azureAuthenticationMode;
+    }
+
+    /**
      * Returns the user that is used to log in to the data source.
      * @return User name.
      */
@@ -359,6 +397,74 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     public void setRegion(String region) {
         setDirtyIf(!Objects.equals(this.region, region));
         this.region = region;
+    }
+
+    /**
+     * Returns the tenantId
+     * @return tenantId.
+     */
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    /**
+     * Sets tenantId.
+     * @param tenantId tenantId.
+     */
+    public void setTenantId(String tenantId) {
+        setDirtyIf(!Objects.equals(this.tenantId, tenantId));
+        this.tenantId = tenantId;
+    }
+
+    /**
+     * Returns the clientId
+     * @return clientId.
+     */
+    public String getClientId() {
+        return clientId;
+    }
+
+    /**
+     * Sets clientId.
+     * @param clientId clientId.
+     */
+    public void setClientId(String clientId) {
+        setDirtyIf(!Objects.equals(this.clientId, clientId));
+        this.clientId = clientId;
+    }
+
+    /**
+     * Returns the clientSecret
+     * @return clientSecret.
+     */
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    /**
+     * Sets clientSecret.
+     * @param clientSecret clientSecret.
+     */
+    public void setClientSecret(String clientSecret) {
+        setDirtyIf(!Objects.equals(this.clientSecret, clientSecret));
+        this.clientSecret = clientSecret;
+    }
+
+    /**
+     * Returns the accountName
+     * @return accountName.
+     */
+    public String getAccountName() {
+        return accountName;
+    }
+
+    /**
+     * Sets accountName.
+     * @param accountName accountName.
+     */
+    public void setAccountName(String accountName) {
+        setDirtyIf(!Objects.equals(this.accountName, accountName));
+        this.accountName = accountName;
     }
 
     /**
@@ -479,6 +585,11 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
         cloned.region = secretValueProvider.expandValue(cloned.region, lookupContext);
+
+        cloned.tenantId = secretValueProvider.expandValue(cloned.tenantId, lookupContext);
+        cloned.clientId = secretValueProvider.expandValue(cloned.clientId, lookupContext);
+        cloned.clientSecret = secretValueProvider.expandValue(cloned.clientSecret, lookupContext);
+        cloned.accountName = secretValueProvider.expandValue(cloned.accountName, lookupContext);
 
         return cloned;
     }

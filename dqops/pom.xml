@@ -442,6 +442,11 @@
 			<artifactId>azure-storage-blob</artifactId>
 			<version>12.22.3</version>
 		</dependency>
+		<dependency>
+			<groupId>com.azure</groupId>
+			<artifactId>azure-identity</artifactId>
+			<version>1.8.2</version>
+		</dependency>
 
 		<!-- JDBC driver dependencies, make sure that they are the same as those in the lib/pom.xml file, because they are distributed in a separate folder -->
 <!--		<dependency>-->
