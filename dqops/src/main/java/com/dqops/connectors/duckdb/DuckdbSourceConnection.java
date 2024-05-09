@@ -65,7 +65,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
     private final HomeLocationFindService homeLocationFindService;
     private static final Object registerExtensionsLock = new Object();
-    private static boolean extensionsRegistered = false;
+    private static Set<String> extensionsRegisteredPerThread = new HashSet<>();
     private final DqoDuckdbConfiguration dqoDuckdbConfiguration;
     private final DuckDBDataTypeParser dataTypeParser;
     private static final Object settingsExecutionLock = new Object();
@@ -208,7 +208,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
                 String temporaryDirectory = Files.createTempDirectory(temporaryDirectoryPrefix).toFile().getAbsolutePath();
                 Path.of(temporaryDirectory).toFile().deleteOnExit();
-                String tempDirectoryQuery = "SET temp_directory = '" + temporaryDirectory + "'";
+                String tempDirectoryQuery = "SET GLOBAL temp_directory = '" + temporaryDirectory + "'";
                 this.executeCommand(tempDirectoryQuery, JobCancellationToken.createDummyJobCancellationToken());
             }
         } catch (Exception e) {
@@ -220,7 +220,8 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      * Registers extensions for duckdb from the local extension repository.
      */
     private void registerExtensions(){
-        if(extensionsRegistered){
+        String currentThreadName = Thread.currentThread().getName();
+        if(extensionsRegisteredPerThread.contains(currentThreadName)){
             return;
         }
         try {
@@ -240,7 +241,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                         log.error(exception.getMessage());
                     }
                 });
-                extensionsRegistered = true;
+                extensionsRegisteredPerThread.add(currentThreadName);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
