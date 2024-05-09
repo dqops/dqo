@@ -94,6 +94,11 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--databricks-password=<password>] [--databricks-port=<port>]
                 [--databricks-user=<user>]
                 [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
+                [--duckdb-azure-account-name=<accountName>]
+                [--duckdb-azure-authentication-mode=<azureAuthenticationMode>]
+                [--duckdb-azure-client-id=<clientId>]
+                [--duckdb-azure-client-secret=<clientSecret>]
+                [--duckdb-azure-tenant-id=<tenantId>]
                 [--duckdb-database=<database>]
                 [--duckdb-directories=<directoriesString>]
                 [--duckdb-files-format-type=<filesFormatType>]
@@ -163,6 +168,11 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--databricks-password=<password>] [--databricks-port=<port>]
                 [--databricks-user=<user>]
                 [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
+                [--duckdb-azure-account-name=<accountName>]
+                [--duckdb-azure-authentication-mode=<azureAuthenticationMode>]
+                [--duckdb-azure-client-id=<clientId>]
+                [--duckdb-azure-client-secret=<clientSecret>]
+                [--duckdb-azure-tenant-id=<tenantId>]
                 [--duckdb-database=<database>]
                 [--duckdb-directories=<directoriesString>]
                 [--duckdb-files-format-type=<filesFormatType>]
@@ -238,6 +248,11 @@ All parameters supported by the command are listed below.
 |<div id="connection add--databricks-port" class="no-wrap-code">`--databricks-port`</div>|Databricks port number| ||
 |<div id="connection add--databricks-user" class="no-wrap-code">`--databricks-user`</div>|Databricks user name.| ||
 |<div id="connection add--duckdb-aws-authentication-mode" class="no-wrap-code">`--duckdb-aws-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>|
+|<div id="connection add--duckdb-azure-account-name" class="no-wrap-code">`--duckdb-azure-account-name`</div>|Azure Storage Account Name used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--duckdb-azure-authentication-mode" class="no-wrap-code">`--duckdb-azure-authentication-mode`</div>|The authentication mode for Azure. Supports also a null configuration with a custom environment variable.| |*connection_string*<br/>*credential_chain*<br/>*service_principal*<br/>|
+|<div id="connection add--duckdb-azure-client-id" class="no-wrap-code">`--duckdb-azure-client-id`</div>|Azure Client ID used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--duckdb-azure-client-secret" class="no-wrap-code">`--duckdb-azure-client-secret`</div>|Azure Client Secret used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--duckdb-azure-tenant-id" class="no-wrap-code">`--duckdb-azure-tenant-id`</div>|Azure Tenant ID used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name for in-memory read mode. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-directories" class="no-wrap-code">`--duckdb-directories`</div>|Virtual schema name to directory mappings. The path must be an absolute path.| ||
 |<div id="connection add--duckdb-files-format-type" class="no-wrap-code">`--duckdb-files-format-type`</div>|Type of source files format for DuckDB.| |*csv*<br/>*json*<br/>*parquet*<br/>|
@@ -408,6 +423,11 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--databricks-password=<password>]
                    [--databricks-port=<port>] [--databricks-user=<user>]
                    [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
+                   [--duckdb-azure-account-name=<accountName>]
+                   [--duckdb-azure-authentication-mode=<azureAuthenticationMode>
+                   ] [--duckdb-azure-client-id=<clientId>]
+                   [--duckdb-azure-client-secret=<clientSecret>]
+                   [--duckdb-azure-tenant-id=<tenantId>]
                    [--duckdb-database=<database>]
                    [--duckdb-directories=<directoriesString>]
                    [--duckdb-files-format-type=<filesFormatType>]
@@ -477,6 +497,11 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--databricks-password=<password>]
                    [--databricks-port=<port>] [--databricks-user=<user>]
                    [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
+                   [--duckdb-azure-account-name=<accountName>]
+                   [--duckdb-azure-authentication-mode=<azureAuthenticationMode>
+                   ] [--duckdb-azure-client-id=<clientId>]
+                   [--duckdb-azure-client-secret=<clientSecret>]
+                   [--duckdb-azure-tenant-id=<tenantId>]
                    [--duckdb-database=<database>]
                    [--duckdb-directories=<directoriesString>]
                    [--duckdb-files-format-type=<filesFormatType>]
@@ -552,6 +577,11 @@ All parameters supported by the command are listed below.
 |<div id="connection update--databricks-port" class="no-wrap-code">`--databricks-port`</div>|Databricks port number| ||
 |<div id="connection update--databricks-user" class="no-wrap-code">`--databricks-user`</div>|Databricks user name.| ||
 |<div id="connection update--duckdb-aws-authentication-mode" class="no-wrap-code">`--duckdb-aws-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>|
+|<div id="connection update--duckdb-azure-account-name" class="no-wrap-code">`--duckdb-azure-account-name`</div>|Azure Storage Account Name used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--duckdb-azure-authentication-mode" class="no-wrap-code">`--duckdb-azure-authentication-mode`</div>|The authentication mode for Azure. Supports also a null configuration with a custom environment variable.| |*connection_string*<br/>*credential_chain*<br/>*service_principal*<br/>|
+|<div id="connection update--duckdb-azure-client-id" class="no-wrap-code">`--duckdb-azure-client-id`</div>|Azure Client ID used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--duckdb-azure-client-secret" class="no-wrap-code">`--duckdb-azure-client-secret`</div>|Azure Client Secret used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--duckdb-azure-tenant-id" class="no-wrap-code">`--duckdb-azure-tenant-id`</div>|Azure Tenant ID used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name for in-memory read mode. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-directories" class="no-wrap-code">`--duckdb-directories`</div>|Virtual schema name to directory mappings. The path must be an absolute path.| ||
 |<div id="connection update--duckdb-files-format-type" class="no-wrap-code">`--duckdb-files-format-type`</div>|Type of source files format for DuckDB.| |*csv*<br/>*json*<br/>*parquet*<br/>|
