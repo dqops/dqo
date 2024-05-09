@@ -4,30 +4,38 @@ import {
   DialogFooter,
   DialogHeader
 } from '@material-tailwind/react';
+import moment from 'moment';
 import React, { useState } from 'react';
-import Button from '../Button';
+import { useSelector } from 'react-redux';
 import {
   CheckSearchFilters,
   CheckSearchFiltersCheckTypeEnum,
   CheckSearchFiltersTimeScaleEnum,
-  StatisticsCollectorSearchFiltersTargetEnum
+  StatisticsCollectorSearchFiltersTargetEnum,
+  TimeWindowFilterParameters
 } from '../../api';
+import { IRootState } from '../../redux/reducers';
+import { CheckTypes } from '../../shared/routes';
+import Button from '../Button';
+import CheckboxThreeSteps from '../CheckBoxThreeSteps';
 import LabelsView from '../Connection/LabelsView';
+import SectionWrapper from '../Dashboard/SectionWrapper';
 import Input from '../Input';
 import SelectInput from '../SelectInput';
-import CheckboxThreeSteps from '../CheckBoxThreeSteps';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 import SvgIcon from '../SvgIcon';
-import SectionWrapper from '../Dashboard/SectionWrapper';
 type TRunChecksDialogProps = {
-  onClick: (filter: CheckSearchFilters) => void;
+  checkType: CheckTypes;
+  onClick: (
+    filter: CheckSearchFilters,
+    timeWindowFilter?: TimeWindowFilterParameters
+  ) => void;
   open: boolean;
   onClose: VoidFunction;
   runChecksJobTemplate: CheckSearchFilters;
 };
 
 export default function RunChecksDialog({
+  checkType,
   onClick,
   onClose,
   open,
@@ -39,11 +47,26 @@ export default function RunChecksDialog({
     fullTableName: 'schema*.table*',
     ...runChecksJobTemplate
   });
+  const [timeWindowFilter, setTimeWindowFilter] = useState<
+    TimeWindowFilterParameters | undefined
+  >({
+    from_date: moment().utc().subtract(7, 'days').format('YYYY-MM-DD'),
+    to_date: moment().utc().format('YYYY-MM-DD')
+  });
 
   const [additionalParams, setAdditionalParams] = useState(false);
 
   const onChangeFilters = (obj: Partial<CheckSearchFilters>) => {
     setFilters((prev) => ({
+      ...prev,
+      ...obj
+    }));
+  };
+
+  const onChangeTimeFilterWindow = (
+    obj: Partial<TimeWindowFilterParameters>
+  ) => {
+    setTimeWindowFilter((prev) => ({
       ...prev,
       ...obj
     }));
@@ -64,6 +87,33 @@ export default function RunChecksDialog({
         Run checks
       </DialogHeader>
       <DialogBody className="text-sm flex flex-col mb-20">
+        {checkType === CheckTypes.PARTITIONED && (
+          <div className="flex justify-between border-b pb-4 border-gray-300 text-black  ">
+            <div className="w-[45%] ml-2">
+              From:
+              <Input
+                value={timeWindowFilter?.from_date}
+                onChange={(e) =>
+                  onChangeTimeFilterWindow({ from_date: e.target.value })
+                }
+                className="mt-2"
+                placeholder="*"
+              />
+            </div>
+            <div className="w-[45%] ml-2">
+              To:
+              <Input
+                value={timeWindowFilter?.to_date}
+                onChange={(e) =>
+                  onChangeTimeFilterWindow({ to_date: e.target.value })
+                }
+                className="mt-2"
+                placeholder="*"
+              />
+            </div>
+            <div></div>
+          </div>
+        )}
         <div className="flex justify-between border-b pb-4 border-gray-300 text-black  ">
           <div className="w-[45%] ml-2">
             Connection:
@@ -245,7 +295,8 @@ export default function RunChecksDialog({
           color="primary"
           className="px-8"
           onClick={() => {
-            onClick(prepareFilters(filters)), setFilters(runChecksJobTemplate);
+            onClick(prepareFilters(filters), timeWindowFilter),
+              setFilters(runChecksJobTemplate);
           }}
           label="Run checks"
           disabled={userProfile.can_delete_data !== true}
