@@ -44,8 +44,13 @@ public class AzureStoragePath {
         if(uri.getHost().contains(".")){
             azureStoragePath.domain = uri.getHost();
             String path = uri.getPath().substring(1);
-            azureStoragePath.containerName = path.substring(0, path.indexOf("/")).replace("/","");
-            azureStoragePath.prefix = path.substring(azureStoragePath.containerName.length() + 1); // + 1 removes a beginning slash
+            if(path.contains("/")){
+                azureStoragePath.containerName = path.substring(0, path.indexOf("/")).replace("/","");
+                azureStoragePath.prefix = path.substring(azureStoragePath.containerName.length() + 1); // + 1 removes a beginning slash
+            } else {
+                azureStoragePath.containerName = path;
+                azureStoragePath.prefix = "";
+            }
         } else {
             azureStoragePath.domain = accountName + BLOB_DOMAIN_SUFFIX;
             azureStoragePath.containerName = uri.getHost();
