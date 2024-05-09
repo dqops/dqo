@@ -95,14 +95,31 @@ export const SchemaTables = () => {
 
   return (
     <>
-      <div className="flex items-center gap-x-4 mb-4 px-4">
-        <Input
-          label="Table name"
-          value={table}
-          onChange={(e) => setTable(e.target.value)}
-        />
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-x-4 mb-4 mt-2 px-4">
+          <Input
+            label="Table name"
+            value={table}
+            onChange={(e) => setTable(e.target.value)}
+          />
+          <Button
+            label="Search"
+            onClick={() =>
+              getTables(
+                labels
+                  .filter((x) => x.clicked && x.label)
+                  .map((x) => x.label)
+                  .filter((x): x is string => typeof x === 'string')
+              )
+            }
+            color="primary"
+            className="mt-5"
+          />
+        </div>
         <Button
-          label="Search"
+          label="Refresh"
+          color="primary"
+          className="mb-4 mt-2 mr-4"
           onClick={() =>
             getTables(
               labels
@@ -111,8 +128,6 @@ export const SchemaTables = () => {
                 .filter((x): x is string => typeof x === 'string')
             )
           }
-          color="primary"
-          className="mt-5"
         />
       </div>
       <TableList
