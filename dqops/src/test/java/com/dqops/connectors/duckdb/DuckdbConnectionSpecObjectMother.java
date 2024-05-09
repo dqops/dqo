@@ -53,6 +53,7 @@ public class DuckdbConnectionSpecObjectMother {
             {{
                 setReadMode(DuckdbReadMode.files);
                 setFilesFormatType(duckdbFilesFormatType);
+                setStorageType(DuckdbStorageType.local);
             }});
         }};
 
