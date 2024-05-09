@@ -185,10 +185,15 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Override
     public void open(SecretValueLookupContext secretValueLookupContext) {
+        try {
+            Class.forName("org.duckdb.DuckDBDriver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         super.open(secretValueLookupContext);
         configureSettings();
         registerExtensions();
-        ensureSecretsLoaded(secretValueLookupContext);
+        loadSecrets(secretValueLookupContext);
     }
 
     private void configureSettings(){
@@ -253,7 +258,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      *
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      */
-    private void ensureSecretsLoaded(SecretValueLookupContext secretValueLookupContext){
+    private void loadSecrets(SecretValueLookupContext secretValueLookupContext){
         DuckdbParametersSpec duckdb = getConnectionSpec().getDuckdb();
         if(duckdb.getStorageType() == null || duckdb.getStorageType().equals(DuckdbStorageType.local)){
             return;
@@ -282,7 +287,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         this.getConnectionSpec().setDuckdb(duckdbSpecCloned);
 
         try {
-            DuckdbSecretManager.getInstance().ensureCreated(this.getConnectionSpec(), this);
+            DuckdbSecretManager.getInstance().createSecrets(this.getConnectionSpec(), this);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
