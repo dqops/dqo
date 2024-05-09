@@ -104,4 +104,25 @@ public class DevelopmentCredentialsSecretNames {
      */
     public static final String AWS_S3_REGION = "${sm://aws-s3-region}";
 
+    /**
+     * Property to retrieve the Azure Service Principal Tenant ID
+     */
+    public static final String AZURE_SERVICE_PRINCIPAL_TENANT_ID = "${sm://azure-service-principal-tenant-id}";
+
+    /**
+     * Property to retrieve the Azure Service Principal Client ID
+     */
+    public static final String AZURE_SERVICE_PRINCIPAL_CLIENT_ID = "${sm://azure-service-principal-client-id}";
+
+    /**
+     * Property to retrieve the Azure Service Principal Client Secret
+     */
+    public static final String AZURE_SERVICE_PRINCIPAL_CLIENT_SECRET = "${sm://azure-service-principal-client-secret}";
+
+
+    /**
+     * Property to retrieve the Azure Storage Account name
+     */
+    public static final String AZURE_STORAGE_ACCOUNT_NAME = "${sm://azure-storage-account-name}";
+
 }

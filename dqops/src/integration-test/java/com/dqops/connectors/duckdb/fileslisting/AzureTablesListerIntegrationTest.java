@@ -5,6 +5,7 @@ import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.storage.azure.AzureAuthenticationMode;
 import com.dqops.core.secrets.DevelopmentCredentialsSecretNames;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderImpl;
@@ -72,6 +73,25 @@ class AzureTablesListerIntegrationTest extends BaseTest {
     @Test
     void listTables_fromBucketPrefixWithSingleFile_returnOnlyOneFile() {
         duckdbParametersSpec.getDirectories().put(schemaName, "az://duckdb-container/test-folder-1/data-set-1/");
+
+        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
+
+        assertThat(sourceTableModels)
+                .extracting(sourceTableModel -> sourceTableModel.getTableName().getTableName())
+                .containsExactly(
+                        "continuous_days_one_row_per_day.csv"
+                );
+    }
+
+    @Test
+    void listTables_withUseOfServicePrincipal_haveAccess() {
+        duckdbParametersSpec.getDirectories().put(schemaName, "az://duckdb-container/test-folder-1/data-set-1/");
+
+        duckdbParametersSpec.setAzureAuthenticationMode(AzureAuthenticationMode.service_principal);
+        duckdbParametersSpec.setTenantId(DevelopmentCredentialsSecretNames.AZURE_SERVICE_PRINCIPAL_TENANT_ID);
+        duckdbParametersSpec.setClientId(DevelopmentCredentialsSecretNames.AZURE_SERVICE_PRINCIPAL_CLIENT_ID);
+        duckdbParametersSpec.setClientSecret(DevelopmentCredentialsSecretNames.AZURE_SERVICE_PRINCIPAL_CLIENT_SECRET);
+        duckdbParametersSpec.setAccountName(DevelopmentCredentialsSecretNames.AZURE_STORAGE_ACCOUNT_NAME);
 
         List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
 
