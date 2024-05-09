@@ -3,6 +3,7 @@ package com.dqops.connectors.duckdb.fileslisting;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.duckdb.fileslisting.azure.AzureConstants;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

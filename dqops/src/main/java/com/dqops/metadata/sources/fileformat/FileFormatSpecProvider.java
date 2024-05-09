@@ -4,7 +4,7 @@ import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
 import com.dqops.connectors.duckdb.fileslisting.AwsConstants;
-import com.dqops.connectors.duckdb.fileslisting.AzureConstants;
+import com.dqops.connectors.duckdb.fileslisting.azure.AzureConstants;
 import com.dqops.metadata.sources.TableSpec;
 
 import java.io.File;

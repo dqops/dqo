@@ -6,6 +6,7 @@ import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.duckdb.fileslisting.azure.AzureTablesLister;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

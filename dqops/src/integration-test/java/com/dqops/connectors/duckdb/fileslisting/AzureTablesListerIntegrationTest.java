@@ -5,6 +5,7 @@ import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.duckdb.fileslisting.azure.AzureTablesLister;
 import com.dqops.connectors.storage.azure.AzureAuthenticationMode;
 import com.dqops.core.secrets.DevelopmentCredentialsSecretNames;
 import com.dqops.core.secrets.SecretValueLookupContext;
@@ -37,14 +38,16 @@ class AzureTablesListerIntegrationTest extends BaseTest {
         this.sut = (AzureTablesLister)TablesListerProvider.createTablesLister(DuckdbStorageType.azure);
 
         this.duckdbParametersSpec = new DuckdbParametersSpec();
-        duckdbParametersSpec.setPassword(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_STORAGE_CONNECTION_STRING, secretValueLookupContext));
 
         duckdbParametersSpec.setFilesFormatType(DuckdbFilesFormatType.csv);
     }
 
     @Test
     void listTables_straightlyFromBucket_returnFileAndFolder() {
+        duckdbParametersSpec.setAzureAuthenticationMode(AzureAuthenticationMode.connection_string);
+
         duckdbParametersSpec.getDirectories().put(schemaName, "az://duckdb-container/");
+        duckdbParametersSpec.setPassword(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_STORAGE_CONNECTION_STRING, secretValueLookupContext));
 
         List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
 
@@ -59,7 +62,10 @@ class AzureTablesListerIntegrationTest extends BaseTest {
 
     @Test
     void listTables_straightlyFromBucketWithNoTrailingSlash_returnFileAndFolder() {
+        duckdbParametersSpec.setAzureAuthenticationMode(AzureAuthenticationMode.connection_string);
+
         duckdbParametersSpec.getDirectories().put(schemaName, "az://duckdb-container");
+        duckdbParametersSpec.setPassword(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_STORAGE_CONNECTION_STRING, secretValueLookupContext));
 
         List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
 
@@ -74,7 +80,10 @@ class AzureTablesListerIntegrationTest extends BaseTest {
 
     @Test
     void listTables_fromBucketPrefixWithSingleFile_returnOnlyOneFile() {
+        duckdbParametersSpec.setAzureAuthenticationMode(AzureAuthenticationMode.connection_string);
+
         duckdbParametersSpec.getDirectories().put(schemaName, "az://duckdb-container/test-folder-1/data-set-1/");
+        duckdbParametersSpec.setPassword(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_STORAGE_CONNECTION_STRING, secretValueLookupContext));
 
         List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
 
@@ -87,9 +96,9 @@ class AzureTablesListerIntegrationTest extends BaseTest {
 
     @Test
     void listTables_withUseOfServicePrincipal_haveAccess() {
+        duckdbParametersSpec.setAzureAuthenticationMode(AzureAuthenticationMode.service_principal);
         duckdbParametersSpec.getDirectories().put(schemaName, "az://duckdb-container/test-folder-1/data-set-1/");
 
-        duckdbParametersSpec.setAzureAuthenticationMode(AzureAuthenticationMode.service_principal);
         duckdbParametersSpec.setTenantId(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_SERVICE_PRINCIPAL_TENANT_ID, secretValueLookupContext));
         duckdbParametersSpec.setClientId(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_SERVICE_PRINCIPAL_CLIENT_ID, secretValueLookupContext));
         duckdbParametersSpec.setClientSecret(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_SERVICE_PRINCIPAL_CLIENT_SECRET, secretValueLookupContext));
@@ -101,6 +110,24 @@ class AzureTablesListerIntegrationTest extends BaseTest {
                 .extracting(sourceTableModel -> sourceTableModel.getTableName().getTableName())
                 .containsExactly(
                         "continuous_days_one_row_per_day.csv"
+                );
+    }
+
+    @Test
+    void listTables_pathUseDomain_returnFileAndFolder() {
+        duckdbParametersSpec.setAzureAuthenticationMode(AzureAuthenticationMode.connection_string);
+        String accountName = secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_STORAGE_ACCOUNT_NAME, secretValueLookupContext);
+        duckdbParametersSpec.getDirectories().put(schemaName, "az://" + accountName + ".blob.core.windows.net/duckdb-container/");
+        duckdbParametersSpec.setPassword(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_STORAGE_CONNECTION_STRING, secretValueLookupContext));
+
+        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
+
+        assertThat(sourceTableModels)
+                .hasSizeGreaterThanOrEqualTo(2)
+                .extracting(sourceTableModel -> sourceTableModel.getTableName().getTableName())
+                .contains(
+                        "string_test_data.csv",
+                        "test-folder-1"
                 );
     }
 

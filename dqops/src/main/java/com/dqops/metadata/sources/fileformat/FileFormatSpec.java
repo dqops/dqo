@@ -2,6 +2,8 @@ package com.dqops.metadata.sources.fileformat;
 
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
+import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.duckdb.fileslisting.azure.AzureStoragePath;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -18,7 +20,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * File format specification for data loaded from the physical files of one of supported formats.
@@ -152,7 +156,13 @@ public class FileFormatSpec extends AbstractSpec {
      * @return Table options string.
      */
     public String buildTableOptionsString(DuckdbParametersSpec duckdb, TableSpec tableSpec){
-        ArrayList<String> filePathList = new ArrayList<>(filePaths);
+        List<String> filePathList = new ArrayList<>(filePaths);
+
+        if(duckdb.getStorageType().equals(DuckdbStorageType.azure)){
+            filePathList = filePathList.stream()
+                    .map(s -> AzureStoragePath.from(s, duckdb.resolveAccountName()).getAzFullPathPrefix())
+                    .collect(Collectors.toList());
+        }
 
         DuckdbFilesFormatType sourceFilesType = duckdb.getFilesFormatType();
         switch(sourceFilesType){
