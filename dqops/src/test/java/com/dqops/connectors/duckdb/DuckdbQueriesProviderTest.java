@@ -206,4 +206,44 @@ class DuckdbQueriesProviderTest extends BaseTest {
         assertThat(lineSplittedResult.get(5)).matches("\\);");
     }
 
+    @Test
+    void provideCreateSecretQuery_forAzureWithJustContainerWithTrailingSlash_createsQuery() {
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother
+                .createForFilesOnAzure(DuckdbFilesFormatType.csv, AzureAuthenticationMode.credential_chain);
+        String scope = "az://container-name/";
+
+        connectionSpec.getDuckdb().setAccountName("duckdbtest");
+
+        String createSecretQuery = DuckdbQueriesProvider.provideCreateSecretQuery(connectionSpec, scope);
+
+        List<String> lineSplittedResult = Arrays.stream(createSecretQuery.split("\n")).collect(Collectors.toList());
+
+        assertThat(lineSplittedResult.get(0)).matches("CREATE SECRET s_[0-9a-f]* \\(");
+        assertThat(lineSplittedResult.get(1)).matches("\\s*TYPE AZURE,\\s*");
+        assertThat(lineSplittedResult.get(2)).matches("\\s*PROVIDER CREDENTIAL_CHAIN,");
+        assertThat(lineSplittedResult.get(3)).matches("\\s*ACCOUNT_NAME 'duckdbtest',");
+        assertThat(lineSplittedResult.get(4)).matches("\\s*SCOPE 'az://duckdbtest.blob.core.windows.net/container-name'");
+        assertThat(lineSplittedResult.get(5)).matches("\\);");
+    }
+
+    @Test
+    void provideCreateSecretQuery_forAzureFullPathEndingContainerNameWithnoSlash_createsQuery() {
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother
+                .createForFilesOnAzure(DuckdbFilesFormatType.csv, AzureAuthenticationMode.credential_chain);
+        String scope = "az://duckdbtest.blob.core.windows.net/container-name/";
+
+        connectionSpec.getDuckdb().setAccountName("duckdbtest");
+
+        String createSecretQuery = DuckdbQueriesProvider.provideCreateSecretQuery(connectionSpec, scope);
+
+        List<String> lineSplittedResult = Arrays.stream(createSecretQuery.split("\n")).collect(Collectors.toList());
+
+        assertThat(lineSplittedResult.get(0)).matches("CREATE SECRET s_[0-9a-f]* \\(");
+        assertThat(lineSplittedResult.get(1)).matches("\\s*TYPE AZURE,\\s*");
+        assertThat(lineSplittedResult.get(2)).matches("\\s*PROVIDER CREDENTIAL_CHAIN,");
+        assertThat(lineSplittedResult.get(3)).matches("\\s*ACCOUNT_NAME 'duckdbtest',");
+        assertThat(lineSplittedResult.get(4)).matches("\\s*SCOPE 'az://duckdbtest.blob.core.windows.net/container-name'");
+        assertThat(lineSplittedResult.get(5)).matches("\\);");
+    }
+
 }

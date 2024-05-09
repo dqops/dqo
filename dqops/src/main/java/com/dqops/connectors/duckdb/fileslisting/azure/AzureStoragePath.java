@@ -44,7 +44,7 @@ public class AzureStoragePath {
         if(uri.getHost().contains(".")){
             azureStoragePath.domain = uri.getHost();
             String path = uri.getPath().substring(1);
-            if(path.contains("/")){
+            if(path.contains("/")){ // contains trailing slash in container name or contains path
                 azureStoragePath.containerName = path.substring(0, path.indexOf("/")).replace("/","");
                 azureStoragePath.prefix = path.substring(azureStoragePath.containerName.length() + 1); // + 1 removes a beginning slash
             } else {
@@ -70,8 +70,8 @@ public class AzureStoragePath {
     }
 
     /**
-     * Returns the path in format: az://<account_name>.<BLOB_DOMAIN_SUFFIX>/<container_name>/<prefix>
-     * @return the path in format: az://<account_name>.<BLOB_DOMAIN_SUFFIX>/<container_name>/<prefix>
+     * Returns the path in format: az://<account_name><BLOB_DOMAIN_SUFFIX>/<container_name>/<prefix>
+     * @return the path in format: az://<account_name><BLOB_DOMAIN_SUFFIX>/<container_name>/<prefix>
      */
     public String getAzFullPathPrefix(){
         return AzureConstants.BLOB_STORAGE_URI_PREFIX + domain + "/" + containerName + (prefix.isEmpty() ? "" : "/" + prefix);
