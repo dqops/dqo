@@ -191,8 +191,8 @@ const ContextMenu = ({
                     setRunChecksDialogOpened(false), 
                     setOpen(false);
                   }}
-                  onClick={() => {
-                    handleRunChecks();
+                  onClick={(filter: CheckSearchFilters) => {
+                    handleRunChecks(filter);
                     setOpen(false);
                     setRunChecksDialogOpened(false);
                   }}
