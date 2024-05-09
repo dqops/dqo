@@ -548,6 +548,28 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Resolves storage account name for azure. It parses the connection string.
+     * @return Storage account name.
+     */
+    @JsonIgnore
+    public String resolveAccountName(){
+        if(accountName != null){
+            return accountName;
+        }
+        if(this.getAzureAuthenticationMode().equals(AzureAuthenticationMode.connection_string)){
+            String connectionString = this.getPassword();
+            try {
+                int start = connectionString.indexOf("AccountName") + "AccountName".length() + 1;
+                String accountName = connectionString.substring(start, start + connectionString.substring(start).indexOf(";"));
+                return accountName;
+            } catch (Exception ex){
+                throw new RuntimeException("The connection string does not contain the AccountName part");
+            }
+        }
+        return null;
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.

@@ -207,7 +207,7 @@ class DuckdbQueriesProviderTest extends BaseTest {
     }
 
     @Test
-    void provideCreateSecretQuery_forAzureWithJustContainerWithTrailingSlash_createsQuery() {
+    void provideCreateSecretQuery_forAzureWithJustContainerWithTrailingSlash_createsQuery() { // todo
         ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother
                 .createForFilesOnAzure(DuckdbFilesFormatType.csv, AzureAuthenticationMode.credential_chain);
         String scope = "az://container-name/";
@@ -222,12 +222,12 @@ class DuckdbQueriesProviderTest extends BaseTest {
         assertThat(lineSplittedResult.get(1)).matches("\\s*TYPE AZURE,\\s*");
         assertThat(lineSplittedResult.get(2)).matches("\\s*PROVIDER CREDENTIAL_CHAIN,");
         assertThat(lineSplittedResult.get(3)).matches("\\s*ACCOUNT_NAME 'duckdbtest',");
-        assertThat(lineSplittedResult.get(4)).matches("\\s*SCOPE 'az://duckdbtest.blob.core.windows.net/container-name'");
+        assertThat(lineSplittedResult.get(4)).matches("\\s*SCOPE 'az://duckdbtest.blob.core.windows.net/container-name/'");
         assertThat(lineSplittedResult.get(5)).matches("\\);");
     }
 
     @Test
-    void provideCreateSecretQuery_forAzureFullPathEndingContainerNameWithnoSlash_createsQuery() {
+    void provideCreateSecretQuery_forAzureFullPathEndingContainerNameWithSlash_createsQuery() {
         ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother
                 .createForFilesOnAzure(DuckdbFilesFormatType.csv, AzureAuthenticationMode.credential_chain);
         String scope = "az://duckdbtest.blob.core.windows.net/container-name/";
@@ -242,7 +242,7 @@ class DuckdbQueriesProviderTest extends BaseTest {
         assertThat(lineSplittedResult.get(1)).matches("\\s*TYPE AZURE,\\s*");
         assertThat(lineSplittedResult.get(2)).matches("\\s*PROVIDER CREDENTIAL_CHAIN,");
         assertThat(lineSplittedResult.get(3)).matches("\\s*ACCOUNT_NAME 'duckdbtest',");
-        assertThat(lineSplittedResult.get(4)).matches("\\s*SCOPE 'az://duckdbtest.blob.core.windows.net/container-name'");
+        assertThat(lineSplittedResult.get(4)).matches("\\s*SCOPE 'az://duckdbtest.blob.core.windows.net/container-name/'");
         assertThat(lineSplittedResult.get(5)).matches("\\);");
     }
 

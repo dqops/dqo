@@ -17,14 +17,14 @@ public class DuckdbQueriesProvider {
      * @param connectionSpec Connection spec with DuckDB parameters with credentials and setup.
      * @return Ready to execute create secrets query string.
      */
-    public static String provideCreateSecretQuery(ConnectionSpec connectionSpec,String scope){
+    public static String provideCreateSecretQuery(ConnectionSpec connectionSpec, String scope){
         DuckdbParametersSpec duckdbParametersSpec = connectionSpec.getDuckdb();
         DuckdbStorageType storageType = duckdbParametersSpec.getStorageType();
         String indent = "    ";
         StringBuilder loadSecretsString = new StringBuilder();
 
         if(connectionSpec.getDuckdb().getStorageType().equals(DuckdbStorageType.azure)){
-            AzureStoragePath azureStoragePath = AzureStoragePath.from(scope, resolveAccountName(connectionSpec.getDuckdb()));
+            AzureStoragePath azureStoragePath = AzureStoragePath.from(scope, connectionSpec.getDuckdb().resolveAccountName());
             if(!scope.contains(azureStoragePath.getDomain())){
                 scope = azureStoragePath.getAzFullPathPrefix();
             }
@@ -80,27 +80,6 @@ public class DuckdbQueriesProvider {
         setCustomRepository.append("/bin/.duckdb/extensions");  // use only "/bin" for DuckDB < 0.10
         setCustomRepository.append("'");
         return setCustomRepository.toString();
-    }
-
-    /**
-     * Resolves storage account name for azure. It parses the connection string.
-     * @param duckdb DuckdbParametersSpec
-     * @return Storage account name.
-     */
-    private static String resolveAccountName(DuckdbParametersSpec duckdb){
-        if(duckdb.getAzureAuthenticationMode().equals(AzureAuthenticationMode.connection_string)){
-            String connectionString = duckdb.getPassword();
-            try {
-                int start = connectionString.indexOf("AccountName") + "AccountName".length() + 1;
-                String accountName = connectionString.substring(start, start + connectionString.substring(start).indexOf(";"));
-                return accountName;
-            } catch (Exception ex){
-                throw new RuntimeException("The connection string does not contain the AccountName part");
-            }
-
-        } else {
-            return duckdb.getAccountName();
-        }
     }
 
     /**
