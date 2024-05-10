@@ -16,8 +16,6 @@
 
 import { Dispatch } from 'redux';
 
-import { IncidentsApi } from '../../services/apiClient';
-import { INCIDENTS_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
 import {
   CheckResultEntryModel,
@@ -25,7 +23,9 @@ import {
   IncidentModel,
   IncidentsPerConnectionModel
 } from "../../api";
+import { IncidentsApi } from '../../services/apiClient';
 import { IncidentFilter, IncidentHistogramFilter, IncidentIssueFilter } from "../reducers/incidents.reducer";
+import { INCIDENTS_ACTION } from '../types';
 
 export const getConnectionsRequest = () => ({
   type: INCIDENTS_ACTION.GET_CONNECTIONS
@@ -93,8 +93,8 @@ export const getIncidentsByConnection = ({
   page = 1,
   pageSize = 50,
   optionalFilter = '',
-  sortBy = 'table',
-  sortDirection = 'asc'
+  sortBy = 'firstSeen',
+  sortDirection = 'desc'
 }: IncidentFilter) => async (dispatch: Dispatch) => {
   dispatch(getIncidentsByConnectionRequest());
   try {
