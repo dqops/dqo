@@ -336,9 +336,6 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
      */
     public ColumnTypeSnapshotSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         ColumnTypeSnapshotSpec cloned = this.deepClone();
-        if (cloned.columnType != null) {
-            cloned.columnType = cloned.columnType.toUpperCase(Locale.ROOT);
-        }
         cloned.columnType = secretValueProvider.expandValue(cloned.columnType, lookupContext);
         return cloned;
     }
