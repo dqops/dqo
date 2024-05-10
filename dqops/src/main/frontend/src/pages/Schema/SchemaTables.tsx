@@ -93,6 +93,25 @@ export const SchemaTables = () => {
     getLabels();
   }, [schema, connection, filters]);
 
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        getTables(
+          labels
+            .filter((x) => x.clicked && x.label)
+            .map((x) => x.label)
+            .filter((x): x is string => typeof x === 'string')
+        );
+      }
+    };
+
+    document.addEventListener('keypress', handleKeyPress);
+
+    return () => {
+      document.removeEventListener('keypress', handleKeyPress);
+    };
+  }, [table]);
+
   return (
     <>
       <div className="flex items-center justify-between">

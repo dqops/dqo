@@ -115,41 +115,29 @@ export default function SchemaTableItem({
       {(!checkTypes || !connection || !schema) && (
         <>
           {!connection && (
-            <td className="content-start pt-2">
-              <div className="flex items-start">
-                <Button
-                  className="px-4 underline cursor-pointer text-sm py-0"
-                  label={item.connection_name}
-                  onClick={() => goToConnection(item)}
-                />
-              </div>
+            <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
+              <Button
+                className="px-4 underline cursor-pointer text-sm py-0 text-start "
+                label={item.connection_name}
+                onClick={() => goToConnection(item)}
+              />
             </td>
           )}
-          <td className="content-start pt-2">
+          <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
             <Button
-              className="px-4 underline cursor-pointer text-sm py-0"
+              className="px-4 underline cursor-pointer text-sm py-0 text-start"
               label={item.schema}
               onClick={() => goToSchema(item)}
             />
           </td>
         </>
       )}
-      <td className="content-start pt-2">
+      <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
         <Button
-          className="px-4 underline cursor-pointer text-sm py-0"
+          className="px-4 underline cursor-pointer text-sm py-0 text-start"
           label={item.target?.table_name}
           onClick={() => goToTable(item)}
         />
-      </td>
-      <td className="px-4">
-        {item?.disabled ? (
-          <SvgIcon
-            name="close"
-            className="text-red-700"
-            width={30}
-            height={22}
-          />
-        ) : null}
       </td>
       <td className="px-4 text-sm content-start pt-2">{item?.stage}</td>
       <td className="px-4 text-sm content-start pt-2">
