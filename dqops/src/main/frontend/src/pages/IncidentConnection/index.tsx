@@ -193,7 +193,7 @@ export const IncidentConnection = () => {
       header: () => (
         <SortableColumn
           className="justify-end text-sm"
-          label="Total data quality issues"
+          label="Total issues"
           order="failedChecksCount"
           direction={
             filters.sortBy === 'failedChecksCount'
@@ -203,7 +203,7 @@ export const IncidentConnection = () => {
           onChange={handleSortChange}
         />
       ),
-      label: 'Total data quality issues',
+      label: 'Total issues',
       className: 'text-right text-sm py-2 px-4',
       value: 'failedChecksCount'
     },

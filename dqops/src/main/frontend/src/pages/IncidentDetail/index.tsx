@@ -442,7 +442,7 @@ export const IncidentDetail = () => {
               </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
-              <div className="flex-[2]">Total data quality issues:</div>
+              <div className="flex-[2]">Total issues:</div>
               <div className="flex-[1] text-right font-bold">
                 {incidentDetail?.failedChecksCount}
               </div>
