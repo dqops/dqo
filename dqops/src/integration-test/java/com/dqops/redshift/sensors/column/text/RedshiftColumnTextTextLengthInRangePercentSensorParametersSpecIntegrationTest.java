@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.snowflake.sensors.column.text;
+package com.dqops.redshift.sensors.column.text;
 
-import com.dqops.snowflake.BaseSnowflakeIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.text.ColumnTextLengthInRangePercentCheckSpec;
 import com.dqops.connectors.ProviderType;
@@ -25,6 +24,7 @@ import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import com.dqops.redshift.BaseRedshiftIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
@@ -37,9 +37,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
-
 @SpringBootTest
-public class SnowflakeColumnTextTextLengthInRangePercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+public class RedshiftColumnTextTextLengthInRangePercentSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
     private ColumnTextTextLengthInRangePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnTextLengthInRangePercentCheckSpec checkSpec;
@@ -47,12 +46,12 @@ public class SnowflakeColumnTextTextLengthInRangePercentSensorParametersSpecInte
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_min_length_test, ProviderType.snowflake);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_regex_sensor, ProviderType.redshift);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnTextTextLengthInRangePercentSensorParametersSpec();
         this.checkSpec = new ColumnTextLengthInRangePercentCheckSpec();
-        this.checkSpec.setParameters(this.sut);
+		this.checkSpec.setParameters(this.sut);
     }
 
     @Test
@@ -68,7 +67,7 @@ public class SnowflakeColumnTextTextLengthInRangePercentSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(30.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -84,7 +83,7 @@ public class SnowflakeColumnTextTextLengthInRangePercentSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(30.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -100,7 +99,7 @@ public class SnowflakeColumnTextTextLengthInRangePercentSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(30.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -116,7 +115,7 @@ public class SnowflakeColumnTextTextLengthInRangePercentSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((float)100.0, (float) resultTable.column(0).get(0), 0.001 );
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -132,7 +131,7 @@ public class SnowflakeColumnTextTextLengthInRangePercentSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((float)100.0, (float) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
