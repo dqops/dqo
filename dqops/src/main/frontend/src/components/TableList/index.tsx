@@ -35,10 +35,6 @@ const headeritems: TButtonTabs[] = [
     value: 'target.table_name'
   },
   {
-    label: 'Disabled',
-    value: 'disabled'
-  },
-  {
     label: 'Stage',
     value: 'stage'
   },
@@ -166,6 +162,8 @@ export default function index({
     return label;
   };
 
+  const isEnd = tables.length < filters.pageSize;
+
   return (
     <>
       <div className="flex">
@@ -214,10 +212,11 @@ export default function index({
           </tbody>
         </table>
       </div>
-      <div className="px-4 mb-50">
+      <div className="px-4 my-5">
         <Pagination
           page={filters.page || 1}
           pageSize={filters.pageSize || 50}
+          isEnd={isEnd}
           totalPages={10}
           onChange={(page, pageSize) =>
             onChangeFilters({

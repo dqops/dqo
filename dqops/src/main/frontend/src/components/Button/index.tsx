@@ -17,6 +17,7 @@ interface IButtonProps {
   variant?: 'contained' | 'outlined' | 'text';
   textSize?: 'sm' | 'base' | 'lg' | 'xl';
   dataTestId?: string;
+  ref?: any;
 }
 
 const colorsMap = {
@@ -59,12 +60,14 @@ const Button = ({
   color,
   variant = 'contained',
   textSize,
-  dataTestId
+  dataTestId,
+  ref
 }: IButtonProps) => {
   const classes = color ? colorsMap[color][variant] : '';
 
   return (
     <button
+      ref={ref}
       type={type}
       onClick={onClick}
       className={clsx(
