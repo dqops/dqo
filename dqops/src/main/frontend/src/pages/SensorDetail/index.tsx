@@ -40,6 +40,10 @@ const tabs = [
     value: ProviderSensorModelProviderTypeEnum.databricks
   },
   {
+    label: 'DuckDB',
+    value: ProviderSensorModelProviderTypeEnum.duckdb
+  },
+  {
     label: 'MySQL',
     value: ProviderSensorModelProviderTypeEnum.mysql
   },
