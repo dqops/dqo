@@ -43,6 +43,9 @@ export interface ISourceState {
     tabs: INestTab[];
     activeTab?: string;
   };
+  ['home']: {
+    activeTab?: string;
+  };
 }
 
 const initialState: ISourceState = {
@@ -57,6 +60,9 @@ const initialState: ISourceState = {
   },
   partitioned: {
     tabs: []
+  },
+  home: {
+    activeTab: '/home' 
   }
 };
 
@@ -1388,6 +1394,14 @@ const connectionReducer = (state = initialState, action: Action) => {
       return setActiveTabState(state, action, {
         multiCheckSearchedChecks: { ...checksState, ...action.data }
       });
+    }
+    case SOURCE_ACTION.SET_FIRST_LEVEL_HOME_TAB: {
+      return {
+        ...state,
+        ['home'] : {
+          activeTab: action.data
+        }
+      }
     }
     default:
       return state;

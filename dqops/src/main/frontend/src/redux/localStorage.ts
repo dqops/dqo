@@ -1,8 +1,8 @@
-import { INestTab, ISourceState } from './reducers/source.reducer';
 import { CheckTypes } from '../shared/routes';
+import { IRootState } from './reducers';
 import { IDefinitionState } from './reducers/definition.reducer';
 import { IIncidentsState } from './reducers/incidents.reducer';
-import { IRootState } from './reducers';
+import { INestTab, ISourceState } from './reducers/source.reducer';
 
 const transformSourceState = (state: ISourceState): ISourceState => {
   const newState = { ...state };
@@ -43,6 +43,9 @@ const transformSourceState = (state: ISourceState): ISourceState => {
         label: item.label,
         state: {}
       })) ?? []
+    },
+    ['home'] : {
+      activeTab: '/home'
     }
   };
 };

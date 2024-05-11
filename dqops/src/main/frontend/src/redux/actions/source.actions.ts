@@ -14,20 +14,18 @@
 /// limitations under the License.
 ///
 
-import { SOURCE_ACTION } from '../types';
-import { CheckTypes } from '../../shared/routes';
-import {
-  CheckResultsListModel,
-  ErrorsListModel,
-  ConnectionIncidentGroupingSpec,
-  SensorReadoutsListModel,
-  CheckModel,
-  CheckSearchFiltersCheckTypeEnum,
-  TableIncidentGroupingSpec,
-  CheckTemplate
-} from '../../api';
-import { Dispatch } from 'redux';
 import { AxiosResponse } from 'axios';
+import { Dispatch } from 'redux';
+import {
+  CheckModel,
+  CheckResultsListModel,
+  CheckSearchFiltersCheckTypeEnum,
+  CheckTemplate,
+  ConnectionIncidentGroupingSpec,
+  ErrorsListModel,
+  SensorReadoutsListModel,
+  TableIncidentGroupingSpec
+} from '../../api';
 import {
   CheckResultApi,
   ConnectionApiClient,
@@ -36,6 +34,8 @@ import {
   TableApiClient
 } from '../../services/apiClient';
 import { IFilterTemplate } from '../../shared/constants';
+import { CheckTypes } from '../../shared/routes';
+import { SOURCE_ACTION } from '../types';
 
 export const addFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   type: SOURCE_ACTION.ADD_FIRST_LEVEL_TAB,
@@ -997,4 +997,11 @@ export const setMultiCheckSearchedChecks = (
   activeTab,
   checkType,
   timeScale 
+})
+
+export const setHomeFirstLevelTab = (
+data: string
+) => ({
+  type: SOURCE_ACTION.SET_FIRST_LEVEL_HOME_TAB,
+  data
 })
