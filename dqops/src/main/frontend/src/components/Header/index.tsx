@@ -1,4 +1,4 @@
-import { Tooltip, tab } from '@material-tailwind/react';
+import { Tooltip } from '@material-tailwind/react';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -56,6 +56,9 @@ const Header = () => {
   const dispatch = useActionDispatch();
   const { tabs, activeTab } = useSelector(
     (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]
+  );
+  const { activeTab : homeActiveTab} = useSelector(
+    (state: IRootState) => state.source['home']
   );
   const selectedTab = tabs?.find((item) => item.value === activeTab);
   const match = useRouteMatch();
@@ -188,7 +191,7 @@ const Header = () => {
         </div>
       )}
       <div className="flex space-x-2">
-        <div onClick={() => history.push('/')}>
+        <div onClick={() => history.push(homeActiveTab ?? '/home')}>
           <Logo className="w-30 cursor-pointer" />
         </div>
         <div className="flex items-center">
