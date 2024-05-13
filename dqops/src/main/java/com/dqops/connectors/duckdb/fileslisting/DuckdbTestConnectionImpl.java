@@ -4,6 +4,7 @@ import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
 import com.dqops.connectors.duckdb.fileslisting.azure.AzureConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,6 +16,14 @@ import java.util.Optional;
  */
 @Component
 public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
+
+    private final TablesListerProvider tablesListerProvider;
+
+    @Autowired
+    public DuckdbTestConnectionImpl(TablesListerProvider tablesListerProvider) {
+        this.tablesListerProvider = tablesListerProvider;
+    }
+
 
     /**
      * Tests the connection by listing files. Throws exception on misconfiguration such as no schema name, lack or invalid paths, no files in a path, etc.
@@ -66,7 +75,7 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
                 }
             }
 
-            TablesLister tablesLister = TablesListerProvider.createTablesLister(storageType);
+            TablesLister tablesLister = tablesListerProvider.createTablesLister(storageType);
             tables = tablesLister.listTables(duckdbParametersSpec, schema);
 
             if(tables == null || tables.isEmpty()){

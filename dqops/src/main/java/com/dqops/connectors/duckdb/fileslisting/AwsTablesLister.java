@@ -3,6 +3,7 @@ package com.dqops.connectors.duckdb.fileslisting;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
@@ -19,6 +20,7 @@ import java.util.List;
  * Used to retrieve the list of files from AWS s3 that are used as tables by duckdb's listTables.
  */
 @Slf4j
+@Component
 public class AwsTablesLister extends RemoteTablesLister {
 
     /**

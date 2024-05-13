@@ -12,6 +12,7 @@ import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.fileslisting.RemoteTablesLister;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
  * Used to retrieve the list of files from Azure Blob Storage that are used as tables by duckdb's listTables.
  */
 @Slf4j
+@Component
 public class AzureTablesLister extends RemoteTablesLister {
 
     /**

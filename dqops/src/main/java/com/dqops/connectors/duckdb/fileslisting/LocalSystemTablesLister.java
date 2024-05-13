@@ -6,6 +6,7 @@ import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.metadata.sources.PhysicalTableName;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
  * Used to retrieve the list of files from AWS s3 that are used as tables by duckdb's listTables.
  */
 @Slf4j
+@Component
 public class LocalSystemTablesLister implements TablesLister {
 
     /**
