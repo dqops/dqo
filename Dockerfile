@@ -68,6 +68,7 @@ COPY --from=dqo-home /dqo/home home
 
 COPY distribution/dqo_docker_entrypoint.sh /dqo/home/bin/
 RUN chmod +x /dqo/home/bin/dqo_docker_entrypoint.sh
+RUN mkdir -p /etc/pki/tls/certs && ln -s /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
 
 # copy spring dependencies
 ARG DEPENDENCY=/workspace/app/dqops/target/dependency
