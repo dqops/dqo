@@ -45,7 +45,7 @@ export default function RunChecksDialog({
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const [filters, setFilters] = useState<CheckSearchFilters>({
-    fullTableName: 'schema*.table*',
+    fullTableName: '*.*',
     ...runChecksJobTemplate
   });
   const [timeWindowFilter, setTimeWindowFilter] = useState<

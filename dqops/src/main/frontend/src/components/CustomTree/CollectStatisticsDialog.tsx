@@ -33,7 +33,7 @@ export default function CollectStatisticsDialog({
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const [filters, setFilters] = useState<StatisticsCollectorSearchFilters>({
-    fullTableName: 'schema*.table*',
+    fullTableName: '*.*',
     ...collectStatisticsJobTemplate
   });
   const [additionalParams, setAdditionalParams] = useState(false);

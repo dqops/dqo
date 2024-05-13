@@ -49,6 +49,7 @@ import tech.tablesaw.columns.Column;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -64,14 +65,11 @@ import java.util.stream.Collectors;
 public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
     private final HomeLocationFindService homeLocationFindService;
-    private static final Object registerExtensionsLock = new Object();
-    private static Set<String> extensionsRegisteredPerThread = new HashSet<>();
     private final DqoDuckdbConfiguration dqoDuckdbConfiguration;
     private final DuckDBDataTypeParser dataTypeParser;
-    private static final Object settingsExecutionLock = new Object();
-    private static final boolean settingsConfigured = false;
     private static final String temporaryDirectoryPrefix = "dqops_duckdb_temp_";
     private final TablesListerProvider tablesListerProvider;
+    private final DuckdbInMemoryInstance duckdbInMemoryInstance;
 
     /**
      * Injection constructor for the duckdb connection.
@@ -81,6 +79,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      * @param homeLocationFindService Home location find service.
      * @param dqoDuckdbConfiguration  Configuration settings for duckdb.
      * @param dataTypeParser          Data type parser that parses the schema of structures.
+     * @param duckdbInMemoryInstance  Holder of a shared in-memory DuckDB connection that is duplicated.
      */
     @Autowired
     public DuckdbSourceConnection(JdbcConnectionPool jdbcConnectionPool,
@@ -89,12 +88,14 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                                   HomeLocationFindService homeLocationFindService,
                                   DqoDuckdbConfiguration dqoDuckdbConfiguration,
                                   DuckDBDataTypeParser dataTypeParser,
-                                  TablesListerProvider tablesListerProvider) {
+                                  TablesListerProvider tablesListerProvider,
+                                  DuckdbInMemoryInstance duckdbInMemoryInstance) {
         super(jdbcConnectionPool, secretValueProvider, duckdbConnectionProvider);
         this.homeLocationFindService = homeLocationFindService;
         this.dqoDuckdbConfiguration = dqoDuckdbConfiguration;
         this.dataTypeParser = dataTypeParser;
         this.tablesListerProvider = tablesListerProvider;
+        this.duckdbInMemoryInstance = duckdbInMemoryInstance;
     }
 
     /**
@@ -154,6 +155,16 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
+     * Stores a reference to an opened JDBC connection. This method should be called only when we create the connection in a different way, for example - by duplicating a DuckDB in-memory connection.
+     *
+     * @param jdbcConnection JDBC connection to store.
+     */
+    @Override
+    protected void setJdbcConnection(Connection jdbcConnection) {
+        super.setJdbcConnection(jdbcConnection);
+    }
+
+    /**
      * Executes a provider specific SQL that runs a command DML/DDL command.
      *
      * @param sqlStatement SQL DDL or DML statement.
@@ -188,71 +199,88 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Override
     public void open(SecretValueLookupContext secretValueLookupContext) {
-        try {
-            Class.forName("org.duckdb.DuckDBDriver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        if (this.getConnectionSpec().getDuckdb() == null || this.getConnectionSpec().getDuckdb().getReadMode() == DuckdbReadMode.in_memory) {
+            // use an in-memory shared instance
+            Connection duckDbDuplicatedInstance = this.duckdbInMemoryInstance.duplicateInMemoryJdbcConnection();
+            this.setJdbcConnection(duckDbDuplicatedInstance);
+        } else {
+            try {
+                Class.forName("org.duckdb.DuckDBDriver");
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+            super.open(secretValueLookupContext);
         }
-        super.open(secretValueLookupContext);
-        configureSettings();
-        registerExtensions();
+
         loadSecrets(secretValueLookupContext);
     }
 
-    private void configureSettings(){
-        if(settingsConfigured){
-            return;
-        }
-        try{
-            synchronized (settingsExecutionLock){
-                String memoryLimit = dqoDuckdbConfiguration.getMemoryLimit();
-                if(memoryLimit != null){
-                    String memoryLimitQuery = "SET GLOBAL memory_limit = '" + memoryLimit + "'";
-                    this.executeCommand(memoryLimitQuery, JobCancellationToken.createDummyJobCancellationToken());
-                }
+    /**
+     * Configures an in-memory instance. This operation is called by {@link DuckdbInMemoryInstanceImpl} singleton to configure the shared instance.
+     */
+    public void initializeInMemoryConfiguration() {
+        configureSettings();
+        registerExtensions();
+    }
 
-                String threadsQuery = "SET GLOBAL threads = " + dqoDuckdbConfiguration.getThreads();
-                this.executeCommand(threadsQuery, JobCancellationToken.createDummyJobCancellationToken());
-
-                String temporaryDirectory = Files.createTempDirectory(temporaryDirectoryPrefix).toFile().getAbsolutePath();
-                Path.of(temporaryDirectory).toFile().deleteOnExit();
-                String tempDirectoryQuery = "SET GLOBAL temp_directory = '" + temporaryDirectory + "'";
-                this.executeCommand(tempDirectoryQuery, JobCancellationToken.createDummyJobCancellationToken());
+    /**
+     * Configures settings for a connection, such as the memory limit.
+     */
+    private void configureSettings() {
+        try {
+            String memoryLimit = dqoDuckdbConfiguration.getMemoryLimit();
+            if (memoryLimit != null){
+                String memoryLimitQuery = "SET GLOBAL memory_limit = '" + memoryLimit + "'";
+                this.executeCommand(memoryLimitQuery, JobCancellationToken.createDummyJobCancellationToken());
             }
+
+            String threadsQuery = "SET GLOBAL threads = " + dqoDuckdbConfiguration.getThreads();
+            this.executeCommand(threadsQuery, JobCancellationToken.createDummyJobCancellationToken());
+
+            String temporaryDirectory = Files.createTempDirectory(temporaryDirectoryPrefix).toFile().getAbsolutePath();
+            Path.of(temporaryDirectory).toFile().deleteOnExit();
+            String tempDirectoryQuery = "SET GLOBAL temp_directory = '" + temporaryDirectory + "'";
+            this.executeCommand(tempDirectoryQuery, JobCancellationToken.createDummyJobCancellationToken());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new DqoRuntimeException(e);
         }
+    }
+
+    /**
+     * The list of available extensions for DuckDB. Extensions are gathered locally through the project installation process.
+     * @return The list of extension names for DuckDB.
+     */
+    private List<String> getAvailableExtensions() {
+        return Arrays.asList(
+                "httpfs",
+                "aws",
+                "azure"
+        );
     }
 
     /**
      * Registers extensions for duckdb from the local extension repository.
      */
-    private void registerExtensions(){
-        String currentThreadName = Thread.currentThread().getName();
-        if(extensionsRegisteredPerThread.contains(currentThreadName)){
-            return;
-        }
+    private void registerExtensions() {
         try {
-            synchronized (registerExtensionsLock) {
-                String setExtensionsQuery = DuckdbQueriesProvider.provideSetExtensionsQuery(homeLocationFindService.getDqoHomePath());
-                this.executeCommand(setExtensionsQuery, JobCancellationToken.createDummyJobCancellationToken());
+            String setExtensionsQuery = DuckdbQueriesProvider.provideSetExtensionsQuery(homeLocationFindService.getDqoHomePath());
+            this.executeCommand(setExtensionsQuery, JobCancellationToken.createDummyJobCancellationToken());
 
-                List<String> availableExtensionList = getAvailableExtensions();
-                availableExtensionList.stream().forEach(extensionName -> {
-                    try {
-                        String installExtensionQuery = "INSTALL " + extensionName;
-                        this.executeCommand(installExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());
-                        String loadExtensionQuery = "LOAD " + extensionName;
-                        this.executeCommand(loadExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());
-                    } catch (Exception exception) {
-                        log.error("Extension " + extensionName + " cannot be loaded.");
-                        log.error(exception.getMessage());
-                    }
-                });
-                extensionsRegisteredPerThread.add(currentThreadName);
-            }
+            List<String> availableExtensionList = getAvailableExtensions();
+            availableExtensionList.stream().forEach(extensionName -> {
+                try {
+                    String installExtensionQuery = "INSTALL " + extensionName;
+                    this.executeCommand(installExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());
+                    String loadExtensionQuery = "LOAD " + extensionName;
+                    this.executeCommand(loadExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());
+                } catch (Exception exception) {
+                    log.error("Extension " + extensionName + " cannot be loaded.");
+                    log.error(exception.getMessage());
+                }
+            });
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new DqoRuntimeException(e);
         }
     }
 
@@ -263,7 +291,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      */
     private void loadSecrets(SecretValueLookupContext secretValueLookupContext){
         DuckdbParametersSpec duckdb = getConnectionSpec().getDuckdb();
-        if(duckdb.getStorageType() == null || duckdb.getStorageType().equals(DuckdbStorageType.local)){
+        if (duckdb.getStorageType() == null || duckdb.getStorageType().equals(DuckdbStorageType.local)) {
             return;
         }
 
@@ -294,18 +322,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * The list of available extensions for DuckDB. Extensions are gathered locally through the project installation process.
-     * @return The list of extension names for DuckDB.
-     */
-    private List<String> getAvailableExtensions(){
-        return Arrays.asList(
-                "httpfs",
-                "aws",
-                "azure"
-        );
     }
 
     /**
@@ -516,5 +532,4 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         String query = String.format("DESCRIBE SELECT * FROM %s", tableString);
         return this.executeQuery(query, JobCancellationToken.createDummyJobCancellationToken(), null, false);
     }
-
 }

@@ -63,7 +63,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
 
     @CommandLine.Option(names = {"--duckdb-read-mode"}, description = "DuckDB read mode.")
     @JsonPropertyDescription("DuckDB read mode.")
-    private DuckdbReadMode readMode = DuckdbReadMode.files;
+    private DuckdbReadMode readMode = DuckdbReadMode.in_memory;
 
     @CommandLine.Option(names = {"--duckdb-files-format-type"}, description = "Type of source files format for DuckDB.")
     @JsonPropertyDescription("Type of source files format for DuckDB.")

@@ -22,6 +22,7 @@ import com.dqops.core.jobqueue.JobCancellationListenerHandle;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -62,6 +63,17 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
      */
     public Connection getJdbcConnection() {
         return jdbcConnection;
+    }
+
+    /**
+     * Stores a reference to an opened JDBC connection. This method should be called only when we create the connection in a different way, for example - by duplicating a DuckDB in-memory connection.
+     * @param jdbcConnection JDBC connection to store.
+     */
+    protected void setJdbcConnection(Connection jdbcConnection) {
+        if (this.jdbcConnection != null) {
+            throw new DqoRuntimeException("Cannot replace a JDBC connection, because a connection is already present.");
+        }
+        this.jdbcConnection = jdbcConnection;
     }
 
     /**
