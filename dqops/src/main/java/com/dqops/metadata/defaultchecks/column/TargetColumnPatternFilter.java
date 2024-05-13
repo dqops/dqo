@@ -29,8 +29,8 @@ import com.google.common.base.Strings;
  * Target column filter for default checks that uses parsed patterns.
  */
 public class TargetColumnPatternFilter extends TargetTablePatternFilter {
-    private SearchPattern columnPattern;
-    private SearchPattern dataTypePattern;
+    private SearchPattern[] columnPattern;
+    private SearchPattern[] dataTypePattern;
     private DataTypeCategory dataTypeCategory;
 
     /**
@@ -41,11 +41,11 @@ public class TargetColumnPatternFilter extends TargetTablePatternFilter {
         super(columnPatternSpec);
 
         if (!Strings.isNullOrEmpty(columnPatternSpec.getColumn())) {
-            this.columnPattern = SearchPattern.create(false, columnPatternSpec.getColumn());
+            this.columnPattern = SearchPattern.createForCommaSeparatedPatterns(false, columnPatternSpec.getColumn());
         }
 
         if (!Strings.isNullOrEmpty(columnPatternSpec.getDataType())) {
-            this.dataTypePattern = SearchPattern.create(false, columnPatternSpec.getDataType());
+            this.dataTypePattern = SearchPattern.createForCommaSeparatedPatterns(false, columnPatternSpec.getDataType());
         }
 
         this.dataTypeCategory = columnPatternSpec.getDataTypeCategory();
@@ -61,13 +61,13 @@ public class TargetColumnPatternFilter extends TargetTablePatternFilter {
      */
     public boolean match(ConnectionSpec connectionSpec, TableSpec tableSpec, ColumnSpec columnSpec, DataTypeCategory dataTypeCategory) {
         if (this.columnPattern != null) {
-            if (!this.columnPattern.match(columnSpec.getColumnName())) {
+            if (!SearchPattern.matchAny(this.columnPattern, columnSpec.getColumnName())) {
                 return false;
             }
         }
 
         if (this.dataTypePattern != null) {
-            if (columnSpec.getTypeSnapshot() == null || !this.dataTypePattern.match(columnSpec.getTypeSnapshot().getColumnType())) {
+            if (columnSpec.getTypeSnapshot() == null || !SearchPattern.matchAny(this.dataTypePattern, columnSpec.getTypeSnapshot().getColumnType())) {
                 return false;
             }
         }
@@ -86,7 +86,7 @@ public class TargetColumnPatternFilter extends TargetTablePatternFilter {
             LabelSetSpec columnSpecLabels = columnSpec.getLabels();
             if (columnSpecLabels != null && !columnSpecLabels.isEmpty()) {
                 for (String label : columnSpecLabels) {
-                    if (this.labelPattern.match(label)) {
+                    if (SearchPattern.matchAny(this.labelPattern, label)) {
                         return true;
                     }
                 }
