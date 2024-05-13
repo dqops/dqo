@@ -158,7 +158,7 @@ public class FileFormatSpec extends AbstractSpec {
     public String buildTableOptionsString(DuckdbParametersSpec duckdb, TableSpec tableSpec){
         List<String> filePathList = new ArrayList<>(filePaths);
 
-        if(duckdb.getStorageType().equals(DuckdbStorageType.azure)){
+        if (Objects.equals(duckdb.getStorageType(), DuckdbStorageType.azure)) {
             filePathList = filePathList.stream()
                     .map(s -> AzureStoragePath.from(s, duckdb.resolveAccountName()).getAzFullPathPrefix())
                     .collect(Collectors.toList());
