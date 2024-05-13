@@ -81,6 +81,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
     public TableDefaultChecksPatternSpec createDefaultTableChecks() {
         TableDefaultChecksPatternSpec defaultPattern = new TableDefaultChecksPatternSpec();
         defaultPattern.setPriority(DEFAULT_PATTERNS_PRIORITY);
+        defaultPattern.setDescription("The default configuration of data quality checks that are always activated. This configuration enables the volume monitoring, anomaly monitoring, timeliness and schema change checks.");
 
         TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
         defaultPattern.setProfilingChecks(profilingChecks);
@@ -176,6 +177,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
     public ColumnDefaultChecksPatternSpec createDefaultColumnChecks() {
         ColumnDefaultChecksPatternSpec defaultPattern = new ColumnDefaultChecksPatternSpec();
         defaultPattern.setPriority(DEFAULT_PATTERNS_PRIORITY);
+        defaultPattern.setDescription("The default configuration of data quality checks that are always activated. This configuration enables the volume monitoring, anomaly monitoring, timeliness and schema change checks.");
 
         ColumnProfilingCheckCategoriesSpec defaultProfilingChecks = new ColumnProfilingCheckCategoriesSpec();
         defaultPattern.setProfilingChecks(defaultProfilingChecks);

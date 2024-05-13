@@ -339,18 +339,22 @@ public class DefaultTableCheckPatternsController {
 
                     TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
                     TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+                    TableDefaultChecksPatternSpec targetPatternSpec;
 
                     if (existingDefaultChecksPatternWrapper == null) {
                         TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-                        defaultChecksPatternWrapper.setSpec(new TableDefaultChecksPatternSpec() {{
+                        targetPatternSpec = new TableDefaultChecksPatternSpec() {{
                             setTarget(patternModel.getTargetTable());
                             setPriority(patternModel.getPriority());
-                        }});
+                        }};
+                        defaultChecksPatternWrapper.setSpec(targetPatternSpec);
                     } else {
-                        TableDefaultChecksPatternSpec currentPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
-                        currentPatternSpec.setTarget(patternModel.getTargetTable());
-                        currentPatternSpec.setPriority(patternModel.getPriority());
+                        targetPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
+                        targetPatternSpec.setTarget(patternModel.getTargetTable());
+                        targetPatternSpec.setPriority(patternModel.getPriority());
                     }
+                    targetPatternSpec.setDisabled(patternModel.isDisabled());
+                    targetPatternSpec.setDescription(patternModel.getDescription());
                     userHomeContext.flush();
 
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);

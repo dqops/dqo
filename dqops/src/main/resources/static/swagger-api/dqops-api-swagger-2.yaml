@@ -18180,6 +18180,13 @@ definitions:
         format: "int32"
         description: "The priority of the pattern. Patterns with lower values are\
           \ applied before patterns with higher priority values."
+      disabled:
+        type: "boolean"
+        description: "Disables this data quality check configuration. The checks will\
+          \ not be activated."
+      description:
+        type: "string"
+        description: "The description (documentation) of this data quality check configuration."
       target:
         description: "The target column filter that are filtering the column, table\
           \ and connection on which the default checks are applied."
@@ -30960,6 +30967,13 @@ definitions:
         format: "int32"
         description: "The priority of the pattern. Patterns with lower values are\
           \ applied before patterns with higher priority values."
+      disabled:
+        type: "boolean"
+        description: "Disables this data quality check configuration. The checks will\
+          \ not be activated."
+      description:
+        type: "string"
+        description: "The description (documentation) of this data quality check configuration."
       target_column:
         description: "The filters for the target column."
         $ref: "#/definitions/TargetColumnPatternSpec"
@@ -31023,6 +31037,13 @@ definitions:
         format: "int32"
         description: "The priority of the pattern. Patterns with lower values are\
           \ applied before patterns with higher priority values."
+      disabled:
+        type: "boolean"
+        description: "Disables this data quality check configuration. The checks will\
+          \ not be activated."
+      description:
+        type: "string"
+        description: "The description (documentation) of this data quality check configuration."
       target_table:
         description: "The filters for the target table."
         $ref: "#/definitions/TargetTablePatternSpec"
@@ -35395,6 +35416,13 @@ definitions:
         format: "int32"
         description: "The priority of the pattern. Patterns with lower values are\
           \ applied before patterns with higher priority values."
+      disabled:
+        type: "boolean"
+        description: "Disables this data quality check configuration. The checks will\
+          \ not be activated."
+      description:
+        type: "string"
+        description: "The description (documentation) of this data quality check configuration."
       target:
         description: "The target table filter that are filtering the table and connection\
           \ on which the default checks are applied."

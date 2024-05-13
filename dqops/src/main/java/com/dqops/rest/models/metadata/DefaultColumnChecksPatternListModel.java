@@ -40,8 +40,23 @@ public class DefaultColumnChecksPatternListModel {
     @JsonPropertyDescription("Pattern name.")
     private String patternName;
 
+    /**
+     * The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.
+     */
     @JsonPropertyDescription("The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.")
     private int priority;
+
+    /**
+     * Disables this data quality check configuration. The checks will not be activated.
+     */
+    @JsonPropertyDescription("Disables this data quality check configuration. The checks will not be activated.")
+    private boolean disabled;
+
+    /**
+     * The description (documentation) of this data quality check configuration.
+     */
+    @JsonPropertyDescription("The description (documentation) of this data quality check configuration.")
+    private String description;
 
     /**
      * Target column filters.
@@ -78,6 +93,8 @@ public class DefaultColumnChecksPatternListModel {
         return new DefaultColumnChecksPatternListModel() {{
             setPatternName(checksPatternSpec.getPatternName());
             setPriority(checksPatternSpec.getPriority());
+            setDisabled(checksPatternSpec.isDisabled());
+            setDescription(checksPatternSpec.getDescription());
             setTargetColumn(checksPatternSpec.getTarget());
             setCanEdit(isEditor);
             setYamlParsingError(checksPatternSpec.getYamlParsingError());

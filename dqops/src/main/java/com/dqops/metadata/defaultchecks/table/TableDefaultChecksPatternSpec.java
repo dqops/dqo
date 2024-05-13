@@ -43,6 +43,7 @@ import java.util.Objects;
 
 /**
  * The default configuration of table-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on tables.
+ * This configuration serves as a data quality policy that defines the data quality checks that are verified on matching tables.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -59,6 +60,13 @@ public class TableDefaultChecksPatternSpec extends AbstractSpec implements Inval
 
     @JsonPropertyDescription("The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.")
     private int priority;
+
+    @JsonPropertyDescription("Disables this data quality check configuration. The checks will not be activated.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean disabled;
+
+    @JsonPropertyDescription("The description (documentation) of this data quality check configuration.")
+    private String description;
 
     @JsonPropertyDescription("The target table filter that are filtering the table and connection on which the default checks are applied.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -119,6 +127,40 @@ public class TableDefaultChecksPatternSpec extends AbstractSpec implements Inval
     public void setPriority(int priority) {
         this.setDirtyIf(this.priority != priority);
         this.priority = priority;
+    }
+
+    /**
+     * Returns true when this configuration is disabled.
+     * @return True when the configuration is disabled, false when these checks should be activated.
+     */
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    /**
+     * Sets the flag that disables this configuration.
+     * @param disabled True when this configuration should be disabled.
+     */
+    public void setDisabled(boolean disabled) {
+        this.setDirtyIf(this.disabled != disabled);
+        this.disabled = disabled;
+    }
+
+    /**
+     * Returns the description of this data quality check configuration. The description is used for documenting the purpose.
+     * @return The description of this data quality check configuration.
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Stores the description of this data quality check configuration.
+     * @param description The description of this configuration.
+     */
+    public void setDescription(String description) {
+        this.setDirtyIf(!Objects.equals(this.description, description));
+        this.description = description;
     }
 
     /**
