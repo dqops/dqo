@@ -308,7 +308,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
                 .filter(colToSpec ->
                         (columnNameSearchPattern == null || columnNameSearchPattern.match(colToSpec.getKey()))
                                 && (checkSearchFilters.getColumnNullable() == null || colToSpec.getValue().getTypeSnapshot() != null
-                                    && colToSpec.getValue().getTypeSnapshot().getNullable() == checkSearchFilters.getColumnNullable())
+                                    && Objects.equals(colToSpec.getValue().getTypeSnapshot().getNullable(), checkSearchFilters.getColumnNullable()))
                                 && (columnDataTypeSearchPattern == null || colToSpec.getValue().getTypeSnapshot() != null
                                    && columnDataTypeSearchPattern.match(colToSpec.getValue().getTypeSnapshot().getColumnType()))
                 ).map(columnNameToSpec -> getColumnChecksModelForColumn(
