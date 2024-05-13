@@ -23,7 +23,7 @@
     CAST(DATE_DIFF(
         'MILLISECOND',
         MAX(
-            SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+            TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
         ),
         CURRENT_TIMESTAMP
     ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
