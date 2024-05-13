@@ -32182,6 +32182,11 @@ definitions:
         type: "integer"
         format: "int32"
         description: "Count of open (new) data quality incidents."
+      mostRecentFirstSeen:
+        type: "integer"
+        format: "int64"
+        description: "The UTC timestamp when the most recent data quality incident\
+          \ was first seen."
   JsonFileFormatSpec:
     type: "object"
     properties:
