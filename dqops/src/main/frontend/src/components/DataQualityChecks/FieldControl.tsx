@@ -1,22 +1,21 @@
+import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import {
+  FieldModel,
   ParameterDefinitionSpecDataTypeEnum,
-  ParameterDefinitionSpecDisplayHintEnum,
-  FieldModel
+  ParameterDefinitionSpecDisplayHintEnum
 } from '../../api';
 import Checkbox from '../Checkbox';
+import ExtendedTextAre from '../ExtendedTextArea';
+import FieldDatePicker from '../FieldDatePicker';
+import FloatingPointInput from '../FloatingPointInput';
 import Input from '../Input';
+import IntegerListField from '../IntegerListField';
 import NumberInput from '../NumberInput';
-import Select from '../Select';
 import ObjectField from '../ObjectField';
+import Select from '../Select';
 import StringListField from '../StringListField';
 import ColumnSelect from './ColumnSelect';
-import TextArea from '../TextArea';
-import IntegerListField from '../IntegerListField';
-import FieldDatePicker from '../FieldDatePicker';
-import clsx from 'clsx';
-import FloatingPointInput from '../FloatingPointInput';
-import ExtendedTextAre from '../ExtendedTextArea';
 
 interface ISensorParametersFieldSettingsProps {
   field: FieldModel;
@@ -201,6 +200,7 @@ const FieldControl = ({
 
             className ? className : '!min-w-30 !max-w-30'
           )}
+          className='text-sm'
           onChange={(value) => handleChange({ enum_value: value })}
           disabled={disabled}
           error={isInvalid}
