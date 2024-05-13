@@ -31,6 +31,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.text.ColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,7 @@ public class AthenaColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec
     @BeforeEach
     void setUp() {
         ConnectionSpec connectionSpec = AthenaConnectionSpecObjectMother.create();
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_min_length_test, connectionSpec);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, connectionSpec);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec();
@@ -61,14 +62,14 @@ public class AthenaColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec
         this.sut.setMinLength(4);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "text", this.checkSpec);
+                sampleTableMetadata, "length_string", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(25.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -76,14 +77,14 @@ public class AthenaColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec
         this.sut.setMinLength(4);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "length_string", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(25.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -91,14 +92,14 @@ public class AthenaColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec
         this.sut.setMinLength(4);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "length_string", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(25.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -106,14 +107,14 @@ public class AthenaColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec
         this.sut.setMinLength(4);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "length_string", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(6, resultTable.rowCount());
+        Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(16.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -121,13 +122,29 @@ public class AthenaColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec
         this.sut.setMinLength(4);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "length_string", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(6, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
+
+    @Test
+    void runSensor_whenRunOnIntegerColumn_thenReturnsValues() {
+        this.sut.setMinLength(4);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "length_int", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(20.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+    }
+
 }
