@@ -334,18 +334,23 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Override
     public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
-        DuckdbParametersSpec duckdb = getConnectionSpec().getDuckdb();
-        if(duckdb.getReadMode().equals(DuckdbReadMode.in_memory)){
+        DuckdbParametersSpec duckDbParameters = getConnectionSpec().getDuckdb();
+        if (duckDbParameters == null) {
+            duckDbParameters = new DuckdbParametersSpec();
+        }
+
+        if (duckDbParameters.getReadMode().equals(DuckdbReadMode.in_memory)) {
             List<SourceTableModel> sourceTableModels = super.listTables(schemaName, secretValueLookupContext);
             return sourceTableModels;
         }
-        if(duckdb == null || duckdb.getFilesFormatType() == null){
+        if (duckDbParameters == null || duckDbParameters.getFilesFormatType() == null) {
             return new ArrayList<>();
         }
 
-        DuckdbStorageType storageType = duckdb.getStorageType();
+        DuckdbStorageType storageType = duckDbParameters.getStorageType();
         TablesLister remoteTablesLister = TablesListerProvider.createTablesLister(storageType);
-        List<SourceTableModel> sourceTableModels = remoteTablesLister.listTables(duckdb, schemaName);
+        List<SourceTableModel> sourceTableModels = remoteTablesLister.listTables(duckDbParameters, schemaName);
+
         return sourceTableModels;
     }
 
