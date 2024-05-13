@@ -1,7 +1,7 @@
 {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
 SELECT
     MAX(
-        LENGTH({{ lib.render_target_column('analyzed_table') }})
+        LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR))
     ) AS actual_value
     {{- lib.render_data_grouping_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
