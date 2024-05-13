@@ -71,6 +71,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     private static final Object settingsExecutionLock = new Object();
     private static final boolean settingsConfigured = false;
     private static final String temporaryDirectoryPrefix = "dqops_duckdb_temp_";
+    private final TablesListerProvider tablesListerProvider;
 
     /**
      * Injection constructor for the duckdb connection.
@@ -87,11 +88,13 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                                   DuckdbConnectionProvider duckdbConnectionProvider,
                                   HomeLocationFindService homeLocationFindService,
                                   DqoDuckdbConfiguration dqoDuckdbConfiguration,
-                                  DuckDBDataTypeParser dataTypeParser) {
+                                  DuckDBDataTypeParser dataTypeParser,
+                                  TablesListerProvider tablesListerProvider) {
         super(jdbcConnectionPool, secretValueProvider, duckdbConnectionProvider);
         this.homeLocationFindService = homeLocationFindService;
         this.dqoDuckdbConfiguration = dqoDuckdbConfiguration;
         this.dataTypeParser = dataTypeParser;
+        this.tablesListerProvider = tablesListerProvider;
     }
 
     /**
@@ -344,7 +347,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
 
         DuckdbStorageType storageType = duckdb.getStorageType();
-        TablesLister remoteTablesLister = TablesListerProvider.createTablesLister(storageType);
+        TablesLister remoteTablesLister = tablesListerProvider.createTablesLister(storageType);
         List<SourceTableModel> sourceTableModels = remoteTablesLister.listTables(duckdb, schemaName);
         return sourceTableModels;
     }

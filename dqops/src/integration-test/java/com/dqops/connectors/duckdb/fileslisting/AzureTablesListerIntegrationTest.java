@@ -35,7 +35,7 @@ class AzureTablesListerIntegrationTest extends BaseTest {
         secretValueProvider = beanFactory.getBean(SecretValueProviderImpl.class);
         secretValueLookupContext = new SecretValueLookupContext(null);
 
-        this.sut = (AzureTablesLister)TablesListerProvider.createTablesLister(DuckdbStorageType.azure);
+        this.sut = (AzureTablesLister) TablesListerProviderObjectMother.getProvider().createTablesLister(DuckdbStorageType.azure);
 
         this.duckdbParametersSpec = new DuckdbParametersSpec();
 

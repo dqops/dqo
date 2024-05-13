@@ -31,7 +31,7 @@ class AwsTablesListerIntegrationTest extends BaseTest {
         SecretValueProviderImpl secretValueProvider = beanFactory.getBean(SecretValueProviderImpl.class);
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
 
-        this.sut = (AwsTablesLister)TablesListerProvider.createTablesLister(DuckdbStorageType.s3);
+        this.sut = (AwsTablesLister) TablesListerProviderObjectMother.getProvider().createTablesLister(DuckdbStorageType.s3);
 
         this.duckdbParametersSpec = new DuckdbParametersSpec();
         duckdbParametersSpec.setUser(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AWS_S3_ACCESS_KEY_ID, secretValueLookupContext));
