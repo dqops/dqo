@@ -31,20 +31,14 @@ FROM
         FROM
             {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '        ') }}
-        GROUP BY {{ render_group_by() }} top_value
-        ORDER BY {{ render_order_by() }} total_values
+        GROUP BY {{ render_grouping_columns() }} top_value
+        ORDER BY {{ render_grouping_columns() }} total_values
     ) AS top_col_values
 ) AS top_values
 WHERE top_values_rank <= {{ parameters.top }}
 {%- endmacro -%}
 
-{% macro render_group_by() %}
-    {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none %}
-        {{ lib.render_grouping_column_names() }} {{ ',' }}
-    {%- endif -%}
-{% endmacro %}
-
-{% macro render_order_by() %}
+{% macro render_grouping_columns() %}
     {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none %}
         {{ lib.render_grouping_column_names() }} {{ ',' }}
     {%- endif -%}
