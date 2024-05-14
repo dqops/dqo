@@ -27,6 +27,7 @@ import { useDecodedParams } from '../../utils';
 import HelpMenu from '../HelpMenu';
 import Logo from '../Logo';
 import NotificationMenu from '../NotificationMenu';
+import SvgIcon from '../SvgIcon';
 import UserProfile from '../UserProfile';
 import { HeaderBanner } from './HeaderBanner';
 import { SynchronizeButton } from './SynchronizeButton';
@@ -199,92 +200,113 @@ const Header = () => {
               className="max-w-80 py-4 px-4 bg-gray-800 delay-700" >
           <div
             className={clsx(
-              'px-4 cursor-pointer',
+              'px-4 cursor-pointer flex items-center',
               location.pathname.startsWith(`/${CheckTypes.SOURCES}`)
               ? 'font-bold'
               : ''
               )}
               onClick={onClick(CheckTypes.SOURCES)}
               >
-            Data Sources
+            <SvgIcon name="data_sources" className="w-4.5 h-4.5 mr-1" />
+              <div>
+                  Data Sources
+              </div>
           </div>
           </Tooltip>
           <Tooltip content={"Measure basic data statistics and experiment with various types of data quality checks"}
               className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
           <div
             className={clsx(
-              'px-4 cursor-pointer',
+              'px-4 cursor-pointer flex items-center',
               location.pathname.startsWith(`/${CheckTypes.PROFILING}`)
               ? 'font-bold'
               : ''
               )}
               onClick={onClick(CheckTypes.PROFILING)}
               >
-            Profiling
+              <SvgIcon name="profiling" className="w-4.5 h-4.5 mr-0.5 mt-[1px]" />
+              <div>
+                Profiling
+              </div>
           </div>
           </Tooltip>
           <Tooltip content={"Run standard checks that monitor the data quality"}
               className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
           <div
             className={clsx(
-              'px-4 cursor-pointer',
+              'px-4 cursor-pointer flex items-center',
               location.pathname.startsWith(`/${CheckTypes.MONITORING}`)
               ? 'font-bold'
               : ''
               )}
               onClick={onClick(CheckTypes.MONITORING)}
               >
-            Monitoring Checks
+              <SvgIcon name="monitoring_checks" className="w-4 h-4 mr-1" />
+               <div>
+                Monitoring Checks
+              </div>
           </div>
             </Tooltip>
             <Tooltip content={"Run checks designed to monitor the data quality of partitioned data"}
               className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
           <div
             className={clsx(
-              'px-4 cursor-pointer',
+              'px-4 cursor-pointer flex items-center',
               location.pathname.startsWith(`/${CheckTypes.PARTITIONED}`)
               ? 'font-bold'
               : ''
               )}
               onClick={onClick(CheckTypes.PARTITIONED)}
               >
+            <SvgIcon name="partitioned_checks" className="w-4.5 h-4.5 mr-1" />
+                <div>
             Partition Checks
+                </div>
           </div>
             </Tooltip>
             <Tooltip content={"Review the summaries of data quality monitoring"}
               className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
           <div
             className={clsx(
-              'px-4 cursor-pointer',
+              'px-4 cursor-pointer flex items-center',
               location.pathname === '/dashboards' ? 'font-bold' : ''
               )}
               onClick={() => history.push('/dashboards')}
               >
+                <SvgIcon name="dashboards" className="w-5 h-5 mr-0.5" />
+                <div>
             Data Quality Dashboards
+                </div>
           </div>
             </Tooltip>
             <Tooltip content={"Review and manage the issues that arise during data quality monitoring"}
               className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
           <div
             className={clsx(
-              'px-4 cursor-pointer',
+              'px-4 cursor-pointer flex items-center',
               location.pathname.startsWith('/incidents') ? 'font-bold' : ''
               )}
               onClick={() => history.push('/incidents')}
               >
-            Incidents
+                <SvgIcon name="incidents" className="w-5 h-5 " />
+                <div>
+                  Incidents
+                </div>
           </div>
             </Tooltip>
           <Tooltip content={"Customize built-in data quality sensors and rules"}
               className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
             <div
             className={clsx(  
-              'px-4 cursor-pointer',
+              'px-4 cursor-pointer flex items-center',
               location.pathname.startsWith('/definitions') ? 'font-bold' : ''
               )}
               onClick={() => location.pathname.startsWith('/definitions') ? undefined : history.push('/definitions')}
               >
-            Configuration
+                <SvgIcon name="configuration" className="w-6 h-6" />
+                <div> 
+                  Configuration
+                </div>
             </div>
           </Tooltip>
         </div>
