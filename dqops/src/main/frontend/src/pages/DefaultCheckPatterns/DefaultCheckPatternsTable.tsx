@@ -143,7 +143,7 @@ export default function DefaultCheckPatternsTable({
             <td
               className={clsx(
                 'px-4 underline cursor-pointer',
-                pattern.disabled && 'text-gray-500'
+                pattern.disabled && 'text-gray-200'
               )}
               onClick={() => editPattern(type, pattern.pattern_name ?? '')}
             >
