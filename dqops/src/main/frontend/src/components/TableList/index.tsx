@@ -165,7 +165,7 @@ export default function index({
   const isEnd = tables.length < filters.pageSize;
 
   return (
-    <>
+    <div className='bg-white'>
       <div className="flex">
         <div className="w-[280px]">
           <SectionWrapper
@@ -226,6 +226,6 @@ export default function index({
           }
         />
       </div>
-    </>
+    </div>
   );
 }
