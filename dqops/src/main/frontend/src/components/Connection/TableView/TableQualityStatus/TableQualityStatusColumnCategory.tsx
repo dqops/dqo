@@ -131,7 +131,7 @@ export default function TableQualityStatusColumnCategory({
       >
         <td
           key={`column_cell_${customKey}`}
-          className="p-2 px-4 underline cursor-pointer font-bold"
+          className="p-2 px-4 underline cursor-pointer"
           onClick={() =>
             openFirstLevelColumnTab(
               checkTypes,
