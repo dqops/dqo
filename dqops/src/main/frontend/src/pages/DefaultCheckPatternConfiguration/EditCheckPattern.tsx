@@ -309,7 +309,7 @@ export default function EditCheckPattern({
   }, [create]);
 
   function getCheckOverview(): void {}
-  console.log(target);
+
   return (
     <>
       <div className="px-4">

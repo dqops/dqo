@@ -69,7 +69,7 @@ export default function CreateCheckPattern({ type }: TCreateCheckPatternProps) {
     openDefaultCheckPatternFirstLevelTab(type, target.pattern_name);
     // onChangeCreating();
   };
-  console.log(target);
+
   return (
     <>
       <div className="px-4">
