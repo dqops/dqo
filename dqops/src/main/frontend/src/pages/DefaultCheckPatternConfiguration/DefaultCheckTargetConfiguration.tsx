@@ -6,6 +6,7 @@ import {
   TargetColumnPatternSpecDataTypeCategoryEnum,
   TargetTablePatternSpec
 } from '../../api';
+import Checkbox from '../../components/Checkbox';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
 import Input from '../../components/Input';
 import Select from '../../components/Select';
@@ -35,7 +36,7 @@ export default function DefaultCheckTargetConfiguration({
 
   return (
     <div>
-      <div className="flex justify-between pb-6 text-black text-sm">
+      <div className="flex justify-between text-black text-sm">
         <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
           <span className="w-30">Pattern name</span>
           {create === true ? (
@@ -53,9 +54,30 @@ export default function DefaultCheckTargetConfiguration({
             value={target?.priority}
             onChange={(e) =>
               onChangeTarget({
-                priority: !isNaN(Number(e.target.value)) && e.target.value !== ''
-                  ? Number(e.target.value)
-                  : undefined
+                priority:
+                  !isNaN(Number(e.target.value)) && e.target.value !== ''
+                    ? Number(e.target.value)
+                    : undefined
+              })
+            }
+          />
+        </div>
+      </div>
+      <div className="flex justify-between pb-6 text-black text-sm">
+        <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+          <span className="w-30">Description</span>
+          <Input
+            value={target?.description}
+            onChange={(e) => onChangeTarget({ description: e.target.value })}
+          />
+        </div>
+        <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+          <span className="w-25"> Priority</span>
+          <Checkbox
+            checked={target?.disabled}
+            onChange={(value) =>
+              onChangeTarget({
+                disabled: value
               })
             }
           />
@@ -63,30 +85,46 @@ export default function DefaultCheckTargetConfiguration({
       </div>
       <SectionWrapper title="Target filters" className="cursor-default">
         <div className="flex justify-between  text-black  ">
-          <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
-            <span className="w-25">Connection</span>
-            <Input
-              value={
-                (target?.[targetSpecKey as keyof TTarget] as any)?.connection
-              }
-              onChange={(e) => onChangeTarget({ connection: e.target.value })}
-            />
+          <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2 ">
+            <span className="w-25 ">Connection</span>
+            <div className="w-3/4">
+              <Input
+                value={
+                  (target?.[targetSpecKey as keyof TTarget] as any)?.connection
+                }
+                className="w-11/12"
+                onChange={(e) => onChangeTarget({ connection: e.target.value })}
+              />
+            </div>
           </div>
           <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
-            <span className="w-25"> Schema</span>
+            <span className="w-25"> Table priority</span>
             <Input
-              value={(target?.[targetSpecKey as keyof TTarget] as any)?.schema}
-              onChange={(e) => onChangeTarget({ schema: e.target.value })}
+              value={
+                (target?.[targetSpecKey as keyof TTarget] as any)
+                  ?.table_priority
+              }
+              onChange={(e) =>
+                onChangeTarget({
+                  table_priority:
+                    !isNaN(Number(e.target.value)) && e.target.value !== ''
+                      ? Number(e.target.value)
+                      : undefined
+                })
+              }
             />
           </div>
         </div>
         <div className="flex justify-between  text-black  ">
           <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
             <span className="w-25"> Table</span>
-            <Input
-              value={(target?.[targetSpecKey as keyof TTarget] as any)?.table}
-              onChange={(e) => onChangeTarget({ table: e.target.value })}
-            />
+            <div className="w-3/4">
+              <Input
+                value={(target?.[targetSpecKey as keyof TTarget] as any)?.table}
+                onChange={(e) => onChangeTarget({ table: e.target.value })}
+                className="w-11/12"
+              />
+            </div>
           </div>
           <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
             <span className="w-25">Stage</span>
@@ -98,21 +136,18 @@ export default function DefaultCheckTargetConfiguration({
         </div>
         <div className="flex justify-between  text-black  ">
           <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
-            <span className="w-25"> Table priority</span>
-            <Input
-              value={
-                (target?.[targetSpecKey as keyof TTarget] as any)
-                  ?.table_priority
-              }
-              onChange={(e) =>
-                onChangeTarget({
-                  table_priority: !isNaN(Number(e.target.value)) && e.target.value !== ''
-                    ? Number(e.target.value)
-                    : undefined
-                })
-              }
-            />
+            <span className="w-25"> Schema</span>
+            <div className="w-3/4">
+              <Input
+                value={
+                  (target?.[targetSpecKey as keyof TTarget] as any)?.schema
+                }
+                className="w-11/12"
+                onChange={(e) => onChangeTarget({ schema: e.target.value })}
+              />
+            </div>
           </div>
+
           <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
             <span className="w-25"> Label</span>
             <Input

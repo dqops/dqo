@@ -32,7 +32,12 @@ export default function CreateCheckPattern({ type }: TCreateCheckPatternProps) {
   const onChangeTarget = (
     updatedTarget: Partial<TTarget> | Partial<TTargetSpec>
   ) => {
-    if ('pattern_name' in updatedTarget || 'priority' in updatedTarget) {
+    if (
+      'pattern_name' in updatedTarget ||
+      'priority' in updatedTarget ||
+      'description' in updatedTarget ||
+      'disabled' in updatedTarget
+    ) {
       setTarget((prev) => ({
         ...prev,
         ...updatedTarget
@@ -64,7 +69,7 @@ export default function CreateCheckPattern({ type }: TCreateCheckPatternProps) {
     openDefaultCheckPatternFirstLevelTab(type, target.pattern_name);
     // onChangeCreating();
   };
-
+  console.log(target);
   return (
     <>
       <div className="px-4">

@@ -120,7 +120,12 @@ export default function EditCheckPattern({
   const onChangeTarget = (
     updatedTarget: Partial<TTarget> | Partial<TTargetSpec>
   ) => {
-    if ('pattern_name' in updatedTarget || 'priority' in updatedTarget) {
+    if (
+      'pattern_name' in updatedTarget ||
+      'priority' in updatedTarget ||
+      'description' in updatedTarget ||
+      'disabled' in updatedTarget
+    ) {
       setTarget((prev) => ({
         ...prev,
         ...updatedTarget
@@ -304,7 +309,7 @@ export default function EditCheckPattern({
   }, [create]);
 
   function getCheckOverview(): void {}
-
+  console.log(target);
   return (
     <>
       <div className="px-4">
