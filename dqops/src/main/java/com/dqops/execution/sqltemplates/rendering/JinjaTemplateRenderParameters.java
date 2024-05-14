@@ -33,6 +33,7 @@ import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
+import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -40,6 +41,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Context object whose properties will be available as variables in the Jinja2 SQL template.
@@ -140,7 +142,7 @@ public class JinjaTemplateRenderParameters {
 			setColumn(sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().trim() : null);
 			setColumnName(sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().getColumnName() : null);
 			setParameters(sensorRunParameters.getSensorParameters());
-            setEffectiveTimeSeries(sensorRunParameters.getTimeSeries());
+            setEffectiveTimeSeries(sensorRunParameters.getTimeSeries() == null || sensorRunParameters.getTimeSeries().getMode() == TimeSeriesMode.current_time ? null : sensorRunParameters.getTimeSeries());
             setEffectiveDataGroupings(sensorRunParameters.getDataGroupings() != null ? sensorRunParameters.getDataGroupings().truncateToColumns() : null);
 			setSensorDefinition(sensorDefinitions.getSensorDefinitionSpec().trim());
 			setProviderSensorDefinition(sensorDefinitions.getProviderSensorDefinitionSpec().trim());
@@ -152,12 +154,11 @@ public class JinjaTemplateRenderParameters {
         }};
 
         DuckdbParametersSpec duckdbParametersSpec = sensorRunParameters.getConnection().getDuckdb();
-        if(duckdbParametersSpec != null && duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.files)
-            && duckdbParametersSpec.getFilesFormatType() != null
-        ){
+        if (duckdbParametersSpec != null && Objects.equals(duckdbParametersSpec.getReadMode(), DuckdbReadMode.files) &&
+                duckdbParametersSpec.getFilesFormatType() != null) {
             DuckdbFilesFormatType duckdbFilesFormatType = duckdbParametersSpec.getFilesFormatType();
             FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
-            if(duckdbFilesFormatType != null && fileFormatSpec != null && !fileFormatSpec.getFilePaths().isEmpty()){
+            if (duckdbFilesFormatType != null && fileFormatSpec != null && !fileFormatSpec.getFilePaths().isEmpty()) {
                 result.setTableFromFiles(fileFormatSpec.buildTableOptionsString(duckdbParametersSpec, tableSpec));
             }
         }
