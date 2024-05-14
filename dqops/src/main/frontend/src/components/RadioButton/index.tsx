@@ -1,14 +1,15 @@
-import React from 'react';
 import clsx from 'clsx';
+import React from 'react';
 
 interface RadioButtonProps {
   label?: string;
   onClick: () => void;
   checked?: boolean;
   className?: string;
+  fontClassName?: string;
 }
 
-const RadioButton = ({ label, onClick, checked, className }: RadioButtonProps) => {
+const RadioButton = ({ label, onClick, checked, className, fontClassName }: RadioButtonProps) => {
   return (
     <div
       className={clsx("flex items-center space-x-2 cursor-pointer", className)}
@@ -19,7 +20,7 @@ const RadioButton = ({ label, onClick, checked, className }: RadioButtonProps) =
           className={clsx('w-3 h-3 rounded-full', checked ? 'bg-primary' : '')}
         />
       </div>
-      {label && <div className="text-sm">{label}</div>}
+      {label && <div className={clsx("text-sm", fontClassName)}>{label}</div>}
     </div>
   );
 };

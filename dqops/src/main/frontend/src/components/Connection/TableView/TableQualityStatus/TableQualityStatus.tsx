@@ -1,14 +1,15 @@
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { TableCurrentDataQualityStatusModel } from '../../../../api';
 import { CheckResultApi } from '../../../../services/apiClient';
 import { CheckTypes } from '../../../../shared/routes';
+import { useDecodedParams } from '../../../../utils';
 import DatePicker from '../../../DatePicker';
 import RadioButton from '../../../RadioButton';
 import CurrentTableStatus from './CurrentTableStatus';
 import { TFirstLevelCheck } from './TableQualityStatusConstans';
 import TableQualityStatusOverview from './TableQualityStatusOverview';
 import TotalChecksExecuted from './TotalChecksExecuted';
-import { useDecodedParams } from '../../../../utils';
 
 interface IProps {
   timeScale?: 'daily' | 'monthly';
@@ -37,8 +38,8 @@ export default function TableQualityStatus({ timeScale }: IProps) {
   const [severityType, setSeverityType] = useState<'current' | 'highest'>(
     'current'
   );
-  const [month, setMonth] = useState<number | undefined>(1);
-  const [since, setSince] = useState<Date | undefined>();
+  const [month, setMonth] = useState<number | undefined>();
+  const [since, setSince] = useState<Date | undefined>(new Date(moment().subtract(30, 'days').format('YYYY-MM-DD')));
 
   const getTableDataQualityStatus = (month?: number, since?: Date) => {
     CheckResultApi.getTableDataQualityStatus(
@@ -164,15 +165,17 @@ export default function TableQualityStatus({ timeScale }: IProps) {
     <div className="p-4 text-sm">
       <div className="flex justify-between items-center">
         <div className="flex pb-6 gap-x-5 items-center">
-          <div className='text-sm'>Group checks by: </div>
+          <div className='text-xs'>Group checks by: </div>
           <RadioButton
             checked={categoryDimension === 'category'}
             label="category"
+            fontClassName='text-xs'
             onClick={() => setCategoryDimension('category')}
           />
           <RadioButton
             checked={categoryDimension === 'dimension'}
             label="quality dimension"
+            fontClassName='text-xs'
             onClick={() => setCategoryDimension('dimension')}
           />
         </div>
@@ -184,6 +187,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
               onClick={() => {
                 setSince(undefined), setMonth(1);
               }}
+              fontClassName='text-xs'
             />
             <RadioButton
               checked={month === 3}
@@ -191,6 +195,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
               onClick={() => {
                 setSince(undefined), setMonth(3);
               }}
+              fontClassName='text-xs'
             />
             <RadioButton
               checked={month === undefined}
@@ -198,6 +203,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
               onClick={() => {
                 setMonth(undefined);
               }}
+              fontClassName='text-xs'
             />
             <DatePicker
               showIcon
@@ -212,11 +218,13 @@ export default function TableQualityStatus({ timeScale }: IProps) {
               label="Current severity status"
               checked={severityType === 'current'}
               onClick={() => setSeverityType('current')}
+              fontClassName='text-xs'
             />
             <RadioButton
               label="Highest severity status"
               checked={severityType === 'highest'}
               onClick={() => setSeverityType('highest')}
+              fontClassName='text-xs'
             />
           </div>
         </div>
