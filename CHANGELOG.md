@@ -1,4 +1,5 @@
-# 1.3.0
-* Screens that show a list of tables and the data quality status divided by data quality dimensions
-* Analyze nested values in JSON fields
-* Analyze files on Azure storage buckets, using the az:// prefix.
+# 1.3.1
+* Ensure that only one instance of DuckDB engine is loaded
+* Profiling and monitoring checks do not render the group by time period (current time)
+* Small UI fixes
+* Default check patterns (profiles) support disabling and targeting multiple tables and columns
