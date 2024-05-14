@@ -247,10 +247,12 @@ public class DefaultColumnCheckPatternsController {
                     }
 
                     ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-                    defaultChecksPatternWrapper.setSpec(new ColumnDefaultChecksPatternSpec() {{
-                        setTarget(patternModel.getTargetColumn());
-                        setPriority(patternModel.getPriority());
-                    }});
+                    ColumnDefaultChecksPatternSpec patternSpec = new ColumnDefaultChecksPatternSpec();
+                    patternSpec.setTarget(patternModel.getTargetColumn());
+                    patternSpec.setPriority(patternModel.getPriority());
+                    patternSpec.setDescription(patternModel.getDescription());
+                    patternSpec.setDisabled(patternModel.isDisabled());
+                    defaultChecksPatternWrapper.setSpec(patternSpec);
                     userHomeContext.flush();
 
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
