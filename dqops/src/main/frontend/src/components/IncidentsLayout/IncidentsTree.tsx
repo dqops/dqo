@@ -8,7 +8,8 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   addFirstLevelTab,
   addSelectedConnection,
-  getConnections
+  getConnections,
+  setActiveFirstLevelTab
 } from '../../redux/actions/incidents.actions';
 import { IRootState } from '../../redux/reducers';
 import { ROUTES } from '../../shared/routes';
@@ -17,7 +18,7 @@ import SvgIcon from '../SvgIcon';
 
 const IncidentsTree = () => {
   const dispatch = useActionDispatch();
-  const { connections, activeTab, selectedConnections } = useSelector(
+  const { connections, activeTab, selectedConnections, tabs } = useSelector(
     (state: IRootState) => state.incidents
   );
   const selectedConnection =
@@ -57,6 +58,62 @@ const IncidentsTree = () => {
     );
     history.push(url);
   };
+
+  const openCorrectTabFromUrl = () => {
+    if (
+      window.location.pathname === '/incidents' ||
+      window.location.pathname === '/incidents/'
+    ) {
+      return;
+    }
+
+    const path = window.location.pathname.split('/');
+    const connection = path[2];
+    const selectedConnection = connections.find(
+      (x) => x.connection === connection
+    );
+
+    if (selectedConnection && !path[3]) {
+      openFirstLevelTab(selectedConnection);
+    } else if (path[3]) {
+      const connection = path[2] || '';
+      const year = Number(path[3]);
+      const month = Number(path[4]);
+      const incidentId = path[5] || '';
+
+      dispatch(
+        addFirstLevelTab({
+          url: ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId),
+          value: ROUTES.INCIDENT_DETAIL_VALUE(
+            connection,
+            year,
+            month,
+            incidentId
+          ),
+          state: {},
+          label: incidentId
+        })
+      );
+
+      dispatch(
+        setActiveFirstLevelTab(
+          ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId)
+        )
+      );
+      history.push(ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId));
+    }
+  };
+
+  useEffect(() => {
+    openCorrectTabFromUrl();
+  }, [window.location.pathname, connections]);
+
+  // useEffect(() => {
+  //   if (activeTab) {
+  //     dispatch(setActiveFirstLevelTab(activeTab));
+  //     history.push(activeTab);
+  //   }
+  // }, [activeTab]);
 
   const openConnection = (connection: IncidentsPerConnectionModel) => {
     dispatch(
