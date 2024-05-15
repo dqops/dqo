@@ -49,7 +49,7 @@ export default function GlobalTables() {
     const addPrefix = (str: string) => {
       return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
     };
-    SearchApiClient.findTables(
+    return SearchApiClient.findTables(
       addPrefix(searchFilters.connection ?? ''),
       addPrefix(searchFilters.schema ?? ''),
       addPrefix(searchFilters.table ?? ''),
@@ -64,6 +64,7 @@ export default function GlobalTables() {
         arr.push(jItem);
       });
       setTables(arr);
+      return arr;
     });
   };
 
@@ -77,7 +78,9 @@ export default function GlobalTables() {
       });
     };
 
-    getTables();
+    getTables().then((res) => {
+      refetchTables(res);
+    });
     getLabels();
   }, [filters]);
 
@@ -99,6 +102,16 @@ export default function GlobalTables() {
       document.removeEventListener('keypress', handleKeyPress);
     };
   }, [searchFilters]);
+
+  const refetchTables = (tables?: TableListModel[]) => {
+    tables?.forEach((table) => {
+      if (!table?.data_quality_status) {
+        setTimeout(() => {
+          getTables();
+        }, 5000);
+      }
+    });
+  };
 
   return (
     <>

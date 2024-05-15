@@ -20,7 +20,7 @@ const HomePage = () => {
   const history = useHistory();
   const dispatch = useActionDispatch();
   const onChange = (activeTab: string) => {
-    dispatch(setHomeFirstLevelTab(activeTab))
+    dispatch(setHomeFirstLevelTab(activeTab));
     history.push(activeTab);
   };
 

@@ -62,7 +62,7 @@ const initialState: ISourceState = {
     tabs: []
   },
   home: {
-    activeTab: '/home' 
+    activeTab: window.location.pathname === '/home' ? '/home' : '/tables'
   }
 };
 
@@ -1398,10 +1398,10 @@ const connectionReducer = (state = initialState, action: Action) => {
     case SOURCE_ACTION.SET_FIRST_LEVEL_HOME_TAB: {
       return {
         ...state,
-        ['home'] : {
+        ['home']: {
           activeTab: action.data
         }
-      }
+      };
     }
     default:
       return state;

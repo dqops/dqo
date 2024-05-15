@@ -49,7 +49,7 @@ const transformSourceState = (state: ISourceState): ISourceState => {
         })) ?? []
     },
     ['home']: {
-      activeTab: '/home'
+      activeTab: newState['home']?.activeTab
     }
   };
 };
