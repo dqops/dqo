@@ -32,7 +32,7 @@ FROM
             {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '        ') }}
         GROUP BY {{ render_grouping_columns() }} top_value
-        ORDER BY {{ render_grouping_columns() }} total_values
+        ORDER BY {{ render_grouping_columns() }} total_values DESC
     ) AS top_col_values
 ) AS top_values
 WHERE top_values_rank <= {{ parameters.top }}
