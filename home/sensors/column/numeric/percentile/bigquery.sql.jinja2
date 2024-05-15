@@ -24,8 +24,10 @@
 
 SELECT
     MAX(nested_table.actual_value) AS actual_value,
+    {% if lib.time_series is not none -%}
     nested_table.`time_period` AS time_period,
     nested_table.`time_period_utc` AS time_period_utc
+    {% endif %}
     {{- lib.render_data_grouping_projections('analyzed_table') }}
 FROM(
     SELECT
@@ -33,6 +35,9 @@ FROM(
         ({{ lib.render_target_column('analyzed_table')}}),
         {{ parameters.percentile_value }})
         OVER (PARTITION BY
+            {% if lib.data_groupings is none and lib.time_series is none -%}
+                NULL
+            {% endif %}
             {{render_local_time_dimension_projection('analyzed_table')}}
             {{render_local_data_grouping_projections('analyzed_table') }}
         ) AS actual_value
