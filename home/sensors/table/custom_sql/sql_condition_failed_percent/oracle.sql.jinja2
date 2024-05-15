@@ -9,9 +9,11 @@ SELECT
                                   THEN 1
                              ELSE 0
                          END) / COUNT(*)
-    END AS actual_value,
+    END AS actual_value {{-"," if lib.time_series is not none else ""}}
+    {%- if lib.time_series is not none-%}
     time_period,
     time_period_utc
+    {% endif %}
 FROM(
     SELECT
               original_table.*
