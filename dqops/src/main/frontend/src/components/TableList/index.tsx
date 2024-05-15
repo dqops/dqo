@@ -7,6 +7,7 @@ import { useDecodedParams } from '../../utils';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import { Pagination } from '../Pagination';
 import SvgIcon from '../SvgIcon';
+
 function getValueForKey<T>(obj: T, key: string): string | undefined {
   const keys = key.split('.');
   let value: any = obj;
@@ -165,7 +166,7 @@ export default function index({
   const isEnd = tables.length < filters.pageSize;
 
   return (
-    <div className='bg-white'>
+    <div className="bg-white">
       <div className="flex">
         <div className="w-[280px]">
           <SectionWrapper
@@ -190,27 +191,29 @@ export default function index({
           </SectionWrapper>
         </div>
 
-        <table className="overflow-x-auto">
-          <thead>
-            <tr className="mb-2">
-              {headerItems.map(
-                (item) =>
-                  item?.label &&
-                  item.value &&
-                  renderItem(item.label, item.value, item.sortable)
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {tables.map((item, index) => (
-              <SchemaTableItem
-                key={index}
-                item={item}
-                dimensionKeys={getDimensionKey()}
-              />
-            ))}
-          </tbody>
-        </table>
+        <div className="overflow-x-auto">
+          <table>
+            <thead>
+              <tr className="mb-2">
+                {headerItems.map(
+                  (item) =>
+                    item?.label &&
+                    item.value &&
+                    renderItem(item.label, item.value, item.sortable)
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {tables.map((item, index) => (
+                <SchemaTableItem
+                  key={index}
+                  item={item}
+                  dimensionKeys={getDimensionKey()}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
       <div className="px-4 my-5">
         <Pagination
