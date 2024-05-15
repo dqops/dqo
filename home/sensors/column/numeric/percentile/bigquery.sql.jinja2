@@ -23,7 +23,7 @@
 {%- endmacro -%}
 
 SELECT
-    MAX(nested_table.actual_value) AS actual_value,
+    MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
     {% if lib.time_series is not none -%}
     nested_table.`time_period` AS time_period,
     nested_table.`time_period_utc` AS time_period_utc
