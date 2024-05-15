@@ -420,16 +420,19 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
                 physicalTableName, CheckResultsColumnNames.CHECK_RESULTS_COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
-        LocalDate startMonth;
+        LocalDate startDay = firstSeen.atZone(defaultTimeZoneId).toLocalDate()
+                .minus(this.dqoIncidentsConfigurationProperties.getPartitionedChecksTimeWindowDays(), ChronoUnit.DAYS);
+
         if (filterParameters.getDays() != null) {
-            startMonth = firstSeen.minus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
-        }
-        else {
-            startMonth = Instant.now().atZone(defaultTimeZoneId).toLocalDate().minus(filterParameters.getDays(), ChronoUnit.DAYS);
+            LocalDate earliestRequestedDate = Instant.now().atZone(defaultTimeZoneId).truncatedTo(ChronoUnit.DAYS)
+                    .minus(filterParameters.getDays(), ChronoUnit.DAYS).toLocalDate();
+            if (earliestRequestedDate.isAfter(startDay)) {
+                startDay = earliestRequestedDate;
+            }
         }
 
-        LocalDate endMonth = incidentUntil.plus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
-        if (!checkResultsSnapshot.ensureMonthsAreLoaded(startMonth, endMonth)) {
+        LocalDate endMonth = incidentUntil.plus(12L, ChronoUnit.HOURS).atZone(defaultTimeZoneId).toLocalDate();
+        if (!checkResultsSnapshot.ensureMonthsAreLoaded(startDay, endMonth)) {
             return new CheckResultEntryModel[0];
         }
 
@@ -548,15 +551,18 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
                 physicalTableName, CheckResultsColumnNames.CHECK_RESULTS_COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
-        LocalDate startMonth;
+        LocalDate startDay = firstSeen.atZone(defaultTimeZoneId).toLocalDate()
+                .minus(this.dqoIncidentsConfigurationProperties.getPartitionedChecksTimeWindowDays(), ChronoUnit.DAYS);
+
         if (filterParameters.getDays() != null) {
-            startMonth = firstSeen.minus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
+            LocalDate earliestRequestedDate = Instant.now().atZone(defaultTimeZoneId).truncatedTo(ChronoUnit.DAYS).minus(filterParameters.getDays(), ChronoUnit.DAYS).toLocalDate();
+            if (earliestRequestedDate.isAfter(startDay)) {
+                startDay = earliestRequestedDate;
+            }
         }
-        else {
-            startMonth = Instant.now().atZone(defaultTimeZoneId).toLocalDate().minus(filterParameters.getDays(), ChronoUnit.DAYS);
-        }
-        LocalDate endMonth = incidentUntil.plus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
-        if (!checkResultsSnapshot.ensureMonthsAreLoaded(startMonth, endMonth)) {
+        
+        LocalDate endMonth = incidentUntil.plus(12L, ChronoUnit.HOURS).atZone(defaultTimeZoneId).toLocalDate();
+        if (!checkResultsSnapshot.ensureMonthsAreLoaded(startDay, endMonth)) {
             return new IncidentIssueHistogramModel();
         }
 
