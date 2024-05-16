@@ -26,7 +26,7 @@ export default function SharedCredentailTable({
       addFirstLevelTab({
         url: ROUTES.SHARED_CREDENTIALS_DETAIL(credential_name),
         value: ROUTES.SHARED_CREDENTIALS_DETAIL_VALUE(credential_name),
-        label: 'Edit credential',
+        label: credential_name,
         state: {
           credential_name
         }
@@ -38,10 +38,12 @@ export default function SharedCredentailTable({
     <tbody>
       {sharedCredentialList?.map((credential, index) => (
         <tr key={index} className="flex items-center text-sm">
-          <td className="px-6 py-2 text-left block w-100 text-teal-500 cursor-pointer" 
+          <td
+            className="px-6 py-2 text-left block w-100 text-teal-500 cursor-pointer"
             onClick={() =>
-                updateSharedCredential(credential.credential_name ?? '')
-              }>
+              updateSharedCredential(credential.credential_name ?? '')
+            }
+          >
             {credential.credential_name}
           </td>
           <td className="px-6 py-2 text-left block w-100">{credential.type}</td>
