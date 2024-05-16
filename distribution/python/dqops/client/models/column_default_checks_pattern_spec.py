@@ -27,6 +27,8 @@ class ColumnDefaultChecksPatternSpec:
     Attributes:
         priority (Union[Unset, int]): The priority of the pattern. Patterns with lower values are applied before
             patterns with higher priority values.
+        disabled (Union[Unset, bool]): Disables this data quality check configuration. The checks will not be activated.
+        description (Union[Unset, str]): The description (documentation) of this data quality check configuration.
         target (Union[Unset, TargetColumnPatternSpec]):
         profiling_checks (Union[Unset, ColumnProfilingCheckCategoriesSpec]):
         monitoring_checks (Union[Unset, ColumnMonitoringCheckCategoriesSpec]):
@@ -34,6 +36,8 @@ class ColumnDefaultChecksPatternSpec:
     """
 
     priority: Union[Unset, int] = UNSET
+    disabled: Union[Unset, bool] = UNSET
+    description: Union[Unset, str] = UNSET
     target: Union[Unset, "TargetColumnPatternSpec"] = UNSET
     profiling_checks: Union[Unset, "ColumnProfilingCheckCategoriesSpec"] = UNSET
     monitoring_checks: Union[Unset, "ColumnMonitoringCheckCategoriesSpec"] = UNSET
@@ -42,6 +46,8 @@ class ColumnDefaultChecksPatternSpec:
 
     def to_dict(self) -> Dict[str, Any]:
         priority = self.priority
+        disabled = self.disabled
+        description = self.description
         target: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.target, Unset):
             target = self.target.to_dict()
@@ -63,6 +69,10 @@ class ColumnDefaultChecksPatternSpec:
         field_dict.update({})
         if priority is not UNSET:
             field_dict["priority"] = priority
+        if disabled is not UNSET:
+            field_dict["disabled"] = disabled
+        if description is not UNSET:
+            field_dict["description"] = description
         if target is not UNSET:
             field_dict["target"] = target
         if profiling_checks is not UNSET:
@@ -89,6 +99,10 @@ class ColumnDefaultChecksPatternSpec:
 
         d = src_dict.copy()
         priority = d.pop("priority", UNSET)
+
+        disabled = d.pop("disabled", UNSET)
+
+        description = d.pop("description", UNSET)
 
         _target = d.pop("target", UNSET)
         target: Union[Unset, TargetColumnPatternSpec]
@@ -126,6 +140,8 @@ class ColumnDefaultChecksPatternSpec:
 
         column_default_checks_pattern_spec = cls(
             priority=priority,
+            disabled=disabled,
+            description=description,
             target=target,
             profiling_checks=profiling_checks,
             monitoring_checks=monitoring_checks,

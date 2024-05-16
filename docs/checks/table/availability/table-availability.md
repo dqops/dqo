@@ -146,28 +146,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for BigQuery"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                        *
                     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Databricks"
 
@@ -187,28 +183,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Databricks"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                        *
                     FROM `<target_schema>`.`<target_table>` AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "DuckDB"
 
@@ -228,28 +220,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for DuckDB"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                        *
                     FROM  AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "MySQL"
 
@@ -269,28 +257,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for MySQL"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                        *
                     FROM `<target_table>` AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Oracle"
 
@@ -313,8 +297,10 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Oracle"
 
@@ -323,21 +309,15 @@ spec:
                 CASE
                    WHEN COUNT(*) > 0 THEN COUNT(*)
                    ELSE 1.0
-                END AS actual_value,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                END AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                        *
                     FROM "<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "PostgreSQL"
 
@@ -357,28 +337,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for PostgreSQL"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                        *
                     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Presto"
 
@@ -398,28 +374,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Presto"
 
             ```sql
             SELECT
-                CAST(0.0 AS DOUBLE) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                CAST(0.0 AS DOUBLE) AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                        *
                     FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Redshift"
 
@@ -439,28 +411,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Redshift"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                        *
                     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Snowflake"
 
@@ -480,28 +448,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Snowflake"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                        *
                     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Spark"
 
@@ -521,28 +485,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Spark"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                        *
                     FROM `<target_schema>`.`<target_table>` AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "SQL Server"
 
@@ -591,28 +551,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Trino"
 
             ```sql
             SELECT
-                CAST(0.0 AS DOUBLE) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                CAST(0.0 AS DOUBLE) AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                        *
                     FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     
 ___
@@ -752,28 +708,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for BigQuery"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                        *
                     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Databricks"
 
@@ -793,28 +745,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Databricks"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                        *
                     FROM `<target_schema>`.`<target_table>` AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "DuckDB"
 
@@ -834,28 +782,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for DuckDB"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                        *
                     FROM  AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "MySQL"
 
@@ -875,28 +819,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for MySQL"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+                        *
                     FROM `<target_table>` AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Oracle"
 
@@ -919,8 +859,10 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Oracle"
 
@@ -929,21 +871,15 @@ spec:
                 CASE
                    WHEN COUNT(*) > 0 THEN COUNT(*)
                    ELSE 1.0
-                END AS actual_value,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                END AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                        *
                     FROM "<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "PostgreSQL"
 
@@ -963,28 +899,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for PostgreSQL"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                        *
                     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Presto"
 
@@ -1004,28 +936,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Presto"
 
             ```sql
             SELECT
-                CAST(0.0 AS DOUBLE) AS actual_value,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                CAST(0.0 AS DOUBLE) AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                        *
                     FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Redshift"
 
@@ -1045,28 +973,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Redshift"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                        *
                     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Snowflake"
 
@@ -1086,28 +1010,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Snowflake"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-                TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-                TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+                        *
                     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Spark"
 
@@ -1127,28 +1047,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Spark"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                        *
                     FROM `<target_schema>`.`<target_table>` AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "SQL Server"
 
@@ -1197,28 +1113,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Trino"
 
             ```sql
             SELECT
-                CAST(0.0 AS DOUBLE) AS actual_value,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                CAST(0.0 AS DOUBLE) AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                        *
                     FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     
 ___
@@ -1358,28 +1270,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for BigQuery"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                        *
                     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Databricks"
 
@@ -1399,28 +1307,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Databricks"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                        *
                     FROM `<target_schema>`.`<target_table>` AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "DuckDB"
 
@@ -1440,28 +1344,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for DuckDB"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                        *
                     FROM  AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "MySQL"
 
@@ -1481,28 +1381,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for MySQL"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                        *
                     FROM `<target_table>` AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Oracle"
 
@@ -1525,8 +1421,10 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Oracle"
 
@@ -1535,21 +1433,15 @@ spec:
                 CASE
                    WHEN COUNT(*) > 0 THEN COUNT(*)
                    ELSE 1.0
-                END AS actual_value,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                END AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                        *
                     FROM "<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "PostgreSQL"
 
@@ -1569,28 +1461,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for PostgreSQL"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                        *
                     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Presto"
 
@@ -1610,28 +1498,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Presto"
 
             ```sql
             SELECT
-                CAST(0.0 AS DOUBLE) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                CAST(0.0 AS DOUBLE) AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                        *
                     FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Redshift"
 
@@ -1651,28 +1535,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Redshift"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                        *
                     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Snowflake"
 
@@ -1692,28 +1572,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Snowflake"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                        *
                     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "Spark"
 
@@ -1733,28 +1609,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Spark"
 
             ```sql
             SELECT
-                0.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                0.0 AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                        *
                     FROM `<target_schema>`.`<target_table>` AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     ??? example "SQL Server"
 
@@ -1803,28 +1675,24 @@ spec:
                     {{ lib.render_where_clause() }}
                     LIMIT 1
                 ) AS tab_scan
+            {% if lib.time_series is not none -%}
             GROUP BY time_period
             ORDER BY time_period
+            {%- endif -%}
             ```
         === "Rendered SQL for Trino"
 
             ```sql
             SELECT
-                CAST(0.0 AS DOUBLE) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                CAST(0.0 AS DOUBLE) AS actual_value
             FROM
                 (
                     SELECT
-                        *,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                        *
                     FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
-            GROUP BY time_period
-            ORDER BY time_period
             ```
     
 ___

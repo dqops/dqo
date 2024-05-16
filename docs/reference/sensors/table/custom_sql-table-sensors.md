@@ -201,9 +201,11 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression |
-            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value,
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value {{-"," if lib.time_series is not none else ""}}
+        {%- if lib.time_series is not none-%}
         time_period,
         time_period_utc
+        {% endif %}
     FROM (SELECT
              original_table.*
              {{- lib.render_data_grouping_projections('original_table') }}
@@ -449,9 +451,11 @@ The templates used to generate the SQL query for each data source supported by D
                      THEN 1
                 ELSE 0
             END
-        ) AS actual_value,
+        ) AS actual_value {{-"," if lib.time_series is not none else ""}}
+        {%- if lib.time_series is not none-%}
         time_period,
         time_period_utc
+        {% endif %}
     FROM(
         SELECT
                  original_table.*
@@ -750,9 +754,11 @@ The templates used to generate the SQL query for each data source supported by D
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
-        END AS actual_value,
+        END AS actual_value {{-"," if lib.time_series is not none else ""}}
+        {%- if lib.time_series is not none-%}
         time_period,
         time_period_utc
+        {% endif %}
     FROM(
         SELECT
                   original_table.*
@@ -1055,9 +1061,11 @@ The templates used to generate the SQL query for each data source supported by D
                      THEN 1
                 ELSE 0
             END
-        ) AS actual_value,
+        ) AS actual_value {{-"," if lib.time_series is not none else ""}}
+        {%- if lib.time_series is not none-%}
         time_period,
         time_period_utc
+        {% endif %}
     FROM(
     SELECT
                   original_table.*
@@ -1356,9 +1364,11 @@ The templates used to generate the SQL query for each data source supported by D
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
-        END AS actual_value,
+        END AS actual_value {{-"," if lib.time_series is not none else ""}}
+        {%- if lib.time_series is not none-%}
         time_period,
         time_period_utc
+        {% endif %}
     FROM(
     SELECT
                  original_table.*
