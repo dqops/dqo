@@ -177,7 +177,7 @@ public class SearchController {
             CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                     listModel.getConnectionName(), listModel.getTarget());
             TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-            listModel.setDataQualityStatus(currentTableStatus);
+            listModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
         });
 
         if (tableModelsList.stream().anyMatch(model -> model.getDataQualityStatus() == null)) {
@@ -191,7 +191,7 @@ public class SearchController {
                                     CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                                             tableListModel.getConnectionName(), tableListModel.getTarget());
                                     TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-                                    tableListModel.setDataQualityStatus(currentTableStatus);
+                                    tableListModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
                                 }
                                 return tableListModel;
                             }));

@@ -2288,6 +2288,24 @@ paths:
         description: "Table name"
         required: true
         type: "string"
+      - name: "dataQualityStatus"
+        in: "query"
+        description: "Optional parameter to opt out from retrieving the most recent\
+          \ data quality status for the column. By default, DQOps calculates the data\
+          \ quality status from the data quality results."
+        required: false
+        type: "boolean"
+      - name: "checkType"
+        in: "query"
+        description: "Optional parameter for the check type, when provided, returns\
+          \ the results for data quality dimensions for the data quality checks of\
+          \ that type"
+        required: false
+        type: "string"
+        enum:
+        - "profiling"
+        - "monitoring"
+        - "partitioned"
       responses:
         200:
           description: "OK"
@@ -20245,6 +20263,13 @@ definitions:
         description: "Column data type that was retrieved when the table metadata\
           \ was imported."
         $ref: "#/definitions/ColumnTypeSnapshotSpec"
+      data_quality_status:
+        description: "The current data quality status for the column, grouped by data\
+          \ quality dimensions. DQOps may return a null value when the results were\
+          \ not yet loaded into the cache. In that case, the client should wait a\
+          \ few seconds and retry a call to get the most recent data quality status\
+          \ of the column."
+        $ref: "#/definitions/ColumnCurrentDataQualityStatusModel"
       run_checks_job_template:
         description: "Configured parameters for the \"check run\" job that should\
           \ be pushed to the job queue in order to run all checks within this column."

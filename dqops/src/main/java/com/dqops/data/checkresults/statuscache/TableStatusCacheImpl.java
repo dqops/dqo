@@ -232,13 +232,13 @@ public class TableStatusCacheImpl implements TableStatusCache {
                     this.checkResultsDataService.analyzeTableMostRecentQualityStatus(filterParameters, userDomainIdentity);
 
             TableCurrentDataQualityStatusModel monitoringAndPartitionedStatus = fullStatusModel.cloneFilteredByCheckType(
-                    checkResultsModel -> checkResultsModel.getCheckType() == CheckType.monitoring || checkResultsModel.getCheckType() == CheckType.partitioned, false);
+                    checkResultsModel -> checkResultsModel.getCheckType() == CheckType.monitoring || checkResultsModel.getCheckType() == CheckType.partitioned, true);
             TableCurrentDataQualityStatusModel profilingStatus = fullStatusModel.cloneFilteredByCheckType(
-                    checkResultsModel -> checkResultsModel.getCheckType() == CheckType.profiling, false);
+                    checkResultsModel -> checkResultsModel.getCheckType() == CheckType.profiling, true);
             TableCurrentDataQualityStatusModel monitoringStatus = fullStatusModel.cloneFilteredByCheckType(
-                    checkResultsModel -> checkResultsModel.getCheckType() == CheckType.monitoring, false);
+                    checkResultsModel -> checkResultsModel.getCheckType() == CheckType.monitoring, true);
             TableCurrentDataQualityStatusModel partitionedStatus = fullStatusModel.cloneFilteredByCheckType(
-                    checkResultsModel -> checkResultsModel.getCheckType() == CheckType.partitioned, false);
+                    checkResultsModel -> checkResultsModel.getCheckType() == CheckType.partitioned, true);
 
             currentTableStatusCacheEntry.setStatusModels(fullStatusModel, monitoringAndPartitionedStatus,
                     profilingStatus, monitoringStatus, partitionedStatus); // also sets the status

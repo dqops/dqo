@@ -31,6 +31,10 @@ import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.data.checkresults.models.currentstatus.ColumnCurrentDataQualityStatusModel;
+import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
+import com.dqops.data.checkresults.statuscache.CurrentTableStatusKey;
+import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.statistics.services.StatisticsDataService;
@@ -46,10 +50,7 @@ import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rest.models.metadata.ColumnListModel;
-import com.dqops.rest.models.metadata.ColumnModel;
-import com.dqops.rest.models.metadata.ColumnStatisticsModel;
-import com.dqops.rest.models.metadata.TableColumnsStatisticsModel;
+import com.dqops.rest.models.metadata.*;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
@@ -71,6 +72,8 @@ import reactor.core.publisher.Mono;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -90,6 +93,7 @@ public class ColumnsController {
     private StatisticsDataService statisticsDataService;
     private DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
     private RestApiLockService lockService;
+    private TableStatusCache tableStatusCache;
 
     /**
      * Creates a columns rest controller.
@@ -101,6 +105,7 @@ public class ColumnsController {
      * @param statisticsDataService       Statistics data service.
      * @param defaultObservabilityConfigurationService The service that applies default observability checks.
      * @param lockService Object lock service.
+     * @param tableStatusCache Table status cache.
      */
     @Autowired
     public ColumnsController(ColumnService columnService,
@@ -110,7 +115,8 @@ public class ColumnsController {
                              ModelToSpecCheckMappingService modelToSpecCheckMappingService,
                              StatisticsDataService statisticsDataService,
                              DefaultObservabilityConfigurationService defaultObservabilityConfigurationService,
-                             RestApiLockService lockService) {
+                             RestApiLockService lockService,
+                             TableStatusCache tableStatusCache) {
         this.columnService = columnService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoHomeContextFactory = dqoHomeContextFactory;
@@ -119,6 +125,7 @@ public class ColumnsController {
         this.statisticsDataService = statisticsDataService;
         this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
         this.lockService = lockService;
+        this.tableStatusCache = tableStatusCache;
     }
 
     /**
@@ -126,6 +133,7 @@ public class ColumnsController {
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name
+     * @param checkType      Data quality check type (optional) for getting the current table status.
      * @return List of columns inside a table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns", produces = "application/json")
@@ -144,7 +152,11 @@ public class ColumnsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam("Table name") @PathVariable String tableName) {
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam(name = "dataQualityStatus", value = "Optional parameter to opt out from retrieving the most recent data quality status for the column. By default, DQOps calculates the data quality status from the data quality results.", required = false)
+            @RequestParam(required = false) Optional<Boolean> dataQualityStatus,
+            @ApiParam(name = "checkType", value = "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type", required = false)
+            @RequestParam(required = false) Optional<CheckType> checkType) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
 
         TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
@@ -155,14 +167,49 @@ public class ColumnsController {
         boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
         boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
-        Stream<ColumnListModel> columnSpecs = tableWrapper.getSpec().getColumns()
+        List<ColumnListModel> columnModelsList = tableWrapper.getSpec().getColumns()
                 .entrySet()
                 .stream()
                 .sorted(Comparator.comparing(kv -> kv.getKey()))
                 .map(kv -> ColumnListModel.fromColumnSpecificationForListEntry(
-                        connectionName, tableWrapper.getPhysicalTableName(), kv.getKey(), kv.getValue(), isEditor, isOperator));
+                        connectionName, tableWrapper.getPhysicalTableName(), kv.getKey(), kv.getValue(), isEditor, isOperator))
+                .collect(Collectors.toList());
 
-        return new ResponseEntity<>(Flux.fromStream(columnSpecs), HttpStatus.OK);
+        if (dataQualityStatus.isEmpty() || dataQualityStatus.get()) {
+            columnModelsList.forEach(listModel -> {
+                CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                        listModel.getConnectionName(), listModel.getTable());
+                TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
+                if (currentTableStatus != null) {
+                    ColumnCurrentDataQualityStatusModel columnQualityStatusModel = currentTableStatus.getColumns().get(listModel.getColumnName());
+                    listModel.setDataQualityStatus(columnQualityStatusModel != null ? columnQualityStatusModel.shallowCloneWithoutChecks() : null);
+                }
+            });
+
+            if (columnModelsList.stream().anyMatch(model -> model.getDataQualityStatus() == null)) {
+                // the results not loaded yet, we need to wait until the queue is empty
+                CompletableFuture<Boolean> waitForLoadTasksFuture = this.tableStatusCache.getQueueEmptyFuture(TableStatusCache.EMPTY_QUEUE_WAIT_TIMEOUT_MS);
+
+                Flux<ColumnListModel> resultListFilledWithDelay = Mono.fromFuture(waitForLoadTasksFuture)
+                        .thenMany(Flux.fromIterable(columnModelsList)
+                                .map(columnListModel -> {
+                                    if (columnListModel.getDataQualityStatus() == null) {
+                                        CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                                                columnListModel.getConnectionName(), columnListModel.getTable());
+                                        TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
+                                        if (currentTableStatus != null) {
+                                            ColumnCurrentDataQualityStatusModel columnQualityStatusModel = currentTableStatus.getColumns().get(columnListModel.getColumnName());
+                                            columnListModel.setDataQualityStatus(columnQualityStatusModel != null ? columnQualityStatusModel.shallowCloneWithoutChecks() : null);
+                                        }
+                                    }
+                                    return columnListModel;
+                                }));
+
+                return new ResponseEntity<>(resultListFilledWithDelay, HttpStatus.OK); // 200
+            }
+        }
+
+        return new ResponseEntity<>(Flux.fromStream(columnModelsList.stream()), HttpStatus.OK); // 200
     }
 
     /**
