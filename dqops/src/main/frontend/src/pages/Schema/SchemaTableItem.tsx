@@ -30,19 +30,19 @@ export default function SchemaTableItem({
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const goToTable = (item: TableListModel) => {
+  const goToTable = (item: TableListModel, checkType?: CheckTypes) => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
-      checkTypes ?? CheckTypes.MONITORING,
+      checkType ?? CheckTypes.MONITORING,
       item.connection_name ?? '',
       item.target?.schema_name ?? '',
       item.target?.table_name ?? '',
       'detail'
     );
     dispatch(
-      addFirstLevelTab(checkTypes ?? CheckTypes.MONITORING, {
+      addFirstLevelTab(checkType ?? CheckTypes.MONITORING, {
         url,
         value: ROUTES.TABLE_LEVEL_VALUE(
-          checkTypes ?? CheckTypes.MONITORING,
+          checkType ?? CheckTypes.MONITORING,
           item.connection_name ?? '',
           item.target?.schema_name ?? '',
           item.target?.table_name ?? ''
@@ -137,7 +137,7 @@ export default function SchemaTableItem({
         <Button
           className="px-4 underline cursor-pointer text-sm py-0 text-start"
           label={item.target?.table_name}
-          onClick={() => goToTable(item)}
+          onClick={() => goToTable(item, checkTypes)}
         />
       </td>
       <td className="px-4 text-sm content-start pt-2">{item?.stage}</td>
@@ -154,10 +154,26 @@ export default function SchemaTableItem({
 
       <td>
         <div className="flex gap-x-2 items-center justify-center mr-3">
-          <SvgIcon name="data_sources" className="w-5 h-5" />
-          <SvgIcon name="profiling" className="w-5 h-5" />
-          <SvgIcon name="monitoring_checks" className="w-5 h-5" />
-          <SvgIcon name="partitioned_checks" className="w-5 h-5" />
+          <SvgIcon
+            name="data_sources"
+            className="w-5 h-5"
+            onClick={() => goToTable(item, CheckTypes.SOURCES)}
+          />
+          <SvgIcon
+            name="profiling"
+            className="w-5 h-5"
+            onClick={() => goToTable(item, CheckTypes.PROFILING)}
+          />
+          <SvgIcon
+            name="monitoring_checks"
+            className="w-5 h-5"
+            onClick={() => goToTable(item, CheckTypes.MONITORING)}
+          />
+          <SvgIcon
+            name="partitioned_checks"
+            className="w-5 h-5"
+            onClick={() => goToTable(item, CheckTypes.PARTITIONED)}
+          />
         </div>
       </td>
     </tr>
