@@ -161,7 +161,7 @@ const JobItem = ({
               )}
             </tr>
             <tr className="flex justify-between w-108">
-              <td>Last Changed</td>
+              <td>Last changed</td>
               <td>
                 {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
               </td>
@@ -174,6 +174,7 @@ const JobItem = ({
                   <td>
                     {key
                       .replace(/([a-z])([A-Z])/g, '$1 $2')
+                      .toLowerCase()
                       .replace(/^\w/, (c) => c.toUpperCase())}
                   </td>
                   <td>{renderValue(value)}</td>
@@ -233,6 +234,7 @@ const JobItem = ({
                   <td>
                     {key
                       .replace(/([a-z])([A-Z])/g, '$1 $2')
+                      .toLowerCase()
                       .replace(/^\w/, (c) => c.toUpperCase())}
                   </td>
                   <td>{renderValue(value)}</td>
@@ -251,11 +253,13 @@ const JobItem = ({
                   <td>{job?.parameters?.importTableParameters?.schemaName}</td>
                 </tr>
                 <tr className="flex justify-between w-108">
-                  <td className="px-2 capitalize align-top">Tables</td>
-                  <td className="px-2 max-w-76">
+                  <td className=" capitalize align-top">Tables</td>
+                  <td className=" max-w-76">
                     {job?.parameters?.importTableParameters?.tableNames?.map(
                       (item, index) => (
-                        <div key={index}>{item}</div>
+                        <div className="text-right" key={index}>
+                          {item}
+                        </div>
                       )
                     )}
                   </td>
@@ -265,7 +269,7 @@ const JobItem = ({
             {job?.errorMessage && (
               <>
                 <tr className="flex flex-col w-108">
-                  <td className="capitalize">Error Message:</td>
+                  <td className="capitalize">Error message:</td>
                   <td className="px-2 ">{job?.errorMessage}</td>
                 </tr>
               </>

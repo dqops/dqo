@@ -1,16 +1,16 @@
 import {
-  DqoJobHistoryEntryModel,
-  DqoJobHistoryEntryModelStatusEnum
-} from '../../../api';
-import React, { useState } from 'react';
-import SvgIcon from '../../SvgIcon';
-import {
   Accordion,
   AccordionBody,
   AccordionHeader
 } from '@material-tailwind/react';
 import moment from 'moment';
+import React, { useState } from 'react';
+import {
+  DqoJobHistoryEntryModel,
+  DqoJobHistoryEntryModelStatusEnum
+} from '../../../api';
 import { JobApiClient } from '../../../services/apiClient';
+import SvgIcon from '../../SvgIcon';
 
 const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
   const [open, setOpen] = useState(false);
@@ -100,7 +100,7 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
               </td>
             </tr>
             <tr>
-              <td className="px-2">Last Changed</td>
+              <td className="px-2">Last changed</td>
               <td className="px-2">
                 {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
               </td>
@@ -159,6 +159,26 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                 </tr>
               </>
             )}
+            {job?.parameters?.runChecksOnTableParameters && (
+              <>
+                <tr>
+                  <td className="px-2">Connection</td>
+                  <td className="px-2">
+                    {job?.parameters?.runChecksOnTableParameters.connection}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-2">Full table name</td>
+                  <td className="px-2">
+                    {job?.parameters?.runChecksOnTableParameters.table
+                      ?.schema_name +
+                      '.' +
+                      job?.parameters?.runChecksOnTableParameters.table
+                        ?.table_name}
+                  </td>
+                </tr>
+              </>
+            )}
             {job?.parameters?.collectStatisticsParameters
               ?.statistics_collector_search_filters &&
               Object.entries(
@@ -198,7 +218,7 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
             )}
             {job?.errorMessage && (
               <tr>
-                <td className="px-2 capitalize">Error Message</td>
+                <td className="px-2 capitalize">Error message</td>
                 <td className="px-2 max-w-76">{job?.errorMessage}</td>
               </tr>
             )}
