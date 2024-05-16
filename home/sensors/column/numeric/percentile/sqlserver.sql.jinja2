@@ -40,7 +40,7 @@ FROM(
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
         OVER (PARTITION BY
-            {%- if lib.data_groupings is none and lib.time_series is none -%}
+            {%- if lib.data_groupings is none and lib.time_series is none %}
                 NULL
             {%- else -%}
                 {{render_local_time_dimension_projection('analyzed_table')}}
