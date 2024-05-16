@@ -29,9 +29,9 @@ public enum SqlServerAuthenticationMode {
     active_directory_service_principal,
 
     /**
-     * Uses the DQOps default credential from USER_HOME/.credentials/Azure_default_credentials
-     * The authentication is acquired from the file.
+     * Uses the Azure Active Directory Default
+     * The authentication is ActiveDirectoryDefault
      */
-    @JsonProperty("default_credential")
-    default_credential,
+    @JsonProperty("active_directory_default")
+    active_directory_default
 }

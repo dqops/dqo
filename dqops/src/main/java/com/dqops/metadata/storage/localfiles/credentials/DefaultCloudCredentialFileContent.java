@@ -48,7 +48,8 @@ public final class DefaultCloudCredentialFileContent {
      * The initial content of the Azure_default_credentials shared secret file.
      */
     public static final String AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT =
-            "user=PLEASE_REPLACE_WITH_YOUR_AZURE_USER_OR_CLIENT_ID\n" +
-            "password=PLEASE_REPLACE_WITH_YOUR_AZURE_USER_PASSWORD_OR_CLIENT_SECRET\n" +
-            "authentication=PLEASE_REPLACE_WITH_YOUR_AZURE_AUTHENTICATION_METHOD\n";
+            "tenant_id=PLEASE_REPLACE_WITH_YOUR_AZURE_TENANT_ID\n" +
+            "client_id=PLEASE_REPLACE_WITH_YOUR_AZURE_CLIENT_ID\n" +
+            "client_secret=PLEASE_REPLACE_WITH_YOUR_AZURE_CLIENT_SECRET\n" +
+            "account_name=PLEASE_REPLACE_WITH_YOUR_AZURE_STORAGE_ACCOUNT_NAME";
 }

@@ -51,9 +51,10 @@ public class AzureCredentialsProviderImpl implements AzureCredentialsProvider {
                         ));
 
                 AzureCredential azureCredential = AzureCredential.builder()
-                        .user(credentialsMap.get(AzureCredentialSettingNames.AZURE_USER))
-                        .password(credentialsMap.get(AzureCredentialSettingNames.AZURE_PASSWORD))
-                        .authentication(credentialsMap.get(AzureCredentialSettingNames.AZURE_AUTHENTICATION_METHOD))
+                        .tenantId(credentialsMap.get(AzureCredentialSettingNames.AZURE_TENANT_ID))
+                        .clientId(credentialsMap.get(AzureCredentialSettingNames.AZURE_CLIENT_ID))
+                        .clientSecret(credentialsMap.get(AzureCredentialSettingNames.AZURE_CLIENT_SECRET))
+                        .accountName(credentialsMap.get(AzureCredentialSettingNames.AZURE_ACCOUNT_NAME))
                         .build();
 
                 return Optional.of(azureCredential);
