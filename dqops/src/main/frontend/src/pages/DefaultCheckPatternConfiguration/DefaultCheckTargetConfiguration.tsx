@@ -72,7 +72,7 @@ export default function DefaultCheckTargetConfiguration({
           />
         </div>
         <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
-          <span className="w-25"> Priority</span>
+          <span className="w-25">Disabled</span>
           <Checkbox
             checked={target?.disabled}
             onChange={(value) =>
@@ -85,40 +85,42 @@ export default function DefaultCheckTargetConfiguration({
       </div>
       <SectionWrapper title="Target filters" className="cursor-default">
         <div className="flex justify-between  text-black  ">
-          <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2 ">
+          <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2 ">
             <span className="w-25 ">Connection</span>
-            <div className="w-3/4">
+            <div className="w-full">
               <Input
                 value={
                   (target?.[targetSpecKey as keyof TTarget] as any)?.connection
                 }
-                className="w-11/12"
+                className="w-full"
                 onChange={(e) => onChangeTarget({ connection: e.target.value })}
               />
             </div>
           </div>
           <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
             <span className="w-25"> Table priority</span>
-            <Input
-              value={
-                (target?.[targetSpecKey as keyof TTarget] as any)
-                  ?.table_priority
-              }
-              onChange={(e) =>
-                onChangeTarget({
-                  table_priority:
-                    !isNaN(Number(e.target.value)) && e.target.value !== ''
-                      ? Number(e.target.value)
-                      : undefined
-                })
-              }
-            />
+            <div className="w-full">
+              <Input
+                value={
+                  (target?.[targetSpecKey as keyof TTarget] as any)
+                    ?.table_priority
+                }
+                onChange={(e) =>
+                  onChangeTarget({
+                    table_priority:
+                      !isNaN(Number(e.target.value)) && e.target.value !== ''
+                        ? Number(e.target.value)
+                        : undefined
+                  })
+                }
+              />
+            </div>
           </div>
         </div>
         <div className="flex justify-between  text-black  ">
-          <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+          <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2">
             <span className="w-25"> Table</span>
-            <div className="w-3/4">
+            <div className="w-full">
               <Input
                 value={(target?.[targetSpecKey as keyof TTarget] as any)?.table}
                 onChange={(e) => onChangeTarget({ table: e.target.value })}
@@ -128,21 +130,23 @@ export default function DefaultCheckTargetConfiguration({
           </div>
           <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
             <span className="w-25">Stage</span>
-            <Input
-              value={(target?.[targetSpecKey as keyof TTarget] as any)?.stage}
-              onChange={(e) => onChangeTarget({ stage: e.target.value })}
-            />
+            <div className="w-full">
+              <Input
+                value={(target?.[targetSpecKey as keyof TTarget] as any)?.stage}
+                onChange={(e) => onChangeTarget({ stage: e.target.value })}
+              />
+            </div>
           </div>
         </div>
         <div className="flex justify-between  text-black  ">
-          <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+          <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2">
             <span className="w-25"> Schema</span>
-            <div className="w-3/4">
+            <div className="w-full">
               <Input
                 value={
                   (target?.[targetSpecKey as keyof TTarget] as any)?.schema
                 }
-                className="w-11/12"
+                className="w-full"
                 onChange={(e) => onChangeTarget({ schema: e.target.value })}
               />
             </div>
@@ -150,72 +154,80 @@ export default function DefaultCheckTargetConfiguration({
 
           <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
             <span className="w-25"> Label</span>
-            <Input
-              value={(target?.[targetSpecKey as keyof TTarget] as any)?.label}
-              onChange={(e) => onChangeTarget({ label: e.target.value })}
-            />
+            <div className="w-full">
+              <Input
+                value={(target?.[targetSpecKey as keyof TTarget] as any)?.label}
+                onChange={(e) => onChangeTarget({ label: e.target.value })}
+              />
+            </div>
           </div>
         </div>
 
         {type === 'column' && (
           <>
             <div className="flex justify-between  text-black  ">
-              <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+              <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2">
                 <span className="w-25"> Column</span>
-                <Input
-                  value={
-                    (target?.[targetSpecKey as keyof TTarget] as any)?.[
-                      'column' as keyof TTargetSpec
-                    ]
-                  }
-                  onChange={(e) =>
-                    onChangeTarget({
-                      ['column' as keyof TTargetSpec]: e.target.value
-                    })
-                  }
-                />
+                <div className="w-full">
+                  <Input
+                    value={
+                      (target?.[targetSpecKey as keyof TTarget] as any)?.[
+                        'column' as keyof TTargetSpec
+                      ]
+                    }
+                    onChange={(e) =>
+                      onChangeTarget({
+                        ['column' as keyof TTargetSpec]: e.target.value
+                      })
+                    }
+                  />
+                </div>
               </div>
               <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
                 <span className="w-25"> Data type</span>
-                <Input
-                  value={
-                    (target?.[targetSpecKey as keyof TTarget] as any)?.[
-                      'data_type' as keyof TTargetSpec
-                    ]
-                  }
-                  onChange={(e) =>
-                    onChangeTarget({
-                      ['data_type' as keyof TTargetSpec]: e.target.value
-                    })
-                  }
-                />
+                <div className="w-full">
+                  <Input
+                    value={
+                      (target?.[targetSpecKey as keyof TTarget] as any)?.[
+                        'data_type' as keyof TTargetSpec
+                      ]
+                    }
+                    onChange={(e) =>
+                      onChangeTarget({
+                        ['data_type' as keyof TTargetSpec]: e.target.value
+                      })
+                    }
+                  />
+                </div>
               </div>
             </div>
             <div className="flex justify-between  text-black  ">
-              <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+              <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2">
                 <span className="w-25"> Data type category</span>
-                <Select
-                  options={[
-                    { label: '', value: '' },
-                    ...Object.keys(
-                      TargetColumnPatternSpecDataTypeCategoryEnum
-                    ).map((x) => ({
-                      label: x,
-                      value: x
-                    }))
-                  ]}
-                  value={
-                    (target?.[targetSpecKey as keyof TTarget] as any)?.[
-                      'data_type_category' as keyof TTargetSpec
-                    ]
-                  }
-                  onChange={(value) =>
-                    onChangeTarget({
-                      ['data_type_category' as keyof TTargetSpec]: value
-                    })
-                  }
-                  className="w-49"
-                />
+                <div className="w-full">
+                  <Select
+                    options={[
+                      { label: '', value: '' },
+                      ...Object.keys(
+                        TargetColumnPatternSpecDataTypeCategoryEnum
+                      ).map((x) => ({
+                        label: x,
+                        value: x
+                      }))
+                    ]}
+                    value={
+                      (target?.[targetSpecKey as keyof TTarget] as any)?.[
+                        'data_type_category' as keyof TTargetSpec
+                      ]
+                    }
+                    onChange={(value) =>
+                      onChangeTarget({
+                        ['data_type_category' as keyof TTargetSpec]: value
+                      })
+                    }
+                    className="w-49"
+                  />
+                </div>
               </div>
             </div>
           </>
