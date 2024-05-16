@@ -31644,6 +31644,7 @@ definitions:
         - "connection_string"
         - "credential_chain"
         - "service_principal"
+        - "default_credentials"
       user:
         type: "string"
         description: "DuckDB user name for a remote storage type. The value can be\
@@ -33850,7 +33851,7 @@ definitions:
         - "sql_password"
         - "active_directory_password"
         - "active_directory_service_principal"
-        - "default_credential"
+        - "active_directory_default"
       properties:
         type: "object"
         description: "A dictionary of custom JDBC parameters that are added to the\
