@@ -44,7 +44,7 @@ export default function SchemaTableItemDimensions({
   return (
     <>
       {' '}
-      <td className="pl-4 content-start pt-2">
+      <td className="pl-4">
         <div
           className={clsx(
             'w-13 h-6 text-center flex items-center justify-center',
@@ -78,10 +78,7 @@ export default function SchemaTableItemDimensions({
           }
         );
         return (
-          <td
-            key={`Dimensionindex${dimType}`}
-            className="pl-4 content-start pt-2"
-          >
+          <td key={`Dimensionindex${dimType}`} className="pl-4">
             <Tooltip
               content={renderSecondLevelTooltip(
                 (item.data_quality_status?.dimensions ?? {})?.[
@@ -109,10 +106,7 @@ export default function SchemaTableItemDimensions({
       ).map((dimensionKey: string | undefined, dimIndex) => {
         if (dimensionKey) {
           return (
-            <td
-              key={`DimensionTooltipindex${dimIndex}`}
-              className="pl-4 content-start pt-2"
-            >
+            <td key={`DimensionTooltipindex${dimIndex}`} className="pl-4">
               <Tooltip
                 content={renderSecondLevelTooltip(
                   (item.data_quality_status?.dimensions ?? {})?.[
