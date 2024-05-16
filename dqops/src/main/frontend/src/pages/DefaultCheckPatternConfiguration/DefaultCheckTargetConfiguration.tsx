@@ -10,6 +10,7 @@ import Checkbox from '../../components/Checkbox';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
 import Input from '../../components/Input';
 import Select from '../../components/Select';
+import TextArea from '../../components/TextArea';
 
 type TTarget =
   | DefaultColumnChecksPatternListModel
@@ -64,12 +65,14 @@ export default function DefaultCheckTargetConfiguration({
         </div>
       </div>
       <div className="flex justify-between pb-6 text-black text-sm">
-        <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+        <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2">
           <span className="w-30">Description</span>
-          <Input
-            value={target?.description}
-            onChange={(e) => onChangeTarget({ description: e.target.value })}
-          />
+          <div className="w-full">
+            <TextArea
+              value={target?.description}
+              onChange={(e) => onChangeTarget({ description: e.target.value })}
+            />
+          </div>
         </div>
         <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
           <span className="w-25">Disabled</span>
