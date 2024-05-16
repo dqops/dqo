@@ -6,7 +6,7 @@
 
 {%- macro render_else() -%}
     {%- if parameters.expected_values|length == 0 -%}
-        0.0
+        MAX(0.0)
     {%- else -%}
           100.0 * SUM(
             CASE
