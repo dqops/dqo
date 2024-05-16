@@ -180,10 +180,10 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') %}
+{% macro render_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ', set_leading_comma=true) %}
     {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
         {%- for attribute in data_groupings -%}
-            {{ ',' }}
+            {{ "" if loop.index == 1 and set_leading_comma == false else "," }}
             {%- with data_grouping_level = data_groupings[attribute] -%}
                 {%- if data_grouping_level.source == 'tag' -%}
                     {{ eol() }}{{ indentation }}{{ make_text_constant(data_grouping_level.tag) }}
@@ -322,7 +322,7 @@
                 {{ table_alias_prefix }}.{{ quote_identifier(data_groupings[attribute].column) }}
         {%- endfor -%}
     {%- endif -%}
-    {%- if time_series is not none and time_series.mode != 'current_time' -%}
+    {%- if time_series is not none and time_series.mode is not none and time_series.mode != 'current_time' -%}
         {%- if (data_groupings is not none and (data_groupings | length()) > 0) -%}
             {{ ', ' }}
         {%- endif -%}
@@ -331,7 +331,7 @@
 {% endmacro %}
 
 {% macro render_group_by(table_alias_prefix = 'analyzed_table', indentation = '') %}
-    {%- if (data_groupings is not none and (data_groupings | length()) > 0) or (time_series.mode is not none and time_series.mode != 'current_time') %}
+    {%- if (data_groupings is not none and (data_groupings | length()) > 0) or (time_series is not none and time_series.mode is not none and time_series.mode != 'current_time') %}
 {{ indentation }}GROUP BY {{ render_grouping_column_names(table_alias_prefix) }}
     {%- endif -%}
 {% endmacro %}
@@ -345,7 +345,7 @@
                 {{ attribute }}
         {%- endfor -%}
     {%- endif -%}
-    {%- if time_series is not none and time_series.mode != 'current_time' -%}
+    {%- if time_series is not none and time_series.mode is not none and time_series.mode != 'current_time' -%}
         {{ render_time_dimension_expression(table_alias_prefix) }}
     {%- elif (data_groupings is not none and (data_groupings | length()) > 0) %}
         {{ ', ' }}
@@ -353,7 +353,7 @@
 {% endmacro %}
 
 {% macro render_order_by(indentation = '') %}
-    {%- if (data_groupings is not none and (data_groupings | length()) > 0) or (time_series.mode is not none and time_series.mode != 'current_time')  %}
+    {%- if (data_groupings is not none and (data_groupings | length()) > 0) or (time_series is not none and time_series.mode is not none and time_series.mode != 'current_time')  %}
 {{ indentation }}ORDER BY {{ render_ordering_column_names() }}
     {% endif %}
 {% endmacro %}
