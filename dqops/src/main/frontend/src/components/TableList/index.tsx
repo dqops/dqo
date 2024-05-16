@@ -152,7 +152,12 @@ export default function index({
       label: x,
       value: x,
       sortable: false
-    }))
+    })),
+    {
+      label: 'Actions',
+      value: 'actions',
+      sortable: false
+    }
   ];
 
   const prepareLabel = (label: string | undefined) => {

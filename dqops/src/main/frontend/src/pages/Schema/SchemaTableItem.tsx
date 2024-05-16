@@ -8,6 +8,7 @@ import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import SchemaTableItemDimensions from './SchemaTableItemDimensions';
+
 type TTableWithSchema = TableListModel & { schema?: string };
 
 export default function SchemaTableItem({
@@ -111,7 +112,7 @@ export default function SchemaTableItem({
   };
 
   return (
-    <tr className="text-sm">
+    <tr className="text-sm my-3">
       {(!checkTypes || !connection || !schema) && (
         <>
           {!connection && (
@@ -150,6 +151,15 @@ export default function SchemaTableItem({
           <SvgIcon name="hourglass" className="w-4 h-4" />
         </td>
       )}
+
+      <td>
+        <div className="flex gap-x-2 items-center justify-center mr-3">
+          <SvgIcon name="data_sources" className="w-5 h-5" />
+          <SvgIcon name="profiling" className="w-5 h-5" />
+          <SvgIcon name="monitoring_checks" className="w-5 h-5" />
+          <SvgIcon name="partitioned_checks" className="w-5 h-5" />
+        </div>
+      </td>
     </tr>
   );
 }
