@@ -21,8 +21,6 @@ import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
-import com.dqops.metadata.storage.localfiles.credentials.azure.AzureCredential;
 import com.dqops.metadata.storage.localfiles.credentials.azure.AzureCredentialsProvider;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
@@ -35,7 +33,6 @@ import tech.tablesaw.api.Table;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -118,8 +115,6 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
         switch (authenticationMode){
             case sql_password:
             case active_directory_password:
-            case active_directory_service_principal:
-
                 String userName = this.getSecretValueProvider().expandValue(sqlserverSpec.getUser(), secretValueLookupContext);
                 hikariConfig.setUsername(userName);
 
@@ -130,34 +125,36 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
                 dataSourceProperties.put("authentication", authenticationValue);
 
                 break;
-            case default_credential:
-
-                Optional<AzureCredential> azureCredential = azureCredentialsProvider.provideCredentials(secretValueLookupContext);
-                if(azureCredential.isPresent()
-                        && !azureCredential.get().getUser().isEmpty()
-                        && !azureCredential.get().getPassword().isEmpty()
-                        && !azureCredential.get().getAuthentication().isEmpty()
-                ){
-                    String defaultUserName = this.getSecretValueProvider().expandValue(azureCredential.get().getUser(), secretValueLookupContext);
-                    hikariConfig.setUsername(defaultUserName);
-
-                    String defaultPassword = this.getSecretValueProvider().expandValue(azureCredential.get().getPassword(), secretValueLookupContext);
-                    hikariConfig.setPassword(defaultPassword);
-
-                    dataSourceProperties.put("authentication", azureCredential.get().getAuthentication());
-
-                } else {
-                    // In case of authentication from local .azure folder (azure cli is installed, executed: az login and az account get-access-token), it got two issues:
-                    // 1. Token based login to Azure SQL end up with the error: Login failed for user '<token-identified principal>'. Incorrect or invalid token.
-                    // 2. Token generation has to be done out of the createHikariConfig method due to block method
-
-                    // TokenRequestContext tokenRequestContext = new TokenRequestContext().addScopes("https://management.azure.com/.default");
-                    // TokenCredential dacWithUserAssignedManagedIdentity = new DefaultAzureCredentialBuilder().build();
-                    // Mono<AccessToken> accessTokenMono = dacWithUserAssignedManagedIdentity.getToken(tokenRequestContext);
-                    // dataSourceProperties.put("accessToken", accessTokenMono.block().getToken());
-
-                    new RuntimeException("Can't use default credentials set in " + DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME + " file.");
-                }
+            case active_directory_service_principal:
+                // the below code use the user password instead of service principal tenant id, etc...
+//                Optional<AzureCredential> azureCredential = azureCredentialsProvider.provideCredentials(secretValueLookupContext);
+//                if(azureCredential.isPresent()
+//                        && !azureCredential.get().getUser().isEmpty()
+//                        && !azureCredential.get().getPassword().isEmpty()
+//                        && !azureCredential.get().getAuthentication().isEmpty()
+//                ){
+//                    String defaultUserName = this.getSecretValueProvider().expandValue(azureCredential.get().getUser(), secretValueLookupContext);
+//                    hikariConfig.setUsername(defaultUserName);
+//
+//                    String defaultPassword = this.getSecretValueProvider().expandValue(azureCredential.get().getPassword(), secretValueLookupContext);
+//                    hikariConfig.setPassword(defaultPassword);
+//
+//                } else {
+//                    // In case of authentication from local .azure folder (azure cli is installed, executed: az login and az account get-access-token), it got two issues:
+//                    // 1. Token based login to Azure SQL end up with the error: Login failed for user '<token-identified principal>'. Incorrect or invalid token.
+//                    // 2. Token generation has to be done out of the createHikariConfig method due to block method
+//
+//                    // TokenRequestContext tokenRequestContext = new TokenRequestContext().addScopes("https://management.azure.com/.default");
+//                    // TokenCredential dacWithUserAssignedManagedIdentity = new DefaultAzureCredentialBuilder().build();
+//                    // Mono<AccessToken> accessTokenMono = dacWithUserAssignedManagedIdentity.getToken(tokenRequestContext);
+//                    // dataSourceProperties.put("accessToken", accessTokenMono.block().getToken());
+//
+//                    new RuntimeException("Can't use default credentials set in " + DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME + " file.");
+//                }
+                throw new RuntimeException("active_directory_service_principal is not supported");
+            case active_directory_default:
+                String authenticationValueString = getJdbcAuthenticationValue(authenticationMode);
+                dataSourceProperties.put("authentication", authenticationValueString);
                 break;
             default:
                 throw new RuntimeException("Given enum is not supported : " + authenticationMode);
@@ -177,9 +174,9 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
             case sql_password:                          return "SqlPassword";
             case active_directory_password:             return "ActiveDirectoryPassword";
             case active_directory_service_principal:    return "ActiveDirectoryServicePrincipal";
-            default: new RuntimeException("Given enum is not supported : " + authenticationMode);
+            case active_directory_default:              return "ActiveDirectoryDefault";
+            default: throw new RuntimeException("Given enum is not supported : " + authenticationMode);
         }
-        return null;
     }
 
     /**

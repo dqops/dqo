@@ -20,10 +20,11 @@ import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.connectors.AbstractSqlConnectionProvider;
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
+import com.dqops.connectors.storage.azure.AzureAuthenticationMode;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
-import org.apache.parquet.Strings;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -141,7 +142,7 @@ public class DuckdbConnectionProvider extends AbstractSqlConnectionProvider {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--duckdb-directories");
             }
-            duckdbSpec.setDirectoriesString(terminalReader.prompt("Virtual schema name and path in a pattern: schema=path. For multiple use pattern: schema=path1,schema=path2", null, false));
+            duckdbSpec.setDirectoriesString(terminalReader.prompt("Virtual schema name and path in the pattern: schema=path. For multiple paths use another schemas as in pattern: schema1=path1,schema2=path2", null, false));
         }
 
         Map<String, String> directories = parseDirectoriesString(duckdbSpec.getDirectoriesString());
