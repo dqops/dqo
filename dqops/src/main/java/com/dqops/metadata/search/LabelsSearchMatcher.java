@@ -134,6 +134,9 @@ public class LabelsSearchMatcher {
 		if (requiredLabels == null) {
 			return true;
 		}
+		if (labels == null && requiredLabels.length > 0) {
+			return false;
+		}
 		for (String label : requiredLabels) {
 			if (!containsPattern(label, labels)) {
 				return false;

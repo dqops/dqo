@@ -272,7 +272,7 @@ public class SearchController {
         columnSearchFilters.setSchemaTableName(tableNameFilter + "." + schemaNameFilter);
 
         if (label.isPresent() && label.get().size() > 0) {
-            columnSearchFilters.setLabels(label.get().toArray(String[]::new));
+            columnSearchFilters.setColumnLabels(label.get().toArray(String[]::new));
         }
 
         columnSearchFilters.setColumnName(column.orElse(null));

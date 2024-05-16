@@ -264,6 +264,10 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
+        if (this.filters.getColumnLabels() != null && !LabelsSearchMatcher.hasAllLabels(this.filters.getColumnLabels(), columnSpec.getLabels())) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
         String columnNameFilter = this.filters.getColumnName();
         if (Strings.isNullOrEmpty(columnNameFilter)) {
             parameter.getNodes().add(columnSpec);
