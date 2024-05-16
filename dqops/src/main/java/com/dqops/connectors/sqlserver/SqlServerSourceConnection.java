@@ -21,7 +21,6 @@ import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.metadata.storage.localfiles.credentials.azure.AzureCredentialsProvider;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +42,6 @@ import java.util.stream.Collectors;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
 
-    private final AzureCredentialsProvider azureCredentialsProvider;
-
     /**
      * Injection constructor for the MS SQL Server connection.
      * @param jdbcConnectionPool Jdbc connection pool.
@@ -53,10 +50,8 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
     @Autowired
     public SqlServerSourceConnection(JdbcConnectionPool jdbcConnectionPool,
                                      SecretValueProvider secretValueProvider,
-                                     SqlServerConnectionProvider sqlServerConnectionProvider,
-                                     AzureCredentialsProvider azureCredentialsProvider) {
+                                     SqlServerConnectionProvider sqlServerConnectionProvider) {
         super(jdbcConnectionPool, secretValueProvider, sqlServerConnectionProvider);
-        this.azureCredentialsProvider = azureCredentialsProvider;
     }
 
     /**

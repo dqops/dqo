@@ -48,7 +48,7 @@ public class AzureTablesLister extends RemoteTablesLister {
                         .getBlobContainerClient(pathComponents.getContainerName());
                 break;
             case service_principal:
-
+            case default_credentials:
                 ClientSecretCredential clientSecretCredential = new ClientSecretCredentialBuilder()
                         .tenantId(duckdb.getTenantId())
                         .clientId(duckdb.getClientId())
