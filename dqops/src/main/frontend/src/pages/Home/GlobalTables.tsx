@@ -45,11 +45,11 @@ export default function GlobalTables() {
     setLabels(arr);
   };
 
-  const getTables = (labels: string[] = []) => {
+  const getTables = async (labels: string[] = []) => {
     const addPrefix = (str: string) => {
       return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
     };
-    return SearchApiClient.findTables(
+    const res = await SearchApiClient.findTables(
       addPrefix(searchFilters.connection ?? ''),
       addPrefix(searchFilters.schema ?? ''),
       addPrefix(searchFilters.table ?? ''),
@@ -57,15 +57,14 @@ export default function GlobalTables() {
       filters.page,
       filters.pageSize,
       filters.checkType
-    ).then((res) => {
-      const arr: TTableWithSchema[] = [];
-      res.data.forEach((item) => {
-        const jItem = { ...item, schema: item.target?.schema_name };
-        arr.push(jItem);
-      });
-      setTables(arr);
-      return arr;
+    );
+    const arr: TTableWithSchema[] = [];
+    res.data.forEach((item) => {
+      const jItem = { ...item, schema: item.target?.schema_name };
+      arr.push(jItem);
     });
+    setTables(arr);
+    return arr;
   };
 
   useEffect(() => {
@@ -78,9 +77,12 @@ export default function GlobalTables() {
       });
     };
 
-    getTables().then((res) => {
-      refetchTables(res);
-    });
+    const fetchData = async () => {
+      const tables = await getTables();
+      refetchTables(tables);
+    };
+
+    fetchData();
     getLabels();
   }, [filters]);
 
@@ -104,13 +106,13 @@ export default function GlobalTables() {
   }, [searchFilters]);
 
   const refetchTables = (tables?: TableListModel[]) => {
-    tables?.forEach((table) => {
-      if (!table?.data_quality_status) {
-        setTimeout(() => {
-          getTables();
-        }, 5000);
-      }
-    });
+    const shouldRefetch = tables?.some((table) => !table?.data_quality_status);
+
+    if (shouldRefetch) {
+      setTimeout(() => {
+        getTables();
+      }, 5000);
+    }
   };
 
   return (
