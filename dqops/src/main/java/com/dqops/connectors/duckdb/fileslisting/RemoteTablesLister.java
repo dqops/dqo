@@ -4,6 +4,7 @@ import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.metadata.sources.fileformat.CompressionType;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,7 +51,8 @@ public abstract class RemoteTablesLister implements TablesLister {
     private boolean isFolderOrFileOfValidExtension(String storageObjectName, DuckdbFilesFormatType filesType){
         String sourceFilesTypeString = filesType.toString();
         return storageObjectName.toLowerCase().endsWith("." + sourceFilesTypeString)
-                || storageObjectName.toLowerCase().endsWith(".gz")
+                || storageObjectName.toLowerCase().endsWith(CompressionType.gzip.getFileExtension())
+                || storageObjectName.toLowerCase().endsWith(CompressionType.zstd.getFileExtension())
                 || storageObjectName.endsWith("/");
     }
 

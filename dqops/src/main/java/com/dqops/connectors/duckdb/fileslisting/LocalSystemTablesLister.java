@@ -4,6 +4,7 @@ import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.metadata.sources.fileformat.CompressionType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
@@ -64,7 +65,8 @@ public class LocalSystemTablesLister implements TablesLister {
 
         String sourceFilesTypeString = filesType.toString();
         return fileName.toLowerCase().endsWith("." + sourceFilesTypeString)
-                || fileName.toLowerCase().endsWith(".gz")
+                || fileName.toLowerCase().endsWith(CompressionType.gzip.getFileExtension())
+                || fileName.toLowerCase().endsWith(CompressionType.zstd.getFileExtension())
                 || file.isDirectory();
     }
 

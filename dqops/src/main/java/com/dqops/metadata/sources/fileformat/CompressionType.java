@@ -16,5 +16,14 @@ public enum CompressionType {
     gzip,
 
     @JsonProperty("zstd")
-    zstd
+    zstd;
+
+    public String getFileExtension(){
+        switch (this){
+            case gzip: return ".gz";
+            case zstd: return ".zst";
+            default: return null;
+        }
+    }
+
 }
