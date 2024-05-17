@@ -140,7 +140,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*DefaultColumnChecksPatternListModel*](./default_column_check_patterns.md#defaultcolumncheckspatternlistmodel)|The listing model of column-level default check patterns that is returned by the REST API.|
 |[*ColumnMonitoringCheckCategoriesSpec*](./default_column_check_patterns.md#columnmonitoringcheckcategoriesspec)|Container of column level monitoring, divided by the time window (daily, monthly, etc.)|
 |[*ColumnPartitionedCheckCategoriesSpec*](./default_column_check_patterns.md#columnpartitionedcheckcategoriesspec)|Container of column level partitioned checks, divided by the time window (daily, monthly, etc.)|
-|[*ColumnDefaultChecksPatternSpec*](./default_column_check_patterns.md#columndefaultcheckspatternspec)|The default configuration of column-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on columns.|
+|[*ColumnDefaultChecksPatternSpec*](./default_column_check_patterns.md#columndefaultcheckspatternspec)|The default configuration of column-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on columns. This configuration serves as a data quality policy that defines the data quality checks that are verified on matching columns.|
 |[*DefaultColumnChecksPatternModel*](./default_column_check_patterns.md#defaultcolumncheckspatternmodel)|Default column-level checks pattern model that is returned by the REST API. Describes a configuration of data quality checks for a named pattern. DQOps applies these checks on columns that match the filter.|
 
 
@@ -152,7 +152,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*DefaultTableChecksPatternListModel*](./default_table_check_patterns.md#defaulttablecheckspatternlistmodel)|The listing model of table-level default check patterns that is returned by the REST API.|
 |[*TableMonitoringCheckCategoriesSpec*](./default_table_check_patterns.md#tablemonitoringcheckcategoriesspec)|Container of table level monitoring, divided by the time window (daily, monthly, etc.)|
 |[*TablePartitionedCheckCategoriesSpec*](./default_table_check_patterns.md#tablepartitionedcheckcategoriesspec)|Container of table level partitioned checks, divided by the time window (daily, monthly, etc.)|
-|[*TableDefaultChecksPatternSpec*](./default_table_check_patterns.md#tabledefaultcheckspatternspec)|The default configuration of table-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on tables.|
+|[*TableDefaultChecksPatternSpec*](./default_table_check_patterns.md#tabledefaultcheckspatternspec)|The default configuration of table-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on tables. This configuration serves as a data quality policy that defines the data quality checks that are verified on matching tables.|
 |[*DefaultTableChecksPatternModel*](./default_table_check_patterns.md#defaulttablecheckspatternmodel)|Default table-level checks pattern model that is returned by the REST API. Describes a configuration of data quality checks for a named pattern. DQOps applies these checks on tables that match the filter.|
 
 

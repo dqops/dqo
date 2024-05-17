@@ -71,19 +71,22 @@ export default function ConnectionTables() {
   };
 
   const refetchTables = (tables?: TableListModel[]) => {
-    tables?.forEach((table) => {
-      if (!table?.data_quality_status) {
-        setTimeout(() => {
-          getTables();
-        }, 5000);
-      }
-    });
+    const shouldRefetch = tables?.some((table) => !table?.data_quality_status);
+
+    if (shouldRefetch) {
+      setTimeout(() => {
+        getTables();
+      }, 5000);
+    }
   };
 
   useEffect(() => {
-    getTables().then((res) => {
-      refetchTables(res);
-    });
+    const fetchData = async () => {
+      const tables = await getTables();
+      refetchTables(tables);
+    };
+
+    fetchData();
     const getLabels = () => {
       LabelsApiClient.getAllLabelsForTables().then((res) => {
         const array: TLabel[] = res.data.map((item) => {

@@ -170,12 +170,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table.`target_column`) AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                MIN(analyzed_table.`target_column`) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Databricks"
 
@@ -196,12 +192,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table.`target_column`) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "DuckDB"
 
@@ -222,12 +214,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
             FROM  AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "MySQL"
 
@@ -248,12 +236,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table.`target_column`) AS actual_value,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Oracle"
 
@@ -280,18 +264,12 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                time_period,
-                time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    original_table.*
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "PostgreSQL"
 
@@ -312,12 +290,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Presto"
 
@@ -345,18 +319,12 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                time_period,
-                time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
                 FROM (
                     SELECT
-                        original_table.*,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                        original_table.*
                     FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Redshift"
 
@@ -377,12 +345,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Snowflake"
 
@@ -403,12 +367,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Spark"
 
@@ -429,12 +389,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table.`target_column`) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "SQL Server"
 
@@ -455,9 +411,7 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table.[target_column]) AS actual_value,
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                MIN(analyzed_table.[target_column]) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -486,18 +440,12 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                time_period,
-                time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
                 FROM (
                     SELECT
-                        original_table.*,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                        original_table.*
                     FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     
 ___
@@ -662,12 +610,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table.`target_column`) AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                MIN(analyzed_table.`target_column`) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Databricks"
 
@@ -688,12 +632,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table.`target_column`) AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "DuckDB"
 
@@ -714,12 +654,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
             FROM  AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "MySQL"
 
@@ -740,12 +676,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table.`target_column`) AS actual_value,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+                MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Oracle"
 
@@ -772,18 +704,12 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                time_period,
-                time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    original_table.*
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "PostgreSQL"
 
@@ -804,12 +730,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Presto"
 
@@ -837,18 +759,12 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                time_period,
-                time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
                 FROM (
                     SELECT
-                        original_table.*,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                        original_table.*
                     FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Redshift"
 
@@ -869,12 +785,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Snowflake"
 
@@ -895,12 +807,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-                TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Spark"
 
@@ -921,12 +829,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table.`target_column`) AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "SQL Server"
 
@@ -947,9 +851,7 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table.[target_column]) AS actual_value,
-                CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
-                CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+                MIN(analyzed_table.[target_column]) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -978,18 +880,12 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                time_period,
-                time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
                 FROM (
                     SELECT
-                        original_table.*,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                        original_table.*
                     FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     
 ___
@@ -1154,12 +1050,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table.`target_column`) AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                MIN(analyzed_table.`target_column`) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Databricks"
 
@@ -1180,12 +1072,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table.`target_column`) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "DuckDB"
 
@@ -1206,12 +1094,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
             FROM  AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "MySQL"
 
@@ -1232,12 +1116,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table.`target_column`) AS actual_value,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Oracle"
 
@@ -1264,18 +1144,12 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                time_period,
-                time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    original_table.*
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "PostgreSQL"
 
@@ -1296,12 +1170,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Presto"
 
@@ -1329,18 +1199,12 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                time_period,
-                time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
                 FROM (
                     SELECT
-                        original_table.*,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                        original_table.*
                     FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Redshift"
 
@@ -1361,12 +1225,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Snowflake"
 
@@ -1387,12 +1247,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Spark"
 
@@ -1413,12 +1269,8 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table.`target_column`) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "SQL Server"
 
@@ -1439,9 +1291,7 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table.[target_column]) AS actual_value,
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                MIN(analyzed_table.[target_column]) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -1470,18 +1320,12 @@ spec:
 
             ```sql
             SELECT
-                MIN(analyzed_table."target_column") AS actual_value,
-                time_period,
-                time_period_utc
+                MIN(analyzed_table."target_column") AS actual_value
                 FROM (
                     SELECT
-                        original_table.*,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                        original_table.*
                     FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     
 ___

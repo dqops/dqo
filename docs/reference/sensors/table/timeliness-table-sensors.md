@@ -1342,7 +1342,7 @@ The templates used to generate the SQL query for each data source supported by D
         CAST(DATE_DIFF(
             'MILLISECOND',
             MAX(
-                SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             CURRENT_TIMESTAMP
         ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
@@ -1550,7 +1550,7 @@ The templates used to generate the SQL query for each data source supported by D
         CAST(DATE_DIFF(
             'MILLISECOND',
             MAX(
-                SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             CURRENT_TIMESTAMP
         ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0

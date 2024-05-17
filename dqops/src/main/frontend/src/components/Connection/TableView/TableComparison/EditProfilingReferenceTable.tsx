@@ -452,6 +452,8 @@ export const EditProfilingReferenceTable = ({
           connection,
           schema,
           table,
+          false,
+          undefined,
           { validateStatus: validate404Status }
         );
         setComparedColumnOptions(
@@ -480,6 +482,8 @@ export const EditProfilingReferenceTable = ({
             parameters.refConnection ?? '',
             parameters.refSchema ?? '',
             parameters.refTable ?? '',
+            false,
+            undefined,
             { validateStatus: validate404Status }
           );
           setColumnOptions(

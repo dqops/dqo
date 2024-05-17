@@ -188,6 +188,16 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
     }
 
     /**
+     * Creates a shallow clone of the object, without the dictionary of check results.
+     * @return Shallow clone, without the check results.
+     */
+    public ColumnCurrentDataQualityStatusModel shallowCloneWithoutChecks() {
+        ColumnCurrentDataQualityStatusModel cloned = this.clone();
+        cloned.checks = null;
+        return cloned;
+    }
+
+    /**
      * Creates a deep clone of the table status model, preserving only the checks for an expected check type.
      * All scores and the data quality KPI is recalculated for the checks that left.
      * @param checkFilter Check filter that filters the checks that should be preserved.

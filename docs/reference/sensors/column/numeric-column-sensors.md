@@ -3658,9 +3658,11 @@ The templates used to generate the SQL query for each data source supported by D
     {%- endmacro -%}
     
     SELECT
-        MAX(nested_table.actual_value) AS actual_value,
+        MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+        {% if lib.time_series is not none -%}
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
+        {% endif %}
         {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
@@ -3668,6 +3670,9 @@ The templates used to generate the SQL query for each data source supported by D
             ({{ lib.render_target_column('analyzed_table')}}),
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
+                {% if lib.data_groupings is none and lib.time_series is none -%}
+                    NULL
+                {% endif %}
                 {{render_local_time_dimension_projection('analyzed_table')}}
                 {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
@@ -3705,9 +3710,11 @@ The templates used to generate the SQL query for each data source supported by D
     {%- endmacro -%}
     
     SELECT
-        MAX(nested_table.actual_value) AS actual_value,
+        MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+        {% if lib.time_series is not none -%}
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
+        {% endif %}
         {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
@@ -3715,6 +3722,9 @@ The templates used to generate the SQL query for each data source supported by D
             ({{ lib.render_target_column('analyzed_table')}}),
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
+                {% if lib.data_groupings is none and lib.time_series is none -%}
+                    NULL
+                {% endif %}
                 {{render_local_time_dimension_projection('analyzed_table')}}
                 {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
@@ -3803,9 +3813,11 @@ The templates used to generate the SQL query for each data source supported by D
     {%- endmacro -%}
     
     SELECT
-        MAX(nested_table.actual_value) AS actual_value,
+        MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+        {% if lib.time_series is not none -%}
         nested_table."time_period" AS time_period,
         nested_table."time_period_utc" AS time_period_utc
+        {% endif %}
         {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
@@ -3814,6 +3826,9 @@ The templates used to generate the SQL query for each data source supported by D
                 {{ parameters.percentile_value }}
             )
             OVER (PARTITION BY
+                {% if lib.data_groupings is none and lib.time_series is none -%}
+                    NULL
+                {% endif %}
                 {{render_local_time_dimension_projection('analyzed_table')}}
                 {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
@@ -3881,9 +3896,11 @@ The templates used to generate the SQL query for each data source supported by D
     {%- endmacro -%}
     
     SELECT
-        MAX(nested_table.actual_value) AS actual_value,
+        MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+        {% if lib.time_series is not none -%}
         nested_table.`time_period` AS time_period,
         nested_table.`time_period_utc` AS time_period_utc
+        {% endif %}
         {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
@@ -3891,6 +3908,9 @@ The templates used to generate the SQL query for each data source supported by D
             ({{ lib.render_target_column('analyzed_table')}}),
             {{ parameters.percentile_value }})
             OVER (PARTITION BY
+                {% if lib.data_groupings is none and lib.time_series is none -%}
+                    NULL
+                {% endif %}
                 {{render_local_time_dimension_projection('analyzed_table')}}
                 {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value
@@ -3908,8 +3928,8 @@ The templates used to generate the SQL query for each data source supported by D
     {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
         {%- if time_series is not none -%}
             {{- lib.eol() -}}
-            {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
-            {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) }}) AS DATETIME)
+            {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
+            {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
         {%- endif -%}
     {%- endmacro -%}
     
@@ -3927,24 +3947,38 @@ The templates used to generate the SQL query for each data source supported by D
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro render_time_period_columns() -%}
+        {% if lib.time_series is not none -%}
+            nested_table.[time_period], nested_table.[time_period_utc]
+        {%- endif -%}
+    {%- endmacro -%}
+    
     SELECT
-        MAX(nested_table.actual_value) AS actual_value,
+        MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
+        {% if lib.time_series is not none -%}
         nested_table.[time_period] AS time_period,
         nested_table.[time_period_utc] AS time_period_utc
+        {%- endif -%}
         {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
             PERCENTILE_CONT({{ parameters.percentile_value }})
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
             OVER (PARTITION BY
-                {{render_local_time_dimension_projection('analyzed_table')}}
-                {{render_local_data_grouping_projections('analyzed_table') }}
+                {%- if lib.data_groupings is none and lib.time_series is none %}
+                    NULL
+                {%- else -%}
+                    {{render_local_time_dimension_projection('analyzed_table')}}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
+                {%- endif -%}
             ) AS actual_value
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-    GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
-    ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+    {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
+    GROUP BY {{render_time_period_columns()}} {{- lib.render_data_grouping_projections('analyzed_table', set_leading_comma=(lib.time_series is not none)) }}
+    ORDER BY {{render_time_period_columns()}} {{- lib.render_data_grouping_projections('analyzed_table', set_leading_comma=(lib.time_series is not none)) }}
+    {%- endif -%}
     ```
 === "Trino"
 
@@ -3974,9 +4008,11 @@ The templates used to generate the SQL query for each data source supported by D
     {%- endmacro -%}
     
     SELECT
-        MAX(nested_table.actual_value) AS actual_value,
+        MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+        {% if lib.time_series is not none -%}
         nested_table."time_period" AS time_period,
         nested_table."time_period_utc" AS time_period_utc
+        {% endif %}
         {{- lib.render_data_grouping_projections('analyzed_table') }}
     FROM(
         SELECT
@@ -3985,6 +4021,9 @@ The templates used to generate the SQL query for each data source supported by D
                 {{ parameters.percentile_value }}
             )
             OVER (PARTITION BY
+                {% if lib.data_groupings is none and lib.time_series is none -%}
+                    NULL
+                {% endif %}
                 {{render_local_time_dimension_projection('analyzed_table')}}
                 {{render_local_data_grouping_projections('analyzed_table') }}
             ) AS actual_value

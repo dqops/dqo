@@ -293,11 +293,11 @@ const TableColumns = ({
       tableName,
       undefined,
       undefined,
-      checkTypes === CheckTypes.PROFILING ? true : undefined,
-      checkTypes === CheckTypes.MONITORING ? true : undefined,
-      checkTypes === CheckTypes.PARTITIONED ? true : undefined
+      checkTypes === CheckTypes.PROFILING,
+      checkTypes === CheckTypes.MONITORING || checkTypes === CheckTypes.SOURCES,
+      checkTypes === CheckTypes.PARTITIONED || checkTypes === CheckTypes.SOURCES
     ).then((res) => setStatus(res.data.columns ?? {}));
-    ColumnApiClient.getColumns(connectionName, schemaName, tableName).then(
+    ColumnApiClient.getColumns(connectionName, schemaName, tableName, true, checkTypes == CheckTypes.SOURCES ? undefined : checkTypes).then(
       (res) => setColumns(res.data)
     );
   }, [checkTypes, connectionName, schemaName, tableName]);

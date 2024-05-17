@@ -35,6 +35,8 @@ The listing model of table-level default check patterns that is returned by the 
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`pattern_name`</span>|Pattern name.|*string*|
 |<span class="no-wrap-code">`priority`</span>|The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.|*integer*|
+|<span class="no-wrap-code">`disabled`</span>|Disables this data quality check configuration. The checks will not be activated.|*boolean*|
+|<span class="no-wrap-code">`description`</span>|The description (documentation) of this data quality check configuration.|*string*|
 |<span class="no-wrap-code">[`target_table`](#targettablepatternspec)</span>|The filters for the target table.|*[TargetTablePatternSpec](#targettablepatternspec)*|
 |<span class="no-wrap-code">`can_edit`</span>|Boolean flag that decides if the current user can update or delete this object.|*boolean*|
 |<span class="no-wrap-code">`yaml_parsing_error`</span>|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|*string*|
@@ -74,6 +76,7 @@ ___
 
 ## TableDefaultChecksPatternSpec
 The default configuration of table-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on tables.
+ This configuration serves as a data quality policy that defines the data quality checks that are verified on matching tables.
 
 
 **The structure of this object is described below**
@@ -82,6 +85,8 @@ The default configuration of table-level data quality checks that are enabled as
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`priority`</span>|The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.|*integer*|
+|<span class="no-wrap-code">`disabled`</span>|Disables this data quality check configuration. The checks will not be activated.|*boolean*|
+|<span class="no-wrap-code">`description`</span>|The description (documentation) of this data quality check configuration.|*string*|
 |<span class="no-wrap-code">[`target`](./default_table_check_patterns.md#targettablepatternspec)</span>|The target table filter that are filtering the table and connection on which the default checks are applied.|*[TargetTablePatternSpec](./default_table_check_patterns.md#targettablepatternspec)*|
 |<span class="no-wrap-code">[`profiling_checks`](./tables.md#tableprofilingcheckcategoriesspec)</span>|Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.|*[TableProfilingCheckCategoriesSpec](./tables.md#tableprofilingcheckcategoriesspec)*|
 |<span class="no-wrap-code">[`monitoring_checks`](#tablemonitoringcheckcategoriesspec)</span>|Configuration of table level monitoring checks. Monitoring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring check stores only the most recent data quality check result for each period of time.|*[TableMonitoringCheckCategoriesSpec](#tablemonitoringcheckcategoriesspec)*|

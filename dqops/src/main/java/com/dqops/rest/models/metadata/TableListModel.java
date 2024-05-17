@@ -111,6 +111,9 @@ public class TableListModel {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ProfilingTimePeriodTruncation profilingChecksResultTruncation;
 
+    /**
+     * File format for a file based table, such as a CSV or Parquet file.
+     */
     @JsonPropertyDescription("File format for a file based table, such as a CSV or Parquet file.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)

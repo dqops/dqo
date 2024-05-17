@@ -194,12 +194,8 @@ spec:
                         SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
                     ),
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Databricks"
 
@@ -256,12 +252,8 @@ spec:
                     BIGINT(MAX(
                         SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
                     ))
-                ) / 24.0 / 3600.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                ) / 24.0 / 3600.0 AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "DuckDB"
 
@@ -303,12 +295,8 @@ spec:
             SELECT
                 EXTRACT(EPOCH FROM (
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at"))::TIMESTAMP WITH TIME ZONE
-                )) / 24.0 / 3600.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                )) / 24.0 / 3600.0 AS actual_value
             FROM  AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "MySQL"
 
@@ -362,12 +350,8 @@ spec:
                     SECOND,
                     MAX(CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)),
                     CURRENT_TIMESTAMP()
-                ) / 24.0 / 3600.0 AS actual_value,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                ) / 24.0 / 3600.0 AS actual_value
             FROM `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Oracle"
 
@@ -407,18 +391,12 @@ spec:
 
             ```sql
             SELECT
-                (CAST(CURRENT_TIMESTAMP AS DATE) - CAST(MAX(analyzed_table."col_inserted_at") AS DATE)) AS actual_value,
-                time_period,
-                time_period_utc
+                (CAST(CURRENT_TIMESTAMP AS DATE) - CAST(MAX(analyzed_table."col_inserted_at") AS DATE)) AS actual_value
                 FROM (
                     SELECT
-                        original_table.*,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                        original_table.*
                     FROM "<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "PostgreSQL"
 
@@ -460,12 +438,8 @@ spec:
             SELECT
                 EXTRACT(EPOCH FROM (
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
-                )) / 24.0 / 3600.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                )) / 24.0 / 3600.0 AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Presto"
 
@@ -497,7 +471,7 @@ spec:
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                        TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
@@ -527,21 +501,15 @@ spec:
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                        TRY_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
-                ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                time_period,
-                time_period_utc
+                ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Redshift"
 
@@ -583,12 +551,8 @@ spec:
             SELECT
                 EXTRACT(EPOCH FROM (
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
-                )) / 24.0 / 3600.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                )) / 24.0 / 3600.0 AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Snowflake"
 
@@ -646,12 +610,8 @@ spec:
                         TRY_TO_TIMESTAMP(analyzed_table."col_inserted_at")
                     ),
                     CURRENT_TIMESTAMP
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Spark"
 
@@ -708,12 +668,8 @@ spec:
                     BIGINT(MAX(
                         SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
                     ))
-                ) / 24.0 / 3600.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                ) / 24.0 / 3600.0 AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "SQL Server"
 
@@ -762,9 +718,7 @@ spec:
                 DATEDIFF(SECOND,
                         MAX(analyzed_table.[col_inserted_at]),
                         SYSDATETIMEOFFSET()
-                    ) / 24.0 / 3600.0 AS actual_value,
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                    ) / 24.0 / 3600.0 AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -797,7 +751,7 @@ spec:
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                        TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
@@ -827,21 +781,15 @@ spec:
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                        TRY_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
-                ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                time_period,
-                time_period_utc
+                ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     
 
@@ -953,12 +901,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     MILLISECOND
                 ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Databricks"
 
@@ -1015,12 +961,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ))
                 ) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "DuckDB"
 
@@ -1062,12 +1006,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at"))::TIMESTAMP WITH TIME ZONE
                 )) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "MySQL"
 
@@ -1121,12 +1063,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CURRENT_TIMESTAMP()
                 ) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Oracle"
 
@@ -1169,20 +1109,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
                 FROM (
                     SELECT
                         original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                original_table."state" AS grouping_level_2
                     FROM "<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "PostgreSQL"
 
@@ -1224,12 +1160,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
                 )) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Presto"
 
@@ -1260,7 +1194,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                        TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
@@ -1289,7 +1223,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                        TRY_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -1297,20 +1231,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Redshift"
 
@@ -1352,12 +1282,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
                 )) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Snowflake"
 
@@ -1415,12 +1343,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CURRENT_TIMESTAMP
                 ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Spark"
 
@@ -1477,12 +1403,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ))
                 ) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "SQL Server"
 
@@ -1531,9 +1455,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SYSDATETIMEOFFSET()
                     ) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
-                analyzed_table.[state] AS grouping_level_2,
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                analyzed_table.[state] AS grouping_level_2
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             GROUP BY analyzed_table.[country], analyzed_table.[state]
             ORDER BY level_1, level_2
@@ -1571,7 +1493,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                        TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
@@ -1600,7 +1522,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                        TRY_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -1608,20 +1530,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     
 ___
@@ -1808,12 +1726,8 @@ spec:
                         SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
                     ),
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Databricks"
 
@@ -1870,12 +1784,8 @@ spec:
                     BIGINT(MAX(
                         SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
                     ))
-                ) / 24.0 / 3600.0 AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                ) / 24.0 / 3600.0 AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "DuckDB"
 
@@ -1917,12 +1827,8 @@ spec:
             SELECT
                 EXTRACT(EPOCH FROM (
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at"))::TIMESTAMP WITH TIME ZONE
-                )) / 24.0 / 3600.0 AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                )) / 24.0 / 3600.0 AS actual_value
             FROM  AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "MySQL"
 
@@ -1976,12 +1882,8 @@ spec:
                     SECOND,
                     MAX(CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)),
                     CURRENT_TIMESTAMP()
-                ) / 24.0 / 3600.0 AS actual_value,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+                ) / 24.0 / 3600.0 AS actual_value
             FROM `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Oracle"
 
@@ -2021,18 +1923,12 @@ spec:
 
             ```sql
             SELECT
-                (CAST(CURRENT_TIMESTAMP AS DATE) - CAST(MAX(analyzed_table."col_inserted_at") AS DATE)) AS actual_value,
-                time_period,
-                time_period_utc
+                (CAST(CURRENT_TIMESTAMP AS DATE) - CAST(MAX(analyzed_table."col_inserted_at") AS DATE)) AS actual_value
                 FROM (
                     SELECT
-                        original_table.*,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                        original_table.*
                     FROM "<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "PostgreSQL"
 
@@ -2074,12 +1970,8 @@ spec:
             SELECT
                 EXTRACT(EPOCH FROM (
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
-                )) / 24.0 / 3600.0 AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                )) / 24.0 / 3600.0 AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Presto"
 
@@ -2111,7 +2003,7 @@ spec:
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                        TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
@@ -2141,21 +2033,15 @@ spec:
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                        TRY_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
-                ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                time_period,
-                time_period_utc
+                ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Redshift"
 
@@ -2197,12 +2083,8 @@ spec:
             SELECT
                 EXTRACT(EPOCH FROM (
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
-                )) / 24.0 / 3600.0 AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                )) / 24.0 / 3600.0 AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Snowflake"
 
@@ -2260,12 +2142,8 @@ spec:
                         TRY_TO_TIMESTAMP(analyzed_table."col_inserted_at")
                     ),
                     CURRENT_TIMESTAMP
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-                TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Spark"
 
@@ -2322,12 +2200,8 @@ spec:
                     BIGINT(MAX(
                         SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
                     ))
-                ) / 24.0 / 3600.0 AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                ) / 24.0 / 3600.0 AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "SQL Server"
 
@@ -2376,9 +2250,7 @@ spec:
                 DATEDIFF(SECOND,
                         MAX(analyzed_table.[col_inserted_at]),
                         SYSDATETIMEOFFSET()
-                    ) / 24.0 / 3600.0 AS actual_value,
-                CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
-                CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+                    ) / 24.0 / 3600.0 AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -2411,7 +2283,7 @@ spec:
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                        TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
@@ -2441,21 +2313,15 @@ spec:
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                        TRY_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
-                ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                time_period,
-                time_period_utc
+                ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     
 
@@ -2568,12 +2434,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     MILLISECOND
                 ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Databricks"
 
@@ -2630,12 +2494,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ))
                 ) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "DuckDB"
 
@@ -2677,12 +2539,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at"))::TIMESTAMP WITH TIME ZONE
                 )) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "MySQL"
 
@@ -2736,12 +2596,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CURRENT_TIMESTAMP()
                 ) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Oracle"
 
@@ -2784,20 +2642,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
                 FROM (
                     SELECT
                         original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                original_table."state" AS grouping_level_2
                     FROM "<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "PostgreSQL"
 
@@ -2839,12 +2693,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
                 )) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Presto"
 
@@ -2875,7 +2727,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                        TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
@@ -2904,7 +2756,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                        TRY_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -2912,20 +2764,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Redshift"
 
@@ -2967,12 +2815,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
                 )) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Snowflake"
 
@@ -3030,12 +2876,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CURRENT_TIMESTAMP
                 ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-                TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Spark"
 
@@ -3092,12 +2936,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ))
                 ) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "SQL Server"
 
@@ -3146,9 +2988,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SYSDATETIMEOFFSET()
                     ) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
-                analyzed_table.[state] AS grouping_level_2,
-                CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
-                CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+                analyzed_table.[state] AS grouping_level_2
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             GROUP BY analyzed_table.[country], analyzed_table.[state]
             ORDER BY level_1, level_2
@@ -3186,7 +3026,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                        TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
@@ -3215,7 +3055,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                        TRY_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -3223,20 +3063,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     
 ___
@@ -3423,12 +3259,8 @@ spec:
                         SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
                     ),
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Databricks"
 
@@ -3485,12 +3317,8 @@ spec:
                     BIGINT(MAX(
                         SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
                     ))
-                ) / 24.0 / 3600.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                ) / 24.0 / 3600.0 AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "DuckDB"
 
@@ -3532,12 +3360,8 @@ spec:
             SELECT
                 EXTRACT(EPOCH FROM (
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at"))::TIMESTAMP WITH TIME ZONE
-                )) / 24.0 / 3600.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                )) / 24.0 / 3600.0 AS actual_value
             FROM  AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "MySQL"
 
@@ -3591,12 +3415,8 @@ spec:
                     SECOND,
                     MAX(CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)),
                     CURRENT_TIMESTAMP()
-                ) / 24.0 / 3600.0 AS actual_value,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                ) / 24.0 / 3600.0 AS actual_value
             FROM `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Oracle"
 
@@ -3636,18 +3456,12 @@ spec:
 
             ```sql
             SELECT
-                (CAST(CURRENT_TIMESTAMP AS DATE) - CAST(MAX(analyzed_table."col_inserted_at") AS DATE)) AS actual_value,
-                time_period,
-                time_period_utc
+                (CAST(CURRENT_TIMESTAMP AS DATE) - CAST(MAX(analyzed_table."col_inserted_at") AS DATE)) AS actual_value
                 FROM (
                     SELECT
-                        original_table.*,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                        original_table.*
                     FROM "<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "PostgreSQL"
 
@@ -3689,12 +3503,8 @@ spec:
             SELECT
                 EXTRACT(EPOCH FROM (
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
-                )) / 24.0 / 3600.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                )) / 24.0 / 3600.0 AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Presto"
 
@@ -3726,7 +3536,7 @@ spec:
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                        TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
@@ -3756,21 +3566,15 @@ spec:
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                        TRY_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
-                ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                time_period,
-                time_period_utc
+                ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Redshift"
 
@@ -3812,12 +3616,8 @@ spec:
             SELECT
                 EXTRACT(EPOCH FROM (
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
-                )) / 24.0 / 3600.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                )) / 24.0 / 3600.0 AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Snowflake"
 
@@ -3875,12 +3675,8 @@ spec:
                         TRY_TO_TIMESTAMP(analyzed_table."col_inserted_at")
                     ),
                     CURRENT_TIMESTAMP
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Spark"
 
@@ -3937,12 +3733,8 @@ spec:
                     BIGINT(MAX(
                         SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
                     ))
-                ) / 24.0 / 3600.0 AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                ) / 24.0 / 3600.0 AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "SQL Server"
 
@@ -3991,9 +3783,7 @@ spec:
                 DATEDIFF(SECOND,
                         MAX(analyzed_table.[col_inserted_at]),
                         SYSDATETIMEOFFSET()
-                    ) / 24.0 / 3600.0 AS actual_value,
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                    ) / 24.0 / 3600.0 AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -4026,7 +3816,7 @@ spec:
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                        TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
@@ -4056,21 +3846,15 @@ spec:
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                        TRY_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
-                ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                time_period,
-                time_period_utc
+                ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     
 
@@ -4183,12 +3967,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     MILLISECOND
                 ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Databricks"
 
@@ -4245,12 +4027,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ))
                 ) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "DuckDB"
 
@@ -4292,12 +4072,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at"))::TIMESTAMP WITH TIME ZONE
                 )) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "MySQL"
 
@@ -4351,12 +4129,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CURRENT_TIMESTAMP()
                 ) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Oracle"
 
@@ -4399,20 +4175,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
                 FROM (
                     SELECT
                         original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                original_table."state" AS grouping_level_2
                     FROM "<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "PostgreSQL"
 
@@ -4454,12 +4226,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
                 )) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Presto"
 
@@ -4490,7 +4260,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                        TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
@@ -4519,7 +4289,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                        TRY_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -4527,20 +4297,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Redshift"
 
@@ -4582,12 +4348,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
                 )) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Snowflake"
 
@@ -4645,12 +4409,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CURRENT_TIMESTAMP
                 ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Spark"
 
@@ -4707,12 +4469,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ))
                 ) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "SQL Server"
 
@@ -4761,9 +4521,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SYSDATETIMEOFFSET()
                     ) / 24.0 / 3600.0 AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
-                analyzed_table.[state] AS grouping_level_2,
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                analyzed_table.[state] AS grouping_level_2
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             GROUP BY analyzed_table.[country], analyzed_table.[state]
             ORDER BY level_1, level_2
@@ -4801,7 +4559,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                        TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
@@ -4830,7 +4588,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(DATE_DIFF(
                     'MILLISECOND',
                     MAX(
-                        SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                        TRY_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
                     ),
                     CURRENT_TIMESTAMP
                 ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -4838,20 +4596,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     
 ___

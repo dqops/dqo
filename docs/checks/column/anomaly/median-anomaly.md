@@ -163,9 +163,11 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -173,6 +175,9 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -186,25 +191,20 @@ spec:
 
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
+                MAX(nested_table.actual_value) AS actual_value
+                
             FROM(
                 SELECT
                     PERCENTILE_CONT(
                     (analyzed_table.`target_column`),
                     0.5)
                     OVER (PARTITION BY
+                        NULL
                         
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH),
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
                         
-                    ) AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                        
+                    ) AS actual_value
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Databricks"
 
@@ -236,9 +236,11 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -246,6 +248,9 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -259,25 +264,20 @@ spec:
 
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
+                MAX(nested_table.actual_value) AS actual_value
+                
             FROM(
                 SELECT
                     PERCENTILE(
                     (analyzed_table.`target_column`),
                     0.5)
                     OVER (PARTITION BY
+                        NULL
                         
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)),
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)))
                         
-                    ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                        
+                    ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "DuckDB"
 
@@ -301,12 +301,8 @@ spec:
             ```sql
             SELECT
                 PERCENTILE_CONT(0.5)
-                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value
             FROM  AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Oracle"
 
@@ -336,18 +332,12 @@ spec:
             ```sql
             SELECT
                 PERCENTILE_CONT(0.5)
-                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-                time_period,
-                time_period_utc
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value
             FROM(
                 SELECT
-                    original_table.*,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    original_table.*
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "PostgreSQL"
 
@@ -371,12 +361,8 @@ spec:
             ```sql
             SELECT
                 PERCENTILE_CONT(0.5)
-                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Presto"
 
@@ -408,9 +394,11 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -419,6 +407,9 @@ spec:
                         {{ parameters.percentile_value }}
                     )
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -432,9 +423,8 @@ spec:
 
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table."time_period" AS time_period,
-                nested_table."time_period_utc" AS time_period_utc
+                MAX(nested_table.actual_value) AS actual_value
+                
             FROM(
                 SELECT
                    APPROX_PERCENTILE(
@@ -442,16 +432,12 @@ spec:
                         0.5
                     )
                     OVER (PARTITION BY
+                        NULL
                         
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)),
-                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date))
                         
-                    ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                        
+                    ) AS actual_value
                 FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Redshift"
 
@@ -475,12 +461,8 @@ spec:
             ```sql
             SELECT
                 PERCENTILE_CONT(0.5)
-                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Snowflake"
 
@@ -504,12 +486,8 @@ spec:
             ```sql
             SELECT
                 PERCENTILE_CONT(0.5)
-                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Spark"
 
@@ -541,9 +519,11 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -551,6 +531,9 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -564,25 +547,20 @@ spec:
 
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
+                MAX(nested_table.actual_value) AS actual_value
+                
             FROM(
                 SELECT
                     PERCENTILE(
                     (analyzed_table.`target_column`),
                     0.5)
                     OVER (PARTITION BY
+                        NULL
                         
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)),
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)))
                         
-                    ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                        
+                    ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "SQL Server"
 
@@ -594,8 +572,8 @@ spec:
             {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
                 {%- if time_series is not none -%}
                     {{- lib.eol() -}}
-                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
-                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) }}) AS DATETIME)
+                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
+                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
                 {%- endif -%}
             {%- endmacro -%}
             
@@ -613,47 +591,52 @@ spec:
                 {%- endif -%}
             {%- endmacro -%}
             
+            {%- macro render_time_period_columns() -%}
+                {% if lib.time_series is not none -%}
+                    nested_table.[time_period], nested_table.[time_period_utc]
+                {%- endif -%}
+            {%- endmacro -%}
+            
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
+                {% if lib.time_series is not none -%}
                 nested_table.[time_period] AS time_period,
                 nested_table.[time_period_utc] AS time_period_utc
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
                     PERCENTILE_CONT({{ parameters.percentile_value }})
                     WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                     OVER (PARTITION BY
-                        {{render_local_time_dimension_projection('analyzed_table')}}
-                        {{render_local_data_grouping_projections('analyzed_table') }}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                            NULL
+                        {%- else -%}
+                            {{render_local_time_dimension_projection('analyzed_table')}}
+                            {{render_local_data_grouping_projections('analyzed_table') }}
+                        {%- endif -%}
                     ) AS actual_value
                     {{- lib.render_time_dimension_projection('analyzed_table') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-            GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
-            ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
+            GROUP BY {{render_time_period_columns()}} {{- lib.render_data_grouping_projections('analyzed_table', set_leading_comma=(lib.time_series is not none)) }}
+            ORDER BY {{render_time_period_columns()}} {{- lib.render_data_grouping_projections('analyzed_table', set_leading_comma=(lib.time_series is not none)) }}
+            {%- endif -%}
             ```
         === "Rendered SQL for SQL Server"
 
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table.[time_period] AS time_period,
-                nested_table.[time_period_utc] AS time_period_utc
+                MAX(nested_table.actual_value) AS actual_value
+                
             FROM(
                 SELECT
                     PERCENTILE_CONT(0.5)
                     WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                     OVER (PARTITION BY
-                        
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0),
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME)
-                        
-                    ) AS actual_value,
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                            NULL) AS actual_value
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
-            GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
-            ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
             ```
     ??? example "Trino"
 
@@ -685,9 +668,11 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -696,6 +681,9 @@ spec:
                         {{ parameters.percentile_value }}
                     )
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -709,9 +697,8 @@ spec:
 
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table."time_period" AS time_period,
-                nested_table."time_period_utc" AS time_period_utc
+                MAX(nested_table.actual_value) AS actual_value
+                
             FROM(
                 SELECT
                    APPROX_PERCENTILE(
@@ -719,16 +706,12 @@ spec:
                         0.5
                     )
                     OVER (PARTITION BY
+                        NULL
                         
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)),
-                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date))
                         
-                    ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                        
+                    ) AS actual_value
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     
 
@@ -809,9 +792,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -819,6 +804,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -831,9 +819,8 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for BigQuery"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc,
+                MAX(nested_table.actual_value) AS actual_value
+                ,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -843,17 +830,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     0.5)
                     OVER (PARTITION BY
                         
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH),
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
+                        
                         
                 analyzed_table.`country` AS grouping_level_1
                 analyzed_table.`state` AS grouping_level_2
-                    ) AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                    ) AS actual_value
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Databricks"
 
@@ -884,9 +868,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -894,6 +880,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -906,9 +895,8 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Databricks"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc,
+                MAX(nested_table.actual_value) AS actual_value
+                ,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -918,17 +906,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     0.5)
                     OVER (PARTITION BY
                         
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)),
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)))
+                        
                         
                 analyzed_table.`country` AS grouping_level_1
                 analyzed_table.`state` AS grouping_level_2
-                    ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                    ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "DuckDB"
 
@@ -952,12 +937,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                 PERCENTILE_CONT(0.5)
                 WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Oracle"
 
@@ -990,20 +973,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM(
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "PostgreSQL"
 
@@ -1027,12 +1006,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                 PERCENTILE_CONT(0.5)
                 WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Presto"
 
@@ -1063,9 +1040,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -1074,6 +1053,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{ parameters.percentile_value }}
                     )
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -1086,9 +1068,8 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table."time_period" AS time_period,
-                nested_table."time_period_utc" AS time_period_utc,
+                MAX(nested_table.actual_value) AS actual_value
+                ,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM(
@@ -1099,17 +1080,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     )
                     OVER (PARTITION BY
                         
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)),
-                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date))
+                        
                         
                 analyzed_table."country" AS grouping_level_1
                 analyzed_table."state" AS grouping_level_2
-                    ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                    ) AS actual_value
                 FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Redshift"
 
@@ -1133,12 +1111,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                 PERCENTILE_CONT(0.5)
                 WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Snowflake"
 
@@ -1162,12 +1138,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                 PERCENTILE_CONT(0.5)
                 WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Spark"
 
@@ -1198,9 +1172,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -1208,6 +1184,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -1220,9 +1199,8 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Spark"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc,
+                MAX(nested_table.actual_value) AS actual_value
+                ,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -1232,17 +1210,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     0.5)
                     OVER (PARTITION BY
                         
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)),
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)))
+                        
                         
                 analyzed_table.`country` AS grouping_level_1
                 analyzed_table.`state` AS grouping_level_2
-                    ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                    ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "SQL Server"
 
@@ -1253,8 +1228,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
                 {%- if time_series is not none -%}
                     {{- lib.eol() -}}
-                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
-                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) }}) AS DATETIME)
+                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
+                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
                 {%- endif -%}
             {%- endmacro -%}
             
@@ -1272,31 +1247,44 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {%- endif -%}
             {%- endmacro -%}
             
+            {%- macro render_time_period_columns() -%}
+                {% if lib.time_series is not none -%}
+                    nested_table.[time_period], nested_table.[time_period_utc]
+                {%- endif -%}
+            {%- endmacro -%}
+            
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
+                {% if lib.time_series is not none -%}
                 nested_table.[time_period] AS time_period,
                 nested_table.[time_period_utc] AS time_period_utc
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
                     PERCENTILE_CONT({{ parameters.percentile_value }})
                     WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                     OVER (PARTITION BY
-                        {{render_local_time_dimension_projection('analyzed_table')}}
-                        {{render_local_data_grouping_projections('analyzed_table') }}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                            NULL
+                        {%- else -%}
+                            {{render_local_time_dimension_projection('analyzed_table')}}
+                            {{render_local_data_grouping_projections('analyzed_table') }}
+                        {%- endif -%}
                     ) AS actual_value
                     {{- lib.render_time_dimension_projection('analyzed_table') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-            GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
-            ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
+            GROUP BY {{render_time_period_columns()}} {{- lib.render_data_grouping_projections('analyzed_table', set_leading_comma=(lib.time_series is not none)) }}
+            ORDER BY {{render_time_period_columns()}} {{- lib.render_data_grouping_projections('analyzed_table', set_leading_comma=(lib.time_series is not none)) }}
+            {%- endif -%}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table.[time_period] AS time_period,
-                nested_table.[time_period_utc] AS time_period_utc,
+                MAX(nested_table.actual_value) AS actual_value
+                ,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2
             FROM(
@@ -1304,20 +1292,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     PERCENTILE_CONT(0.5)
                     WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                     OVER (PARTITION BY
-                        
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0),
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME)
-                        
-                    ) AS actual_value,
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                ,
+                CAST(() AS DATETIME)
+                            ) AS actual_value
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
-            GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-                analyzed_table.[country] AS grouping_level_1,
-                analyzed_table.[state] AS grouping_level_2
-            ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-                analyzed_table.[country] AS grouping_level_1,
-                analyzed_table.[state] AS grouping_level_2
             ```
     ??? example "Trino"
 
@@ -1348,9 +1326,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -1359,6 +1339,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{ parameters.percentile_value }}
                     )
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -1371,9 +1354,8 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Trino"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table."time_period" AS time_period,
-                nested_table."time_period_utc" AS time_period_utc,
+                MAX(nested_table.actual_value) AS actual_value
+                ,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM(
@@ -1384,17 +1366,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     )
                     OVER (PARTITION BY
                         
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)),
-                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date))
+                        
                         
                 analyzed_table."country" AS grouping_level_1
                 analyzed_table."state" AS grouping_level_2
-                    ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                    ) AS actual_value
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     
 ___
@@ -1551,9 +1530,11 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -1561,6 +1542,9 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -1574,25 +1558,20 @@ spec:
 
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
+                MAX(nested_table.actual_value) AS actual_value
+                
             FROM(
                 SELECT
                     PERCENTILE_CONT(
                     (analyzed_table.`target_column`),
                     0.5)
                     OVER (PARTITION BY
+                        NULL
                         
-                CAST(CURRENT_TIMESTAMP() AS DATE),
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE))
                         
-                    ) AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                        
+                    ) AS actual_value
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Databricks"
 
@@ -1624,9 +1603,11 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -1634,6 +1615,9 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -1647,25 +1631,20 @@ spec:
 
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
+                MAX(nested_table.actual_value) AS actual_value
+                
             FROM(
                 SELECT
                     PERCENTILE(
                     (analyzed_table.`target_column`),
                     0.5)
                     OVER (PARTITION BY
+                        NULL
                         
-                CAST(CURRENT_TIMESTAMP() AS DATE),
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE))
                         
-                    ) AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                        
+                    ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "DuckDB"
 
@@ -1689,12 +1668,8 @@ spec:
             ```sql
             SELECT
                 PERCENTILE_CONT(0.5)
-                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value
             FROM  AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Oracle"
 
@@ -1724,18 +1699,12 @@ spec:
             ```sql
             SELECT
                 PERCENTILE_CONT(0.5)
-                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-                time_period,
-                time_period_utc
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value
             FROM(
                 SELECT
-                    original_table.*,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    original_table.*
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "PostgreSQL"
 
@@ -1759,12 +1728,8 @@ spec:
             ```sql
             SELECT
                 PERCENTILE_CONT(0.5)
-                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Presto"
 
@@ -1796,9 +1761,11 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -1807,6 +1774,9 @@ spec:
                         {{ parameters.percentile_value }}
                     )
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -1820,9 +1790,8 @@ spec:
 
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table."time_period" AS time_period,
-                nested_table."time_period_utc" AS time_period_utc
+                MAX(nested_table.actual_value) AS actual_value
+                
             FROM(
                 SELECT
                    APPROX_PERCENTILE(
@@ -1830,16 +1799,12 @@ spec:
                         0.5
                     )
                     OVER (PARTITION BY
+                        NULL
                         
-                CAST(CURRENT_TIMESTAMP AS date),
-                 CAST(CURRENT_TIMESTAMP AS date)
                         
-                    ) AS actual_value,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                        
+                    ) AS actual_value
                 FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Redshift"
 
@@ -1863,12 +1828,8 @@ spec:
             ```sql
             SELECT
                 PERCENTILE_CONT(0.5)
-                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Snowflake"
 
@@ -1892,12 +1853,8 @@ spec:
             ```sql
             SELECT
                 PERCENTILE_CONT(0.5)
-                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
-                CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-                TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Spark"
 
@@ -1929,9 +1886,11 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -1939,6 +1898,9 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -1952,25 +1914,20 @@ spec:
 
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
+                MAX(nested_table.actual_value) AS actual_value
+                
             FROM(
                 SELECT
                     PERCENTILE(
                     (analyzed_table.`target_column`),
                     0.5)
                     OVER (PARTITION BY
+                        NULL
                         
-                CAST(CURRENT_TIMESTAMP() AS DATE),
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE))
                         
-                    ) AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                        
+                    ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "SQL Server"
 
@@ -1982,8 +1939,8 @@ spec:
             {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
                 {%- if time_series is not none -%}
                     {{- lib.eol() -}}
-                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
-                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) }}) AS DATETIME)
+                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
+                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
                 {%- endif -%}
             {%- endmacro -%}
             
@@ -2001,47 +1958,52 @@ spec:
                 {%- endif -%}
             {%- endmacro -%}
             
+            {%- macro render_time_period_columns() -%}
+                {% if lib.time_series is not none -%}
+                    nested_table.[time_period], nested_table.[time_period_utc]
+                {%- endif -%}
+            {%- endmacro -%}
+            
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
+                {% if lib.time_series is not none -%}
                 nested_table.[time_period] AS time_period,
                 nested_table.[time_period_utc] AS time_period_utc
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
                     PERCENTILE_CONT({{ parameters.percentile_value }})
                     WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                     OVER (PARTITION BY
-                        {{render_local_time_dimension_projection('analyzed_table')}}
-                        {{render_local_data_grouping_projections('analyzed_table') }}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                            NULL
+                        {%- else -%}
+                            {{render_local_time_dimension_projection('analyzed_table')}}
+                            {{render_local_data_grouping_projections('analyzed_table') }}
+                        {%- endif -%}
                     ) AS actual_value
                     {{- lib.render_time_dimension_projection('analyzed_table') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-            GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
-            ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
+            GROUP BY {{render_time_period_columns()}} {{- lib.render_data_grouping_projections('analyzed_table', set_leading_comma=(lib.time_series is not none)) }}
+            ORDER BY {{render_time_period_columns()}} {{- lib.render_data_grouping_projections('analyzed_table', set_leading_comma=(lib.time_series is not none)) }}
+            {%- endif -%}
             ```
         === "Rendered SQL for SQL Server"
 
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table.[time_period] AS time_period,
-                nested_table.[time_period_utc] AS time_period_utc
+                MAX(nested_table.actual_value) AS actual_value
+                
             FROM(
                 SELECT
                     PERCENTILE_CONT(0.5)
                     WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                     OVER (PARTITION BY
-                        
-                CAST(SYSDATETIMEOFFSET() AS date),
-                CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME)
-                        
-                    ) AS actual_value,
-                CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
-                CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+                            NULL) AS actual_value
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
-            GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
-            ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
             ```
     ??? example "Trino"
 
@@ -2073,9 +2035,11 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -2084,6 +2048,9 @@ spec:
                         {{ parameters.percentile_value }}
                     )
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -2097,9 +2064,8 @@ spec:
 
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table."time_period" AS time_period,
-                nested_table."time_period_utc" AS time_period_utc
+                MAX(nested_table.actual_value) AS actual_value
+                
             FROM(
                 SELECT
                    APPROX_PERCENTILE(
@@ -2107,16 +2073,12 @@ spec:
                         0.5
                     )
                     OVER (PARTITION BY
+                        NULL
                         
-                CAST(CURRENT_TIMESTAMP AS date),
-                 CAST(CURRENT_TIMESTAMP AS date)
                         
-                    ) AS actual_value,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                        
+                    ) AS actual_value
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     
 
@@ -2198,9 +2160,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -2208,6 +2172,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -2220,9 +2187,8 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for BigQuery"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc,
+                MAX(nested_table.actual_value) AS actual_value
+                ,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -2232,17 +2198,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     0.5)
                     OVER (PARTITION BY
                         
-                CAST(CURRENT_TIMESTAMP() AS DATE),
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE))
+                        
                         
                 analyzed_table.`country` AS grouping_level_1
                 analyzed_table.`state` AS grouping_level_2
-                    ) AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                    ) AS actual_value
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Databricks"
 
@@ -2273,9 +2236,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -2283,6 +2248,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -2295,9 +2263,8 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Databricks"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc,
+                MAX(nested_table.actual_value) AS actual_value
+                ,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -2307,17 +2274,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     0.5)
                     OVER (PARTITION BY
                         
-                CAST(CURRENT_TIMESTAMP() AS DATE),
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE))
+                        
                         
                 analyzed_table.`country` AS grouping_level_1
                 analyzed_table.`state` AS grouping_level_2
-                    ) AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                    ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "DuckDB"
 
@@ -2341,12 +2305,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                 PERCENTILE_CONT(0.5)
                 WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Oracle"
 
@@ -2379,20 +2341,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM(
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "PostgreSQL"
 
@@ -2416,12 +2374,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                 PERCENTILE_CONT(0.5)
                 WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Presto"
 
@@ -2452,9 +2408,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -2463,6 +2421,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{ parameters.percentile_value }}
                     )
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -2475,9 +2436,8 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table."time_period" AS time_period,
-                nested_table."time_period_utc" AS time_period_utc,
+                MAX(nested_table.actual_value) AS actual_value
+                ,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM(
@@ -2488,17 +2448,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     )
                     OVER (PARTITION BY
                         
-                CAST(CURRENT_TIMESTAMP AS date),
-                 CAST(CURRENT_TIMESTAMP AS date)
+                        
                         
                 analyzed_table."country" AS grouping_level_1
                 analyzed_table."state" AS grouping_level_2
-                    ) AS actual_value,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                    ) AS actual_value
                 FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Redshift"
 
@@ -2522,12 +2479,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                 PERCENTILE_CONT(0.5)
                 WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Snowflake"
 
@@ -2551,12 +2506,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                 PERCENTILE_CONT(0.5)
                 WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-                TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Spark"
 
@@ -2587,9 +2540,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -2597,6 +2552,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -2609,9 +2567,8 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Spark"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc,
+                MAX(nested_table.actual_value) AS actual_value
+                ,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -2621,17 +2578,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     0.5)
                     OVER (PARTITION BY
                         
-                CAST(CURRENT_TIMESTAMP() AS DATE),
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE))
+                        
                         
                 analyzed_table.`country` AS grouping_level_1
                 analyzed_table.`state` AS grouping_level_2
-                    ) AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                    ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "SQL Server"
 
@@ -2642,8 +2596,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
                 {%- if time_series is not none -%}
                     {{- lib.eol() -}}
-                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
-                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) }}) AS DATETIME)
+                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
+                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
                 {%- endif -%}
             {%- endmacro -%}
             
@@ -2661,31 +2615,44 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {%- endif -%}
             {%- endmacro -%}
             
+            {%- macro render_time_period_columns() -%}
+                {% if lib.time_series is not none -%}
+                    nested_table.[time_period], nested_table.[time_period_utc]
+                {%- endif -%}
+            {%- endmacro -%}
+            
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
+                {% if lib.time_series is not none -%}
                 nested_table.[time_period] AS time_period,
                 nested_table.[time_period_utc] AS time_period_utc
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
                     PERCENTILE_CONT({{ parameters.percentile_value }})
                     WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                     OVER (PARTITION BY
-                        {{render_local_time_dimension_projection('analyzed_table')}}
-                        {{render_local_data_grouping_projections('analyzed_table') }}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                            NULL
+                        {%- else -%}
+                            {{render_local_time_dimension_projection('analyzed_table')}}
+                            {{render_local_data_grouping_projections('analyzed_table') }}
+                        {%- endif -%}
                     ) AS actual_value
                     {{- lib.render_time_dimension_projection('analyzed_table') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-            GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
-            ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
+            GROUP BY {{render_time_period_columns()}} {{- lib.render_data_grouping_projections('analyzed_table', set_leading_comma=(lib.time_series is not none)) }}
+            ORDER BY {{render_time_period_columns()}} {{- lib.render_data_grouping_projections('analyzed_table', set_leading_comma=(lib.time_series is not none)) }}
+            {%- endif -%}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table.[time_period] AS time_period,
-                nested_table.[time_period_utc] AS time_period_utc,
+                MAX(nested_table.actual_value) AS actual_value
+                ,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2
             FROM(
@@ -2693,20 +2660,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     PERCENTILE_CONT(0.5)
                     WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                     OVER (PARTITION BY
-                        
-                CAST(SYSDATETIMEOFFSET() AS date),
-                CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME)
-                        
-                    ) AS actual_value,
-                CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
-                CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+                ,
+                CAST(() AS DATETIME)
+                            ) AS actual_value
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
-            GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
-                analyzed_table.[country] AS grouping_level_1,
-                analyzed_table.[state] AS grouping_level_2
-            ORDER BY nested_table.[time_period], nested_table.[time_period_utc],
-                analyzed_table.[country] AS grouping_level_1,
-                analyzed_table.[state] AS grouping_level_2
             ```
     ??? example "Trino"
 
@@ -2737,9 +2694,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -2748,6 +2707,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{ parameters.percentile_value }}
                     )
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -2760,9 +2722,8 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Trino"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
-                nested_table."time_period" AS time_period,
-                nested_table."time_period_utc" AS time_period_utc,
+                MAX(nested_table.actual_value) AS actual_value
+                ,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM(
@@ -2773,17 +2734,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     )
                     OVER (PARTITION BY
                         
-                CAST(CURRENT_TIMESTAMP AS date),
-                 CAST(CURRENT_TIMESTAMP AS date)
+                        
                         
                 analyzed_table."country" AS grouping_level_1
                 analyzed_table."state" AS grouping_level_2
-                    ) AS actual_value,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                    ) AS actual_value
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     
 ___
@@ -2950,9 +2908,11 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -2960,6 +2920,9 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -2976,12 +2939,14 @@ spec:
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                
             FROM(
                 SELECT
                     PERCENTILE_CONT(
                     (analyzed_table.`target_column`),
                     0.5)
                     OVER (PARTITION BY
+                        
                         
                 CAST(analyzed_table.`date_column` AS DATE),
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
@@ -3023,9 +2988,11 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -3033,6 +3000,9 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -3049,12 +3019,14 @@ spec:
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                
             FROM(
                 SELECT
                     PERCENTILE(
                     (analyzed_table.`target_column`),
                     0.5)
                     OVER (PARTITION BY
+                        
                         
                 CAST(analyzed_table.`date_column` AS DATE),
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
@@ -3195,9 +3167,11 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -3206,6 +3180,9 @@ spec:
                         {{ parameters.percentile_value }}
                     )
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -3222,6 +3199,7 @@ spec:
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
+                
             FROM(
                 SELECT
                    APPROX_PERCENTILE(
@@ -3229,6 +3207,7 @@ spec:
                         0.5
                     )
                     OVER (PARTITION BY
+                        
                         
                 CAST(analyzed_table."date_column" AS date),
                  CAST(analyzed_table."date_column" AS date)
@@ -3328,9 +3307,11 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -3338,6 +3319,9 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -3354,12 +3338,14 @@ spec:
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                
             FROM(
                 SELECT
                     PERCENTILE(
                     (analyzed_table.`target_column`),
                     0.5)
                     OVER (PARTITION BY
+                        
                         
                 CAST(analyzed_table.`date_column` AS DATE),
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
@@ -3381,8 +3367,8 @@ spec:
             {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
                 {%- if time_series is not none -%}
                     {{- lib.eol() -}}
-                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
-                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) }}) AS DATETIME)
+                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
+                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
                 {%- endif -%}
             {%- endmacro -%}
             
@@ -3400,24 +3386,38 @@ spec:
                 {%- endif -%}
             {%- endmacro -%}
             
+            {%- macro render_time_period_columns() -%}
+                {% if lib.time_series is not none -%}
+                    nested_table.[time_period], nested_table.[time_period_utc]
+                {%- endif -%}
+            {%- endmacro -%}
+            
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
+                {% if lib.time_series is not none -%}
                 nested_table.[time_period] AS time_period,
                 nested_table.[time_period_utc] AS time_period_utc
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
                     PERCENTILE_CONT({{ parameters.percentile_value }})
                     WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                     OVER (PARTITION BY
-                        {{render_local_time_dimension_projection('analyzed_table')}}
-                        {{render_local_data_grouping_projections('analyzed_table') }}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                            NULL
+                        {%- else -%}
+                            {{render_local_time_dimension_projection('analyzed_table')}}
+                            {{render_local_data_grouping_projections('analyzed_table') }}
+                        {%- endif -%}
                     ) AS actual_value
                     {{- lib.render_time_dimension_projection('analyzed_table') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-            GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
-            ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
+            GROUP BY {{render_time_period_columns()}} {{- lib.render_data_grouping_projections('analyzed_table', set_leading_comma=(lib.time_series is not none)) }}
+            ORDER BY {{render_time_period_columns()}} {{- lib.render_data_grouping_projections('analyzed_table', set_leading_comma=(lib.time_series is not none)) }}
+            {%- endif -%}
             ```
         === "Rendered SQL for SQL Server"
 
@@ -3431,11 +3431,9 @@ spec:
                     PERCENTILE_CONT(0.5)
                     WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                     OVER (PARTITION BY
-                        
                 CAST(analyzed_table.[date_column] AS date),
                 CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME)
-                        
-                    ) AS actual_value,
+                            ) AS actual_value,
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
                 CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
@@ -3472,9 +3470,11 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -3483,6 +3483,9 @@ spec:
                         {{ parameters.percentile_value }}
                     )
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -3499,6 +3502,7 @@ spec:
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
+                
             FROM(
                 SELECT
                    APPROX_PERCENTILE(
@@ -3506,6 +3510,7 @@ spec:
                         0.5
                     )
                     OVER (PARTITION BY
+                        
                         
                 CAST(analyzed_table."date_column" AS date),
                  CAST(analyzed_table."date_column" AS date)
@@ -3607,9 +3612,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -3617,6 +3624,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -3631,7 +3641,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc,
+                nested_table.`time_period_utc` AS time_period_utc
+                ,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -3640,6 +3651,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.5)
                     OVER (PARTITION BY
+                        
                         
                 CAST(analyzed_table.`date_column` AS DATE),
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
@@ -3682,9 +3694,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -3692,6 +3706,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -3706,7 +3723,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc,
+                nested_table.`time_period_utc` AS time_period_utc
+                ,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -3715,6 +3733,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.5)
                     OVER (PARTITION BY
+                        
                         
                 CAST(analyzed_table.`date_column` AS DATE),
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
@@ -3861,9 +3880,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -3872,6 +3893,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{ parameters.percentile_value }}
                     )
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -3886,7 +3910,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table."time_period" AS time_period,
-                nested_table."time_period_utc" AS time_period_utc,
+                nested_table."time_period_utc" AS time_period_utc
+                ,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM(
@@ -3896,6 +3921,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         0.5
                     )
                     OVER (PARTITION BY
+                        
                         
                 CAST(analyzed_table."date_column" AS date),
                  CAST(analyzed_table."date_column" AS date)
@@ -3996,9 +4022,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -4006,6 +4034,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -4020,7 +4051,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc,
+                nested_table.`time_period_utc` AS time_period_utc
+                ,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -4029,6 +4061,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.5)
                     OVER (PARTITION BY
+                        
                         
                 CAST(analyzed_table.`date_column` AS DATE),
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
@@ -4051,8 +4084,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
                 {%- if time_series is not none -%}
                     {{- lib.eol() -}}
-                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
-                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) }}) AS DATETIME)
+                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
+                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
                 {%- endif -%}
             {%- endmacro -%}
             
@@ -4070,24 +4103,38 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {%- endif -%}
             {%- endmacro -%}
             
+            {%- macro render_time_period_columns() -%}
+                {% if lib.time_series is not none -%}
+                    nested_table.[time_period], nested_table.[time_period_utc]
+                {%- endif -%}
+            {%- endmacro -%}
+            
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
+                {% if lib.time_series is not none -%}
                 nested_table.[time_period] AS time_period,
                 nested_table.[time_period_utc] AS time_period_utc
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
                     PERCENTILE_CONT({{ parameters.percentile_value }})
                     WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                     OVER (PARTITION BY
-                        {{render_local_time_dimension_projection('analyzed_table')}}
-                        {{render_local_data_grouping_projections('analyzed_table') }}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                            NULL
+                        {%- else -%}
+                            {{render_local_time_dimension_projection('analyzed_table')}}
+                            {{render_local_data_grouping_projections('analyzed_table') }}
+                        {%- endif -%}
                     ) AS actual_value
                     {{- lib.render_time_dimension_projection('analyzed_table') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
-            GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
-            ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
+            GROUP BY {{render_time_period_columns()}} {{- lib.render_data_grouping_projections('analyzed_table', set_leading_comma=(lib.time_series is not none)) }}
+            ORDER BY {{render_time_period_columns()}} {{- lib.render_data_grouping_projections('analyzed_table', set_leading_comma=(lib.time_series is not none)) }}
+            {%- endif -%}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
@@ -4102,11 +4149,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     PERCENTILE_CONT(0.5)
                     WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                     OVER (PARTITION BY
-                        
                 CAST(analyzed_table.[date_column] AS date),
                 CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME)
-                        
-                    ) AS actual_value,
+                            ) AS actual_value,
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
                 CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
@@ -4146,9 +4191,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value,
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
+                {% if lib.time_series is not none -%}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
+                {% endif %}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -4157,6 +4204,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{ parameters.percentile_value }}
                     )
                     OVER (PARTITION BY
+                        {% if lib.data_groupings is none and lib.time_series is none -%}
+                            NULL
+                        {% endif %}
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
@@ -4171,7 +4221,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table."time_period" AS time_period,
-                nested_table."time_period_utc" AS time_period_utc,
+                nested_table."time_period_utc" AS time_period_utc
+                ,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM(
@@ -4181,6 +4232,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         0.5
                     )
                     OVER (PARTITION BY
+                        
                         
                 CAST(analyzed_table."date_column" AS date),
                  CAST(analyzed_table."date_column" AS date)

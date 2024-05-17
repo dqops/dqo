@@ -26,6 +26,7 @@ type TButtonTabs = {
   label: string;
   value: string;
   sortable?: boolean;
+  toRotate?: boolean | undefined;
 };
 
 type TTableWithSchema = TableListModel & { schema?: string };
@@ -76,7 +77,12 @@ export default function index({
   } = useDecodedParams();
   const [sortingDir, setSortingDir] = useState<'asc' | 'desc'>('asc');
 
-  const renderItem = (label: string, key: string, sortable?: boolean) => {
+  const renderItem = (
+    label: string,
+    key: string,
+    sortable?: boolean,
+    toRotate?: boolean
+  ) => {
     const sortTables = (key: string): void => {
       setTables((prev: any) => {
         const array = [...prev];
@@ -95,12 +101,12 @@ export default function index({
     };
     return (
       <th
-        className="px-4 text-left cursor-pointer"
+        className="px-4 cursor-pointer"
         onClick={() => sortable !== false && sortTables(key)}
         key={key}
       >
-        <div className="flex text-sm">
-          {label}
+        <div className="flex text-sm items-center relative mt-30">
+          <span className={clsx(toRotate ? ' z-9' : '')}>{label}</span>
           {sortable !== false && (
             <div className="flex flex-col items-center">
               <SvgIcon name="chevron-up" className="w-3 h-2" />
@@ -145,14 +151,21 @@ export default function index({
     ...basicDimensionTypes.map((x) => ({
       label: x,
       value: x,
-      sortable: false
+      sortable: false,
+      toRotate: true
     })),
 
     ...getDimensionKey().map((x) => ({
       label: x,
       value: x,
+      sortable: false,
+      toRotate: true
+    })),
+    {
+      label: 'Actions',
+      value: 'actions',
       sortable: false
-    }))
+    }
   ];
 
   const prepareLabel = (label: string | undefined) => {
@@ -199,7 +212,12 @@ export default function index({
                   (item) =>
                     item?.label &&
                     item.value &&
-                    renderItem(item.label, item.value, item.sortable)
+                    renderItem(
+                      item.label,
+                      item.value,
+                      item.sortable,
+                      item.toRotate
+                    )
                 )}
               </tr>
             </thead>
