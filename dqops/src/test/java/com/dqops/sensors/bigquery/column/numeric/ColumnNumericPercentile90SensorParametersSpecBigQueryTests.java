@@ -190,12 +190,8 @@ public class ColumnNumericPercentile90SensorParametersSpecBigQueryTests extends 
                     TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
                            \s
                         ) AS actual_value,
-                    DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                    TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                     FROM `%s`.`%s`.`%s` AS analyzed_table
-                    WHERE %s) AS nested_table
-                GROUP BY time_period, time_period_utc
-                ORDER BY time_period, time_period_utc""";
+                    WHERE %s) AS nested_table""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -260,8 +256,6 @@ public class ColumnNumericPercentile90SensorParametersSpecBigQueryTests extends 
         String target_query = """
             SELECT 
                 MAX(nested_table.actual_value) AS actual_value,
-                nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc,
                 analyzed_table.`length_string` AS grouping_level_1
             FROM(
                 SELECT
@@ -299,8 +293,6 @@ public class ColumnNumericPercentile90SensorParametersSpecBigQueryTests extends 
         String target_query = """
             SELECT 
                 MAX(nested_table.actual_value) AS actual_value,
-                nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc,
                 analyzed_table.`length_string` AS grouping_level_1
             FROM(
                 SELECT
@@ -309,17 +301,12 @@ public class ColumnNumericPercentile90SensorParametersSpecBigQueryTests extends 
                     0.9) 
                     OVER (PARTITION BY
                        \s
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH),
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
-                       \s
                 analyzed_table.`length_string` AS grouping_level_1
                     ) AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table
                 WHERE %s) AS nested_table
-            GROUP BY grouping_level_1, time_period, time_period_utc
-            ORDER BY grouping_level_1, time_period, time_period_utc""";
+            GROUP BY grouping_level_1
+            ORDER BY grouping_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -463,12 +450,10 @@ public class ColumnNumericPercentile90SensorParametersSpecBigQueryTests extends 
                 analyzed_table.`mix_of_values` AS grouping_level_2
                 analyzed_table.`length_string` AS grouping_level_3
                     ) AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table
                 WHERE %s) AS nested_table
-            GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2, grouping_level_3
+            ORDER BY grouping_level_1, grouping_level_2, grouping_level_3""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
