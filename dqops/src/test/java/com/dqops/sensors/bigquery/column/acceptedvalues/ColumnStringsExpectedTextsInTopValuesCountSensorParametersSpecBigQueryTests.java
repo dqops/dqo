@@ -114,16 +114,12 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecBigQu
                             ELSE NULL
                         END
                     ) AS actual_value,
-                    MAX(2) AS expected_value,
-                    top_values.time_period,
-                    top_values.time_period_utc
+                    MAX(2) AS expected_value
                 FROM
                 (
                     SELECT
                         top_col_values.top_value as top_value,
-                        top_col_values.time_period as time_period,
-                        top_col_values.time_period_utc as time_period_utc,
-                        RANK() OVER(PARTITION BY top_col_values.time_period
+                        RANK() OVER(PARTITION BY NULL
                             ORDER BY top_col_values.total_values DESC) as top_values_rank
                     FROM
                     (
@@ -133,7 +129,9 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecBigQu
                         FROM
                             `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                         WHERE id < 5
-                              AND %1$s IS NOT NULL, top_value, total_values DESC
+                              AND %1$s IS NOT NULL
+                        GROUP BY top_value
+                        ORDER BY total_values DESC
                     ) AS top_col_values
                 ) AS top_values
                 WHERE top_values_rank <= 2""";
@@ -350,16 +348,12 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecBigQu
                         END
                     ) AS actual_value,
                     MAX(2) AS expected_value,
-                    top_values.time_period,
-                    top_values.time_period_utc,
                     top_values.grouping_level_1
                 FROM
                 (
                     SELECT
                         top_col_values.top_value as top_value,
-                        top_col_values.time_period as time_period,
-                        top_col_values.time_period_utc as time_period_utc,
-                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1
+                        RANK() OVER(PARTITION BY top_col_values.grouping_level_1
                             ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1
                     FROM
                     (
@@ -412,36 +406,30 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecBigQu
                         END
                     ) AS actual_value,
                     MAX(2) AS expected_value,
-                    top_values.time_period,
-                    top_values.time_period_utc,
                     top_values.grouping_level_1
                 FROM
                 (
                     SELECT
                         top_col_values.top_value as top_value,
-                        top_col_values.time_period as time_period,
-                        top_col_values.time_period_utc as time_period_utc,
-                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1
+                        RANK() OVER(PARTITION BY top_col_values.grouping_level_1
                             ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1
                     FROM
                     (
                         SELECT
                             %1$s AS top_value,
                             COUNT(*) AS total_values,
-                            analyzed_table.`result` AS grouping_level_1,
-                            DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                            TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                            analyzed_table.`result` AS grouping_level_1
                         FROM
                             `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                         WHERE id < 5
                               AND %1$s IS NOT NULL
-                        GROUP BY grouping_level_1, time_period, time_period_utc, top_value
-                        ORDER BY grouping_level_1, time_period, time_period_utc, total_values DESC
+                        GROUP BY grouping_level_1, top_value
+                        ORDER BY grouping_level_1, total_values DESC
                     ) AS top_col_values
                 ) AS top_values
                 WHERE top_values_rank <= 2
-                GROUP BY grouping_level_1, time_period, time_period_utc
-                ORDER BY grouping_level_1, time_period, time_period_utc""";
+                GROUP BY grouping_level_1
+                ORDER BY grouping_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -627,8 +615,8 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecBigQu
                 FROM
                 (
                     SELECT
-                        top_col_values.top_value as top_value
-                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2, top_col_values.grouping_level_3
+                        top_col_values.top_value as top_value,
+                        RANK() OVER(PARTITION BY top_col_values.grouping_level_1, top_col_values.grouping_level_2, top_col_values.grouping_level_3
                             ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2, top_col_values.grouping_level_3
                     FROM
                     (
