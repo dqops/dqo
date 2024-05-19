@@ -227,13 +227,9 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
-                END AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                END AS actual_value
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc""";
+            WHERE %5$s""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -351,13 +347,11 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
-                analyzed_table.`date2` AS grouping_level_1,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                analyzed_table.`date2` AS grouping_level_1
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s
-            GROUP BY grouping_level_1, time_period, time_period_utc
-            ORDER BY grouping_level_1, time_period, time_period_utc""";
+            GROUP BY grouping_level_1
+            ORDER BY grouping_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -489,13 +483,11 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
                     ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
-                analyzed_table.`date3` AS grouping_level_2,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                analyzed_table.`date3` AS grouping_level_2
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),

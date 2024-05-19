@@ -273,13 +273,9 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                         analyzed_table.`%s`,
                         MILLISECOND
                     )
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc""";
+            WHERE %s""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getIngestionTimestampColumn(),
@@ -384,13 +380,11 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                         MILLISECOND
                     )
                 ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
-                analyzed_table.`earlier_string` AS grouping_level_1,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                analyzed_table.`earlier_string` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY grouping_level_1, time_period, time_period_utc
-            ORDER BY grouping_level_1, time_period, time_period_utc""";
+            GROUP BY grouping_level_1
+            ORDER BY grouping_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getIngestionTimestampColumn(),
