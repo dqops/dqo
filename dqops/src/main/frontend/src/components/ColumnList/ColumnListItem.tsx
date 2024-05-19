@@ -177,7 +177,6 @@ export default function SchemaTableItem({
       <td className="px-4 text-sm content-start pt-2">
         {item.type_snapshot?.column_type}
       </td>
-      <td className="px-4 text-sm content-start pt-2">{'stage'}</td>
       <td className="px-4 text-sm content-start pt-2">
         {getLabelsOverview(item?.labels ?? [])}
       </td>

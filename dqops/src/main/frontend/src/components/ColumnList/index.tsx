@@ -48,10 +48,6 @@ const headeritems: TButtonTabs[] = [
     value: 'column_type'
   },
   {
-    label: 'Stage',
-    value: 'stage'
-  },
-  {
     label: 'Labels',
     value: 'labels'
   },
