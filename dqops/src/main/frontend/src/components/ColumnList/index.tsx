@@ -116,7 +116,7 @@ function ColumnList({
         onClick={() => sortable !== false && sortTables(key)}
         key={key}
       >
-        <div className="flex text-sm items-center relative mt-30">
+        <div className="flex text-sm items-center relative">
           <span className={clsx(toRotate ? ' z-9' : '')}>{label}</span>
           {sortable !== false && (
             <div className="flex flex-col items-center">

@@ -16,7 +16,7 @@ type TTableWithSchema = TableListModel & { schema?: string };
 
 export default function GlobalTables() {
   const [tables, setTables] = useState<TTableWithSchema[]>([]);
-  const [filters, setFilters] = useState<any>({ page: 1, limit: 50 });
+  const [filters, setFilters] = useState<any>({ page: 1, pageSize: 50 });
   const [searchFilters, setSearchFilters] = useState<TSearchFilters>({});
   const [labels, setLabels] = useState<TLabel[]>([]);
 
