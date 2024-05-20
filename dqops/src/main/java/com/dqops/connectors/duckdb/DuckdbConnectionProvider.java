@@ -105,7 +105,7 @@ public class DuckdbConnectionProvider extends AbstractSqlConnectionProvider {
             duckdbSpec = new DuckdbParametersSpec();
             connectionSpec.setDuckdb(duckdbSpec);
         }
-        duckdbSpec.setReadMode(DuckdbReadMode.files);
+        duckdbSpec.setReadMode(DuckdbReadMode.in_memory);
 
 //        if (duckdbSpec.getReadMode() == null) {
 //            if (isHeadless) {

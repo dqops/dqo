@@ -16,9 +16,8 @@
 package com.dqops.execution.sqltemplates.rendering;
 
 import com.dqops.connectors.ProviderDialectSettings;
-import com.dqops.connectors.duckdb.DuckdbParametersSpec;
-import com.dqops.connectors.duckdb.DuckdbReadMode;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
@@ -41,7 +40,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Context object whose properties will be available as variables in the Jinja2 SQL template.
@@ -154,8 +152,7 @@ public class JinjaTemplateRenderParameters {
         }};
 
         DuckdbParametersSpec duckdbParametersSpec = sensorRunParameters.getConnection().getDuckdb();
-        if (duckdbParametersSpec != null && Objects.equals(duckdbParametersSpec.getReadMode(), DuckdbReadMode.files) &&
-                duckdbParametersSpec.getFilesFormatType() != null) {
+        if (duckdbParametersSpec != null && duckdbParametersSpec.getFilesFormatType() != null) {
             DuckdbFilesFormatType duckdbFilesFormatType = duckdbParametersSpec.getFilesFormatType();
             FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
             if (duckdbFilesFormatType != null && fileFormatSpec != null && !fileFormatSpec.getFilePaths().isEmpty()) {

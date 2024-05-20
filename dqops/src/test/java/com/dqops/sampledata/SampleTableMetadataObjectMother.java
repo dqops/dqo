@@ -73,9 +73,6 @@ public class SampleTableMetadataObjectMother {
             case postgresql:
                 return PostgresqlConnectionSpecObjectMother.create();
 
-            case duckdb:
-                return DuckdbConnectionSpecObjectMother.createForInMemory();
-
             case redshift:
                 return RedshiftConnectionSpecObjectMother.create();
 
