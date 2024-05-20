@@ -57,7 +57,9 @@ export default function ConnectionColumns() {
       addPrefix(searchFilters.schema ?? ''),
       addPrefix(searchFilters.table ?? ''),
       addPrefix(searchFilters.column ?? ''),
-      addPrefix(searchFilters.columnType ?? ''),
+      searchFilters.columnType?.length
+        ? addPrefix(searchFilters.columnType ?? '')
+        : undefined,
       labels,
       filters.page,
       filters.pageSize,
