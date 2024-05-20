@@ -234,7 +234,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
 
         if (this.filters.getColumnDataType() != null
                 && (columnSpec.getTypeSnapshot() == null
-                || !Objects.equals(this.filters.getColumnDataType(), columnSpec.getTypeSnapshot().getColumnType()))) {
+                || !StringPatternComparer.matchSearchPattern(columnSpec.getTypeSnapshot().getColumnType(), this.filters.getColumnDataType()))) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
