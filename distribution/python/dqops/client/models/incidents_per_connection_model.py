@@ -14,15 +14,19 @@ class IncidentsPerConnectionModel:
     Attributes:
         connection (Union[Unset, str]): Connection (data source) name.
         open_incidents (Union[Unset, int]): Count of open (new) data quality incidents.
+        most_recent_first_seen (Union[Unset, int]): The UTC timestamp when the most recent data quality incident was
+            first seen.
     """
 
     connection: Union[Unset, str] = UNSET
     open_incidents: Union[Unset, int] = UNSET
+    most_recent_first_seen: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         connection = self.connection
         open_incidents = self.open_incidents
+        most_recent_first_seen = self.most_recent_first_seen
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -31,6 +35,8 @@ class IncidentsPerConnectionModel:
             field_dict["connection"] = connection
         if open_incidents is not UNSET:
             field_dict["openIncidents"] = open_incidents
+        if most_recent_first_seen is not UNSET:
+            field_dict["mostRecentFirstSeen"] = most_recent_first_seen
 
         return field_dict
 
@@ -41,9 +47,12 @@ class IncidentsPerConnectionModel:
 
         open_incidents = d.pop("openIncidents", UNSET)
 
+        most_recent_first_seen = d.pop("mostRecentFirstSeen", UNSET)
+
         incidents_per_connection_model = cls(
             connection=connection,
             open_incidents=open_incidents,
+            most_recent_first_seen=most_recent_first_seen,
         )
 
         incidents_per_connection_model.additional_properties = d

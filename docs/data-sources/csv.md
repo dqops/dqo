@@ -12,7 +12,7 @@ DQOps will create a table from the CSV file, which will allow you to profile it 
 
 ## Prerequisite credentials
 
-Additional configuration is required **only for using remote storage** (AWS S3).
+Additional configuration is required **only when using remote storage** (AWS S3 or Azure Blob Storage).
 
 When using remote cloud storage, make sure your account has access to the remote directory containing CSV files. 
 The permissions granted should allow you to list the files and directories, as well as read the contents of the files.
@@ -38,20 +38,25 @@ After navigating to the CSV connection settings, you will need to fill in its de
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-csv.png){ loading=lazy; width="1200px" }
 
-| CSV connection settings   | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                           | 
-|---------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name           |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                             |
-| Parallel jobs limit       |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                                                                                                       |
-| Files location            | `storage-type`                           | You have the option to import files stored locally or on AWS S3. If you choose to work with files on AWS S3, it is recommended that you create a specialized user in IAM. This user should be used as a service account and given permission to list and read objects. |
-| File format               | `files-format-type`                      | Type of source files for DuckDB.                                                                                                                                                                                                                                      |
-| Aws authentication mode   | `duckdb_aws_authentication_mode`         | Available when using AWS S3. Authentication mode to AWS S3. Supports also a ${REDSHIFT_AUTHENTICATION_MODE} configuration with a custom environment variable.                                                                                                              |
-| Access Key ID             | `user`                                   | Available when using AWS S3. Access Key ID for AWS authentication. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                |
-| Secret Access Key         | `password`                               | Available when using AWS S3. Secret Access Key for AWS authentication. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                            |
-| Region                    | `region`                                 | The region for the storage credentials for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When not set the default value will be loaded from .credentials/AWS_default_config file in your DQOps' userhome |
-| Virtual schema name       | `directories`                            | An alias for the parent directory with data. The virtual schema name is a key of the directories mapping.                                                                                                                                                             |
-| Path                      | `directories`                            | The path prefix to the parent directory with data. The path must be absolute.                                                                                                                           |
-| JDBC connection property  |                                          | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                                              |
-
+| CSV connection settings   | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                                                             | 
+|---------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name           |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                                                                               |
+| Parallel jobs limit       |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                                                                                                            |
+| Files location            | `storage_type`                           | You have the option to import files stored locally or remotely at AWS S3 or Azure Blob Storage. If you choose to work with files remotely, it is recommended that you create a specialized user in IAM. This user should be used as a service account and given permission to list and read objects.                    |
+| File format               | `files_format_type`                      | Type of source files for DuckDB.                                                                                                                                                                                                                                                                                        |
+| Aws authentication mode   | `aws_authentication_mode`                | (Available when using AWS S3 files location) Authentication mode to AWS S3. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.                                                                                                                                         |
+| Access Key ID             | `user`                                   | (Available when using AWS S3 files location) Access Key ID for AWS authentication. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                             |
+| Secret Access Key         | `password`                               | (Available when using AWS S3 files location) Secret Access Key for AWS authentication. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                         |
+| Region                    | `region`                                 | (Available when using AWS S3 files location) The region for the storage credentials for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution. When not set the default value will be loaded from .credentials/AWS_default_config file in your DQOps' userhome |
+| Azure authentication mode | `azure_authentication_mode`              | (Available when using Azure Blob Storage files location) Authentication mode to Azure Blob Storage. Supports also a ${DUCKDB_AZURE_AUTHENTICATION_MODE} configuration with a custom environment variable.                                                                                                               |
+| Connection string         | `password`                               | (Available when using Azure Blob Storage files location with Connection String authentication mode) Connection string to the Azure Storage Account. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                            |
+| Tenant ID                 | `tenant_id`                              | (Available when using Azure Blob Storage files location with Service Principal authentication mode) Tenant ID. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                 |
+| Client ID                 | `client_id`                              | (Available when using Azure Blob Storage files location with Service Principal authentication mode) Client ID. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                 |
+| Client Secret             | `client_secret`                          | (Available when using Azure Blob Storage files location with Service Principal authentication mode) Client Secret. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                             |
+| Storage account name      | `storage_account_name`                   | (Available when using Azure Blob Storage files location with Credential Chain or Service Principal authentication mode) Storage account name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                  |
+| Virtual schema name       | `directories`                            | An alias for the parent directory with data. The virtual schema name is a key of the directories mapping.                                                                                                                                                                                                               |
+| Path                      | `directories`                            | The path prefix to the parent directory with data. The path must be absolute. The virtual schema name is a value of the directories mapping.                                                                                                                                                                            |
+| JDBC connection property  |                                          | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                                                                                                |     
 
 ### Setting the path to data import
 
@@ -239,6 +244,7 @@ Please enter one of the [] values: 6
 Type of storage [local]:
  [ 1] local (default)
  [ 2] s3
+ [ 3] azure
 Please enter one of the [] values: 
 Type of source files for DuckDB:
  [ 1] csv
@@ -306,10 +312,10 @@ YAML file format.
 
 ### Using shared credentials
 
-With DQOps, you can configure credentials to access AWS S3 directly in the platform.
+With DQOps, you can configure credentials to access AWS S3 or Azure Blob Storage directly in the platform.
 
 Please note, that any credentials and secrets shared with the DQOps Cloud or DQOps SaaS instances are stored in the .credentials folder.
-This folder also contains the default credentials files pair for AWS named **AWS_default_config** and **AWS_default_credentials**.
+This folder also contains the default credentials files for AWS S3 (**AWS_default_config** and **AWS_default_credentials**) and Azure Blob Storage (**Azure_default_credentials**).
 
 ``` { .asc .annotate hl_lines="4-5" }
 $DQO_USER_HOME
@@ -317,18 +323,21 @@ $DQO_USER_HOME
 └───.credentials                                                            
     ├───AWS_default_config
     ├───AWS_default_credentials
+    ├───Azure_default_credentials
     └─...   
 ```
 
 If you wish to use AWS authentication, the content of the files must be replaced with your aws_access_key_id, aws_secret_access_key and region.
 You can find more details on how to [manage access keys for IAM users](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html) in AWS documentation.
 
-!!! warning
+If you wish to use Azure authentication, you need service principal credentials that must be replaced in Azure file content.
 
-    If you do not replace the content of the files, the default credentials will be loaded from system.
+!!! warning 'AWS system default credentials'
+
+    If you do not replace the content of the files, the default credentials will be loaded from system for AWS only.
 
 
-To set the credential file in DQOps, follow these steps:
+To set the credential file for AWS in DQOps, follow steps:
 
 1. Open the Configuration section.
 2. Select Shared credentials from the tree view on the left.
@@ -345,10 +354,12 @@ To set the credential file in DQOps, follow these steps:
 6. Edit the region in AWS_default_config file and save the file.
 
 
-!!! tip "Use the system default credentials after filling in the shared credential"
+!!! tip "Use the AWS system default credentials after filling in the shared credential"
 
     If you still want to use default credentials from AWS, 
     you must manually delete the .credentials/AWS_default_config and .credentials/AWS_default_credentials files from the DQOps credentials.
+
+    Remember that system default credentials are supported only for AWS.
 
 
 ## Next steps

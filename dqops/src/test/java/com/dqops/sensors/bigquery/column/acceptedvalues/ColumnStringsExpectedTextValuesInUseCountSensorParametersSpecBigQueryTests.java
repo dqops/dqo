@@ -213,13 +213,9 @@ public class ColumnStringsExpectedTextValuesInUseCountSensorParametersSpecBigQue
                         ELSE NULL
                     END
                 ) AS actual_value,
-                MAX(3) AS expected_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                MAX(3) AS expected_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc""";
+            WHERE %s""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -322,13 +318,11 @@ public class ColumnStringsExpectedTextValuesInUseCountSensorParametersSpecBigQue
                     END
                 ) AS actual_value,
                 MAX(3) AS expected_value,
-                analyzed_table.`length_int` AS grouping_level_1,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                analyzed_table.`length_int` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY grouping_level_1, time_period, time_period_utc
-            ORDER BY grouping_level_1, time_period, time_period_utc""";
+            GROUP BY grouping_level_1
+            ORDER BY grouping_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -449,13 +443,11 @@ public class ColumnStringsExpectedTextValuesInUseCountSensorParametersSpecBigQue
                 MAX(3) AS expected_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
-                analyzed_table.`length_int` AS grouping_level_3,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                analyzed_table.`length_int` AS grouping_level_3
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2, grouping_level_3
+            ORDER BY grouping_level_1, grouping_level_2, grouping_level_3""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),

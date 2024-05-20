@@ -17,6 +17,7 @@ package com.dqops.rest.models.metadata;
 
 import com.dqops.checks.CheckType;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
+import com.dqops.data.checkresults.models.currentstatus.ColumnCurrentDataQualityStatusModel;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.ColumnSpec;
@@ -85,6 +86,15 @@ public class ColumnListModel {
     @JsonPropertyDescription("Column data type that was retrieved when the table metadata was imported.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ColumnTypeSnapshotSpec typeSnapshot;
+
+    /**
+     * The current data quality status for the column, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache.
+     * In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the column.
+     */
+    @JsonPropertyDescription("The current data quality status for the column, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache. " +
+            "In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the column.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ColumnCurrentDataQualityStatusModel dataQualityStatus;
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this column.")
     private CheckSearchFilters runChecksJobTemplate;

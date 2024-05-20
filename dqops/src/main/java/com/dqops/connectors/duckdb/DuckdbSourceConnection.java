@@ -24,6 +24,7 @@ import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
 import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
+import com.dqops.connectors.storage.azure.AzureAuthenticationMode;
 import com.dqops.core.configuration.DqoDuckdbConfiguration;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.jobqueue.JobCancellationListenerHandle;
@@ -34,6 +35,7 @@ import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
 import com.dqops.metadata.sources.fileformat.FilePathListSpec;
+import com.dqops.metadata.storage.localfiles.credentials.azure.AzureCredentialsProvider;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
@@ -70,16 +72,18 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     private static final String temporaryDirectoryPrefix = "dqops_duckdb_temp_";
     private final TablesListerProvider tablesListerProvider;
     private final DuckdbInMemoryInstance duckdbInMemoryInstance;
+    private final AzureCredentialsProvider azureCredentialsProvider;
 
     /**
      * Injection constructor for the duckdb connection.
      *
-     * @param jdbcConnectionPool      Jdbc connection pool.
-     * @param secretValueProvider     Secret value provider for the environment variable expansion.
-     * @param homeLocationFindService Home location find service.
-     * @param dqoDuckdbConfiguration  Configuration settings for duckdb.
-     * @param dataTypeParser          Data type parser that parses the schema of structures.
-     * @param duckdbInMemoryInstance  Holder of a shared in-memory DuckDB connection that is duplicated.
+     * @param jdbcConnectionPool       Jdbc connection pool.
+     * @param secretValueProvider      Secret value provider for the environment variable expansion.
+     * @param homeLocationFindService  Home location find service.
+     * @param dqoDuckdbConfiguration   Configuration settings for duckdb.
+     * @param dataTypeParser           Data type parser that parses the schema of structures.
+     * @param duckdbInMemoryInstance   Holder of a shared in-memory DuckDB connection that is duplicated.
+     * @param azureCredentialsProvider Azure credentials provider
      */
     @Autowired
     public DuckdbSourceConnection(JdbcConnectionPool jdbcConnectionPool,
@@ -89,13 +93,15 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                                   DqoDuckdbConfiguration dqoDuckdbConfiguration,
                                   DuckDBDataTypeParser dataTypeParser,
                                   TablesListerProvider tablesListerProvider,
-                                  DuckdbInMemoryInstance duckdbInMemoryInstance) {
+                                  DuckdbInMemoryInstance duckdbInMemoryInstance,
+                                  AzureCredentialsProvider azureCredentialsProvider) {
         super(jdbcConnectionPool, secretValueProvider, duckdbConnectionProvider);
         this.homeLocationFindService = homeLocationFindService;
         this.dqoDuckdbConfiguration = dqoDuckdbConfiguration;
         this.dataTypeParser = dataTypeParser;
         this.tablesListerProvider = tablesListerProvider;
         this.duckdbInMemoryInstance = duckdbInMemoryInstance;
+        this.azureCredentialsProvider = azureCredentialsProvider;
     }
 
     /**
@@ -306,12 +312,19 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                             AwsAuthenticationMode.default_credentials : duckdb.getAwsAuthenticationMode();
 
                     if(awsAuthenticationMode.equals(AwsAuthenticationMode.default_credentials)){
-                        duckdbSpecCloned.fillSpecWithDefaultCredentials(secretValueLookupContext);
+                        duckdbSpecCloned.fillSpecWithDefaultAwsCredentials(secretValueLookupContext);
                     } else if (Strings.isNullOrEmpty(duckdbSpecCloned.getRegion())){
                         duckdbSpecCloned.fillSpecWithDefaultAwsConfig(secretValueLookupContext);
                     }
                     break;
-                    // todo: add default azure credentials
+                case azure:
+                    AzureAuthenticationMode azureAuthenticationMode = duckdb.getAzureAuthenticationMode() == null ?
+                            AzureAuthenticationMode.default_credentials : duckdb.getAzureAuthenticationMode();
+
+                    if(azureAuthenticationMode.equals(AzureAuthenticationMode.default_credentials)){
+                        duckdbSpecCloned.fillSpecWithDefaultAzureCredentials(secretValueLookupContext, azureCredentialsProvider);
+                    }
+                    break;
             }
         }
 

@@ -350,6 +350,17 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
         return tableStatusClone;
     }
 
+    /**
+     * Creates a shallow clone of the object, without the checks and columns.
+     * @return Shallow clone of the object, without checks and columns.
+     */
+    public TableCurrentDataQualityStatusModel shallowCloneWithoutCheckResultsAndColumns() {
+        TableCurrentDataQualityStatusModel tableStatusClone = this.clone();
+        tableStatusClone.checks = null; // detaching checks
+        tableStatusClone.columns = null; // detaching columns
+        return tableStatusClone;
+    }
+
     public static class TableCurrentDataQualityStatusModelSampleFactory implements SampleValueFactory<TableCurrentDataQualityStatusModel> {
         @Override
         public TableCurrentDataQualityStatusModel createSample() {

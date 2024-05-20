@@ -31147,6 +31147,20 @@
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
           },
+          "disabled" : {
+            "type" : "boolean",
+            "description" : "Disables this data quality check configuration. The checks will not be activated.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "The description (documentation) of this data quality check configuration.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
           "target" : {
             "$ref" : "#/components/schemas/TargetColumnPatternSpec",
             "extensions" : { },
@@ -31177,6 +31191,14 @@
               "type" : "integer",
               "format" : "int32",
               "description" : "The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values."
+            },
+            "disabled" : {
+              "type" : "boolean",
+              "description" : "Disables this data quality check configuration. The checks will not be activated."
+            },
+            "description" : {
+              "type" : "string",
+              "description" : "The description (documentation) of this data quality check configuration."
             },
             "target" : {
               "description" : "The target column filter that are filtering the column, table and connection on which the default checks are applied.",
@@ -62624,6 +62646,20 @@
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
           },
+          "disabled" : {
+            "type" : "boolean",
+            "description" : "Disables this data quality check configuration. The checks will not be activated.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "The description (documentation) of this data quality check configuration.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
           "target_column" : {
             "$ref" : "#/components/schemas/TargetColumnPatternSpec",
             "extensions" : { },
@@ -62658,6 +62694,14 @@
               "type" : "integer",
               "format" : "int32",
               "description" : "The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values."
+            },
+            "disabled" : {
+              "type" : "boolean",
+              "description" : "Disables this data quality check configuration. The checks will not be activated."
+            },
+            "description" : {
+              "type" : "string",
+              "description" : "The description (documentation) of this data quality check configuration."
             },
             "target_column" : {
               "description" : "The filters for the target column.",
@@ -62813,6 +62857,20 @@
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
           },
+          "disabled" : {
+            "type" : "boolean",
+            "description" : "Disables this data quality check configuration. The checks will not be activated.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "The description (documentation) of this data quality check configuration.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
           "target_table" : {
             "$ref" : "#/components/schemas/TargetTablePatternSpec",
             "extensions" : { },
@@ -62847,6 +62905,14 @@
               "type" : "integer",
               "format" : "int32",
               "description" : "The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values."
+            },
+            "disabled" : {
+              "type" : "boolean",
+              "description" : "Disables this data quality check configuration. The checks will not be activated."
+            },
+            "description" : {
+              "type" : "string",
+              "description" : "The description (documentation) of this data quality check configuration."
             },
             "target_table" : {
               "description" : "The filters for the target table.",
@@ -65989,6 +66055,14 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
+          },
+          "mostRecentFirstSeen" : {
+            "type" : "integer",
+            "description" : "The UTC timestamp when the most recent data quality incident was first seen.",
+            "format" : "int64",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
           }
         },
         "exampleSetFlag" : false,
@@ -66004,6 +66078,11 @@
               "type" : "integer",
               "format" : "int32",
               "description" : "Count of open (new) data quality incidents."
+            },
+            "mostRecentFirstSeen" : {
+              "type" : "integer",
+              "format" : "int64",
+              "description" : "The UTC timestamp when the most recent data quality incident was first seen."
             }
           }
         }
@@ -74292,6 +74371,20 @@
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
           },
+          "disabled" : {
+            "type" : "boolean",
+            "description" : "Disables this data quality check configuration. The checks will not be activated.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "The description (documentation) of this data quality check configuration.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
           "target" : {
             "$ref" : "#/components/schemas/TargetTablePatternSpec",
             "extensions" : { },
@@ -74322,6 +74415,14 @@
               "type" : "integer",
               "format" : "int32",
               "description" : "The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values."
+            },
+            "disabled" : {
+              "type" : "boolean",
+              "description" : "Disables this data quality check configuration. The checks will not be activated."
+            },
+            "description" : {
+              "type" : "string",
+              "description" : "The description (documentation) of this data quality check configuration."
             },
             "target" : {
               "description" : "The target table filter that are filtering the table and connection on which the default checks are applied.",

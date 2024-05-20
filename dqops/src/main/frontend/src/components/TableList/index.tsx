@@ -7,6 +7,7 @@ import { useDecodedParams } from '../../utils';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import { Pagination } from '../Pagination';
 import SvgIcon from '../SvgIcon';
+
 function getValueForKey<T>(obj: T, key: string): string | undefined {
   const keys = key.split('.');
   let value: any = obj;
@@ -25,6 +26,7 @@ type TButtonTabs = {
   label: string;
   value: string;
   sortable?: boolean;
+  toRotate?: boolean | undefined;
 };
 
 type TTableWithSchema = TableListModel & { schema?: string };
@@ -75,7 +77,12 @@ export default function index({
   } = useDecodedParams();
   const [sortingDir, setSortingDir] = useState<'asc' | 'desc'>('asc');
 
-  const renderItem = (label: string, key: string, sortable?: boolean) => {
+  const renderItem = (
+    label: string,
+    key: string,
+    sortable?: boolean,
+    toRotate?: boolean
+  ) => {
     const sortTables = (key: string): void => {
       setTables((prev: any) => {
         const array = [...prev];
@@ -94,12 +101,12 @@ export default function index({
     };
     return (
       <th
-        className="px-4 text-left cursor-pointer"
+        className="px-4 cursor-pointer"
         onClick={() => sortable !== false && sortTables(key)}
         key={key}
       >
-        <div className="flex text-sm">
-          {label}
+        <div className="flex text-sm items-center relative">
+          <span className={clsx(toRotate ? ' z-9' : '')}>{label}</span>
           {sortable !== false && (
             <div className="flex flex-col items-center">
               <SvgIcon name="chevron-up" className="w-3 h-2" />
@@ -144,14 +151,21 @@ export default function index({
     ...basicDimensionTypes.map((x) => ({
       label: x,
       value: x,
-      sortable: false
+      sortable: false,
+      toRotate: true
     })),
 
     ...getDimensionKey().map((x) => ({
       label: x,
       value: x,
+      sortable: false,
+      toRotate: true
+    })),
+    {
+      label: 'Actions',
+      value: 'actions',
       sortable: false
-    }))
+    }
   ];
 
   const prepareLabel = (label: string | undefined) => {
@@ -165,7 +179,7 @@ export default function index({
   const isEnd = tables.length < filters.pageSize;
 
   return (
-    <>
+    <div className="bg-white">
       <div className="flex">
         <div className="w-[280px]">
           <SectionWrapper
@@ -190,27 +204,34 @@ export default function index({
           </SectionWrapper>
         </div>
 
-        <table className="overflow-x-auto">
-          <thead>
-            <tr className="mb-2">
-              {headerItems.map(
-                (item) =>
-                  item?.label &&
-                  item.value &&
-                  renderItem(item.label, item.value, item.sortable)
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {tables.map((item, index) => (
-              <SchemaTableItem
-                key={index}
-                item={item}
-                dimensionKeys={getDimensionKey()}
-              />
-            ))}
-          </tbody>
-        </table>
+        <div className="overflow-x-auto">
+          <table>
+            <thead>
+              <tr className="mb-2">
+                {headerItems.map(
+                  (item) =>
+                    item?.label &&
+                    item.value &&
+                    renderItem(
+                      item.label,
+                      item.value,
+                      item.sortable,
+                      item.toRotate
+                    )
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {tables.map((item, index) => (
+                <SchemaTableItem
+                  key={index}
+                  item={item}
+                  dimensionKeys={getDimensionKey()}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
       <div className="px-4 my-5">
         <Pagination
@@ -226,6 +247,6 @@ export default function index({
           }
         />
       </div>
-    </>
+    </div>
   );
 }

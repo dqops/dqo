@@ -134,8 +134,15 @@ public class PreparedSensorsGroup {
 
                     stringBuilder.append(sqlFragmentText);
 
-                    if (!sqlFragmentText.trim().endsWith(",")) {
-                        stringBuilder.append(',');
+                    SqlQueryFragment nextQueryFragment = firstQuerySqlFragments.getComponents().size() > fragmentIndex + 1 ?
+                            firstQuerySqlFragments.getComponents().get(fragmentIndex + 1) : null;
+                    if (sensorIndex < this.preparedSensors.size() - 1 ||  // not the last merged sensor
+                            (nextQueryFragment != null && (nextQueryFragment.getFragmentType() != SqlQueryFragmentType.STATIC_FRAGMENT ||
+                                    (nextQueryFragment.getFragmentType() == SqlQueryFragmentType.STATIC_FRAGMENT &&
+                                    nextQueryFragment.getText().trim().startsWith(","))))) {
+                        if (!sqlFragmentText.trim().endsWith(",")) {
+                            stringBuilder.append(',');
+                        }
                     }
                 }
             }

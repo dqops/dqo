@@ -37,6 +37,7 @@ import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityObjectMother;
+import com.dqops.data.checkresults.statuscache.TableStatusCacheStub;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.sources.ColumnSpec;
@@ -62,6 +63,7 @@ import com.dqops.services.metadata.ColumnService;
 import com.dqops.services.metadata.ColumnServiceImpl;
 import com.dqops.utils.BeanFactoryObjectMother;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
+import org.apache.zookeeper.Op;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,6 +75,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 public class ColumnsControllerUTTests extends BaseTest {
@@ -97,7 +100,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
         this.sut = new ColumnsController(columnService, this.userHomeContextFactory, dqoHomeContextFactory, specToUiCheckMappingService,
                 uiToSpecCheckMappingService, null, new DefaultObservabilityConfigurationServiceImpl(ConnectionProviderRegistryObjectMother.getInstance()),
-                new RestApiLockServiceImpl());
+                new RestApiLockServiceImpl(), new TableStatusCacheStub());
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
     }
@@ -110,7 +113,10 @@ public class ColumnsControllerUTTests extends BaseTest {
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
-                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
+                Optional.of(false),
+                Optional.empty()
+        );
 
         List<ColumnListModel> result = responseEntity.getBody().collectList().block();
         Assertions.assertNotNull(result);

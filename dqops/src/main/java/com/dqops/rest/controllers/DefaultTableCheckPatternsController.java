@@ -246,10 +246,13 @@ public class DefaultTableCheckPatternsController {
                     }
 
                     TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-                    defaultChecksPatternWrapper.setSpec(new TableDefaultChecksPatternSpec() {{
-                        setTarget(patternModel.getTargetTable());
-                        setPriority(patternModel.getPriority());
-                    }});
+                    TableDefaultChecksPatternSpec patternSpec = new TableDefaultChecksPatternSpec();
+                    patternSpec.setTarget(patternModel.getTargetTable());
+                    patternSpec.setPriority(patternModel.getPriority());
+                    patternSpec.setDescription(patternModel.getDescription());
+                    patternSpec.setDisabled(patternModel.isDisabled());
+
+                    defaultChecksPatternWrapper.setSpec(patternSpec);
                     userHomeContext.flush();
 
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);

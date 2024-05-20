@@ -108,7 +108,7 @@ export const IncidentDetail = () => {
   useEffect(() => {
     IncidentsApi.getIncident(connection, year, month, incidentId).then(
       (res) => {
-        setIncidentDetail(res.data);
+        setIncidentDetail(res?.data);
       }
     );
 

@@ -14,5 +14,7 @@ FROM
         {{ lib.render_where_clause() }}
         LIMIT 1
     ) AS tab_scan
+{% if lib.time_series is not none -%}
 GROUP BY time_period
 ORDER BY time_period
+{%- endif -%}

@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useMemo } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -12,7 +12,6 @@ import {
 } from '../../redux/actions/incidents.actions';
 import { IRootState } from '../../redux/reducers';
 import { ROUTES } from '../../shared/routes';
-import { urlencodeDecoder } from '../../utils';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 import Header from '../Header';
 import PageTabs from '../PageTabs';
@@ -24,26 +23,34 @@ interface LayoutProps {
 }
 
 const IncidentsLayout = ({ route }: LayoutProps) => {
-  const { objectNotFound, setObjectNotFound } = useTree()
-  
+  const { objectNotFound, setObjectNotFound } = useTree();
+
   const { tabs: pageTabs, activeTab } = useSelector(
     (state: IRootState) => state.incidents
   );
-  
+
   const dispatch = useDispatch();
   const history = useHistory();
 
-
   const handleChange = (tab: TabOption) => {
+    if (tab.url === window.location.pathname) {
+      return;
+    }
     dispatch(setActiveFirstLevelTab(tab.value));
-    history.push(urlencodeDecoder(tab?.url ?? ''));
+    history.push(tab.value);
   };
 
   const closeTab = (value: string) => {
-    if (pageTabs.length === 1) {
-      history.push(`/incidents`)
-    }
+    const tabIndex = pageTabs.findIndex((item) => item.url === value);
     dispatch(closeFirstLevelTab(value));
+    if (pageTabs.length === 1) {
+      history.push(`/incidents`);
+      return;
+    }
+    history.push(pageTabs[tabIndex - 1]?.url || pageTabs[0]?.url);
+    dispatch(
+      setActiveFirstLevelTab(pageTabs[tabIndex - 1]?.url || pageTabs[0]?.url)
+    );
   };
 
   const tabOptions = useMemo(() => {
@@ -56,21 +63,14 @@ const IncidentsLayout = ({ route }: LayoutProps) => {
     );
   }, [pageTabs]);
 
-  useEffect(() => {
-    if (activeTab) {
-      dispatch(setActiveFirstLevelTab(activeTab));
-      history.push(activeTab);
-    }
-  }, [activeTab]);
-
   const getComponent = () => {
     switch (route) {
       case ROUTES.PATTERNS.INCIDENT_DETAIL:
-        return <IncidentDetail/>;
+        return <IncidentDetail />;
       case ROUTES.PATTERNS.INCIDENTS:
-        return <Incidents/>;
+        return <Incidents />;
       case ROUTES.PATTERNS.INCIDENT_CONNECTION:
-        return <IncidentConnection/>;  
+        return <IncidentConnection />;
       default:
         return null;
     }
@@ -105,17 +105,26 @@ const IncidentsLayout = ({ route }: LayoutProps) => {
               limit={7}
             />
             <div className="bg-white border border-gray-300 flex-auto min-h-0 overflow-auto">
-              {!!activeTab && activeTab !== '/incidents/new-tab' && <>{renderComponent}</>}
+              {!!activeTab && activeTab !== '/incidents/new-tab' && (
+                <>{renderComponent}</>
+              )}
             </div>
           </div>
         </div>
       </div>
       <ConfirmDialog
-      open={objectNotFound}
-      onConfirm={() => new Promise(() => {dispatch(closeFirstLevelTab(activeTab)), setObjectNotFound(false)})}
-      isCancelExcluded={true} 
-      onClose={() => {dispatch(closeFirstLevelTab(activeTab)), setObjectNotFound(false)}}
-      message='The definition of this object was deleted in the DQOps user home. The tab will be closed.'/>
+        open={objectNotFound}
+        onConfirm={() =>
+          new Promise(() => {
+            dispatch(closeFirstLevelTab(activeTab)), setObjectNotFound(false);
+          })
+        }
+        isCancelExcluded={true}
+        onClose={() => {
+          dispatch(closeFirstLevelTab(activeTab)), setObjectNotFound(false);
+        }}
+        message="The definition of this object was deleted in the DQOps user home. The tab will be closed."
+      />
     </div>
   );
 };

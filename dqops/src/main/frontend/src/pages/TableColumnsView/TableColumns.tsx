@@ -20,29 +20,33 @@ import { ITableColumnsProps, MyData, spec } from './TableColumnsConstans';
 import TableColumnsHeader from './TableColumnsHeader';
 import { renderValue } from './TableColumnsUtils';
 
-const getSeverityLevel = (severity: CheckCurrentDataQualityStatusModelCurrentSeverityEnum | undefined) => {
+const getSeverityLevel = (
+  severity: CheckCurrentDataQualityStatusModelCurrentSeverityEnum | undefined
+) => {
   switch (severity) {
-    case 'execution_error': 
+    case 'execution_error':
       return 4;
-    case 'fatal' : 
+    case 'fatal':
       return 3;
-    case 'error': 
+    case 'error':
       return 2;
-    case 'warning': 
+    case 'warning':
       return 1;
     case 'valid':
-      return 0;        
+      return 0;
   }
   return 4;
-} 
+};
 
-const rewriteDimensions = (columnStatus : { [key: string]: ColumnCurrentDataQualityStatusModel }) => {
-  const obj : any = {};
+const rewriteDimensions = (columnStatus: {
+  [key: string]: ColumnCurrentDataQualityStatusModel;
+}) => {
+  const obj: any = {};
   Object.entries(columnStatus).forEach(([key, value]) => {
     obj[key] = value.dimensions;
-  }); 
+  });
   return obj;
-}
+};
 
 const prepareLabel = (label: string | undefined) => {
   if (!label) return;
@@ -67,7 +71,7 @@ const TableColumns = ({
   onChangeSelectedColumns,
   refreshListFunc
 }: ITableColumnsProps) => {
-  const {checkTypes} : {checkTypes: CheckTypes} = useDecodedParams()
+  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
   const [sortedArray, setSortedArray] = useState<MyData[]>();
@@ -75,8 +79,10 @@ const TableColumns = ({
     {}
   );
   const [shouldResetCheckboxes, setShouldResetCheckboxes] = useState(false);
-  const [status, setStatus] = useState<{ [key: string]: ColumnCurrentDataQualityStatusModel }>({})
-  const [columns, setColumns] = useState<ColumnListModel[]>([])
+  const [status, setStatus] = useState<{
+    [key: string]: ColumnCurrentDataQualityStatusModel;
+  }>({});
+  const [columns, setColumns] = useState<ColumnListModel[]>([]);
 
   const handleButtonClick = (name: string) => {
     setObjectStates((prevStates) => ({
@@ -275,15 +281,26 @@ const TableColumns = ({
       </div>
     );
   }
-  const handleSorting  = (data: MyData[]) => {
-    const arr = [...data]
+  const handleSorting = (data: MyData[]) => {
+    const arr = [...data];
     setSortedArray(arr);
-  }
+  };
 
   useEffect(() => {
-    CheckResultApi.getTableDataQualityStatus(connectionName, schemaName, tableName, undefined, undefined, checkTypes === CheckTypes.PROFILING ? true : undefined).then((res) =>  setStatus(res.data.columns ?? {}));
-    ColumnApiClient.getColumns(connectionName, schemaName, tableName).then((res) => setColumns(res.data))
-  }, [connectionName, schemaName, tableName]);
+    CheckResultApi.getTableDataQualityStatus(
+      connectionName,
+      schemaName,
+      tableName,
+      undefined,
+      undefined,
+      checkTypes === CheckTypes.PROFILING,
+      checkTypes === CheckTypes.MONITORING || checkTypes === CheckTypes.SOURCES,
+      checkTypes === CheckTypes.PARTITIONED || checkTypes === CheckTypes.SOURCES
+    ).then((res) => setStatus(res.data.columns ?? {}));
+    ColumnApiClient.getColumns(connectionName, schemaName, tableName, true, checkTypes == CheckTypes.SOURCES ? undefined : checkTypes).then(
+      (res) => setColumns(res.data)
+    );
+  }, [checkTypes, connectionName, schemaName, tableName]);
 
   return (
     <div className="p-4 relative">

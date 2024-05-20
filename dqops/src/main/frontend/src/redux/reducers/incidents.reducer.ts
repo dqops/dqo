@@ -90,6 +90,7 @@ export interface IIncidentsState {
   error?: any;
   tabs: INestTab[];
   activeTab?: string;
+  selectedConnections?: { [key: string]: string };
 }
 
 const initialState: IIncidentsState = {
@@ -219,7 +220,7 @@ const incidentsReducer = (state = initialState, action: any) => {
       return setActiveTabState(state, action, {
         issues: action.data,
         loading: false,
-        isEnd: action.isEnd,
+        isEnd: action.isEnd
       });
     }
     case INCIDENTS_ACTION.GET_INCIDENTS_ISSUES_ERROR: {
@@ -259,6 +260,13 @@ const incidentsReducer = (state = initialState, action: any) => {
         histogramFilter: action.data
       });
     }
+    case INCIDENTS_ACTION.ADD_SELECTED_CONNECTION: {
+      return {
+        ...state,
+        selectedConnections: { ...state.selectedConnections, ...action.data }
+      };
+    }
+
     default:
       return state;
   }

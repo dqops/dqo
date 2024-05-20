@@ -12,7 +12,7 @@
 
 {%- macro actual_value() -%}
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-    0.0
+    MAX(0.0)
     {%- else -%}
     CASE
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0

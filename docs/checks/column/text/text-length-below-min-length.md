@@ -205,12 +205,8 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                ) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Databricks"
 
@@ -243,12 +239,8 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "DuckDB"
 
@@ -259,7 +251,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -277,16 +269,12 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                ) AS actual_value
             FROM  AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "MySQL"
 
@@ -320,12 +308,8 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                ) AS actual_value
             FROM `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Oracle"
 
@@ -364,17 +348,11 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                time_period,
-                time_period_utc
+                ) AS actual_value
             FROM(
                 SELECT
-                    original_table.*,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    original_table.*
                 FROM "<target_schema>"."<target_table>" original_table) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "PostgreSQL"
 
@@ -385,7 +363,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -403,16 +381,12 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                ) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Presto"
 
@@ -421,52 +395,10 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -496,18 +428,12 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                time_period,
-                time_period_utc
+                ) AS actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Redshift"
 
@@ -518,7 +444,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table') }}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -536,16 +462,12 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                ) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Snowflake"
 
@@ -579,12 +501,8 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                ) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Spark"
 
@@ -617,12 +535,8 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "SQL Server"
 
@@ -655,9 +569,7 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -700,18 +612,12 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                time_period,
-                time_period_utc
+                ) AS actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     
 
@@ -837,12 +743,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Databricks"
 
@@ -875,12 +779,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "DuckDB"
 
@@ -890,7 +792,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -907,18 +809,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "MySQL"
 
@@ -952,12 +852,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Oracle"
 
@@ -999,19 +897,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM(
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "<target_schema>"."<target_table>" original_table) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "PostgreSQL"
 
@@ -1021,7 +915,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -1038,18 +932,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Presto"
 
@@ -1057,52 +949,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -1136,20 +986,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Redshift"
 
@@ -1159,7 +1005,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table') }}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -1176,18 +1022,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Snowflake"
 
@@ -1221,12 +1065,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Spark"
 
@@ -1259,12 +1101,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "SQL Server"
 
@@ -1297,9 +1137,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
-                analyzed_table.[state] AS grouping_level_2,
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                analyzed_table.[state] AS grouping_level_2
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             GROUP BY analyzed_table.[country], analyzed_table.[state]
             ORDER BY level_1, level_2
@@ -1351,20 +1189,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     
 ___
@@ -1565,12 +1399,8 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                ) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Databricks"
 
@@ -1603,12 +1433,8 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "DuckDB"
 
@@ -1619,7 +1445,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -1637,16 +1463,12 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                ) AS actual_value
             FROM  AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "MySQL"
 
@@ -1680,12 +1502,8 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+                ) AS actual_value
             FROM `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Oracle"
 
@@ -1724,17 +1542,11 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                time_period,
-                time_period_utc
+                ) AS actual_value
             FROM(
                 SELECT
-                    original_table.*,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    original_table.*
                 FROM "<target_schema>"."<target_table>" original_table) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "PostgreSQL"
 
@@ -1745,7 +1557,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -1763,16 +1575,12 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                ) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Presto"
 
@@ -1781,52 +1589,10 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -1856,18 +1622,12 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                time_period,
-                time_period_utc
+                ) AS actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Redshift"
 
@@ -1878,7 +1638,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table') }}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -1896,16 +1656,12 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                ) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Snowflake"
 
@@ -1939,12 +1695,8 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-                TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+                ) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Spark"
 
@@ -1977,12 +1729,8 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "SQL Server"
 
@@ -2015,9 +1763,7 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
-                CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+                ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -2060,18 +1806,12 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                time_period,
-                time_period_utc
+                ) AS actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     
 
@@ -2198,12 +1938,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Databricks"
 
@@ -2236,12 +1974,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "DuckDB"
 
@@ -2251,7 +1987,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -2268,18 +2004,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "MySQL"
 
@@ -2313,12 +2047,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Oracle"
 
@@ -2360,19 +2092,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM(
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "<target_schema>"."<target_table>" original_table) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "PostgreSQL"
 
@@ -2382,7 +2110,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -2399,18 +2127,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Presto"
 
@@ -2418,52 +2144,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -2497,20 +2181,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Redshift"
 
@@ -2520,7 +2200,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table') }}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -2537,18 +2217,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Snowflake"
 
@@ -2582,12 +2260,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-                TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Spark"
 
@@ -2620,12 +2296,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "SQL Server"
 
@@ -2658,9 +2332,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
-                analyzed_table.[state] AS grouping_level_2,
-                CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
-                CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+                analyzed_table.[state] AS grouping_level_2
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             GROUP BY analyzed_table.[country], analyzed_table.[state]
             ORDER BY level_1, level_2
@@ -2712,20 +2384,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     
 ___
@@ -2926,12 +2594,8 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                ) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Databricks"
 
@@ -2964,12 +2628,8 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "DuckDB"
 
@@ -2980,7 +2640,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -2998,16 +2658,12 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                ) AS actual_value
             FROM  AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "MySQL"
 
@@ -3041,12 +2697,8 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                ) AS actual_value
             FROM `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Oracle"
 
@@ -3085,17 +2737,11 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                time_period,
-                time_period_utc
+                ) AS actual_value
             FROM(
                 SELECT
-                    original_table.*,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    original_table.*
                 FROM "<target_schema>"."<target_table>" original_table) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "PostgreSQL"
 
@@ -3106,7 +2752,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -3124,16 +2770,12 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                ) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Presto"
 
@@ -3142,52 +2784,10 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -3217,18 +2817,12 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                time_period,
-                time_period_utc
+                ) AS actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Redshift"
 
@@ -3239,7 +2833,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table') }}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -3257,16 +2851,12 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                ) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Snowflake"
 
@@ -3300,12 +2890,8 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                ) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Spark"
 
@@ -3338,12 +2924,8 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "SQL Server"
 
@@ -3376,9 +2958,7 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -3421,18 +3001,12 @@ spec:
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                time_period,
-                time_period_utc
+                ) AS actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     
 
@@ -3559,12 +3133,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Databricks"
 
@@ -3597,12 +3169,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "DuckDB"
 
@@ -3612,7 +3182,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -3629,18 +3199,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "MySQL"
 
@@ -3674,12 +3242,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Oracle"
 
@@ -3721,19 +3287,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM(
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "<target_schema>"."<target_table>" original_table) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "PostgreSQL"
 
@@ -3743,7 +3305,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -3760,18 +3322,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Presto"
 
@@ -3779,52 +3339,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -3858,20 +3376,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Redshift"
 
@@ -3881,7 +3395,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table') }}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -3898,18 +3412,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Snowflake"
 
@@ -3943,12 +3455,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Spark"
 
@@ -3981,12 +3491,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "SQL Server"
 
@@ -4019,9 +3527,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     END
                 ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
-                analyzed_table.[state] AS grouping_level_2,
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                analyzed_table.[state] AS grouping_level_2
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             GROUP BY analyzed_table.[country], analyzed_table.[state]
             ORDER BY level_1, level_2
@@ -4073,20 +3579,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     
 ___
@@ -4351,7 +3853,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -4369,7 +3871,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -4477,7 +3979,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -4495,7 +3997,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -4513,52 +4015,10 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -4610,7 +4070,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table') }}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -4628,7 +4088,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -4997,7 +4457,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -5014,7 +4474,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -5128,7 +4588,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -5145,7 +4605,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -5164,52 +4624,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -5266,7 +4684,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table') }}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -5283,7 +4701,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -5734,7 +5152,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -5752,7 +5170,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -5860,7 +5278,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -5878,7 +5296,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -5896,52 +5314,10 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -5993,7 +5369,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table') }}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -6011,7 +5387,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -6380,7 +5756,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR)) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -6397,7 +5773,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(CAST(analyzed_table."target_column" AS VARCHAR)) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -6511,7 +5887,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -6528,7 +5904,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END
@@ -6547,52 +5923,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -6649,7 +5983,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
+                        WHEN LENGTH({{ lib.render_target_column('analyzed_table') }}::VARCHAR) < {{(parameters.min_length)}}
                             THEN 1
                         ELSE 0
                     END
@@ -6666,7 +6000,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(analyzed_table."target_column") < 5
+                        WHEN LENGTH(analyzed_table."target_column"::VARCHAR) < 5
                             THEN 1
                         ELSE 0
                     END

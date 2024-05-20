@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import moment from 'moment';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -6,7 +7,9 @@ import { IncidentsPerConnectionModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   addFirstLevelTab,
-  getConnections
+  addSelectedConnection,
+  getConnections,
+  setActiveFirstLevelTab
 } from '../../redux/actions/incidents.actions';
 import { IRootState } from '../../redux/reducers';
 import { ROUTES } from '../../shared/routes';
@@ -15,7 +18,7 @@ import SvgIcon from '../SvgIcon';
 
 const IncidentsTree = () => {
   const dispatch = useActionDispatch();
-  const { connections, activeTab } = useSelector(
+  const { connections, activeTab, selectedConnections, tabs } = useSelector(
     (state: IRootState) => state.incidents
   );
   const selectedConnection =
@@ -33,6 +36,7 @@ const IncidentsTree = () => {
   };
 
   const openFirstLevelTab = (connection: IncidentsPerConnectionModel) => {
+    openConnection(connection);
     const url = ROUTES.INCIDENT_CONNECTION(connection?.connection ?? '');
     if (activeTab === url) {
       return;
@@ -55,6 +59,84 @@ const IncidentsTree = () => {
     history.push(url);
   };
 
+  const openCorrectTabFromUrl = () => {
+    if (
+      window.location.pathname === '/incidents' ||
+      window.location.pathname === '/incidents/'
+    ) {
+      return;
+    }
+
+    const path = window.location.pathname.split('/');
+    const connection = path[2];
+    const selectedConnection = connections.find(
+      (x) => x.connection === connection
+    );
+
+    if (selectedConnection && !path[3]) {
+      openFirstLevelTab(selectedConnection);
+    } else if (path[3]) {
+      const connection = path[2] || '';
+      const year = Number(path[3]);
+      const month = Number(path[4]);
+      const incidentId = path[5] || '';
+
+      dispatch(
+        addFirstLevelTab({
+          url: ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId),
+          value: ROUTES.INCIDENT_DETAIL_VALUE(
+            connection,
+            year,
+            month,
+            incidentId
+          ),
+          state: {},
+          label: incidentId
+        })
+      );
+
+      dispatch(
+        setActiveFirstLevelTab(
+          ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId)
+        )
+      );
+      history.push(ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId));
+    }
+  };
+
+  useEffect(() => {
+    openCorrectTabFromUrl();
+  }, [window.location.pathname, connections]);
+
+  // useEffect(() => {
+  //   if (activeTab) {
+  //     dispatch(setActiveFirstLevelTab(activeTab));
+  //     history.push(activeTab);
+  //   }
+  // }, [activeTab]);
+
+  const openConnection = (connection: IncidentsPerConnectionModel) => {
+    dispatch(
+      addSelectedConnection({
+        [connection.connection ?? '']: moment().format('YYYY-MM-DD HH:mm:ss')
+      })
+    );
+  };
+
+  const isExpired = (connectionDate?: number, localStorageDate?: string) => {
+    if (!connectionDate) {
+      return false;
+    }
+
+    if (!localStorageDate && connectionDate) {
+      return true;
+    }
+    return (
+      new Date(connectionDate).getTime() >
+      new Date(localStorageDate ?? '').getTime()
+    );
+  };
+
   return (
     <div className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 bg-white">
       <Button
@@ -71,7 +153,13 @@ const IncidentsTree = () => {
             key={index}
             className={clsx(
               'flex space-x-2 py-1 px-2 flex-1 w-full text-[13px] cursor-pointer',
-              selectedConnection === connection.connection ? 'bg-gray-100' : ''
+              selectedConnection === connection.connection ? 'bg-gray-100' : '',
+              isExpired(
+                connection.mostRecentFirstSeen,
+                selectedConnections?.[connection.connection ?? '']
+              )
+                ? 'font-bold '
+                : ''
             )}
             onClick={() => openFirstLevelTab(connection)}
           >

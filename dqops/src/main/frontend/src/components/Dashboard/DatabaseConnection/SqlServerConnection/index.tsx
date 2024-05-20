@@ -27,14 +27,15 @@ const authenticationModes = [
     value:
       SqlServerParametersSpecAuthenticationModeEnum.active_directory_password
   },
+  // service principal is not supported yet
+//   {
+//     label: 'Active Directory Service Principal',
+//     value:
+//       SqlServerParametersSpecAuthenticationModeEnum.active_directory_service_principal
+//   },
   {
-    label: 'Active Directory Service Principal',
-    value:
-      SqlServerParametersSpecAuthenticationModeEnum.active_directory_service_principal
-  },
-  {
-    label: 'Default Credential',
-    value: SqlServerParametersSpecAuthenticationModeEnum.default_credential
+    label: 'Active Directory Default',
+    value: SqlServerParametersSpecAuthenticationModeEnum.active_directory_default
   }
 ];
 
@@ -91,28 +92,18 @@ const SqlServerConnection = ({
       />
 
       {sqlserver?.authentication_mode !==
-        SqlServerParametersSpecAuthenticationModeEnum.default_credential && (
+        SqlServerParametersSpecAuthenticationModeEnum.active_directory_default && (
         <>
           <FieldTypeInput
             data={sharedCredentials}
-            label={
-              sqlserver?.authentication_mode ===
-              SqlServerParametersSpecAuthenticationModeEnum.active_directory_service_principal
-                ? 'Application (client) ID'
-                : 'User name'
-            }
+            label="User name"
             className="mb-4"
             value={sqlserver?.user}
             onChange={(value) => handleChange({ user: value })}
           />
           <FieldTypeInput
             data={sharedCredentials}
-            label={
-              sqlserver?.authentication_mode ===
-              SqlServerParametersSpecAuthenticationModeEnum.active_directory_service_principal
-                ? 'Client Secret'
-                : 'Password'
-            }
+            label="Password"
             className="mb-4"
             maskingType="password"
             value={sqlserver?.password}
