@@ -132,6 +132,11 @@ export default function ConnectionColumns() {
       <div className="flex items-center justify-between bg-white">
         <div className="flex items-center gap-x-4 mb-4 mt-2 px-4">
           <Input
+            label="Schema name"
+            value={searchFilters.schema}
+            onChange={(e) => onChangeSearchFilters({ schema: e.target.value })}
+          />
+          <Input
             label="Table name"
             value={searchFilters.table}
             onChange={(e) => onChangeSearchFilters({ table: e.target.value })}

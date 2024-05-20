@@ -122,14 +122,14 @@ export default function ConnectionTables() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-4 mb-4 mt-2 px-4">
           <Input
-            label="Table name"
-            value={table}
-            onChange={(e) => setTable(e.target.value)}
-          />
-          <Input
             label="Schema name"
             value={schema}
             onChange={(e) => setSchema(e.target.value)}
+          />
+          <Input
+            label="Table name"
+            value={table}
+            onChange={(e) => setTable(e.target.value)}
           />
           <Button
             label="Search"
