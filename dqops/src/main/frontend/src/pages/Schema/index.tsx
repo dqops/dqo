@@ -13,8 +13,8 @@ import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import { MultiChecks } from './MultiCheck/MultiChecks';
+import SchemaColumns from './SchemaColumns';
 import { SchemaTables } from './SchemaTables';
-import { tab } from '@material-tailwind/react';
 
 const SchemaPage = () => {
   const {
@@ -40,6 +40,10 @@ const SchemaPage = () => {
       {
         label: 'Tables',
         value: 'tables'
+      },
+      {
+        label: 'Columns',
+        value: 'columns'
       },
       ...(checkTypes !== CheckTypes.SOURCES
         ? [
@@ -115,6 +119,11 @@ const SchemaPage = () => {
       {activeTab === 'tables' && (
         <div className="p-4">
           <SchemaTables />
+        </div>
+      )}
+      {activeTab === 'columns' && (
+        <div className="p-4">
+          <SchemaColumns />
         </div>
       )}
       {activeTab === 'import-tables' && <SourceTablesView />}

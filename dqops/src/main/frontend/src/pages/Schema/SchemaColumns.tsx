@@ -4,10 +4,9 @@ import Button from '../../components/Button';
 import ColumnList from '../../components/ColumnList';
 import Input from '../../components/Input';
 import { LabelsApiClient, SearchApiClient } from '../../services/apiClient';
+import { useDecodedParams } from '../../utils';
 
 type TSearchFilters = {
-  connection?: string | undefined;
-  schema?: string | undefined;
   table?: string | undefined;
   column?: string | undefined;
   columnType?: string | undefined;
@@ -16,7 +15,9 @@ type TSearchFilters = {
 type TLabel = LabelModel & { clicked: boolean };
 type TTableWithSchema = TableListModel & { schema?: string };
 
-export default function GlobalTables() {
+export default function SchemaColumns() {
+  const { connection, schema }: { connection: string; schema: string } =
+    useDecodedParams();
   const [columns, setColumns] = useState<TTableWithSchema[]>([]);
   const [filters, setFilters] = useState<any>({ page: 1, pageSize: 50 });
   const [searchFilters, setSearchFilters] = useState<TSearchFilters>({});
@@ -52,8 +53,8 @@ export default function GlobalTables() {
       return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
     };
     const res = await SearchApiClient.findColumns(
-      addPrefix(searchFilters.connection ?? ''),
-      addPrefix(searchFilters.schema ?? ''),
+      connection,
+      schema,
       addPrefix(searchFilters.table ?? ''),
       addPrefix(searchFilters.column ?? ''),
       addPrefix(searchFilters.columnType ?? ''),
@@ -128,18 +129,6 @@ export default function GlobalTables() {
     <>
       <div className="flex items-center justify-between bg-white">
         <div className="flex items-center gap-x-4 mb-4 mt-2 px-4">
-          <Input
-            label="Connection name"
-            value={searchFilters.connection}
-            onChange={(e) =>
-              onChangeSearchFilters({ connection: e.target.value })
-            }
-          />
-          <Input
-            label="Schema name"
-            value={searchFilters.schema}
-            onChange={(e) => onChangeSearchFilters({ schema: e.target.value })}
-          />
           <Input
             label="Table name"
             value={searchFilters.table}
