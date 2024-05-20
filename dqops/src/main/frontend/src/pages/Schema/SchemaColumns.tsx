@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { LabelModel, TableListModel } from '../../api';
 import Button from '../../components/Button';
+import ColumnList from '../../components/ColumnList';
 import Input from '../../components/Input';
-import TableList from '../../components/TableList';
 import { LabelsApiClient, SearchApiClient } from '../../services/apiClient';
+import { useDecodedParams } from '../../utils';
 
 type TSearchFilters = {
-  connection?: string | undefined;
-  schema?: string | undefined;
   table?: string | undefined;
+  column?: string | undefined;
+  columnType?: string | undefined;
 };
 
 type TLabel = LabelModel & { clicked: boolean };
 type TTableWithSchema = TableListModel & { schema?: string };
 
-export default function GlobalTables() {
-  const [tables, setTables] = useState<TTableWithSchema[]>([]);
+export default function SchemaColumns() {
+  const { connection, schema }: { connection: string; schema: string } =
+    useDecodedParams();
+  const [columns, setColumns] = useState<TTableWithSchema[]>([]);
   const [filters, setFilters] = useState<any>({ page: 1, pageSize: 50 });
   const [searchFilters, setSearchFilters] = useState<TSearchFilters>({});
   const [labels, setLabels] = useState<TLabel[]>([]);
@@ -41,18 +44,22 @@ export default function GlobalTables() {
       .filter((x) => x.clicked && x.label)
       .map((x) => x.label)
       .filter((x): x is string => typeof x === 'string');
-    getTables(filteredlabels);
+    getColumns(filteredlabels);
     setLabels(arr);
   };
 
-  const getTables = async (labels: string[] = []) => {
+  const getColumns = async (labels: string[] = []) => {
     const addPrefix = (str: string) => {
       return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
     };
-    const res = await SearchApiClient.findTables(
-      addPrefix(searchFilters.connection ?? ''),
-      addPrefix(searchFilters.schema ?? ''),
+    const res = await SearchApiClient.findColumns(
+      connection,
+      schema,
       addPrefix(searchFilters.table ?? ''),
+      addPrefix(searchFilters.column ?? ''),
+      searchFilters.columnType?.length
+        ? addPrefix(searchFilters.columnType ?? '')
+        : undefined,
       labels,
       filters.page,
       filters.pageSize,
@@ -60,16 +67,21 @@ export default function GlobalTables() {
     );
     const arr: TTableWithSchema[] = [];
     res.data.forEach((item) => {
-      const jItem = { ...item, schema: item.target?.schema_name };
+      const jItem = {
+        ...item,
+        schema: item.table?.schema_name,
+        table_name: item.table?.table_name,
+        column_type: item.type_snapshot?.column_type
+      };
       arr.push(jItem);
     });
-    setTables(arr);
+    setColumns(arr);
     return arr;
   };
 
   useEffect(() => {
     const getLabels = () => {
-      LabelsApiClient.getAllLabelsForTables().then((res) => {
+      LabelsApiClient.getAllLabelsForColumns().then((res) => {
         const array: TLabel[] = res.data.map((item) => {
           return { ...item, clicked: false };
         });
@@ -78,8 +90,8 @@ export default function GlobalTables() {
     };
 
     const fetchData = async () => {
-      const tables = await getTables();
-      refetchTables(tables);
+      const columns = await getColumns();
+      refetchTables(columns);
     };
 
     fetchData();
@@ -89,7 +101,7 @@ export default function GlobalTables() {
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
-        getTables(
+        getColumns(
           labels
             .filter((x) => x.clicked && x.label)
             .map((x) => x.label)
@@ -105,12 +117,12 @@ export default function GlobalTables() {
     };
   }, [searchFilters]);
 
-  const refetchTables = (tables?: TableListModel[]) => {
-    const shouldRefetch = tables?.some((table) => !table?.data_quality_status);
+  const refetchTables = (columns?: TableListModel[]) => {
+    const shouldRefetch = columns?.some((table) => !table?.data_quality_status);
 
     if (shouldRefetch) {
       setTimeout(() => {
-        getTables();
+        getColumns();
       }, 5000);
     }
   };
@@ -120,26 +132,26 @@ export default function GlobalTables() {
       <div className="flex items-center justify-between bg-white">
         <div className="flex items-center gap-x-4 mb-4 mt-2 px-4">
           <Input
-            label="Connection name"
-            value={searchFilters.connection}
-            onChange={(e) =>
-              onChangeSearchFilters({ connection: e.target.value })
-            }
-          />
-          <Input
-            label="Schema name"
-            value={searchFilters.schema}
-            onChange={(e) => onChangeSearchFilters({ schema: e.target.value })}
-          />
-          <Input
             label="Table name"
             value={searchFilters.table}
             onChange={(e) => onChangeSearchFilters({ table: e.target.value })}
           />
+          <Input
+            label="Column name"
+            value={searchFilters.column}
+            onChange={(e) => onChangeSearchFilters({ column: e.target.value })}
+          />
+          <Input
+            label="Column type"
+            value={searchFilters.columnType}
+            onChange={(e) =>
+              onChangeSearchFilters({ columnType: e.target.value })
+            }
+          />
           <Button
             label="Search"
             onClick={() => {
-              getTables(
+              getColumns(
                 labels
                   .filter((x) => x.clicked && x.label)
                   .map((x) => x.label)
@@ -153,9 +165,9 @@ export default function GlobalTables() {
         <Button
           label="Refresh"
           color="primary"
-          className="mb-4 mt-2 mr-4"
+          className="mb-2 mt-5 mr-4"
           onClick={() =>
-            getTables(
+            getColumns(
               labels
                 .filter((x) => x.clicked && x.label)
                 .map((x) => x.label)
@@ -164,9 +176,9 @@ export default function GlobalTables() {
           }
         />
       </div>
-      <TableList
-        tables={tables}
-        setTables={setTables}
+      <ColumnList
+        columns={columns}
+        setColumns={setColumns}
         filters={filters}
         onChangeFilters={onChangeFilters}
         labels={labels}
