@@ -148,9 +148,6 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
         }
 
         PhysicalTableName physicalTableName = PhysicalTableName.fromSchemaTableFilter(schemaTableName);
-        if (physicalTableName.isSearchPattern()) {
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // we need to iterate anyway
-        }
 
         if (tableWrapper.getPhysicalTableName().matchPattern(physicalTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
