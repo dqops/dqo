@@ -18,9 +18,9 @@ FROM
         {% if lib.time_series is not none -%}
         top_col_values.time_period as time_period,
         top_col_values.time_period_utc as time_period_utc,
-        {%- endif %}
+        {% endif -%}
         RANK() OVER({{- render_data_grouping('top_col_values', indentation = ' ', partition_by_enabled=true) }}
-            ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+            ORDER BY top_col_values.total_values DESC) as top_values_rank {{- render_data_grouping('top_col_values', indentation = ' ') }}
     FROM
     (
         SELECT
@@ -31,7 +31,7 @@ FROM
         FROM
             {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
-        GROUP BY {{ render_grouping_columns() }} {{ lib.render_target_column('analyzed_table') }}
+        GROUP BY {{ render_grouping_columns() -}} {{ lib.render_target_column('analyzed_table') }}
     ) AS top_col_values
 ) AS top_values
 WHERE top_values_rank <= {{ parameters.top }}
@@ -70,7 +70,7 @@ SELECT
     {{- lib.render_data_grouping_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ lib.render_target_table() }} AS analyzed_table
-    {%- else %}
+{%- else %}
     COUNT_BIG(DISTINCT
         CASE
             WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
