@@ -118,7 +118,7 @@ export default function SchemaTableItem({
           {!connection && (
             <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
               <Button
-                className="px-4 underline cursor-pointer text-sm py-0 text-start "
+                className="ml-4 !px-0 underline cursor-pointer text-sm py-0 text-start "
                 label={item.connection_name}
                 onClick={() => goToConnection(item)}
               />
@@ -126,7 +126,7 @@ export default function SchemaTableItem({
           )}
           <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
             <Button
-              className="px-4 underline cursor-pointer text-sm py-0 text-start"
+              className="ml-4 !px-0 underline cursor-pointer text-sm py-0 text-start"
               label={item.schema}
               onClick={() => goToSchema(item)}
             />
@@ -135,7 +135,7 @@ export default function SchemaTableItem({
       )}
       <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
         <Button
-          className="px-4 underline cursor-pointer text-sm py-0 text-start"
+          className="ml-4 !px-0 underline cursor-pointer text-sm py-0 text-start"
           label={item.target?.table_name}
           onClick={() => goToTable(item, checkTypes)}
         />
