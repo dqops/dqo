@@ -4,7 +4,7 @@ import { LabelModel, TableListModel } from '../../api';
 import SchemaTableItem from '../../pages/Schema/SchemaTableItem';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
-import SectionWrapper from '../Dashboard/SectionWrapper';
+import LabelsSectionWrapper from '../LabelsSectionWrapper/LabelsSectionWrapper';
 import { Pagination } from '../Pagination';
 import SvgIcon from '../SvgIcon';
 
@@ -168,42 +168,17 @@ export default function index({
     }
   ];
 
-  const prepareLabel = (label: string | undefined) => {
-    if (!label) return;
-    if (label.length > 20) {
-      return label.slice(0, 20) + '...';
-    }
-    return label;
-  };
-
   const isEnd = tables.length < filters.pageSize;
 
   return (
     <div className="bg-white">
       <div className="flex">
         <div className="w-[280px]">
-          <SectionWrapper
-            title="Filter by labels"
-            className="text-sm w-[250px] mx-4 mb-4 mt-6 "
-          >
-            {labels.map((label, index) => (
-              <div
-                className={clsx(
-                  'flex gap-2 mb-2 cursor-pointer whitespace-normal break-all',
-                  {
-                    'font-bold text-gray-700': label.clicked,
-                    'text-gray-500': !label.clicked
-                  }
-                )}
-                key={index}
-                onClick={() => onChangeLabels(index)}
-              >
-                <span>{prepareLabel(label.label)}</span>({label.labels_count})
-              </div>
-            ))}
-          </SectionWrapper>
+          <LabelsSectionWrapper
+            labels={labels}
+            onChangeLabels={onChangeLabels}
+          />
         </div>
-
         <div className="overflow-x-auto">
           <table>
             <thead>
