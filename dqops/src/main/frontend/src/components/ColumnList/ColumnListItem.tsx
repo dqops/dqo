@@ -7,7 +7,7 @@ import SvgIcon from '../../components/SvgIcon';
 import SchemaTableItemDimensions from '../../pages/Schema/SchemaTableItemDimensions';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useDecodedParams } from '../../utils';
+import { prepareString, useDecodedParams } from '../../utils';
 
 type TColumnWithSchema = ColumnListModel & { schema?: string };
 
@@ -126,16 +126,8 @@ export default function SchemaTableItem({
     return;
   };
 
-  const prepareLabel = (label: string | undefined) => {
-    if (!label) return;
-    if (label.length > 20) {
-      return label.slice(0, 20) + '...';
-    }
-    return label;
-  };
-
   const getLabelsOverview = (labels: string[]) => {
-    return labels.map((x) => prepareLabel(x)).join(',');
+    return labels.map((x) => prepareString(x, 20)).join(',');
   };
 
   return (
@@ -175,7 +167,7 @@ export default function SchemaTableItem({
         />
       </td>{' '}
       <td className="px-4 text-sm content-start pt-2">
-        {item.type_snapshot?.column_type}
+        {prepareString(item.type_snapshot?.column_type, 15)}
       </td>
       <td className="px-4 text-sm content-start pt-2">
         {getLabelsOverview(item?.labels ?? [])}
