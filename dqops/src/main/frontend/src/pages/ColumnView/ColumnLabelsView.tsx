@@ -135,7 +135,7 @@ const ColumnLabelsView = ({
         isUpdating={isUpdating}
       />
       <div className="flex">
-        <div className="mt-4 mx-2 w-1/2">
+        <div className="mt-4 mx-2 max-w-150 min-w-40">
           <LabelsSectionWrapper
             labels={globalLabels}
             onChangeLabels={onChangeLabels}

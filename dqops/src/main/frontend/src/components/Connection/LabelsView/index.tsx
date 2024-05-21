@@ -1,11 +1,11 @@
-import React, { KeyboardEvent } from 'react';
-import LabelItem from './LabelItem';
-import Input from '../../Input';
 import { IconButton } from '@material-tailwind/react';
-import SvgIcon from '../../SvgIcon';
+import clsx from 'clsx';
+import React, { KeyboardEvent } from 'react';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import clsx from 'clsx';
+import Input from '../../Input';
+import SvgIcon from '../../SvgIcon';
+import LabelItem from './LabelItem';
 
 interface ILabelsViewProps {
   labels: string[];
@@ -55,7 +55,7 @@ const LabelsView = ({
   };
 
   return (
-    <div className="p-4 text-sm w-full">
+    <div className="p-4 text-sm w-full max-w-200">
       <div className={clsx('flex items-center font-bold', titleClassName)}>
         <div className="text-left min-w-40 w-11/12 pr-4">
           {title ?? 'Label'}
