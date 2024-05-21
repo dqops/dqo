@@ -71,6 +71,7 @@ const TableLabelsView = () => {
         false
       )
     );
+    getGlobalLabels();
   };
 
   const handleChange = (value: string[]) => {
@@ -89,16 +90,16 @@ const TableLabelsView = () => {
     }
     setGlobalLabels(arr);
   };
-  useEffect(() => {
-    const getGlobalLabels = async () => {
-      await LabelsApiClient.getAllLabelsForTables().then((res) => {
-        const array: TLabel[] = res.data.map((item) => {
-          const isClicked = labels?.includes(item.label);
-          return { ...item, clicked: isClicked };
-        });
-        setGlobalLabels(array);
+  const getGlobalLabels = async () => {
+    await LabelsApiClient.getAllLabelsForTables().then((res) => {
+      const array: TLabel[] = res.data.map((item) => {
+        const isClicked = labels?.includes(item.label);
+        return { ...item, clicked: isClicked };
       });
-    };
+      setGlobalLabels(array);
+    });
+  };
+  useEffect(() => {
     if (!labels || labels?.length === 0 || globalLabels.length === 0) {
       getGlobalLabels();
     }
@@ -112,7 +113,7 @@ const TableLabelsView = () => {
         isUpdating={isUpdating}
       />
       <div className="flex">
-        <div className="mt-4 mx-2 w-1/2">
+        <div className="mt-4 mx-2 max-w-150 min-w-40">
           <LabelsSectionWrapper
             labels={globalLabels}
             onChangeLabels={onChangeLabels}
