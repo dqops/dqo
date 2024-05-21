@@ -257,7 +257,7 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
         this.executionErrors = 0;
         this.lastCheckExecutedAt = null;
 
-        for (CheckCurrentDataQualityStatusModel checkStatusModel : checks.values()) {
+        for (CheckCurrentDataQualityStatusModel checkStatusModel : this.checks.values()) {
             if (checkStatusModel.getLastExecutedAt() != null &&
                     (this.lastCheckExecutedAt == null || checkStatusModel.getLastExecutedAt().isAfter(this.lastCheckExecutedAt))) {
                 this.lastCheckExecutedAt = checkStatusModel.getLastExecutedAt();
