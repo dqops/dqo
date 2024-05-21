@@ -338,7 +338,7 @@ public class SearchController {
                                     if (currentTableStatus != null) {
                                         ColumnCurrentDataQualityStatusModel columnQualityStatusModel = currentTableStatus.getColumns().get(listModel.getColumnName());
                                         listModel.setDataQualityStatus(columnQualityStatusModel != null ?
-                                                columnQualityStatusModel.shallowCloneWithoutChecks() : null);
+                                                columnQualityStatusModel.shallowCloneWithoutChecks() : new ColumnCurrentDataQualityStatusModel());
                                     }
                                 }
                                 return listModel;
