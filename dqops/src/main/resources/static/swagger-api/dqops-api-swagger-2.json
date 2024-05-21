@@ -19678,6 +19678,11 @@
           "format" : "int32",
           "description" : "The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. When an execution error is reported, the configuration of a data quality check on a column must be updated."
         },
+        "data_quality_kpi" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Data quality KPI score for the column, measured as a percentage of passed data quality checks. DQOps counts data quality issues at a warning severity level as passed checks. The data quality KPI score is a value in the range 0..100."
+        },
         "checks" : {
           "type" : "object",
           "description" : "The dictionary of statuses for data quality checks. The keys are data quality check names, the values are the current data quality check statuses that describe the most current status.",

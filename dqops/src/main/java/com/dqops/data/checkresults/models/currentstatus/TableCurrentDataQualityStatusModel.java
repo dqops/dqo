@@ -251,6 +251,12 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
         Double dataQualityKpi = totalExecutedChecksWithNoExecutionErrors > 0 ?
                 (this.getValidResults() + this.getWarnings()) * 100.0 / totalExecutedChecksWithNoExecutionErrors : null;
         setDataQualityKpi(dataQualityKpi);
+
+        if (this.columns != null) {
+            for (ColumnCurrentDataQualityStatusModel columnStatusModel : this.columns.values()) {
+                columnStatusModel.calculateDataQualityKpiScore();
+            }
+        }
     }
 
     /**
