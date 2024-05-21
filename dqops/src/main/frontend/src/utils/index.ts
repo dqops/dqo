@@ -5,6 +5,7 @@ import {
   ConnectionModelProviderTypeEnum,
   TableListModel
 } from '../api';
+import { CheckTypes } from '../shared/routes';
 
 export const getDaysString = (value: string | number) => {
   const daysDiff = moment().diff(moment(value), 'day');
@@ -236,6 +237,31 @@ export const filterPropertiesDirectories = (db: ConnectionModel) => {
   };
 };
 
+export const getFirstLevelTableTab = (checkType: CheckTypes) => {
+  switch (checkType) {
+    case CheckTypes.SOURCES:
+      return 'detail';
+    case CheckTypes.PROFILING:
+      return 'statistics';
+    case CheckTypes.PARTITIONED:
+      return 'table-quality-status-daily';
+    case CheckTypes.MONITORING:
+      return 'table-quality-status-daily';
+  }
+};
+
+export const getFirstLevelColumnTab = (checkType: CheckTypes) => {
+  switch (checkType) {
+    case CheckTypes.SOURCES:
+      return 'detail';
+    case CheckTypes.PROFILING:
+      return 'statistics';
+    case CheckTypes.PARTITIONED:
+      return 'daily';
+    case CheckTypes.MONITORING:
+      return 'daily';
+  }
+};
 export const prepareString = (str: string | undefined, index: number) => {
   if (!str) return;
   if (str.length > index) {

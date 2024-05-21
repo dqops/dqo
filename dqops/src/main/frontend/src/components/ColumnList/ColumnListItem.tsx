@@ -1,13 +1,18 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { ColumnListModel, TableListModel } from '../../api';
+import { ColumnListModel } from '../../api';
 import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
 import SchemaTableItemDimensions from '../../pages/Schema/SchemaTableItemDimensions';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { prepareString, useDecodedParams } from '../../utils';
+import {
+  getFirstLevelColumnTab,
+  getFirstLevelTableTab,
+  prepareString,
+  useDecodedParams
+} from '../../utils';
 
 type TColumnWithSchema = ColumnListModel & { schema?: string };
 
@@ -30,13 +35,13 @@ export default function SchemaTableItem({
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const goToTable = (item: TableListModel, checkType?: CheckTypes) => {
+  const goToTable = (item: ColumnListModel, checkType?: CheckTypes) => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
       checkType ?? CheckTypes.MONITORING,
       item.connection_name ?? '',
-      item.target?.schema_name ?? '',
-      item.target?.table_name ?? '',
-      'detail'
+      item.table?.schema_name ?? '',
+      item.table?.table_name ?? '',
+      getFirstLevelTableTab(checkType ?? CheckTypes.MONITORING)
     );
     dispatch(
       addFirstLevelTab(checkType ?? CheckTypes.MONITORING, {
@@ -44,11 +49,11 @@ export default function SchemaTableItem({
         value: ROUTES.TABLE_LEVEL_VALUE(
           checkType ?? CheckTypes.MONITORING,
           item.connection_name ?? '',
-          item.target?.schema_name ?? '',
-          item.target?.table_name ?? ''
+          item.table?.schema_name ?? '',
+          item.table?.table_name ?? ''
         ),
         state: {},
-        label: item.target?.table_name ?? ''
+        label: item.table?.table_name ?? ''
       })
     );
     history.push(url);
@@ -62,7 +67,7 @@ export default function SchemaTableItem({
       item.table?.schema_name ?? '',
       item.table?.table_name ?? '',
       item.column_name ?? '',
-      'detail'
+      getFirstLevelColumnTab(checkType ?? CheckTypes.MONITORING)
     );
     dispatch(
       addFirstLevelTab(checkType ?? CheckTypes.MONITORING, {
@@ -137,7 +142,7 @@ export default function SchemaTableItem({
           {!connection && (
             <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
               <Button
-                className="px-4 underline cursor-pointer text-sm py-0 text-start "
+                className="ml-4 !px-0 underline cursor-pointer text-sm py-0 text-start "
                 label={item.connection_name}
                 onClick={() => goToConnection(item)}
               />
@@ -145,7 +150,7 @@ export default function SchemaTableItem({
           )}
           <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
             <Button
-              className="px-4 underline cursor-pointer text-sm py-0 text-start"
+              className="ml-4 !px-0 underline cursor-pointer text-sm py-0 text-start"
               label={item.schema}
               onClick={() => goToSchema(item)}
             />
@@ -154,14 +159,14 @@ export default function SchemaTableItem({
       )}
       <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
         <Button
-          className="px-4 underline cursor-pointer text-sm py-0 text-start"
+          className="ml-4 !px-0 underline cursor-pointer text-sm py-0 text-start"
           label={item.table?.table_name}
           onClick={() => goToTable(item, checkTypes)}
         />
       </td>
       <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
         <Button
-          className="px-4 underline cursor-pointer text-sm py-0 text-start"
+          className="ml-4 !px-0 underline cursor-pointer text-sm py-0 text-start"
           label={item.column_name}
           onClick={() => goToColumn(item, checkTypes)}
         />
@@ -184,22 +189,22 @@ export default function SchemaTableItem({
           <SvgIcon
             name="data_sources"
             className="w-5 h-5"
-            onClick={() => goToTable(item, CheckTypes.SOURCES)}
+            onClick={() => goToColumn(item, CheckTypes.SOURCES)}
           />
           <SvgIcon
             name="profiling"
             className="w-5 h-5"
-            onClick={() => goToTable(item, CheckTypes.PROFILING)}
+            onClick={() => goToColumn(item, CheckTypes.PROFILING)}
           />
           <SvgIcon
             name="monitoring_checks"
             className="w-5 h-5"
-            onClick={() => goToTable(item, CheckTypes.MONITORING)}
+            onClick={() => goToColumn(item, CheckTypes.MONITORING)}
           />
           <SvgIcon
             name="partitioned_checks"
             className="w-5 h-5"
-            onClick={() => goToTable(item, CheckTypes.PARTITIONED)}
+            onClick={() => goToColumn(item, CheckTypes.PARTITIONED)}
           />
         </div>
       </td>
