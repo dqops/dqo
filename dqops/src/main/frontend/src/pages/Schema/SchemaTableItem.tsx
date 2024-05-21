@@ -6,7 +6,7 @@ import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useDecodedParams } from '../../utils';
+import { getFirstLevelTableTab, useDecodedParams } from '../../utils';
 import SchemaTableItemDimensions from './SchemaTableItemDimensions';
 
 type TTableWithSchema = TableListModel & { schema?: string };
@@ -30,17 +30,13 @@ export default function SchemaTableItem({
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const goToTable = (
-    item: TableListModel,
-    checkType?: CheckTypes,
-    tab?: string
-  ) => {
+  const goToTable = (item: TableListModel, checkType?: CheckTypes) => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
       checkType ?? CheckTypes.MONITORING,
       item.connection_name ?? '',
       item.target?.schema_name ?? '',
       item.target?.table_name ?? '',
-      tab ?? 'detail'
+      getFirstLevelTableTab(checkType ?? CheckTypes.MONITORING)
     );
     dispatch(
       addFirstLevelTab(checkType ?? CheckTypes.MONITORING, {
@@ -166,29 +162,17 @@ export default function SchemaTableItem({
           <SvgIcon
             name="profiling"
             className="w-5 h-5"
-            onClick={() => goToTable(item, CheckTypes.PROFILING, 'statistics')}
+            onClick={() => goToTable(item, CheckTypes.PROFILING)}
           />
           <SvgIcon
             name="monitoring_checks"
             className="w-5 h-5"
-            onClick={() =>
-              goToTable(
-                item,
-                CheckTypes.MONITORING,
-                'table-quality-status-daily'
-              )
-            }
+            onClick={() => goToTable(item, CheckTypes.MONITORING)}
           />
           <SvgIcon
             name="partitioned_checks"
             className="w-5 h-5"
-            onClick={() =>
-              goToTable(
-                item,
-                CheckTypes.PARTITIONED,
-                'table-quality-status-daily'
-              )
-            }
+            onClick={() => goToTable(item, CheckTypes.PARTITIONED)}
           />
         </div>
       </td>

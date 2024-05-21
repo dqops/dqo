@@ -1,13 +1,17 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { ColumnListModel, TableListModel } from '../../api';
+import { ColumnListModel } from '../../api';
 import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
 import SchemaTableItemDimensions from '../../pages/Schema/SchemaTableItemDimensions';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useDecodedParams } from '../../utils';
+import {
+  getFirstLevelColumnTab,
+  getFirstLevelTableTab,
+  useDecodedParams
+} from '../../utils';
 
 type TColumnWithSchema = ColumnListModel & { schema?: string };
 
@@ -30,13 +34,13 @@ export default function SchemaTableItem({
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const goToTable = (item: TableListModel, checkType?: CheckTypes) => {
+  const goToTable = (item: ColumnListModel, checkType?: CheckTypes) => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
       checkType ?? CheckTypes.MONITORING,
       item.connection_name ?? '',
-      item.target?.schema_name ?? '',
-      item.target?.table_name ?? '',
-      'detail'
+      item.table?.schema_name ?? '',
+      item.table?.table_name ?? '',
+      getFirstLevelTableTab(checkType ?? CheckTypes.MONITORING)
     );
     dispatch(
       addFirstLevelTab(checkType ?? CheckTypes.MONITORING, {
@@ -44,29 +48,25 @@ export default function SchemaTableItem({
         value: ROUTES.TABLE_LEVEL_VALUE(
           checkType ?? CheckTypes.MONITORING,
           item.connection_name ?? '',
-          item.target?.schema_name ?? '',
-          item.target?.table_name ?? ''
+          item.table?.schema_name ?? '',
+          item.table?.table_name ?? ''
         ),
         state: {},
-        label: item.target?.table_name ?? ''
+        label: item.table?.table_name ?? ''
       })
     );
     history.push(url);
     return;
   };
 
-  const goToColumn = (
-    item: ColumnListModel,
-    checkType?: CheckTypes,
-    tab?: string
-  ) => {
+  const goToColumn = (item: ColumnListModel, checkType?: CheckTypes) => {
     const url = ROUTES.COLUMN_LEVEL_PAGE(
       checkType ?? CheckTypes.MONITORING,
       item.connection_name ?? '',
       item.table?.schema_name ?? '',
       item.table?.table_name ?? '',
       item.column_name ?? '',
-      tab ?? 'detail'
+      getFirstLevelColumnTab(checkType ?? CheckTypes.MONITORING)
     );
     dispatch(
       addFirstLevelTab(checkType ?? CheckTypes.MONITORING, {
@@ -201,17 +201,17 @@ export default function SchemaTableItem({
           <SvgIcon
             name="profiling"
             className="w-5 h-5"
-            onClick={() => goToColumn(item, CheckTypes.PROFILING, 'statistics')}
+            onClick={() => goToColumn(item, CheckTypes.PROFILING)}
           />
           <SvgIcon
             name="monitoring_checks"
             className="w-5 h-5"
-            onClick={() => goToColumn(item, CheckTypes.MONITORING, 'daily')}
+            onClick={() => goToColumn(item, CheckTypes.MONITORING)}
           />
           <SvgIcon
             name="partitioned_checks"
             className="w-5 h-5"
-            onClick={() => goToColumn(item, CheckTypes.PARTITIONED, 'daily')}
+            onClick={() => goToColumn(item, CheckTypes.PARTITIONED)}
           />
         </div>
       </td>
