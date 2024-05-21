@@ -262,3 +262,10 @@ export const getFirstLevelColumnTab = (checkType: CheckTypes) => {
       return 'daily';
   }
 };
+export const prepareString = (str: string | undefined, index: number) => {
+  if (!str) return;
+  if (str.length > index) {
+    return str.slice(0, index) + '...';
+  }
+  return str;
+};

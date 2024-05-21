@@ -55,12 +55,14 @@ export default function UserListDetail() {
     await UsersApi.changeUserPassword(selectedEmailToChangePassword, password)
       .then(() => setRefreshUsersIndicator(!reshreshUsersIndicator))
       .catch((err) => console.error(err));
+    setSelectedEmailToChangePassword('');
   };
 
   const changePrincipalPassword = async (password: string) => {
     await UsersApi.changeCallerPassword(selectedEmailToChangePassword, password)
       .then(() => setRefreshUsersIndicator(!reshreshUsersIndicator))
       .catch((err) => console.error(err));
+    setSelectedEmailToChangePassword(''); 
   };
 
   const addDqoCloudUser = () => {
