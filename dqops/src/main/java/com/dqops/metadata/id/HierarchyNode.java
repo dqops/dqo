@@ -69,6 +69,12 @@ public interface HierarchyNode extends DirtyStatus, ReadOnlyStatus {
     Iterable<HierarchyNode> children();
 
     /**
+     * Clears the child node, setting a null value.
+     * @param childName Child name.
+     */
+    void detachChildNode(Object childName);
+
+    /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
      * @param visitor Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
