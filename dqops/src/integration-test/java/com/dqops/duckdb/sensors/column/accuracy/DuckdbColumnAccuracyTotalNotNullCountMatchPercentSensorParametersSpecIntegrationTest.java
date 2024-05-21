@@ -17,15 +17,16 @@ package com.dqops.duckdb.sensors.column.accuracy;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.accuracy.ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec;
-import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.duckdb.BaseDuckdbIntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.duckdb.BaseDuckdbIntegrationTest;
-import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
@@ -47,10 +48,13 @@ public class DuckdbColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSp
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip4_test, ProviderType.duckdb);
-        this.sampleTableMetadataReferenced = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip6_test, ProviderType.duckdb);
-        IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadata);
-        IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadataReferenced);
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        String csvFileName = SampleCsvFileNames.ip4_test;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+                csvFileName, connectionSpec);
+        String csvFileNameReferenced = SampleCsvFileNames.ip6_test;
+        this.sampleTableMetadataReferenced = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+                csvFileNameReferenced, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpec();
         this.checkSpec = new ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec();
