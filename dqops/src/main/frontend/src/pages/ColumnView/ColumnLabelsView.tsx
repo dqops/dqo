@@ -84,6 +84,7 @@ const ColumnLabelsView = ({
         false
       )
     );
+    getGlobalLabels();
     dispatch(setIsUpdatedLabels(checkTypes, firstLevelActiveTab, false));
   };
 
@@ -104,16 +105,16 @@ const ColumnLabelsView = ({
     setGlobalLabels(arr);
   };
 
-  useEffect(() => {
-    const getGlobalLabels = async () => {
-      await LabelsApiClient.getAllLabelsForColumns().then((res) => {
-        const array: TLabel[] = res.data.map((item) => {
-          const isClicked = labels?.includes(item.label);
-          return { ...item, clicked: isClicked };
-        });
-        setGlobalLabels(array);
+  const getGlobalLabels = async () => {
+    await LabelsApiClient.getAllLabelsForColumns().then((res) => {
+      const array: TLabel[] = res.data.map((item) => {
+        const isClicked = labels?.includes(item.label);
+        return { ...item, clicked: isClicked };
       });
-    };
+      setGlobalLabels(array);
+    });
+  };
+  useEffect(() => {
     if (!labels || labels?.length === 0 || globalLabels.length === 0) {
       getGlobalLabels();
     }

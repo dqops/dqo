@@ -52,6 +52,7 @@ const ConnectionLabelsView = () => {
     await dispatch(
       getConnectionLabels(checkTypes, firstLevelActiveTab, connection, false)
     );
+    getGlobalLabels();
   };
 
   const handleChange = (value: string[]) => {
@@ -72,16 +73,16 @@ const ConnectionLabelsView = () => {
     setGlobalLabels(arr);
   };
 
-  useEffect(() => {
-    const getGlobalLabels = async () => {
-      await LabelsApiClient.getAllLabelsForConnections().then((res) => {
-        const array: TLabel[] = res.data.map((item) => {
-          const isClicked = labels?.includes(item.label);
-          return { ...item, clicked: isClicked };
-        });
-        setGlobalLabels(array);
+  const getGlobalLabels = async () => {
+    await LabelsApiClient.getAllLabelsForConnections().then((res) => {
+      const array: TLabel[] = res.data.map((item) => {
+        const isClicked = labels?.includes(item.label);
+        return { ...item, clicked: isClicked };
       });
-    };
+      setGlobalLabels(array);
+    });
+  };
+  useEffect(() => {
     if (!labels || labels?.length === 0 || globalLabels.length === 0) {
       getGlobalLabels();
     }
