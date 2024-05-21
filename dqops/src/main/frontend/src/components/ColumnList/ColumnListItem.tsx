@@ -55,14 +55,18 @@ export default function SchemaTableItem({
     return;
   };
 
-  const goToColumn = (item: ColumnListModel, checkType?: CheckTypes) => {
+  const goToColumn = (
+    item: ColumnListModel,
+    checkType?: CheckTypes,
+    tab?: string
+  ) => {
     const url = ROUTES.COLUMN_LEVEL_PAGE(
       checkType ?? CheckTypes.MONITORING,
       item.connection_name ?? '',
       item.table?.schema_name ?? '',
       item.table?.table_name ?? '',
       item.column_name ?? '',
-      'detail'
+      tab ?? 'detail'
     );
     dispatch(
       addFirstLevelTab(checkType ?? CheckTypes.MONITORING, {
@@ -192,22 +196,22 @@ export default function SchemaTableItem({
           <SvgIcon
             name="data_sources"
             className="w-5 h-5"
-            onClick={() => goToTable(item, CheckTypes.SOURCES)}
+            onClick={() => goToColumn(item, CheckTypes.SOURCES)}
           />
           <SvgIcon
             name="profiling"
             className="w-5 h-5"
-            onClick={() => goToTable(item, CheckTypes.PROFILING)}
+            onClick={() => goToColumn(item, CheckTypes.PROFILING, 'statistics')}
           />
           <SvgIcon
             name="monitoring_checks"
             className="w-5 h-5"
-            onClick={() => goToTable(item, CheckTypes.MONITORING)}
+            onClick={() => goToColumn(item, CheckTypes.MONITORING, 'daily')}
           />
           <SvgIcon
             name="partitioned_checks"
             className="w-5 h-5"
-            onClick={() => goToTable(item, CheckTypes.PARTITIONED)}
+            onClick={() => goToColumn(item, CheckTypes.PARTITIONED, 'daily')}
           />
         </div>
       </td>

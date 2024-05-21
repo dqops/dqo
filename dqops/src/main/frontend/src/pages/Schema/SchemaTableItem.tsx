@@ -30,13 +30,17 @@ export default function SchemaTableItem({
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const goToTable = (item: TableListModel, checkType?: CheckTypes) => {
+  const goToTable = (
+    item: TableListModel,
+    checkType?: CheckTypes,
+    tab?: string
+  ) => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
       checkType ?? CheckTypes.MONITORING,
       item.connection_name ?? '',
       item.target?.schema_name ?? '',
       item.target?.table_name ?? '',
-      'detail'
+      tab ?? 'detail'
     );
     dispatch(
       addFirstLevelTab(checkType ?? CheckTypes.MONITORING, {
@@ -162,17 +166,29 @@ export default function SchemaTableItem({
           <SvgIcon
             name="profiling"
             className="w-5 h-5"
-            onClick={() => goToTable(item, CheckTypes.PROFILING)}
+            onClick={() => goToTable(item, CheckTypes.PROFILING, 'statistics')}
           />
           <SvgIcon
             name="monitoring_checks"
             className="w-5 h-5"
-            onClick={() => goToTable(item, CheckTypes.MONITORING)}
+            onClick={() =>
+              goToTable(
+                item,
+                CheckTypes.MONITORING,
+                'table-quality-status-daily'
+              )
+            }
           />
           <SvgIcon
             name="partitioned_checks"
             className="w-5 h-5"
-            onClick={() => goToTable(item, CheckTypes.PARTITIONED)}
+            onClick={() =>
+              goToTable(
+                item,
+                CheckTypes.PARTITIONED,
+                'table-quality-status-daily'
+              )
+            }
           />
         </div>
       </td>
