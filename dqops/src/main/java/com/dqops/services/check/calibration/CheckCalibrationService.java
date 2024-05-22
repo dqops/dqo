@@ -32,4 +32,12 @@ public interface CheckCalibrationService {
      * @param disableProfilingChecks Boolean flag that decides to also disable profiling checks if they match the check search filter.
      */
     void disableChecks(CheckSearchFilters checkSearchFilters, UserHome userHome, boolean disableProfilingChecks);
+
+    /**
+     * Decreases the sensitivity of the check by changing the rule severity for all matching checks by changing the rule parameters.
+     * @param checkSearchFilters Check search filter to identify target tables to change.
+     * @param userHome User home to find default checks and all required objects (connection, etc).
+     * @param reconfigureProfilingChecks When true, also reconfigures profiling checks.
+     */
+    void decreaseCheckSensitivity(CheckSearchFilters checkSearchFilters, UserHome userHome, boolean reconfigureProfilingChecks);
 }

@@ -1041,6 +1041,27 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder, 
     }
 
     /**
+     * Detach empty data quality category nodes and trims the object tree to contain only required objects.
+     */
+    public void detachEmptyCheckNodes() {
+        if (this.profilingChecks != null) {
+            this.profilingChecks.detachEmptyChildNodes();
+        }
+
+        if (this.monitoringChecks != null) {
+            this.monitoringChecks.detachEmptyChildNodes();
+        }
+
+        if (this.partitionedChecks != null) {
+            this.partitionedChecks.detachEmptyChildNodes();
+        }
+
+        if (this.columns != null) {
+            this.columns.detachEmptyChildNodes();
+        }
+    }
+
+    /**
      * Creates and returns a deep clone (copy) of this object.
      */
     @Override

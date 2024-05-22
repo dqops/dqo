@@ -16,6 +16,7 @@
 package com.dqops.rules;
 
 import com.dqops.BaseTest;
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -49,6 +50,17 @@ public class AbstractRuleParametersSpecTests extends BaseTest {
         @Override
         public String getRuleDefinitionName() {
             return null;
+        }
+
+        /**
+         * Decreases the rule severity by changing the parameters.
+         * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+         *
+         * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+         */
+        @Override
+        public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+
         }
     }
 }

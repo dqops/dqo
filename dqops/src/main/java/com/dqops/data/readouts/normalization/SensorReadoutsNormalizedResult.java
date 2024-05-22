@@ -17,10 +17,15 @@ package com.dqops.data.readouts.normalization;
 
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
+import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.utils.tables.TableColumnUtility;
+import com.google.common.base.Strings;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
+import tech.tablesaw.selection.Selection;
+
+import java.time.Instant;
 
 /**
  * Describes the dataset (dataframe) returned from the sensor. Identifies the time series column, data stream columns, etc.
@@ -518,5 +523,85 @@ public class SensorReadoutsNormalizedResult {
      */
     public IntColumn getSeverityColumn() {
         return severityColumn;
+    }
+
+    /**
+     * Finds sensor result rows matching check search filters.
+     * @param searchFilters Check search filters.
+     * @return Selection (bitmap filter) of rows with results for that check.
+     */
+    public Selection findResults(CheckSearchFilters searchFilters) {
+        Table table = this.getTable();
+        Selection selection = Selection.withRange(0, table.rowCount());
+
+        if (!Strings.isNullOrEmpty(searchFilters.getConnection())) {
+            selection = selection.and(this.getConnectionNameColumn().isEqualTo(searchFilters.getConnection()));
+        }
+
+        if (searchFilters.getPhysicalTableName() != null) {
+            selection = selection.and(this.getSchemaNameColumn().isEqualTo(searchFilters.getPhysicalTableName().getSchemaName()));
+            selection = selection.and(this.getTableNameColumn().isEqualTo(searchFilters.getPhysicalTableName().getTableName()));
+        }
+
+        if (!Strings.isNullOrEmpty(searchFilters.getColumn())) {
+            selection = selection.and(this.getColumnNameColumn().isEqualTo(searchFilters.getColumn()));
+        }
+
+        if (searchFilters.getCheckType() != null) {
+            selection = selection.and(this.getCheckTypeColumn().isEqualTo(searchFilters.getCheckType().getDisplayName()));
+        }
+
+        if (searchFilters.getTimeScale() != null) {
+            selection = selection.and(this.getTimeGradientColumn().isEqualTo(searchFilters.getTimeScale().toTimeSeriesGradient().toString()));
+        }
+
+        if (!Strings.isNullOrEmpty(searchFilters.getCheckCategory())) {
+            selection = selection.and(this.getCheckCategoryColumn().isEqualTo(searchFilters.getCheckCategory()));
+        }
+
+        if (!Strings.isNullOrEmpty(searchFilters.getTableComparisonName())) {
+            selection = selection.and(this.getTableComparisonNameColumn().isEqualTo(searchFilters.getTableComparisonName()));
+        }
+
+        if (!Strings.isNullOrEmpty(searchFilters.getCheckName())) {
+            selection = selection.and(this.getCheckNameColumn().isEqualTo(searchFilters.getCheckName()));
+        }
+
+        if (!Strings.isNullOrEmpty(searchFilters.getQualityDimension())) {
+            selection = selection.and(this.getQualityDimensionColumn().isEqualTo(searchFilters.getQualityDimension()));
+        }
+
+        if (!Strings.isNullOrEmpty(searchFilters.getSensorName())) {
+            selection = selection.and(this.getSensorNameColumn().isEqualTo(searchFilters.getSensorName()));
+        }
+
+        return selection;
+    }
+
+    /**
+     * Returns true if the table with results is empty.
+     * @return True when empty, false when there are some rows.
+     */
+    public boolean isEmpty() {
+        return this.getTable().isEmpty();
+    }
+
+    /**
+     * Finds the row index of the row that contains the most recent result.
+     * @return The row index that contains the most recent result or null, when no results are present.
+     */
+    public Integer getRowIndexWithMostRecentResult() {
+        if (this.isEmpty()) {
+            return null;
+        }
+
+        Instant mostRecentExecutedAt = this.getExecutedAtColumn().max();
+        Selection selectionOfMostRecentResults = this.getExecutedAtColumn().isEqualTo(mostRecentExecutedAt);
+        if (selectionOfMostRecentResults.isEmpty()) {
+            return null; // rather not possible
+        }
+
+        int firstIndex = selectionOfMostRecentResults.get(selectionOfMostRecentResults.size() - 1);
+        return firstIndex;
     }
 }

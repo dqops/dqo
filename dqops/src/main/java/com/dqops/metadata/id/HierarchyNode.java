@@ -20,14 +20,46 @@ import com.dqops.metadata.basespecs.ReadOnlyStatus;
 import com.dqops.utils.serialization.YamlNotRenderWhenDefault;
 import org.apache.commons.collections.IteratorUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Interface implemented by objects that are represented on the hierarchy ID tree.
  */
 public interface HierarchyNode extends DirtyStatus, ReadOnlyStatus {
+    /**
+     * Find an element in an array that is of a given data type or a derived type.
+     * @param nodes Array of hierarchy nodes to search inside.
+     * @param targetType Target type to find or a base type.
+     * @return Found node or null.
+     * @param <T> Target type.
+     */
+    static <T extends HierarchyNode> T findNodeOfType(HierarchyNode[] nodes, Class<T> targetType) {
+        for (HierarchyNode node : nodes) {
+            if (targetType.isAssignableFrom(node.getClass())) {
+                return (T)node;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Find an element in an array that matches a predicate.
+     * @param nodes Array of hierarchy nodes to search inside.
+     * @param filter Filter predicate
+     * @return Found node or null.
+     */
+    static HierarchyNode findNode(HierarchyNode[] nodes, Predicate<HierarchyNode> filter) {
+        for (HierarchyNode node : nodes) {
+            if (filter.test(node)) {
+                return node;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Detach all child nodes that are default (empty) and will not be rendered into YAML anyway.
      * The purpose of this method is to get rid of extra nodes that were created for a short time to avoid a serialization/deserialization approach for dropping empty nodes.

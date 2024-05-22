@@ -15,6 +15,7 @@
  */
 package com.dqops.rules.stdev;
 
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -110,5 +111,22 @@ public class MultiplyMovingStdev7DaysRuleParametersSpec extends AbstractRulePara
     @Override
     public String getRuleDefinitionName() {
         return "stdev/multiply_moving_stdev_7_days";
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (this.multiplyStdevAbove != null) {
+            this.multiplyStdevAbove = this.multiplyStdevAbove * 1.3;
+        }
+
+        if (this.multiplyStdevBelow != null) {
+            this.multiplyStdevBelow = this.multiplyStdevBelow * 1.3;
+        }
     }
 }
