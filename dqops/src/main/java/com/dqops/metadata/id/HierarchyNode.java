@@ -17,11 +17,34 @@ package com.dqops.metadata.id;
 
 import com.dqops.metadata.basespecs.DirtyStatus;
 import com.dqops.metadata.basespecs.ReadOnlyStatus;
+import com.dqops.utils.serialization.YamlNotRenderWhenDefault;
+import org.apache.commons.collections.IteratorUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Interface implemented by objects that are represented on the hierarchy ID tree.
  */
 public interface HierarchyNode extends DirtyStatus, ReadOnlyStatus {
+    /**
+     * Detach all child nodes that are default (empty) and will not be rendered into YAML anyway.
+     * The purpose of this method is to get rid of extra nodes that were created for a short time to avoid a serialization/deserialization approach for dropping empty nodes.
+     */
+    default void detachEmptyChildNodes() {
+        for (HierarchyNode childNode : (List<HierarchyNode>)IteratorUtils.toList(this.children().iterator())) {
+            childNode.detachEmptyChildNodes();
+
+            if (childNode instanceof YamlNotRenderWhenDefault) {
+                YamlNotRenderWhenDefault defaultNode = (YamlNotRenderWhenDefault)childNode;
+                if (defaultNode.isDefault()) {
+                    this.detachChildNode(childNode.getHierarchyId().getLast());
+                }
+            }
+        }
+    }
+
     /**
      * Retrieves a child node given an expected object type that we want to extract.
      * Returns a child that has the class type as expected or is a subclass of the expected type.

@@ -87,6 +87,8 @@ public class CheckCalibrationServiceImpl implements CheckCalibrationService {
                     parentNode.detachChildNode(checkSpec.getHierarchyId().getLast());
                 }
             }
+
+            targetTableSpec.detachEmptyChildNodes();
         }
     }
 }
