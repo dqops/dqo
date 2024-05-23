@@ -52,10 +52,11 @@ public class DuckdbColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecInt
         String csvFileName = SampleCsvFileNames.value_match_right_table;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
                 csvFileName, connectionSpec);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         String csvFileNameForeign = SampleCsvFileNames.value_match_left_table;
         this.sampleTableMetadataForeign = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
                 csvFileNameForeign, connectionSpec);
-        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, sampleTableMetadataForeign);
         this.sut = new ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec();
         this.checkSpec = new ColumnIntegrityLookupKeyNotFoundCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
