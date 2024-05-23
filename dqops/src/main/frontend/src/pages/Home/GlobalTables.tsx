@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { LabelModel, TableListModel } from '../../api';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import Loader from '../../components/Loader';
 import TableList from '../../components/TableList';
 import { LabelsApiClient, SearchApiClient } from '../../services/apiClient';
 
@@ -19,7 +20,7 @@ export default function GlobalTables() {
   const [filters, setFilters] = useState<any>({ page: 1, pageSize: 50 });
   const [searchFilters, setSearchFilters] = useState<TSearchFilters>({});
   const [labels, setLabels] = useState<TLabel[]>([]);
-
+  const [loading, setLoading] = useState<boolean>(false);
   const onChangeFilters = (obj: Partial<any>) => {
     setFilters((prev: any) => ({
       ...prev,
@@ -49,6 +50,7 @@ export default function GlobalTables() {
     const addPrefix = (str: string) => {
       return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
     };
+    setLoading(true);
     const res = await SearchApiClient.findTables(
       addPrefix(searchFilters.connection ?? ''),
       addPrefix(searchFilters.schema ?? ''),
@@ -57,7 +59,7 @@ export default function GlobalTables() {
       filters.page,
       filters.pageSize,
       filters.checkType
-    );
+    ).finally(() => setLoading(false));
     const arr: TTableWithSchema[] = [];
     res.data.forEach((item) => {
       const jItem = { ...item, schema: item.target?.schema_name };
@@ -114,6 +116,14 @@ export default function GlobalTables() {
       }, 5000);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center min-h-80">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
 
   return (
     <>
