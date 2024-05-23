@@ -25,7 +25,7 @@ export default function ConnectionTables() {
   const [table, setTable] = useState<string>();
   const [schema, setSchema] = useState<string>();
   const [labels, setLabels] = useState<TLabel[]>([]);
-
+  const [loading, setLoading] = useState<boolean>(false);
   const onChangeFilters = (obj: Partial<any>) => {
     setFilters((prev: any) => ({
       ...prev,
@@ -51,6 +51,7 @@ export default function ConnectionTables() {
       if (!str) return undefined;
       return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
     };
+    setLoading(true);
     return SearchApiClient.findTables(
       connection,
       addPrefix(schema),
@@ -59,15 +60,17 @@ export default function ConnectionTables() {
       filters.page,
       filters.pageSize,
       filters.checkType
-    ).then((res) => {
-      const arr: TTableWithSchema[] = [];
-      res.data.forEach((item) => {
-        const jItem = { ...item, schema: item.target?.schema_name };
-        arr.push(jItem);
-      });
-      setTables(arr);
-      return arr;
-    });
+    )
+      .then((res) => {
+        const arr: TTableWithSchema[] = [];
+        res.data.forEach((item) => {
+          const jItem = { ...item, schema: item.target?.schema_name };
+          arr.push(jItem);
+        });
+        setTables(arr);
+        return arr;
+      })
+      .finally(() => setLoading(false));
   };
 
   const refetchTables = (tables?: TableListModel[]) => {
@@ -165,6 +168,7 @@ export default function ConnectionTables() {
         onChangeFilters={onChangeFilters}
         labels={labels}
         onChangeLabels={onChangeLabels}
+        loading={loading}
       />
     </>
   );

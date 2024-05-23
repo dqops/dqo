@@ -3,7 +3,6 @@ import { LabelModel, TableListModel } from '../../api';
 import Button from '../../components/Button';
 import ColumnList from '../../components/ColumnList';
 import Input from '../../components/Input';
-import Loader from '../../components/Loader';
 import { LabelsApiClient, SearchApiClient } from '../../services/apiClient';
 
 type TSearchFilters = {
@@ -129,14 +128,6 @@ export default function GlobalTables() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center min-h-80">
-        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
-      </div>
-    );
-  }
-
   return (
     <>
       <div className="flex items-center justify-between bg-white">
@@ -204,6 +195,7 @@ export default function GlobalTables() {
         onChangeFilters={onChangeFilters}
         labels={labels}
         onChangeLabels={onChangeLabels}
+        loading={loading}
       />
     </>
   );

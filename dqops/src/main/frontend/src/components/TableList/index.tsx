@@ -5,6 +5,7 @@ import SchemaTableItem from '../../pages/Schema/SchemaTableItem';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import LabelsSectionWrapper from '../LabelsSectionWrapper/LabelsSectionWrapper';
+import Loader from '../Loader';
 import { Pagination } from '../Pagination';
 
 type TButtonTabs = {
@@ -38,6 +39,7 @@ type TTableListProps = {
   onChangeFilters: (filters: any) => void;
   labels: TLabel[];
   onChangeLabels: (index: number) => void;
+  loading: boolean;
 };
 
 type TLabel = LabelModel & { clicked: boolean };
@@ -47,7 +49,8 @@ export default function index({
   filters,
   onChangeFilters,
   labels,
-  onChangeLabels
+  onChangeLabels,
+  loading
 }: TTableListProps) {
   const {
     checkTypes,
@@ -142,15 +145,19 @@ export default function index({
                 )}
               </tr>
             </thead>
-            <tbody>
-              {tables.map((item, index) => (
-                <SchemaTableItem
-                  key={index}
-                  item={item}
-                  dimensionKeys={getDimensionKey()}
-                />
-              ))}
-            </tbody>
+            {loading ? (
+              <Loader isFull={false} className="w-8 h-8 fill-green-700 mt-5" />
+            ) : (
+              <tbody>
+                {tables.map((item, index) => (
+                  <SchemaTableItem
+                    key={index}
+                    item={item}
+                    dimensionKeys={getDimensionKey()}
+                  />
+                ))}
+              </tbody>
+            )}
           </table>
         </div>
       </div>

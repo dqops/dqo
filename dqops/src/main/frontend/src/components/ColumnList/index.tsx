@@ -6,6 +6,7 @@ import { useDecodedParams } from '../../utils';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import { Pagination } from '../Pagination';
 
+import Loader from '../Loader';
 import ColumnListItem from './ColumnListItem';
 
 type TButtonTabs = {
@@ -47,6 +48,7 @@ type TColumnListProps = {
   onChangeFilters: (filters: any) => void;
   labels: TLabel[];
   onChangeLabels: (index: number) => void;
+  loading: boolean;
 };
 
 type TLabel = LabelModel & { clicked: boolean };
@@ -56,7 +58,8 @@ function ColumnList({
   filters,
   onChangeFilters,
   labels,
-  onChangeLabels
+  onChangeLabels,
+  loading
 }: TColumnListProps) {
   const {
     checkTypes,
@@ -173,15 +176,19 @@ function ColumnList({
                 )}
               </tr>
             </thead>
-            <tbody>
-              {columns.map((item, index) => (
-                <ColumnListItem
-                  key={index}
-                  item={item}
-                  dimensionKeys={getDimensionKey()}
-                />
-              ))}
-            </tbody>
+            {loading ? (
+              <Loader isFull={false} className="w-8 h-8 fill-green-700 mt-5" />
+            ) : (
+              <tbody>
+                {columns.map((item, index) => (
+                  <ColumnListItem
+                    key={index}
+                    item={item}
+                    dimensionKeys={getDimensionKey()}
+                  />
+                ))}
+              </tbody>
+            )}
           </table>
         </div>
       </div>

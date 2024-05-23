@@ -22,7 +22,7 @@ export default function ConnectionColumns() {
   const [filters, setFilters] = useState<any>({ page: 1, pageSize: 50 });
   const [searchFilters, setSearchFilters] = useState<TSearchFilters>({});
   const [labels, setLabels] = useState<TLabel[]>([]);
-
+  const [loading, setLoading] = useState<boolean>(false);
   const onChangeFilters = (obj: Partial<any>) => {
     setFilters((prev: any) => ({
       ...prev,
@@ -52,6 +52,7 @@ export default function ConnectionColumns() {
     const addPrefix = (str: string) => {
       return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
     };
+    setLoading(true);
     const res = await SearchApiClient.findColumns(
       connection,
       addPrefix(searchFilters.schema ?? ''),
@@ -64,7 +65,7 @@ export default function ConnectionColumns() {
       filters.page,
       filters.pageSize,
       filters.checkType
-    );
+    ).finally(() => setLoading(true));
     const arr: TTableWithSchema[] = [];
     res.data.forEach((item) => {
       const jItem = {
@@ -187,6 +188,7 @@ export default function ConnectionColumns() {
         onChangeFilters={onChangeFilters}
         labels={labels}
         onChangeLabels={onChangeLabels}
+        loading={loading}
       />
     </>
   );

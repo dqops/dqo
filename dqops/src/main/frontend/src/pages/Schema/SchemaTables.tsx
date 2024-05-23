@@ -24,7 +24,7 @@ export const SchemaTables = () => {
   const [filters, setFilters] = useState<any>({ page: 1, pageSize: 50 });
   const [table, setTable] = useState('');
   const [labels, setLabels] = useState<TLabel[]>([]);
-
+  const [loading, setLoading] = useState<boolean>(false);
   const onChangeFilters = (obj: Partial<any>) => {
     setFilters((prev: any) => ({
       ...prev,
@@ -48,7 +48,7 @@ export const SchemaTables = () => {
   const getTables = async (labels: string[] = []) => {
     const filter =
       table.includes('*') || table.length === 0 ? table : '*' + table + '*';
-
+    setLoading(true);
     return TableApiClient.getTables(
       connection,
       schema,
@@ -57,15 +57,17 @@ export const SchemaTables = () => {
       filters.pageSize,
       filter,
       checkTypes === CheckTypes.SOURCES ? undefined : checkTypes
-    ).then((res) => {
-      const arr: TTableWithSchema[] = [];
-      res.data.forEach((item) => {
-        const jItem = { ...item, schema: item.target?.schema_name };
-        arr.push(jItem);
-      });
-      setTables(arr);
-      return arr;
-    });
+    )
+      .then((res) => {
+        const arr: TTableWithSchema[] = [];
+        res.data.forEach((item) => {
+          const jItem = { ...item, schema: item.target?.schema_name };
+          arr.push(jItem);
+        });
+        setTables(arr);
+        return arr;
+      })
+      .finally(() => setLoading(false));
   };
 
   const refetchTables = (tables?: TableListModel[]) => {
@@ -158,6 +160,7 @@ export const SchemaTables = () => {
         onChangeFilters={onChangeFilters}
         labels={labels}
         onChangeLabels={onChangeLabels}
+        loading={loading}
       />
     </>
   );
