@@ -19,7 +19,6 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindResult;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindResultObjectMother;
-import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderParameters;
 
 /**
  * Object mother for JinjaTemplateRenderParameters.
@@ -37,8 +36,9 @@ public class JinjaTemplateRenderParametersObjectMother {
         SensorDefinitionFindResult sensorDefinitions =
                 SensorDefinitionFindResultObjectMother.findDqoHomeSensorDefinition(sensorName, providerType);
 
-        JinjaTemplateRenderParameters renderParameters = JinjaTemplateRenderParameters.createFromTrimmedObjects(
-                sensorExecutionRunParameters, sensorDefinitions);
+        JinjaTemplateRenderParametersProvider jinjaTemplateRenderParametersProvider = new JinjaTemplateRenderParametersProviderImpl(null);
+        JinjaTemplateRenderParameters renderParameters = jinjaTemplateRenderParametersProvider.createFromTrimmedObjects(
+                null, sensorExecutionRunParameters, sensorDefinitions);
         return renderParameters;
     }
 
@@ -54,8 +54,9 @@ public class JinjaTemplateRenderParametersObjectMother {
         SensorDefinitionFindResult sensorDefinitions =
                 SensorDefinitionFindResultObjectMother.findDqoHomeSensorDefinition(sensorName, sensorExecutionRunParameters.getConnection().getProviderType());
 
-        JinjaTemplateRenderParameters renderParameters = JinjaTemplateRenderParameters.createFromTrimmedObjects(
-                sensorExecutionRunParameters, sensorDefinitions);
+        JinjaTemplateRenderParametersProvider jinjaTemplateRenderParametersProvider = new JinjaTemplateRenderParametersProviderImpl(null);
+        JinjaTemplateRenderParameters renderParameters = jinjaTemplateRenderParametersProvider.createFromTrimmedObjects(
+                null, sensorExecutionRunParameters, sensorDefinitions);
         return renderParameters;
     }
 }

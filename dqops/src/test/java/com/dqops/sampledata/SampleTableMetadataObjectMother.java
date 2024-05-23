@@ -251,10 +251,12 @@ public class SampleTableMetadataObjectMother {
         ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
         SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTable(csvFileName);
 
+        String targetSchema = getSchemaForProvider(connectionSpec);
+        PhysicalTableName physicalTableName = new PhysicalTableName(targetSchema, sampleTable.getHashedTableName());
         TableSpec tableSpec = new TableSpec();
         FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForCsvFile(csvFileName);
         tableSpec.setFileFormat(fileFormatSpec);
-        tableSpec.setPhysicalTableName(new PhysicalTableName("a_random_schema_name", "a_random_table_name"));
+        tableSpec.setPhysicalTableName(physicalTableName);
 
         DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec();
         tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);

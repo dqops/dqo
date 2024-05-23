@@ -65,25 +65,30 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final JinjaSqlTemplateSensorExecutor jinjaSqlTemplateSensorExecutor;
     private final UserErrorLogger userErrorLogger;
+    private final JinjaTemplateRenderParametersProvider jinjaTemplateRenderParametersProvider;
 
     /**
      * Creates a sql template runner.
-     * @param jinjaTemplateRenderService Jinja template rendering service.
-     * @param connectionProviderRegistry Connection provider registry.
-     * @param defaultTimeZoneProvider The default time zone provider.
-     * @param userErrorLogger Check execution logger.
+     *
+     * @param jinjaTemplateRenderService            Jinja template rendering service.
+     * @param connectionProviderRegistry            Connection provider registry.
+     * @param defaultTimeZoneProvider               The default time zone provider.
+     * @param userErrorLogger                       Check execution logger.
+     * @param jinjaTemplateRenderParametersProvider
      */
     @Autowired
     public JinjaSqlTemplateSensorRunner(JinjaTemplateRenderService jinjaTemplateRenderService,
                                         ConnectionProviderRegistry connectionProviderRegistry,
                                         DefaultTimeZoneProvider defaultTimeZoneProvider,
                                         JinjaSqlTemplateSensorExecutor jinjaSqlTemplateSensorExecutor,
-                                        UserErrorLogger userErrorLogger) {
+                                        UserErrorLogger userErrorLogger,
+                                        JinjaTemplateRenderParametersProvider jinjaTemplateRenderParametersProvider) {
         super(defaultTimeZoneProvider);
         this.jinjaTemplateRenderService = jinjaTemplateRenderService;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.jinjaSqlTemplateSensorExecutor = jinjaSqlTemplateSensorExecutor;
         this.userErrorLogger = userErrorLogger;
+        this.jinjaTemplateRenderParametersProvider = jinjaTemplateRenderParametersProvider;
     }
 
     /**
@@ -101,8 +106,8 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
                                              SensorExecutionProgressListener progressListener) {
         String renderedSql = null;
         try {
-            JinjaTemplateRenderParameters templateRenderParameters = JinjaTemplateRenderParameters.createFromTrimmedObjects(
-                    sensorRunParameters, sensorDefinition);
+            JinjaTemplateRenderParameters templateRenderParameters = jinjaTemplateRenderParametersProvider.createFromTrimmedObjects(
+                    executionContext, sensorRunParameters, sensorDefinition);
             renderedSql = this.jinjaTemplateRenderService.renderTemplate(executionContext, sensorDefinition,
                     templateRenderParameters, progressListener);
 

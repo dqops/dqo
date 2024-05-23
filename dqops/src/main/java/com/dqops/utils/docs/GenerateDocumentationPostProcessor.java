@@ -15,16 +15,16 @@
  */
 package com.dqops.utils.docs;
 
+import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoPythonConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
@@ -47,9 +47,11 @@ import com.dqops.metadata.storage.localfiles.settings.LocalSettingsYaml;
 import com.dqops.metadata.storage.localfiles.sources.ConnectionYaml;
 import com.dqops.metadata.storage.localfiles.sources.TableYaml;
 import com.dqops.metadata.storage.localfiles.tabledefaultpatterns.TableDefaultChecksPatternYaml;
-import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingServiceImpl;
-import com.dqops.services.check.matching.*;
+import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
+import com.dqops.services.check.matching.SimilarCheckGroupingKeyFactoryImpl;
+import com.dqops.services.check.matching.SimilarCheckMatchingService;
+import com.dqops.services.check.matching.SimilarCheckMatchingServiceImpl;
 import com.dqops.utils.docs.checks.CheckDocumentationGenerator;
 import com.dqops.utils.docs.checks.CheckDocumentationGeneratorImpl;
 import com.dqops.utils.docs.checks.CheckDocumentationModelFactory;
