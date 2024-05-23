@@ -135,7 +135,7 @@ function ColumnList({
         <div className="w-[280px]">
           <SectionWrapper
             title="Filter by labels"
-            className="text-sm w-[250px] mx-4 mb-4 mt-6 "
+            className="text-xs w-[250px] mx-4 mb-4 mt-6 "
           >
             {labels.map((label, index) => (
               <div

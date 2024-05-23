@@ -17,7 +17,7 @@ const renderItem = (label: string, key: string, toRotate?: boolean) => {
 
   return (
     <th
-      className="px-4 "
+      className="px-4 text-xs"
       key={key}
       style={
         toRotate
@@ -35,9 +35,9 @@ const renderItem = (label: string, key: string, toRotate?: boolean) => {
       >
         <span
           className={clsx(
-            'inline-block',
+            'inline-block text-xs',
             toRotate ? 'rotate-90 origin-bottom-left' : '',
-            label === 'Actions' ? 'ml-3' : ''
+            label === 'Actions' ? 'ml-6' : ''
           )}
           style={
             toRotate

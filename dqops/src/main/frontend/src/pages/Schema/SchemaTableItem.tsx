@@ -112,13 +112,13 @@ export default function SchemaTableItem({
   };
 
   return (
-    <tr className="text-sm my-3">
+    <tr className="text-xs my-3">
       {(!checkTypes || !connection || !schema) && (
         <>
           {!connection && (
             <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
               <Button
-                className="ml-4 !px-0 underline cursor-pointer text-sm py-0 text-start "
+                className="ml-4 !px-0 underline cursor-pointer text-xs py-0 text-start "
                 label={item.connection_name}
                 onClick={() => goToConnection(item)}
               />
@@ -126,7 +126,7 @@ export default function SchemaTableItem({
           )}
           <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
             <Button
-              className="ml-4 !px-0 underline cursor-pointer text-sm py-0 text-start"
+              className="ml-4 !px-0 underline cursor-pointer text-xs py-0 text-start"
               label={item.schema}
               onClick={() => goToSchema(item)}
             />
@@ -135,13 +135,13 @@ export default function SchemaTableItem({
       )}
       <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
         <Button
-          className="ml-4 !px-0 underline cursor-pointer text-sm py-0 text-start"
+          className="ml-4 !px-0 underline cursor-pointer text-xs py-0 text-start"
           label={item.target?.table_name}
           onClick={() => goToTable(item, checkTypes)}
         />
       </td>
-      <td className="px-4 text-sm content-start pt-2">{item?.stage}</td>
-      <td className="px-4 text-sm content-start pt-2">
+      <td className="px-4 text-xs content-start pt-2">{item?.stage}</td>
+      <td className="px-4 text-xs content-start pt-2">
         {getLabelsOverview(item?.labels ?? [])}
       </td>
       {item?.data_quality_status?.dimensions ? (
@@ -151,7 +151,7 @@ export default function SchemaTableItem({
             dimensionKeys={dimensionKeys}
           />
           <td>
-            <div className="flex gap-x-2 items-center justify-center mr-3">
+            <div className="flex gap-x-2 items-center justify-center mx-3">
               <SvgIcon
                 name="data_sources"
                 className="w-5 h-5"
