@@ -1,3 +1,4 @@
+import { Tooltip } from '@material-tailwind/react';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -152,26 +153,49 @@ export default function SchemaTableItem({
           />
           <td>
             <div className="flex gap-x-2 items-center justify-center mx-3">
-              <SvgIcon
-                name="data_sources"
-                className="w-5 h-5"
-                onClick={() => goToTable(item, CheckTypes.SOURCES)}
-              />
-              <SvgIcon
-                name="profiling"
-                className="w-5 h-5"
-                onClick={() => goToTable(item, CheckTypes.PROFILING)}
-              />
-              <SvgIcon
-                name="monitoring_checks"
-                className="w-5 h-5"
-                onClick={() => goToTable(item, CheckTypes.MONITORING)}
-              />
-              <SvgIcon
-                name="partitioned_checks"
-                className="w-5 h-5"
-                onClick={() => goToTable(item, CheckTypes.PARTITIONED)}
-              />
+              <Tooltip
+                content={'Add a new connection and manage its settings'}
+                className="max-w-120 z-50"
+                placement="right-start"
+              >
+                <>
+                  <SvgIcon
+                    name="data_sources"
+                    className="w-5 h-5 cursor-pointer"
+                    onClick={() => goToTable(item, CheckTypes.SOURCES)}
+                  />
+                </>
+              </Tooltip>
+              <Tooltip
+                content={'Profiling'}
+                className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+              >
+                <SvgIcon
+                  name="profiling"
+                  className="w-5 h-5 cursor-pointer"
+                  onClick={() => goToTable(item, CheckTypes.PROFILING)}
+                />
+              </Tooltip>
+              <Tooltip
+                content={'Monitoring Checks'}
+                className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+              >
+                <SvgIcon
+                  name="monitoring_checks"
+                  className="w-5 h-5 cursor-pointer"
+                  onClick={() => goToTable(item, CheckTypes.MONITORING)}
+                />
+              </Tooltip>
+              <Tooltip
+                content={'Partitioned Checks'}
+                className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+              >
+                <SvgIcon
+                  name="partitioned_checks"
+                  className="w-5 h-5 cursor-pointer"
+                  onClick={() => goToTable(item, CheckTypes.PARTITIONED)}
+                />
+              </Tooltip>
             </div>
           </td>
         </>
