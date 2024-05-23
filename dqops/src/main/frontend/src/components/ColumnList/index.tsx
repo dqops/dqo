@@ -8,6 +8,7 @@ import { Pagination } from '../Pagination';
 
 import Loader from '../Loader';
 import ColumnListItem from './ColumnListItem';
+import renderItem from './renderItem';
 
 type TButtonTabs = {
   label: string;
@@ -70,16 +71,6 @@ function ColumnList({
     connection: string;
     schema: string;
   } = useDecodedParams();
-
-  const renderItem = (label: string, key: string, toRotate?: boolean) => {
-    return (
-      <th className="px-4" key={key}>
-        <div className="flex text-sm items-center relative">
-          <span className={clsx(toRotate ? ' z-9' : '')}>{label}</span>
-        </div>
-      </th>
-    );
-  };
 
   const getDimensionKey = () => {
     const uniqueDimensions: string[] = [];
@@ -165,7 +156,7 @@ function ColumnList({
         </div>
 
         <div className="overflow-x-auto">
-          <table>
+          <table className="absolute top-25">
             <thead>
               <tr className="mb-2">
                 {headerItems.map(
@@ -189,22 +180,22 @@ function ColumnList({
                 ))}
               </tbody>
             )}
+            <div className="px-4 my-5 pb-6 flex justify-end">
+              <Pagination
+                page={filters.page || 1}
+                pageSize={filters.pageSize || 50}
+                isEnd={isEnd}
+                totalPages={10}
+                onChange={(page, pageSize) =>
+                  onChangeFilters({
+                    page,
+                    pageSize
+                  })
+                }
+              />
+            </div>
           </table>
         </div>
-      </div>
-      <div className="px-4 my-5 pb-6">
-        <Pagination
-          page={filters.page || 1}
-          pageSize={filters.pageSize || 50}
-          isEnd={isEnd}
-          totalPages={10}
-          onChange={(page, pageSize) =>
-            onChangeFilters({
-              page,
-              pageSize
-            })
-          }
-        />
       </div>
     </div>
   );

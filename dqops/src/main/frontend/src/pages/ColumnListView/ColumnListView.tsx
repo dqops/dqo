@@ -194,7 +194,7 @@ export default function ColumnListView() {
         <Button
           label="Refresh"
           color="primary"
-          className="mb-2 mt-5 mr-4"
+          className="mb-2 mt-5 mr-4 z-[1]"
           onClick={() =>
             getColumns(
               labels

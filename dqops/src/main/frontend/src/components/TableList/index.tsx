@@ -1,9 +1,9 @@
-import clsx from 'clsx';
 import React from 'react';
 import { LabelModel, TableListModel } from '../../api';
 import SchemaTableItem from '../../pages/Schema/SchemaTableItem';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
+import renderItem from '../ColumnList/renderItem';
 import LabelsSectionWrapper from '../LabelsSectionWrapper/LabelsSectionWrapper';
 import Loader from '../Loader';
 import { Pagination } from '../Pagination';
@@ -61,16 +61,6 @@ export default function index({
     connection: string;
     schema: string;
   } = useDecodedParams();
-
-  const renderItem = (label: string, key: string, toRotate?: boolean) => {
-    return (
-      <th className="px-4" key={key}>
-        <div className="flex text-sm items-center relative">
-          <span className={clsx(toRotate ? ' z-9' : '')}>{label}</span>
-        </div>
-      </th>
-    );
-  };
 
   const getDimensionKey = () => {
     const uniqueDimensions: string[] = [];
@@ -134,7 +124,7 @@ export default function index({
           />
         </div>
         <div className="overflow-x-auto">
-          <table>
+          <table className="absolute top-25">
             <thead>
               <tr className="mb-2">
                 {headerItems.map(
@@ -158,22 +148,22 @@ export default function index({
                 ))}
               </tbody>
             )}
+            <div className="px-4 my-5 pb-6 flex justify-end">
+              <Pagination
+                page={filters.page || 1}
+                pageSize={filters.pageSize || 50}
+                isEnd={isEnd}
+                totalPages={10}
+                onChange={(page, pageSize) =>
+                  onChangeFilters({
+                    page,
+                    pageSize
+                  })
+                }
+              />
+            </div>
           </table>
         </div>
-      </div>
-      <div className="px-4 my-5 pb-6">
-        <Pagination
-          page={filters.page || 1}
-          pageSize={filters.pageSize || 50}
-          isEnd={isEnd}
-          totalPages={10}
-          onChange={(page, pageSize) =>
-            onChangeFilters({
-              page,
-              pageSize
-            })
-          }
-        />
       </div>
     </div>
   );
