@@ -145,6 +145,7 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
      * Clears the child node, setting a null value.
      * @param childName Child name.
      */
+    @Override
     public void detachChildNode(Object childName) {
         ChildHierarchyNodeFieldMap childFieldMap = this.getChildMap();
         FieldInfo fieldInfo = childFieldMap.getReflectionClassInfo().getFieldByYamlName(childName.toString());

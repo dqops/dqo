@@ -238,6 +238,24 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
         return cloned;
     }
 
+    /**
+     * Creates a table level incident grouping configuration that is a copy of the connection level configuration. Webhooks are not copied.
+     * @return Table level configuration.
+     */
+    public TableIncidentGroupingSpec toTableIncidentGrouping() {
+        TableIncidentGroupingSpec tableIncidentGroupingSpec = new TableIncidentGroupingSpec();
+        tableIncidentGroupingSpec.setGroupingLevel(this.getGroupingLevel());
+        tableIncidentGroupingSpec.setMinimumSeverity(this.getMinimumSeverity());
+        if (this.isDisabled()) {
+            tableIncidentGroupingSpec.setDisabled(this.isDisabled());
+        }
+        if (this.isDivideByDataGroups()) {
+            tableIncidentGroupingSpec.setDivideByDataGroup(this.isDivideByDataGroups());
+        }
+
+        return tableIncidentGroupingSpec;
+    }
+
     public static class ConnectionIncidentGroupingSpecSampleFactory implements SampleValueFactory<ConnectionIncidentGroupingSpec> {
         @Override
         public ConnectionIncidentGroupingSpec createSample() {

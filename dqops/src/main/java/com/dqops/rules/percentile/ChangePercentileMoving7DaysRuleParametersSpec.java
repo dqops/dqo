@@ -15,6 +15,7 @@
  */
 package com.dqops.rules.percentile;
 
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -124,5 +125,22 @@ public class ChangePercentileMoving7DaysRuleParametersSpec extends AbstractRuleP
     @Override
     public String getRuleDefinitionName() {
         return "percentile/change_percentile_moving_7_days";
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (this.percentileAbove != null) {
+            this.percentileAbove *= 0.7;
+        }
+
+        if (this.percentileBelow != null) {
+            this.percentileBelow *= 0.7;
+        }
     }
 }

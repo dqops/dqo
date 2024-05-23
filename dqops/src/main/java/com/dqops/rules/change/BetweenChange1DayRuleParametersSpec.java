@@ -15,6 +15,7 @@
  */
 package com.dqops.rules.change;
 
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -126,5 +127,22 @@ public class BetweenChange1DayRuleParametersSpec extends AbstractRuleParametersS
     @Override
     public String getRuleDefinitionName() {
         return "change/between_change_1_day";
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (this.from != null) {
+            this.from *= 0.7;
+        }
+
+        if (this.to != null) {
+            this.to *= 1.3;
+        }
     }
 }

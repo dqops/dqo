@@ -127,6 +127,16 @@ public abstract class AbstractDirtyTrackingSpecMap<V extends HierarchyNode>
     }
 
     /**
+     * Clears the child node, setting a null value.
+     *
+     * @param childName Child name.
+     */
+    @Override
+    public void detachChildNode(Object childName) {
+        remove(childName);
+    }
+
+    /**
      * Associates the specified value with the specified key in this map.
      * If the map previously contained a mapping for the key, the old
      * value is replaced.

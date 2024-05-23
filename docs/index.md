@@ -469,7 +469,7 @@ Want to learn more about data quality?
     DQOps creators have written an eBook ["A step-by-step guide to improve data quality"](https://dqops.com/best-practices-for-effective-data-quality-improvement/)
     that describes their experience in data cleansing and data quality monitoring using DQOps. 
 
-    The eBook desribes a full data quality improvement process that allows to reach a ~100% data quality KPI score within 6-12 months.
+    The eBook describes a full data quality improvement process that allows you to reach a ~100% data quality KPI score within 6-12 months.
     [Download the eBook](https://dqops.com/best-practices-for-effective-data-quality-improvement/) to learn the process of managing
     an iterative data quality project that leads to fixing all data quality issues.
     

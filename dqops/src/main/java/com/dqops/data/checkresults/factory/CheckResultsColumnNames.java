@@ -102,7 +102,8 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
      * List of column names that should be loaded from the parquet files when the recent result overview is needed.
      * We only want to read the statuses.
      */
-    public static final String[] COLUMN_NAMES_FOR_RESULTS_OVERVIEW = new String[] {
+    @Deprecated
+    public static final String[] COLUMN_NAMES_FOR_RESULTS_OVERVIEW_OBSOLETE = new String[] {
             COLUMN_NAME_COLUMN_NAME,
             CHECK_TYPE_COLUMN_NAME,
             TIME_GRADIENT_COLUMN_NAME,
@@ -162,4 +163,10 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
 
             INCIDENT_HASH_COLUMN_NAME
     };
+
+    /**
+     * List of column names that should be loaded from the parquet files when the recent result overview is needed.
+     * We only want to read the statuses.
+     */
+    public static final String[] COLUMN_NAMES_FOR_RESULTS_OVERVIEW = CHECK_RESULTS_COLUMN_NAMES_FOR_READ_ONLY_ACCESS;
 }

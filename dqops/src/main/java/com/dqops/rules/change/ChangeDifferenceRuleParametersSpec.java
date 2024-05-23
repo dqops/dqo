@@ -15,6 +15,7 @@
  */
 package com.dqops.rules.change;
 
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -87,5 +88,25 @@ public class ChangeDifferenceRuleParametersSpec extends AbstractRuleParametersSp
     @Override
     public String getRuleDefinitionName() {
         return "change/change_difference";
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (this.maxDifference == null) {
+            return;
+        }
+
+        if (this.maxDifference <= 0.0) {
+            this.maxDifference = checkResultsSingleCheck.getActualValueColumn().max();
+            return;
+        }
+
+        this.maxDifference *= 1.3;
     }
 }

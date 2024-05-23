@@ -15,6 +15,7 @@
  */
 package com.dqops.rules.comparison;
 
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -126,5 +127,26 @@ public class EqualsRuleParametersSpec extends AbstractRuleParametersSpec {
     @Override
     public String getRuleDefinitionName() {
         return "comparison/equals";
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (this.errorMargin == null) {
+            this.expectedValue = checkResultsSingleCheck.getActualValueColumn().median();
+            return;
+        }
+
+        if (this.errorMargin <= 0.0) {
+            this.errorMargin = (checkResultsSingleCheck.getActualValueColumn().max() - checkResultsSingleCheck.getActualValueColumn().min()) / 2.0;
+            return;
+        }
+
+        this.errorMargin = this.errorMargin * 1.3;
     }
 }

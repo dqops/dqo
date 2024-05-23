@@ -1,8 +1,8 @@
+import { IconButton } from '@material-tailwind/react';
+import clsx from 'clsx';
 import React from 'react';
 import Input from '../../Input';
-import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../SvgIcon';
-import clsx from 'clsx';
 
 interface ILabelItemProps {
   idx: number;

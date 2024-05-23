@@ -343,4 +343,14 @@ public class DqoHomeImpl implements DqoHome, Cloneable {
             }
         }
     }
+
+    /**
+     * Clears the child node, setting a null value.
+     *
+     * @param childName Child name.
+     */
+    @Override
+    public void detachChildNode(Object childName) {
+        // do nothing, ignore
+    }
 }

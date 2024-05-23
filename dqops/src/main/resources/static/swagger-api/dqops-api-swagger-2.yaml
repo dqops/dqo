@@ -11800,6 +11800,56 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/incidents/{connectionName}/{year}/{month}/{incidentId}/checks/disable:
+    post:
+      tags:
+      - "Incidents"
+      summary: "disableChecksForIncident"
+      description: "Disables all data quality checks that caused a given data quality\
+        \ incident."
+      operationId: "disableChecksForIncident"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "year"
+        in: "path"
+        description: "Year when the incident was first seen"
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "month"
+        in: "path"
+        description: "Month when the incident was first seen"
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "incidentId"
+        in: "path"
+        description: "Incident id"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        204:
+          description: "Data quality checks related to the incident successfully disabled"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Connection was not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram:
     get:
       tags:
@@ -17438,6 +17488,13 @@ definitions:
           \ invalid queries in data quality sensors or invalid python rules. When\
           \ an execution error is reported, the configuration of a data quality check\
           \ on a column must be updated."
+      data_quality_kpi:
+        type: "number"
+        format: "double"
+        description: "Data quality KPI score for the column, measured as a percentage\
+          \ of passed data quality checks. DQOps counts data quality issues at a warning\
+          \ severity level as passed checks. The data quality KPI score is a value\
+          \ in the range 0..100."
       checks:
         type: "object"
         description: "The dictionary of statuses for data quality checks. The keys\
@@ -31328,6 +31385,7 @@ definitions:
         - "floats"
         - "dates"
         - "datetimes"
+        - "timestamps"
         - "booleans"
         - "texts"
         - "mixed"

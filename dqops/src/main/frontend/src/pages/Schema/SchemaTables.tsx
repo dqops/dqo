@@ -21,7 +21,7 @@ export const SchemaTables = () => {
     schema: string;
   } = useDecodedParams();
   const [tables, setTables] = useState<TableListModel[]>([]);
-  const [filters, setFilters] = useState<any>({ page: 1, limit: 50 });
+  const [filters, setFilters] = useState<any>({ page: 1, pageSize: 50 });
   const [table, setTable] = useState('');
   const [labels, setLabels] = useState<TLabel[]>([]);
 

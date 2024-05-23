@@ -27,6 +27,7 @@ import com.dqops.data.incidents.models.IncidentModel;
 import com.dqops.data.incidents.models.IncidentSortOrder;
 import com.dqops.data.incidents.models.IncidentsPerConnectionModel;
 import com.dqops.data.incidents.services.IncidentsDataService;
+import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -35,6 +36,7 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.common.SortDirection;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.services.check.calibration.CheckCalibrationService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,20 +62,24 @@ public class IncidentsController {
     private IncidentsDataService incidentsDataService;
     private IncidentImportQueueService incidentImportQueueService;
     private UserHomeContextFactory userHomeContextFactory;
+    private CheckCalibrationService checkCalibrationService;
 
     /**
      * Creates an incident management service, given all used dependencies.
      * @param incidentsDataService Incident data service used to load incidents.
      * @param incidentImportQueueService Incident queued update service that updates the statuses of incidents.
      * @param userHomeContextFactory User home factory.
+     * @param checkCalibrationService Data quality check calibration service that adapts the configuration of checks to reduce the number of incidents.
      */
     @Autowired
     public IncidentsController(IncidentsDataService incidentsDataService,
                                IncidentImportQueueService incidentImportQueueService,
-                               UserHomeContextFactory userHomeContextFactory) {
+                               UserHomeContextFactory userHomeContextFactory,
+                               CheckCalibrationService checkCalibrationService) {
         this.incidentsDataService = incidentsDataService;
         this.incidentImportQueueService = incidentImportQueueService;
         this.userHomeContextFactory = userHomeContextFactory;
+        this.checkCalibrationService = checkCalibrationService;
     }
 
     /**
@@ -455,6 +461,104 @@ public class IncidentsController {
             @ApiParam(name = "issueUrl", value = "New incident's issueUrl") @RequestParam String issueUrl) {
         IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters = new IncidentIssueUrlChangeParameters(connectionName, year, month, incidentId, issueUrl);
         this.incidentImportQueueService.setIncidentIssueUrl(incidentIssueUrlChangeParameters, principal.getDataDomainIdentity()); // operation performed in the background, no result is returned
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Disables all data quality checks that caused a given data quality incident.
+     * @param connectionName Connection name.
+     * @param year Year when the incident was first seen.
+     * @param month Month when the incident was first seen.
+     * @param incidentId Incident id.
+     * @return None.
+     */
+    @PostMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/checks/disable", produces = "application/json")
+    @ApiOperation(value = "disableChecksForIncident", notes = "Disables all data quality checks that caused a given data quality incident.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Data quality checks related to the incident successfully disabled", response = Void.class),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
+            @ApiResponse(code = 404, message = "Connection was not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> disableChecksForIncident(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Year when the incident was first seen") @PathVariable int year,
+            @ApiParam("Month when the incident was first seen") @PathVariable int month,
+            @ApiParam("Incident id") @PathVariable String incidentId) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        IncidentModel incidentModel = this.incidentsDataService.loadIncident(connectionName, year, month, incidentId, principal.getDataDomainIdentity());
+
+        if (incidentModel == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        CheckSearchFilters checkSearchFilter = incidentModel.toCheckSearchFilter();
+        this.checkCalibrationService.disableChecks(checkSearchFilter, userHome, false);
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Recalibrates all data quality checks that caused a given data quality incident to generate less issues by changing the data quality rule parameters.
+     * @param connectionName Connection name.
+     * @param year Year when the incident was first seen.
+     * @param month Month when the incident was first seen.
+     * @param incidentId Incident id.
+     * @return None.
+     */
+    @PostMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/checks/recalibrate", produces = "application/json")
+    @ApiOperation(value = "recalibrateChecksForIncident", notes = "Recalibrates all data quality checks that caused a given data quality incident to generate less issues by changing the data quality rule parameters.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Data quality checks related to the incident successfully recalibrated", response = Void.class),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
+            @ApiResponse(code = 404, message = "Connection was not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<Void>> recalibrateChecksForIncident(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Year when the incident was first seen") @PathVariable int year,
+            @ApiParam("Month when the incident was first seen") @PathVariable int month,
+            @ApiParam("Incident id") @PathVariable String incidentId) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        IncidentModel incidentModel = this.incidentsDataService.loadIncident(connectionName, year, month, incidentId, principal.getDataDomainIdentity());
+
+        if (incidentModel == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        CheckSearchFilters checkSearchFilter = incidentModel.toCheckSearchFilter();
+        this.checkCalibrationService.decreaseCheckSensitivity(checkSearchFilter, userHome, false);
+        userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }

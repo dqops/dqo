@@ -16,7 +16,6 @@
 
 package com.dqops.data.checkresults.models.currentstatus;
 
-import com.dqops.checks.CheckType;
 import com.dqops.data.checkresults.models.CheckResultStatus;
 import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.utils.docs.generators.SampleListUtility;
@@ -112,6 +111,13 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
     private int executionErrors;
 
     /**
+     * Data quality KPI score for the column, measured as a percentage of passed data quality checks.
+     * DQOps counts data quality issues at a warning severity level as passed checks. The data quality KPI score is a value in the range 0..100.
+     */
+    @JsonPropertyDescription("Data quality KPI score for the column, measured as a percentage of passed data quality checks. " +
+            "DQOps counts data quality issues at a warning severity level as passed checks. The data quality KPI score is a value in the range 0..100.")
+    private Double dataQualityKpi;
+    /**
      * The dictionary of statuses for data quality checks. The keys are data quality check names, the values are the current data quality check statuses
      * that describe the most current status.
      */
@@ -172,6 +178,16 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
         for (DimensionCurrentDataQualityStatusModel dimensionModel : this.dimensions.values()) {
             dimensionModel.calculateDataQualityKpiScore();
         }
+    }
+
+    /**
+     * Calculates a data quality KPI score for a column.
+     */
+    public void calculateDataQualityKpiScore() {
+        int totalExecutedChecksWithNoExecutionErrors = this.getValidResults() + this.getWarnings() + this.getErrors() + this.getFatals();
+        Double dataQualityKpi = totalExecutedChecksWithNoExecutionErrors > 0 ?
+                (this.getValidResults() + this.getWarnings()) * 100.0 / totalExecutedChecksWithNoExecutionErrors : null;
+        setDataQualityKpi(dataQualityKpi);
     }
 
     /**
@@ -241,7 +257,7 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
         this.executionErrors = 0;
         this.lastCheckExecutedAt = null;
 
-        for (CheckCurrentDataQualityStatusModel checkStatusModel : checks.values()) {
+        for (CheckCurrentDataQualityStatusModel checkStatusModel : this.checks.values()) {
             if (checkStatusModel.getLastExecutedAt() != null &&
                     (this.lastCheckExecutedAt == null || checkStatusModel.getLastExecutedAt().isAfter(this.lastCheckExecutedAt))) {
                 this.lastCheckExecutedAt = checkStatusModel.getLastExecutedAt();

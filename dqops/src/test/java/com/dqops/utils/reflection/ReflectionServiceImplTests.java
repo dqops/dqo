@@ -23,6 +23,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountAnomalyDifferencingCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -284,6 +285,17 @@ public class ReflectionServiceImplTests extends BaseTest {
         @Override
         public String getRuleDefinitionName() {
             return "comparison/min_percent";
+        }
+
+        /**
+         * Decreases the rule severity by changing the parameters.
+         * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+         *
+         * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+         */
+        @Override
+        public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+
         }
     }
 
