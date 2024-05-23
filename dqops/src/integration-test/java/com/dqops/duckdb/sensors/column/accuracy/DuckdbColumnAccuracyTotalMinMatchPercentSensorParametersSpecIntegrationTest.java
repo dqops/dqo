@@ -52,10 +52,11 @@ public class DuckdbColumnAccuracyTotalMinMatchPercentSensorParametersSpecIntegra
         String csvFileName = SampleCsvFileNames.ip4_test;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
                 csvFileName, connectionSpec);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         String csvFileNameReferenced = SampleCsvFileNames.ip6_test;
         this.sampleTableMetadataReferenced = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
                 csvFileNameReferenced, connectionSpec);
-        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, sampleTableMetadataReferenced);
         this.sut = new ColumnAccuracyTotalMinMatchPercentSensorParametersSpec();
         this.checkSpec = new ColumnAccuracyTotalMinMatchPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
