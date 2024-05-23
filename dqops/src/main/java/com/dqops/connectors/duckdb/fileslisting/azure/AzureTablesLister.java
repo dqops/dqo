@@ -33,20 +33,28 @@ public class AzureTablesLister extends RemoteTablesLister {
      * @return The list of SourceTableModel.
      */
     public List<SourceTableModel> listTables(DuckdbParametersSpec duckdb, String schemaName){
-
         String pathString = duckdb.getDirectories().get(schemaName);
 
         AzureStoragePath pathComponents = AzureStoragePath.from(pathString, duckdb.getAccountName());
+        BlobContainerClient blobContainerClient = provideBlobContainerClient(duckdb, pathComponents);
+        List<String> files = listBucketObjects(blobContainerClient, pathComponents);
+        List<SourceTableModel> sourceTableModels = filterAndTransform(duckdb, files, schemaName);
+        return sourceTableModels;
+    }
 
-        BlobContainerClient blobContainerClient = null;
-
+    /**
+     * Creates a new BlobContainerClient for the specific Azure authentication mode
+     * @param duckdb DuckdbParametersSpec
+     * @param pathComponents AzureStoragePath
+     * @return
+     */
+    private BlobContainerClient provideBlobContainerClient(DuckdbParametersSpec duckdb, AzureStoragePath pathComponents){
         switch(duckdb.getAzureAuthenticationMode()){
             case connection_string:
-                blobContainerClient = new BlobServiceClientBuilder()
+                return new BlobServiceClientBuilder()
                         .connectionString(duckdb.getPassword())
                         .buildClient()
                         .getBlobContainerClient(pathComponents.getContainerName());
-                break;
             case service_principal:
             case default_credentials:
                 ClientSecretCredential clientSecretCredential = new ClientSecretCredentialBuilder()
@@ -55,31 +63,23 @@ public class AzureTablesLister extends RemoteTablesLister {
                         .clientSecret(duckdb.getClientSecret())
                         .build();
 
-                blobContainerClient = new BlobServiceClientBuilder()
+                return new BlobServiceClientBuilder()
                         .credential(clientSecretCredential)
                         .endpoint(pathComponents.getEndpoint())
                         .buildClient()
                         .getBlobContainerClient(pathComponents.getContainerName());
-                break;
             case credential_chain:
                 DefaultAzureCredential defaultAzureCredential = new DefaultAzureCredentialBuilder()
                         .build();
 
-                blobContainerClient = new BlobServiceClientBuilder()
+                return new BlobServiceClientBuilder()
                         .credential(defaultAzureCredential)
                         .endpoint(pathComponents.getEndpoint())
                         .buildClient()
                         .getBlobContainerClient(pathComponents.getContainerName());
-
-                break;
             default:
                 throw new RuntimeException("Azure authentication mode " + duckdb.getAzureAuthenticationMode() + " is not supported for listing tables.");
         }
-
-        List<String> files = listBucketObjects(blobContainerClient, pathComponents);
-
-        List<SourceTableModel> sourceTableModels = filterAndTransform(duckdb, files, schemaName);
-        return sourceTableModels;
     }
 
     /**

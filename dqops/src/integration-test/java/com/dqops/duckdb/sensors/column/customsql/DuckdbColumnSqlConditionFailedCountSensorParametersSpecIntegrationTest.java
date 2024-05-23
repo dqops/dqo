@@ -17,15 +17,16 @@ package com.dqops.duckdb.sensors.column.customsql;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionFailedCheckSpec;
-import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.duckdb.BaseDuckdbIntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.duckdb.BaseDuckdbIntegrationTest;
-import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
@@ -46,8 +47,10 @@ public class DuckdbColumnSqlConditionFailedCountSensorParametersSpecIntegrationT
 
     @BeforeEach
     void setUp() {
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.duckdb);
-        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        String csvFileName = SampleCsvFileNames.string_test_data;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+                csvFileName, connectionSpec);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnSqlConditionFailedCountSensorParametersSpec();
 		this.checkSpec = new ColumnSqlConditionFailedCheckSpec();
@@ -66,7 +69,7 @@ public class DuckdbColumnSqlConditionFailedCountSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(14L, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -81,7 +84,7 @@ public class DuckdbColumnSqlConditionFailedCountSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(14L, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -96,7 +99,7 @@ public class DuckdbColumnSqlConditionFailedCountSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(14L, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -126,6 +129,6 @@ public class DuckdbColumnSqlConditionFailedCountSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(14L, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, resultTable.column(0).get(0));
     }
 }

@@ -53,6 +53,8 @@ import com.dqops.execution.checks.EffectiveSensorRuleNames;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindResult;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderParameters;
+import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderParametersProvider;
+import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderParametersProviderImpl;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderService;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
@@ -702,8 +704,10 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                         true
                 );
 
-                JinjaTemplateRenderParameters templateRenderParameters = JinjaTemplateRenderParameters.createFromTrimmedObjects(
-                        sensorRunParameters, sensorDefinitionFindResult);
+                JinjaTemplateRenderParametersProvider jinjaTemplateRenderParametersProvider = new JinjaTemplateRenderParametersProviderImpl(null);
+                JinjaTemplateRenderParameters templateRenderParameters = jinjaTemplateRenderParametersProvider.createFromTrimmedObjects(
+                        null, sensorRunParameters, sensorDefinitionFindResult);
+
                 try {
                     String renderedTemplate = this.jinjaTemplateRenderService.renderTemplate(sqlTemplate, templateRenderParameters);
                     providerDocModel.setRenderedTemplate(renderedTemplate);

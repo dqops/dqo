@@ -37,13 +37,7 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
             throw new RuntimeException("Virtual schema name is not configured in the Import configuration.");
         }
 
-        Optional<Map.Entry<String, String>> schemaToEmptyPath = directories.entrySet().stream()
-                .filter(x -> x.getValue() == null || x.getValue().isEmpty())
-                .findAny();
-
-        if(schemaToEmptyPath.isPresent()){
-            throw new RuntimeException("A path is not filled in the schema: " + schemaToEmptyPath.get().getKey());
-        }
+        verifyEmptyPaths(directories);
 
         directories.keySet().forEach(schema -> {
             List<SourceTableModel> tables;
@@ -64,7 +58,7 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
 
                 Optional<Map.Entry<String, String>> pathWithInvalidPrefix = directories.entrySet().stream()
                         .filter(x -> !x.getValue().toLowerCase().startsWith(AzureConstants.BLOB_STORAGE_URI_PREFIX)
-                            && !x.getValue().toLowerCase().startsWith(AzureConstants.DATA_LAKE_STORAGE_URI_PREFIX)
+                            //&& !x.getValue().toLowerCase().startsWith(AzureConstants.DATA_LAKE_STORAGE_URI_PREFIX)  // not yet supported
                         )
                         .findAny();
 
@@ -83,6 +77,16 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
             }
         });
 
+    }
+
+    private void verifyEmptyPaths(Map<String, String> directories){
+        Optional<Map.Entry<String, String>> schemaToEmptyPath = directories.entrySet().stream()
+                .filter(x -> x.getValue() == null || x.getValue().isEmpty())
+                .findAny();
+
+        if(schemaToEmptyPath.isPresent()){
+            throw new RuntimeException("A path is not filled in the schema: " + schemaToEmptyPath.get().getKey());
+        }
     }
 
 }

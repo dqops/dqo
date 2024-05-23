@@ -20,6 +20,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.AbstractSensorParametersSpec;
+import com.dqops.sensors.ReferencedTableParameters;
 import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,7 +37,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpec extends AbstractSensorParametersSpec {
+public class ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpec extends AbstractSensorParametersSpec
+        implements ReferencedTableParameters {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpec> FIELDS =
             new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
                 {
